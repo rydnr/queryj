@@ -83,24 +83,24 @@
     <ant:echo message="Replacing CVS keywords"/>
 
     <ant:replaceregexp byline="true">
-      <ant:regexp pattern="\$(Date:)\s\$"/>
-      <ant:substitution expression="\1"/>
+      <ant:regexp pattern="\$(Date:)\s(.*?)\$"/>
+      <ant:substitution expression="\2"/>
       <ant:fileset dir="../../../target/docs">
         <ant:include name="*.html"/>
       </ant:fileset>
     </ant:replaceregexp>
 
     <ant:replaceregexp byline="true">
-      <ant:regexp pattern="\$(Author:)\s\$"/>
-      <ant:substitution expression="\1"/>
+      <ant:regexp pattern="\$(Author:)\s(.*?)\$"/>
+      <ant:substitution expression="\2"/>
       <ant:fileset dir="../../../target/docs">
         <ant:include name="*.html"/>
       </ant:fileset>
     </ant:replaceregexp>
 
     <ant:replaceregexp byline="true">
-      <ant:regexp pattern="\$(Id:)\s\$"/>
-      <ant:substitution expression="\1"/>
+      <ant:regexp pattern="\$(Id:)\s(.*?)\$"/>
+      <ant:substitution expression="\2"/>
       <ant:fileset dir="../../../target/docs">
         <ant:include name="*.html"/>
       </ant:fileset>
