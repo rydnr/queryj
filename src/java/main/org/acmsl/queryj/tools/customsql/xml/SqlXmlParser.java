@@ -44,26 +44,27 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.customsql.xml;
+package org.acmsl.queryj.tools.customsql.xml;
 
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.customsql.AbstractIdElement;
-import org.acmsl.queryj.customsql.ParameterElement;
-import org.acmsl.queryj.customsql.ParameterRefElement;
-import org.acmsl.queryj.customsql.PropertyElement;
-import org.acmsl.queryj.customsql.PropertyRefElement;
-import org.acmsl.queryj.customsql.ResultElement;
-import org.acmsl.queryj.customsql.ResultRefElement;
-import org.acmsl.queryj.customsql.SqlElement;
-import org.acmsl.queryj.customsql.xml.SqlElementFactory;
-import org.acmsl.queryj.customsql.xml.ParameterElementFactory;
-import org.acmsl.queryj.customsql.xml.ParameterRefElementFactory;
-import org.acmsl.queryj.customsql.xml.PropertyElementFactory;
-import org.acmsl.queryj.customsql.xml.PropertyRefElementFactory;
-import org.acmsl.queryj.customsql.xml.ResultElementFactory;
-import org.acmsl.queryj.customsql.xml.ResultRefElementFactory;
+import org.acmsl.queryj.tools.customsql.AbstractIdElement;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.ParameterElement;
+import org.acmsl.queryj.tools.customsql.ParameterRefElement;
+import org.acmsl.queryj.tools.customsql.PropertyElement;
+import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.xml.SqlElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.ParameterElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.PropertyElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.PropertyRefElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.ResultElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactory;
 
 /*
  * Importing some JDK classes.
@@ -93,6 +94,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public abstract class SqlXmlParser
+    implements  CustomSqlProvider
 {
     /**
      * The complete sql.xml contents.

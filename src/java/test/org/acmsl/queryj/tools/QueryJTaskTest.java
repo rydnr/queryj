@@ -496,6 +496,46 @@ extends TestCase
   }
   
   /**
+  * Tests QueryJTaskTest accessor methods.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  public void testSetGetCustomSqlModel()
+  throws Exception
+  {
+    // JUnitDoclet begin method setCustomSqlModel getCustomSqlModel
+    java.lang.String[] t_aTests = {"", " ", "a", "A", "?", "?", "0123456789", "012345678901234567890", "\n", null};
+    
+    for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
+    {
+      queryjtask.setCustomSqlModel(t_aTests[t_iTestIndex]);
+      assertEquals(
+      t_aTests[t_iTestIndex],
+      queryjtask.getCustomSqlModel());
+    }
+    // JUnitDoclet end method setCustomSqlModel getCustomSqlModel
+  }
+  
+  /**
+  * Tests QueryJTaskTest accessor methods.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  public void testSetGetSqlXmlFile()
+  throws Exception
+  {
+    // JUnitDoclet begin method setSqlXmlFile getSqlXmlFile
+    java.io.File[] t_aTests = {new java.io.File("a"), null};
+    
+    for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
+    {
+      queryjtask.setSqlXmlFile(t_aTests[t_iTestIndex]);
+      assertEquals(
+      t_aTests[t_iTestIndex],
+      queryjtask.getSqlXmlFile());
+    }
+    // JUnitDoclet end method setSqlXmlFile getSqlXmlFile
+  }
+  
+  /**
   * Tests QueryJTaskTestsetDynamicAttribute()
   * @throws Exception if an unexpected situation occurs.
   * @see org.acmsl.queryj.tools.QueryJTask#setDynamicAttribute(java.lang.String, java.lang.String)

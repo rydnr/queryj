@@ -50,6 +50,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -937,6 +938,11 @@ public abstract class DAOTemplate
     private DatabaseMetaDataManager m__MetaDataManager;
 
     /**
+     * The custom-sql provider.
+     */
+    private CustomSqlProvider m__CustomSqlProvider;
+
+    /**
      * The header.
      */
     private String m__strHeader;
@@ -1175,6 +1181,7 @@ public abstract class DAOTemplate
      * Builds a DAOTemplate using given information.
      * @param tableTemplate the table template.
      * @param metaDataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -1231,6 +1238,7 @@ public abstract class DAOTemplate
     public DAOTemplate(
         final TableTemplate           tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
+        final CustomSqlProvider       customSqlProvider,
         final String                  header,
         final String                  packageDeclaration,
         final String                  packageName,
@@ -1279,151 +1287,154 @@ public abstract class DAOTemplate
         final String                  deleteWithFkPkValues,
         final String                  classEnd)
     {
-        inmutableSetTableTemplate(
+        immutableSetTableTemplate(
             tableTemplate);
 
-        inmutableSetMetaDataManager(
+        immutableSetMetaDataManager(
             metaDataManager);
 
-        inmutableSetHeader(
+        immutableSetCustomSqlProvider(
+            customSqlProvider);
+
+        immutableSetHeader(
             header);
 
-        inmutableSetPackageDeclaration(
+        immutableSetPackageDeclaration(
             packageDeclaration);
 
-        inmutableSetPackageName(
+        immutableSetPackageName(
             packageName);
 
-        inmutableSetEngineName(
+        immutableSetEngineName(
             engineName);
 
-        inmutableSetEngineVersion(
+        immutableSetEngineVersion(
             engineVersion);
 
-        inmutableSetQuote(
+        immutableSetQuote(
             quote);
 
-        inmutableSetBasePackageName(
+        immutableSetBasePackageName(
             basePackageName);
 
-        inmutableSetRepositoryName(
+        immutableSetRepositoryName(
             repositoryName);
 
-        inmutableSetProjectImports(
+        immutableSetProjectImports(
             projectImports);
 
-        inmutableSetForeignDAOImports(
+        immutableSetForeignDAOImports(
             foreignDAOImports);
 
-        inmutableSetAcmslImports(
+        immutableSetAcmslImports(
             acmslImports);
 
-        inmutableSetJdkImports(
+        immutableSetJdkImports(
             jdkImports);
 
-        inmutableSetJdkExtensionImports(
+        immutableSetJdkExtensionImports(
             jdkExtensionImports);
 
-        inmutableSetLoggingImports(
+        immutableSetLoggingImports(
             loggingImports);
 
-        inmutableSetJavadoc(
+        immutableSetJavadoc(
             javadoc);
 
-        inmutableSetClassDefinition(
+        immutableSetClassDefinition(
             classDefinition);
 
-        inmutableSetClassStart(
+        immutableSetClassStart(
             classStart);
 
-        inmutableSetClassConstructor(
+        immutableSetClassConstructor(
             classConstructor);
 
-        inmutableSetFindByPrimaryKeyMethod(
+        immutableSetFindByPrimaryKeyMethod(
             findByPrimaryKeyMethod);
 
-        inmutableSetFindByPrimaryKeyPkJavadoc(
+        immutableSetFindByPrimaryKeyPkJavadoc(
             findByPrimaryKeyPkJavadoc);
 
-        inmutableSetFindByPrimaryKeyPkDeclaration(
+        immutableSetFindByPrimaryKeyPkDeclaration(
             findByPrimaryKeyPkDeclaration);
 
-        inmutableSetFindByPrimaryKeySelectFields(
+        immutableSetFindByPrimaryKeySelectFields(
             findByPrimaryKeySelectFields);
 
-        inmutableSetFindByPrimaryKeyFilterDeclaration(
+        immutableSetFindByPrimaryKeyFilterDeclaration(
             findByPrimaryKeyFilterDeclaration);
 
-        inmutableSetFindByPrimaryKeyFilterValues(
+        immutableSetFindByPrimaryKeyFilterValues(
             findByPrimaryKeyFilterValues);
 
-        inmutableSetBuildValueObjectMethod(
+        immutableSetBuildValueObjectMethod(
             buildValueObjectMethod);
 
-        inmutableSetBuildValueObjectValueRetrieval(
+        immutableSetBuildValueObjectValueRetrieval(
             buildValueObjectValueRetrieval);
 
-        inmutableSetInsertMethod(
+        immutableSetInsertMethod(
             insertMethod);
 
-        inmutableSetInsertParametersJavadoc(
+        immutableSetInsertParametersJavadoc(
             insertParametersJavadoc);
 
-        inmutableSetInsertParametersDeclaration(
+        immutableSetInsertParametersDeclaration(
             insertParametersDeclaration);
 
-        inmutableSetInsertParametersSpecification(
+        immutableSetInsertParametersSpecification(
             insertParametersSpecification);
 
-        inmutableSetInsertKeywordParametersSpecification(
+        immutableSetInsertKeywordParametersSpecification(
             insertKeywordParametersSpecification);
 
-        inmutableSetUpdateMethod(
+        immutableSetUpdateMethod(
             updateMethod);
 
-        inmutableSetUpdateParametersJavadoc(
+        immutableSetUpdateParametersJavadoc(
             updateParametersJavadoc);
 
-        inmutableSetUpdateParametersDeclaration(
+        immutableSetUpdateParametersDeclaration(
             updateParametersDeclaration);
 
-        inmutableSetUpdateParametersSpecification(
+        immutableSetUpdateParametersSpecification(
             updateParametersSpecification);
 
-        inmutableSetUpdateFilter(
+        immutableSetUpdateFilter(
             updateFilter);
 
-        inmutableSetDeleteMethod(
+        immutableSetDeleteMethod(
             deleteMethod);
 
-        inmutableSetDeletePkJavadoc(
+        immutableSetDeletePkJavadoc(
             deletePkJavadoc);
 
-        inmutableSetDeletePkDeclaration(
+        immutableSetDeletePkDeclaration(
             deletePkDeclaration);
 
-        inmutableSetDeleteFilterDeclaration(
+        immutableSetDeleteFilterDeclaration(
             deleteFilterDeclaration);
 
-        inmutableSetDeleteFilterValues(
+        immutableSetDeleteFilterValues(
             deleteFilterValues);
 
-        inmutableSetDeleteWithFkMethod(
+        immutableSetDeleteWithFkMethod(
             deleteWithFkMethod);
 
-        inmutableSetDeleteWithFkPkJavadoc(
+        immutableSetDeleteWithFkPkJavadoc(
             deleteWithFkPkJavadoc);
 
-        inmutableSetDeleteWithFkPkDeclaration(
+        immutableSetDeleteWithFkPkDeclaration(
             deleteWithFkPkDeclaration);
 
-        inmutableSetDeleteWithFkDAODeleteRequest(
+        immutableSetDeleteWithFkDAODeleteRequest(
             deleteWithFkDAODeleteRequest);
 
-        inmutableSetDeleteWithFkPkValues(
+        immutableSetDeleteWithFkPkValues(
             deleteWithFkPkValues);
 
-        inmutableSetClassEnd(
+        immutableSetClassEnd(
             classEnd);
     }
 
@@ -1431,6 +1442,7 @@ public abstract class DAOTemplate
      * Builds a DAOTemplate using given information.
      * @param tableTemplate the table template.
      * @param metaDataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -1441,6 +1453,7 @@ public abstract class DAOTemplate
     public DAOTemplate(
         final TableTemplate           tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
+        final CustomSqlProvider       customSqlProvider,
         final String                  packageName,
         final String                  engineName,
         final String                  engineVersion,
@@ -1451,6 +1464,7 @@ public abstract class DAOTemplate
         this(
             tableTemplate,
             metaDataManager,
+            customSqlProvider,
             DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             packageName,
@@ -1504,7 +1518,7 @@ public abstract class DAOTemplate
      * Specifies the table template.
      * @param tableTemplate the table template.
      */
-    private void inmutableSetTableTemplate(final TableTemplate tableTemplate)
+    private void immutableSetTableTemplate(final TableTemplate tableTemplate)
     {
         m__TableTemplate = tableTemplate;
     }
@@ -1515,7 +1529,7 @@ public abstract class DAOTemplate
      */
     protected void setTableTemplate(final TableTemplate tableTemplate)
     {
-        inmutableSetTableTemplate(tableTemplate);
+        immutableSetTableTemplate(tableTemplate);
     }
 
     /**
@@ -1527,12 +1541,11 @@ public abstract class DAOTemplate
         return m__TableTemplate;
     }
 
-
     /**
      * Specifies the metadata manager.
      * @param metaDataManager the metadata manager.
      */
-    private void inmutableSetMetaDataManager(
+    private void immutableSetMetaDataManager(
         final DatabaseMetaDataManager metaDataManager)
     {
         m__MetaDataManager = metaDataManager;
@@ -1545,7 +1558,7 @@ public abstract class DAOTemplate
     protected void setMetaDataManager(
         final DatabaseMetaDataManager metaDataManager)
     {
-        inmutableSetMetaDataManager(metaDataManager);
+        immutableSetMetaDataManager(metaDataManager);
     }
 
     /**
@@ -1558,10 +1571,39 @@ public abstract class DAOTemplate
     }
 
     /**
+     * Specifies the custom-sql provider.
+     * @param customSqlProvider the customsql provider.
+     */
+    private void immutableSetCustomSqlProvider(
+        final CustomSqlProvider customSqlProvider)
+    {
+        m__CustomSqlProvider = customSqlProvider;
+    }
+
+    /**
+     * Specifies the custom-sql provider.
+     * @param customSqlProvider the customsql provider.
+     */
+    protected void setCustomSqlProvider(
+        final CustomSqlProvider customSqlProvider)
+    {
+        immutableSetCustomSqlProvider(customSqlProvider);
+    }
+
+    /**
+     * Retrieves the custom-sql provider.
+     * @return such provider.
+     */
+    public CustomSqlProvider getCustomSqlProvider()
+    {
+        return m__CustomSqlProvider;
+    }
+
+    /**
      * Specifies the header.
      * @param header the new header.
      */
-    private void inmutableSetHeader(final String header)
+    private void immutableSetHeader(final String header)
     {
         m__strHeader = header;
     }
@@ -1572,7 +1614,7 @@ public abstract class DAOTemplate
      */
     protected void setHeader(final String header)
     {
-        inmutableSetHeader(header);
+        immutableSetHeader(header);
     }
 
     /**
@@ -1588,7 +1630,7 @@ public abstract class DAOTemplate
      * Specifies the package declaration.
      * @param packageDeclaration the new package declaration.
      */
-    private void inmutableSetPackageDeclaration(final String packageDeclaration)
+    private void immutableSetPackageDeclaration(final String packageDeclaration)
     {
         m__strPackageDeclaration = packageDeclaration;
     }
@@ -1599,7 +1641,7 @@ public abstract class DAOTemplate
      */
     protected void setPackageDeclaration(final String packageDeclaration)
     {
-        inmutableSetPackageDeclaration(packageDeclaration);
+        immutableSetPackageDeclaration(packageDeclaration);
     }
 
     /**
@@ -1615,7 +1657,7 @@ public abstract class DAOTemplate
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    private void inmutableSetPackageName(final String packageName)
+    private void immutableSetPackageName(final String packageName)
     {
         m__strPackageName = packageName;
     }
@@ -1626,7 +1668,7 @@ public abstract class DAOTemplate
      */
     protected void setPackageName(final String packageName)
     {
-        inmutableSetPackageName(packageName);
+        immutableSetPackageName(packageName);
     }
 
     /**
@@ -1642,7 +1684,7 @@ public abstract class DAOTemplate
      * Specifies the engine name.
      * @param engineName the new engine name.
      */
-    private void inmutableSetEngineName(final String engineName)
+    private void immutableSetEngineName(final String engineName)
     {
         m__strEngineName = engineName;
     }
@@ -1653,7 +1695,7 @@ public abstract class DAOTemplate
      */
     protected void setEngineName(final String engineName)
     {
-        inmutableSetEngineName(engineName);
+        immutableSetEngineName(engineName);
     }
 
     /**
@@ -1669,7 +1711,7 @@ public abstract class DAOTemplate
      * Specifies the engine version.
      * @param engineVersion the new engine version.
      */
-    private void inmutableSetEngineVersion(final String engineVersion)
+    private void immutableSetEngineVersion(final String engineVersion)
     {
         m__strEngineVersion = engineVersion;
     }
@@ -1680,7 +1722,7 @@ public abstract class DAOTemplate
      */
     protected void setEngineVersion(final String engineVersion)
     {
-        inmutableSetEngineVersion(engineVersion);
+        immutableSetEngineVersion(engineVersion);
     }
 
     /**
@@ -1696,7 +1738,7 @@ public abstract class DAOTemplate
      * Specifies the identifier quote string.
      * @param quote such identifier.
      */
-    private void inmutableSetQuote(final String quote)
+    private void immutableSetQuote(final String quote)
     {
         m__strQuote = quote;
     }
@@ -1707,7 +1749,7 @@ public abstract class DAOTemplate
      */
     protected void setQuote(final String quote)
     {
-        inmutableSetQuote(quote);
+        immutableSetQuote(quote);
     }
 
     /**
@@ -1723,7 +1765,7 @@ public abstract class DAOTemplate
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
-    private void inmutableSetBasePackageName(final String basePackageName)
+    private void immutableSetBasePackageName(final String basePackageName)
     {
         m__strBasePackageName = basePackageName;
     }
@@ -1734,7 +1776,7 @@ public abstract class DAOTemplate
      */
     protected void setBasePackageName(final String basePackageName)
     {
-        inmutableSetBasePackageName(basePackageName);
+        immutableSetBasePackageName(basePackageName);
     }
 
     /**
@@ -1750,7 +1792,7 @@ public abstract class DAOTemplate
      * Specifies the repository name.
      * @param repositoryName the new repository name.
      */
-    private void inmutableSetRepositoryName(final String repositoryName)
+    private void immutableSetRepositoryName(final String repositoryName)
     {
         m__strRepositoryName = repositoryName;
     }
@@ -1761,7 +1803,7 @@ public abstract class DAOTemplate
      */
     protected void setRepositoryName(final String repositoryName)
     {
-        inmutableSetRepositoryName(repositoryName);
+        immutableSetRepositoryName(repositoryName);
     }
 
     /**
@@ -1777,7 +1819,7 @@ public abstract class DAOTemplate
      * Specifies the project imports.
      * @param projectImports the new project imports.
      */
-    private void inmutableSetProjectImports(final String projectImports)
+    private void immutableSetProjectImports(final String projectImports)
     {
         m__strProjectImports = projectImports;
     }
@@ -1788,7 +1830,7 @@ public abstract class DAOTemplate
      */
     protected void setProjectImports(final String projectImports)
     {
-        inmutableSetProjectImports(projectImports);
+        immutableSetProjectImports(projectImports);
     }
 
     /**
@@ -1804,7 +1846,7 @@ public abstract class DAOTemplate
      * Specifies the foreign DAO imports.
      * @param foreignDAOImports the new foreign DAO imports.
      */
-    private void inmutableSetForeignDAOImports(final String foreignDAOImports)
+    private void immutableSetForeignDAOImports(final String foreignDAOImports)
     {
         m__strForeignDAOImports = foreignDAOImports;
     }
@@ -1815,7 +1857,7 @@ public abstract class DAOTemplate
      */
     protected void setForeignDAOImports(final String foreignDAOImports)
     {
-        inmutableSetForeignDAOImports(foreignDAOImports);
+        immutableSetForeignDAOImports(foreignDAOImports);
     }
 
     /**
@@ -1831,7 +1873,7 @@ public abstract class DAOTemplate
      * Specifies the ACM-SL imports.
      * @param acmslImports the new ACM-SL imports.
      */
-    private void inmutableSetAcmslImports(final String acmslImports)
+    private void immutableSetAcmslImports(final String acmslImports)
     {
         m__strAcmslImports = acmslImports;
     }
@@ -1842,7 +1884,7 @@ public abstract class DAOTemplate
      */
     protected void setAcmslImports(final String acmslImports)
     {
-        inmutableSetAcmslImports(acmslImports);
+        immutableSetAcmslImports(acmslImports);
     }
 
     /**
@@ -1858,7 +1900,7 @@ public abstract class DAOTemplate
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
-    private void inmutableSetJdkImports(final String jdkImports)
+    private void immutableSetJdkImports(final String jdkImports)
     {
         m__strJdkImports = jdkImports;
     }
@@ -1869,7 +1911,7 @@ public abstract class DAOTemplate
      */
     protected void setJdkImports(final String jdkImports)
     {
-        inmutableSetJdkImports(jdkImports);
+        immutableSetJdkImports(jdkImports);
     }
 
     /**
@@ -1885,7 +1927,7 @@ public abstract class DAOTemplate
      * Specifies the JDK extension imports.
      * @param jdkExtensionImports the new JDK extension imports.
      */
-    private void inmutableSetJdkExtensionImports(final String jdkExtensionImports)
+    private void immutableSetJdkExtensionImports(final String jdkExtensionImports)
     {
         m__strJdkExtensionImports = jdkExtensionImports;
     }
@@ -1896,7 +1938,7 @@ public abstract class DAOTemplate
      */
     protected void setJdkExtensionImports(final String jdkExtensionImports)
     {
-        inmutableSetJdkExtensionImports(jdkExtensionImports);
+        immutableSetJdkExtensionImports(jdkExtensionImports);
     }
 
     /**
@@ -1913,7 +1955,7 @@ public abstract class DAOTemplate
      * Specifies the logging imports.
      * @param loggingImports the new logging imports.
      */
-    private void inmutableSetLoggingImports(final String loggingImports)
+    private void immutableSetLoggingImports(final String loggingImports)
     {
         m__strLoggingImports = loggingImports;
     }
@@ -1924,7 +1966,7 @@ public abstract class DAOTemplate
      */
     protected void setLoggingImports(final String loggingImports)
     {
-        inmutableSetLoggingImports(loggingImports);
+        immutableSetLoggingImports(loggingImports);
     }
 
     /**
@@ -1940,7 +1982,7 @@ public abstract class DAOTemplate
      * Specifies the javadoc.
      * @param javadoc the new javadoc.
      */
-    private void inmutableSetJavadoc(final String javadoc)
+    private void immutableSetJavadoc(final String javadoc)
     {
         m__strJavadoc = javadoc;
     }
@@ -1951,7 +1993,7 @@ public abstract class DAOTemplate
      */
     protected void setJavadoc(final String javadoc)
     {
-        inmutableSetJavadoc(javadoc);
+        immutableSetJavadoc(javadoc);
     }
 
     /**
@@ -1967,7 +2009,7 @@ public abstract class DAOTemplate
      * Specifies the class definition.
      * @param classDefinition the new class definition.
      */
-    private void inmutableSetClassDefinition(final String classDefinition)
+    private void immutableSetClassDefinition(final String classDefinition)
     {
         m__strClassDefinition = classDefinition;
     }
@@ -1978,7 +2020,7 @@ public abstract class DAOTemplate
      */
     protected void setClassDefinition(final String classDefinition)
     {
-        inmutableSetClassDefinition(classDefinition);
+        immutableSetClassDefinition(classDefinition);
     }
 
     /**
@@ -1994,7 +2036,7 @@ public abstract class DAOTemplate
      * Specifies the class start.
      * @param classStart the new class start.
      */
-    private void inmutableSetClassStart(final String classStart)
+    private void immutableSetClassStart(final String classStart)
     {
         m__strClassStart = classStart;
     }
@@ -2005,7 +2047,7 @@ public abstract class DAOTemplate
      */
     protected void setClassStart(final String classStart)
     {
-        inmutableSetClassStart(classStart);
+        immutableSetClassStart(classStart);
     }
 
     /**
@@ -2021,7 +2063,7 @@ public abstract class DAOTemplate
      * Specifies the class constructor
      * @param constructor such source code.
      */
-    private void inmutableSetClassConstructor(final String constructor)
+    private void immutableSetClassConstructor(final String constructor)
     {
         m__strClassConstructor = constructor;
     }
@@ -2032,7 +2074,7 @@ public abstract class DAOTemplate
      */
     protected void setClassConstructor(final String constructor)
     {
-        inmutableSetClassConstructor(constructor);
+        immutableSetClassConstructor(constructor);
     }
 
     /**
@@ -2048,7 +2090,7 @@ public abstract class DAOTemplate
      * Specifies the find-by-primary-key method.
      * @param findByPrimaryKeyMethod such method.
      */
-    private void inmutableSetFindByPrimaryKeyMethod(
+    private void immutableSetFindByPrimaryKeyMethod(
         String findByPrimaryKeyMethod)
     {
         m__strFindByPrimaryKeyMethod = findByPrimaryKeyMethod;
@@ -2061,7 +2103,7 @@ public abstract class DAOTemplate
     protected void setFindByPrimaryKeyMethod(
         String findByPrimaryKeyMethod)
     {
-        inmutableSetFindByPrimaryKeyMethod(
+        immutableSetFindByPrimaryKeyMethod(
             findByPrimaryKeyMethod);
     }
 
@@ -2078,7 +2120,7 @@ public abstract class DAOTemplate
      * Specifies the find-by-primary-key pk Javadoc.
      * @param findByPrimaryKeyPkJavadoc such Javadoc.
      */
-    private void inmutableSetFindByPrimaryKeyPkJavadoc(
+    private void immutableSetFindByPrimaryKeyPkJavadoc(
         String findByPrimaryKeyPkJavadoc)
     {
         m__strFindByPrimaryKeyPkJavadoc = findByPrimaryKeyPkJavadoc;
@@ -2091,7 +2133,7 @@ public abstract class DAOTemplate
     protected void setFindByPrimaryKeyPkJavadoc(
         String findByPrimaryKeyPkJavadoc)
     {
-        inmutableSetFindByPrimaryKeyPkJavadoc(
+        immutableSetFindByPrimaryKeyPkJavadoc(
             findByPrimaryKeyPkJavadoc);
     }
 
@@ -2108,7 +2150,7 @@ public abstract class DAOTemplate
      * Specifies the find-by-primary-key pk declaration.
      * @param findByPrimaryKeyPkDeclaration such declaration.
      */
-    private void inmutableSetFindByPrimaryKeyPkDeclaration(
+    private void immutableSetFindByPrimaryKeyPkDeclaration(
         String findByPrimaryKeyPkDeclaration)
     {
         m__strFindByPrimaryKeyPkDeclaration =
@@ -2122,7 +2164,7 @@ public abstract class DAOTemplate
     protected void setFindByPrimaryKeyPkdeclaration(
         String findByPrimaryKeyPkDeclaration)
     {
-        inmutableSetFindByPrimaryKeyPkDeclaration(
+        immutableSetFindByPrimaryKeyPkDeclaration(
             findByPrimaryKeyPkDeclaration);
     }
 
@@ -2139,7 +2181,7 @@ public abstract class DAOTemplate
      * Specifies the find-by-primary-key select fields.
      * @param findByPrimaryKeySelectFields such fields.
      */
-    private void inmutableSetFindByPrimaryKeySelectFields(
+    private void immutableSetFindByPrimaryKeySelectFields(
         String findByPrimaryKeySelectFields)
     {
         m__strFindByPrimaryKeySelectFields =
@@ -2153,7 +2195,7 @@ public abstract class DAOTemplate
     protected void setFindByPrimaryKeySelectFields(
         String findByPrimaryKeySelectFields)
     {
-        inmutableSetFindByPrimaryKeySelectFields(
+        immutableSetFindByPrimaryKeySelectFields(
             findByPrimaryKeySelectFields);
     }
 
@@ -2170,7 +2212,7 @@ public abstract class DAOTemplate
      * Specifies the find-by-primary-key filter declaration.
      * @param findByPrimaryKeyPkFilterDeclaration such declaration.
      */
-    private void inmutableSetFindByPrimaryKeyFilterDeclaration(
+    private void immutableSetFindByPrimaryKeyFilterDeclaration(
         String findByPrimaryKeyFilterDeclaration)
     {
         m__strFindByPrimaryKeyFilterDeclaration =
@@ -2184,7 +2226,7 @@ public abstract class DAOTemplate
     protected void setFindByPrimaryKeyFilterDeclaration(
         String findByPrimaryKeyFilterDeclaration)
     {
-        inmutableSetFindByPrimaryKeyFilterDeclaration(
+        immutableSetFindByPrimaryKeyFilterDeclaration(
             findByPrimaryKeyFilterDeclaration);
     }
 
@@ -2201,7 +2243,7 @@ public abstract class DAOTemplate
      * Specifies the find-by-primary-key filter values.
      * @param findByPrimaryKeyFilterValues such values.
      */
-    private void inmutableSetFindByPrimaryKeyFilterValues(
+    private void immutableSetFindByPrimaryKeyFilterValues(
         String findByPrimaryKeyFilterValues)
     {
         m__strFindByPrimaryKeyFilterValues =
@@ -2215,7 +2257,7 @@ public abstract class DAOTemplate
     protected void setFindByPrimaryKeyFilterValues(
         String findByPrimaryKeyFilterValues)
     {
-        inmutableSetFindByPrimaryKeyFilterValues(
+        immutableSetFindByPrimaryKeyFilterValues(
             findByPrimaryKeyFilterValues);
     }
 
@@ -2232,7 +2274,7 @@ public abstract class DAOTemplate
      * Specifies the build-value-object method.
      * @param buildValueObjectMethod such method.
      */
-    private void inmutableSetBuildValueObjectMethod(
+    private void immutableSetBuildValueObjectMethod(
         String buildValueObjectMethod)
     {
         m__strBuildValueObjectMethod = buildValueObjectMethod;
@@ -2245,7 +2287,7 @@ public abstract class DAOTemplate
     protected void setBuildValueObjectMethod(
         String buildValueObjectMethod)
     {
-        inmutableSetBuildValueObjectMethod(
+        immutableSetBuildValueObjectMethod(
             buildValueObjectMethod);
     }
 
@@ -2262,7 +2304,7 @@ public abstract class DAOTemplate
      * Specifies the build-value-object value retrieval.
      * @param buildValueObjectValueRetrieval such method.
      */
-    private void inmutableSetBuildValueObjectValueRetrieval(
+    private void immutableSetBuildValueObjectValueRetrieval(
         String buildValueObjectValueRetrieval)
     {
         m__strBuildValueObjectValueRetrieval = buildValueObjectValueRetrieval;
@@ -2275,7 +2317,7 @@ public abstract class DAOTemplate
     protected void setBuildValueObjectValueRetrieval(
         String buildValueObjectValueRetrieval)
     {
-        inmutableSetBuildValueObjectValueRetrieval(
+        immutableSetBuildValueObjectValueRetrieval(
             buildValueObjectValueRetrieval);
     }
 
@@ -2292,7 +2334,7 @@ public abstract class DAOTemplate
      * Specifies the insert method.
      * @param insertMethod such method.
      */
-    private void inmutableSetInsertMethod(final String insertMethod)
+    private void immutableSetInsertMethod(final String insertMethod)
     {
         m__strInsertMethod = insertMethod;
     }
@@ -2303,7 +2345,7 @@ public abstract class DAOTemplate
      */
     protected void setInsertMethod(final String insertMethod)
     {
-        inmutableSetInsertMethod(insertMethod);
+        immutableSetInsertMethod(insertMethod);
     }
 
     /**
@@ -2319,7 +2361,7 @@ public abstract class DAOTemplate
      * Specifies the insert parameters Javadoc.
      * @param javadoc such javadoc.
      */
-    private void inmutableSetInsertParametersJavadoc(final String javadoc)
+    private void immutableSetInsertParametersJavadoc(final String javadoc)
     {
         m__strInsertParametersJavadoc = javadoc;
     }
@@ -2330,7 +2372,7 @@ public abstract class DAOTemplate
      */
     protected void setInsertParametersJavadoc(final String javadoc)
     {
-        inmutableSetInsertParametersJavadoc(javadoc);
+        immutableSetInsertParametersJavadoc(javadoc);
     }
 
     /**
@@ -2346,7 +2388,7 @@ public abstract class DAOTemplate
      * Specifies the insert parameters Declaration.
      * @param declaration such declaration.
      */
-    private void inmutableSetInsertParametersDeclaration(final String declaration)
+    private void immutableSetInsertParametersDeclaration(final String declaration)
     {
         m__strInsertParametersDeclaration = declaration;
     }
@@ -2357,7 +2399,7 @@ public abstract class DAOTemplate
      */
     protected void setInsertParametersDeclaration(final String declaration)
     {
-        inmutableSetInsertParametersDeclaration(declaration);
+        immutableSetInsertParametersDeclaration(declaration);
     }
 
     /**
@@ -2373,7 +2415,7 @@ public abstract class DAOTemplate
      * Specifies the insert parameters specification.
      * @param specification such specification.
      */
-    private void inmutableSetInsertParametersSpecification(final String specification)
+    private void immutableSetInsertParametersSpecification(final String specification)
     {
         m__strInsertParametersSpecification = specification;
     }
@@ -2384,7 +2426,7 @@ public abstract class DAOTemplate
      */
     protected void setInsertParametersSpecification(final String specification)
     {
-        inmutableSetInsertParametersSpecification(specification);
+        immutableSetInsertParametersSpecification(specification);
     }
 
     /**
@@ -2400,7 +2442,7 @@ public abstract class DAOTemplate
      * Specifies the insert keyword-based parameters specification.
      * @param specification such specification.
      */
-    private void inmutableSetInsertKeywordParametersSpecification(
+    private void immutableSetInsertKeywordParametersSpecification(
         String specification)
     {
         m__strInsertKeywordParametersSpecification = specification;
@@ -2412,7 +2454,7 @@ public abstract class DAOTemplate
      */
     protected void setInsertKeywordParametersSpecification(final String specification)
     {
-        inmutableSetInsertKeywordParametersSpecification(specification);
+        immutableSetInsertKeywordParametersSpecification(specification);
     }
 
     /**
@@ -2428,7 +2470,7 @@ public abstract class DAOTemplate
      * Specifies the update method.
      * @param updateMethod such method.
      */
-    private void inmutableSetUpdateMethod(final String updateMethod)
+    private void immutableSetUpdateMethod(final String updateMethod)
     {
         m__strUpdateMethod = updateMethod;
     }
@@ -2439,7 +2481,7 @@ public abstract class DAOTemplate
      */
     protected void setUpdateMethod(final String updateMethod)
     {
-        inmutableSetUpdateMethod(updateMethod);
+        immutableSetUpdateMethod(updateMethod);
     }
 
     /**
@@ -2455,7 +2497,7 @@ public abstract class DAOTemplate
      * Specifies the update parameters Javadoc.
      * @param javadoc such javadoc.
      */
-    private void inmutableSetUpdateParametersJavadoc(final String javadoc)
+    private void immutableSetUpdateParametersJavadoc(final String javadoc)
     {
         m__strUpdateParametersJavadoc = javadoc;
     }
@@ -2466,7 +2508,7 @@ public abstract class DAOTemplate
      */
     protected void setUpdateParametersJavadoc(final String javadoc)
     {
-        inmutableSetUpdateParametersJavadoc(javadoc);
+        immutableSetUpdateParametersJavadoc(javadoc);
     }
 
     /**
@@ -2482,7 +2524,7 @@ public abstract class DAOTemplate
      * Specifies the update parameters Declaration.
      * @param declaration such declaration.
      */
-    private void inmutableSetUpdateParametersDeclaration(final String declaration)
+    private void immutableSetUpdateParametersDeclaration(final String declaration)
     {
         m__strUpdateParametersDeclaration = declaration;
     }
@@ -2493,7 +2535,7 @@ public abstract class DAOTemplate
      */
     protected void setUpdateParametersDeclaration(final String declaration)
     {
-        inmutableSetUpdateParametersDeclaration(declaration);
+        immutableSetUpdateParametersDeclaration(declaration);
     }
 
     /**
@@ -2509,7 +2551,7 @@ public abstract class DAOTemplate
      * Specifies the update parameters Specification.
      * @param specification such specification.
      */
-    private void inmutableSetUpdateParametersSpecification(final String specification)
+    private void immutableSetUpdateParametersSpecification(final String specification)
     {
         m__strUpdateParametersSpecification = specification;
     }
@@ -2520,7 +2562,7 @@ public abstract class DAOTemplate
      */
     protected void setUpdateParametersSpecification(final String specification)
     {
-        inmutableSetUpdateParametersSpecification(specification);
+        immutableSetUpdateParametersSpecification(specification);
     }
 
     /**
@@ -2536,7 +2578,7 @@ public abstract class DAOTemplate
      * Specifies the update filter.
      * @param updateFilter such filter.
      */
-    private void inmutableSetUpdateFilter(final String updateFilter)
+    private void immutableSetUpdateFilter(final String updateFilter)
     {
         m__strUpdateFilter = updateFilter;
     }
@@ -2547,7 +2589,7 @@ public abstract class DAOTemplate
      */
     protected void setUpdateFilter(final String updateFilter)
     {
-        inmutableSetUpdateFilter(updateFilter);
+        immutableSetUpdateFilter(updateFilter);
     }
 
     /**
@@ -2563,7 +2605,7 @@ public abstract class DAOTemplate
      * Specifies the delete method.
      * @param deleteMethod such method.
      */
-    private void inmutableSetDeleteMethod(
+    private void immutableSetDeleteMethod(
         String deleteMethod)
     {
         m__strDeleteMethod = deleteMethod;
@@ -2576,7 +2618,7 @@ public abstract class DAOTemplate
     protected void setDeleteMethod(
         String deleteMethod)
     {
-        inmutableSetDeleteMethod(
+        immutableSetDeleteMethod(
             deleteMethod);
     }
 
@@ -2593,7 +2635,7 @@ public abstract class DAOTemplate
      * Specifies the delete pk Javadoc.
      * @param deletePkJavadoc such Javadoc.
      */
-    private void inmutableSetDeletePkJavadoc(
+    private void immutableSetDeletePkJavadoc(
         String deletePkJavadoc)
     {
         m__strDeletePkJavadoc = deletePkJavadoc;
@@ -2606,7 +2648,7 @@ public abstract class DAOTemplate
     protected void setDeletePkJavadoc(
         String deletePkJavadoc)
     {
-        inmutableSetDeletePkJavadoc(
+        immutableSetDeletePkJavadoc(
             deletePkJavadoc);
     }
 
@@ -2623,7 +2665,7 @@ public abstract class DAOTemplate
      * Specifies the delete pk declaration.
      * @param deletePkDeclaration such declaration.
      */
-    private void inmutableSetDeletePkDeclaration(
+    private void immutableSetDeletePkDeclaration(
         String deletePkDeclaration)
     {
         m__strDeletePkDeclaration =
@@ -2637,7 +2679,7 @@ public abstract class DAOTemplate
     protected void setDeletePkdeclaration(
         String deletePkDeclaration)
     {
-        inmutableSetDeletePkDeclaration(
+        immutableSetDeletePkDeclaration(
             deletePkDeclaration);
     }
 
@@ -2654,7 +2696,7 @@ public abstract class DAOTemplate
      * Specifies the delete filter declaration.
      * @param deletePkFilterDeclaration such declaration.
      */
-    private void inmutableSetDeleteFilterDeclaration(
+    private void immutableSetDeleteFilterDeclaration(
         String deleteFilterDeclaration)
     {
         m__strDeleteFilterDeclaration =
@@ -2668,7 +2710,7 @@ public abstract class DAOTemplate
     protected void setDeleteFilterDeclaration(
         String deleteFilterDeclaration)
     {
-        inmutableSetDeleteFilterDeclaration(
+        immutableSetDeleteFilterDeclaration(
             deleteFilterDeclaration);
     }
 
@@ -2685,7 +2727,7 @@ public abstract class DAOTemplate
      * Specifies the delete filter values.
      * @param deleteFilterValues such values.
      */
-    private void inmutableSetDeleteFilterValues(
+    private void immutableSetDeleteFilterValues(
         String deleteFilterValues)
     {
         m__strDeleteFilterValues =
@@ -2699,7 +2741,7 @@ public abstract class DAOTemplate
     protected void setDeleteFilterValues(
         String deleteFilterValues)
     {
-        inmutableSetDeleteFilterValues(
+        immutableSetDeleteFilterValues(
             deleteFilterValues);
     }
 
@@ -2716,7 +2758,7 @@ public abstract class DAOTemplate
      * Specifies the delete with FK method.
      * @param deleteWithFkMethod such method.
      */
-    private void inmutableSetDeleteWithFkMethod(
+    private void immutableSetDeleteWithFkMethod(
         String deleteWithFkMethod)
     {
         m__strDeleteWithFkMethod = deleteWithFkMethod;
@@ -2729,7 +2771,7 @@ public abstract class DAOTemplate
     protected void setDeleteWithFkMethod(
         String deleteWithFkMethod)
     {
-        inmutableSetDeleteWithFkMethod(
+        immutableSetDeleteWithFkMethod(
             deleteWithFkMethod);
     }
 
@@ -2746,7 +2788,7 @@ public abstract class DAOTemplate
      * Specifies the delete with FK PK Javadoc.
      * @param deleteWithFkPkJavadoc such Javadoc.
      */
-    private void inmutableSetDeleteWithFkPkJavadoc(
+    private void immutableSetDeleteWithFkPkJavadoc(
         String deleteWithFkPkJavadoc)
     {
         m__strDeleteWithFkPkJavadoc = deleteWithFkPkJavadoc;
@@ -2759,7 +2801,7 @@ public abstract class DAOTemplate
     protected void setDeleteWithFkPkJavadoc(
         String deleteWithFkPkJavadoc)
     {
-        inmutableSetDeleteWithFkPkJavadoc(
+        immutableSetDeleteWithFkPkJavadoc(
             deleteWithFkPkJavadoc);
     }
 
@@ -2776,7 +2818,7 @@ public abstract class DAOTemplate
      * Specifies the delete with FK PK declaration.
      * @param deleteWithFkPkDeclaration such declaration.
      */
-    private void inmutableSetDeleteWithFkPkDeclaration(
+    private void immutableSetDeleteWithFkPkDeclaration(
         String deleteWithFkPkDeclaration)
     {
         m__strDeleteWithFkPkDeclaration =
@@ -2790,7 +2832,7 @@ public abstract class DAOTemplate
     protected void setDeleteWithFkPkdeclaration(
         String deleteWithFkPkDeclaration)
     {
-        inmutableSetDeleteWithFkPkDeclaration(
+        immutableSetDeleteWithFkPkDeclaration(
             deleteWithFkPkDeclaration);
     }
 
@@ -2807,7 +2849,7 @@ public abstract class DAOTemplate
      * Specifies the delete with FK DAO delete request.
      * @param deleteWithFkDAODeleteRequest such request.
      */
-    private void inmutableSetDeleteWithFkDAODeleteRequest(
+    private void immutableSetDeleteWithFkDAODeleteRequest(
         String deleteWithFkDAODeleteRequest)
     {
         m__strDeleteWithFkDAODeleteRequest =
@@ -2821,7 +2863,7 @@ public abstract class DAOTemplate
     protected void setDeleteWithFkDAODeleteRequest(
         String deleteWithFkDAODeleteRequest)
     {
-        inmutableSetDeleteWithFkDAODeleteRequest(
+        immutableSetDeleteWithFkDAODeleteRequest(
             deleteWithFkDAODeleteRequest);
     }
 
@@ -2838,7 +2880,7 @@ public abstract class DAOTemplate
      * Specifies the delete with FK PK values.
      * @param deleteWithFkPkValues such values.
      */
-    private void inmutableSetDeleteWithFkPkValues(
+    private void immutableSetDeleteWithFkPkValues(
         String deleteWithFkPkValues)
     {
         m__strDeleteWithFkPkValues =
@@ -2852,7 +2894,7 @@ public abstract class DAOTemplate
     protected void setDeleteWithFkPkValues(
         String deleteWithFkPkValues)
     {
-        inmutableSetDeleteWithFkPkValues(
+        immutableSetDeleteWithFkPkValues(
             deleteWithFkPkValues);
     }
 
@@ -2869,7 +2911,7 @@ public abstract class DAOTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    private void inmutableSetClassEnd(final String classEnd)
+    private void immutableSetClassEnd(final String classEnd)
     {
         m__strClassEnd = classEnd;
     }
@@ -2878,9 +2920,9 @@ public abstract class DAOTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    protected void setClassEnd(String classEnd)
+    protected void setClassEnd(final String classEnd)
     {
-        inmutableSetClassEnd(classEnd);
+        immutableSetClassEnd(classEnd);
     }
 
     /**

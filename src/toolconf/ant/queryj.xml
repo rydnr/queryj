@@ -238,7 +238,9 @@
         outputdir="${queryj.outputdir}"
         extractFunctions="${queryj.extractfunctions}"
         extractProcedures="${queryj.extractprocedures}"
-        jndiDataSource="java:comp/env/jdbc/queryj">
+        jndiDataSource="java:comp/env/jdbc/queryj"
+        customSqlModel="xml"
+        sqlXmlFile="sql.xml">
 
         <externally-managed-fields>
 

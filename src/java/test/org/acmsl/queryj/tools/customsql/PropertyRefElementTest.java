@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.customsql.
+*              unittests.org.acmsl.queryj.tools.customsql.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.customsql;
+package unittests.org.acmsl.queryj.tools.customsql;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.customsql.PropertyRefElement;
+import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 // JUnitDoclet end import
 
 /*
@@ -86,7 +86,7 @@ Boston, MA  02111-1307  USA
 /**
 * Tests PropertyRefElementTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.customsql.PropertyRefElement
+* @see org.acmsl.queryj.tools.customsql.PropertyRefElement
 */
 public class PropertyRefElementTest
 // JUnitDoclet begin extends_implements
@@ -94,7 +94,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.customsql.PropertyRefElement propertyrefelement = null;
+  org.acmsl.queryj.tools.customsql.PropertyRefElement propertyrefelement = null;
   // JUnitDoclet end class
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.customsql.PropertyRefElement createInstance()
+  public org.acmsl.queryj.tools.customsql.PropertyRefElement createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.PropertyRefElement("pp1");
+    return new org.acmsl.queryj.tools.customsql.PropertyRefElement("pp1");
     // JUnitDoclet end method testcase.createInstance
   }
   

@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.customsql.xml.
+*              unittests.org.acmsl.queryj.tools.customsql.xml.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,7 +44,7 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.customsql.xml;
+package unittests.org.acmsl.queryj.tools.customsql.xml;
 
 
 /*
@@ -88,9 +88,9 @@ Boston, MA  02111-1307  USA
 
 /**
 * Executes all tests defined for package
-* org.acmsl.queryj.customsql.xml
+* org.acmsl.queryj.tools.customsql.xml
 * @version $Revision$
-* @see org.acmsl.queryj.customsql.xml
+* @see org.acmsl.queryj.tools.customsql.xml
 */
 public class XmlSuite
 // JUnitDoclet begin extends_implements
@@ -104,16 +104,16 @@ public class XmlSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.customsql.xml");
+    new TestSuite("unittests.org.acmsl.queryj.tools.customsql.xml");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.xml.PropertyRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.xml.ParameterRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.xml.ParameterElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.xml.SqlXmlParserFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.xml.ResultElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.xml.PropertyElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.xml.ResultRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.xml.SqlElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.PropertyRefElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.SqlElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.PropertyElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ParameterElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultElementFactoryTest.class);
     
     
     

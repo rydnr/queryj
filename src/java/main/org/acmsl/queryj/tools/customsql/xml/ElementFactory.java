@@ -45,7 +45,7 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.customsql.xml;
+package org.acmsl.queryj.tools.customsql.xml;
 
 /*
  * Importing some ACM-SL classes.

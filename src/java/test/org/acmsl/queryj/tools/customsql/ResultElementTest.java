@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.customsql.
+*              unittests.org.acmsl.queryj.tools.customsql.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.customsql;
+package unittests.org.acmsl.queryj.tools.customsql;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.ResultElement;
 // JUnitDoclet end import
 
 /*
@@ -86,7 +86,7 @@ Boston, MA  02111-1307  USA
 /**
 * Tests ResultElementTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.customsql.ResultElement
+* @see org.acmsl.queryj.tools.customsql.ResultElement
 */
 public class ResultElementTest
 // JUnitDoclet begin extends_implements
@@ -94,7 +94,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.customsql.ResultElement resultelement = null;
+  org.acmsl.queryj.tools.customsql.ResultElement resultelement = null;
   // JUnitDoclet end class
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.customsql.ResultElement createInstance()
+  public org.acmsl.queryj.tools.customsql.ResultElement createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.ResultElement("r1", "class", "single");
+    return new org.acmsl.queryj.tools.customsql.ResultElement("r1", "class", "single");
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -150,7 +150,7 @@ extends TestCase
   /**
   * Tests ResultElementTestgetClassValue()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.ResultElement#getClassValue()
+  * @see org.acmsl.queryj.tools.customsql.ResultElement#getClassValue()
   */
   public void testGetClassValue()
   throws Exception
@@ -162,7 +162,7 @@ extends TestCase
   /**
   * Tests ResultElementTestgetMatches()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.ResultElement#getMatches()
+  * @see org.acmsl.queryj.tools.customsql.ResultElement#getMatches()
   */
   public void testGetMatches()
   throws Exception
@@ -174,7 +174,7 @@ extends TestCase
   /**
   * Tests ResultElementTestgetPropertyRefs()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.ResultElement#getPropertyRefs()
+  * @see org.acmsl.queryj.tools.customsql.ResultElement#getPropertyRefs()
   */
   public void testGetPropertyRefs()
   throws Exception
@@ -186,7 +186,7 @@ extends TestCase
   /**
   * Tests ResultElementTestadd()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.ResultElement#add(org.acmsl.queryj.customsql.PropertyRefElement)
+  * @see org.acmsl.queryj.tools.customsql.ResultElement#add(org.acmsl.queryj.tools.customsql.PropertyRefElement)
   */
   public void testAdd()
   throws Exception
@@ -198,7 +198,7 @@ extends TestCase
   /**
   * Tests ResultElementTesttoString()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.ResultElement#toString()
+  * @see org.acmsl.queryj.tools.customsql.ResultElement#toString()
   */
   public void testToString()
   throws Exception

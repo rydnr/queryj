@@ -95,7 +95,7 @@ public class DatabaseMetaDataLoggingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      */
-    public boolean handle(Command command)
+    public boolean handle(final Command command)
     {
         boolean result = false;
 
@@ -107,7 +107,7 @@ public class DatabaseMetaDataLoggingHandler
             {
                 result = handle(t_AntCommand);
             }
-            catch  (BuildException buildException)
+            catch  (final BuildException buildException)
             {
                 Project t_Project = t_AntCommand.getProject();
 
@@ -130,7 +130,7 @@ public class DatabaseMetaDataLoggingHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -1018,8 +1018,8 @@ public class DatabaseMetaDataLoggingHandler
      * @throws BuildException if the metadata retrieval process if faulty.
      */
     protected DatabaseMetaData retrieveDatabaseMetaData(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
         DatabaseMetaData result = null;
 

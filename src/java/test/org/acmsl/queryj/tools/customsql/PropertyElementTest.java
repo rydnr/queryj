@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.customsql.
+*              unittests.org.acmsl.queryj.tools.customsql.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.customsql;
+package unittests.org.acmsl.queryj.tools.customsql;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.tools.customsql.PropertyElement;
 // JUnitDoclet end import
 
 /*
@@ -86,7 +86,7 @@ Boston, MA  02111-1307  USA
 /**
 * Tests PropertyElementTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.customsql.PropertyElement
+* @see org.acmsl.queryj.tools.customsql.PropertyElement
 */
 public class PropertyElementTest
 // JUnitDoclet begin extends_implements
@@ -94,7 +94,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.customsql.PropertyElement propertyelement = null;
+  org.acmsl.queryj.tools.customsql.PropertyElement propertyelement = null;
   // JUnitDoclet end class
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.customsql.PropertyElement createInstance()
+  public org.acmsl.queryj.tools.customsql.PropertyElement createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.PropertyElement("pp1", "column_name", 1, "name", "int");
+    return new org.acmsl.queryj.tools.customsql.PropertyElement("pp1", "column_name", 1, "name", "int");
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -150,7 +150,7 @@ extends TestCase
   /**
   * Tests PropertyElementTestgetColumnName()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.PropertyElement#getColumnName()
+  * @see org.acmsl.queryj.tools.customsql.PropertyElement#getColumnName()
   */
   public void testGetColumnName()
   throws Exception
@@ -162,7 +162,7 @@ extends TestCase
   /**
   * Tests PropertyElementTestgetIndex()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.PropertyElement#getIndex()
+  * @see org.acmsl.queryj.tools.customsql.PropertyElement#getIndex()
   */
   public void testGetIndex()
   throws Exception
@@ -174,7 +174,7 @@ extends TestCase
   /**
   * Tests PropertyElementTestgetName()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.PropertyElement#getName()
+  * @see org.acmsl.queryj.tools.customsql.PropertyElement#getName()
   */
   public void testGetName()
   throws Exception
@@ -186,7 +186,7 @@ extends TestCase
   /**
   * Tests PropertyElementTestgetType()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.PropertyElement#getType()
+  * @see org.acmsl.queryj.tools.customsql.PropertyElement#getType()
   */
   public void testGetType()
   throws Exception
@@ -198,7 +198,7 @@ extends TestCase
   /**
   * Tests PropertyElementTesttoString()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.PropertyElement#toString()
+  * @see org.acmsl.queryj.tools.customsql.PropertyElement#toString()
   */
   public void testToString()
   throws Exception

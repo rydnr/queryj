@@ -51,7 +51,6 @@ package unittests.org.acmsl.queryj;
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.customsql.CustomsqlSuite;
 import unittests.org.acmsl.queryj.dao.DaoSuite;
 import unittests.org.acmsl.queryj.tools.ToolsSuite;
 
@@ -113,7 +112,6 @@ public class QueryjSuite
     suite.addTestSuite(unittests.org.acmsl.queryj.QueryResultSetTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.ConditionOperatorRepositoryTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.customsql.CustomsqlSuite.suite());
     suite.addTest(unittests.org.acmsl.queryj.dao.DaoSuite.suite());
     suite.addTest(unittests.org.acmsl.queryj.tools.ToolsSuite.suite());
     

@@ -256,6 +256,27 @@ public class ParameterValidationHandler
          "Empty externally-managed fields information specified.";
 
     /**
+     * The custom-sql model.
+     */
+    public static final String CUSTOM_SQL_MODEL = "customSqlModel";
+
+    /**
+     * The sql.xml file.
+     */
+    public static final String SQL_XML_FILE = "sqlXmlFile";
+
+    /**
+     * The missing tables error message.
+     */
+    public static final String SQL_XML_FILE_MISSING =
+         "No sql.xml file specified.";
+
+    /**
+     * The custom-sql XML model.
+     */
+    public static final String CUSTOM_SQL_MODEL_XML = "xml";
+
+    /**
      * Creates a ParameterValidationHandler.
      */
     public ParameterValidationHandler() {};
@@ -334,7 +355,9 @@ public class ParameterValidationHandler
                 (Boolean)          parameters.get(GENERATE_MOCK_DAO),
                 (AntTablesElement) parameters.get(TABLES),
                 (AntExternallyManagedFieldsElement)
-                    parameters.get(EXTERNALLY_MANAGED_FIELDS));
+                parameters.get(EXTERNALLY_MANAGED_FIELDS),
+                (String)           parameters.get(CUSTOM_SQL_MODEL),
+                (String)           parameters.get(SQL_XML_FILE));
         }
     }
 
@@ -357,27 +380,31 @@ public class ParameterValidationHandler
      * @param tables the table information.
      * @param externallyManagedFields the externally-managed fields
      * information.
-     * @exception org.apache.tools.ant.BuildException whenever the required
+     * @param customSqlModel the model for custom-sql information.
+     * @param sqlXmlFile the sql.xml file.
+     * @throws BuildException whenever the required
      * parameters are not present or valid.
      */
     protected void validateParameters(
-            String                            driver,
-            String                            url,
-            String                            username,
-            String                            password,
-            String                            catalog,
-            String                            schema,
-            String                            repository,
-            String                            packageName,
-            Path                              classpath,
-            File                              outputdir,
-            Boolean                           extractProcedures,
-            Boolean                           extractFunctions,
-            String                            jndiDataSources,
-            Boolean                           generateMockDAO,
-            AntTablesElement                  tables,
-            AntExternallyManagedFieldsElement externallyManagedFields)
-        throws  BuildException
+        final String                            driver,
+        final String                            url,
+        final String                            username,
+        final String                            password,
+        final String                            catalog,
+        final String                            schema,
+        final String                            repository,
+        final String                            packageName,
+        final Path                              classpath,
+        final File                              outputdir,
+        final Boolean                           extractProcedures,
+        final Boolean                           extractFunctions,
+        final String                            jndiDataSources,
+        final Boolean                           generateMockDAO,
+        final AntTablesElement                  tables,
+        final AntExternallyManagedFieldsElement externallyManagedFields,
+        final String                            customSqlModel,
+        final String                            sqlXmlFile)
+      throws  BuildException
     {
         if  (driver == null) 
         {
@@ -461,6 +488,18 @@ public class ParameterValidationHandler
                  || (externallyManagedFields.getFields().size() == 0)))
         {
             throw new BuildException(EXTERNALLY_MANAGED_FIELDS_MISSING);
+        }
+
+        /* Not mandatory
+        if  (customSqlModel == null)
+        {
+            throw new BuildException(CUSTOM_SQL_MODEL_MISSING);
+        }
+        */
+        if  (   (CUSTOM_SQL_MODEL_XML.equals(customSqlModel))
+             && (sqlXmlFile == null))
+        {
+            throw new BuildException(SQL_XML_FILE_MISSING);
         }
     }
 

@@ -53,6 +53,7 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.AntTablesElement;
+import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
@@ -193,6 +194,17 @@ public class QueryJTask
      * The "generate-mock-dao-implementation" flag.
      */
     private boolean m__bGenerateMockDAOImplementation = true;
+
+    /**
+     * The "custom-sql-model" type.
+     */
+    private String m__strCustomSqlModel =
+        ParameterValidationHandler.CUSTOM_SQL_MODEL_XML;
+
+    /**
+     * The "sql-xml-file" path.
+     */
+    private File m__SqlXmlFile;
 
     /**
      * The nested tables.
@@ -639,6 +651,42 @@ public class QueryJTask
     }
 
     /**
+     * Specifies the custom-sql model.
+     * @param model the model.
+     */
+    public void setCustomSqlModel(final String model)
+    {
+        m__strCustomSqlModel = model;
+    }
+
+    /**
+     * Retrieves the custom-sql model.
+     * @return such model.
+     */
+    public String getCustomSqlModel()
+    {
+        return m__strCustomSqlModel;
+    }
+
+    /**
+     * Specifies the sql.xml file.
+     * @param file the new file.
+     */
+    public void setSqlXmlFile(final File file)
+    {
+        m__SqlXmlFile = file;
+    }
+
+    /**
+     * Retrieves the sql.xml file.
+     * @return such information.
+     */
+    public File getSqlXmlFile() 
+    {
+        return m__SqlXmlFile;
+    }
+
+    /**
      * Builds the chain.
      * @param chain the chain to be configured.
      * @return the updated chain.
@@ -654,6 +702,8 @@ public class QueryJTask
             result.add(new JdbcConnectionOpeningHandler());
             result.add(new DatabaseMetaDataRetrievalHandler());
 //            result.add(new OracleMetaDataRetrievalHandler());
+
+            result.add(new CustomSqlProviderRetrievalHandler());
 
             result.add(new DatabaseMetaDataLoggingHandler());
 

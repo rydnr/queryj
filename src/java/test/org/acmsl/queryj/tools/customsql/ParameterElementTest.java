@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.customsql.
+*              unittests.org.acmsl.queryj.tools.customsql.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.customsql;
+package unittests.org.acmsl.queryj.tools.customsql;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.customsql.ParameterElement;
+import org.acmsl.queryj.tools.customsql.ParameterElement;
 // JUnitDoclet end import
 
 /*
@@ -86,7 +86,7 @@ Boston, MA  02111-1307  USA
 /**
 * Tests ParameterElementTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.customsql.ParameterElement
+* @see org.acmsl.queryj.tools.customsql.ParameterElement
 */
 public class ParameterElementTest
 // JUnitDoclet begin extends_implements
@@ -94,7 +94,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.customsql.ParameterElement parameterelement = null;
+  org.acmsl.queryj.tools.customsql.ParameterElement parameterelement = null;
   // JUnitDoclet end class
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.customsql.ParameterElement createInstance()
+  public org.acmsl.queryj.tools.customsql.ParameterElement createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.ParameterElement("p1", 1, "long");
+    return new org.acmsl.queryj.tools.customsql.ParameterElement("p1", 1, "long");
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -150,7 +150,7 @@ extends TestCase
   /**
   * Tests ParameterElementTestgetIndex()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.ParameterElement#getIndex()
+  * @see org.acmsl.queryj.tools.customsql.ParameterElement#getIndex()
   */
   public void testGetIndex()
   throws Exception
@@ -162,7 +162,7 @@ extends TestCase
   /**
   * Tests ParameterElementTestgetType()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.ParameterElement#getType()
+  * @see org.acmsl.queryj.tools.customsql.ParameterElement#getType()
   */
   public void testGetType()
   throws Exception
@@ -174,7 +174,7 @@ extends TestCase
   /**
   * Tests ParameterElementTesttoString()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.ParameterElement#toString()
+  * @see org.acmsl.queryj.tools.customsql.ParameterElement#toString()
   */
   public void testToString()
   throws Exception

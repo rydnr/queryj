@@ -101,7 +101,7 @@ public class JdbcConnectionOpeningHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      */
-    public boolean handle(Command command)
+    public boolean handle(final Command command)
     {
         boolean result = false;
 
@@ -111,7 +111,7 @@ public class JdbcConnectionOpeningHandler
             {
                 result = handle((AntCommand) command);
             }
-            catch  (BuildException buildException)
+            catch  (final BuildException buildException)
             {
                 LogFactory.getLog(getClass()).error(
                     "unhandled.exception",
@@ -128,7 +128,7 @@ public class JdbcConnectionOpeningHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -150,7 +150,7 @@ public class JdbcConnectionOpeningHandler
      * @return the JDBC connection.
      * @throws BuildException if the connection cannot be opened.
      */
-    protected Connection openConnection(Map parameters)
+    protected Connection openConnection(final Map parameters)
         throws  BuildException
     {
         Connection result = null;
@@ -187,11 +187,11 @@ public class JdbcConnectionOpeningHandler
      * parameters are not present or valid.
      */
     protected Connection openConnection(
-            String driver,
-            String url,
-            String username,
-            String password)
-        throws  BuildException
+        final String driver,
+        final String url,
+        final String username,
+        final String password)
+      throws  BuildException
     {
         Connection result = null;
 
@@ -206,7 +206,7 @@ public class JdbcConnectionOpeningHandler
                     DriverManager.getConnection(
                         url, username, password);
             }
-            catch  (Exception exception)
+            catch  (final Exception exception)
             {
                 throw new BuildException(exception);
             }
@@ -222,9 +222,9 @@ public class JdbcConnectionOpeningHandler
      * @throws BuildException if the connection cannot be stored for any reason.
      */
     protected void storeConnection(
-            Connection connection,
-            Map        parameters)
-        throws  BuildException
+        final Connection connection,
+        final Map        parameters)
+      throws  BuildException
     {
         if  (   (connection != null)
              && (parameters != null))

@@ -51,6 +51,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateFactory;
@@ -241,6 +242,7 @@ public class DAOTemplateGenerator
      * Generates a DAO template.
      * @param tableTemplate the table template.
      * @param metaDataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -299,6 +301,7 @@ public class DAOTemplateGenerator
     public DAOTemplate createDAOTemplate(
         final TableTemplate           tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
+        final CustomSqlProvider       customSqlProvider,
         final String                  header,
         final String                  packageDeclaration,
         final String                  packageName,
@@ -367,6 +370,7 @@ public class DAOTemplateGenerator
                     t_TemplateFactory.createDAOTemplate(
                         tableTemplate,
                         metaDataManager,
+                        customSqlProvider,
                         header,
                         packageDeclaration,
                         packageName,
@@ -421,6 +425,7 @@ public class DAOTemplateGenerator
                     new DAOTemplate(
                         tableTemplate,
                         metaDataManager,
+                        customSqlProvider,
                         header,
                         packageDeclaration,
                         packageName,
@@ -478,6 +483,7 @@ public class DAOTemplateGenerator
      * Generates a DAO template.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -490,6 +496,7 @@ public class DAOTemplateGenerator
     public DAOTemplate createDAOTemplate(
         final TableTemplate           tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
+        final CustomSqlProvider       customSqlProvider,
         final String                  packageName,
         final String                  engineName,
         final String                  engineVersion,
@@ -517,6 +524,7 @@ public class DAOTemplateGenerator
                     t_TemplateFactory.createDAOTemplate(
                         tableTemplate,
                         metaDataManager,
+                        customSqlProvider,
                         packageName,
                         engineName,
                         engineVersion,
@@ -530,6 +538,7 @@ public class DAOTemplateGenerator
                     new DAOTemplate(
                         tableTemplate,
                         metaDataManager,
+                        customSqlProvider,
                         packageName,
                         engineName,
                         engineVersion,

@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.customsql.xml.
+*              unittests.org.acmsl.queryj.tools.customsql.xml.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.customsql.xml;
+package unittests.org.acmsl.queryj.tools.customsql.xml;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.customsql.xml.SqlXmlParserFactory;
+import org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory;
 // JUnitDoclet end import
 
 /*
@@ -86,7 +86,7 @@ Boston, MA  02111-1307  USA
 /**
 * Tests SqlXmlParserFactoryTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.customsql.xml.SqlXmlParserFactory
+* @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory
 */
 public class SqlXmlParserFactoryTest
 // JUnitDoclet begin extends_implements
@@ -94,7 +94,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.customsql.xml.SqlXmlParserFactory sqlxmlparserfactory = null;
+  org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory sqlxmlparserfactory = null;
   // JUnitDoclet end class
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.customsql.xml.SqlXmlParserFactory createInstance()
+  public org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.customsql.xml.SqlXmlParserFactory.getInstance();
+    return org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory.getInstance();
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -150,7 +150,7 @@ extends TestCase
   /**
   * Tests SqlXmlParserFactoryTestgetInstance()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.xml.SqlXmlParserFactory#getInstance()
+  * @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory#getInstance()
   */
   public void testGetInstance()
   throws Exception
@@ -162,7 +162,7 @@ extends TestCase
   /**
   * Tests SqlXmlParserFactoryTestcreateSqlXmlParser()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.xml.SqlXmlParserFactory#createSqlXmlParser()
+  * @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory#createSqlXmlParser()
   */
   public void testCreateSqlXmlParser()
   throws Exception

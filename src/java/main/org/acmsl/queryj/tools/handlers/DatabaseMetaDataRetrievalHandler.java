@@ -131,7 +131,7 @@ public class DatabaseMetaDataRetrievalHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      */
-    public boolean handle(Command command)
+    public boolean handle(final Command command)
     {
         boolean result = false;
 
@@ -143,7 +143,7 @@ public class DatabaseMetaDataRetrievalHandler
             {
                 result = handle(t_AntCommand);
             }
-            catch  (BuildException buildException)
+            catch  (final BuildException buildException)
             {
                 Project t_Project = t_AntCommand.getProject();
 
@@ -166,7 +166,7 @@ public class DatabaseMetaDataRetrievalHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -461,7 +461,7 @@ public class DatabaseMetaDataRetrievalHandler
      * @return the metadata instance.
      * @throws BuildException if the retrieval process cannot be performed.
      */
-    protected DatabaseMetaData retrieveMetaData(Map parameters)
+    protected DatabaseMetaData retrieveMetaData(final Map parameters)
         throws  BuildException
     {
         DatabaseMetaData result = null;
@@ -485,7 +485,7 @@ public class DatabaseMetaDataRetrievalHandler
      * @throws org.apache.tools.ant.BuildException whenever the required
      * parameters are not present or valid.
      */
-    protected DatabaseMetaData retrieveMetaData(Connection connection)
+    protected DatabaseMetaData retrieveMetaData(final Connection connection)
         throws  BuildException
     {
         DatabaseMetaData result = null;
@@ -512,7 +512,7 @@ public class DatabaseMetaDataRetrievalHandler
      * @return the table information.
      * @throws BuildException if the retrieval process cannot be performed.
      */
-    protected AntTablesElement retrieveTablesElement(Map parameters)
+    protected AntTablesElement retrieveTablesElement(final Map parameters)
         throws  BuildException
     {
         AntTablesElement result = null;
@@ -534,7 +534,7 @@ public class DatabaseMetaDataRetrievalHandler
      * @return such setting.
      * @throws BuildException if the retrieval process cannot be performed.
      */
-    protected boolean retrieveExtractTables(Map parameters)
+    protected boolean retrieveExtractTables(final Map parameters)
         throws  BuildException
     {
         return
@@ -548,7 +548,7 @@ public class DatabaseMetaDataRetrievalHandler
      * @return such setting.
      * @throws BuildException if the retrieval process cannot be performed.
      */
-    protected boolean retrieveExtractProcedures(Map parameters)
+    protected boolean retrieveExtractProcedures(final Map parameters)
         throws  BuildException
     {
         return
@@ -563,7 +563,7 @@ public class DatabaseMetaDataRetrievalHandler
      * @return the boolean value.
      * @throws BuildException if the retrieval process cannot be performed.
      */
-    protected boolean retrieveBoolean(String name, Map parameters)
+    protected boolean retrieveBoolean(final String name, final Map parameters)
         throws  BuildException
     {
         Boolean t_Result = null;
@@ -595,14 +595,14 @@ public class DatabaseMetaDataRetrievalHandler
      * @throws BuildException if the retrieval process cannot be performed.
      */
     protected DatabaseMetaDataManager buildMetaDataManager(
-            boolean disableTableExtraction,
-            boolean lazyTableExtraction,
-            boolean disableProcedureExtraction,
-            boolean lazyProcedureExtraction,
-            Map     parameters,
-            Project project,
-            Task    task)
-        throws  BuildException
+        final boolean disableTableExtraction,
+        final boolean lazyTableExtraction,
+        final boolean disableProcedureExtraction,
+        final boolean lazyProcedureExtraction,
+        final Map     parameters,
+        final Project project,
+        final Task    task)
+      throws  BuildException
     {
         DatabaseMetaDataManager result = null;
 
@@ -655,18 +655,18 @@ public class DatabaseMetaDataRetrievalHandler
      * parameters are not present or valid.
      */
     protected DatabaseMetaDataManager buildMetaDataManager(
-            String[]         tableNames,
-            String[]         procedureNames,
-            boolean          disableTableExtraction,
-            boolean          lazyTableExtraction,
-            boolean          disableProcedureExtraction,
-            boolean          lazyProcedureExtraction,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema,
-            Project          project,
-            Task             task)
-        throws  BuildException
+        final String[]         tableNames,
+        final String[]         procedureNames,
+        final boolean          disableTableExtraction,
+        final boolean          lazyTableExtraction,
+        final boolean          disableProcedureExtraction,
+        final boolean          lazyProcedureExtraction,
+        final DatabaseMetaData metaData,
+        final String           catalog,
+        final String           schema,
+        final Project          project,
+        final Task             task)
+      throws  BuildException
     {
         DatabaseMetaDataManager result = null;
 
@@ -688,7 +688,7 @@ public class DatabaseMetaDataRetrievalHandler
                         project,
                         task);
             }
-            catch  (Exception exception)
+            catch  (final Exception exception)
             {
                 if  (project != null)
                 {
@@ -714,9 +714,9 @@ public class DatabaseMetaDataRetrievalHandler
      * @throws BuildException if the metadata cannot be stored for any reason.
      */
     protected void storeMetaData(
-            DatabaseMetaData metaData,
-            Map              parameters)
-        throws  BuildException
+        final DatabaseMetaData metaData,
+        final Map              parameters)
+      throws  BuildException
     {
         if  (   (metaData   != null)
              && (parameters != null))
@@ -733,9 +733,9 @@ public class DatabaseMetaDataRetrievalHandler
      * @throws BuildException if the table names cannot be stored for any reason.
      */
     protected void storeTableNames(
-            String[] tableNames,
-            Map      parameters)
-        throws  BuildException
+        final String[] tableNames,
+        final Map      parameters)
+      throws  BuildException
     {
         if  (   (tableNames != null)
              && (parameters != null))
@@ -751,9 +751,9 @@ public class DatabaseMetaDataRetrievalHandler
      * @throws BuildException if the manager cannot be stored for any reason.
      */
     protected void storeMetaDataManager(
-            DatabaseMetaDataManager metaDataManager,
-            Map                    parameters)
-        throws  BuildException
+        final DatabaseMetaDataManager metaDataManager,
+        final Map                    parameters)
+      throws  BuildException
     {
         if  (   (metaDataManager != null)
              && (parameters      != null))
@@ -775,7 +775,7 @@ public class DatabaseMetaDataRetrievalHandler
      * Builds the table fields key.
      * @return the map key.
      */
-    protected Object buildTableFieldsKey(Object key)
+    protected Object buildTableFieldsKey(final Object key)
     {
         return ".98.table'@'@'fields`p" + key;
     }
@@ -785,7 +785,7 @@ public class DatabaseMetaDataRetrievalHandler
      * @param firstKey the first object key.
      * @return the map key.
      */
-    protected Object buildPkKey(Object firstKey)
+    protected Object buildPkKey(final Object firstKey)
     {
         return ".|\\|.pk" + firstKey;
     }
@@ -796,7 +796,8 @@ public class DatabaseMetaDataRetrievalHandler
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildPkKey(Object firstKey, Object secondKey)
+    protected Object buildPkKey(
+        final Object firstKey, final Object secondKey)
     {
         return buildPkKey(firstKey) + "-.,.,-" + secondKey;
     }
@@ -806,7 +807,7 @@ public class DatabaseMetaDataRetrievalHandler
      * @param firstKey the first object key.
      * @return the map key.
      */
-    protected Object buildFkKey(Object firstKey)
+    protected Object buildFkKey(final Object firstKey)
     {
         return "==fk''" + firstKey;
     }
@@ -817,7 +818,8 @@ public class DatabaseMetaDataRetrievalHandler
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildFkKey(Object firstKey, Object secondKey)
+    protected Object buildFkKey(
+        final Object firstKey, final Object secondKey)
     {
         return buildFkKey(firstKey) + ".,.," + secondKey;
     }

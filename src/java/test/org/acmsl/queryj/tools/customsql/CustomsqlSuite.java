@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.customsql.
+*              unittests.org.acmsl.queryj.tools.customsql.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,14 +44,15 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.customsql;
+package unittests.org.acmsl.queryj.tools.customsql;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.customsql.xml.XmlSuite;
+import unittests.org.acmsl.queryj.tools.customsql.handlers.HandlersSuite;
+import unittests.org.acmsl.queryj.tools.customsql.xml.XmlSuite;
 
 
 /*
@@ -89,9 +90,9 @@ Boston, MA  02111-1307  USA
 
 /**
 * Executes all tests defined for package
-* org.acmsl.queryj.customsql
+* org.acmsl.queryj.tools.customsql
 * @version $Revision$
-* @see org.acmsl.queryj.customsql
+* @see org.acmsl.queryj.tools.customsql
 */
 public class CustomsqlSuite
 // JUnitDoclet begin extends_implements
@@ -105,17 +106,18 @@ public class CustomsqlSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.customsql");
+    new TestSuite("unittests.org.acmsl.queryj.tools.customsql");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.ResultRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.ResultElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.ParameterElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.SqlElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.ParameterRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.PropertyRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.PropertyElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.SqlElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultRefElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ParameterElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ParameterRefElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.PropertyRefElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.PropertyElementTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.customsql.xml.XmlSuite.suite());
+    suite.addTest(unittests.org.acmsl.queryj.tools.customsql.handlers.HandlersSuite.suite());
+    suite.addTest(unittests.org.acmsl.queryj.tools.customsql.xml.XmlSuite.suite());
     
     
     // JUnitDoclet begin method suite

@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.customsql.xml.
+*              unittests.org.acmsl.queryj.tools.customsql.xml.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.customsql.xml;
+package unittests.org.acmsl.queryj.tools.customsql.xml;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.customsql.xml.ResultElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.ResultElementFactory;
 // JUnitDoclet end import
 
 /*
@@ -86,7 +86,7 @@ Boston, MA  02111-1307  USA
 /**
 * Tests ResultElementFactoryTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.customsql.xml.ResultElementFactory
+* @see org.acmsl.queryj.tools.customsql.xml.ResultElementFactory
 */
 public class ResultElementFactoryTest
 // JUnitDoclet begin extends_implements
@@ -94,7 +94,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.customsql.xml.ResultElementFactory resultelementfactory = null;
+  org.acmsl.queryj.tools.customsql.xml.ResultElementFactory resultelementfactory = null;
   // JUnitDoclet end class
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.customsql.xml.ResultElementFactory createInstance()
+  public org.acmsl.queryj.tools.customsql.xml.ResultElementFactory createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.xml.ResultElementFactory();
+    return new org.acmsl.queryj.tools.customsql.xml.ResultElementFactory();
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -150,7 +150,7 @@ extends TestCase
   /**
   * Tests ResultElementFactoryTestcreateObject()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.xml.ResultElementFactory#createObject(org.xml.sax.Attributes, org.apache.commons.digester.Digester, org.acmsl.commons.utils.ConversionUtils)
+  * @see org.acmsl.queryj.tools.customsql.xml.ResultElementFactory#createObject(org.xml.sax.Attributes, org.apache.commons.digester.Digester, org.acmsl.commons.utils.ConversionUtils)
   */
   public void testCreateObject()
   throws Exception

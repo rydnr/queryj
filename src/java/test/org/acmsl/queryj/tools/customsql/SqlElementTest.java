@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.customsql.
+*              unittests.org.acmsl.queryj.tools.customsql.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.customsql;
+package unittests.org.acmsl.queryj.tools.customsql;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.SqlElement;
 // JUnitDoclet end import
 
 /*
@@ -86,7 +86,7 @@ Boston, MA  02111-1307  USA
 /**
 * Tests SqlElementTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.customsql.SqlElement
+* @see org.acmsl.queryj.tools.customsql.SqlElement
 */
 public class SqlElementTest
 // JUnitDoclet begin extends_implements
@@ -94,7 +94,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.customsql.SqlElement sqlelement = null;
+  org.acmsl.queryj.tools.customsql.SqlElement sqlelement = null;
   // JUnitDoclet end class
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.customsql.SqlElement createInstance()
+  public org.acmsl.queryj.tools.customsql.SqlElement createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.SqlElement("s1", "dao", "name", "select", "all");
+    return new org.acmsl.queryj.tools.customsql.SqlElement("s1", "dao", "name", "select", "all");
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -150,7 +150,7 @@ extends TestCase
   /**
   * Tests SqlElementTestgetDao()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.SqlElement#getDao()
+  * @see org.acmsl.queryj.tools.customsql.SqlElement#getDao()
   */
   public void testGetDao()
   throws Exception
@@ -162,7 +162,7 @@ extends TestCase
   /**
   * Tests SqlElementTestgetName()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.SqlElement#getName()
+  * @see org.acmsl.queryj.tools.customsql.SqlElement#getName()
   */
   public void testGetName()
   throws Exception
@@ -174,7 +174,7 @@ extends TestCase
   /**
   * Tests SqlElementTestgetType()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.SqlElement#getType()
+  * @see org.acmsl.queryj.tools.customsql.SqlElement#getType()
   */
   public void testGetType()
   throws Exception
@@ -186,7 +186,7 @@ extends TestCase
   /**
   * Tests SqlElementTestgetImplementation()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.SqlElement#getImplementation()
+  * @see org.acmsl.queryj.tools.customsql.SqlElement#getImplementation()
   */
   public void testGetImplementation()
   throws Exception
@@ -218,7 +218,7 @@ extends TestCase
   /**
   * Tests SqlElementTestgetParameterRefs()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.SqlElement#getParameterRefs()
+  * @see org.acmsl.queryj.tools.customsql.SqlElement#getParameterRefs()
   */
   public void testGetParameterRefs()
   throws Exception
@@ -230,7 +230,7 @@ extends TestCase
   /**
   * Tests SqlElementTestadd()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.SqlElement#add(org.acmsl.queryj.customsql.ParameterRefElement)
+  * @see org.acmsl.queryj.tools.customsql.SqlElement#add(org.acmsl.queryj.tools.customsql.ParameterRefElement)
   */
   public void testAdd()
   throws Exception
@@ -247,8 +247,8 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setResultRef getResultRef
-    org.acmsl.queryj.customsql.ResultRefElement[] t_aTests =
-        {new org.acmsl.queryj.customsql.ResultRefElement("r1"), null};
+    org.acmsl.queryj.tools.customsql.ResultRefElement[] t_aTests =
+        {new org.acmsl.queryj.tools.customsql.ResultRefElement("r1"), null};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {
@@ -263,7 +263,7 @@ extends TestCase
   /**
   * Tests SqlElementTesttoString()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.SqlElement#toString()
+  * @see org.acmsl.queryj.tools.customsql.SqlElement#toString()
   */
   public void testToString()
   throws Exception

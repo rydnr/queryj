@@ -44,14 +44,14 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.customsql;
+package org.acmsl.queryj.tools.customsql;
 
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.customsql.AbstractIdElement;
-import org.acmsl.queryj.customsql.ParameterRefElement;
-import org.acmsl.queryj.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.AbstractIdElement;
+import org.acmsl.queryj.tools.customsql.ParameterRefElement;
+import org.acmsl.queryj.tools.customsql.ResultRefElement;
 
 /*
  * Importing JDK classes.

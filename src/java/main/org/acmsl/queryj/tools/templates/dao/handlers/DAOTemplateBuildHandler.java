@@ -51,6 +51,8 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
@@ -132,6 +134,9 @@ public class DAOTemplateBuildHandler
             DatabaseMetaDataManager t_MetaDataManager =
                 retrieveDatabaseMetaDataManager(attributes);
 
+            CustomSqlProvider t_CustomSqlProvider =
+                retrieveCustomSqlProvider(attributes);
+
             DAOTemplateGenerator t_DAOTemplateGenerator =
                 DAOTemplateGenerator.getInstance();
 
@@ -179,6 +184,7 @@ public class DAOTemplateBuildHandler
                             t_DAOTemplateGenerator.createDAOTemplate(
                                 t_aTableTemplates[t_iDAOIndex],
                                 t_MetaDataManager,
+                                t_CustomSqlProvider,
                                 t_strPackage,
                                 t_MetaData.getDatabaseProductName(),
                                 t_MetaData.getDatabaseProductVersion(),
@@ -265,6 +271,23 @@ public class DAOTemplateBuildHandler
             (DatabaseMetaDataManager)
                 parameters.get(
                     DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
+    }
+
+    /**
+     * Retrieves the custom-sql provider from the attribute map.
+     * @param parameters the parameter map.
+     * @return the provider.
+     * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    protected CustomSqlProvider retrieveCustomSqlProvider(
+        final Map parameters)
+      throws  BuildException
+    {
+        return
+            (CustomSqlProvider)
+                parameters.get(
+                    CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
     }
 
     /**

@@ -45,7 +45,7 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.customsql;
+package org.acmsl.queryj.tools.customsql;
 
 /**
  * Common parent to all <i>custom-sql</i> elements with <i>id</i>
