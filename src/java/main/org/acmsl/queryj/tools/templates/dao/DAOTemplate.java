@@ -803,7 +803,7 @@ public class DAOTemplate
                                             t_ResultElement.getId(), "-", "_"),
                                         ".",
                                         "_"),
-                                    '_'),
+                                    '_').toUpperCase(),
                                 stringUtils.capitalize(
                                     stringUtils.capitalize(
                                         stringUtils.capitalize(
