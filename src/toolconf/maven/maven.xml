@@ -29,7 +29,7 @@
       PMD makes the site generation crash if no errors are
       found. It's better to do it manually.
     -->
-    <attainGoal name="pmd"/>
+    <!--attainGoal name="pmd"/-->
 
     <attainGoal name="faq"/>
 
@@ -63,10 +63,12 @@
 
     <!--attainGoal name="pdf"/-->
 
-    <ant:replace dir="target" value="http://bugzilla.acm-sl.org/show_bug.cgi?id=">
-      <include name="**/*.html"/>
-        <replacetoken><![CDATA[${issue.url}]]></replacetoken>
-    </ant:replace>    
+    <ant:replace
+      dir="../../../target/docs"
+      token="${issue.url}"
+      value="http://bugzilla.acm-sl.org/show_bug.cgi?id=">
+      <ant:include name="**/*.html"/>
+    </ant:replace>
   </preGoal>
 
 </project>
