@@ -58,162 +58,33 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .JdbcDAOTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .JdbcDAOTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.handlers
-    .KeywordRepositoryTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.handlers
-    .KeywordRepositoryTemplateWritingHandler;
-
+import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.templates.handlers
-    .ProcedureRepositoryTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.handlers
-    .ProcedureRepositoryTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .BaseDAOFactoryTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .BaseDAOFactoryTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .BaseDAOTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .BaseDAOTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .ConfigurationPropertiesTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .ConfigurationPropertiesTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DAOChooserTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DAOChooserTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DAOFactoryTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DAOFactoryTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DAOTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DAOTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DAOTestTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DAOTestTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DataAccessManagerTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DataAccessManagerTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.dao.mock.handlers
-    .MockDAOFactoryTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.mock.handlers
-    .MockDAOFactoryTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.dao.mock.handlers
-    .MockDAOTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.dao.mock.handlers
-    .MockDAOTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.handlers
-    .TableRepositoryTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.handlers
-    .TableRepositoryTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.handlers
-    .TableTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.handlers
-    .TableTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.handlers
-    .TestSuiteTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.handlers
-    .TestSuiteTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.functions.numeric.handlers
-    .NumericFunctionsTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.functions.numeric.handlers
-    .NumericFunctionsTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.functions.numeric.handlers
-    .NumericFunctionsTestTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.functions.numeric.handlers
-    .NumericFunctionsTestTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.functions.system.handlers
-    .SystemFunctionsTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.functions.system.handlers
-    .SystemFunctionsTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.functions.system.handlers
-    .SystemFunctionsTestTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.functions.system.handlers
-    .SystemFunctionsTestTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.functions.text.handlers
-    .TextFunctionsTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.functions.text.handlers
-    .TextFunctionsTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.functions.text.handlers
-    .TextFunctionsTestTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.functions.text.handlers
-    .TextFunctionsTestTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.functions.time.handlers
-    .TimeFunctionsTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.functions.time.handlers
-    .TimeFunctionsTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.functions.time.handlers
-    .TimeFunctionsTestTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.functions.time.handlers
-    .TimeFunctionsTestTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.valueobject.handlers
-    .ValueObjectFactoryTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.valueobject.handlers
-    .ValueObjectFactoryTemplateWritingHandler;
-
-import org.acmsl.queryj.tools.templates.valueobject.handlers
-    .ValueObjectTemplateBuildHandler;
-
-import org.acmsl.queryj.tools.templates.valueobject.handlers
-    .ValueObjectTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.ConfigurationPropertiesTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOChooserTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundle;
 
 /*
  * Importing some ACM-SL classes.
@@ -234,11 +105,6 @@ import org.apache.tools.ant.DynamicConfigurator;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
-
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Generates QueryJ classes using Ant.
@@ -810,79 +676,53 @@ public class QueryJTask
 
             result.add(new ExternallyManagedFieldsRetrievalHandler());
 
-            result.add(new TableTemplateBuildHandler());
-            result.add(new TableTemplateWritingHandler());
+            result.add(new TableTemplateHandlerBundle());
 
-            result.add(new TableRepositoryTemplateBuildHandler());
-            result.add(new TableRepositoryTemplateWritingHandler());
+            result.add(new TableRepositoryTemplateHandlerBundle());
 
-            result.add(new TimeFunctionsTemplateBuildHandler());
-            result.add(new TimeFunctionsTestTemplateBuildHandler());
-            result.add(new TimeFunctionsTemplateWritingHandler());
-            result.add(new TimeFunctionsTestTemplateWritingHandler());
+            result.add(new TimeFunctionsTemplateHandlerBundle());
+            result.add(new TimeFunctionsTestTemplateHandlerBundle());
 
-            result.add(new NumericFunctionsTemplateBuildHandler());
-            result.add(new NumericFunctionsTemplateWritingHandler());
-            result.add(new NumericFunctionsTestTemplateBuildHandler());
-            result.add(new NumericFunctionsTestTemplateWritingHandler());
+            result.add(new NumericFunctionsTemplateHandlerBundle());
+            result.add(new NumericFunctionsTestTemplateHandlerBundle());
 
-            result.add(new TextFunctionsTemplateBuildHandler());
-            result.add(new TextFunctionsTestTemplateBuildHandler());
-            result.add(new TextFunctionsTemplateWritingHandler());
-            result.add(new TextFunctionsTestTemplateWritingHandler());
+            result.add(new TextFunctionsTemplateHandlerBundle());
+            result.add(new TextFunctionsTestTemplateHandlerBundle());
 
-            result.add(new SystemFunctionsTemplateBuildHandler());
-            result.add(new SystemFunctionsTestTemplateBuildHandler());
-            result.add(new SystemFunctionsTemplateWritingHandler());
-            result.add(new SystemFunctionsTestTemplateWritingHandler());
+            result.add(new SystemFunctionsTemplateHandlerBundle());
+            result.add(new SystemFunctionsTestTemplateHandlerBundle());
 
-            result.add(new ProcedureRepositoryTemplateBuildHandler());
-            result.add(new ProcedureRepositoryTemplateWritingHandler());
+            result.add(new ProcedureRepositoryTemplateHandlerBundle());
 
-            result.add(new KeywordRepositoryTemplateBuildHandler());
-            result.add(new KeywordRepositoryTemplateWritingHandler());
+            result.add(new KeywordRepositoryTemplateHandlerBundle());
 
-            result.add(new DAOTemplateBuildHandler());
-            result.add(new DAOTemplateWritingHandler());
+            result.add(new DAOTemplateHandlerBundle());
 
-            result.add(new DAOFactoryTemplateBuildHandler());
-            result.add(new DAOFactoryTemplateWritingHandler());
+            result.add(new DAOFactoryTemplateHandlerBundle());
 
-            result.add(new ValueObjectTemplateBuildHandler());
-            result.add(new ValueObjectTemplateWritingHandler());
+            result.add(new ValueObjectTemplateHandlerBundle());
 
-            result.add(new ValueObjectFactoryTemplateBuildHandler());
-            result.add(new ValueObjectFactoryTemplateWritingHandler());
+            result.add(new ValueObjectFactoryTemplateHandlerBundle());
 
-            result.add(new BaseDAOTemplateBuildHandler());
-            result.add(new BaseDAOTemplateWritingHandler());
+            result.add(new BaseDAOTemplateHandlerBundle());
 
-            result.add(new BaseDAOFactoryTemplateBuildHandler());
-            result.add(new BaseDAOFactoryTemplateWritingHandler());
+            result.add(new BaseDAOFactoryTemplateHandlerBundle());
 
-            result.add(new DataAccessManagerTemplateBuildHandler());
-            result.add(new DataAccessManagerTemplateWritingHandler());
+            result.add(new DataAccessManagerTemplateHandlerBundle());
 
-            result.add(new DAOChooserTemplateBuildHandler());
-            result.add(new DAOChooserTemplateWritingHandler());
+            result.add(new DAOChooserTemplateHandlerBundle());
 
-            result.add(new ConfigurationPropertiesTemplateBuildHandler());
-            result.add(new ConfigurationPropertiesTemplateWritingHandler());
+            result.add(new ConfigurationPropertiesTemplateHandlerBundle());
 
-            result.add(new JdbcDAOTemplateBuildHandler());
-            result.add(new JdbcDAOTemplateWritingHandler());
+            result.add(new JdbcDAOTemplateHandlerBundle());
 
-            result.add(new DAOTestTemplateBuildHandler());
-            result.add(new DAOTestTemplateWritingHandler());
+            result.add(new DAOTestTemplateHandlerBundle());
 
-            result.add(new MockDAOTemplateBuildHandler());
-            result.add(new MockDAOTemplateWritingHandler());
+            result.add(new MockDAOTemplateHandlerBundle());
 
-            result.add(new MockDAOFactoryTemplateBuildHandler());
-            result.add(new MockDAOFactoryTemplateWritingHandler());
+            result.add(new MockDAOFactoryTemplateHandlerBundle());
 
-            result.add(new TestSuiteTemplateBuildHandler());
-            result.add(new TestSuiteTemplateWritingHandler());
+            result.add(new TestSuiteTemplateHandlerBundle());
 
             result.add(new JdbcConnectionClosingHandler());
         }
