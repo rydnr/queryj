@@ -154,9 +154,13 @@ public abstract class BaseDAOTemplate
      */
     public static final String ACMSL_IMPORTS =
           "/*\n"
-        + " * Importing some ACM-SL classes.\n"
+        + " * Importing QueryJ classes.\n"
         + " */\n"
-        + "import org.acmsl.queryj.dao.TransactionToken;\n\n";
+        + "import org.acmsl.queryj.dao.TransactionToken;\n\n"
+        + "/*\n"
+        + " * Importing ACM-SL Commons classes.\n"
+        + " */\n"
+        + "import org.acmsl.commons.patterns.dao.DAO;\n\n";
 
     /**
      * The JDK imports.
@@ -185,7 +189,8 @@ public abstract class BaseDAOTemplate
      * The class definition.
      */
     public static final String CLASS_DEFINITION =
-        "public interface {0}DAO\n";
+          "public interface {0}DAO\n"
+        + "    extends  DAO\n";
         // table name
 
     /**

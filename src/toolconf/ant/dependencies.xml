@@ -149,8 +149,8 @@
 
         <jarDependency
           name="acmsl-commons"
-          version="0.5.5b6"
-          jar="commons-0.5.5b6.jar"/>
+          version="0.5.5b7"
+          jar="commons-0.5.5b7.jar"/>
 
         <jarDependency
           name="commons-logging"
@@ -213,6 +213,11 @@
           name="rmijdbc"
           version="3.0.1"
           jar="rmijdbc-3.0.1.jar"/>
+
+        <jarDependency
+          name="commons-digester"
+          version="1.4.1"
+          jar="commons-digester-1.4.1.jar"/>
 
         <jarDependency
           name="aspectj"

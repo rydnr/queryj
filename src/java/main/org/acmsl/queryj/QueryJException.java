@@ -59,7 +59,7 @@ public class QueryJException
      * Builds a QueryJ exception with a certain message.
      * @param message the message.
      */
-    public QueryJException(String message)
+    public QueryJException(final String message)
     {
         super(message);
     }
@@ -69,7 +69,7 @@ public class QueryJException
      * @param message the message.
      * @param cause the exception to wrap.
      */
-    public QueryJException(String message, Throwable cause)
+    public QueryJException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

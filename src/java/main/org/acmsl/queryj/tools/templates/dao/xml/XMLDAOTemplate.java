@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
 
@@ -182,7 +183,11 @@ public abstract class XMLDAOTemplate
           "\n/*\n"
         + " * Importing some ACM-SL classes.\n"
         + " */\n"
-        + "import org.acmsl.queryj.dao.TransactionToken;\n\n";
+        + "import org.acmsl.queryj.dao.TransactionToken;\n\n"
+        + "\n/*\n"
+        + " * Importing ACM-SL Commons classes.\n"
+        + " */\n"
+        + "import org.acmsl.commons.patterns.dao.DataAccessException;\n\n";
 
     /**
      * The JDK imports.
@@ -203,19 +208,14 @@ public abstract class XMLDAOTemplate
         + "import java.util.Map;\n\n";
 
     /**
-     * The Digester imports.
+     * The extra imports.
      */
-    public static final String DIGESTER_IMPORTS =
+    public static final String EXTRA_IMPORTS =
           "/*\n"
         + " * Importing Digester classes.\n"
         + " */\n"
-        + "import org.apache.commons.digester.Digester;\n\n";
-
-    /**
-     * The logging imports.
-     */
-    public static final String LOGGING_IMPORTS =
-          "/*\n"
+        + "import org.apache.commons.digester.Digester;\n\n"
+        + "/*\n"
         + " * Importing Jakarta Commons Logging classes\n"
         + " */\n"
         + "import org.apache.commons.logging.LogFactory;\n\n";
@@ -266,7 +266,7 @@ public abstract class XMLDAOTemplate
      */
     public static final String CLASS_CONSTRUCTOR =
           "    /**\n"
-        + "     * Creates a XXM{0}DAO with given input stream.\n"
+        + "     * Creates a XML{0}DAO with given input stream.\n"
         // table name
         + "     * @param input the input stream.\n"
         + "     * @precondition input != null\n"
@@ -372,11 +372,10 @@ public abstract class XMLDAOTemplate
         + "    /**\n"
         + "     * Loads the information from the XML resource.\n"
         + "     * @return the {0} collection.\n"
-        + "     * @throws DataAccessException  if the access to the data repository\n"
-        + "     * fails.\n"
+        + "     * @throws DataAccessException if the data can not be parsed.\n"
         + "     */\n"
         + "    protected Collection load()\n"
-        + "         throws DataAccessException\n"
+        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        return load(configureDigester(), getInput(), getReader());\n"
         + "    '}'\n\n"
@@ -386,15 +385,14 @@ public abstract class XMLDAOTemplate
         + "     * @param stream the input stream.\n"
         + "     * @param reader the input reader.\n"
         + "     * @return the {0} collection.\n"
-        + "     * @throws DataAccessException  if the access to the data repository\n"
-        + "     * fails.\n"
+        + "     * @throws DataAccessException if the data can not be parsed.\n"
         + "     * @precondition (stream != null || reader != null)\n"
         + "     */\n"
         + "    protected synchronized Collection load(\n"
         + "        final Digester digester,\n"
         + "        final InputStream input,\n"
         + "        final Reader reader)\n"
-        + "      throws DataAccessException\n"
+        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        Collection result = null;\n\n"
         + "        if  (digester != null)\n"
@@ -419,7 +417,7 @@ public abstract class XMLDAOTemplate
         + "                '}'\n\n"
         + "                if  (parsed)\n"
         + "                '{'\n"
-        + "                    process{0}Collection(result);\n"
+        + "                    //process{0}Collection(result);\n"
         + "                '}'\n"
         + "            '}'\n"
         + "            catch (final Exception exception)\n"
@@ -427,11 +425,15 @@ public abstract class XMLDAOTemplate
         + "                LogFactory.getLog(getClass()).error(\n"
         + "                    \"Cannot read XML {0} information.\",\n"
         + "                    exception);\n"
-        + "                throw new DataAccessException(exception);\n"
+        + "                throw\n"
+        + "                    new DataAccessException(\n"
+        + "                        \"Cannot read XML {0} information\",\n"
+        + "                        exception,\n"
+        + "                        this);\n"
         + "            '}'\n"
         + "        '}'\n\n"
         + "        return result;\n"
-        + "    '}'\n\n;"
+        + "    '}'\n\n"
         + "    /**\n"
         + "     * Creates and configures a digester instance.\n"
         + "     * @return a configured digester instance.\n"
@@ -441,7 +443,7 @@ public abstract class XMLDAOTemplate
         + "        Digester result = new Digester();\n\n"
         + "        result.addObjectCreate(\n"
         + "            \"{4}-list/{4}\",\n"
-    // uncapitalized value object name
+    // uncapitalized value object name, in singular
         + "            \"{5}.{0}\");\n"
     // value object package + name
     /* iterate through all value object properties 
@@ -677,7 +679,7 @@ public abstract class XMLDAOTemplate
      * The update parameters declaration.
      */
     public static final String DEFAULT_UPDATE_PARAMETERS_DECLARATION =
-        "        {0} {1},\n";
+        "        final {0} {1},\n";
     // field type - field name
 
     /**
@@ -725,7 +727,7 @@ public abstract class XMLDAOTemplate
      * The delete method's primary keys declaration.
      */
     public static final String DEFAULT_DELETE_PK_DECLARATION =
-        "        {0}              {1},\n";
+        "        final {0} {1},\n";
          // pk type - java pk
 
     /**
@@ -763,7 +765,7 @@ public abstract class XMLDAOTemplate
      * The delete with fk method's primary keys declaration.
      */
     public static final String DEFAULT_DELETE_WITH_FK_PK_DECLARATION =
-        "        {0}              {1},\n";
+        "        final {0} {1},\n";
          // pk type - java pk
 
     /**
@@ -857,9 +859,9 @@ public abstract class XMLDAOTemplate
     private String m__strJdkImports;
 
     /**
-     * The Logging import statements.
+     * The extra import statements.
      */
-    private String m__strLoggingImports;
+    private String m__strExtraImports;
 
     /**
      * The class Javadoc.
@@ -1019,7 +1021,7 @@ public abstract class XMLDAOTemplate
      * @param foreignDAOImports the foreign DAO imports.
      * @param acmslImports the ACM-SL imports.
      * @param jdkImports the JDK imports.
-     * @param loggingImports the commons-logging imports.
+     * @param extraImports the extra imports.
      * @param javadoc the class Javadoc.
      * @param classDefinition the class definition.
      * @param classStart the class start.
@@ -1064,7 +1066,7 @@ public abstract class XMLDAOTemplate
         final String                  foreignDAOImports,
         final String                  acmslImports,
         final String                  jdkImports,
-        final String                  loggingImports,
+        final String                  extraImports,
         final String                  javadoc,
         final String                  classDefinition,
         final String                  classStart,
@@ -1127,8 +1129,8 @@ public abstract class XMLDAOTemplate
         inmutableSetJdkImports(
             jdkImports);
 
-        inmutableSetLoggingImports(
-            loggingImports);
+        inmutableSetExtraImports(
+            extraImports);
 
         inmutableSetJavadoc(
             javadoc);
@@ -1242,7 +1244,7 @@ public abstract class XMLDAOTemplate
             DEFAULT_FOREIGN_DAO_IMPORTS,
             ACMSL_IMPORTS,
             JDK_IMPORTS,
-            LOGGING_IMPORTS,
+            EXTRA_IMPORTS,
             DEFAULT_JAVADOC,
             CLASS_DEFINITION,
             DEFAULT_CLASS_START,
@@ -1574,30 +1576,30 @@ public abstract class XMLDAOTemplate
     }
 
     /**
-     * Specifies the logging imports.
-     * @param loggingImports the new logging imports.
+     * Specifies the extra imports.
+     * @param extraImports the new extra imports.
      */
-    private void inmutableSetLoggingImports(final String loggingImports)
+    private void inmutableSetExtraImports(final String extraImports)
     {
-        m__strLoggingImports = loggingImports;
+        m__strExtraImports = extraImports;
     }
 
     /**
-     * Specifies the logging imports.
-     * @param loggingImports the new logging imports.
+     * Specifies the extra imports.
+     * @param extraImports the new extra imports.
      */
-    protected void setLoggingImports(final String loggingImports)
+    protected void setExtraImports(final String extraImports)
     {
-        inmutableSetLoggingImports(loggingImports);
+        inmutableSetExtraImports(extraImports);
     }
 
     /**
-     * Retrieves the logging imports.
+     * Retrieves the extra imports.
      * @return such information.
      */
-    public String getLoggingImports() 
+    public String getExtraImports() 
     {
-        return m__strLoggingImports;
+        return m__strExtraImports;
     }
 
     /**
@@ -2421,6 +2423,8 @@ public abstract class XMLDAOTemplate
         StringBuffer t_sbResult = new StringBuffer();
 
         StringUtils t_StringUtils = StringUtils.getInstance();
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
 
         StringValidator t_StringValidator = StringValidator.getInstance();
 
@@ -2637,7 +2641,7 @@ public abstract class XMLDAOTemplate
 
             t_sbResult.append(getAcmslImports());
             t_sbResult.append(getJdkImports());
-            t_sbResult.append(getLoggingImports());
+            t_sbResult.append(getExtraImports());
 
             t_sbResult.append(
                 t_JavadocFormatter.format(
@@ -2852,8 +2856,9 @@ public abstract class XMLDAOTemplate
                             t_sbPkJavadoc,
                             t_sbBuildKeyPkDeclaration,
                             t_sbBuildKeyValues,
-                            t_StringUtils.unCapitalize(
-                                t_TableTemplate.getTableName(), "-"),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_StringUtils.unCapitalize(
+                                    t_TableTemplate.getTableName(), "-")),
                             t_PackageUtils.retrieveValueObjectPackage(
                                 getBasePackageName())
                         }));
