@@ -79,7 +79,7 @@ import java.util.Map;
 /**
  * Represents standard SQL update queries.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class UpdateQuery
@@ -98,18 +98,9 @@ public abstract class UpdateQuery
      * @param field the field.
      * @param value the value.
      */
-    public void set(StringField field, String value)
+    public void set(final StringField field, final String value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void set(StringField field)
-    {
-        addField(field);
     }
 
     /**
@@ -117,18 +108,9 @@ public abstract class UpdateQuery
      * @param field the field.
      * @param value the value.
      */
-    public void set(IntField field, int value)
+    public void set(final IntField field, final int value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void set(IntField field)
-    {
-        addField(field);
     }
 
     /**
@@ -136,18 +118,9 @@ public abstract class UpdateQuery
      * @param field the field.
      * @param value the value.
      */
-    public void set(LongField field, long value)
+    public void set(final LongField field, final long value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void set(LongField field)
-    {
-        addField(field);
     }
 
     /**
@@ -155,18 +128,9 @@ public abstract class UpdateQuery
      * @param field the field.
      * @param value the value.
      */
-    public void set(DoubleField field, double value)
+    public void set(final DoubleField field, final double value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void set(DoubleField field)
-    {
-        addField(field);
     }
 
     /**
@@ -174,18 +138,9 @@ public abstract class UpdateQuery
      * @param field the field.
      * @param value the value.
      */
-    public void set(CalendarField field, Calendar value)
+    public void set(final CalendarField field, final Calendar value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void set(CalendarField field)
-    {
-        addField(field);
     }
 
     /**
@@ -193,18 +148,9 @@ public abstract class UpdateQuery
      * @param field the field.
      * @param value the value.
      */
-    public void set(DateField field, Date value)
+    public void set(final DateField field, final Date value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void set(DateField field)
-    {
-        addField(field);
     }
 
     /**
@@ -212,18 +158,9 @@ public abstract class UpdateQuery
      * @param field the field.
      * @param value the value.
      */
-    public void set(BigDecimalField field, BigDecimal value)
+    public void set(final BigDecimalField field, final BigDecimal value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void set(BigDecimalField field)
-    {
-        addField(field);
     }
 
     /**
@@ -231,7 +168,7 @@ public abstract class UpdateQuery
      * @param field the field.
      * @param value the value.
      */
-    public void set(Field field, Object value)
+    public void set(final Field field, final Object value)
     {
         addValue(field, value);
     }
@@ -240,46 +177,41 @@ public abstract class UpdateQuery
      * Specifies the value of a field.
      * @param field the field.
      */
-    public void set(Field field)
+    public void set(final Field field)
     {
         addField(field);
+        addVariableCondition(field.equals());
     }
 
     /**
      * Indicates which table the update applies to.
      * @param table the table.
+     * @precondition table != null
      */
-    public void update(Table table)
+    public void update(final Table table)
     {
-        if  (table != null) 
-        {
-            setTable(table);
-        }
+        setTable(table);
     }
 
     /**
      * Indicates a query condition.
      * @param condition such condition.
+     * @precondition condition != null
      */
-    public void where(Condition condition)
+    public void where(final Condition condition)
     {
-        if  (condition != null) 
-        {
-            addCondition(condition);
-        }
+        addCondition(condition);
     }
 
     /**
      * Indicates a query variable condition.
      * @param variableCondition such variable condition.
+     * @precondition variableCondition != null
      */
-    public void where(VariableCondition variableCondition)
+    public void where(final VariableCondition variableCondition)
     {
-        if  (variableCondition != null) 
-        {
-            addCondition(variableCondition);
-            addVariableCondition(variableCondition);
-        }
+        addCondition(variableCondition);
+        addVariableCondition(variableCondition);
     }
 
     // Serialization methods //
@@ -290,66 +222,79 @@ public abstract class UpdateQuery
      */
     public String toString()
     {
+        return
+            toString(
+                getTable(),
+                getFields(),
+                getConditions(),
+                QueryUtils.getInstance());
+    }
+
+    /**
+     * Outputs a text version of the query, in SQL format.
+     * @param table the table.
+     * @param fields the fields.
+     * @param conditions the conditions.
+     * @param queryUtils the <code>QueryUtils</code> instance.
+     * @return the SQL query.
+     * @precondition tabhle != null
+     * @precondition fields != null
+     * @precondition queryUtils != null
+     */
+    protected String toString(
+        final Table table,
+        final List fields,
+        final List conditions,
+        final QueryUtils queryUtils)
+    {
         StringBuffer t_sbResult = new StringBuffer();
 
-        QueryUtils t_QueryUtils = QueryUtils.getInstance();
+        t_sbResult.append("UPDATE ");
 
-        Table t_Table =  getTable();
-        List t_lFields = getFields();
+        t_sbResult.append(table);
 
-        if  (   (t_QueryUtils != null)
-             && (t_lFields    != null)
-             && (t_Table      != null))
+        t_sbResult.append(" SET ");
+
+        List t_alValues = new ArrayList();
+
+        Iterator t_FieldIterator = fields.iterator();
+
+        while  (   (t_FieldIterator != null)
+                && (t_FieldIterator.hasNext()))
         {
-            t_sbResult.append("UPDATE ");
+            Field t_Field = (Field) t_FieldIterator.next();
 
-            t_sbResult.append(t_Table);
+            String t_strValue = "";
 
-            t_sbResult.append(" SET ");
+            Object t_Value = getValue(t_Field);
 
-            List t_alValues = new ArrayList();
-
-            Iterator t_FieldIterator = t_lFields.iterator();
-
-            while  (   (t_FieldIterator != null)
-                    && (t_FieldIterator.hasNext()))
+            if  (t_Value == null)
             {
-                Field t_Field = (Field) t_FieldIterator.next();
-
-                String t_strValue = "";
-
-                Object t_Value = getValue(t_Field);
-
-                if  (t_Value == null)
-                {
-                    t_strValue = "?";
-                }
-                else 
-                {
-                    t_strValue = "" + t_Value;
-
-                    if  (t_QueryUtils.shouldBeEscaped(t_Value))
-                    {
-                        t_strValue = "'" + t_strValue + "'";
-                    }
-                }
-
-                t_alValues.add(t_Field.toSimplifiedString() + " = " + t_strValue);
+                t_strValue = "?";
             }
+            else 
+            {
+                t_strValue = "" + t_Value;
+
+                if  (queryUtils.shouldBeEscaped(t_Value))
+                {
+                    t_strValue = "'" + t_strValue + "'";
+                }
+            }
+
+            t_alValues.add(t_Field.toSimplifiedString() + " = " + t_strValue);
+        }
+
+        t_sbResult.append(
+            queryUtils.concatenate(t_alValues, ", "));
+
+        if  (   (conditions != null)
+             && (conditions.size() > 0))
+        {
+            t_sbResult.append(" WHERE ");
 
             t_sbResult.append(
-                t_QueryUtils.concatenate(t_alValues, ", "));
-
-            List t_lConditions = getConditions();
-
-            if  (   (t_lConditions != null)
-                 && (t_lConditions.size() > 0))
-            {
-                t_sbResult.append(" WHERE ");
-
-                t_sbResult.append(
-                    t_QueryUtils.concatenate(t_lConditions, " AND ", true));
-            }
+                queryUtils.concatenate(conditions, " AND ", true));
         }
 
         return t_sbResult.toString();

@@ -107,10 +107,10 @@ public class HandlersSuite
     new TestSuite("unittests.org.acmsl.queryj.tools.templates.valueobject.handlers");
     
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateBuildHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateHandlerBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateWritingHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateBuildHandlerTest.class);
     
     

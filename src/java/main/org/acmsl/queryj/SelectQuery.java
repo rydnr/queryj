@@ -68,7 +68,7 @@ import java.util.List;
 /**
  * Represents standard SQL select queries.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class SelectQuery
@@ -90,15 +90,15 @@ public abstract class SelectQuery
     public SelectQuery()
     {
         super();
-        inmutableSetOrderingFields(new ArrayList());
-        inmutableSetGroupingFields(new ArrayList());
+        immutableSetOrderingFields(new ArrayList());
+        immutableSetGroupingFields(new ArrayList());
     }
 
     /**
      * Specifies new ordering field collection.
      * @param list the new list.
      */
-    private void inmutableSetOrderingFields(List list)
+    private void immutableSetOrderingFields(List list)
     {
         m__lOrderingFields = list;
     }
@@ -109,7 +109,7 @@ public abstract class SelectQuery
      */
     protected void setOrderingFields(List list)
     {
-        inmutableSetOrderingFields(list);
+        immutableSetOrderingFields(list);
     }
 
     /**
@@ -124,18 +124,24 @@ public abstract class SelectQuery
     /**
      * Adds a new ordering field.
      * @param orderingField the ordering field to add.
+     * @precondition orderingField != null
      */
-    protected void addOrderingField(Field orderingField)
+    protected void addOrderingField(final Field orderingField)
     {
-        if  (orderingField != null) 
-        {
-            List t_OrderingFields = getOrderingFields();
+        addOrderingField(orderingField, getOrderingFields());
+    }
 
-            if  (t_OrderingFields != null) 
-            {
-                t_OrderingFields.add(orderingField);
-            }
-        }
+    /**
+     * Adds a new ordering field to given collection.
+     * @param orderingField the ordering field to add.
+     * @param orderingFields the ordering fields.
+     * @precondition orderingField != null
+     * @precondition orderingFields != null
+     */
+    protected void addOrderingField(
+        final Field orderingField, final List orderingFields)
+    {
+        orderingFields.add(orderingField);
     }
 
     /**
@@ -144,7 +150,7 @@ public abstract class SelectQuery
      * @return its position, or -1 if such field doesn't belong to
      * this query.
      */
-    protected int getOrderingFieldIndex(Field field)
+    protected int getOrderingFieldIndex(final Field field)
     {
         return getIndex(getOrderingFields(), field);
     }
@@ -153,7 +159,7 @@ public abstract class SelectQuery
      * Specifies new grouping field collection.
      * @param list the new list.
      */
-    private void inmutableSetGroupingFields(List list)
+    private void immutableSetGroupingFields(final List list)
     {
         m__lGroupingFields = list;
     }
@@ -162,9 +168,9 @@ public abstract class SelectQuery
      * Specifies new grouping field collection.
      * @param list the new list.
      */
-    protected void setGroupingFields(List list)
+    protected void setGroupingFields(final List list)
     {
-        inmutableSetGroupingFields(list);
+        immutableSetGroupingFields(list);
     }
 
     /**
@@ -179,18 +185,24 @@ public abstract class SelectQuery
     /**
      * Adds a new grouping field.
      * @param groupingField the grouping field to add.
+     * @precondition groupingField != null
      */
-    protected void addGroupingField(Field groupingField)
+    protected void addGroupingField(final Field groupingField)
     {
-        if  (groupingField != null) 
-        {
-            List t_GroupingFields = getGroupingFields();
+        addGroupingField(groupingField, getGroupingFields());
+    }
 
-            if  (t_GroupingFields != null) 
-            {
-                t_GroupingFields.add(groupingField);
-            }
-        }
+    /**
+     * Adds a new grouping field.
+     * @param groupingField the grouping field to add.
+     * @param groupingFields the grouping fields.
+     * @precondition groupingField != null
+     * @precondition groupingFields != null
+     */
+    protected void addGroupingField(
+        final Field groupingField, final List groupingFields)
+    {
+        groupingFields.add(groupingField);
     }
 
     /**
@@ -198,8 +210,9 @@ public abstract class SelectQuery
      * @param field the field to find.
      * @return its position, or -1 if such field doesn't belong to
      * this query.
+     * @precondition field != null
      */
-    protected int getGroupingFieldIndex(Field field)
+    protected int getGroupingFieldIndex(final Field field)
     {
         return getIndex(getGroupingFields(), field);
     }
@@ -207,75 +220,76 @@ public abstract class SelectQuery
     /**
      * Selects a field.
      * @param field the field to select.
+     * @precondition field != null
      */
-    public void select(Field field)
+    public void select(final Field field)
     {
-        if  (field != null) 
+        addField(field);
+    }
+
+    /**
+     * Selects the fields (typically, via <code>Table.getAll</code>
+     * meaning <i>select </i>.
+     * @param fields the fields to select.
+     * @precondition fields != null
+     */
+    public void select(final Field[] fields)
+    {
+        for  (int t_iIndex = 0; t_iIndex < fields.length; t_iIndex++)
         {
-            addField(field);
-            //m__Factory.add(this, field);
+            addField(fields[t_iIndex]);
         }
     }
 
     /**
      * Indicates which table participates in the query.
      * @param table the table.
+     * @precondition table != null
      */
-    public void from(Table table)
+    public void from(final Table table)
     {
-        if  (table != null) 
-        {
-            addTable(table);
-        }
+        addTable(table);
     }
 
     /**
      * Indicates a query condition.
      * @param condition such condition.
+     * @precondition condition != null
      */
-    public void where(Condition condition)
+    public void where(final Condition condition)
     {
-        if  (condition != null) 
-        {
-            addCondition(condition);
-        }
+        addCondition(condition);
     }
 
     /**
      * Indicates a query variable condition.
      * @param variableCondition such variable condition.
+     * @precondition variableCondition != null
      */
-    public void where(VariableCondition variableCondition)
+    public void where(final VariableCondition variableCondition)
     {
-        if  (variableCondition != null) 
-        {
-            addCondition(variableCondition);
-            addVariableCondition(variableCondition);
-        }
+        addCondition(variableCondition);
+        addVariableCondition(variableCondition);
     }
 
     /**
      * Indicates a field to be used to group the results.
      * @param groupingField such field.
+     * @precondition groupingField != null
      */
-    public void groupBy(Field groupingField)
+    public void groupBy(final Field groupingField)
     {
-        if  (groupingField != null) 
-        {
-            addGroupingField(groupingField);
-        }
+        addGroupingField(groupingField);
     }
 
     /**
      * Indicates a field to be used to order the results.
      * @param orderingField such field.
+     * @precondition orderingField != null
      */
-    public void orderBy(Field orderingField)
+    public void orderBy(final Field orderingField)
     {
-        if  (orderingField != null) 
-        {
-            addOrderingField(orderingField);
-        }
+        addOrderingField(orderingField);
     }
 
     /**
@@ -309,16 +323,44 @@ public abstract class SelectQuery
      * @return (Taken from Sun's Javadoc) either the row count for INSERT,
      * UPDATE or DELETE statements, or 0 for SQL statements that return
      * nothing.
-     * @exception SQLException if an error occurs.
+     * @throws SQLException if an error occurs.
+     * @precondition sql != null
+     * @precondition fields != null
      */
-    public int executeUpdate(String sql, Field[] fields)
+    public int executeUpdate(final String sql, final Field[] fields)
         throws  SQLException
+    {
+        return
+            executeUpdate(
+                sql, fields, getPreparedStatement());
+    }
+
+    /**
+     * Executes given update operation using field references.
+     * @param sql (Taken from Sun's Javadoc) must be an SQL INSERT, UPDATE
+     * or DELETE statement or an SQL statement that returns nothing.
+     * @param fields the fields.
+     * @param preparedStatement the <code>PreparedStatement</code>.
+     * @return (Taken from Sun's Javadoc) either the row count for INSERT,
+     * UPDATE or DELETE statements, or 0 for SQL statements that return
+     * nothing.
+     * @throws SQLException if an error occurs.
+     * @precondition sql != null
+     * @precondition fields != null
+     */
+    protected int executeUpdate(
+        final String sql,
+        final Field[] fields,
+        final PreparedStatement preparedStatement)
+      throws  SQLException
     {
         int result = 0;
 
-        Statement t_Statement = getPreparedStatement();
-
-        if  (t_Statement != null) 
+        if  (preparedStatement == null) 
+        {
+            throw new SQLException("No statement created yet!");
+        }
+        else
         {
             int[] t_aiIndexes = new int[fields.length];
 
@@ -327,7 +369,7 @@ public abstract class SelectQuery
                 t_aiIndexes[t_iIndex] = getFieldIndex(fields[t_iIndex]);
             }
 
-            result = t_Statement.executeUpdate(sql, t_aiIndexes);
+            result = preparedStatement.executeUpdate(sql, t_aiIndexes);
         }
 
         return result;
@@ -341,16 +383,42 @@ public abstract class SelectQuery
      * @return (Taken from Sun's Javadoc) true if the first result is a
      * ResultSet object; false if it is an update count or there are no
      * results.
-     * @exception SQLException if an error occurs.
+     * @throws SQLException if an error occurs.
+     * @precondition sql != null
+     * @precondition fields != null
      */
-    public boolean execute(String sql, Field[] fields)
+    public boolean execute(final String sql, final Field[] fields)
         throws  SQLException
+    {
+        return execute(sql, fields, getPreparedStatement());
+    }
+
+    /**
+     * Executes given update operation using field references.
+     * @param sql (Taken from Sun's Javadoc) must be an SQL INSERT, UPDATE
+     * or DELETE statement or an SQL statement that returns nothing.
+     * @param fields the fields.
+     * @param preparedStatement the <code>PreparedStatement</code>.
+     * @return (Taken from Sun's Javadoc) true if the first result is a
+     * ResultSet object; false if it is an update count or there are no
+     * results.
+     * @throws SQLException if an error occurs.
+     * @precondition sql != null
+     * @precondition fields != null
+     */
+    protected boolean execute(
+        final String sql,
+        final Field[] fields,
+        final PreparedStatement preparedStatement)
+      throws  SQLException
     {
         boolean result = false;
 
-        Statement t_Statement = getPreparedStatement();
-
-        if  (t_Statement != null) 
+        if  (preparedStatement == null) 
+        {
+            throw new SQLException("No statement created yet!");
+        }
+        else
         {
             int[] t_aiIndexes = new int[fields.length];
 
@@ -359,7 +427,7 @@ public abstract class SelectQuery
                 t_aiIndexes[t_iIndex] = getFieldIndex(fields[t_iIndex]);
             }
 
-            result = t_Statement.execute(sql, t_aiIndexes);
+            result = preparedStatement.execute(sql, t_aiIndexes);
         }
 
         return result;
@@ -370,44 +438,41 @@ public abstract class SelectQuery
      * @param tables the tables to process.
      * @param separator the separator.
      * @return the processed tables.
+     * @precondition tables != null
+     * @precondition separator != null
      */
-    protected List processTables(List tables, String separator)
+    protected List processTables(final List tables, final String separator)
     {
-        List result = tables;
+        List result = new ArrayList();
 
-        if  (result != null)
+        Iterator t_itTables = tables.iterator();
+
+        Table t_CurrentTable = null;
+
+        TableAlias t_CurrentTableAlias = null;
+
+        StringBuffer t_sbCurrentTable = null;
+
+        while  (   (t_itTables != null)
+                && (t_itTables.hasNext()))
         {
-            result = new ArrayList();
+            t_CurrentTable = (Table) t_itTables.next();
 
-            Iterator t_itTables = tables.iterator();
-
-            Table t_CurrentTable = null;
-
-            TableAlias t_CurrentTableAlias = null;
-
-            StringBuffer t_sbCurrentTable = null;
-
-            while  (   (t_itTables != null)
-                    && (t_itTables.hasNext()))
+            if  (t_CurrentTable != null)
             {
-                t_CurrentTable = (Table) t_itTables.next();
+                t_sbCurrentTable = new StringBuffer();
 
-                if  (t_CurrentTable != null)
+                t_sbCurrentTable.append(t_CurrentTable.getName());
+
+                t_CurrentTableAlias = t_CurrentTable.getTableAlias();
+
+                if  (t_CurrentTableAlias != null)
                 {
-                    t_sbCurrentTable = new StringBuffer();
-
-                    t_sbCurrentTable.append(t_CurrentTable.getName());
-
-                    t_CurrentTableAlias = t_CurrentTable.getTableAlias();
-
-                    if  (t_CurrentTableAlias != null)
-                    {
-                        t_sbCurrentTable.append(separator);
-                        t_sbCurrentTable.append(t_CurrentTableAlias);
-                    }
-
-                    result.add(t_sbCurrentTable);
+                    t_sbCurrentTable.append(separator);
+                    t_sbCurrentTable.append(t_CurrentTableAlias);
                 }
+
+                result.add(t_sbCurrentTable);
             }
         }
         
@@ -422,59 +487,74 @@ public abstract class SelectQuery
      */
     public String toString()
     {
+        return
+            toString(
+                getTables(),
+                getFields(),
+                getConditions(),
+                getGroupingFields(),
+                getOrderingFields(),
+                QueryUtils.getInstance());
+    }
+
+    /**
+     * Outputs a text version of the query, in SQL format.
+     * @param tables the tables.
+     * @param fields the fields.
+     * @param conditions the conditions.
+     * @param groupingFields the <i>group by</i> fields.
+     * @param orderingFields the <i>order by</i> fields.
+     * @param queryUtils the <code>QueryUtils</code> instance.
+     * @return the SQL query.
+     * @precondition tables != null
+     * @precondition fields != null
+     * @precondition conditions != null
+     * @precondition groupingFields != null
+     * @precondition orderingFields != null
+     * @precondition queryUtils != null
+     */
+    protected String toString(
+        final List tables,
+        final List fields,
+        final List conditions,
+        final List groupingFields,
+        final List orderingFields,
+        final QueryUtils queryUtils)
+    {
         StringBuffer t_sbResult = new StringBuffer();
 
-        QueryUtils t_QueryUtils = QueryUtils.getInstance();
+        t_sbResult.append("SELECT ");
 
-        if  (t_QueryUtils != null) 
+        t_sbResult.append(
+            queryUtils.concatenate(fields, ", "));
+
+        t_sbResult.append(" FROM ");
+
+        t_sbResult.append(
+            queryUtils.concatenate(processTables(tables, " "), ", "));
+
+        if  (conditions.size() > 0)
         {
-            t_sbResult.append("SELECT ");
+            t_sbResult.append(" WHERE ");
 
             t_sbResult.append(
-                t_QueryUtils.concatenate(getFields(), ", "));
+                queryUtils.concatenate(conditions, " AND "));
+        }
 
-            List t_lTables = getTables();
+        if  (groupingFields.size() > 0)
+        {
+            t_sbResult.append(" GROUP BY ");
 
-            if  (t_lTables != null)
-            {
-                t_sbResult.append(" FROM ");
-
-                t_sbResult.append(
-                    t_QueryUtils.concatenate(processTables(t_lTables, " "), ", "));
-
-                List t_lConditions = getConditions();
-
-                if  (   (t_lConditions != null)
-                     && (t_lConditions.size() > 0))
-                {
-                    t_sbResult.append(" WHERE ");
-
-                    t_sbResult.append(
-                        t_QueryUtils.concatenate(t_lConditions, " AND "));
-                }
-
-                List t_lAdditionalFields = getGroupingFields();
-
-                if  (   (t_lAdditionalFields != null)
-                     && (t_lAdditionalFields.size() > 0))
-                {
-                    t_sbResult.append(" GROUP BY ");
-
-                    t_sbResult.append(
-                        t_QueryUtils.concatenate(t_lAdditionalFields, ", "));
-                }
+            t_sbResult.append(
+                queryUtils.concatenate(groupingFields, ", "));
+        }
             
-                t_lAdditionalFields = getOrderingFields();
+        if  (orderingFields.size() > 0)
+        {
+            t_sbResult.append(" ORDER BY ");
 
-                if  (   (t_lAdditionalFields != null)
-                     && (t_lAdditionalFields.size() > 0))
-                {
-                    t_sbResult.append(" ORDER BY ");
-
-                    t_sbResult.append(
-                        t_QueryUtils.concatenate(t_lAdditionalFields, ", "));
-                }
-            }
+            t_sbResult.append(
+                queryUtils.concatenate(orderingFields, ", "));
         }
 
         return t_sbResult.toString();

@@ -94,38 +94,32 @@ public abstract class DeleteQuery
     /**
      * Indicates which table the delete applies to.
      * @param table the table.
+     * @precondition table != null
      */
-    public void deleteFrom(Table table)
+    public void deleteFrom(final Table table)
     {
-        if  (table != null) 
-        {
-            setTable(table);
-        }
+        setTable(table);
     }
 
     /**
      * Indicates a query condition.
      * @param condition such condition.
+     * @precondition condition != null
      */
-    public void where(Condition condition)
+    public void where(final Condition condition)
     {
-        if  (condition != null) 
-        {
-            addCondition(condition);
-        }
+        addCondition(condition);
     }
 
     /**
      * Indicates a query variable condition.
      * @param variableCondition such variable condition.
+     * @precondition variableCondition != null
      */
-    public void where(VariableCondition variableCondition)
+    public void where(final VariableCondition variableCondition)
     {
-        if  (variableCondition != null) 
-        {
-            addCondition(variableCondition);
-            addVariableCondition(variableCondition);
-        }
+        addCondition(variableCondition);
+        addVariableCondition(variableCondition);
     }
 
     // Serialization methods //
@@ -136,31 +130,44 @@ public abstract class DeleteQuery
      */
     public String toString()
     {
+        return
+            toString(
+                getTable(),
+                getFields(),
+                getConditions(),
+                QueryUtils.getInstance());
+    }
+
+    /**
+     * Outputs a text version of the query, in SQL format.
+     * @param table the table.
+     * @param fields the fields.
+     * @param conditions the conditions.
+     * @param queryUtils the <code>QueryUtils</code> instance.
+     * @return the SQL query.
+     * @precondition table != null
+     * @precondition fields != null
+     * @precondition queryUtils != null
+     */
+    protected String toString(
+        final Table table,
+        final List fields,
+        final List conditions,
+        final QueryUtils queryUtils)
+    {
         StringBuffer t_sbResult = new StringBuffer();
 
-        QueryUtils t_QueryUtils = QueryUtils.getInstance();
+        t_sbResult.append("DELETE FROM ");
 
-        Table t_Table =  getTable();
-        List t_lFields = getFields();
+        t_sbResult.append(table);
 
-        if  (   (t_QueryUtils != null)
-             && (t_lFields    != null)
-             && (t_Table      != null))
+        if  (   (conditions != null)
+             && (conditions.size() > 0))
         {
-            t_sbResult.append("DELETE FROM ");
+            t_sbResult.append(" WHERE ");
 
-            t_sbResult.append(t_Table);
-
-            List t_lConditions = getConditions();
-
-            if  (   (t_lConditions != null)
-                 && (t_lConditions.size() > 0))
-            {
-                t_sbResult.append(" WHERE ");
-
-                t_sbResult.append(
-                    t_QueryUtils.concatenate(t_lConditions, " AND ", true));
-            }
+            t_sbResult.append(
+                queryUtils.concatenate(conditions, " AND ", true));
         }
 
         return t_sbResult.toString();

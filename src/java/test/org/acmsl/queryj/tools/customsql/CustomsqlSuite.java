@@ -109,18 +109,18 @@ public class CustomsqlSuite
     new TestSuite("unittests.org.acmsl.queryj.tools.customsql");
     
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.StatementFlagsRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.SqlElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ConnectionFlagsElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.StatementFlagsElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ParameterElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ConnectionFlagsElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultSetFlagsElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.SqlElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.StatementFlagsElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ParameterRefElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.PropertyRefElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.PropertyElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElementTest.class);
     
     suite.addTest(unittests.org.acmsl.queryj.tools.customsql.handlers.HandlersSuite.suite());
     suite.addTest(unittests.org.acmsl.queryj.tools.customsql.xml.XmlSuite.suite());

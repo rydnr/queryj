@@ -97,18 +97,9 @@ public abstract class InsertQuery
      * @param field the field.
      * @param value the value.
      */
-    public void value(StringField field, String value)
+    public void value(final StringField field, final String value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void value(StringField field)
-    {
-        addField(field);
     }
 
     /**
@@ -116,18 +107,9 @@ public abstract class InsertQuery
      * @param field the field.
      * @param value the value.
      */
-    public void value(IntField field, int value)
+    public void value(final IntField field, final int value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void value(IntField field)
-    {
-        addField(field);
     }
 
     /**
@@ -135,18 +117,9 @@ public abstract class InsertQuery
      * @param field the field.
      * @param value the value.
      */
-    public void value(LongField field, long value)
+    public void value(final LongField field, final long value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void value(LongField field)
-    {
-        addField(field);
     }
 
     /**
@@ -154,18 +127,9 @@ public abstract class InsertQuery
      * @param field the field.
      * @param value the value.
      */
-    public void value(DoubleField field, double value)
+    public void value(final DoubleField field, final double value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void value(DoubleField field)
-    {
-        addField(field);
     }
 
     /**
@@ -173,18 +137,9 @@ public abstract class InsertQuery
      * @param field the field.
      * @param value the value.
      */
-    public void value(CalendarField field, Calendar value)
+    public void value(final CalendarField field, final Calendar value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void value(CalendarField field)
-    {
-        addField(field);
     }
 
     /**
@@ -192,18 +147,9 @@ public abstract class InsertQuery
      * @param field the field.
      * @param value the value.
      */
-    public void value(DateField field, Date value)
+    public void value(final DateField field, final Date value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void value(DateField field)
-    {
-        addField(field);
     }
 
     /**
@@ -211,18 +157,9 @@ public abstract class InsertQuery
      * @param field the field.
      * @param value the value.
      */
-    public void value(BigDecimalField field, BigDecimal value)
+    public void value(final BigDecimalField field, final BigDecimal value)
     {
         addValue(field, value);
-    }
-
-    /**
-     * Specifies the value of a field.
-     * @param field the field.
-     */
-    public void value(BigDecimalField field)
-    {
-        addField(field);
     }
 
     /**
@@ -230,7 +167,7 @@ public abstract class InsertQuery
      * @param field the field.
      * @param value the value.
      */
-    public void value(Field field, Object value)
+    public void value(final Field field, final Object value)
     {
         addValue(field, value);
     }
@@ -239,21 +176,20 @@ public abstract class InsertQuery
      * Specifies the value of a field.
      * @param field the field.
      */
-    public void value(Field field)
+    public void value(final Field field)
     {
         addField(field);
+        addVariableCondition(field.equals());
     }
 
     /**
      * Indicates which table the insert applies to.
      * @param table the table.
+     * @precondition table != null
      */
-    public void insertInto(Table table)
+    public void insertInto(final Table table)
     {
-        if  (table != null) 
-        {
-            setTable(table);
-        }
+        setTable(table);
     }
 
     // Serialization methods //
@@ -264,69 +200,81 @@ public abstract class InsertQuery
      */
     public String toString()
     {
+        return
+            toString(
+                getTable(),
+                getFields(),
+                QueryUtils.getInstance());
+    }
+
+    /**
+     * Outputs a text version of the query, in SQL format.
+     * @param table the table.
+     * @param fields the fields.
+     * @param queryUtils the <code>QueryUtils</code> instance.
+     * @return the SQL query.
+     * @precondition table != null
+     * @precondition fields != null
+     * @precondition queryUtils != null
+     */
+    protected String toString(
+        final Table table,
+        final List fields,
+        final QueryUtils queryUtils)
+    {
         StringBuffer t_sbResult = new StringBuffer();
 
-        QueryUtils t_QueryUtils = QueryUtils.getInstance();
+        t_sbResult.append("INSERT INTO ");
 
-        Table t_Table =  getTable();
-        List t_lFields = getFields();
+        t_sbResult.append(table);
 
-        if  (   (t_QueryUtils != null)
-             && (t_lFields    != null)
-             && (t_Table      != null))
+        t_sbResult.append(" ( ");
+
+        List t_alBriefFields = new ArrayList();
+        List t_alValues = new ArrayList();
+
+        Iterator t_FieldIterator = fields.iterator();
+
+        while  (   (t_FieldIterator != null)
+                && (t_FieldIterator.hasNext()))
         {
-            t_sbResult.append("INSERT INTO ");
+            Field t_Field = (Field) t_FieldIterator.next();
 
-            t_sbResult.append(t_Table);
-
-            t_sbResult.append(" ( ");
-
-            List t_alBriefFields = new ArrayList();
-            List t_alValues = new ArrayList();
-
-            Iterator t_FieldIterator = t_lFields.iterator();
-
-            while  (   (t_FieldIterator != null)
-                    && (t_FieldIterator.hasNext()))
+            if  (t_Field != null)
             {
-                Field t_Field = (Field) t_FieldIterator.next();
+                t_alBriefFields.add(t_Field.toSimplifiedString());
 
-                if  (t_Field != null)
+                String t_strValue = "";
+
+                Object t_Value = getValue(t_Field);
+
+                if  (t_Value == null)
                 {
-                    t_alBriefFields.add(t_Field.toSimplifiedString());
-
-                    String t_strValue = "";
-
-                    Object t_Value = getValue(t_Field);
-
-                    if  (t_Value == null)
-                    {
-                        t_strValue = "?";
-                    }
-                    else 
-                    {
-                        t_strValue = "" + t_Value;
-
-                        if  (t_QueryUtils.shouldBeEscaped(t_Value))
-                        {
-                            t_strValue = "'" + t_strValue + "'";
-                        }
-                    }
-
-                    t_alValues.add(t_strValue);
+                    t_strValue = "?";
                 }
+                else 
+                {
+                    t_strValue = "" + t_Value;
+
+                    if  (queryUtils.shouldBeEscaped(t_Value))
+                    {
+                        t_strValue = "'" + t_strValue + "'";
+                    }
+                }
+
+                t_alValues.add(t_strValue);
             }
-
-            t_sbResult.append(
-                t_QueryUtils.concatenate(t_alBriefFields, ", "));
-
-            t_sbResult.append(" ) VALUES ( ");
-
-            t_sbResult.append(
-                t_QueryUtils.concatenate(t_alValues, ", "));
-
-            t_sbResult.append(" )");
         }
+
+        t_sbResult.append(
+            queryUtils.concatenate(t_alBriefFields, ", "));
+
+        t_sbResult.append(" ) VALUES ( ");
+
+        t_sbResult.append(
+            queryUtils.concatenate(t_alValues, ", "));
+
+        t_sbResult.append(" )");
 
         return t_sbResult.toString();
     }
