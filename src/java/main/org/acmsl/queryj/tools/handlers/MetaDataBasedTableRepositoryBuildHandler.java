@@ -51,12 +51,7 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandler;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.version.Version;
-import org.acmsl.commons.version.VersionFactory;
+import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 
 /*
  * Importing some Ant classes.
@@ -83,7 +78,7 @@ public class MetaDataBasedTableRepositoryBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -96,30 +91,5 @@ public class MetaDataBasedTableRepositoryBuildHandler
         }
         
         return result;
-    }
-
-    /**
-     * Concrete version object updated everytime it's checked-in in a
-     * CVS repository.
-     */
-    public static final Version VERSION =
-        VersionFactory.createVersion("$Revision$");
-
-    /**
-     * Retrieves the current version of this object.
-     * @return the version object with such information.
-     */
-    public Version getVersion()
-    {
-        return VERSION;
-    }
-
-    /**
-     * Retrieves the current version of this class.
-     * @return the object with class version information.
-     */
-    public static Version getClassVersion()
-    {
-        return VERSION;
     }
 }

@@ -84,7 +84,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class JdbcConnectionOpeningHandler
-    implements  AntCommandHandler
+    extends  AntCommandHandler
 {
     /**
      * The JDBC connection attribute name.

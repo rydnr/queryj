@@ -96,7 +96,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class DatabaseMetaDataRetrievalHandler
-    implements  AntCommandHandler
+    extends  AntCommandHandler
 {
     /**
      * The Database Metadata attribute name.

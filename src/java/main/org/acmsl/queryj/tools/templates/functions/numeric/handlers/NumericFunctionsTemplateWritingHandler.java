@@ -55,13 +55,7 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGenerator;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.version.Version;
-import org.acmsl.commons.version.VersionFactory;
+import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 
 /*
  * Importing some Ant classes.
@@ -75,11 +69,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Writes the numeric functions template.
  * @author <a href="mailto:jsanleandro@yahoo.es"
@@ -87,7 +76,8 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class NumericFunctionsTemplateWritingHandler
-    implements  AntCommandHandler
+    extends    AntCommandHandler
+    implements TemplateWritingHandler
 {
     /**
      * Creates a NumericFunctionsTemplateWritingHandler.
@@ -98,35 +88,9 @@ public class NumericFunctionsTemplateWritingHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            try 
-            {
-                result = handle((AntCommand) command);
-            }
-            catch  (BuildException buildException)
-            {
-                LogFactory.getLog(getClass()).error(
-                    "unhandled.exception",
-                    buildException);
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -153,7 +117,7 @@ public class NumericFunctionsTemplateWritingHandler
                         t_NumericFunctionsTemplate, t_OutputDir);
                 }
             }
-            catch  (IOException ioException)
+            catch  (final IOException ioException)
             {
                 throw new BuildException(ioException);
             }
@@ -247,31 +211,5 @@ public class NumericFunctionsTemplateWritingHandler
         }
         
         return result;
-    }
-
-    /**
-     * Concrete version object updated everytime it's checked-in in a
-     * CVS repository.
-     */
-    public static final Version VERSION =
-        VersionFactory.createVersion("$Revision$");
-
-    /**
-     * Retrieves the current version of this object.
-     * @return the version object with such information.
-     */
-    public Version getVersion()
-    {
-        return VERSION;
-    }
-
-    /**
-     * Retrieves the current version of this class. It's defined because
-     * this is a utility class that cannot be instantiated.
-     * @return the object with class version information.
-     */
-    public static Version getClassVersion()
-    {
-        return VERSION;
     }
 }

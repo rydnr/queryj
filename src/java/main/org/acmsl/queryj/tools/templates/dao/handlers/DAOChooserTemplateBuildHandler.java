@@ -56,6 +56,7 @@ import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -78,11 +79,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Builds a DAOChooser using database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
@@ -90,7 +86,8 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class DAOChooserTemplateBuildHandler
-    implements  AntCommandHandler
+    extends    AntCommandHandler
+    implements TemplateBuildHandler
 {
     /**
      * Creates a DAOChooserTemplateBuildHandler.
@@ -101,35 +98,9 @@ public class DAOChooserTemplateBuildHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            try 
-            {
-                result = handle((AntCommand) command);
-            }
-            catch  (BuildException buildException)
-            {
-                LogFactory.getLog(getClass()).error(
-                    "unhandled.exception",
-                    buildException);
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -264,31 +235,5 @@ public class DAOChooserTemplateBuildHandler
                 TemplateMappingManager.DAO_CHOOSER_TEMPLATE,
                 daoChooserTemplate);
         }
-    }
-
-    /**
-     * Concrete version object updated everytime it's checked-in in a
-     * CVS repository.
-     */
-    public static final Version VERSION =
-        VersionFactory.createVersion("$Revision$");
-
-    /**
-     * Retrieves the current version of this object.
-     * @return the version object with such information.
-     */
-    public Version getVersion()
-    {
-        return VERSION;
-    }
-
-    /**
-     * Retrieves the current version of this class. It's defined because
-     * this is a utility class that cannot be instantiated.
-     * @return the object with class version information.
-     */
-    public static Version getClassVersion()
-    {
-        return VERSION;
     }
 }

@@ -90,7 +90,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class DataAccessManagerTemplateBuildHandler
-    implements  AntCommandHandler
+    extends  AntCommandHandler
 {
     /**
      * Creates a DataAccessManagerTemplateBuildHandler.

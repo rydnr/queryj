@@ -57,30 +57,20 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.ProcedureMetaData;
 import org.acmsl.queryj.tools.ProcedureParameterMetaData;
 import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.version.Version;
-import org.acmsl.commons.version.VersionFactory;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 
 /*
  * Importing some JDK classes.
  */
 import java.util.Map;
-
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Builds a procedure repository using database metadata.
@@ -89,7 +79,8 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class ProcedureRepositoryTemplateBuildHandler
-    implements  AntCommandHandler
+    extends    AntCommandHandler
+    implements TemplateBuildHandler
 {
     /**
      * The procedure repository template attribute name.
@@ -106,35 +97,9 @@ public class ProcedureRepositoryTemplateBuildHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            try 
-            {
-                result = handle((AntCommand) command);
-            }
-            catch  (BuildException buildException)
-            {
-                LogFactory.getLog(getClass()).error(
-                    "unhandled.exception",
-                    buildException);
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -160,8 +125,9 @@ public class ProcedureRepositoryTemplateBuildHandler
                 ProcedureMetaData[] t_aProceduresMetaData =
                     t_MetaDataManager.getProceduresMetaData();
 
-                LogFactory.getLog(getClass()).info(
-                    "Handling stored procedures..." + t_aProceduresMetaData);
+                command.getProject().log(
+                    "Handling stored procedures..." + t_aProceduresMetaData,
+                    Project.MSG_INFO);
 
                 ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate =
                     buildProcedureRepositoryTemplate(attributes);
@@ -169,8 +135,9 @@ public class ProcedureRepositoryTemplateBuildHandler
                 if  (  (t_ProcedureRepositoryTemplate != null)
                     && (t_aProceduresMetaData         != null))
                 {
-                    LogFactory.getLog(getClass()).info(
-                        "Building " + t_aProceduresMetaData.length + " procedures.");
+                    command.getProject().log(
+                        "Building " + t_aProceduresMetaData.length + " procedures.",
+                    Project.MSG_INFO);
 
                     for  (int t_iIndex = 0;
                               t_iIndex < t_aProceduresMetaData.length;
@@ -337,31 +304,5 @@ public class ProcedureRepositoryTemplateBuildHandler
         {
             parameters.put(PROCEDURE_REPOSITORY_TEMPLATE, procedureRepositoryTemplate);
         }
-    }
-
-    /**
-     * Concrete version object updated everytime it's checked-in in a
-     * CVS repository.
-     */
-    public static final Version VERSION =
-        VersionFactory.createVersion("$Revision$");
-
-    /**
-     * Retrieves the current version of this object.
-     * @return the version object with such information.
-     */
-    public Version getVersion()
-    {
-        return VERSION;
-    }
-
-    /**
-     * Retrieves the current version of this class. It's defined because
-     * this is a utility class that cannot be instantiated.
-     * @return the object with class version information.
-     */
-    public static Version getClassVersion()
-    {
-        return VERSION;
     }
 }

@@ -2,9 +2,9 @@
  @license
                  ACM-SL Ant-based build script
 
-    Copyright (C) 2002-2004  Jose San Leandro Armend&aacute;riz
-                            jsanleandro@yahoo.es
-                            chousz@yahoo.com
+    Copyright (C) 2001-2004  Jose San Leandro Armend&aacute;riz
+                             jsanleandro@yahoo.es
+                             chousz@yahoo.com
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -66,7 +66,7 @@
       log4j/
         log4j.xml
         [..][/]
-      struts/
+      i18n/
         [..][/]
       thirdparty/
         [..][/]
@@ -99,31 +99,26 @@
       notes/
         [..][/]
       [..]
-    lib/
-      antlr/
-        build/
+    dependencies/
+      lib/
+        antlr/
+          build/
+            [..]
+          runtime/
+            [..]
           [..]
-        runtime/
+        java/
+          build/
+            [..]
+          development/
+            [..]
+          runtime/
+            [..]
+          unittest/
+            [..]
           [..]
+      tld/
         [..]
-      aspectj/
-        build/
-          [..]
-        runtime/
-          [..]
-        [..]
-      java/
-        ant/
-          [..]
-        build/
-          [..]
-        runtime/
-          [..]
-        unittest/
-          [..]
-        [..]
-      wartmp/
-        [..][/]
     src/
       antlr/
         java/
@@ -159,8 +154,6 @@
         overview.html
         [..][/]
       shellscripts
-        wartmp/
-          [..][/]
         [..][/]
       toolconf/
         ant/
@@ -168,7 +161,6 @@
           build.xml
         [..][/]
     build.number
-    deploy.number
     package.number
     test.number
  @requires AspectJ libraries and Ant tasks.
@@ -204,7 +196,7 @@
       log4j/
         log4j.xml
         [..][/]
-      struts/
+      i18n/
         [..][/]
       thirdparty/
         [..][/]
@@ -237,31 +229,25 @@
       notes/
         [..][/]
       [..]
-    lib/
-      antlr/
-        build/
+      lib/
+        antlr/
+          build/
+            [..]
+          runtime/
+            [..]
           [..]
-        runtime/
+        java/
+          build/
+            [..]
+          development/
+            [..]
+          runtime/
+            [..]
+          unittest/
+            [..]
           [..]
+      tld/
         [..]
-      aspectj/
-        build/
-          [..]
-        runtime/
-          [..]
-        [..]
-      java/
-        ant/
-          [..]
-        build/
-          [..]
-        runtime/
-          [..]
-        unittest/
-          [..]
-        [..]
-      wartmp/
-        [..][/]
     src/
       antlr/
         build/
@@ -294,8 +280,6 @@
         overview.html
         [..][/]
       shellscripts
-        wartmp/
-          [..][/]
         [..][/]
       toolconf/
         ant/
@@ -303,7 +287,6 @@
           build.xml
         [..][/]
     build.number
-    deploy.number
     package.number
     test.number
         </echo>
@@ -322,6 +305,11 @@
      @return the asignment of correct values to the required properties.
     -->
     <target name="init.properties">
+
+      <!--
+       System classpath not used.
+      -->
+      <property name="build.sysclasspath" value="ignore"/>
 
         <!--
          Variable to check if JAVA_HOME variable is available.
@@ -345,7 +333,7 @@
         <!--
          Requests CVS to perform the keyword clean substitution.
         -->
-        <cvs command="update -kv src/toolconf/ant/build.properties"/>
+        <!--cvs command="update -kv src/toolconf/ant/build.properties"/-->
 
         <!--
          Reads some specific properties from an external property file.
@@ -356,12 +344,12 @@
          Removes the build.properties file to get rid of the sticky
          keyword substitution setting.
         -->
-        <delete file="src/toolconf/ant/build.properties"/>
+        <!--delete file="src/toolconf/ant/build.properties"/-->
 
         <!--
          Restores build.properties state.
         -->
-        <cvs command="update -A src/toolconf/ant/build.properties"/>
+        <!--cvs command="update -A src/toolconf/ant/build.properties"/-->
 
         <!--
          Displays some project information.
@@ -401,19 +389,14 @@
         <property name="log4j.dir" value="${conf.dir}/log4j"/>
 
         <!--
-           Struts configuration folder.
-        -->
-        <property name="struts.dir" value="${conf.dir}/struts"/>
-
-        <!--
            XML configuration files are placed in this folder.
         -->
         <property name="xml.dir" value="${conf.dir}/xml"/>
 
         <!--
-           War configuration temporary folder.
+           Internationalized message files in this folder.
         -->
-        <property name="war.conf.temp.dir" value="${conf.dir}/wartmp"/>
+        <property name="i18n.dir" value="${conf.dir}/i18n"/>
 
         <!--
          Compilation and distribution base folder.
@@ -439,8 +422,8 @@
              Documentation images base folder.
         -->
         <property
-            name="docs.images.dir"
-            value="${docs.dir}/images"/>
+          name="docs.images.dir"
+          value="${docs.dir}/images"/>
 
         <!--
            Sets where to place the automatically-generated documentation.
@@ -463,9 +446,16 @@
         <property name="license.dir" value="${docs.dir}/license"/>
 
         <!--
+         Dependencies base folder.
+        -->
+        <property
+          name="dependencies.dir"
+          value="${project.base.folder}/dependencies"/>
+
+        <!--
          Libraries base folder.
         -->
-        <property name="lib.dir" value="${project.base.folder}/lib"/>
+        <property name="lib.dir" value="${dependencies.dir}/lib"/>
 
         <!--
            ANTLR-specific libraries folder. Files under this folder are
@@ -478,47 +468,25 @@
              required at runtime.
         -->
         <property
-            name="antlr.build.lib.dir"
-            value="${antlr.lib.dir}/build"/>
+          name="antlr.build.lib.dir"
+          value="${antlr.lib.dir}/build"/>
 
         <!--
              ANTLR libraries needed ONLY at runtime, not required for
              building the project.
         -->   
         <property
-            name="antlr.runtime.lib.dir"
-            value="${antlr.lib.dir}/runtime"/>
+          name="antlr.runtime.lib.dir"
+          value="${antlr.lib.dir}/runtime"/>
    
         <!--
              ANTLR libraries needed ONLY for unit tests, not required
              for building the project.
         -->   
         <property
-            name="antlr.unit.test.lib.dir"
-            value="${antlr.lib.dir}/unittest"/>
+          name="antlr.unit.test.lib.dir"
+          value="${antlr.lib.dir}/unittest"/>
 
-        <!--
-           AspectJ-specific libraries folder. Files under this folder are
-           needed for compiling the sources (Java+aspects) and also at runtime.
-        -->
-        <property name="aspectj.lib.dir" value="${lib.dir}/aspectj"/>
-
-        <!--
-             AspectJ libraries needed ONLY for building the project, not
-             required at runtime.
-        -->
-        <property
-            name="aspectj.build.lib.dir"
-            value="${aspectj.lib.dir}/build"/>
-
-        <!--
-             AspectJ libraries needed ONLY at runtime, not required for
-             building the project.
-        -->   
-        <property
-            name="aspectj.runtime.lib.dir"
-            value="${aspectj.lib.dir}/runtime"/>
-   
         <!--
            Java libraries folder. Files under this folder are needed for
            compiling the Java sources and also at runtime.
@@ -526,33 +494,42 @@
         <property name="java.lib.dir" value="${lib.dir}/java"/>
 
         <!--
-             Java libraries needed ONLY for building the project, not required
-             at runtime.
+             Java libraries needed ONLY while developing the project,
+             required by development tools, not required at build or
+             runtime.
         -->
         <property
-            name="java.build.lib.dir"
-            value="${java.lib.dir}/build"/>
+          name="java.development.lib.dir"
+          value="${java.lib.dir}/development"/>
+
+        <!--
+            Java libraries needed ONLY for building the project, not required
+            at runtime.
+        -->
+        <property
+          name="java.build.lib.dir"
+          value="${java.lib.dir}/build"/>
 
         <!--
              Java libraries needed ONLY at runtime, not required for building
              the project.
         -->   
         <property
-            name="java.runtime.lib.dir"
-            value="${java.lib.dir}/runtime"/>
+          name="java.runtime.lib.dir"
+          value="${java.lib.dir}/runtime"/>
 
         <!--
              Java libraries needed ONLY for unit tests, not required
              for building the project.
         -->   
         <property
-            name="java.unit.test.lib.dir"
-            value="${java.lib.dir}/unittest"/>
+          name="java.unit.test.lib.dir"
+          value="${java.lib.dir}/unittest"/>
 
         <!--
-           War temporary folder.
+         TagLibs descriptors base folder.
         -->
-        <property name="war.lib.temp.dir" value="${lib.dir}/wartmp"/>
+        <property name="tld.dir" value="${dependencies.dir}/tld"/>
 
         <!--
          Base folder for all kind of source files.
@@ -568,29 +545,29 @@
              ANTLR generated Java sources location.
         -->
         <property
-            name="antlr.java.src.dir"
-            value="${antlr.src.dir}/java"/>
+          name="antlr.java.src.dir"
+          value="${antlr.src.dir}/java"/>
 
         <!--
              Javadoc HTML sources related to ANTLR generated compiler packages.
         -->
         <property
-            name="antlr.javadoc.src.dir"
-            value="${antlr.src.dir}/javadoc"/>
+          name="antlr.javadoc.src.dir"
+          value="${antlr.src.dir}/javadoc"/>
 
         <!--
              ANTLR input data used in tests.
         -->
         <property
-            name="antlr.input.src.dir"
-            value="${antlr.src.dir}/input"/>
+          name="antlr.input.src.dir"
+          value="${antlr.src.dir}/input"/>
 
         <!--
              ANTLR output data generated by tests from previous input.
         -->
         <property
-            name="antlr.output.src.dir"
-            value="${antlr.src.dir}/output"/>
+          name="antlr.output.src.dir"
+          value="${antlr.src.dir}/output"/>
 
         <!--
            AspectJ source folder.
@@ -606,6 +583,11 @@
            Where all images referred by web pages are located.
         -->
         <property name="web.images.dir" value="${src.dir}/images"/>
+
+        <!--
+           Where all stylesheets referred by web pages are located.
+        -->
+        <property name="web.css.dir" value="${src.dir}/css"/>
 
         <!--
            Java source folder.
@@ -634,13 +616,6 @@
         -->
         <property name="shellscripts.dir" value="${src.dir}/shellscripts"/>
 
-        <!--
-           War temporary script.
-        -->
-        <property
-            name="war.temp.script.path"
-            value="${shellscripts.dir}/wartmp/warlib.sh"/>
-
 <!--         END OF FOLDER STRUCTURE SECTION                                -->
 
 <!--         BEGIN MISC PROPERTIES DEFINITION SECTION                       -->
@@ -649,7 +624,8 @@
          Defines the name and location of the project's jar file.
         -->
         <property
-            name="project.jar.path" value="${build.dir}/${project.name}.jar"/>
+          name="project.jar.file"
+          value="${build.dir}/${project.name}-${project.version}${project.status}.jar"/>
 
         <!--
          Defines the name and location of project's Javadoc packaged zip.
@@ -657,6 +633,11 @@
         <property
             name="javadoc.zip.path"
             value="${dist.dir}/${project.name}-javadoc.zip"/>
+
+        <!--
+         Prefix to use in WAR files to store the taglib descriptors.
+        -->
+        <property name="tld.war.prefix" value="tlds"/>
 
         <!--
          Prefix to use in WAR files to store the JSP pages.
@@ -667,6 +648,11 @@
          Prefix to use in WAR files to store the images.
         -->
         <property name="images.war.prefix" value="images"/>
+
+        <!--
+         Prefix to use in WAR files to store the stylesheets.
+        -->
+        <property name="css.war.prefix" value="css"/>
 
         <!--
          Prefix to use in WAR files to store the HTML pages.
@@ -694,116 +680,103 @@
      @return the creation of the <i>classes.dir</i> folder.
     -->
     <target
-        name="init.folders"
-        depends="init.properties"
-        description="Prepares the required directories.">
+      name="init.folders"
+      depends="init.properties"
+      description="Prepares the required directories.">
 
-        <!--
-         Creates the distribution directory.
-        -->
-        <mkdir dir="${dist.dir}"/>
+      <!--
+       Creates the distribution directory.
+      -->
+      <mkdir dir="${dist.dir}"/>
 
-        <!--
-         Creates the directory to store the compiled classes.
-        -->
-        <mkdir dir="${classes.dir}"/>
+      <!--
+       Creates the directory to store the compiled classes.
+      -->
+      <mkdir dir="${classes.dir}"/>
 
-        <!--
-         Creates the libraries base folder, if it's not created yet.
-        -->
-        <mkdir dir="${lib.dir}"/>
+      <!--
+       Creates the libraries base folder, if it's not created yet.
+      -->
+      <mkdir dir="${lib.dir}"/>
 
-        <!--
-         Creates the log4j directory, if it doesn't exist.
-        -->
-        <mkdir dir="${log4j.dir}"/>
+      <!--
+       Creates the log4j directory, if it doesn't exist.
+      -->
+      <mkdir dir="${log4j.dir}"/>
 
-        <!--
-         Creates the properties directory, if it doesn't exist.
-        -->
-        <mkdir dir="${properties.dir}"/>
+      <!--
+       Creates the properties directory, if it doesn't exist.
+      -->
+      <mkdir dir="${properties.dir}"/>
 
-        <!--
-         Creates the XML configuration directory, if it doesn't exist.
-        -->
-        <mkdir dir="${xml.dir}"/>
+      <!--
+       Creates the XML configuration directory, if it doesn't exist.
+      -->
+      <mkdir dir="${xml.dir}"/>
 
-        <!--
-           Creates the ANTLR-specific libraries folder, if it's not created
-           yet.
-        -->
-        <mkdir dir="${antlr.lib.dir}"/>
+      <!--
+         Creates the ANTLR-specific libraries folder, if it's not created
+         yet.
+      -->
+      <mkdir dir="${antlr.lib.dir}"/>
 
-        <!--
-             Creates the folder where the ANTLR libraries needed ONLY for
-             building the project (not required at runtime) are located,
-             unless it already exists.
-        -->
-        <mkdir dir="${antlr.build.lib.dir}"/>
+      <!--
+           Creates the folder where the ANTLR libraries needed ONLY for
+           building the project (not required at runtime) are located,
+           unless it already exists.
+      -->
+      <mkdir dir="${antlr.build.lib.dir}"/>
 
-        <!--
-             Creates the folder where the ANTLR libraries needed ONLY at
-             runtime (not required for building the project) are located,
-             unless it already exists.
-        -->   
-        <mkdir dir="${antlr.runtime.lib.dir}"/>
+      <!--
+           Creates the folder where the ANTLR libraries needed ONLY at
+           runtime (not required for building the project) are located,
+           unless it already exists.
+      -->   
+      <mkdir dir="${antlr.runtime.lib.dir}"/>
    
-        <!--
-             Creates the folder where the ANTLR libraries needed ONLY for
-             testing.
-        -->   
-        <mkdir dir="${antlr.unit.test.lib.dir}"/>
+      <!--
+           Creates the folder where the ANTLR libraries needed ONLY for
+           testing.
+      -->   
+      <mkdir dir="${antlr.unit.test.lib.dir}"/>
    
-        <!--
-           Creates the AspectJ-specific libraries folder, it if's not created
-           yet.
-        -->
-        <mkdir dir="${aspectj.lib.dir}"/>
+      <!--
+         Creates the Java libraries folder, if it's not created yet.
+      -->
+      <mkdir dir="${java.lib.dir}"/>
 
-        <!--
-             Creates the folder where AspectJ libraries needed ONLY for
-             building the project (not required at runtime) are located,
-             unless it already exists.
-        -->
-        <mkdir dir="${aspectj.build.lib.dir}"/>
+      <!--
+           Creates the folder where Java libraries needed ONLY while
+           developing the project (not required at runtime) are
+           located, unless it already exists.
+      -->
+      <mkdir dir="${java.development.lib.dir}"/>
 
-        <!--
-             Creates the folder where AspectJ libraries folder needed ONLY at
-             runtime (not required for building the project) are located,
-             unless it already exists.
-        -->   
-        <mkdir dir="${aspectj.runtime.lib.dir}"/>
-   
-        <!--
-           Creates the Java libraries folder, if it's not created yet.
-        -->
-        <mkdir dir="${java.lib.dir}"/>
+      <!--
+           Creates the folder where Java libraries needed ONLY while
+           building the project (not required at runtime) are
+           located, unless it already exists.
+      -->
+      <mkdir dir="${java.build.lib.dir}"/>
 
-        <!--
-             Creates the folder where Java libraries needed ONLY for building
-             the project (not required at runtime) are located, unless it
-             already exists.
-        -->
-        <mkdir dir="${java.build.lib.dir}"/>
+      <!--
+           Creates the folder where Java libraries needed ONLY at runtime
+           (not required for building the project) are located, unless it
+           already exists.
+      -->   
+      <mkdir dir="${java.runtime.lib.dir}"/>
 
-        <!--
-             Creates the folder where Java libraries needed ONLY at runtime
-             (not required for building the project) are located, unless it
-             already exists.
-        -->   
-        <mkdir dir="${java.runtime.lib.dir}"/>
+      <!--
+           Creates the folder where Java libraries needed ONLY for
+           unit testing (not required for building the project) are
+           located, unless it already exists.
+      -->   
+      <mkdir dir="${java.unit.test.lib.dir}"/>
 
-        <!--
-             Creates the folder where Java libraries needed ONLY for
-             unit testing (not required for building the project) are
-             located, unless it already exists.
-        -->   
-        <mkdir dir="${java.unit.test.lib.dir}"/>
-
-        <!--
-             Usually, projects use only the latest version of the JDK.
-        -->
-        <mkdir dir="${jdk.X.Y.src.dir}"/>
+      <!--
+           Usually, projects use only the latest version of the JDK.
+      -->
+      <mkdir dir="${jdk.X.Y.src.dir}"/>
 
     </target>
 
@@ -813,598 +786,447 @@
      @return the definition of all paths.
     -->
     <target
-        name="init.paths"
-        depends="init.folders"
-        description="Defines all required paths.">
+      name="init.paths"
+      depends="init.folders"
+      description="Defines all required paths.">
+
+      <!--
+       ANTLR-only compilation classpath.
+      -->
+      <path id="antlr.compile.class.path">
 
         <!--
-         ANTLR-only compilation classpath.
+         ANTLR libraries needed for compilation and at runtime.
         -->
-        <path id="antlr.compile.class.path">
+        <fileset dir="${antlr.lib.dir}">
 
-            <!--
-             JDK classes.
-            -->
-            <pathelement location="${java.home}/lib/rt.jar"/>
+          <include name="*.jar"/>
 
-            <!--
-             ANTLR libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${antlr.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             ANTLR libraries needed only for compilation.
-            -->
-            <fileset dir="${antlr.build.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-        </path>
+        </fileset>
 
         <!--
-         ANTLR-only runtime classpath.
+         ANTLR libraries needed only for compilation.
         -->
-        <path id="antlr.runtime.class.path">
+        <fileset dir="${antlr.build.lib.dir}">
 
-            <!--
-             JDK classes.
-            -->
-            <pathelement location="${java.home}/lib/rt.jar"/>
+          <include name="*.jar"/>
 
-            <!--
-             ANTLR libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${antlr.lib.dir}">
+        </fileset>
 
-                <include name="*.jar"/>
+      </path>
 
-            </fileset>
-
-            <!--
-             ANTLR libraries needed only at runtime.
-            -->
-            <fileset dir="${antlr.runtime.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-        </path>
+      <!--
+       ANTLR-only runtime classpath.
+      -->
+      <path id="antlr.runtime.class.path">
 
         <!--
-         ANTLR-only unit test classpath.
+         ANTLR libraries needed for compilation and at runtime.
         -->
-        <path id="antlr.unit.test.class.path">
+        <fileset dir="${antlr.lib.dir}">
 
-            <!--
-             ANTLR compile classpath.
-            -->
-            <path refid="antlr.compile.class.path"/>
+          <include name="*.jar"/>
 
-            <!--
-             ANTLR runtime classpath.
-            -->
-            <path refid="antlr.runtime.class.path"/>
-
-            <!--
-             ANTLR libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${antlr.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             ANTLR libraries needed only for testing..
-            -->
-            <fileset dir="${antlr.unit.test.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-        </path>
+        </fileset>
 
         <!--
-         ANTLR-only classpath.
+         ANTLR libraries needed only at runtime.
         -->
-        <path id="antlr.class.path">
+        <fileset dir="${antlr.runtime.lib.dir}">
 
-            <!--
-             ANTLR compile classpath.
-            -->
-            <path refid="antlr.compile.class.path"/>
+          <include name="*.jar"/>
 
-            <!--
-             ANTLR runtime classpath.
-            -->
-            <path refid="antlr.runtime.class.path"/>
+        </fileset>
 
-            <!--
-             ANTLR unit test classpath.
-            -->
-            <path refid="antlr.unit.test.class.path"/>
+      </path>
 
-        </path>
+      <!--
+       ANTLR-only unit test classpath.
+      -->
+      <path id="antlr.unit.test.class.path">
 
         <!--
-         AspectJ-only compilation classpath.
+         ANTLR compile classpath.
         -->
-        <path id="aspectj.compile.class.path">
-
-            <!--
-             JDK classes.
-            -->
-            <pathelement location="${java.home}/lib/rt.jar"/>
-
-            <!--
-             AspectJ libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${aspectj.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             AspectJ libraries needed only for compilation.
-            -->
-            <fileset dir="${aspectj.build.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-        </path>
+        <path refid="antlr.compile.class.path"/>
 
         <!--
-         AspectJ-only runtime classpath.
+         ANTLR runtime classpath.
         -->
-        <path id="aspectj.runtime.class.path">
-
-            <!--
-             JDK classes.
-            -->
-            <pathelement location="${java.home}/lib/rt.jar"/>
-
-            <!--
-             AspectJ libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${aspectj.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             AspectJ libraries needed only at runtime.
-            -->
-            <fileset dir="${aspectj.runtime.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-        </path>
+        <path refid="antlr.runtime.class.path"/>
 
         <!--
-         AspectJ-only classpath.
+         ANTLR libraries needed for compilation and at runtime.
         -->
-        <path id="aspectj.class.path">
+        <fileset dir="${antlr.lib.dir}">
 
-            <!--
-             AspectJ compile classpath.
-            -->
-            <path refid="aspectj.compile.class.path"/>
+          <include name="*.jar"/>
 
-            <!--
-             AspectJ runtime classpath.
-            -->
-            <path refid="aspectj.runtime.class.path"/>
-
-        </path>
+        </fileset>
 
         <!--
-         Ant add-ins classpath.
+         ANTLR libraries needed only for testing..
         -->
-        <path id="java.ant.class.path">
+        <fileset dir="${antlr.unit.test.lib.dir}">
 
-            <!--
-             JDK classes.
-            -->
-            <pathelement location="${java.home}/lib/rt.jar"/>
+          <include name="*.jar"/>
 
-            <!--
-             Ant add-ins.
-            -->
-            <fileset dir="${java.build.lib.dir}">
+        </fileset>
 
-                <include name="*.jar"/>
+      </path>
 
-            </fileset>
-
-        </path>
+      <!--
+       ANTLR-only classpath.
+      -->
+      <path id="antlr.class.path">
 
         <!--
-         Java-only compilation classpath.
+         ANTLR compile classpath.
         -->
-        <path id="java.compile.class.path">
-
-            <!--
-             JDK classes.
-            -->
-            <pathelement location="${java.home}/lib/rt.jar"/>
-
-            <!--
-             Project own classes.
-            -->
-            <pathelement location="${classes.dir}"/>
-
-            <!--
-             Java libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${java.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             Java libraries needed only for compilation.
-            -->
-            <fileset dir="${java.build.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             Java libraries needed compiling the unit tests.
-            -->
-            <fileset dir="${java.unit.test.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             ANTLR-related libraries.
-            -->
-            <path refid="antlr.compile.class.path"/>
-
-        </path>
+        <path refid="antlr.compile.class.path"/>
 
         <!--
-         Java-only runtime classpath.
+         ANTLR runtime classpath.
         -->
-        <path id="java.runtime.class.path">
-
-            <!--
-             Project own classes.
-            -->
-            <pathelement location="${classes.dir}"/>
-
-            <!--
-             Java libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${java.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             Java libraries needed only at runtime.
-            -->
-            <fileset dir="${java.runtime.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             ANTLR-related libraries.
-            -->
-            <path refid="antlr.runtime.class.path"/>
-
-        </path>
+        <path refid="antlr.runtime.class.path"/>
 
         <!--
-         Java-only test classpath: unittest classpath.
+         ANTLR unit test classpath.
         -->
-        <path id="java.unit.test.class.path">
+        <path refid="antlr.unit.test.class.path"/>
 
-            <!--
-             Project own classes.
-            -->
-            <pathelement location="${classes.dir}"/>
+      </path>
 
-            <!--
-             Java libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${java.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             Java libraries needed only at runtime.
-            -->
-            <fileset dir="${java.runtime.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             Java libraries needed only for compilation.
-            -->
-            <fileset dir="${java.build.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             Java libraries needed only for unit tests.
-            -->
-            <fileset dir="${java.unit.test.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-        </path>
+      <!--
+       Ant add-ins classpath.
+      -->
+      <path id="java.development.class.path">
 
         <!--
-         Compilation classpath (including aspects).
+         Ant add-ins.
         -->
-        <path id="compile.class.path">
+        <fileset dir="${java.development.lib.dir}">
 
-            <!--
-             Class path for compiling without aspects.
-            -->
-            <path refid="java.compile.class.path"/>
+          <include name="*.jar"/>
 
-            <!--
-             AspectJ libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${aspectj.lib.dir}">
+        </fileset>
 
-                <include name="*.jar"/>
+      </path>
 
-            </fileset>
-
-            <!--
-             AspectJ libraries needed only for compilation.
-            -->
-            <fileset dir="${aspectj.build.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-        </path>
+      <!--
+       Java-only compilation classpath.
+      -->
+      <path id="java.compile.class.path">
 
         <!--
-         Runtime classpath (including aspects).
+         Project own classes.
         -->
-        <path id="runtime.class.path">
-
-            <!--
-             Class path required at runtime without aspects.
-            -->
-            <path refid="java.runtime.class.path"/>
-
-            <!--
-             Project own classes.
-            -->
-            <pathelement location="${classes.dir}"/>
-
-            <!--
-             AspectJ libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${aspectj.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-            <!--
-             AspectJ libraries needed only at runtime.
-            -->
-            <fileset dir="${aspectj.runtime.lib.dir}">
-
-                <include name="*.jar"/>
-
-            </fileset>
-
-        </path>
+        <pathelement location="${classes.dir}"/>
 
         <!--
-         Unit test classpath: compile plus runtime classpath
-         (including aspects).
+         Java libraries needed for compilation and at runtime.
         -->
-        <path id="unit.test.class.path">
+        <fileset dir="${java.lib.dir}">
 
-            <!--
-             Class path for testing without aspects.
-            -->
-            <path refid="java.unit.test.class.path"/>
+          <include name="*.jar"/>
 
-            <!--
-             AspectJ libraries needed for compilation and at runtime.
-            -->
-            <fileset dir="${aspectj.lib.dir}">
+        </fileset>
 
-                <include name="*.jar"/>
+        <!--
+         Java libraries needed only for compilation.
+        -->
+        <fileset dir="${java.build.lib.dir}">
 
-            </fileset>
+          <include name="*.jar"/>
 
-            <!--
-             AspectJ libraries needed only at runtime.
-            -->
-            <fileset dir="${aspectj.runtime.lib.dir}">
+        </fileset>
 
-                <include name="*.jar"/>
+        <!--
+         Java libraries needed compiling the unit tests.
+        -->
+        <fileset dir="${java.unit.test.lib.dir}">
 
-            </fileset>
+          <include name="*.jar"/>
 
-            <!--
-             AspectJ libraries needed only for compilation.
-            -->
-            <fileset dir="${aspectj.build.lib.dir}">
+        </fileset>
 
-                <include name="*.jar"/>
+        <!--
+         ANTLR-related libraries.
+        -->
+        <path refid="antlr.compile.class.path"/>
 
-            </fileset>
+      </path>
 
-            <!--
-             ANTLR test libraries.
-            -->
-            <path refid="antlr.unit.test.class.path"/>
+      <!--
+       Java-only runtime classpath.
+      -->
+      <path id="java.libonly.runtime.class.path">
 
-        </path>
+        <!--
+         Java libraries needed for compilation and at runtime.
+        -->
+        <fileset dir="${java.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <!--
+         Java libraries needed only at runtime.
+        -->
+        <fileset dir="${java.runtime.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <!--
+         ANTLR-related libraries.
+        -->
+        <path refid="antlr.runtime.class.path"/>
+
+      </path>
+
+      <!--
+       Java-only runtime classpath.
+      -->
+      <path id="java.runtime.class.path">
+
+        <!--
+         Project own classes.
+        -->
+        <pathelement location="${classes.dir}"/>
+
+        <path refid="java.libonly.runtime.class.path"/>
+
+      </path>
+
+      <!--
+       Java-only test classpath: unittest classpath.
+      -->
+      <path id="java.unit.test.class.path">
+
+        <!--
+         Project own classes.
+        -->
+        <pathelement location="${classes.dir}"/>
+
+        <!--
+         Java libraries needed for compilation and at runtime.
+        -->
+        <fileset dir="${java.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <!--
+         Java libraries needed only at runtime.
+        -->
+        <fileset dir="${java.runtime.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <!--
+         Java libraries needed only for compilation.
+        -->
+        <fileset dir="${java.build.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <!--
+         Java libraries needed only for unit tests.
+        -->
+        <fileset dir="${java.unit.test.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+      </path>
+
+      <!--
+       Compilation classpath (including aspects).
+      -->
+      <path id="compile.class.path">
+
+        <!--
+         Class path for compiling without aspects.
+        -->
+        <path refid="java.compile.class.path"/>
+
+      </path>
+
+      <!--
+       Runtime classpath (including aspects).
+      -->
+      <path id="runtime.class.path">
+
+        <!--
+         Class path required at runtime without aspects.
+        -->
+        <path refid="java.runtime.class.path"/>
+
+        <!--
+         Project own classes.
+        -->
+        <pathelement location="${classes.dir}"/>
+
+      </path>
+
+      <!--
+       Unit test classpath: compile plus runtime classpath
+       (including aspects).
+      -->
+      <path id="unit.test.class.path">
+
+        <!--
+         Class path for testing without aspects.
+        -->
+        <path refid="java.unit.test.class.path"/>
+
+        <!--
+         ANTLR test libraries.
+        -->
+        <path refid="antlr.unit.test.class.path"/>
+
+      </path>
 
 <!--         END CLASSPATH DEFINITIONS SECTION                              -->
 
 <!--         BEGIN SOURCE PATH DEFINITIONS SECTION                          -->
 
-        <!--
-         ANTLR source path.
-        -->
-        <path id="antlr.java.source.path">
-
-            <!--
-             Source files.
-            -->
-            <pathelement location="${antlr.java.src.dir}"/>
-
-        </path>
+      <!--
+       ANTLR source path.
+      -->
+      <path id="antlr.java.source.path">
 
         <!--
-         ANTLR source path, plus Javadoc sources.
+         Source files.
         -->
-        <path id="antlr.java.source.and.javadoc.path">
+        <pathelement location="${antlr.java.src.dir}"/>
 
-            <!--
-             Java Source files generated by ANTLR.
-            -->
-            <path refid="antlr.java.source.path"/>
+      </path>
 
-            <!--
-             Javadoc sources for packages generated from ANTLR grammars.
-            -->
-            <pathelement location="${antlr.javadoc.src.dir}"/>
-
-        </path>
+      <!--
+       ANTLR source path, plus Javadoc sources.
+      -->
+      <path id="antlr.java.source.and.javadoc.path">
 
         <!--
-         Java-only source path.
+         Java Source files generated by ANTLR.
         -->
-        <path id="java.source.path">
-
-            <!--
-             Source files.
-            -->
-            <pathelement location="${java.src.dir}"/>
-
-            <!--
-             Source files.
-            -->
-            <pathelement location="${jdk.X.Y.src.dir}"/>
-
-        </path>
+        <path refid="antlr.java.source.path"/>
 
         <!--
-         Java-only source path, plus Javadoc sources.
+         Javadoc sources for packages generated from ANTLR grammars.
         -->
-        <path id="java.source.and.javadoc.path">
+        <pathelement location="${antlr.javadoc.src.dir}"/>
 
-            <!--
-             Java Source files.
-            -->
-            <path refid="java.source.path"/>
+      </path>
 
-            <!--
-             Javadoc sources.
-            -->
-            <pathelement location="${javadoc.src.dir}"/>
-
-        </path>
+      <!--
+       Java-only source path.
+      -->
+      <path id="java.source.path">
 
         <!--
-         Source path, including aspects.
+         Source files.
         -->
-        <path id="project.source.path">
-
-            <!--
-             AspectJ source files.
-            --> 
-            <pathelement location="${aspectj.src.dir}"/>
-
-            <!--
-             Source files.
-            -->
-            <path refid="java.source.path"/>
-
-        </path>
+        <pathelement location="${java.src.dir}"/>
 
         <!--
-         Source path, including aspects.
+         Source files.
         -->
-        <path id="project.source.and.javadoc.path">
+        <pathelement location="${jdk.X.Y.src.dir}"/>
 
-            <!--
-             Java and Javadoc source files.
-            -->
-            <path refid="java.source.and.javadoc.path"/>
+      </path>
 
-            <!--
-             AspectJ sources.
-            -->
-            <pathelement location="${aspectj.src.dir}"/>
+      <!--
+       Java-only source path, plus Javadoc sources.
+      -->
+      <path id="java.source.and.javadoc.path">
 
-        </path>
+        <!--
+         Java Source files.
+        -->
+        <path refid="java.source.path"/>
+
+        <!--
+         Javadoc sources.
+        -->
+        <pathelement location="${javadoc.src.dir}"/>
+
+      </path>
+
+      <!--
+       Source path, including aspects.
+      -->
+      <path id="project.source.path">
+
+        <!--
+         AspectJ source files.
+        --> 
+        <pathelement location="${aspectj.src.dir}"/>
+
+        <!--
+         Source files.
+        -->
+        <path refid="java.source.path"/>
+
+      </path>
+
+      <!--
+       Source path, including aspects.
+      -->
+      <path id="project.source.and.javadoc.path">
+
+        <!--
+         Java and Javadoc source files.
+        -->
+        <path refid="java.source.and.javadoc.path"/>
+
+        <!--
+         AspectJ sources.
+        -->
+        <pathelement location="${aspectj.src.dir}"/>
+
+      </path>
 
 <!--        END SOURCE PATH DEFINITIONS SECTION                             -->
 
 <!--        BEGIN CONFIGURATION PATH DEFINITIONS SECTION                    -->
 
+      <!--
+       Configuration files path.
+      -->
+      <path id="configuration.path">
+
         <!--
-         Configuration files path.
+         Property files.
         -->
-        <path id="configuration.path">
+        <pathelement location="${properties.dir}"/>
 
-            <!--
-             Property files.
-            -->
-            <pathelement location="${properties.dir}"/>
+        <!--
+         Log4J configuration folder.
+        -->
+        <pathelement location="${log4j.dir}"/>
 
-            <!--
-             Log4J configuration folder.
-            -->
-            <pathelement location="${log4j.dir}"/>
+        <!--
+         XML configuration files are placed in this folder.
+        -->
+        <pathelement location="${xml.dir}"/>
 
-            <!--
-             Struts configuration folder.
-            -->
-            <pathelement location="${struts.dir}"/>
+        <!--
+         Internationalized messages.
+        -->
+        <pathelement location="${i18n.dir}"/>
 
-            <!--
-             XML configuration files are placed in this folder.
-            -->
-            <pathelement location="${xml.dir}"/>
-
-        </path>
+      </path>
 
      </target>
 
@@ -1456,19 +1278,6 @@
         <available
           property="specific.jdk.version.files.available"
           file="${jdk.X.Y.src.dir}"/>
-
-        <!--
-         Checks if web.xml is available.
-        -->
-        <available property="web.xml.available" file="${web.xml.path}"/>
-
-        <!--
-         Checks if deploy.path is available.
-        -->
-        <available
-            property="deploy.path.available"
-            file="${deploy.path}"
-            type="dir"/>
 
         <!--
          Checks if antlr.jar is available.
@@ -1552,10 +1361,10 @@
             <filepath>
 
                 <!--
-                 Tries to find it in the folder where the AspectJ libraries
+                 Tries to find it in the folder where the Ant add-ins
                  are located.
                 -->
-                <path refid="aspectj.class.path"/>
+                <path refid="java.development.class.path"/>
 
             </filepath>
 
@@ -1571,10 +1380,10 @@
             <filepath>
 
                 <!--
-                 Tries to find it in the folder where the AspectJ libraries
+                 Tries to find it in the folder where the Ant add-ins
                  are located.
                 -->
-                <path refid="aspectj.class.path"/>
+                <path refid="java.development.class.path"/>
 
             </filepath>
 
@@ -1593,7 +1402,7 @@
                  Tries to find it in the folder where the Ant add-ins
                  are located.
                 -->
-                <path refid="java.ant.class.path"/>
+                <path refid="java.development.class.path"/>
 
             </filepath>
 
@@ -1612,7 +1421,7 @@
                  Tries to find it in the folder where the Ant add-ins
                  are located.
                 -->
-                <path refid="java.ant.class.path"/>
+                <path refid="java.development.class.path"/>
 
             </filepath>
 
@@ -1631,7 +1440,7 @@
                  Tries to find it in the folder where the Ant add-ins
                  are located.
                 -->
-                <path refid="java.ant.class.path"/>
+                <path refid="java.development.class.path"/>
 
             </filepath>
 
@@ -1650,7 +1459,7 @@
                  Tries to find it in the folder where the Ant add-ins
                  are located.
                 -->
-                <path refid="java.ant.class.path"/>
+                <path refid="java.development.class.path"/>
 
             </filepath>
 
@@ -1818,17 +1627,17 @@
         description="Checks if the jdktools.jar is present.">
 
         <!--
-         Contains all AspectJ runtime classpath.
+         Contains all development add-ins classpath.
         -->
         <property
-            name="aspectj-classpath"
-            refid="aspectj.class.path"/>
+            name="jdktools-classpath"
+            refid="java.development.class.path"/>
 
         <!--
          Indicates the error message and exits.
         -->
         <fail
-            message="AspectJ expects tools.jar at ${aspectj-classpath}.
+            message="AspectJ expects tools.jar at ${jdktools-classpath}.
                      The process stops because AspectJ runtime library is
                      mandatory."/>
     </target>
@@ -1851,18 +1660,18 @@
         description="Checks if the aspectjtools.jar is present.">
 
         <!--
-         Contains all AspectJ runtime classpath.
+         Contains all development add-ins classpath.
         -->
         <property
-            name="aspectj-compile-classpath"
-            refid="aspectj.compile.class.path"/>
+            name="aspectjtools-classpath"
+            refid="java.development.class.path"/>
 
         <!--
          Indicates the error message and exits.
         -->
         <fail
             message="Expecting aspectjtools.jar at
-                     ${aspectj-compile-classpath}.
+                     ${aspectjtools-classpath}.
                      The process stops because AspectJ runtime library is
                      mandatory."/>
 
@@ -1885,17 +1694,17 @@
         description="Checks if the aspectjrt.jar is present.">
 
         <!--
-         Contains all AspectJ runtime classpath.
+         Contains all development add-ins classpath.
         -->
         <property
-            name="aspectj-runtime-classpath"
-            refid="aspectj.runtime.class.path"/>
+            name="aspectjrt-classpath"
+            refid="java.development.class.path"/>
 
         <!--
          Indicates the error message and exits.
         -->
         <fail
-            message="Expecting aspectjrt.jar at ${aspectj-runtime-classpath}.
+            message="Expecting aspectjrt.jar at ${aspectjrt-classpath}.
                      The process stops because AspectJ runtime library is
                      mandatory."/>
 
@@ -1920,7 +1729,7 @@
         -->
         <property
             name="junitdoclet-classpath"
-            refid="java.ant.class.path"/>
+            refid="java.development.class.path"/>
 
         <!--
          Indicates the error message and exits.
@@ -1953,7 +1762,7 @@
         -->
         <property
             name="junitdoclet-acmsl-classpath"
-            refid="java.ant.class.path"/>
+            refid="java.development.class.path"/>
 
         <!--
          Indicates the error message and exits.
@@ -1998,50 +1807,53 @@
     </target>
 
     <!--
-     Checks if the <i>web.xml</i> file is present.
-     @depends init to initialize all required properties.
-     @unless web.xml exists, the process will fail.
-     @param web.xml.available the flag that indicates if such file is present.
-     @param web.xml.path the expected location of the <i>web.xml</i> file.
-     @calls fail to stop the process if <i>web.xml</i> is not present.
-     @return the execution ends if the <i>web.xml</i> is not available.
+     Checks if the <i>project.jar</i> file is present.
+     @depends init.properties to initialize all required properties.
+     @param project.jar the expected location of the <i>project.jar</i> file.
+     @return a property called "project.jar.available", indicating
+     whether the file exists or not.
     -->
     <target
-        name="web.xml.available"
-        depends="init" 
-        unless="web.xml.available"
-        description="Checks if the web.xml file is present.">
+      name="check.project.jar.available"
+      depends="init.properties"
+      description="Checks if project.jar file is present.">
 
-        <!--
-         Indicates the error message and exits.
-        -->
-        <fail message="Expecting web.xml at ${web.xml.path}.
-                       The process stops because the project doesn't seem to be
-                       deployable, or it's not correctly configured."/>
+      <echo message="Checking ${project.jar.file}"/>
+
+      <!--
+       Checks if the project's jar is available.
+      -->
+      <available
+        property="project.jar.available"
+        file="${project.jar.file}"
+        type="file"/>
+
     </target>
 
     <!--
-     Checks if the <i>deploy.path</i> folder is present.
-     @depends init to initialize all required properties.
-     @unless deploy.path exists, the process will fail.
-     @param deploy.path.available the flag that indicates if such folder is
+     Stops the process unless the <i>project.jar</i> file is present.
+     @depends check.project.jar to check whether the project.jar exists.
+     @unless project.jar exists, the process will fail.
+     @param project.jar.available the flag that indicates if such file is
             present.
-     @param deploy.path the expected location of the <i>deploy.path</i> folder.
-     @calls fail to stop the process if <i>deploy.path</i> is not present.
-     @return the execution ends if the <i>deploy.path</i> is not available.
+     @param project.jar the expected location of the <i>project.jar</i> file.
+     @calls fail to stop the process if <i>project.jar</i> is not present.
+     @return the execution ends if the <i>project.jar</i> is not available.
     -->
     <target
-        name="deploy.path.available"
-        depends="init" 
-        unless="deploy.path.available"
-        description="Checks if deploy.path folder is present.">
+      name="project.jar.available"
+      depends="check.project.jar.available" 
+      unless="project.jar.available"
+      description="Stops the process unless the project.jar file is present.">
 
-        <!--
-         Indicates the error message and exits.
-        -->
-        <fail message="Expecting deploy.path at ${deploy.path}.
-                       The process stops because the project doesn't seem to be
-                       deployable, or it's not correctly configured."/>
+      <!--
+       Indicates the error message and exits.
+      -->
+      <fail message="Please create a jar file using jar target,
+                     or via ContractChecker.
+                     The process cannot continue without the jar file
+                     of the project."/>
+
     </target>
 
 <!--         END REQUIRED LIBRARIES/FILES/FOLDERS CHECK SECTION             -->
@@ -2060,34 +1872,34 @@
              symbols and emacs backup files.
     -->
     <target
-        name="clean"
-        depends="init"
-        description="Cleans up compiled classes, AspectJ browse symbols
+      name="clean"
+      depends="init"
+      description="Cleans up compiled classes, AspectJ browse symbols
                              and Emacs backup files.">
 
-        <!--
-         Deletes the ${classes.dir} folder.
-        -->
-        <delete dir="${classes.dir}"/>
+      <!--
+       Deletes the ${classes.dir} folder.
+      -->
+      <delete dir="${classes.dir}"/>
 
-        <delete>
-
-            <!--
-             Deletes the generated AspectJ browse symbols.
-            -->
-            <fileset dir="${java.src.dir}" includes="**/*.ajesym"/>
-
-            <!--
-             Deletes Emacs backup files.
-            -->
-            <fileset dir="${java.src.dir}" includes="**/*.*~"/>
-
-        </delete>
+      <delete>
 
         <!--
-         Creates the directory to store the compiled classes again.
+         Deletes the generated AspectJ browse symbols.
         -->
-        <mkdir dir="${classes.dir}"/>
+        <fileset dir="${java.src.dir}" includes="**/*.ajesym"/>
+
+        <!--
+         Deletes Emacs backup files.
+        -->
+        <fileset dir="${java.src.dir}" includes="**/*.*~"/>
+
+      </delete>
+
+      <!--
+       Creates the directory to store the compiled classes again.
+      -->
+      <mkdir dir="${classes.dir}"/>
 
     </target>
 
@@ -2099,15 +1911,15 @@
      @return the cleaning of the <i>Javadoc</i> files.
     -->
     <target
-        name="clean.javadoc"
-        depends="init"
-        description="Cleans up previous Javadoc autogenerated
+      name="clean.javadoc"
+      depends="init"
+      description="Cleans up previous Javadoc autogenerated
                                        documentation.">
 
-        <!--
-         Deletes the ${javadoc.dir} folder.
-        -->
-        <delete dir="${javadoc.dir}"/>
+      <!--
+       Deletes the ${javadoc.dir} folder.
+      -->
+      <delete dir="${javadoc.dir}"/>
 
     </target>
 
@@ -2119,64 +1931,15 @@
      @return the cleaning of the <i>antdoc</i> files.
     -->
     <target
-        name="clean.antdoc"
-        depends="init"
-        description="Cleans up previous Antdoc autogenerated
+      name="clean.antdoc"
+      depends="init"
+      description="Cleans up previous Antdoc autogenerated
                                         documentation.">
 
-        <!--
-         Deletes the ${antdoc.dir} folder.
-        -->
-        <delete dir="${antdoc.dir}"/>
-
-    </target>
-
-    <!--
-     Cleans up previous deployments.
-     @depends init to initialize all required properties.
-     @param web.xml.path the location of the web.xml file.
-     @param deploy.path the application server's webapps folder.
-    -->
-    <target
-        name="clean.war"
-        depends="init"
-        description="Removes any file or folder created during
-                                      deployment.">
-
-        <!--
-         Checks if web.xml is present.
-        -->
-        <available file="${web.xml.path}" property="web.xml.present"/>
-
-        <!--
-         Stops the build if the project is not web-based.
-        -->
-        <fail unless="web.xml.present">Project not deployable.</fail>
-
-        <!--
-         Checks if deploy path is correctly configured.
-        -->
-        <available
-            file="${deploy.path}"
-            type="dir"
-            property="deploy.path.present"/>
-
-        <!--
-         Stops the build otherwise.
-        -->
-        <fail unless="deploy.path.present">
-            deploy.path property not present!
-        </fail>
-
-        <!--
-         Deletes the expanded application folder.
-        -->
-        <delete dir="${deploy.path}/${project.name}"/>
-
-        <!--
-         Deletes the application's already deployed WAR file.
-        -->
-        <delete file="${deploy.path}/${project.name}.war"/>
+      <!--
+       Deletes the ${antdoc.dir} folder.
+      -->
+      <delete dir="${antdoc.dir}"/>
 
     </target>
 
@@ -2200,18 +1963,18 @@
      @return initializes the task definition required for AspectJ: <i>iajc</i>.
     -->
     <target
-        name="init.aspectj.taskdefs"
-        depends="init,
-                 aspectjtools.jar.available,
-                 aspectjrt.jar.available,
-                 jdktools.jar.available">
+      name="init.aspectj.taskdefs"
+      depends="init,
+               aspectjtools.jar.available,
+               aspectjrt.jar.available,
+               jdktools.jar.available">
 
-        <!--
-         Defines <i>iajc</i> task.
-        -->
-        <taskdef 
-          resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"
-          classpathref="aspectj.class.path"/>
+      <!--
+       Defines <i>iajc</i> task.
+      -->
+      <taskdef 
+        resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"
+        classpathref="aspectj.class.path"/>
 
     </target>
 
@@ -2225,21 +1988,21 @@
      @return initializes the task definitions required for JUnit,
     -->
     <target
-        name="init.junit.taskdefs"
-        depends="init, junit.jar.available, optional.jar.available"
-        description="Initializes the JUnit task definitions.">
+      name="init.junit.taskdefs"
+      depends="init, junit.jar.available, optional.jar.available"
+      description="Initializes the JUnit task definitions.">
 
-        <!--property name="unit-test-path" refid="unit.test.class.path"/>
+      <!--property name="unit-test-path" refid="unit.test.class.path"/>
 
-        <echo message="${unit-test-path}"/-->
+      <echo message="${unit-test-path}"/-->
 
-        <!--
-         Defines the <i>JUnit</i> task.
-        -->
-        <taskdef
-            name="junit"
-            classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"
-            classpathref="unit.test.class.path"/>
+      <!--
+       Defines the <i>JUnit</i> task.
+      -->
+      <taskdef
+        name="junit"
+        classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"
+        classpathref="unit.test.class.path"/>
 
     </target>
 
@@ -2253,16 +2016,16 @@
      @return initializes the task definition required for ANTLR.
     -->
     <target
-        name="init.antlr.taskdefs"
-        depends="init, antlr.jar.available">
+      name="init.antlr.taskdefs"
+      depends="init, antlr.jar.available">
 
-        <!--
-         Defines the <i>antlr</i> task.
-        -->
-        <taskdef
-            name="antlr"
-            classname="org.apache.tools.ant.taskdefs.optional.ANTLR"
-            classpathref="antlr.class.path"/>
+      <!--
+       Defines the <i>antlr</i> task.
+      -->
+      <taskdef
+        name="antlr"
+        classname="org.apache.tools.ant.taskdefs.optional.ANTLR"
+        classpathref="antlr.class.path"/>
 
     </target>
 
@@ -2278,17 +2041,17 @@
      @return initializes the task definitions required for Jalopy
     -->
     <target
-        name="init.jalopy.taskdefs"
-        depends="init, jalopy.jar.available"
-        description="Initializes the Jalopy task definitions.">
+      name="init.jalopy.taskdefs"
+      depends="init, jalopy.jar.available"
+      description="Initializes the Jalopy task definitions.">
 
-        <!--
-         Defines the <i>Jalopy</i> task.
-        -->
-        <taskdef
-            name="jalopy"
-            classname="de.hunsicker.jalopy.plugin.ant.AntPlugin"
-            classpathref="unit.test.class.path"/>
+      <!--
+       Defines the <i>Jalopy</i> task.
+      -->
+      <taskdef
+        name="jalopy"
+        classname="de.hunsicker.jalopy.plugin.ant.AntPlugin"
+        classpathref="unit.test.class.path"/>
 
     </target>
 
@@ -2314,12 +2077,14 @@
       name="junitdoclet"
       depends="init, junitdoclet.jar.available, junitdoclet-acmsl.jar.available">
 
+      <mkdir dir="${javadoc.src.dir}"/>
+
       <javadoc
         packagenames="${organization.type}.*"
         defaultexcludes="yes"
-        classpathref="java.ant.class.path"
+        classpathref="unit.test.class.path"
         doclet="com.objectfab.tools.junitdoclet.JUnitDoclet"
-        docletpathref="java.ant.class.path"
+        docletpathref="java.development.class.path"
         additionalparam="-d ../../../${java.src.dir} -buildall -naming org.acmsl.junitdoclet.AcmslNamingStrategy -testintest">
 
         <sourcepath>
@@ -2385,29 +2150,36 @@
      @return the compilation of specified classes.
     -->
     <target
-        name="compile"
-        depends="init, clean"
-        description="Compiles the source files.">
+      name="compile"
+      depends="init, clean"
+      description="Compiles the source files.">
 
-        <!--
-         Compile the java code from ${java.source.path} into ${classes.dir}.
-        -->
-        <javac
-          debug="on"
-          destdir="${classes.dir}"
-          encoding="ISO-8859-1"
-          deprecation="false">
+      <!--
+       Compile the java code from ${java.source.path} into ${classes.dir}.
+      -->
+      <javac
+        debug="on"
+        destdir="${classes.dir}"
+        encoding="ISO-8859-1"
+        deprecation="false">
 
-            <src refid="java.source.path"/>
+        <src refid="java.source.path"/>
 
-            <classpath refid="java.compile.class.path"/>
+        <classpath refid="java.compile.class.path"/>
 
-        </javac>
+      </javac>
 
-        <!--
-         In case of success, update the build count.
-        <antcall target="update.build.number" inheritRefs="true"/>
-        -->
+      <!--
+       Copy resources to ${classes.dir}
+      -->
+      <copy todir="${classes.dir}" flatten="true" includeEmptyDirs="false">
+        <fileset dir="${conf.dir}"/>
+      </copy>
+
+      <!--
+       In case of success, update the build count.
+      <antcall target="update.build.number" inheritRefs="true"/>
+      -->
 
     </target>
 
@@ -2461,31 +2233,31 @@
      @return the compiled files.
     -->
     <target
-        name="aspectj"
-        depends="init,jdktools.jar.available,clean,init.aspectj.taskdefs"
-        description="Compiles Java and AspectJ files.">
+      name="aspectj"
+      depends="init,jdktools.jar.available,clean,init.aspectj.taskdefs"
+      description="Compiles Java and AspectJ files.">
 
-        <!--
-         Creates the classes folder.
-        -->
-        <mkdir dir="${classes.dir}"/>
+      <!--
+       Creates the classes folder.
+      -->
+      <mkdir dir="${classes.dir}"/>
 
-        <!--
-         Calls <i>iajc</i> to build Java and AspectJ files
-        -->
-        <iajc
-          sourcerootsref="project.source.path"
-          destdir="${classes.dir}">
+      <!--
+       Calls <i>iajc</i> to build Java and AspectJ files
+      -->
+      <iajc
+        sourcerootsref="project.source.path"
+        destdir="${classes.dir}">
 
-          <classpath>
+        <classpath>
 
-            <path refid="compile.class.path"/>
+          <path refid="compile.class.path"/>
 
-            <path refid="aspectj.class.path"/>
+          <path refid="aspectj.class.path"/>
 
-          </classpath>
+        </classpath>
 
-        </iajc>
+      </iajc>
 
     </target>
 
@@ -2505,15 +2277,15 @@
              by one.
     -->
     <target
-        name="update.build.number"
-        description="Updates the build number.">
+      name="update.build.number"
+      description="Updates the build number.">
 
-        <!--
-         Updates the build count.
-        -->
-        <buildnumber file="${project.base.folder}/build.number"/>
+      <!--
+       Updates the build count.
+      -->
+      <buildnumber file="${project.base.folder}/build.number"/>
 
-        <echo message="build number: ${build.number}"/>
+      <echo message="build number: ${build.number}"/>
 
     </target>
 
@@ -2529,14 +2301,14 @@
              by one.
     -->
     <target
-        name="update.unittest.number"
-        description="Updates how many times the project has been unit
+      name="update.unittest.number"
+      description="Updates how many times the project has been unit
                                tested.">
 
-        <!--
-         Updates the unit test count.
-        -->
-        <buildnumber file="${project.base.folder}/test.number"/>
+      <!--
+       Updates the unit test count.
+      -->
+      <buildnumber file="${project.base.folder}/test.number"/>
 
     </target>
 
@@ -2552,35 +2324,14 @@
              incrementing its number by one.
     -->
     <target
-        name="update.functionaltest.number"
-        description="Updates how many times the project has been functional
-                               tested.">
+      name="update.functionaltest.number"
+      description="Updates how many times the project has been functional
+                             tested.">
 
-        <!--
-         Updates the unit test count.
-        -->
-        <buildnumber file="${project.base.folder}/functionaltest.number"/>
-
-    </target>
-
-    <!--
-     Updates how many times the project has been deployed.
-     @depends init.properties to initialize all required properties.
-     @param project.base.folder the project's root folder.
-     @calls build.number to increment the deployment number.
-     @return the deploy.number file has been updated, incrementing its number
-             by one.
-    -->
-    <target
-        name="update.deploy.number"
-        depends="init.properties"
-        description="Updates how many times the project has been
-                                    deployed.">
-
-        <!--
-         Updates the deployment count.
-        -->
-        <buildnumber file="${project.base.folder}/deploy.number"/>
+      <!--
+       Updates the unit test count.
+      -->
+      <buildnumber file="${project.base.folder}/functionaltest.number"/>
 
     </target>
 
@@ -2593,34 +2344,21 @@
              by one.
     -->
     <target
-        name="update.package.number"
-        depends="init.properties"
-        description="Updates how many times the project has been
+      name="update.package.number"
+      depends="init.properties"
+      description="Updates how many times the project has been
                                     packaged.">
 
-        <!--
-         Updates the package count.
-        -->
-        <buildnumber file="${project.base.folder}/package.number"/>
+      <!--
+       Updates the package count.
+      -->
+      <buildnumber file="${project.base.folder}/package.number"/>
 
     </target>
 
 <!--         END PROCESS COUNT ANNOTATION TASKS SECTION                     -->
 
 <!--         BEGIN JAR/WAR/EAR CREATION TASKS SECTION                       -->
-
-    <!--
-     Creates a jar with the classes.
-     @depends compile to generate the .class files of the sources not compiled
-              yet.
-     @depends jar to package the .class files.
-     @calls jar to actually create the jar file.
-     @return the jar with all compiled classes, in folder <i>build.dir</i>.
-    -->
-    <target
-        name="make.jar"
-        depends="compile,jar"
-        description="Creates a jar with the classes."/>
 
     <!--
      Creates a jar with the classes, including aspects.
@@ -2637,8 +2375,7 @@
 
     <!--
      Creates a jar with the classes.
-     @depends compile to generate the .class files of the sources not compiled
-              yet.
+     @depends init to set up required properties and paths.
      @param build.dir the folder that will contain the jar file(s).
      @param classes.dir the classes folder.
      @param log4j.dir the Log4J configuration files.
@@ -2658,7 +2395,7 @@
     -->
     <target
         name="jar"
-        depends="compile,update.build.number"
+        depends="init, update.build.number"
         description="Creates a jar with the classes.">
 
         <!--
@@ -2756,190 +2493,9 @@
           file="${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
           tofile="${build.dir}/${project.name}-${project.version}${project.status}.jar"/>
 
-    </target>
-
-    <!--
-     Prepares the environment for creating the Web ARchive.
-     @depends clean.war to clean up previous Web ARchives.
-     @depends make.jar to ensure the module is created previously.
-     @param deploy.path the deploy path.
-     @param project.name the project's name to build the WAR file.
-     @param web.xml.path the web.xml path.
-     @param build.dir the folder where to find the jar version of the project's
-            classes.
-     @param project.name the project's name.
-     @param war.lib.temp.dir the temporary folder where to copy the required
-            libraries.
-     @param war.temp.script.path the path of the temporary script used to
-            copy the correct libraries to the <i>war.lib.temp.dir</> folder.
-     @return the creation of the war file.
-    -->
-    <target
-        name="prepare.war"
-        depends="clean.war,make.jar"
-        description="Prepares the environment for creating the Web
-                                  ARchive.">
-
-        <!--
-         Creates any missing folders
-        -->
-        <mkdir dir="${html.dir}"/>
-
-        <!--
-         Creates a temporary folder to store the required libraries.
-        -->
-        <mkdir dir="${war.lib.temp.dir}"/>
-
-        <!--
-         Takes the needed classpath into a single property.
-        -->
-        <property name="war.libs" refid="runtime.class.path"/>
-
-        <!--
-         Takes the needed configuration files into a single property.
-        -->
-        <property name="war.conf" refid="configuration.path"/>
-
-        <!--
-         Creates a script to copy only the required libraries to previous
-         folder.
-        -->
-        <echo file="${war.temp.script.path}" message="#!/bin/sh -f"/>
-
-        <!--
-         Writes the code to copy the needed configuration files.
-        -->
-        <echo
-            file="${war.temp.script.path}"
-            append="true">
-cp -r ${war.conf} ${war.conf.temp.dir}
-        </echo>
-
-        <!--
-         Replaces all occurences of the file separator in the script.
-        -->
-        <replace file="${war.temp.script.path}" token=":" value="/* "/>
-        <replace file="${war.temp.script.path}" token=" ${war.conf.temp.dir}" value="/* ${war.conf.temp.dir}"/>
-
-        <!--
-         Writes the code to copy the needed runtime libraries.
-        -->
-        <echo
-            file="${war.temp.script.path}"
-            append="true">
-cp -r ${war.libs} ${war.lib.temp.dir}
-        </echo>
-
-        <!--
-         Replaces all occurences of the file separator in the script.
-        -->
-        <replace file="${war.temp.script.path}" token=":" value=" "/>
-        <replace
-            file="${war.temp.script.path}"
-            token="${classes.dir} "
-            value=" "/>
-
-        <!--
-         Executes the script.
-        <exec executable="/bin/sh">
-          <arg line="${war.temp.script.path}"/>
-        </exec>
-        -->
-
-        <!--
-         Copies configuration files.
-        <copy todir="${war.lib.temp.dir}" flatten="true">
-
-            <fileset dir="${war.conf}">
-
-                <include name="**/*"/>
-
-            </fileset>
-
-        </copy>
-        -->
-
-        <!--
-         Copies runtime libraries.
-        <copy todir="${war.lib.temp.dir}" flatten="true">
-
-            <fileset dir="${war.libs}">
-
-                <include name="**/*.jar"/>
-
-            </fileset>
-
-        </copy>
-        -->
-
-    </target>
-
-    <!--
-     Creates the Web ARchive with the application, after cleaning up
-     previous deployments.
-     @depends clean.war to clean up previous Web ARchives.
-     @param deploy.path the deploy path.
-     @param project.name the project's name to build the WAR file.
-     @param web.xml.path the web.xml path.
-     @param build.dir the folder where to find the jar version of the project's
-            classes.
-     @param project.name the project's name.
-     @param war.lib.temp.dir the temporary folder where to copy the required
-            libraries.
-     @param war.temp.script.path the path of the temporary script used to
-            copy the correct libraries to the <i>war.lib.temp.dir</> folder.
-     @calls war to actually create the war file.
-     @return the creation of the war file.
-    -->
-    <target
-        name="war"
-        depends="prepare.war"
-        description="Creates the Web ARchive.">
-
-        <!--
-         Creates the war file.
-        -->
-        <war
-            warfile="${deploy.path}/${project.name}.war"
-            webxml="${web.xml.path}">
-
-            <!--
-             Includes the project classes.
-            -->
-            <lib dir="${build.dir}">
-
-                <include name="${project.name}.jar"/>
-
-            </lib>
-
-            <!--
-             Includes the project runtime java libraries.
-            -->
-            <lib dir="${war.lib.temp.dir}"/>
-
-            <!--
-             HTML are stored inside /${html.prefix}
-            -->
-            <zipfileset dir="${html.dir}" prefix="${html.war.prefix}"/>
-
-            <!--
-             JSPs are stored inside /${jsp.prefix}
-            -->
-            <zipfileset dir="${jsp.dir}" prefix="${jsp.war.prefix}"/>
-
-            <!--
-             Images are stored inside /${images.prefix}
-            -->
-            <zipfileset
-                dir="${web.images.dir}"
-                prefix="${images.war.prefix}"/>
-
-            <!--
-             Include all configuration files into the classes folder.
-            -->
-            <classes dir="${war.conf.temp.dir}"/>
-
-        </war>
+        <copy
+          file="${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
+          tofile="${build.dir}/${project.name}-latest.jar"/>
 
     </target>
 <!--         END JAR/WAR/EAR CREATION TASKS SECTION                         -->
@@ -2996,12 +2552,16 @@ cp -r ${war.libs} ${war.lib.temp.dir}
 
           </sourcepath>
 
-          <bottom><![CDATA[<i>Copyright &#169; 2003 ACM S.L.</i>]]></bottom>
+          <bottom><![CDATA[<i>Copyright &#169; 2004 ACM S.L.</i>]]></bottom>
 
+          <tag
+            name="precondition"
+            scope="all"
+            description="Preconditions: "/>
           <tag
             name="todo"
             scope="all"
-            description="To do:"/>
+            description="WARNING (not finished):"/>
           <tag
             name="testfamily"
             scope="all"
@@ -3109,18 +2669,18 @@ cp -r ${war.libs} ${war.lib.temp.dir}
     -->
     <target
         name="unit.tests"
-        depends="junitdoclet, rebuild, update.unittest.number"
+        depends="junitdoclet"
         description="Executes all defined unit tests.">
 
-        <!--property name="unit-test-path" refid="unit.test.class.path"/>
+        <property name="unit-test-path" refid="unit.test.class.path"/>
 
-        <echo message="${unit-test-path}"/-->
+        <echo message="${unit-test-path}"/>
 
         <!--
          Actual JUnit invokation.
         -->
         <java
-            fork="yes"
+            fork="true"
             classname="${junit.runner.classname}"
             taskname="JUnit"
             failonerror="true"
@@ -3232,12 +2792,12 @@ cp -r ${war.libs} ${war.lib.temp.dir}
      Builds the project from scratch.
      @depends clean to clean up previously compiled classes.
      @depends compile to generate the .class files.
-     @depends make.jar to create the resulting jar file.
+     @depends jar to create the resulting jar file.
      @return the complete build process.
     -->
     <target
         name="rebuild"
-        depends="clean, compile, make.jar"
+        depends="clean, compile, jar"
         description="Builds the project from scratch."/>
 
     <!--
@@ -3262,7 +2822,7 @@ cp -r ${war.libs} ${war.lib.temp.dir}
     -->
     <target
         name="rebuild.final"
-        depends="clean, compile.final, make.jar"
+        depends="clean, compile.final, jar"
         description="Builds the project from scratch, with
                                           optimizations."/>
 
@@ -3278,34 +2838,6 @@ cp -r ${war.libs} ${war.lib.temp.dir}
         description="Rebuilds the classes and executes the tests."/>
 
 <!--         END REBUILD TASKS SECTION                                      -->
-
-<!--         BEGIN DEPLOY TASKS SECTION                                     -->
-
-    <!--
-     Deploys the application from scratch.
-     @depends rebuild to rebuild the application from scratch.
-     @depends war to package the application into a stand-alone war file.
-     @return the clean deployment of the web application.
-    -->
-    <target
-        name="deploy"
-        depends="rebuild, update.deploy.number, war"
-        description="Deploys the application from scratch."/>
-
-    <!--
-     Deploys the application from scratch, with optimizations.
-     @depends rebuild.final to rebuild the application from scratch, with
-              optimizations.
-     @depends war to package the application into a stand-alone war file.
-     @return the clean and deployment of the optimized web application.
-    -->
-    <target
-        name="deploy.final"
-        depends="rebuild.final, update.package.number, war"
-        description="Deploys the application from scratch, with
-                                     optimizations."/>
-
-<!--         END DEPLOY TASKS SECTION                                       -->
 
 <!--         BEGIN PROJECT PACKAGING TASKS SECTION                          -->
 
@@ -3367,7 +2899,7 @@ cp -r ${war.libs} ${war.lib.temp.dir}
     -->
     <target
         name="all"
-        depends="rebuild, make.jar, create.api.doc, tests"
+        depends="rebuild, create.api.doc, tests"
         description="Rebuilds the classes, makes the jar, creates the
                                API documentation and executes the tests."/>
 
@@ -3384,7 +2916,7 @@ cp -r ${war.libs} ${war.lib.temp.dir}
     -->
     <target
         name="all.final"
-        depends="rebuild.final,make.jar,create.api.doc,tests"
+        depends="rebuild.final,create.api.doc,tests"
         description="Rebuilds the classes with optimization settings
                                 activated, makes the jar, creates the API
                                       documentation and executes the tests."/>
@@ -3713,9 +3245,6 @@ junit.runner.classname=junit.swingui.TestRunner
 
 # Project base JUnit suite.
 project.base.suite=
-
-# Deploy path
-deploy.path=$${TOMCAT_HOME}/webapps
         </echo>
 
         <!--
@@ -3723,13 +3252,6 @@ deploy.path=$${TOMCAT_HOME}/webapps
         -->
         <echo
             file="${new.project.base.folder}/src/toolconf/packaged.number"
-            message="build.number=0"/>
-
-        <!--
-               Initializes the deployment count.
-        -->
-        <echo
-            file="${new.project.base.folder}/src/toolconf/deployed.number"
             message="build.number=0"/>
 
         <!--
@@ -3969,104 +3491,6 @@ deploy.path=$${TOMCAT_HOME}/webapps
     </target>
 
 <!--         END ANTLR TASK SECTION                                         -->
-
-<!--         BEGIN WEBEXTENSION TASK SECTION                                -->
-
-    <!--
-     Executes the webextension plugin.
-     @depends prepare.war to actually build WebExtension library.
-     @return the execution of the WebExtension mechanism.
-    -->
-    <target
-        name="webextension"
-        depends="prepare.war">
-
-        <!--
-         Definition of the WebExtension task.
-        -->
-        <taskdef
-            name="webextension"
-            classname="org.acmsl.webextension.WebExtension"
-            classpathref="runtime.class.path"/>
-
-        <!--
-         Actual WebExtension invocation.
-        -->
-        <webextension
-            warfile="${deploy.path}/${project.name}.war"
-            webxml="${web.xml.path}"
-            libpathref="runtime.class.path"
-            mapping="webext">
-
-            <!--
-             Includes the runtime class path.
-            <libpath refid="runtime.class.path"/>
-            -->
-
-            <!--
-             Include all configuration files into the classes folder.
-            -->
-            <classespath refid="configuration.path"/>
-
-            <!--
-             HTML are stored inside /${html.prefix}
-            -->
-            <zipfileset dir="${html.dir}" prefix="${html.war.prefix}"/>
-
-            <!--
-             JSPs are stored inside /${jsp.prefix}
-            -->
-            <zipfileset dir="${jsp.dir}" prefix="${jsp.war.prefix}"/>
-
-            <!--
-             Images are stored inside /${images.prefix}
-            -->
-            <zipfileset
-                dir="${web.images.dir}"
-                prefix="${images.war.prefix}"/>
-
-        </webextension>
-
-    </target>
-
-<!--         END WEBEXTENSION TASK SECTION                                  -->
-
-<!--         BEGIN COPYPATH TASK SECTION                                    -->
-
-    <!--
-     Executes the CopyPath plugin.
-     @depends make.jar to actually build CopyPath library.
-     @return the execution of the CopyPath task.
-    -->
-    <target
-        name="copypath"
-        depends="make.jar">
-
-        <!--
-         Definition of the CopyPath task.
-        -->
-        <taskdef
-            name="copypath"
-            classname="org.acmsl.webextension.CopyPath"
-            classpathref="runtime.class.path"/>
-
-        <property
-            name="java-compile-class-path"
-            refid="java.compile.class.path"/>
-
-        <echo message="${java-compile-class-path}"/>
-
-        <!--
-         Actual WebExtension invocation.
-        -->
-        <copypath
-            copyfoldercontents="false"
-            sourcepathref="java.compile.class.path"
-            toDir="/tmp/copypath/abc"/>
-
-    </target>
-
-<!--         END COPYPATH TASK SECTION                                      -->
 
 <!--         BEGIN AUTOCONF SECTION                                         -->
 

@@ -244,7 +244,7 @@ import org.apache.commons.logging.LogFactory;
  * Generates QueryJ classes using Ant.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
+ * @version $Revision$ at $Date$
  */
 public class QueryJTask
     extends     ChainTask

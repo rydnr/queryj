@@ -83,7 +83,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class DatabaseMetaDataLoggingHandler
-    implements  AntCommandHandler
+    extends  AntCommandHandler
 {
     /**
      * Creates a DatabaseMetaDataLoggingHandler.

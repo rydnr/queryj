@@ -170,7 +170,8 @@
 
         <jarDependency
           name="ant"
-          version="1.6.1" jar="ant-1.6.1.jar"/>
+          version="1.6.1"
+          jar="ant-1.6.1.jar"/>
         <jarDependency
           name="junit" version="3.8.1" jar="junit-3.8.1.jar"/>
         <jarDependency

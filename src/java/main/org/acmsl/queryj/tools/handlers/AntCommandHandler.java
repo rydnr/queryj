@@ -56,6 +56,7 @@ import org.acmsl.queryj.tools.AntCommand;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.patterns.CommandHandler;
 
 /*
@@ -63,15 +64,46 @@ import org.acmsl.commons.patterns.CommandHandler;
  */
 import org.apache.tools.ant.BuildException;
 
+/*
+ * Importing Jakarta Commons Logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Inside a Chain Of Responsibility, these are the chain links.
  * This means they perform specific actions when receiving the command.
- * @author <a href="mailto:jose.sanleandro@ventura24.es">Jose San Leandro</a>
- * @version $Revision$
+ * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
+ * @version $Revision$ at $Date$
  */
-public interface AntCommandHandler
-    extends  CommandHandler
+public abstract class AntCommandHandler
+    implements  CommandHandler
 {
+    /**
+     * Handles given command.
+     * @param command the command to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     */
+    public boolean handle(final Command command)
+    {
+        boolean result = false;
+
+        if  (command instanceof AntCommand) 
+        {
+            try 
+            {
+                result = handle((AntCommand) command);
+            }
+            catch  (final BuildException buildException)
+            {
+                LogFactory.getLog(getClass()).error(
+                    "unhandled.exception",
+                    buildException);
+            }
+        }
+        
+        return result;
+    }
+
     /**
      * Handles given command.
      * @param command the command.
@@ -79,6 +111,6 @@ public interface AntCommandHandler
      * by different handlers.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public abstract boolean handle(final AntCommand command)
         throws  BuildException;
 }

@@ -89,7 +89,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class JdbcDAOTemplateWritingHandler
-    implements  AntCommandHandler
+    extends  AntCommandHandler
 {
     /**
      * Creates a JdbcDAOTemplateWritingHandler.

@@ -68,6 +68,14 @@
             $Date$
           </td>
           <td>
+            Working on refactoring described in issue <a href="${issue.url}500">500</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/09/16 06:53:38
+          </td>
+          <td>
             Deployed at new server, <a href="http://maven.acm-sl.org">maven.acm-sl.org</a>.
           </td>
         </tr>

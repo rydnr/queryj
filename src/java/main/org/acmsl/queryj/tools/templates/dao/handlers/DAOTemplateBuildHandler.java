@@ -61,14 +61,13 @@ import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.version.Version;
-import org.acmsl.commons.version.VersionFactory;
 
 /*
  * Importing some Ant classes.
@@ -98,7 +97,8 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class DAOTemplateBuildHandler
-    implements  AntCommandHandler
+    extends    AntCommandHandler
+    implements TemplateBuildHandler
 {
     /**
      * The output dir key.
@@ -109,48 +109,6 @@ public class DAOTemplateBuildHandler
      * Creates a DAOTemplateBuildHandler.
      */
     public DAOTemplateBuildHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @precondition command != null
-     * @precondition command instanceof AntCommand
-     */
-    public boolean handle(final Command command)
-    {
-        boolean result = false;
-
-        AntCommand t_AntCommand = (AntCommand) command;
-
-        try 
-        {
-            result = handle(t_AntCommand);
-        }
-        catch  (BuildException buildException)
-        {
-            Project t_Project = t_AntCommand.getProject();
-
-            if  (t_Project != null)
-            {
-                t_Project.log(
-                    t_AntCommand.getTask(),
-                      "Cannot handle the building of "
-                    + "the DAO template ("
-                    + buildException.getMessage()
-                    + ")",
-                    Project.MSG_WARN);
-            }
-            else 
-            {
-               LogFactory.getLog(getClass()).error(
-                    "unhandled.exception",
-                    buildException);
-            }
-        }
-        
-        return result;
-    }
 
     /**
      * Handles given command.
@@ -395,31 +353,5 @@ public class DAOTemplateBuildHandler
         return
             (TableTemplate[])
                 parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-    }
-
-    /**
-     * Concrete version object updated everytime it's checked-in in a
-     * CVS repository.
-     */
-    public static final Version VERSION =
-        VersionFactory.createVersion("$Revision$");
-
-    /**
-     * Retrieves the current version of this object.
-     * @return the version object with such information.
-     */
-    public Version getVersion()
-    {
-        return VERSION;
-    }
-
-    /**
-     * Retrieves the current version of this class. It's defined because
-     * this is a utility class that cannot be instantiated.
-     * @return the object with class version information.
-     */
-    public static Version getClassVersion()
-    {
-        return VERSION;
     }
 }

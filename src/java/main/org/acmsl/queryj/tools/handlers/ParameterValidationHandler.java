@@ -86,7 +86,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class ParameterValidationHandler
-    implements  AntCommandHandler
+    extends  AntCommandHandler
 {
     /**
      * The JDBC driver attribute name.

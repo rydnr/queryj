@@ -96,7 +96,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class ExternallyManagedFieldsRetrievalHandler
-    implements  AntCommandHandler
+    extends  AntCommandHandler
 {
     /**
      * Creates an ExternallyManagedFieldsRetrievalHandler.
