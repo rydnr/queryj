@@ -70,6 +70,14 @@
             $Date$
           </td>
           <td>
+            Closed <a href="${issue.url}515">515</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/09/28 06:37:26
+          </td>
+          <td>
             Finished <a href="${issue.url}507">507</a>.
           </td>
         </tr>
