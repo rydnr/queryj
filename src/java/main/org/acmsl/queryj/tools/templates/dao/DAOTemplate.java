@@ -176,10 +176,14 @@ public class DAOTemplate
             DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_TYPE_SPECIFICATION,
             DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_VALUES,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_NO_RETURN,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_RETURN,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_SINGLE_RETURN,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_MULTIPLE_RETURN,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_JAVADOC,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RETURN_JAVADOC,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_DECLARATION,
-            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_VALUES,
-            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RESULT_PROPERTIES,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_SPECIFICATION,
             DEFAULT_CLASS_END);
     }
 
@@ -926,6 +930,7 @@ public class DAOTemplate
                                 parameterDeclaration,
                                 parameterTypeSpecification,
                                 parameterValues,
+                                "",
                                 metaDataUtils,
                                 stringUtils,
                                 stringValidator);
@@ -963,6 +968,7 @@ public class DAOTemplate
      * @param parameterDeclaration the parameter declaration.
      * @param parameterTypeSpecification the parameter type specification.
      * @param parameterValues the parameter values.
+     * @param parameterSpecification the parameter specification.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
@@ -972,6 +978,7 @@ public class DAOTemplate
      * @precondition parameterDeclaration != null
      * @precondition parameterTypeSpecification != null
      * @precondition parameterValues != null
+     * @precondition parameterSpecification != null
      * @precondition stringUtils != null
      * @precondition stringValidator != null
      */
@@ -982,16 +989,18 @@ public class DAOTemplate
         final String parameterDeclaration,
         final String parameterTypeSpecification,
         final String parameterValues,
+        final String parameterSpecification,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final StringValidator stringValidator)
     {
-        String[] result = new String[4];
+        String[] result = new String[5];
 
         StringBuffer t_sbParameterJavadoc = new StringBuffer();
         StringBuffer t_sbParameterDeclaration = new StringBuffer();
         StringBuffer t_sbParameterTypeSpecification = new StringBuffer();
         StringBuffer t_sbParameterValues = new StringBuffer();
+        StringBuffer t_sbParameterSpecification = new StringBuffer();
 
         if  (parameterRefs != null)
         {
@@ -1006,6 +1015,9 @@ public class DAOTemplate
 
             MessageFormat t_ParameterValuesFormatter =
                 new MessageFormat(parameterValues);
+
+            MessageFormat t_ParameterSpecificationFormatter =
+                new MessageFormat(parameterSpecification);
 
             Iterator t_itParameterRefs =
                 parameterRefs.iterator();
@@ -1043,6 +1055,7 @@ public class DAOTemplate
                         {
                             t_sbParameterDeclaration.append(",");
                             t_sbParameterValues.append(",");
+                            t_sbParameterSpecification.append(",");
                         }
 
                         t_sbParameterJavadoc.append(
@@ -1066,7 +1079,6 @@ public class DAOTemplate
                                         metaDataUtils.getJavaType(
                                             t_Parameter.getType()))
                                 }));
-
                         t_sbParameterValues.append(
                             t_ParameterValuesFormatter.format(
                                 new Object[]
@@ -1074,6 +1086,12 @@ public class DAOTemplate
                                     metaDataUtils.getObjectType(
                                         metaDataUtils.getJavaType(
                                             t_Parameter.getType())),
+                                    t_strName
+                                }));
+                        t_sbParameterSpecification.append(
+                            t_ParameterSpecificationFormatter.format(
+                                new Object[]
+                                {
                                     t_strName
                                 }));
                     }
@@ -1087,6 +1105,7 @@ public class DAOTemplate
         result[1] = t_sbParameterDeclaration.toString();
         result[2] = t_sbParameterTypeSpecification.toString();
         result[3] = t_sbParameterValues.toString();
+        result[4] = t_sbParameterSpecification.toString();
 
         return result;
     }
@@ -1376,6 +1395,7 @@ public class DAOTemplate
                                 parameterDeclaration,
                                 parameterTypeSpecification,
                                 parameterValues,
+                                "",
                                 metaDataUtils,
                                 stringUtils,
                                 stringValidator);
@@ -1526,12 +1546,14 @@ public class DAOTemplate
             buildCustomSelectForUpdates(
                 provider,
                 getCustomSelectForUpdate(),
+                getCustomSelectForUpdateWithNoReturn(),
+                getCustomSelectForUpdateWithReturn(),
+                getCustomSelectForUpdateWithSingleReturn(),
+                getCustomSelectForUpdateWithMultipleReturn(),
                 getCustomSelectForUpdateParameterJavadoc(),
+                getCustomSelectForUpdateReturnJavadoc(),
                 getCustomSelectForUpdateParameterDeclaration(),
-                // TODO
-                getCustomSelectParameterTypeSpecification(),
-                getCustomSelectForUpdateParameterValues(),
-                getCustomSelectForUpdateResultPropertyValues(),
+                getCustomSelectForUpdateParameterSpecification(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance());
@@ -1539,24 +1561,34 @@ public class DAOTemplate
 
     /**
      * Builds the custom select-for-update operations.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param customSelectForUpdate the custom select-for-update.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSelectForUpdate the custom-select-for-update template.
+     * @param customSelectForUpdateWithNoReturn the
+     * custom-select-for-update-with-no-return subtemplate.
+     * @param customSelectForUpdateWithReturn the
+     * custom-select-for-update-with-return subtemplate.
+     * @param customSelectForUpdateWithSingleReturn the
+     * custom-select-for-update-with-single-return subtemplate.
+     * @param customSelectForUpdateWithMultipleReturn the
+     * custom-select-for-update-with-multiple-return subtemplate.
      * @param parameterJavadoc the Javadoc template
      * of the parameters.
+     * @param customSelectForUpdateReturnJavadoc the Javadoc template
+     * of the return.
      * @param parameterDeclaration the parameter declaration.
-     * @param parameterTypeSpecification the parameter type specification.
-     * @param parameterValues the parameter values.
-     * @param resultPropertyValues the result property values.
+     * @param parameterSpecification the parameter specification.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
      * @return such generated code.
      * @precondition customSqlProvider != null
      * @precondition customSelectForUpdate != null
+     * @precondition customSelectForUpdateWithNoReturn != null
+     * @precondition customSelectForUpdateWithReturn != null
+     * @precondition customSelectForUpdateWithSingleReturn != null
+     * @precondition customSelectForUpdateWithMultipleReturn != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
-     * @precondition parameterValues != null
-     * @precondition resultPropertyValues != null
      * @precondition metaDataUtils != null
      * @precondition stringUtils != null
      * @precondition stringValidator != null
@@ -1564,11 +1596,14 @@ public class DAOTemplate
     protected String buildCustomSelectForUpdates(
         final CustomSqlProvider customSqlProvider,
         final String customSelectForUpdate,
+        final String customSelectForUpdateWithNoReturn,
+        final String customSelectForUpdateWithReturn,
+        final String customSelectForUpdateWithSingleReturn,
+        final String customSelectForUpdateWithMultipleReturn,
         final String parameterJavadoc,
+        final String customSelectForUpdateReturnJavadoc,
         final String parameterDeclaration,
-        final String parameterTypeSpecification,
-        final String parameterValues,
-        final String resultPropertyValues,
+        final String parameterSpecification,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final StringValidator stringValidator)
@@ -1599,27 +1634,26 @@ public class DAOTemplate
                                 t_SqlElement.getParameterRefs(),
                                 parameterJavadoc,
                                 parameterDeclaration,
-                                parameterTypeSpecification,
-                                parameterValues,
+                                "",
+                                "",
+                                parameterSpecification,
                                 metaDataUtils,
                                 stringUtils,
                                 stringValidator);
-
-                        String t_strResultPropertyValues =
-                            buildResultPropertyValues(
-                                customSqlProvider,
-                                t_SqlElement.getResultRef(),
-                                resultPropertyValues);
 
                         result.append(
                             buildCustomSelectForUpdate(
                                 customSqlProvider,
                                 t_SqlElement,
                                 customSelectForUpdate,
+                                customSelectForUpdateWithNoReturn,
+                                customSelectForUpdateWithReturn,
+                                customSelectForUpdateWithSingleReturn,
+                                customSelectForUpdateWithMultipleReturn,
                                 t_astrParameterTemplates[0],
+                                customSelectForUpdateReturnJavadoc,
                                 t_astrParameterTemplates[1],
-                                t_astrParameterTemplates[3],
-                                t_strResultPropertyValues,
+                                t_astrParameterTemplates[4],
                                 stringUtils));
                     }
                 }
@@ -1634,29 +1668,45 @@ public class DAOTemplate
      * @param provider the CustomSqlProvider instance.
      * @param sqlElement the SqlElement instance.
      * @param customSelectForUpdate the custom select-for-update template.
+     * @param customSelectForUpdateWithNoReturn the
+     * custom-select-for-update-with-no-return subtemplate.
+     * @param customSelectForUpdateWithReturn the
+     * custom-select-for-update-with-return subtemplate.
+     * @param customSelectForUpdateWithSingleReturn the
+     * custom-select-for-update-with-single-return subtemplate.
+     * @param customSelectForUpdateWithMultipleReturn the
+     * custom-select-for-update-with-multiple-return subtemplate.
      * @param parameterJavadoc the generated parameter Javadoc.
+     * @param returnJavadoc the generated return Javadoc.
      * @param parameterDeclaration the generated parameter declaration.
-     * @param parameterValues the generared parameter values.
-     * @param resultPropertyValues the generated result property values.
+     * @param parameterSpecification the generated parameter specification.
      * @param stringUtils the StringUtils isntance.
      * @return the generated code.
      * @precondition provider != null
      * @precondition sqlElement != null
      * @precondition customSelectForUpdate != null
+     * @precondition customSelectForUpdateWithNoReturn != null
+     * @precondition customSelectForUpdateWithReturn != null
+     * @precondition customSelectForUpdateWithSingleReturn != null
+     * @precondition customSelectForUpdateWithMultipleReturn != null
      * @precondition parameterJavadoc != null
+     * @precondition returnJavadoc != null
      * @precondition parameterDeclaration != null
-     * @precondition parameterValues != null
-     * @precondition resultPropertyValues != null
+     * @precondition parameterSpecification != null
      * @precondition stringUtils != null
      */
     protected String buildCustomSelectForUpdate(
         final CustomSqlProvider provider,
         final SqlElement sqlElement,
         final String customSelectForUpdate,
+        final String customSelectForUpdateWithNoReturn,
+        final String customSelectForUpdateWithReturn,
+        final String customSelectForUpdateWithSingleReturn,
+        final String customSelectForUpdateWithMultipleReturn,
         final String parameterJavadoc,
+        final String returnJavadoc,
         final String parameterDeclaration,
-        final String parameterValues,
-        final String resultPropertyValues,
+        final String parameterSpecification,
         final StringUtils stringUtils)
     {
         String result = "";
@@ -1673,27 +1723,110 @@ public class DAOTemplate
             t_Result = provider.resolveReference(t_ResultRef);
         }
 
+        String t_strCustomSelectForUpdateTemplate =
+            customSelectForUpdateWithReturn;
+
+        String t_strCustomSelectForUpdateSubtemplate = "";
+
+        String t_strReturn = "void";
+
+        String t_strReturnJavadoc = "";
+
+        if (   (t_Result != null)
+            && (ResultElement.SINGLE.equalsIgnoreCase(
+                    t_Result.getMatches())))
+        {
+            t_strCustomSelectForUpdateSubtemplate =
+                customSelectForUpdateWithSingleReturn;
+
+            t_strReturn = t_Result.getClassValue();
+
+            t_strReturnJavadoc = returnJavadoc;
+        }
+        else if  (   (t_Result != null)
+                  && (ResultElement.MULTIPLE.equalsIgnoreCase(
+                          t_Result.getMatches())))
+        {
+            t_strCustomSelectForUpdateSubtemplate =
+                customSelectForUpdateWithMultipleReturn;
+
+            t_strReturn = "List";
+
+            t_strReturnJavadoc = returnJavadoc;
+        }
+        else
+        {
+            t_strCustomSelectForUpdateTemplate =
+                customSelectForUpdateWithNoReturn;
+        }
+
         result =
             t_CustomSelectForUpdateFormatter.format(
                 new Object[]
                 {
-                    (   (t_Result != null)
-                     ?  t_Result.getClassValue()
-                     :  "-no-result-type-defined-"),
+                    sqlElement.getId(),
+                    sqlElement.getDescription(),
                     parameterJavadoc,
+                    t_strReturnJavadoc,
+                    t_strReturn,
                     stringUtils.unCapitalizeStart(
                         stringUtils.capitalize(
                             sqlElement.getName(), '-')),
                     parameterDeclaration,
-                    stringUtils.replace(
-                        sqlElement.getValue(),
-                        "\"", "\\\""),
-                    parameterValues,
-                    (   (t_Result != null)
-                     ?  stringUtils.extractPackageName(
-                            t_Result.getClassValue())
-                     :  "-no-result-type-defined-"),
-                    resultPropertyValues
+                    parameterSpecification,
+                    buildCustomSelectForUpdate(
+                        t_strCustomSelectForUpdateTemplate,
+                        t_strCustomSelectForUpdateSubtemplate,
+                        stringUtils.capitalize(
+                            stringUtils.capitalize(
+                                stringUtils.capitalize(
+                                    sqlElement.getName(), '_'),
+                                '-'),
+                            '.'),
+                        stringUtils.replace(
+                            sqlElement.getValue(),
+                            "\"", "\\\""),
+                        t_strReturn)
+                });
+
+        return result;
+    }
+
+    /**
+     * Builds the custom select-for-update template.
+     * @param template the template.
+     * @param subtemplate the subtemplate.
+     * @param queryObjectName the query object name.
+     * @param sqlQuery the sql query.
+     * @param resultType the result type.
+     * @return the generated code.
+     * @precondition template != null
+     * @precondition subtemplate != null
+     * @precondition customSelectForUpdateWithNoReturn != null
+     * @precondition queryObjectName != null
+     * @precondition sqlQuery != null
+     * @precondition resultType != null
+     */
+    protected String buildCustomSelectForUpdate(
+        final String template,
+        final String subtemplate,
+        final String queryObjectName,
+        final String sqlQuery,
+        final String resultType)
+    {
+        String result = "";
+
+        MessageFormat t_Formatter =
+            new MessageFormat(template);
+
+        result =
+            t_Formatter.format(
+                new Object[]
+                {
+                    queryObjectName,
+                    sqlQuery,
+                    resultType,
+                    subtemplate
                 });
 
         return result;

@@ -311,9 +311,34 @@ public abstract class AbstractDAOTemplate
     private String m__strCustomSelectForUpdate;
 
     /**
+     * The custom select-for-update with no return.
+     */
+    private String m__strCustomSelectForUpdateWithNoReturn;
+
+    /**
+     * The custom select-for-update with return.
+     */
+    private String m__strCustomSelectForUpdateWithReturn;
+
+    /**
+     * The custom select-for-update with single return.
+     */
+    private String m__strCustomSelectForUpdateWithSingleReturn;
+
+    /**
+     * The custom select-for-update with multiple return.
+     */
+    private String m__strCustomSelectForUpdateWithMultipleReturn;
+
+    /**
      * The custom select-for-update parameter javadoc.
      */
     private String m__strCustomSelectForUpdateParameterJavadoc;
+
+    /**
+     * The custom select-for-update return javadoc.
+     */
+    private String m__strCustomSelectForUpdateReturnJavadoc;
 
     /**
      * The custom select-for-update parameter declaration.
@@ -321,14 +346,9 @@ public abstract class AbstractDAOTemplate
     private String m__strCustomSelectForUpdateParameterDeclaration;
 
     /**
-     * The custom select-for-update parameter values.
+     * The custom select-for-update parameter specification.
      */
-    private String m__strCustomSelectForUpdateParameterValues;
-
-    /**
-     * The custom select-for-update result properties.
-     */
-    private String m__strCustomSelectForUpdateResultPropertyValues;
+    private String m__strCustomSelectForUpdateParameterSpecification;
 
     /**
      * The class end.
@@ -397,15 +417,23 @@ public abstract class AbstractDAOTemplate
      * specification subtemplate of the custom updates or inserts.
      * @param customUpdateOrInsertParameterValues the parameter values of
      * the custom updates or inserts.
-     * @param customSelectForUpdate the custom select-for-update template.
+     * @param customSelectForUpdate the custom-select-for-update template.
+     * @param customSelectForUpdateWithNoReturn the
+     * custom-select-for-update-with-no-return subtemplate.
+     * @param customSelectForUpdateWithReturn the
+     * custom-select-for-update-with-return subtemplate.
+     * @param customSelectForUpdateWithSingleReturn the
+     * custom-select-for-update-with-single-return subtemplate.
+     * @param customSelectForUpdateWithMultipleReturn the
+     * custom-select-for-update-with-multiple-return subtemplate.
      * @param customSelectForUpdateParameterJavadoc the Javadoc for the
-     * parameters of the custom select-for-update operations.
+     * parameters of the custom-select-for-update operations.
+     * @param customSelectForUpdateReturnJavadoc the Javadoc for the
+     * return of the custom-select-for-update operations.
      * @param customSelectForUpdateParameterDeclaration the parameter
-     * declaration of the custom select-for-update opèrations.
-     * @param customSelectForUpdateParameterValues the parameter values of
-     * the custom select-for-update operations.
-     * @param customForUpdateSelectResultPropertyValues the properties
-     * of the result* set for custom select-for-update operations.
+     * declaration of the custom-select-for-update operations.
+     * @param customSelectForUpdateParameterSpecification the parameter
+     * specification of the custom-select-for-update operations.
      * @param classEnd the class end.
      */
     protected AbstractDAOTemplate(
@@ -457,10 +485,14 @@ public abstract class AbstractDAOTemplate
         final String customUpdateOrInsertParameterTypeSpecification,
         final String customUpdateOrInsertParameterValues,
         final String customSelectForUpdate,
+        final String customSelectForUpdateWithNoReturn,
+        final String customSelectForUpdateWithReturn,
+        final String customSelectForUpdateWithSingleReturn,
+        final String customSelectForUpdateWithMultipleReturn,
         final String customSelectForUpdateParameterJavadoc,
+        final String customSelectForUpdateReturnJavadoc,
         final String customSelectForUpdateParameterDeclaration,
-        final String customSelectForUpdateParameterValues,
-        final String customSelectForUpdateResultPropertyValues,
+        final String customSelectForUpdateParameterSpecification,
         final String classEnd)
     {
         immutableSetTableTemplate(
@@ -594,26 +626,38 @@ public abstract class AbstractDAOTemplate
         immutableSetCustomUpdateOrInsertParameterDeclaration(
             customUpdateOrInsertParameterDeclaration);
 
+        immutableSetCustomUpdateOrInsertParameterTypeSpecification(
+            customUpdateOrInsertParameterTypeSpecification);
+
         immutableSetCustomUpdateOrInsertParameterValues(
             customUpdateOrInsertParameterValues);
 
         immutableSetCustomSelectForUpdate(
             customSelectForUpdate);
 
+        immutableSetCustomSelectForUpdateWithNoReturn(
+            customSelectForUpdateWithNoReturn);
+
+        immutableSetCustomSelectForUpdateWithReturn(
+            customSelectForUpdateWithReturn);
+
+        immutableSetCustomSelectForUpdateWithSingleReturn(
+            customSelectForUpdateWithSingleReturn);
+
+        immutableSetCustomSelectForUpdateWithMultipleReturn(
+            customSelectForUpdateWithMultipleReturn);
+
         immutableSetCustomSelectForUpdateParameterJavadoc(
             customSelectForUpdateParameterJavadoc);
+
+        immutableSetCustomSelectForUpdateReturnJavadoc(
+            customSelectForUpdateReturnJavadoc);
 
         immutableSetCustomSelectForUpdateParameterDeclaration(
             customSelectForUpdateParameterDeclaration);
 
-        immutableSetCustomUpdateOrInsertParameterTypeSpecification(
-            customUpdateOrInsertParameterTypeSpecification);
-
-        immutableSetCustomSelectForUpdateParameterValues(
-            customSelectForUpdateParameterValues);
-
-        immutableSetCustomSelectForUpdateResultPropertyValues(
-            customSelectForUpdateResultPropertyValues);
+        immutableSetCustomSelectForUpdateParameterSpecification(
+            customSelectForUpdateParameterSpecification);
 
         immutableSetClassEnd(
             classEnd);
@@ -1973,6 +2017,122 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
+     * Specifies the custom select-for-update-with-no-return template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateWithNoReturn(
+        final String select)
+    {
+        m__strCustomSelectForUpdateWithNoReturn = select;
+    }
+
+    /**
+     * Specifies the custom select-for-update-with-no-return subtemplate.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateWithNoReturn(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateWithNoReturn(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update-with-no-return template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateWithNoReturn()
+    {
+        return m__strCustomSelectForUpdateWithNoReturn;
+    }
+
+    /**
+     * Specifies the custom select-for-update-with-return template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateWithReturn(
+        final String select)
+    {
+        m__strCustomSelectForUpdateWithReturn = select;
+    }
+
+    /**
+     * Specifies the custom select-for-update-with-return subtemplate.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateWithReturn(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateWithReturn(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update-with-return template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateWithReturn()
+    {
+        return m__strCustomSelectForUpdateWithReturn;
+    }
+
+    /**
+     * Specifies the custom select-for-update-with-single-return template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateWithSingleReturn(
+        final String select)
+    {
+        m__strCustomSelectForUpdateWithSingleReturn = select;
+    }
+
+    /**
+     * Specifies the custom select-for-update-with-single-return subtemplate.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateWithSingleReturn(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateWithSingleReturn(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update-with-single-return template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateWithSingleReturn()
+    {
+        return m__strCustomSelectForUpdateWithSingleReturn;
+    }
+
+    /**
+     * Specifies the custom select-for-update-with-multiple-return template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateWithMultipleReturn(
+        final String select)
+    {
+        m__strCustomSelectForUpdateWithMultipleReturn = select;
+    }
+
+    /**
+     * Specifies the custom select-for-update-with-multiple-return subtemplate.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateWithMultipleReturn(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateWithMultipleReturn(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update-with-multiple-return template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateWithMultipleReturn()
+    {
+        return m__strCustomSelectForUpdateWithMultipleReturn;
+    }
+
+    /**
      * Specifies the custom select-for-update parameter Javadoc template.
      * @param select such template.
      */
@@ -1999,6 +2159,35 @@ public abstract class AbstractDAOTemplate
     public String getCustomSelectForUpdateParameterJavadoc()
     {
         return m__strCustomSelectForUpdateParameterJavadoc;
+    }
+
+    /**
+     * Specifies the custom select-for-update return Javadoc template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateReturnJavadoc(
+        final String template)
+    {
+        m__strCustomSelectForUpdateReturnJavadoc = template;
+    }
+
+    /**
+     * Specifies the custom select-for-update return Javadoc template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateReturnJavadoc(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateReturnJavadoc(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update return Javadoc template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateReturnJavadoc()
+    {
+        return m__strCustomSelectForUpdateReturnJavadoc;
     }
 
     /**
@@ -2031,61 +2220,32 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
-     * Specifies the custom select-for-update parameter values template.
+     * Specifies the custom select-for-update parameter specification template.
      * @param select such template.
      */
-    private void immutableSetCustomSelectForUpdateParameterValues(
+    private void immutableSetCustomSelectForUpdateParameterSpecification(
         final String template)
     {
-        m__strCustomSelectForUpdateParameterValues = template;
+        m__strCustomSelectForUpdateParameterSpecification = template;
     }
 
     /**
-     * Specifies the custom select-for-update parameter values template.
+     * Specifies the custom select-for-update parameter specification template.
      * @param select such template.
      */
-    protected void setCustomSelectForUpdateParameterValues(
+    protected void setCustomSelectForUpdateParameterSpecification(
         final String select)
     {
-        immutableSetCustomSelectForUpdateParameterValues(select);
+        immutableSetCustomSelectForUpdateParameterSpecification(select);
     }
 
     /**
-     * Retrieves the custom select-for-update parameter values template.
+     * Retrieves the custom select-for-update parameter specification template.
      * @return such template.
      */
-    public String getCustomSelectForUpdateParameterValues()
+    public String getCustomSelectForUpdateParameterSpecification()
     {
-        return m__strCustomSelectForUpdateParameterValues;
-    }
-
-    /**
-     * Specifies the custom select-for-update result properties' values template.
-     * @param select such template.
-     */
-    private void immutableSetCustomSelectForUpdateResultPropertyValues(
-        final String template)
-    {
-        m__strCustomSelectForUpdateResultPropertyValues = template;
-    }
-
-    /**
-     * Specifies the custom select-for-update result properties' values template.
-     * @param select such template.
-     */
-    protected void setCustomSelectForUpdateResultPropertyValues(
-        final String select)
-    {
-        immutableSetCustomSelectForUpdateResultPropertyValues(select);
-    }
-
-    /**
-     * Retrieves the custom select-for-update result properties' values template.
-     * @return such template.
-     */
-    public String getCustomSelectForUpdateResultPropertyValues()
-    {
-        return m__strCustomSelectForUpdateResultPropertyValues;
+        return m__strCustomSelectForUpdateParameterSpecification;
     }
 
     /**

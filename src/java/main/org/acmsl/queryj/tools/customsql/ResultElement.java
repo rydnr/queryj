@@ -75,6 +75,11 @@ public class ResultElement
     extends  AbstractIdElement
 {
     /**
+     * The <b>none</b> value for <i>matches</i> attribute.
+     */
+    public static final String NONE = "none";
+
+    /**
      * The <b>single</b> value for <i>matches</i> attribute.
      */
     public static final String SINGLE = "single";

@@ -35,11 +35,12 @@
     type  CDATA #REQUIRED
     name  CDATA #REQUIRED>
   <!ELEMENT result-list (result)*>
-  <!ELEMENT result (property-ref)+>
+  <!ELEMENT result (property-ref)*>
   <!ATTLIST result
     id ID #REQUIRED
     class CDATA #IMPLIED
-    matches (single | multiple) #REQUIRED>
+    matches (none | single | multiple) #REQUIRED
+    provider CDATA #IMPLIED>
   <!ELEMENT property-ref EMPTY>
   <!ATTLIST property-ref
     id IDREF #REQUIRED>
@@ -160,12 +161,8 @@
     <result
       id="find-customer-for-update.result"
       class="com.foo.bar.dao.CustomerValueObject"
-      matches="single">
-      <property-ref
-        id="find-customer-for-update.customer_id.property"/>
-      <property-ref
-        id="find-customer-for-update.name.property"/>
-    </result>
+      matches="none"
+      provider="com.foo.bar2.utils.CustomerResultSetUpdater"/>
   </result-list>
 
   <!-- Result property metadata -->

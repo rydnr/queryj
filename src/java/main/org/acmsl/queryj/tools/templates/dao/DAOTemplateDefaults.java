@@ -287,7 +287,7 @@ public interface DAOTemplateDefaults
         // engine name - table name
         + "     * with given data source.\n"
         + "     * @param dataSource the required data source.\n"
-        + "     * @precondition dateSource != null\n"
+        + "     * @precondition dataSource != null\n"
         + "     */\n"
         + "    public {0}{1}DAO(final DataSource dataSource)\n"
         + "    '{'\n"
@@ -730,104 +730,110 @@ public interface DAOTemplateDefaults
         DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES;
 
     /**
-     * The custom select for update template, with return.
+     * The custom select for update template.
+     * @param 0 the sql id.
+     * @param 1 the sql description.
+     * @param 2 parameter Javadoc.
+     * @param 3 return Javadoc.
+     * @param 4 the result type.
+     * @param 5 the method name.
+     * @param 6 the parameter declaration.
+     * @param 7 the parameter specification,
+     * @param 8 the custom select for update subtemplate.
      */
-    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_RETURN =
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE =
           "    /**\n"
-        + "     * Performs the <i>{0}</i> operation.\n"
+        + "     * <i>{0}</i>:\n"
          // sql id
-        + "{1}\n"
-         // CUSTOM_SELECT_PARAMETER_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @return the information extracted from the persistence layer\n"
-        + "     * and/or processed.\n"
+        + "     * {1}"
+         // sql description
+        + "{2}\n"
+         // parameter Javadoc
+        + "{3}"
+         // return Javadoc
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public {0} {2}("
-         // result class - sql name
-        + "{3}\n"
-         // CUSTOM_SELECT_PARAMETER_DECLARATION
-        + "        final TransactionToken transactionToken)\n"
+        + "    public {4} {5}("
+         // result class - method name
+        + "{6})\n"
+         // parameter declaration
         + "      throws DataAccessException\n"
         + "    '{'\n"
-        + "        {0} result = null;\n\n"
-         // java table name
-        + "        Connection        t_Connection        = null;\n"
-        + "        PreparedStatement t_PreparedStatement = null;\n"
-        + "        ResultSet         t_rsResults         = null;\n\n"
-        + "        try\n"
-        + "        '{'\n"
-        + "            t_Connection = getConnection(transactionToken);\n\n"
-        + "            String t_strQuery =\n"
-        + "                \"{4}\";\n\n"
-        + "            t_PreparedStatement = t_Connection.prepareStatement(t_strQuery);\n"
-        + "{5}\n\n"
-         // CUSTOM_SELECT_PARAMETER_VALUES
-        + "            t_rsResults = t_PreparedStatement.executeQuery();\n\n"
-        + "            if  (   (t_rsResults != null)\n"
-        + "                 && (t_rsResults.next()))\n"
-        + "            '{'\n"
-        + "                {0}Factory t_Factory =\n"
-        + "                    {0}Factory.getInstance();\n\n"
-        + "                result =\n"
-        + "                    t_Factory.create{6}("
-        + "{7});\n"
-         // CUSTOM_SELECT_RESULT_PROPERTIES
-        + "            '}'\n"
-        + "        '}'\n"
-        + "        catch  (final SQLException sqlException)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
-        + "        '}'\n"
-        + "        catch  (final Exception exception)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).error(exception);\n"
-        + "        '}'\n"
-        + "        finally\n"
-        + "        '{'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_rsResults != null)\n"
-        + "                '{'\n"
-        + "                    t_rsResults.close();\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_PreparedStatement != null)\n"
-        + "                '{'\n"
-        + "                    t_PreparedStatement.close();\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_Connection != null)\n"
-        + "                '{'\n"
-        + "                    closeConnection(t_Connection, transactionToken);\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "        '}'\n\n"
-        + "        return result;\n"
+        + "        return\n"
+        + "            {5}(\n"
+         // method name
+        + "{7},\n"
+         // parameter specification
+        + "                getDataSource());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * <i>{0}</i>:\n"
+         // sql id
+        + "     * {1}"
+         // sql description
+        + "{2}\n"
+         // parameter Javadoc
+        + "     * @param dataSource the data source.\n"
+        + "{3}"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     * @precondition dataSource != null\n"
+        + "     */\n"
+        + "    protected {4} {5}("
+         // result class - method name
+        + "{6},\n"
+         // parameter declaration
+        + "        final DataSource dataSource)\n"
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
+        + "{8}"
+         // custom select for update subtemplate
         + "    '}'\n\n";
 
     /**
-     * The custom select for update template.
+     * The custom select for update template with no return.
+     * @param 0 the query object name.
+     * @param 1 the sql query.
      */
-    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE =
-        DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_RETURN;
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_NO_RETURN =
+          "        SqlQuery t_Query =\n"
+        + "            new {0}Query(\n"
+        + "                dataSource,\n"
+        + "                \"{1}\");\n\n"
+        + "        t_Query.execute();\n";
+
+    /**
+     * The custom select for update template, returning 1 or more instances.
+     * @param 0 the query object name.
+     * @param 1 the sql query.
+     * @param 2 the result type.
+     * @param 3 the subtemplate.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_RETURN =
+          "        {2} result = null;\n\n"
+         // result type
+        + "        SqlQuery t_Query =\n"
+        + "            new {0}Query(\n"
+        + "                dataSource,\n"
+        + "                \"{1}\");\n\n"
+        + "        List t_lResult = t_Query.execute();\n\n"
+        + "{3}\n"
+        + "        return result;\n";
+
+    /**
+     * The custom select for update, returning a single instance.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_SINGLE_RETURN =
+          "        if  (   (t_lResult != null)\n"
+        + "             && (t_lResult.size() > 0))\n"
+        + "        {\n"
+        + "            result = t_lResult.get(0);\n"
+        + "        }\n\n";
+
+    /**
+     * The custom select for update, returning multiple instances.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_MULTIPLE_RETURN =
+        "        result = t_lResult;\n";
 
     /**
      * The custom select-for-update parameter javadoc.
@@ -836,22 +842,25 @@ public interface DAOTemplateDefaults
         DEFAULT_CUSTOM_SELECT_PARAMETER_JAVADOC;
 
     /**
+     * The custom select-for-update return javadoc.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RETURN_JAVADOC =
+          "    * @return the information extracted from the persistence layer\n"
+        + "    * and/or processed.\n";
+
+    /**
      * The custom select-for-update parameter declaration.
      */
     public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_DECLARATION =
         DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION;
 
     /**
-     * The custom select-for-update parameter values.
+     * The custom select-for-update parameter specification.
+     * @param 0 parameter name
      */
-    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_VALUES =
-        DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES;
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_SPECIFICATION =
+        "                {0}";
 
-    /**
-     * The custom select result properties.
-     */
-    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RESULT_PROPERTIES =
-        DEFAULT_CUSTOM_SELECT_RESULT_PROPERTIES;
 
     /**
      * The default class end.
