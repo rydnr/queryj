@@ -271,6 +271,39 @@ public interface BaseDAOTemplateDefaults
     // field type - field name
 
     /**
+     * The create method.
+     */
+    public static final String DEFAULT_CREATE_METHOD =
+          "    /**\n"
+        + "     * Inserts and retrieves the newly-inserted\n"
+        + "     * <i>{0}</i> information."
+         // table name
+        + "{1}"
+         // (optional) pk javadoc
+        + "{2}\n"
+         // update parameters javadoc
+        + "     */\n"
+        + "    public {0}ValueObject create("
+        + "{3}"
+         // (optional) pk declaration
+        + "{4});\n\n";
+         // update parameters declaration
+
+    /**
+     * The create parameters javadoc.
+     */
+    public static final String DEFAULT_CREATE_PARAMETERS_JAVADOC =
+        "\n     * @param {0} the <i>{1}</i> information.";
+    // field name - field Name
+
+    /**
+     * The create parameters declaration.
+     */
+    public static final String DEFAULT_CREATE_PARAMETERS_DECLARATION =
+        "\n        final {0} {1}";
+    // field type - field name
+
+    /**
      * The update method.
      */
     public static final String DEFAULT_UPDATE_METHOD =

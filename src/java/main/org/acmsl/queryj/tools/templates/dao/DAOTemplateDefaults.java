@@ -111,6 +111,8 @@ public interface DAOTemplateDefaults
          // Custom resultset extractors' imports
         + "import {3}.{1}ValueObject;\n"
          // ValueObject package - table name
+        + "import {3}.{1}ValueObjectFactory;\n"
+         // ValueObject package - table name
         + "import {4}.{1}DAO;\n"
          // DAO interface package - table name
         + "import {5}.QueryPreparedStatementCreator;\n"
@@ -183,11 +185,14 @@ public interface DAOTemplateDefaults
         + " * Importing some JDK classes.\n"
         + " */\n"
         + "import java.math.BigDecimal;\n"
+        + "import java.sql.ResultSet;\n"
         + "import java.sql.SQLException;\n"
         + "import java.sql.Types;\n"
         + "import java.util.Calendar;\n"
         + "import java.util.Date;\n"
-        + "import java.util.List;\n\n";
+        + "import java.util.HashMap;\n"
+        + "import java.util.List;\n"
+        + "import java.util.Map;\n\n";
 
     /**
      * The JDK extension imports.
@@ -247,6 +252,13 @@ public interface DAOTemplateDefaults
         + "    public static final ResultSetExtractor "
         + "{1}_EXTRACTOR =\n"
         + "        new {2}ResultSetExtractor();\n\n"
+        + "    /**\n"
+        + "     * The result set extractor for <i>{0}</i>\n"
+        + "     * primary keys (see inner class).\n"
+        + "     */\n"
+        + "    public static final ResultSetExtractor "
+        + "{1}_PK_EXTRACTOR =\n"
+        + "        new {2}PkResultSetExtractor();\n\n"
         + "{3}"
          // result set extractor constant
         + "    // </constants>\n\n";
@@ -498,6 +510,120 @@ public interface DAOTemplateDefaults
     public static final String
         DEFAULT_EXTERNALLY_MANAGED_INSERT_PARAMETERS_SPECIFICATION =
             "\n        result.value({0}TableRepository.{1}.{2}, \"{3}\", false);";
+
+    /**
+     * The create method.
+     * @param 0 the capitalized value object name.
+     * @param 1 the table repository name.
+     * @param 2 the table name.
+     * @param 3 the create parameters specification.
+     * @param 4 the attributes Javadoc.
+     * @param 5 the attributes declaration.
+     * @param 6 the statement setter call.
+     * @param 7 the attributes passing.
+     * @param 8 the pk queries.
+     * @param 9 the attributes specification.
+     * @param 10 the externally-managed field's value retrieval.
+     */
+    public static final String DEFAULT_CREATE_METHOD =
+          "    // <create>\n\n"
+        + "    /**\n"
+        + "     * Builds the query required to <i>create</i> a concrete\n"
+        + "     * <code>{0}ValueObject</code> instance.\n"
+        + "     * @return the <code>InsertQuery</code> instance.\n"
+        + "     */\n"
+        + "    protected Query buildCreateQuery()\n"
+        + "    '{'\n"
+        + "        return buildCreateQuery(QueryFactory.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Builds the query required to <i>create</i> a concrete\n"
+        + "     * <code>{0}</code> instance.\n"
+        + "     * @param queryFactory the <code>QueryFactory</code> "
+        + "instance.\n"
+        + "     * @return the <code>InsertQuery</code> instance.\n"
+        + "     * @precondition queryFactory != null\n"
+        + "     */\n"
+        + "    protected Query buildCreateQuery("
+        +          "final QueryFactory queryFactory)\n"
+        + "    '{'\n"
+        + "        InsertQuery result = queryFactory.createInsertQuery();\n\n"
+        + "        result.insertInto({1}TableRepository.{2});\n"
+        + "{3}\n"
+        + "        return result;\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Inserts and retrieves the newly-inserted\n"
+        + "     * <code>{0}</code> instance."
+         // table name
+        + "{4}\n"
+         // attributes javadoc
+        + "     * @throws DataAccessException if the operation fails.\n"
+        + "     */\n"
+        + "    public {0}ValueObject create("
+        + "{5})\n"
+         // attributes declaration
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
+        + "        return\n"
+        + "            create({7}\n"
+        + "                {0}ValueObjectFactory.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Inserts and retrieves the newly-inserted\n"
+        + "     * <code>{0}</code> instance."
+         // table name
+        + "{4}\n"
+         // attributes javadoc
+        + "     * @throws DataAccessException if the operation fails.\n"
+        + "     */\n"
+        + "    public {0}ValueObject create("
+        + "{5},\n"
+        + "        final {0}ValueObjectFactory factory)\n"
+         // attributes declaration
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
+        + "        {0}ValueObject result = null;\n\n"
+        + "        Map t_mMap =\n"
+        + "            (Map)\n"
+        + "                query(\n"
+        + "                    \"{8}\",\n"
+        + "                    {11}_PK_EXTRACTOR);\n\n"
+        + "{10}\n"
+        + "        Query t_Query = buildCreateQuery();\n\n"
+        + "        update(\n"
+        + "            new QueryPreparedStatementCreator(t_Query),\n"
+        + "            new {0}AttributesStatementSetter({6},\n"
+        + "                true));\n\n"
+        + "        result =\n"
+        + "            factory.create{0}ValueObject("
+        + "{9});\n\n"
+        + "        return result;\n"
+        + "    '}'\n\n"
+        + "    // </create>\n\n";
+
+    /**
+     * The attributes passing subtemplate.
+     * @param 0 the attribute name (Java version).
+     */
+    public static final String DEFAULT_ATTRIBUTES_PASSING_SUBTEMPLATE =
+        "\n                {0},";
+
+    /**
+     * The attributes specification subtemplate.
+     * @param 0 the attribute name (Java version).
+     */
+    public static final String DEFAULT_ATTRIBUTES_SPECIFICATION_SUBTEMPLATE =
+        "\n                {0}";
+
+    /**
+     * The externally-managed field value retrieval.
+     * @param 0 the attribute name (Java version).
+     * @param 1 the attribute type.
+     */
+    public static final String DEFAULT_CREATE_EXTERNALLY_MANAGED_FIELD_VALUE_RETRIEVAL =
+          "        {0} {1} =\n"
+        + "           (({2}) t_mMap.get(\"{1}\")).{0}Value();\n";
 
     /**
      * The update method.
@@ -1074,6 +1200,66 @@ public interface DAOTemplateDefaults
           "        return\n"
         + "    ";
 
+    /**
+     * The PK ResultSet extractor subtemplate.
+     * @param 0 the capitalized value object name.
+     * @param 1 the pk extractor parameter retrieval.
+     */
+    public static final String DEFAULT_PK_RESULTSET_EXTRACTOR =
+          "    /**\n"
+        + "     * Extracts <i>g_subscription</i> value objects from result sets.\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
+        + "     */\n"
+        + "    public static class {0}PkResultSetExtractor\n"
+        + "        implements  ResultSetExtractor\n"
+        + "    '{'\n"
+        + "        // <extract data>\n"
+        + "        /**\n"
+        + "         * Extracts <i>{0}</i> information from given result set.\n"
+        + "         * @param resultSet the result set.\n"
+        + "         * @return the <code>{0}ValueObject</code> or <code>null</code>\n"
+        + "         * if the operation returned no data.\n"
+        + "         * @throws SQLException intercepted by <i>Spring</i>.\n"
+        + "         * @throws DataAccessException with information about any\n"
+        + "         * custom exception.\n"
+        + "         * @precondition resultSet != null\n"
+        + "         */\n"
+        + "        public Object extractData(final ResultSet resultSet)\n"
+        + "            throws  SQLException,\n"
+        + "                    DataAccessException\n"
+        + "        '{'\n"
+        + "            Map result = new HashMap();\n\n"
+        + "            if  (resultSet.next())\n"
+        + "            '{'\n"
+        + "                int index = 1;\n\n"
+        + "{1}"
+        + "            '}'\n\n"
+        + "            return result;\n"
+        + "        '}'\n"
+        + "        // </extract data>\n"
+        + "    '}'\n";
+
+    /**
+     * The pk extractor simple parameter retrieval.
+     * @param 0 the attribute name (Java version).
+     * @param 1 the getter method.
+     * @param 2 the Java type.
+     */
+    public static final String DEFAULT_PK_EXTRACTOR_SIMPLE_PARAMETER_RETRIEVAL =
+          "                result.put(\n"
+        + "                    \"{0}\",\n"
+        + "                    new {2}(resultSet.{1}(index++)));\n";
+        
+    /**
+     * The pk extractor parameter retrieval.
+     * @param 0 the attribute name (Java version).
+     * @param 1 the getter method.
+     */
+    public static final String DEFAULT_PK_EXTRACTOR_PARAMETER_RETRIEVAL =
+          "                result.put(\n"
+        + "                    \"{0}\",\n"
+        + "                    resultSet.{1}(index++));\n";
+        
     /**
      * The default class end.
      */

@@ -35,17 +35,6 @@
  *
  * Description: Manages the information provided by database metadata.
  *
-<<<<<<< DatabaseMetaDataManager.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.11
  */
 package org.acmsl.queryj.tools;
 
@@ -81,10 +70,6 @@ import org.apache.tools.ant.Task;
  * Manages the information provided by database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
-<<<<<<< DatabaseMetaDataManager.java
-=======
- * @version $Revision$
->>>>>>> 1.11
  */
 public class DatabaseMetaDataManager
 {
@@ -1637,8 +1622,8 @@ public class DatabaseMetaDataManager
      * @param columnName the column name.
      */
     public void addExternallyManagedField(
-        String tableName,
-        String columnName)
+        final String tableName,
+        final String columnName)
     {
         addExternallyManagedField(
             tableName,
@@ -1653,9 +1638,25 @@ public class DatabaseMetaDataManager
      * @param keyword the keyword.
      */
     public void addExternallyManagedField(
-        String tableName,
-        String columnName,
-        String keyword)
+        final String tableName,
+        final String columnName,
+        final String keyword)
+    {
+        addExternallyManagedField(tableName, columnName, keyword, null);
+    }
+
+    /**
+     * Annotates a externally-managed field.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param keyword the keyword.
+     * @param query the retrieval query.
+     */
+    public void addExternallyManagedField(
+        final String tableName,
+        final String columnName,
+        final String keyword,
+        final String query)
     {
         Map t_mExternallyManagedFields = getExternallyManagedFields();
 
@@ -1669,6 +1670,11 @@ public class DatabaseMetaDataManager
             t_mExternallyManagedFields.put(
                 buildExternallyManagedFieldKey(tableName, columnName),
                 buildExternallyManagedFieldValue(keyword));
+
+            t_mExternallyManagedFields.put(
+                buildExternallyManagedFieldRetrievalQueryKey(
+                    tableName, columnName),
+                buildExternallyManagedFieldRetrievalQueryValue(query));
 
             Collection t_cExternallyManagedTableFields =
                 (Collection)
@@ -1790,6 +1796,51 @@ public class DatabaseMetaDataManager
                           ""
                         + t_mExternallyManagedFields.get(
                               buildExternallyManagedFieldKey(
+                                  tableName, t_Field));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the keyword used to create new values of given field.
+     * @param tableName the table name.
+     * @param fieldName the field name.
+     * @return such keyword, or <code>null</code> if such information is
+     * unknown.
+     */
+    public String getExternallyManagedFieldRetrievalQuery(
+        final String tableName, String fieldName)
+    {
+        String result = null;
+
+        Map t_mExternallyManagedFields = getExternallyManagedFields();
+
+        if  (   (tableName != null)
+             && (fieldName != null)
+             && (t_mExternallyManagedFields != null))
+        {
+            Collection t_cExternallyManagedTableFields =
+                (Collection)
+                    t_mExternallyManagedFields.get(
+                        buildExternallyManagedFieldKey(tableName));
+
+            if  (t_cExternallyManagedTableFields != null)
+            {
+                Iterator t_itFieldIterator =
+                    t_cExternallyManagedTableFields.iterator();
+
+                while  (   (t_itFieldIterator != null)
+                        && (t_itFieldIterator.hasNext()))
+                {
+                    Object t_Field = t_itFieldIterator.next();
+
+                    result =
+                          ""
+                        + t_mExternallyManagedFields.get(
+                              buildExternallyManagedFieldRetrievalQueryKey(
                                   tableName, t_Field));
                 }
             }
@@ -2141,11 +2192,57 @@ public class DatabaseMetaDataManager
     }
 
     /**
+     * Builds a retrieval query key for an externally-managed field using given
+     * object.
+     * @param firstKey the first object key.
+     * @return the map key.
+     */
+    protected Object buildExternallyManagedFieldRetrievalQueryKey(
+        final Object firstKey)
+    {
+        return "[externally-managed-field-retrieval-query]!!" + buildKey(firstKey);
+    }
+
+    /**
+     * Builds a retrieval query key for an externally-managed field
+     * using given object.
+     * @param firstKey the first object key.
+     * @param secondKey the second object key.
+     * @return the map key.
+     */
+    protected Object buildExternallyManagedFieldRetrievalQueryKey(
+        final Object firstKey, final Object secondKey)
+    {
+        return
+              buildExternallyManagedFieldRetrievalQueryKey(firstKey)
+            + ",.,." + secondKey;
+    }
+
+    /**
      * Builds a externally-managed field value using given object.
      * @param value the object.
      * @return the map value.
      */
     protected Object buildExternallyManagedFieldValue(final Object value)
+    {
+        Object result = "";
+
+        if  (value != null)
+        {
+            result = value;
+        }
+
+        return result;
+    }
+
+    /**
+     * Builds a retrieval query value key for an externally-managed field
+     * using given object.
+     * @param value the object.
+     * @return the map value.
+     */
+    protected Object buildExternallyManagedFieldRetrievalQueryValue(
+        final Object value)
     {
         Object result = "";
 

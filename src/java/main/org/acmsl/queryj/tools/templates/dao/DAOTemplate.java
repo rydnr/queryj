@@ -176,6 +176,10 @@ public class DAOTemplate
             DEFAULT_INSERT_METHOD,
             DEFAULT_INSERT_PARAMETERS_SPECIFICATION,
             DEFAULT_EXTERNALLY_MANAGED_INSERT_PARAMETERS_SPECIFICATION,
+            DEFAULT_CREATE_METHOD,
+            DEFAULT_ATTRIBUTES_PASSING_SUBTEMPLATE,
+            DEFAULT_ATTRIBUTES_SPECIFICATION_SUBTEMPLATE,
+            DEFAULT_CREATE_EXTERNALLY_MANAGED_FIELD_VALUE_RETRIEVAL,
             DEFAULT_UPDATE_METHOD,
             DEFAULT_UPDATE_PARAMETERS_SPECIFICATION,
             DEFAULT_DELETE_METHOD_NO_FK,
@@ -206,6 +210,9 @@ public class DAOTemplate
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_DECLARATION,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_SPECIFICATION,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_CONDITIONAL_RETURN,
+            DEFAULT_PK_RESULTSET_EXTRACTOR,
+            DEFAULT_PK_EXTRACTOR_SIMPLE_PARAMETER_RETRIEVAL,
+            DEFAULT_PK_EXTRACTOR_PARAMETER_RETRIEVAL,
             DEFAULT_CLASS_END,
             project,
             task);
@@ -257,6 +264,10 @@ public class DAOTemplate
                 getInsertMethod(),
                 getInsertParametersSpecification(),
                 getExternallyManagedInsertParametersSpecification(),
+                getCreateMethod(),
+                getAttributesPassing(),
+                getAttributesSpecification(),
+                getCreateExternallyManagedFieldValueRetrieval(),
                 getUpdateMethod(),
                 getUpdateParametersSpecification(),
                 getDeleteMethodNoFk(),
@@ -287,6 +298,9 @@ public class DAOTemplate
                 getCustomSelectForUpdateParameterDeclaration(),
                 getCustomSelectForUpdateParameterSpecification(),
                 getCustomSelectForUpdateConditionalReturn(),
+                getPkResultSetExtractor(),
+                getPkExtractorSimpleParameterRetrieval(),
+                getPkExtractorParameterRetrieval(),
                 getClassEnd(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
@@ -343,6 +357,11 @@ public class DAOTemplate
      * method's parameters.
      * @param externallyManagedInsertParametersSpecification the specification
      * of the insert method's parameters managed externally.
+     * @param createMethod the create method.
+     * @param attributesPassing the attributes passing subtemplate.
+     * @param attributesSpecification the attributes specification subtemplate.
+     * @param createExternallyManagedFieldValueRetrieval the externally-managed
+     * field value retrieval in create method.
      * @param updateMethod the update method.
      * @param updateParametersSpecification the specification of the update
      * method's parameters.
@@ -392,6 +411,11 @@ public class DAOTemplate
      * specification of the custom-select-for-update operations.
      * @param customSelectForUpdateConditionalReturn the subtemplate
      * to conditionally provide return statement in select-for-update operations.
+     * @param pkResultSetExtractor the PK ResultSet extractor.
+     * @param pkExtractorSimpleParameterRetrieval the PK extractor parameter
+     * retrieval subtemplate.
+     * @param pkExtractorParameterRetrieval the PK extractor parameter
+     * retrieval subtemplate.
      * @param classEnd the class end.
      * @param metaDataUtils the MetaDataUtils instance.
      * @param stringUtils the StringUtils instance.
@@ -448,6 +472,10 @@ public class DAOTemplate
         final String insertMethod,
         final String insertParametersSpecification,
         final String externallyManagedInsertParametersSpecification,
+        final String createMethod,
+        final String attributesPassing,
+        final String attributesSpecification,
+        final String createExternallyManagedFieldValueRetrieval,
         final String updateMethod,
         final String updateParametersSpecification,
         final String deleteMethodNoFk,
@@ -478,6 +506,9 @@ public class DAOTemplate
         final String customSelectForUpdateParameterDeclaration,
         final String customSelectForUpdateParameterSpecification,
         final String customSelectForUpdateConditionalReturn,
+        final String pkResultSetExtractor,
+        final String pkExtractorSimpleParameterRetrieval,
+        final String pkExtractorParameterRetrieval,
         final String classEnd,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
@@ -552,6 +583,18 @@ public class DAOTemplate
         MessageFormat t_ExternallyManagedInsertParametersSpecificationFormatter =
             new MessageFormat(externallyManagedInsertParametersSpecification);
 
+        MessageFormat t_CreateMethodFormatter =
+            new MessageFormat(createMethod);
+
+        MessageFormat t_AttributesPassingFormatter =
+            new MessageFormat(attributesPassing);
+
+        MessageFormat t_AttributesSpecificationFormatter =
+            new MessageFormat(attributesSpecification);
+
+        MessageFormat t_CreateExternallyManagedFieldValueRetrievalFormatter =
+            new MessageFormat(createExternallyManagedFieldValueRetrieval);
+
         MessageFormat t_UpdateMethodFormatter =
             new MessageFormat(updateMethod);
 
@@ -572,6 +615,15 @@ public class DAOTemplate
         MessageFormat t_FkDeclarationFormatter =
             new MessageFormat(deleteFkDeclaration);
 
+        MessageFormat t_PkResultSetExtractorFormatter =
+            new MessageFormat(pkResultSetExtractor);
+
+        MessageFormat t_PkExtractorSimpleParameterRetrievalFormatter =
+            new MessageFormat(pkExtractorSimpleParameterRetrieval);
+
+        MessageFormat t_PkExtractorParameterRetrievalFormatter =
+            new MessageFormat(pkExtractorParameterRetrieval);
+
         StringBuffer t_sbForeignKeyStatementSetterImports =
             new StringBuffer();
         StringBuffer t_sbForeignDAOImports = new StringBuffer();
@@ -590,11 +642,21 @@ public class DAOTemplate
         String t_strFkStatementSetterCall = "";
         StringBuffer t_sbInsertAttributesStatementSetterCall = new StringBuffer();
         StringBuffer t_sbUpdateAttributesStatementSetterCall = new StringBuffer();
+        StringBuffer t_sbCreateMethod = new StringBuffer();
+        StringBuffer t_sbCreateAttributesStatementSetterCall = new StringBuffer();
+        StringBuffer t_sbRetrievalQueries = new StringBuffer();
+        StringBuffer t_sbAttributesPassing = new StringBuffer();
+        StringBuffer t_sbAttributesSpecification = new StringBuffer();
+        StringBuffer t_sbCreateExternallyManagedFieldValueRetrieval =
+            new StringBuffer();
         StringBuffer t_sbDeleteMethod = new StringBuffer();
         StringBuffer t_sbForeignDAODeleteCall = new StringBuffer();
         StringBuffer t_sbForeignDAOUpdateCall = new StringBuffer();
         StringBuffer t_sbDeleteByFkMethod = new StringBuffer();
-                
+        StringBuffer t_sbPkResultSetExtractor = new StringBuffer();
+        StringBuffer t_sbPkExtractorSimpleParameterRetrieval = new StringBuffer();
+        StringBuffer t_sbPkExtractorParameterRetrieval = new StringBuffer();
+
         StringBuffer t_sbInsertParametersSpecification = new StringBuffer();
         StringBuffer t_sbExternallyManagedInsertParametersSpecification =
             new StringBuffer();
@@ -634,6 +696,14 @@ public class DAOTemplate
                     t_sbPkDeclaration.append(",");
                 }
 
+                int t_iType =
+                    metaDataManager.getColumnType(
+                        tableTemplate.getTableName(),
+                        t_astrPrimaryKeys[t_iPkIndex]);
+
+                String t_strNativeType =
+                    metaDataUtils.getNativeType(t_iType);
+
                 t_sbPkDeclaration.append(
                     t_AttributeDeclarationFormatter.format(
                         new Object[]
@@ -656,6 +726,45 @@ public class DAOTemplate
                         {
                             t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
                         }));
+
+                if  (metaDataManager.isManagedExternally(
+                         tableTemplate.getTableName(),
+                         t_astrPrimaryKeys[t_iPkIndex]))
+                {
+                    MessageFormat t_PkExtractorFormatter =
+                        t_PkExtractorParameterRetrievalFormatter;
+
+                    String t_strFieldType =
+                        metaDataUtils.getFieldType(t_iType, false, null, null);
+
+                    if  (t_strFieldType.equals(t_strNativeType))
+                    {
+                        t_PkExtractorFormatter =
+                            t_PkExtractorSimpleParameterRetrievalFormatter;
+                    }
+
+                    t_strFieldType =
+                        metaDataUtils.getFieldType(t_iType, true, null, null);
+
+                    t_sbPkExtractorParameterRetrieval.append(
+                        t_PkExtractorFormatter.format(
+                            new Object[]
+                            {
+                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                                metaDataUtils.getGetterMethod(t_iType),
+                                t_strFieldType
+                            }));
+
+                    t_sbCreateExternallyManagedFieldValueRetrieval.append(
+                        t_CreateExternallyManagedFieldValueRetrievalFormatter.format(
+                            new Object[]
+                            {
+                                t_strNativeType,
+                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                                t_strFieldType
+                            }));
+                            
+                }
             }
         }
 
@@ -1022,9 +1131,25 @@ public class DAOTemplate
                             t_astrColumnNames[t_iColumnIndex].toLowerCase()
                         }));
 
+                t_sbCreateAttributesStatementSetterCall.append(
+                    t_StatementSetterCallFormatter.format(
+                        new Object[]
+                        {
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                        }));
+
+                t_sbAttributesSpecification.append(
+                    t_AttributesSpecificationFormatter.format(
+                        new Object[]
+                        {
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                        }));
+
                 if  (t_iColumnIndex < t_astrColumnNames.length - 1)
                 {
                     t_sbUpdateAttributesDeclaration.append(",");
+                    t_sbCreateAttributesStatementSetterCall.append(",");
+                    t_sbAttributesSpecification.append(",");
                 }
 
                 boolean t_bManagedExternally =
@@ -1045,6 +1170,11 @@ public class DAOTemplate
                                     tableTemplate.getTableName(),
                                     t_astrColumnNames[t_iColumnIndex])
                             }));
+
+                    t_sbRetrievalQueries.append(
+                        metaDataManager.getExternallyManagedFieldRetrievalQuery(
+                            tableTemplate.getTableName(),
+                            t_astrColumnNames[t_iColumnIndex]));
 
                     t_sbUpdateAttributesStatementSetterCall.append(
                         t_StatementSetterCallFormatter.format(
@@ -1088,6 +1218,13 @@ public class DAOTemplate
                                 t_strRepositoryName,
                                 tableTemplate.getTableName().toUpperCase(),
                                 t_astrColumnNames[t_iColumnIndex].toUpperCase(),
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                            }));
+
+                    t_sbAttributesPassing.append(
+                        t_AttributesPassingFormatter.format(
+                            new Object[]
+                            {
                                 t_astrColumnNames[t_iColumnIndex].toLowerCase()
                             }));
 
@@ -1175,6 +1312,24 @@ public class DAOTemplate
                     }));
 
             t_sbResult.append(
+                t_CreateMethodFormatter.format(
+                    new Object[]
+                    {
+                        t_strCapitalizedValueObjectName,
+                        t_strRepositoryName,
+                        tableTemplate.getTableName().toUpperCase(),
+                        t_sbInsertParametersSpecification,
+                        t_sbAttributesJavadoc,
+                        t_sbAttributesDeclaration,
+                        t_sbCreateAttributesStatementSetterCall,
+                        t_sbAttributesPassing,
+                        t_sbRetrievalQueries,
+                        t_sbAttributesSpecification,
+                        t_sbCreateExternallyManagedFieldValueRetrieval,
+                        t_strValueObjectName.toUpperCase()
+                    }));
+
+            t_sbResult.append(
                 t_UpdateMethodFormatter.format(
                     new Object[]
                     {
@@ -1208,6 +1363,14 @@ public class DAOTemplate
        }
 
         t_sbResult.append(buildCustomSql());
+
+        t_sbResult.append(
+            t_PkResultSetExtractorFormatter.format(
+                new Object[]
+                {
+                    t_strCapitalizedValueObjectName,
+                    t_sbPkExtractorParameterRetrieval
+                }));
 
         t_sbResult.append(classEnd);
 

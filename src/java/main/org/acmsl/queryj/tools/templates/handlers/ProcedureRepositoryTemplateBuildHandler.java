@@ -117,10 +117,6 @@ public class ProcedureRepositoryTemplateBuildHandler
                 ProcedureMetaData[] t_aProceduresMetaData =
                     t_MetaDataManager.getProceduresMetaData();
 
-                command.getProject().log(
-                    "Handling stored procedures..." + t_aProceduresMetaData,
-                    Project.MSG_INFO);
-
                 ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate =
                     buildProcedureRepositoryTemplate(
                         attributes, command.getProject(), command.getTask());
@@ -128,10 +124,6 @@ public class ProcedureRepositoryTemplateBuildHandler
                 if  (  (t_ProcedureRepositoryTemplate != null)
                     && (t_aProceduresMetaData         != null))
                 {
-                    command.getProject().log(
-                        "Building " + t_aProceduresMetaData.length + " procedures.",
-                    Project.MSG_INFO);
-
                     for  (int t_iIndex = 0;
                               t_iIndex < t_aProceduresMetaData.length;
                               t_iIndex++) 

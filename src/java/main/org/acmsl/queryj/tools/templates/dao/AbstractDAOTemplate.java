@@ -34,17 +34,6 @@
  *
  * Description: Contains the elements required to create the DAO sources.
  *
-<<<<<<< AbstractDAOTemplate.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.16
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -66,10 +55,6 @@ import org.apache.tools.ant.Task;
  * Contains the elements required to create the DAO sources.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< AbstractDAOTemplate.java
-=======
- * @version $Revision$
->>>>>>> 1.16
  */
 public abstract class AbstractDAOTemplate
     extends  AbstractTemplate
@@ -265,6 +250,26 @@ public abstract class AbstractDAOTemplate
     private String m__strExternallyManagedInsertParametersSpecification;
 
     /**
+     * The create method.
+     */
+    private String m__strCreateMethod;
+
+    /**
+     * The attributes passing subtemplate.
+     */
+    private String m__strAttributesPassing;
+
+    /**
+     * The attributes specification.
+     */
+    private String m__strAttributesSpecification;
+
+    /**
+     * The externally-managed field value retrieval for create method.
+     */
+    private String m__strCreateExternallyManagedFieldValueRetrieval;
+
+    /**
      * The update method.
      */
     private String m__strUpdateMethod;
@@ -415,6 +420,21 @@ public abstract class AbstractDAOTemplate
     private String m__strCustomSelectForUpdateConditionalReturn;
 
     /**
+     * The PK ResultSet extractor.
+     */
+    private String m__strPkResultSetExtractor;
+
+    /**
+     * The PK extractor simple parameter retrieval.
+     */
+    private String m__strPkExtractorSimpleParameterRetrieval;
+
+    /**
+     * The PK extractor parameter retrieval.
+     */
+    private String m__strPkExtractorParameterRetrieval;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
@@ -466,6 +486,11 @@ public abstract class AbstractDAOTemplate
      * method's parameters.
      * @param externallyManagedInsertParametersSpecification the
      * specification of the insert parameters externally managed.
+     * @param createMethod the create method.
+     * @param attributesPassing the attributes passing subtemplate.
+     * @param attributesSpecification the attributes specification subtemplate.
+     * @param createExternallyManagedFieldValueRetrieval the externally-managed
+     * field value retrieval in create method.
      * @param updateMethod the update method.
      * @param updateParametersSpecification the specification of the update
      * method's parameters.
@@ -515,6 +540,11 @@ public abstract class AbstractDAOTemplate
      * specification of the custom-select-for-update operations.
      * @param customSelectForUpdateConditionalReturn the subtemplate
      * to conditionally provide return statement in select-for-update operations.
+     * @param pkResultSetExtractor the PK ResultSet extractor.
+     * @param pkExtractorSimpleParameterRetrieval the PK extractor parameter
+     * retrieval subtemplate.
+     * @param pkExtractorParameterRetrieval the PK extractor parameter
+     * retrieval subtemplate.
      * @param classEnd the class end.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
@@ -558,6 +588,10 @@ public abstract class AbstractDAOTemplate
         final String insertMethod,
         final String insertParametersSpecification,
         final String externallyManagedInsertParametersSpecification,
+        final String createMethod,
+        final String attributesPassing,
+        final String attributesSpecification,
+        final String createExternallyManagedFieldValueRetrieval,
         final String updateMethod,
         final String updateParametersSpecification,
         final String deleteMethodNoFk,
@@ -588,6 +622,9 @@ public abstract class AbstractDAOTemplate
         final String customSelectForUpdateParameterDeclaration,
         final String customSelectForUpdateParameterSpecification,
         final String customSelectForUpdateConditionalReturn,
+        final String pkResultSetExtractor,
+        final String pkExtractorSimpleParameterRetrieval,
+        final String pkExtractorParameterRetrieval,
         final String classEnd,
         final Project project,
         final Task task)
@@ -698,6 +735,18 @@ public abstract class AbstractDAOTemplate
         immutableSetExternallyManagedInsertParametersSpecification(
             externallyManagedInsertParametersSpecification);
 
+        immutableSetCreateMethod(
+            createMethod);
+
+        immutableSetAttributesPassing(
+            attributesPassing);
+
+        immutableSetAttributesSpecification(
+            attributesSpecification);
+
+        immutableSetCreateExternallyManagedFieldValueRetrieval(
+            createExternallyManagedFieldValueRetrieval);
+
         immutableSetUpdateMethod(
             updateMethod);
 
@@ -782,6 +831,15 @@ public abstract class AbstractDAOTemplate
 
         immutableSetCustomSelectForUpdateConditionalReturn(
             customSelectForUpdateConditionalReturn);
+
+        immutableSetPkResultSetExtractor(
+            pkResultSetExtractor);
+
+        immutableSetPkExtractorSimpleParameterRetrieval(
+            pkExtractorSimpleParameterRetrieval);
+
+        immutableSetPkExtractorParameterRetrieval(
+            pkExtractorParameterRetrieval);
 
         immutableSetClassEnd(
             classEnd);
@@ -1853,6 +1911,116 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
+     * Specifies the create method.
+     * @param createMethod such method.
+     */
+    private void immutableSetCreateMethod(final String createMethod)
+    {
+        m__strCreateMethod = createMethod;
+    }
+
+    /**
+     * Specifies the create method.
+     * @param createMethod such method.
+     */
+    protected void setCreateMethod(final String createMethod)
+    {
+        immutableSetCreateMethod(createMethod);
+    }
+
+    /**
+     * Retrieves the create method.
+     * @return such method.
+     */
+    public String getCreateMethod()
+    {
+        return m__strCreateMethod;
+    }
+
+    /**
+     * The attributes passing subtemplate.
+     * @param subtemplate the subtemplate.
+     */
+    private void immutableSetAttributesPassing(final String subtemplate)
+    {
+        m__strAttributesPassing = subtemplate;
+    }
+
+    /**
+     * The attributes passing subtemplate.
+     * @param subtemplate the subtemplate.
+     */
+    protected void setAttributesPassing(final String subtemplate)
+    {
+        immutableSetAttributesPassing(subtemplate);
+    }
+
+    /**
+     * Retrieves the attributes passing subtemplate.
+     * @return such subtemplate.
+     */
+    public String getAttributesPassing()
+    {
+        return m__strAttributesPassing;
+    }
+
+    /**
+     * The attributes specification subtemplate.
+     * @param subtemplate the subtemplate.
+     */
+    private void immutableSetAttributesSpecification(final String subtemplate)
+    {
+        m__strAttributesSpecification = subtemplate;
+    }
+
+    /**
+     * The attributes specification subtemplate.
+     * @param subtemplate the subtemplate.
+     */
+    protected void setAttributesSpecification(final String subtemplate)
+    {
+        immutableSetAttributesSpecification(subtemplate);
+    }
+
+    /**
+     * Retrieves the attributes specification subtemplate.
+     * @return such subtemplate.
+     */
+    public String getAttributesSpecification()
+    {
+        return m__strAttributesSpecification;
+    }
+
+    /**
+     * Specifies the externally-managed field value retrieval in create method.
+     * @param subtemplate the subtemplate.
+     */
+    private void immutableSetCreateExternallyManagedFieldValueRetrieval(
+        final String subtemplate)
+    {
+        m__strCreateExternallyManagedFieldValueRetrieval = subtemplate;
+    }
+
+    /**
+     * Specifies the externally-managed field value retrieval in create method.
+     * @param subtemplate the subtemplate.
+     */
+    protected void setCreateExternallyManagedFieldValueRetrieval(
+        final String subtemplate)
+    {
+        immutableSetCreateExternallyManagedFieldValueRetrieval(subtemplate);
+    }
+
+    /**
+     * Retrieves the externally-managed field value retrieval in create method.
+     * @return the subtemplate.
+     */
+    public String getCreateExternallyManagedFieldValueRetrieval()
+    {
+        return m__strCreateExternallyManagedFieldValueRetrieval;
+    }
+
+    /**
      * Specifies the update method.
      * @param updateMethod such method.
      */
@@ -2730,6 +2898,93 @@ public abstract class AbstractDAOTemplate
     public String getCustomSelectForUpdateConditionalReturn()
     {
         return m__strCustomSelectForUpdateConditionalReturn;
+    }
+
+    /**
+     * Specifies the PK ResultSet extractor.
+     * @param subtemplate the subtemplate.
+     */
+    private void immutableSetPkResultSetExtractor(
+        final String subtemplate)
+    {
+        m__strPkResultSetExtractor = subtemplate;
+    }
+
+    /**
+     * Specifies the PK ResultSet extractor.
+     * @param subtemplate the subtemplate.
+     */
+    protected void setPkResultSetExtractor(
+        final String subtemplate)
+    {
+        immutableSetPkResultSetExtractor(subtemplate);
+    }
+
+    /**
+     * Retrieves the PK ResultSet extractor.
+     * @return such information.
+     */
+    public String getPkResultSetExtractor()
+    {
+        return m__strPkResultSetExtractor;
+    }
+
+    /**
+     * Specifies the PK extractor simple parameter retrieval.
+     * @param subtemplate the subtemplate.
+     */
+    private void immutableSetPkExtractorSimpleParameterRetrieval(
+        final String subtemplate)
+    {
+        m__strPkExtractorSimpleParameterRetrieval = subtemplate;
+    }
+
+    /**
+     * Specifies the PK extractor simple parameter retrieval.
+     * @param subtemplate the subtemplate.
+     */
+    protected void setPkExtractorSimpleParameterRetrieval(
+        final String subtemplate)
+    {
+        immutableSetPkExtractorSimpleParameterRetrieval(subtemplate);
+    }
+
+    /**
+     * Retrieves the PK extractor simple parameter retrieval.
+     * @return such subtemplate.
+     */
+    public String getPkExtractorSimpleParameterRetrieval()
+    {
+        return m__strPkExtractorSimpleParameterRetrieval;
+    }
+
+    /**
+     * Specifies the PK extractor parameter retrieval.
+     * @param subtemplate the subtemplate.
+     */
+    private void immutableSetPkExtractorParameterRetrieval(
+        final String subtemplate)
+    {
+        m__strPkExtractorParameterRetrieval = subtemplate;
+    }
+
+    /**
+     * Specifies the PK extractor parameter retrieval.
+     * @param subtemplate the subtemplate.
+     */
+    protected void setPkExtractorParameterRetrieval(
+        final String subtemplate)
+    {
+        immutableSetPkExtractorParameterRetrieval(subtemplate);
+    }
+
+    /**
+     * Retrieves the PK extractor parameter retrieval.
+     * @return such subtemplate.
+     */
+    public String getPkExtractorParameterRetrieval()
+    {
+        return m__strPkExtractorParameterRetrieval;
     }
 
     /**

@@ -182,7 +182,8 @@ public class ExternallyManagedFieldsRetrievalHandler
                                     t_MetaDataManager.addExternallyManagedField(
                                         t_Field.getTableName(),
                                         t_Field.getName(),
-                                        t_Field.getKeyword());
+                                        t_Field.getKeyword(),
+                                        t_Field.getRetrievalQuery());
                                 }
                             }
                         }

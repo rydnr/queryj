@@ -609,12 +609,14 @@ public interface DAOTestTemplateDefaults
         + "        '{'\n"
         + "            assertNotNull(getTestedInstance());\n\n"
         + "            assertNotNull(get{2}());\n\n"
+        + "            /*\n"
         + "            getTestedInstance()\n"
         + "                .update("
         + "{4}"
          // primary key values.
         + "{5});\n"
          // update test parameters.
+        + "            */\n"
         + "        '}'\n\n"
         + "    '}'\n\n";
 

@@ -90,6 +90,11 @@ public class AntFieldElement
     private String m__strKeyword;
 
     /**
+     * The query to retrieve the keyword value.
+     */
+    private String m__strRetrievalQuery;
+
+    /**
      * The field fk collection.
      */
     private Collection m__cFieldFks;
@@ -220,7 +225,7 @@ public class AntFieldElement
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    private void setFieldFks(Collection fieldFks)
+    protected void setFieldFks(Collection fieldFks)
     {
         inmutableSetFieldFks(fieldFks);
     }
@@ -232,6 +237,33 @@ public class AntFieldElement
     public Collection getFieldFks()
     {
         return m__cFieldFks;
+    }
+
+    /**
+     * Specifies the query to retrieve the field value.
+     * @param query such query.
+     */
+    private void immutableSetRetrievalQuery(final String query)
+    {
+        m__strRetrievalQuery = query;
+    }
+
+    /**
+     * Specifies the query to retrieve the field value.
+     * @param query such query.
+     */
+    protected void setRetrievalQuery(final String query)
+    {
+        immutableSetRetrievalQuery(query);
+    }
+
+    /**
+     * Retrieves the query to retrieve the field value.
+     * @return such information.
+     */
+    public String getRetrievalQuery()
+    {
+        return m__strRetrievalQuery;
     }
 
     /**
@@ -260,6 +292,10 @@ public class AntFieldElement
         else if  ("keyword".equals(name))
         {
             setKeyword(value);
+        }
+        else if  ("retrieval-query".equals(name))
+        {
+            setRetrievalQuery(value);
         }
         else 
         {

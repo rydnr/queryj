@@ -35,17 +35,6 @@
  * Description: Defines the default subtemplates to create abstract base
  *              JDBC DAO.
  *
-<<<<<<< JdbcDAOTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -58,10 +47,6 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * Defines the default subtemplates to create abstract base JDBC DAO.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< JdbcDAOTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.3
  */
 public interface JdbcDAOTemplateDefaults
     extends  JavaTemplateDefaults
@@ -179,9 +164,9 @@ public interface JdbcDAOTemplateDefaults
         + "     * with given data source.\n"
         + "     * @param dataSource the required data source.\n"
         + "     */\n"
-        + "    public JdbcDAO(DataSource dataSource)\n"
+        + "    public JdbcDAO(final DataSource dataSource)\n"
         + "    {\n"
-        + "        inmutableSetDataSource(dataSource);\n"
+        + "        immutableSetDataSource(dataSource);\n"
         + "    }\n\n";
         // engine name - table name
 
@@ -193,7 +178,7 @@ public interface JdbcDAOTemplateDefaults
         + "     * Specifies the data source.\n"
         + "     * @param dataSource the data source to use.\n"
         + "     */\n"
-        + "    private void inmutableSetDataSource(DataSource dataSource)\n"
+        + "    private void immutableSetDataSource(DataSource dataSource)\n"
         + "    {\n"
         + "        m__DataSource = dataSource;\n"
         + "    }\n\n"
@@ -203,7 +188,7 @@ public interface JdbcDAOTemplateDefaults
         + "     */\n"
         + "    protected void setDataSource(DataSource dataSource)\n"
         + "    {\n"
-        + "        inmutableSetDataSource(dataSource);\n"
+        + "        immutableSetDataSource(dataSource);\n"
         + "    }\n\n"
         + "    /**\n"
         + "     * Retrieves the data source.\n"
@@ -318,10 +303,10 @@ public interface JdbcDAOTemplateDefaults
         + "     * the connection an exception occurs.\n"
         + "     */\n"
         + "    protected void commit(\n"
-        + "            final Connection       connection,\n"
+        + "            final Connection connection,\n"
         + "            final TransactionToken transactionToken,\n"
-        + "            final boolean          restoreAutoCommit,\n"
-        + "            final boolean          closeConnection)\n"
+        + "            final boolean restoreAutoCommit,\n"
+        + "            final boolean closeConnection)\n"
         + "        throws  SQLException\n"
         + "    {\n"
         + "        SQLException t_AutoCommitException = null;\n\n"

@@ -1109,6 +1109,27 @@ public abstract class FunctionsTemplate
     }
 
     /**
+     * Logs a debug message.
+     * @param message the message.
+     */
+    protected void logDebug(final String message)
+    {
+        Project t_Project = getProject();
+
+        if  (t_Project != null)
+        {
+            t_Project.log(
+                getTask(),
+                message,
+                Project.MSG_DEBUG);
+        }
+        else 
+        {
+            LogFactory.getLog(getClass()).debug(message);
+        }
+    }
+
+    /**
      * Builds the header for logging purposes.
      * @return such header.
      */
@@ -1242,7 +1263,7 @@ public abstract class FunctionsTemplate
                             {
                                 if  (generateWarning(t_strMapping)) 
                                 {
-                                    logWarn(
+                                    logDebug(
                                         "No mapping for " + t_strFunction);
                                 }
 

@@ -116,7 +116,7 @@ public abstract class QueryUtils
      * @param separator the separator.
      * @return such concatenation.
      */
-    public String concatenate(Collection items, String separator)
+    public String concatenate(final Collection items, final String separator)
     {
         return concatenate(items, separator, false);
     }
@@ -130,7 +130,7 @@ public abstract class QueryUtils
      * @return such concatenation.
      */
     public String concatenate(
-        Collection items, String separator, boolean simplify)
+        final Collection items, final String separator, final boolean simplify)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
@@ -160,7 +160,7 @@ public abstract class QueryUtils
      * without explicit table information.
      * @return such text.
      */
-    protected String concatenate(Object item, boolean simplify)
+    protected String concatenate(final Object item, final boolean simplify)
     {
         String result = "null";
 

@@ -34,17 +34,6 @@
  *
  * Description: Contains the required subtemplates to create DAO interfaces.
  *
-<<<<<<< AbstractBaseDAOTemplate.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.8
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -66,10 +55,6 @@ import org.apache.tools.ant.Task;
  * Contains the required subtemplates to create DAO interfaces.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< AbstractBaseDAOTemplate.java
-=======
- * @version $Revision$
->>>>>>> 1.8
  */
 public abstract class AbstractBaseDAOTemplate
     extends  AbstractTemplate
@@ -215,6 +200,21 @@ public abstract class AbstractBaseDAOTemplate
     private String m__strInsertParametersDeclaration;
 
     /**
+     * The create method.
+     */
+    private String m__strCreateMethod;
+
+    /**
+     * The create parameters Javadoc.
+     */
+    private String m__strCreateParametersJavadoc;
+
+    /**
+     * The create parameters declaration.
+     */
+    private String m__strCreateParametersDeclaration;
+
+    /**
      * The update method.
      */
     private String m__strUpdateMethod;
@@ -354,6 +354,9 @@ public abstract class AbstractBaseDAOTemplate
      * @param insertMethod the insert method.
      * @param insertParametersJavadoc the javadoc of the insert method's parameters.
      * @param insertParametersDeclaration the declaration of the insert method's parameters.
+     * @param createMethod the create method.
+     * @param createParametersJavadoc the javadoc of the create method's parameters.
+     * @param createParametersDeclaration the declaration of the create method's parameters.
      * @param updateMethod the update method.
      * @param updateParametersJavadoc the javadoc of the update method's parameters.
      * @param updateParametersDeclaration the declaration of the update method's parameters.
@@ -414,6 +417,9 @@ public abstract class AbstractBaseDAOTemplate
         final String insertMethod,
         final String insertParametersJavadoc,
         final String insertParametersDeclaration,
+        final String createMethod,
+        final String createParametersJavadoc,
+        final String createParametersDeclaration,
         final String updateMethod,
         final String updateParametersJavadoc,
         final String updateParametersDeclaration,
@@ -463,6 +469,9 @@ public abstract class AbstractBaseDAOTemplate
         immutableSetInsertMethod(insertMethod);
         immutableSetInsertParametersJavadoc(insertParametersJavadoc);
         immutableSetInsertParametersDeclaration(insertParametersDeclaration);
+        immutableSetCreateMethod(createMethod);
+        immutableSetCreateParametersJavadoc(createParametersJavadoc);
+        immutableSetCreateParametersDeclaration(createParametersDeclaration);
         immutableSetUpdateMethod(updateMethod);
         immutableSetUpdateParametersJavadoc(updateParametersJavadoc);
         immutableSetUpdateParametersDeclaration(updateParametersDeclaration);
@@ -1193,6 +1202,87 @@ public abstract class AbstractBaseDAOTemplate
     public String getInsertParametersDeclaration()
     {
         return m__strInsertParametersDeclaration;
+    }
+
+    /**
+     * Specifies the create method.
+     * @param createMethod such method.
+     */
+    private void immutableSetCreateMethod(final String createMethod)
+    {
+        m__strCreateMethod = createMethod;
+    }
+
+    /**
+     * Specifies the create method.
+     * @param createMethod such method.
+     */
+    protected void setCreateMethod(final String createMethod)
+    {
+        immutableSetCreateMethod(createMethod);
+    }
+
+    /**
+     * Retrieves the create method.
+     * @return such method.
+     */
+    public String getCreateMethod()
+    {
+        return m__strCreateMethod;
+    }
+
+    /**
+     * Specifies the create parameters Javadoc.
+     * @param javadoc such javadoc.
+     */
+    private void immutableSetCreateParametersJavadoc(final String javadoc)
+    {
+        m__strCreateParametersJavadoc = javadoc;
+    }
+
+    /**
+     * Specifies the create parameters Javadoc.
+     * @param javadoc such javadoc.
+     */
+    protected void setCreateParametersJavadoc(final String javadoc)
+    {
+        immutableSetCreateParametersJavadoc(javadoc);
+    }
+
+    /**
+     * Retrieves the create parameters javadoc.
+     * @return such information.
+     */
+    public String getCreateParametersJavadoc()
+    {
+        return m__strCreateParametersJavadoc;
+    }
+
+    /**
+     * Specifies the create parameters Declaration.
+     * @param declaration such declaration.
+     */
+    private void immutableSetCreateParametersDeclaration(final String declaration)
+    {
+        m__strCreateParametersDeclaration = declaration;
+    }
+
+    /**
+     * Specifies the create parameters Declaration.
+     * @param declaration such declaration.
+     */
+    protected void setCreateParametersDeclaration(final String declaration)
+    {
+        immutableSetCreateParametersDeclaration(declaration);
+    }
+
+    /**
+     * Retrieves the create parameters declaration.
+     * @return such information.
+     */
+    public String getCreateParametersDeclaration()
+    {
+        return m__strCreateParametersDeclaration;
     }
 
     /**

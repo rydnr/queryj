@@ -723,7 +723,7 @@ public abstract class FunctionsTestTemplate
                             {
                                 if  (generateWarning(t_strMapping)) 
                                 {
-                                    logWarn(
+                                    logDebug(
                                         "No mapping for " + t_strFunction);
                                 }
 

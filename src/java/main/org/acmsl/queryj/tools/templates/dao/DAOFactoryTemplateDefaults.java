@@ -34,10 +34,6 @@
  *
  * Description: Defines the default subtemplates used to generate DAO
  *              factories according to database metadata.
-<<<<<<< DAOFactoryTemplateDefaults.java
- *
-=======
->>>>>>> 1.6
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -113,6 +109,11 @@ public interface DAOFactoryTemplateDefaults
      */
     public static final String DEFAULT_EXTENSION_IMPORTS =
           "/*\n"
+        + " * Importing some Spring classes.\n"
+        + " */\n"
+        + "import org.springframework.jdbc.CannotGetJdbcConnectionException;\n"
+        + "import org.springframework.jdbc.datasource.DataSourceUtils;\n\n"
+        + "/*\n"
         + " * Importing some extension classes.\n"
         + " */\n"
         + "import javax.sql.DataSource;\n"
@@ -237,13 +238,13 @@ public interface DAOFactoryTemplateDefaults
        + "        DataSource result = null;\n"
        + "        try\n"
        + "        {\n"
-       + "            InitialContext t_InitialContext = new InitialContext();\n"
-       + "            result = (DataSource) t_InitialContext.lookup(JNDI_LOCATION);\n"
+       + "            result =\n"
+       + "                DataSourceUtils.getDataSourceFromJndi(JNDI_LOCATION);\n"
        + "        }\n"
-       + "        catch  (final NamingException namingException)\n"
+       + "        catch  (final CannotGetJdbcConnectionException cannotGetJdbcConnectionException)\n"
        + "        {\n"
        + "            LogFactory.getLog(getClass()).error(\n"
-       + "                \"cannot.retrieve.data.source\", namingException);\n"
+       + "                \"cannot.retrieve.data.source\", cannotGetJdbcConnectionException);\n"
        + "        }\n\n"
        + "        return result;\n"
        + "   }\n";

@@ -34,17 +34,6 @@
  *
  * Description: Generates QueryJ classes using Ant.
  *
-<<<<<<< QueryJTask.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.15
  */
 package org.acmsl.queryj.tools;
 
@@ -100,10 +89,6 @@ import org.apache.tools.ant.types.Reference;
  * Generates QueryJ classes using Ant.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
-<<<<<<< QueryJTask.java
-=======
- * @version $Revision$ at $Date$
->>>>>>> 1.15
  */
 public class QueryJTask
     extends     ChainTask

@@ -148,6 +148,9 @@ public class BaseDAOTemplate
             DEFAULT_INSERT_METHOD,
             DEFAULT_INSERT_PARAMETERS_JAVADOC,
             DEFAULT_INSERT_PARAMETERS_DECLARATION,
+            DEFAULT_CREATE_METHOD,
+            DEFAULT_CREATE_PARAMETERS_JAVADOC,
+            DEFAULT_CREATE_PARAMETERS_DECLARATION,
             DEFAULT_UPDATE_METHOD,
             DEFAULT_UPDATE_PARAMETERS_JAVADOC,
             DEFAULT_UPDATE_PARAMETERS_DECLARATION,
@@ -206,6 +209,9 @@ public class BaseDAOTemplate
                 getInsertMethod(),
                 getInsertParametersJavadoc(),
                 getInsertParametersDeclaration(),
+                getCreateMethod(),
+                getCreateParametersJavadoc(),
+                getCreateParametersDeclaration(),
                 getUpdateMethod(),
                 getUpdateParametersJavadoc(),
                 getUpdateParametersDeclaration(),
@@ -262,6 +268,9 @@ public class BaseDAOTemplate
      * @param insertMethod the insert method.
      * @param insertParametersJavadoc the javadoc of the insert method's parameters.
      * @param insertParametersDeclaration the declaration of the insert method's parameters.
+     * @param createMethod the create method.
+     * @param createParametersJavadoc the javadoc of the create method's parameters.
+     * @param createParametersDeclaration the declaration of the create method's parameters.
      * @param updateMethod the update method.
      * @param updateParametersJavadoc the javadoc of the update method's parameters.
      * @param updateParametersDeclaration the declaration of the update method's parameters.
@@ -330,6 +339,9 @@ public class BaseDAOTemplate
         final String insertMethod,
         final String insertParametersJavadoc,
         final String insertParametersDeclaration,
+        final String createMethod,
+        final String createParametersJavadoc,
+        final String createParametersDeclaration,
         final String updateMethod,
         final String updateParametersJavadoc,
         final String updateParametersDeclaration,
@@ -613,6 +625,15 @@ public class BaseDAOTemplate
         MessageFormat t_InsertParametersDeclarationFormatter =
             new MessageFormat(insertParametersDeclaration);
 
+        MessageFormat t_CreateMethodFormatter =
+            new MessageFormat(createMethod);
+
+        MessageFormat t_CreateParametersJavadocFormatter =
+            new MessageFormat(createParametersJavadoc);
+
+        MessageFormat t_CreateParametersDeclarationFormatter =
+            new MessageFormat(createParametersDeclaration);
+
         MessageFormat t_UpdateMethodFormatter =
             new MessageFormat(updateMethod);
 
@@ -643,6 +664,8 @@ public class BaseDAOTemplate
         
         StringBuffer t_sbInsertPkJavadoc = new StringBuffer();
         StringBuffer t_sbInsertPkDeclaration = new StringBuffer();
+        StringBuffer t_sbCreatePkJavadoc = new StringBuffer();
+        StringBuffer t_sbCreatePkDeclaration = new StringBuffer();
 
         if  (t_astrPrimaryKeys != null)
         {
@@ -688,11 +711,14 @@ public class BaseDAOTemplate
                 {
                     t_sbInsertPkJavadoc.append(t_strPkJavadoc);
                     t_sbInsertPkDeclaration.append(t_strPkDeclaration);
+                    t_sbCreatePkJavadoc.append(t_strPkJavadoc);
+                    t_sbCreatePkDeclaration.append(t_strPkDeclaration);
                 }
 
                 if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
                 {
                     t_sbInsertPkDeclaration.append(",");
+                    t_sbCreatePkDeclaration.append(",");
                 }
             }
 
@@ -732,6 +758,13 @@ public class BaseDAOTemplate
                 new StringBuffer();
             StringBuffer t_sbInsertParametersSpecification =
                 new StringBuffer();
+            StringBuffer t_sbCreateParametersJavadoc       =
+                new StringBuffer();
+            StringBuffer t_sbCreateParametersDeclaration   =
+                new StringBuffer();
+            StringBuffer t_sbCreateParametersSpecification =
+                new StringBuffer();
+
             StringBuffer t_sbUpdateParametersJavadoc       =
                 new StringBuffer();
             StringBuffer t_sbUpdateParametersDeclaration   =
@@ -780,6 +813,15 @@ public class BaseDAOTemplate
                                     t_astrColumnNames[t_iColumnIndex]
                                 }));
 
+                        t_sbCreateParametersJavadoc.append(
+                            t_CreateParametersJavadocFormatter.format(
+                                new Object[]
+                                {
+                                    t_astrColumnNames[t_iColumnIndex]
+                                        .toLowerCase(),
+                                    t_astrColumnNames[t_iColumnIndex]
+                                }));
+
                         t_sbUpdateParametersJavadoc.append(
                             t_UpdateParametersJavadocFormatter.format(
                                 new Object[]
@@ -790,6 +832,15 @@ public class BaseDAOTemplate
 
                         t_sbInsertParametersDeclaration.append(
                             t_InsertParametersDeclarationFormatter.format(
+                                new Object[]
+                                {
+                                    t_strType,
+                                    t_astrColumnNames[t_iColumnIndex]
+                                        .toLowerCase()
+                                }));
+
+                        t_sbCreateParametersDeclaration.append(
+                            t_CreateParametersDeclarationFormatter.format(
                                 new Object[]
                                 {
                                     t_strType,
@@ -809,6 +860,7 @@ public class BaseDAOTemplate
                         if  (t_iColumnIndex < t_astrColumnNames.length - 1)
                         {
                             t_sbInsertParametersDeclaration.append(",");
+                            t_sbCreateParametersDeclaration.append(",");
                         }
                     }
                 }
@@ -818,6 +870,7 @@ public class BaseDAOTemplate
                  && (t_sbInsertPkDeclaration.length() > 0))
             {
                 t_sbInsertPkDeclaration.append(",");
+                t_sbCreatePkDeclaration.append(",");
             }
 
             t_sbResult.append(
@@ -836,6 +889,21 @@ public class BaseDAOTemplate
                     }));
 
             t_sbResult.append(
+                t_CreateMethodFormatter.format(
+                    new Object[]
+                    {
+                        stringUtils.capitalize(
+                            englishGrammarUtils.getSingular(
+                                tableTemplate.getTableName()
+                                    .toLowerCase()),
+                            '_'),
+                        t_sbCreatePkJavadoc.toString(),
+                        t_sbCreateParametersJavadoc,
+                        t_sbCreatePkDeclaration,
+                        t_sbCreateParametersDeclaration
+                    }));
+
+            t_sbResult.append(
                 t_UpdateMethodFormatter.format(
                     new Object[]
                     {
@@ -849,7 +917,6 @@ public class BaseDAOTemplate
                         t_sbPkDeclaration,
                         t_sbUpdateParametersDeclaration
                     }));
-
         }
 
         t_sbResult.append(t_sbDeleteMethod);

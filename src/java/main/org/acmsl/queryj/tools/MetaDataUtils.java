@@ -509,6 +509,17 @@ public class MetaDataUtils
     /**
      * Retrieves the getter method name.
      * @param dataType the data type.
+     * @param paramIndex the parameter index.
+     * @return the associated getter method name.
+     */
+    public String getGetterMethod(final int dataType)
+    {
+        return getGetterMethod(dataType, null);
+    }
+
+    /**
+     * Retrieves the getter method name.
+     * @param dataType the data type.
      * @param param the parameter.
      * @return the associated getter method name.
      */
@@ -524,11 +535,11 @@ public class MetaDataUtils
             case Types.SMALLINT:
             case Types.INTEGER:
 
-                result = "Int(" + param + ")";
+                result = "Int" + ((param != null) ? "(" + param  + ")" : "");
                 break;
 
             default:
-                result += "(" + param + ")";
+                result +=  "" + ((param != null) ? "(" + param  + ")" : "");
                 break;
         }
 
