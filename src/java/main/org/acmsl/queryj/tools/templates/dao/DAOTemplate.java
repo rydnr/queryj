@@ -140,6 +140,7 @@ public class DAOTemplate
             basePackageName,
             repositoryName,
             DEFAULT_PROJECT_IMPORTS,
+            DEFAULT_CUSTOM_RESULT_SET_EXTRACTOR_IMPORT,
             DEFAULT_FOREIGN_DAO_IMPORTS,
             DEFAULT_ACMSL_IMPORTS,
             DEFAULT_ADDITIONAL_IMPORTS,
@@ -365,15 +366,22 @@ public class DAOTemplate
             t_PackageDeclarationFormatter.format(
                 new Object[]{getPackageName()}));
 
+        String t_strJdbcOperationsPackage =
+            packageUtils.retrieveJdbcOperationsPackage(
+                getBasePackageName(),
+                getEngineName(),
+                t_strValueObjectName);
+
         t_sbResult.append(
             t_ProjectImportFormatter.format(
                 new Object[]
                 {
-                    packageUtils.retrieveJdbcOperationsPackage(
-                        getBasePackageName(),
-                        getEngineName(),
-                        t_strValueObjectName),
+                    t_strJdbcOperationsPackage,
                     t_strCapitalizedValueObjectName,
+                    buildCustomResultSetExtractorImports(
+                        t_strJdbcOperationsPackage,
+                        getCustomResultSetExtractorImport(),
+                        stringUtils),
                     packageUtils.retrieveValueObjectPackage(
                         getBasePackageName()),
                     packageUtils.retrieveBaseDAOPackage(
@@ -642,6 +650,86 @@ public class DAOTemplate
         t_sbResult.append(buildCustomSql());
 
         t_sbResult.append(getClassEnd());
+
+        return t_sbResult.toString();
+    }
+
+    /**
+     * Builds the custom result set extractor imports.
+     * @param jdbcOperationsPackage such package.
+     * @param customResultSetExtractorImport the import template.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return such generated code.
+     * @precondition jdbcOperationsPackage != null
+     * @precondition customResultSetExtractorImport != null
+     * @precondition stringUtils != null
+     */
+    protected String buildCustomResultSetExtractorImports(
+        final String jdbcOperationsPackage,
+        final String customResultSetExtractorImport,
+        final StringUtils stringUtils)
+    {
+        return
+            buildCustomResultSetExtractorImports(
+                jdbcOperationsPackage,
+                customResultSetExtractorImport,
+                stringUtils,
+                getCustomSqlProvider());
+    }
+
+    /**
+     * Builds the custom result set extractor imports.
+     * @param jdbcOperationsPackage such package.
+     * @param customResultSetExtractorImport the import template.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @return such generated code.
+     * @precondition jdbcOperationsPackage != null
+     * @precondition customResultSetExtractorImport != null
+     * @precondition stringUtils != null
+     * @precondition customSqlProvider != null
+     */
+    protected String buildCustomResultSetExtractorImports(
+        final String jdbcOperationsPackage,
+        final String customResultSetExtractorImport,
+        final StringUtils stringUtils,
+        final CustomSqlProvider customSqlProvider)
+    {
+        StringBuffer t_sbResult = new StringBuffer();
+
+        Collection t_cContents = customSqlProvider.getCollection();
+
+        if  (t_cContents != null)
+        {
+            Iterator t_itContentIterator = t_cContents.iterator();
+
+            MessageFormat t_CustomResultSetExtractorImportFormatter =
+                new MessageFormat(customResultSetExtractorImport);
+
+            while  (t_itContentIterator.hasNext())
+            {
+                Object t_Content = t_itContentIterator.next();
+
+                if  (t_Content instanceof ResultElement)
+                {
+                    ResultElement t_ResultElement =
+                        (ResultElement) t_Content;
+
+                    t_sbResult.append(
+                        t_CustomResultSetExtractorImportFormatter.format(
+                            new Object[]
+                            {
+                                jdbcOperationsPackage,
+                                stringUtils.capitalize(
+                                    stringUtils.capitalize(
+                                        stringUtils.capitalize(
+                                            t_ResultElement.getId(), '_'),
+                                        '-'),
+                                    '.')
+                            }));
+                }
+            }
+        }
 
         return t_sbResult.toString();
     }

@@ -140,18 +140,27 @@ public interface DAOTemplateDefaults
          // Specific JDBC operations package - table name
         + "import {0}.{1}ResultSetExtractor;\n"
          // Specific JDBC operations package - table name
-        + "import {2}.{1};\n"
+        + "{2}"
+         // Custom resultset extractors' imports
+        + "import {3}.{1};\n"
          // ValueObject package - table name
-        + "import {3}.{1}DAO;\n"
+        + "import {4}.{1}DAO;\n"
          // DAO interface package - table name
-        + "import {4}.QueryPreparedStatementCreator;\n"
+        + "import {5}.QueryPreparedStatementCreator;\n"
          // RDB base package - table name
-        + "import {5}.{6};\n"
+        + "import {6}.{7};\n"
          // Table repository package - Table repository name
-        + "import {7}.DataAccessManager;\n"
+        + "import {8}.DataAccessManager;\n"
          // data access manager package
-        + "{8}";
+        + "{9}";
          // foreign DAO imports
+
+    /**
+     * The custom result set extractors.
+     */
+    public static final String DEFAULT_CUSTOM_RESULT_SET_EXTRACTOR_IMPORT =
+        "import {0}.{1}Extractor;\n";
+         // Specific JDBC operations package - custom result id
 
     /**
      * Foreign DAO imports.

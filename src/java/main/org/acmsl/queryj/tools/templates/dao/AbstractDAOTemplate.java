@@ -131,6 +131,11 @@ public abstract class AbstractDAOTemplate
     private String m__strProjectImports;
 
     /**
+     * The custom result set extractor import.
+     */
+    private String m__strCustomResultSetExtractorImport;
+
+    /**
      * The foreign DAO imports.
      */
     private String m__strForeignDAOImports;
@@ -334,6 +339,8 @@ public abstract class AbstractDAOTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param projectImports the project imports.
+     * @param customResultSetExtractorImport the custom result set extractor
+     * import subtemplate.
      * @param foreignDAOImports the foreign DAO imports.
      * @param acmslImports the ACM-SL imports.
      * @param additionalImports the additional imports.
@@ -400,6 +407,7 @@ public abstract class AbstractDAOTemplate
         final String basePackageName,
         final String repositoryName,
         final String projectImports,
+        final String customResultSetExtractorImport,
         final String foreignDAOImports,
         final String additionalImports,
         final String acmslImports,
@@ -474,6 +482,9 @@ public abstract class AbstractDAOTemplate
 
         immutableSetProjectImports(
             projectImports);
+
+        immutableSetCustomResultSetExtractorImport(
+            customResultSetExtractorImport);
 
         immutableSetForeignDAOImports(
             foreignDAOImports);
@@ -912,6 +923,38 @@ public abstract class AbstractDAOTemplate
     public String getProjectImports() 
     {
         return m__strProjectImports;
+    }
+
+    /**
+     * Specifies the custom result set extractor import subtemplate.
+     * @param customResultSetExtractorImport the new custom result set
+     * extractor import.
+     */
+    private void immutableSetCustomResultSetExtractorImport(
+        final String customResultSetExtractorImport)
+    {
+        m__strCustomResultSetExtractorImport = customResultSetExtractorImport;
+    }
+
+    /**
+     * Specifies the result set extractor import subtemplate.
+     * @param customResultSetExtractorImport the new custom result set
+     * extractor import.
+     */
+    protected void setCustomResultSetExtractorImport(
+        final String customResultSetExtractorImport)
+    {
+        immutableSetCustomResultSetExtractorImport(
+            customResultSetExtractorImport);
+    }
+
+    /**
+     * Retrieves the custom result set extractor import subtemplate.
+     * @return such information.
+     */
+    public String getCustomResultSetExtractorImport() 
+    {
+        return m__strCustomResultSetExtractorImport;
     }
 
     /**
