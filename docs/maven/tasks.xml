@@ -35,6 +35,10 @@
         <p>
           <ul>
             <li>
+              <b>0.6b4</b><br/>
+              Support cascade deletions (<a href="${issue.url}586">586</a>).
+            </li>
+            <li>
               <b>0.6b3</b><br/>
               Support custom queries in Ant scripts.
               (<a href="${issue.url}566">566</a>,

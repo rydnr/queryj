@@ -51,6 +51,8 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
@@ -134,6 +136,7 @@ public class BaseDAOTemplateBuildHandler
             handle(
                 parameters,
                 retrieveDatabaseMetaDataManager(parameters),
+                retrieveCustomSqlProvider(parameters),
                 retrievePackage(parameters),
                 retrieveValueObjectPackageName(parameters),
                 retrieveTableTemplates(parameters),
@@ -147,6 +150,7 @@ public class BaseDAOTemplateBuildHandler
      * @param parameters the parameters.
      * @param databaseMetaDataManager the manager instance
      * of the database metadata.
+     * @param customSqlProvider the custom sql provider.
      * @param packageName the package name.
      * @param valueObjectPackageName the value object package name.
      * @param tableTemplates the table templates.
@@ -157,6 +161,7 @@ public class BaseDAOTemplateBuildHandler
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition databaseMetaDataManager != null
+     * @precondition customSqlProvider != null
      * @precondition packageName != null
      * @precondition valueObjectPackageName != null
      * @precondition tableTemplates != null
@@ -165,6 +170,7 @@ public class BaseDAOTemplateBuildHandler
     protected boolean handle(
         final Map parameters,
         final DatabaseMetaDataManager databaseMetaDataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String valueObjectPackageName,
         final TableTemplate[] tableTemplates,
@@ -188,6 +194,7 @@ public class BaseDAOTemplateBuildHandler
                     templateFactory.createBaseDAOTemplate(
                         tableTemplates[t_iBaseDAOIndex],
                         databaseMetaDataManager,
+                        customSqlProvider,
                         packageName,
                         valueObjectPackageName,
                         project,
@@ -292,5 +299,23 @@ public class BaseDAOTemplateBuildHandler
         return
             (TableTemplate[])
                 parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
+    }
+
+
+    /**
+     * Retrieves the custom-sql provider from the attribute map.
+     * @param parameters the parameter map.
+     * @return the provider.
+     * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    public static CustomSqlProvider retrieveCustomSqlProvider(
+        final Map parameters)
+      throws  BuildException
+    {
+        return
+            (CustomSqlProvider)
+                parameters.get(
+                    CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
     }
 }

@@ -75,6 +75,15 @@
             $Date$
           </td>
           <td>
+            Added support for <a href="${issue.url}586">cascade deletetions</a>.<br/>
+            Released <b>0.6b4</b>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/02/09 11:09:58
+          </td>
+          <td>
             Refixed the custom queries support, including their
             validation at generation-time.br/>
             Released <b>0.6b3</b>.

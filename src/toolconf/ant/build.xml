@@ -340,7 +340,7 @@
       <!--
        Requests CVS to perform the keyword clean substitution.
       -->
-      <cvs command="update -kv src/toolconf/ant/version.properties"/>
+      <!--cvs command="update -kv src/toolconf/ant/version.properties"/-->
 
       <!--
        Reads some specific properties from an external property file.
@@ -351,12 +351,12 @@
        Removes the version.properties file to get rid of the sticky
        keyword substitution setting.
       -->
-      <delete file="src/toolconf/ant/version.properties"/>
+      <!--delete file="src/toolconf/ant/version.properties"/-->
 
       <!--
        Restores version.properties state.
       -->
-      <cvs command="update -A src/toolconf/ant/version.properties"/>
+      <!--cvs command="update -A src/toolconf/ant/version.properties"/-->
 
       <!--
        Displays some project information.

@@ -33,7 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create base DAO templates.
+ * Description: Represents entities able to create FkStatementSetter
+ *              templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -50,9 +51,8 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
+import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -62,31 +62,33 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 /**
- * Is able to create base DAO templates.
+ * Represents entities able to create FkStatementSetter templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface BaseDAOTemplateFactory
+public interface FkStatementSetterTemplateFactory
 {
     /**
-     * Generates a BaseDAO template.
+     * Generates a FkStatementSetter template.
      * @param tableTemplate the table template.
+     * @param foreignKey the foreign key.
      * @param metaDataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param valueObjectPackageName the value object package name.
+     * @param basePackageName the base package name.
+     * @param repositoryName the name of the repository.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
-    public BaseDAOTemplate createBaseDAOTemplate(
+    public FkStatementSetterTemplate createFkStatementSetterTemplate(
         final TableTemplate tableTemplate,
+        final String foreignKey,
         final DatabaseMetaDataManager metaDataManager,
-        final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String valueObjectPackageName,
+        final String basePackageName,
+        final String repositoryName,
         final Project project,
         final Task task)
       throws  QueryJException;

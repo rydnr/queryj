@@ -1272,4 +1272,47 @@ public class PackageUtils
             retrieveJdbcOperationsFolder(
                 parentFolder, packageName, engineName, tableName);
     }
+
+    /**
+     * Retrieves the package name for the FkStatementSetter classes.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param tableName the table name.
+     * @return the package for the associated classes.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
+     */
+    public String retrieveFkStatementSetterPackage(
+        final String packageName,
+        final String engineName,
+        final String tableName)
+    {
+        return
+            retrieveJdbcOperationsPackage(
+                packageName, engineName, tableName);
+    }
+
+    /**
+     * Retrieves the folder for the FkStatementSetter classes.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param tableName the table name.
+     * @return the folder for the associated pointers.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
+     */
+    public File retrieveFkStatementSetterFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final String tableName)
+    {
+        return
+            retrieveJdbcOperationsFolder(
+                parentFolder, packageName, engineName, tableName);
+    }
 }

@@ -96,6 +96,12 @@ public class OracleUserTabColumnsTable
         new StringField("DATA_TYPE", this);
 
     /**
+     * The user_tab_columns table nullable field.
+     */
+    public StringField NULLABLE =
+        new StringField("NULLABLE", this);
+
+    /**
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */

@@ -49,6 +49,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -77,6 +78,11 @@ public abstract class AbstractBaseDAOTemplate
      * The database metadata manager.
      */
     private DatabaseMetaDataManager m__MetaDataManager;
+
+    /**
+     * The custom-sql provider.
+     */
+    private CustomSqlProvider m__CustomSqlProvider;
 
     /**
      * The header.
@@ -204,6 +210,81 @@ public abstract class AbstractBaseDAOTemplate
     private String m__strDeletePkDeclaration;
 
     /**
+     * The delete method by fk.
+     */
+    private String m__strDeleteByFkMethod;
+
+    /**
+     * The delete FK javadoc.
+     */
+    private String m__strDeleteFkJavadoc;
+
+    /**
+     * The delete FK declaration.
+     */
+    private String m__strDeleteFkDeclaration;
+
+    /**
+     * The custom select.
+     */
+    private String m__strCustomSelect;
+
+    /**
+     * The custom select parameter javadoc.
+     */
+    private String m__strCustomSelectParameterJavadoc;
+
+    /**
+     * The custom select parameter declaration.
+     */
+    private String m__strCustomSelectParameterDeclaration;
+
+    /**
+     * The custom update or insert.
+     */
+    private String m__strCustomUpdateOrInsert;
+
+    /**
+     * The custom update or insert parameter javadoc.
+     */
+    private String m__strCustomUpdateOrInsertParameterJavadoc;
+
+    /**
+     * The custom update or insert parameter declaration.
+     */
+    private String m__strCustomUpdateOrInsertParameterDeclaration;
+
+    /**
+     * The custom update or insert parameter type specification.
+     */
+    private String m__strCustomUpdateOrInsertParameterTypeSpecification;
+
+    /**
+     * The custom update or insert parameter values.
+     */
+    private String m__strCustomUpdateOrInsertParameterValues;
+
+    /**
+     * The custom select-for-update.
+     */
+    private String m__strCustomSelectForUpdate;
+
+    /**
+     * The custom select-for-update parameter javadoc.
+     */
+    private String m__strCustomSelectForUpdateParameterJavadoc;
+
+    /**
+     * The custom select-for-update return javadoc.
+     */
+    private String m__strCustomSelectForUpdateReturnJavadoc;
+
+    /**
+     * The custom select-for-update parameter declaration.
+     */
+    private String m__strCustomSelectForUpdateParameterDeclaration;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
@@ -212,6 +293,7 @@ public abstract class AbstractBaseDAOTemplate
      * Builds an <code>AbstractBaseDAOTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metaDataManager the database metadata manager.
+     * @param customSqlProvider the custom sql provider.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -235,6 +317,30 @@ public abstract class AbstractBaseDAOTemplate
      * @param deleteMethod the delete method.
      * @param deletePkJavadoc the delete PK javadoc.
      * @param deletePkDeclaration the delete PK declaration.
+     * @param deleteByFkMethod the delete method.
+     * @param deleteFkJavadoc the delete FK javadoc.
+     * @param deleteFkDeclaration the delete FK declaration.
+     * @param customSelect the custom select template.
+     * @param customSelectParameterJavadoc the Javadoc for the parameters of
+     * the custom selects.
+     * @param customSelectParameterDeclaration the parameter declaration of the
+     * custom selects.
+     * @param customUpdateOrInsert the custom update template.
+     * @param customUpdateOrInsertParameterJavadoc the Javadoc for the
+     * parameters of the custom updates or inserts.
+     * @param customUpdateOrInsertParameterDeclaration the parameter
+     * declaration of the custom updates or inserts.
+     * @param customUpdateOrInsertParameterTypeSpecification the parameter type
+     * specification subtemplate of the custom updates or inserts.
+     * @param customUpdateOrInsertParameterValues the parameter values of
+     * the custom updates or inserts.
+     * @param customSelectForUpdate the custom-select-for-update template.
+     * @param customSelectForUpdateParameterJavadoc the Javadoc for the
+     * parameters of the custom-select-for-update operations.
+     * @param customSelectForUpdateReturnJavadoc the Javadoc for the
+     * return of the custom-select-for-update operations.
+     * @param customSelectForUpdateParameterDeclaration the parameter
+     * declaration of the custom-select-for-update operations.
      * @param classEnd the class end.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
@@ -242,6 +348,7 @@ public abstract class AbstractBaseDAOTemplate
     protected AbstractBaseDAOTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
+        final CustomSqlProvider customSqlProvider,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -264,6 +371,19 @@ public abstract class AbstractBaseDAOTemplate
         final String deleteMethod,
         final String deletePkJavadoc,
         final String deletePkDeclaration,
+        final String deleteByFkMethod,
+        final String deleteFkJavadoc,
+        final String deleteFkDeclaration,
+        final String customSelect,
+        final String customSelectParameterJavadoc,
+        final String customSelectParameterDeclaration,
+        final String customUpdateOrInsert,
+        final String customUpdateOrInsertParameterJavadoc,
+        final String customUpdateOrInsertParameterDeclaration,
+        final String customSelectForUpdate,
+        final String customSelectForUpdateParameterJavadoc,
+        final String customSelectForUpdateReturnJavadoc,
+        final String customSelectForUpdateParameterDeclaration,
         final String classEnd,
         final Project project,
         final Task task)
@@ -271,6 +391,7 @@ public abstract class AbstractBaseDAOTemplate
         super(project, task);
         immutableSetTableTemplate(tableTemplate);
         immutableSetMetaDataManager(metaDataManager);
+        immutableSetCustomSqlProvider(customSqlProvider);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
@@ -293,6 +414,29 @@ public abstract class AbstractBaseDAOTemplate
         immutableSetDeleteMethod(deleteMethod);
         immutableSetDeletePkJavadoc(deletePkJavadoc);
         immutableSetDeletePkDeclaration(deletePkDeclaration);
+        immutableSetDeleteByFkMethod(deleteByFkMethod);
+        immutableSetDeleteFkJavadoc(deleteFkJavadoc);
+        immutableSetDeleteFkDeclaration(deleteFkDeclaration);
+        immutableSetCustomSelect(
+            customSelect);
+        immutableSetCustomSelectParameterJavadoc(
+            customSelectParameterJavadoc);
+        immutableSetCustomSelectParameterDeclaration(
+            customSelectParameterDeclaration);
+        immutableSetCustomUpdateOrInsert(
+            customUpdateOrInsert);
+        immutableSetCustomUpdateOrInsertParameterJavadoc(
+            customUpdateOrInsertParameterJavadoc);
+        immutableSetCustomUpdateOrInsertParameterDeclaration(
+            customUpdateOrInsertParameterDeclaration);
+        immutableSetCustomSelectForUpdate(
+            customSelectForUpdate);
+        immutableSetCustomSelectForUpdateParameterJavadoc(
+            customSelectForUpdateParameterJavadoc);
+        immutableSetCustomSelectForUpdateReturnJavadoc(
+            customSelectForUpdateReturnJavadoc);
+        immutableSetCustomSelectForUpdateParameterDeclaration(
+            customSelectForUpdateParameterDeclaration);
         immutableSetClassEnd(classEnd);
     }
 
@@ -351,6 +495,35 @@ public abstract class AbstractBaseDAOTemplate
     public DatabaseMetaDataManager getMetaDataManager()
     {
         return m__MetaDataManager;
+    }
+
+    /**
+     * Specifies the custom-sql provider.
+     * @param customSqlProvider the customsql provider.
+     */
+    private void immutableSetCustomSqlProvider(
+        final CustomSqlProvider customSqlProvider)
+    {
+        m__CustomSqlProvider = customSqlProvider;
+    }
+
+    /**
+     * Specifies the custom-sql provider.
+     * @param customSqlProvider the customsql provider.
+     */
+    protected void setCustomSqlProvider(
+        final CustomSqlProvider customSqlProvider)
+    {
+        immutableSetCustomSqlProvider(customSqlProvider);
+    }
+
+    /**
+     * Retrieves the custom-sql provider.
+     * @return such provider.
+     */
+    public CustomSqlProvider getCustomSqlProvider()
+    {
+        return m__CustomSqlProvider;
     }
 
     /**
@@ -965,6 +1138,449 @@ public abstract class AbstractBaseDAOTemplate
     public String getDeletePkDeclaration()
     {
         return m__strDeletePkDeclaration;
+    }
+
+    /**
+     * Specifies the delete by fk method.
+     * @param deleteMethod such method.
+     */
+    private void immutableSetDeleteByFkMethod(
+        final String deleteMethod)
+    {
+        m__strDeleteByFkMethod = deleteMethod;
+    }
+
+    /**
+     * Specifies the delete by fk method.
+     * @param deleteMethod such method.
+     */
+    protected void setDeleteByFkMethod(
+        final String deleteMethod)
+    {
+        immutableSetDeleteByFkMethod(
+            deleteMethod);
+    }
+
+    /**
+     * Retrieves the delete by fk method.
+     * @return such method.
+     */
+    public String getDeleteByFkMethod()
+    {
+        return m__strDeleteByFkMethod;
+    }
+
+    /**
+     * Specifies the delete fk Javadoc.
+     * @param deleteFkJavadoc such Javadoc.
+     */
+    private void immutableSetDeleteFkJavadoc(
+        final String deleteFkJavadoc)
+    {
+        m__strDeleteFkJavadoc = deleteFkJavadoc;
+    }
+
+    /**
+     * Specifies the delete fk Javadoc.
+     * @param deleteFkJavadoc such Javadoc.
+     */
+    protected void setDeleteFkJavadoc(
+        final String deleteFkJavadoc)
+    {
+        immutableSetDeleteFkJavadoc(
+            deleteFkJavadoc);
+    }
+
+    /**
+     * Retrieves the delete fk Javadoc.
+     * @return such Javadoc.
+     */
+    public String getDeleteFkJavadoc()
+    {
+        return m__strDeleteFkJavadoc;
+    }
+    
+    /**
+     * Specifies the delete fk declaration.
+     * @param deleteFkDeclaration such declaration.
+     */
+    private void immutableSetDeleteFkDeclaration(
+        final String deleteFkDeclaration)
+    {
+        m__strDeleteFkDeclaration =
+            deleteFkDeclaration;
+    }
+
+    /**
+     * Specifies the delete fk declaration.
+     * @param deleteFkDeclaration such declaration.
+     */
+    protected void setDeleteFkdeclaration(
+        final String deleteFkDeclaration)
+    {
+        immutableSetDeleteFkDeclaration(
+            deleteFkDeclaration);
+    }
+
+    /**
+     * Retrieves the delete fk declaration.
+     * @return such declaration.
+     */
+    public String getDeleteFkDeclaration()
+    {
+        return m__strDeleteFkDeclaration;
+    }
+
+    /**
+     * Specifies the custom select template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelect(
+        final String select)
+    {
+        m__strCustomSelect = select;
+    }
+
+    /**
+     * Specifies the custom select template.
+     * @param select such template.
+     */
+    protected void setCustomSelect(
+        final String select)
+    {
+        immutableSetCustomSelect(select);
+    }
+
+    /**
+     * Retrieves the custom select template.
+     * @return such template.
+     */
+    public String getCustomSelect()
+    {
+        return m__strCustomSelect;
+    }
+
+    /**
+     * Specifies the custom select parameter Javadoc template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectParameterJavadoc(
+        final String template)
+    {
+        m__strCustomSelectParameterJavadoc = template;
+    }
+
+    /**
+     * Specifies the custom select parameter Javadoc template.
+     * @param select such template.
+     */
+    protected void setCustomSelectParameterJavadoc(
+        final String select)
+    {
+        immutableSetCustomSelectParameterJavadoc(select);
+    }
+
+    /**
+     * Retrieves the custom select parameter Javadoc template.
+     * @return such template.
+     */
+    public String getCustomSelectParameterJavadoc()
+    {
+        return m__strCustomSelectParameterJavadoc;
+    }
+
+    /**
+     * Specifies the custom select parameter declaration template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectParameterDeclaration(
+        final String template)
+    {
+        m__strCustomSelectParameterDeclaration = template;
+    }
+
+    /**
+     * Specifies the custom select parameter declaration template.
+     * @param select such template.
+     */
+    protected void setCustomSelectParameterDeclaration(
+        final String select)
+    {
+        immutableSetCustomSelectParameterDeclaration(select);
+    }
+
+    /**
+     * Retrieves the custom select parameter declaration template.
+     * @return such template.
+     */
+    public String getCustomSelectParameterDeclaration()
+    {
+        return m__strCustomSelectParameterDeclaration;
+    }
+
+    /**
+     * Specifies the custom update or insert template.
+     * @param updateOrInsert such template.
+     */
+    private void immutableSetCustomUpdateOrInsert(
+        final String updateOrInsert)
+    {
+        m__strCustomUpdateOrInsert = updateOrInsert;
+    }
+
+    /**
+     * Specifies the custom update or insert template.
+     * @param updateOrInsert such template.
+     */
+    protected void setCustomUpdateOrInsert(
+        final String updateOrInsert)
+    {
+        immutableSetCustomUpdateOrInsert(updateOrInsert);
+    }
+
+    /**
+     * Retrieves the custom update or insert template.
+     * @return such template.
+     */
+    public String getCustomUpdateOrInsert()
+    {
+        return m__strCustomUpdateOrInsert;
+    }
+
+    /**
+     * Specifies the custom update or insert parameter Javadoc template.
+     * @param update such template.
+     */
+    private void immutableSetCustomUpdateOrInsertParameterJavadoc(
+        final String template)
+    {
+        m__strCustomUpdateOrInsertParameterJavadoc = template;
+    }
+
+    /**
+     * Specifies the custom update or insert parameter Javadoc template.
+     * @param update such template.
+     */
+    protected void setCustomUpdateOrInsertParameterJavadoc(
+        final String update)
+    {
+        immutableSetCustomUpdateOrInsertParameterJavadoc(update);
+    }
+
+    /**
+     * Retrieves the custom update or insert parameter Javadoc template.
+     * @return such template.
+     */
+    public String getCustomUpdateOrInsertParameterJavadoc()
+    {
+        return m__strCustomUpdateOrInsertParameterJavadoc;
+    }
+
+    /**
+     * Specifies the custom update or insert parameter declaration template.
+     * @param update such template.
+     */
+    private void immutableSetCustomUpdateOrInsertParameterDeclaration(
+        final String template)
+    {
+        m__strCustomUpdateOrInsertParameterDeclaration = template;
+    }
+
+    /**
+     * Specifies the custom update or insert parameter declaration template.
+     * @param update such template.
+     */
+    protected void setCustomUpdateOrInsertParameterDeclaration(
+        final String update)
+    {
+        immutableSetCustomUpdateOrInsertParameterDeclaration(update);
+    }
+
+    /**
+     * Retrieves the custom update or insert parameter declaration template.
+     * @return such template.
+     */
+    public String getCustomUpdateOrInsertParameterDeclaration()
+    {
+        return m__strCustomUpdateOrInsertParameterDeclaration;
+    }
+
+    /**
+     * Specifies the subtemplate to specify the types of the 
+     * custom update or insert parameters.
+     * @param template the template.
+     */
+    private void immutableSetCustomUpdateOrInsertParameterTypeSpecification(
+        final String template)
+    {
+        m__strCustomUpdateOrInsertParameterTypeSpecification = template;
+    }
+
+    /**
+     * Specifies the subtemplate to specify the types of the 
+     * custom update or insert parameters.
+     * @param template the template.
+     */
+    protected void setCustomUpdateOrInsertParameterTypeSpecification(
+        final String template)
+    {
+        immutableSetCustomUpdateOrInsertParameterTypeSpecification(template);
+    }
+
+    /**
+     * Retrieves the subtemplate to specify the types of the custom update or insert
+     * parameters.
+     * @return such subtemplate.
+     */
+    public String getCustomUpdateOrInsertParameterTypeSpecification()
+    {
+        return m__strCustomUpdateOrInsertParameterTypeSpecification;
+    }
+
+    /**
+     * Specifies the custom update or insert parameter values template.
+     * @param update such template.
+     */
+    private void immutableSetCustomUpdateOrInsertParameterValues(
+        final String template)
+    {
+        m__strCustomUpdateOrInsertParameterValues = template;
+    }
+
+    /**
+     * Specifies the custom update or insert parameter values template.
+     * @param update such template.
+     */
+    protected void setCustomUpdateOrInsertParameterValues(
+        final String update)
+    {
+        immutableSetCustomUpdateOrInsertParameterValues(update);
+    }
+
+    /**
+     * Retrieves the custom update or insert parameter values template.
+     * @return such template.
+     */
+    public String getCustomUpdateOrInsertParameterValues()
+    {
+        return m__strCustomUpdateOrInsertParameterValues;
+    }
+
+//
+    /**
+     * Specifies the custom select-for-update template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdate(
+        final String select)
+    {
+        m__strCustomSelectForUpdate = select;
+    }
+
+    /**
+     * Specifies the custom select-for-update template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdate(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdate(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdate()
+    {
+        return m__strCustomSelectForUpdate;
+    }
+
+    /**
+     * Specifies the custom select-for-update parameter Javadoc template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateParameterJavadoc(
+        final String template)
+    {
+        m__strCustomSelectForUpdateParameterJavadoc = template;
+    }
+
+    /**
+     * Specifies the custom select-for-update parameter Javadoc template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateParameterJavadoc(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateParameterJavadoc(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update parameter Javadoc template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateParameterJavadoc()
+    {
+        return m__strCustomSelectForUpdateParameterJavadoc;
+    }
+
+    /**
+     * Specifies the custom select-for-update return Javadoc template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateReturnJavadoc(
+        final String template)
+    {
+        m__strCustomSelectForUpdateReturnJavadoc = template;
+    }
+
+    /**
+     * Specifies the custom select-for-update return Javadoc template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateReturnJavadoc(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateReturnJavadoc(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update return Javadoc template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateReturnJavadoc()
+    {
+        return m__strCustomSelectForUpdateReturnJavadoc;
+    }
+
+    /**
+     * Specifies the custom select-for-update parameter declaration template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateParameterDeclaration(
+        final String template)
+    {
+        m__strCustomSelectForUpdateParameterDeclaration = template;
+    }
+
+    /**
+     * Specifies the custom select-for-update parameter declaration template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateParameterDeclaration(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateParameterDeclaration(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update parameter declaration template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateParameterDeclaration()
+    {
+        return m__strCustomSelectForUpdateParameterDeclaration;
     }
 
     /**

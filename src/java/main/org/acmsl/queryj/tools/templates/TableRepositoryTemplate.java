@@ -108,6 +108,38 @@ public class TableRepositoryTemplate
     }
 
     /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return
+            buildHeader(
+                getRepository(),
+                TableRepositoryTemplateUtils.getInstance());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param repository the table repository.
+     * @param tableRepositoryTemplateUtils the
+     * <code>TableRepositoryTemplateUtils</code> instance.
+     * @return such header.
+     * @precondition repository != null
+     * @precondition tableRepositoryTemplateUtils != null
+     */
+    protected String buildHeader(
+        final String repository,
+        final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
+    {
+        return
+              "Generating "
+            + tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
+                  repository)
+            + ".";
+    }
+
+    /**
      * Retrieves the source code of the generated table repository.
      * @return such source code.
      */

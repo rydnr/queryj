@@ -185,7 +185,6 @@ public interface BaseDAOTemplateDefaults
         + "{1}\n"
          // FIND_BY_PRIMARY_KEY_PK_JAVADOC
         + "     * @return the information extracted from the persistence layer.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public {2}ValueObject findByPrimaryKey("
          // java table name
@@ -217,7 +216,6 @@ public interface BaseDAOTemplateDefaults
          // (optional) pk javadoc
         + "{2}\n"
          // insert parameters javadoc
-        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public void insert("
         + "{3}"
@@ -251,7 +249,6 @@ public interface BaseDAOTemplateDefaults
          // (optional) pk javadoc
         + "{2}\n"
          // update parameters javadoc
-        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public void update("
         + "{3}"
@@ -275,34 +272,182 @@ public interface BaseDAOTemplateDefaults
 
     /**
      * The delete method.
+     * @param 0 the value object name.
+     * @param 1 the pk javadoc
+     * @param 2 the pk declaration.
      */
     public static final String DEFAULT_DELETE_METHOD =
           "    /**\n"
         + "     * Deletes {0} information from the persistence layer filtering\n"
-         // table name
         + "     * by its primary keys."
         + "{1}\n"
-         // DELETE_PK_JAVADOC
-        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public void delete("
-         // java table name
-        + "{2});\n";
-         // DELETE_PK_DECLARATION
+        + "{2});\n\n";
 
     /**
      * The delete method's primary keys javadoc.
+     * @param 0 the pk java name
+     * @param 1 the pk name.
      */
     public static final String DEFAULT_DELETE_PK_JAVADOC =
         "\n     * @param {0} the <i>{1}</i> value to filter.";
-         // java pk - pk
 
     /**
      * The delete method's primary keys declaration.
+     * @param pk java type
+     * @param pk name.
      */
     public static final String DEFAULT_DELETE_PK_DECLARATION =
         "\n        final {0} {1}";
-         // pk type - java pk
+
+    /**
+     * The delete by fk method.
+     * @param 0 the value object name.
+     * @param 1 the fk javadoc
+     * @param 2 the fk value object name.
+     * @param 3 the fk declaration.
+     */
+    public static final String DEFAULT_DELETE_BY_FK_METHOD =
+          "    /**\n"
+        + "     * Deletes {0} information from the persistence layer filtering\n"
+        + "     * by given foreign keys."
+        + "{1}\n"
+        + "     */\n"
+        + "    public void deleteBy{2}("
+        + "{3});\n\n";
+
+    /**
+     * The delete method's primary keys javadoc.
+     * @param 0 the fk java name
+     * @param 1 the fk name.
+     */
+    public static final String DEFAULT_DELETE_FK_JAVADOC =
+        DEFAULT_DELETE_PK_JAVADOC;
+
+    /**
+     * The delete method's foreign keys declaration.
+     * @param fk java type
+     * @param fk name.
+     */
+    public static final String DEFAULT_DELETE_FK_DECLARATION =
+        "\n        final {0} {1}";
+
+    /**
+     * The custom select template.
+     * @param 0 the sql id.
+     * @param 1 the sql description.
+     * @param 2 the parameter Javadoc.
+     * @param 3 the result type.
+     * @param 4 the sql method name.
+     * @param 5 the parameter declaration.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT =
+          "    /**\n"
+        + "     * Custom select <i>{0}</i>.\n"
+        + "     * {1}"
+         // sql id - sql description
+        + "{2}\n"
+         // CUSTOM_SELECT_PARAMETER_JAVADOC
+        + "     * @return the <i>{3}</i> information retrieved.\n"
+        + "     */\n"
+        + "    public {3} {4}("
+         // result class - sql name
+        + "{5});\n";
+         // CUSTOM_SELECT_PARAMETER_DECLARATION
+
+    /**
+     * The custom select parameter javadoc.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_PARAMETER_JAVADOC =
+        "\n     * @param {0} the value to filter.";
+         // parameter name
+
+    /**
+     * The custom select parameter declaration.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION =
+        "\n        final {0} {1}";
+         // parameter type - parameter name
+
+    /**
+     * The custom update or insert template.
+     * @param 0 sql id.
+     * @param 1 sql description.
+     * @param 2 the parameter Javadoc.
+     * @param 3 the sql method name.
+     * @param 4 the parameter declaration.
+     */
+    public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT =
+          "    /**\n"
+        + "     * Custom select <i>{0}</i>.\n"
+        + "     * {1}"
+         // sql id - sql description
+        + "{2}\n"
+         // CUSTOM_SELECT_PARAMETER_JAVADOC
+        + "     */\n"
+        + "    public void {3}("
+         // sql name
+        + "{4});\n";
+         // CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION
+
+    /**
+     * The custom update or insert parameter javadoc.
+     */
+    public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_JAVADOC =
+        "\n     * @param {0} such information.";
+         // parameter name
+
+    /**
+     * The custom update or insert parameter declaration.
+     */
+    public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION =
+        DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION;
+
+    /**
+     * The custom select for update template.
+     * @param 0 the sql id.
+     * @param 1 the sql description.
+     * @param 2 parameter Javadoc.
+     * @param 3 return Javadoc.
+     * @param 4 the result type.
+     * @param 5 the method name.
+     * @param 6 the parameter declaration.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE =
+          "    /**\n"
+        + "     * <i>{0}</i>:\n"
+         // sql id
+        + "     * {1}"
+         // sql description
+        + "{2}\n"
+         // parameter Javadoc
+        + "{3}"
+         // return Javadoc
+        + "     */\n"
+        + "    public {4} {5}("
+         // result class - method name
+        + "{6});\n";
+         // parameter declaration
+
+    /**
+     * The custom select-for-update parameter javadoc.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_JAVADOC =
+        DEFAULT_CUSTOM_SELECT_PARAMETER_JAVADOC;
+
+    /**
+     * The custom select-for-update return javadoc.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RETURN_JAVADOC =
+          "     * @return the information extracted from the persistence layer\n"
+        + "     * and/or processed.\n";
+
+    /**
+     * The custom select-for-update parameter declaration.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_DECLARATION =
+        DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION;
 
     /**
      * The default class end.

@@ -152,6 +152,7 @@ public class DAOTemplate
             repositoryName,
             DEFAULT_PROJECT_IMPORTS,
             DEFAULT_CUSTOM_RESULT_SET_EXTRACTOR_IMPORT,
+            DEFAULT_FOREIGN_KEY_STATEMENT_SETTER_IMPORT,
             DEFAULT_FOREIGN_DAO_IMPORTS,
             DEFAULT_ACMSL_IMPORTS,
             DEFAULT_ADDITIONAL_IMPORTS,
@@ -174,7 +175,13 @@ public class DAOTemplate
             DEFAULT_INSERT_PARAMETERS_SPECIFICATION,
             DEFAULT_UPDATE_METHOD,
             DEFAULT_UPDATE_PARAMETERS_SPECIFICATION,
-            DEFAULT_DELETE_METHOD,
+            DEFAULT_DELETE_METHOD_NO_FK,
+            DEFAULT_DELETE_METHOD_FK,
+            DEFAULT_FOREIGN_DAO_DELETE_CALL,
+            DEFAULT_FOREIGN_DAO_UPDATE_CALL,
+            DEFAULT_DELETE_BY_FK_METHOD,
+            DEFAULT_DELETE_FK_JAVADOC,
+            DEFAULT_DELETE_FK_DECLARATION,
             DEFAULT_CUSTOM_SELECT,
             DEFAULT_CUSTOM_SELECT_PARAMETER_JAVADOC,
             DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION,
@@ -222,6 +229,7 @@ public class DAOTemplate
                 getRepositoryName(),
                 getProjectImports(),
                 getCustomResultSetExtractorImport(),
+                getForeignKeyStatementSetterImport(),
                 getForeignDAOImports(),
                 getAdditionalImports(),
                 getAcmslImports(),
@@ -244,7 +252,13 @@ public class DAOTemplate
                 getInsertParametersSpecification(),
                 getUpdateMethod(),
                 getUpdateParametersSpecification(),
-                getDeleteMethod(),
+                getDeleteMethodNoFk(),
+                getDeleteMethodFk(),
+                getForeignDAODeleteCall(),
+                getForeignDAOUpdateCall(),
+                getDeleteByFkMethod(),
+                getDeleteFkJavadoc(),
+                getDeleteFkDeclaration(),
                 getCustomSelect(),
                 getCustomSelectParameterJavadoc(),
                 getCustomSelectParameterDeclaration(),
@@ -291,6 +305,8 @@ public class DAOTemplate
      * @param projectImports the project imports.
      * @param customResultSetExtractorImport the custom result set extractor
      * import subtemplate.
+     * @param foreignKeyStatementSetterImport the foreign key
+     * statement setter import subtemplate.
      * @param foreignDAOImports the foreign DAO imports.
      * @param acmslImports the ACM-SL imports.
      * @param additionalImports the additional imports.
@@ -316,7 +332,13 @@ public class DAOTemplate
      * @param updateMethod the update method.
      * @param updateParametersSpecification the specification of the update
      * method's parameters.
-     * @param deleteMethod the delete method.
+     * @param deleteMethodNoFk the delete method with no fk.
+     * @param deleteMethodFk the delete method with fk.
+     * @param foreignDAODeleteCall the delete call to foreign DAOs.
+     * @param foreignDAOUpdateCall the update call to foreign DAOs.
+     * @param deleteByFkMethod the delete by fk method.
+     * @param deleteFkJavadoc the delete FK javadoc.
+     * @param deleteFkDeclaration the delete FK declaration.
      * @param customSelect the custom select template.
      * @param customSelectParameterJavadoc the Javadoc for the parameters of
      * the custom selects.
@@ -387,6 +409,7 @@ public class DAOTemplate
         final String repositoryName,
         final String projectImports,
         final String customResultSetExtractorImport,
+        final String foreignKeyStatementSetterImport,
         final String foreignDAOImports,
         final String additionalImports,
         final String acmslImports,
@@ -409,7 +432,13 @@ public class DAOTemplate
         final String insertParametersSpecification,
         final String updateMethod,
         final String updateParametersSpecification,
-        final String deleteMethod,
+        final String deleteMethodNoFk,
+        final String deleteMethodFk,
+        final String foreignDAODeleteCall,
+        final String foreignDAOUpdateCall,
+        final String deleteByFkMethod,
+        final String deleteFkJavadoc,
+        final String deleteFkDeclaration,
         final String customSelect,
         final String customSelectParameterJavadoc,
         final String customSelectParameterDeclaration,
@@ -461,6 +490,9 @@ public class DAOTemplate
         MessageFormat t_ProjectImportFormatter =
             new MessageFormat(projectImports);
 
+        MessageFormat t_ForeignKeyStatementSetterImportFormatter =
+            new MessageFormat(foreignKeyStatementSetterImport);
+
         MessageFormat t_ForeignDAOImportsFormatter =
             new MessageFormat(foreignDAOImports);
 
@@ -506,8 +538,21 @@ public class DAOTemplate
             new MessageFormat(updateParametersSpecification);
 
         MessageFormat t_DeleteMethodFormatter =
-            new MessageFormat(deleteMethod);
+            new MessageFormat(deleteMethodNoFk);
 
+        MessageFormat t_ForeignDAODeleteCallFormatter = null;
+        MessageFormat t_ForeignDAOUpdateCallFormatter = null;
+
+        MessageFormat t_DeleteByFkMethodFormatter =
+            new MessageFormat(deleteByFkMethod);
+
+        MessageFormat t_FkJavadocFormatter =
+            new MessageFormat(deleteFkJavadoc);
+        MessageFormat t_FkDeclarationFormatter =
+            new MessageFormat(deleteFkDeclaration);
+
+        StringBuffer t_sbForeignKeyStatementSetterImports =
+            new StringBuffer();
         StringBuffer t_sbForeignDAOImports = new StringBuffer();
         StringBuffer t_sbAttributesJavadoc = new StringBuffer();
         StringBuffer t_sbPkJavadoc = new StringBuffer();
@@ -517,144 +562,19 @@ public class DAOTemplate
         StringBuffer t_sbNonPkDeclaration = new StringBuffer();
         StringBuffer t_sbPkFilter = new StringBuffer();
         StringBuffer t_sbNonPkFilter = new StringBuffer();
+        StringBuffer t_sbFkFilter = new StringBuffer();
         StringBuffer t_sbPkStatementSetterCall = new StringBuffer();
+        String t_strFkStatementSetterCall = "";
         StringBuffer t_sbAttributesStatementSetterCall = new StringBuffer();
         StringBuffer t_sbDeleteMethod = new StringBuffer();
-
+        StringBuffer t_sbForeignDAODeleteCall = new StringBuffer();
+        StringBuffer t_sbForeignDAOUpdateCall = new StringBuffer();
+        StringBuffer t_sbDeleteByFkMethod = new StringBuffer();
+                
         StringBuffer t_sbInsertParametersSpecification = new StringBuffer();
         StringBuffer t_sbUpdateParametersSpecification = new StringBuffer();
 
         boolean t_bForeignKeys = false;
-
-        String[] t_astrReferredTables =
-            metaDataManager.getReferredTables(
-                tableTemplate.getTableName());
-
-        if  (t_astrReferredTables != null)
-        {
-            for  (int t_iRefTableIndex = 0;
-                      t_iRefTableIndex < t_astrReferredTables.length;
-                      t_iRefTableIndex++)
-            {
-                t_bForeignKeys = true;
-
-                String t_strReferredTableName =
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            t_astrReferredTables[t_iRefTableIndex]
-                                .toLowerCase()),
-                        '_');
-
-                String t_strFkName =
-                    metaDataManager.getReferredKey(
-                        tableTemplate.getTableName(),
-                        t_astrReferredTables[t_iRefTableIndex]);
-
-                t_sbForeignDAOImports.append(
-                    t_ForeignDAOImportsFormatter.format(
-                        new Object[]
-                        {
-                            packageUtils.retrieveBaseDAOPackage(
-                                basePackageName),
-                            t_strReferredTableName
-                                
-                        }));
-            }
-        }
-
-        t_sbResult.append(
-            t_HeaderFormatter.format(
-                new Object[]
-                {
-                    engineName,
-                    engineVersion,
-                    t_strValueObjectName
-                }));
-
-        t_sbResult.append(
-            t_PackageDeclarationFormatter.format(
-                new Object[]{packageName}));
-
-        String t_strJdbcOperationsPackage =
-            packageUtils.retrieveJdbcOperationsPackage(
-                basePackageName,
-                engineName,
-                t_strCapitalizedValueObjectName);
-
-        t_sbResult.append(
-            t_ProjectImportFormatter.format(
-                new Object[]
-                {
-                    t_strJdbcOperationsPackage,
-                    t_strCapitalizedValueObjectName,
-                    buildCustomResultSetExtractorImports(
-                        tableTemplate.getTableName(),
-                        t_strJdbcOperationsPackage,
-                        customResultSetExtractorImport,
-                        customSqlProvider,
-                        daoTemplateUtils,
-                        stringUtils),
-                    packageUtils.retrieveValueObjectPackage(
-                        basePackageName),
-                    packageUtils.retrieveBaseDAOPackage(
-                        basePackageName),
-                    packageUtils.retrieveRdbPackage(
-                        basePackageName),
-                    packageUtils.retrieveTableRepositoryPackage(
-                        basePackageName),
-                    t_strRepositoryName,
-                    packageUtils.retrieveDataAccessManagerPackage(
-                        basePackageName),
-                    t_sbForeignDAOImports
-                }));
-
-        t_sbResult.append(acmslImports);
-        t_sbResult.append(additionalImports);
-        t_sbResult.append(jdkImports);
-        t_sbResult.append(jdkExtensionImports);
-        t_sbResult.append(loggingImports);
-
-        t_sbResult.append(
-            t_JavadocFormatter.format(
-                new Object[]
-                {
-                    engineName,
-                    engineVersion,
-                    t_strValueObjectName
-                }));
-
-        t_sbResult.append(
-            t_ClassDefinitionFormatter.format(
-                new Object[]
-                {
-                    engineName,
-                    t_strCapitalizedValueObjectName
-                }));
-
-        t_sbResult.append(classStart);
-
-        t_sbResult.append(
-            t_ClassConstantsFormatter.format(
-                new Object[]
-                {
-                    t_strValueObjectName,
-                    t_strValueObjectName.toUpperCase(),
-                    t_strCapitalizedValueObjectName,
-                    buildCustomResultSetExtractorConstants(
-                        tableTemplate.getTableName(),
-                        customResultSetExtractorConstant,
-                        customSqlProvider,
-                        daoTemplateUtils,
-                        stringUtils),
-                }));
-
-        t_sbResult.append(
-            t_ClassConstructorFormatter.format(
-                new Object[]
-                {
-                    engineName,
-                    t_strCapitalizedValueObjectName
-                }));
 
         String[] t_astrPrimaryKeys =
             metaDataManager.getPrimaryKeys(tableTemplate.getTableName());
@@ -712,6 +632,270 @@ public class DAOTemplate
                         }));
             }
         }
+
+        String[] t_astrReferingTables =
+            metaDataManager.getReferingTables(
+                tableTemplate.getTableName());
+
+        if  (   (t_astrReferingTables != null)
+             && (t_astrReferingTables.length > 0))
+        {
+            t_DeleteMethodFormatter = new MessageFormat(deleteMethodFk);
+
+            t_ForeignDAODeleteCallFormatter =
+                new MessageFormat(foreignDAODeleteCall);
+
+            t_ForeignDAOUpdateCallFormatter =
+                new MessageFormat(foreignDAOUpdateCall);
+
+            String t_strReferingColumn = null;
+
+            StringBuffer t_sbCall = null;
+
+            MessageFormat t_CallFormatter = null;
+
+            for  (int t_iRefTableIndex = 0;
+                      t_iRefTableIndex < t_astrReferingTables.length;
+                      t_iRefTableIndex++)
+            {
+                t_bForeignKeys = true;
+
+                t_strReferingColumn =
+                    metaDataManager.getForeignKey(
+                        t_astrReferingTables[t_iRefTableIndex],
+                        tableTemplate.getTableName());
+
+                if  (metaDataManager.allowsNull(
+                         t_astrReferingTables[t_iRefTableIndex],
+                         t_strReferingColumn))
+                {
+                    t_sbCall = t_sbForeignDAOUpdateCall;
+                    t_CallFormatter = t_ForeignDAOUpdateCallFormatter;
+                }
+                else
+                {
+                    t_sbCall = t_sbForeignDAODeleteCall;
+                    t_CallFormatter = t_ForeignDAODeleteCallFormatter;
+                }
+
+                String t_strReferingTableName =
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            t_astrReferingTables[t_iRefTableIndex]
+                                .toLowerCase()),
+                        '_');
+
+                t_sbForeignDAOImports.append(
+                    t_ForeignDAOImportsFormatter.format(
+                        new Object[]
+                        {
+                            packageUtils.retrieveBaseDAOPackage(
+                                basePackageName),
+                            t_strReferingTableName
+                                
+                        }));
+
+                t_sbCall.append(
+                    t_CallFormatter.format(
+                        new Object[]
+                        {
+                            t_strReferingTableName,
+                            t_strCapitalizedValueObjectName,
+                            t_sbPkStatementSetterCall
+                        }));
+
+            }
+        }
+
+        String t_strReferredColumn = null;
+
+        String[] t_astrReferredTables =
+            metaDataManager.getReferredTables(
+                tableTemplate.getTableName());
+
+        if  (   (t_astrReferredTables != null)
+             && (t_astrReferredTables.length > 0))
+        {
+            for  (int t_iRefTableIndex = 0;
+                      t_iRefTableIndex < t_astrReferredTables.length;
+                      t_iRefTableIndex++)
+            {
+                t_strReferredColumn =
+                    metaDataManager.getForeignKey(
+                        tableTemplate.getTableName(),
+                        t_astrReferredTables[t_iRefTableIndex]);
+
+                String t_strReferredTableName =
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            t_astrReferredTables[t_iRefTableIndex]
+                                .toLowerCase()),
+                        '_');
+
+                String t_strFkJavadoc =
+                    t_FkJavadocFormatter.format(
+                        new Object[]
+                        {
+                            t_strReferredColumn.toLowerCase(),
+                            t_strReferredColumn
+                        });
+
+                String t_strFkDeclaration =
+                    t_FkDeclarationFormatter.format(
+                        new Object[]
+                        {
+                            metaDataUtils.getNativeType(
+                                metaDataManager.getColumnType(
+                                    tableTemplate.getTableName(),
+                                    t_strReferredColumn)),
+                            t_strReferredColumn.toLowerCase()
+                        });
+
+                t_sbFkFilter.append(
+                    t_AttributeFilterFormatter.format(
+                        new Object[]
+                        {
+                            t_strRepositoryName,
+                            tableTemplate.getTableName().toUpperCase(),
+                            t_strReferredColumn.toUpperCase()
+                        }));
+
+                t_strFkStatementSetterCall =
+                    t_StatementSetterCallFormatter.format(
+                        new Object[]
+                        {
+                            t_strReferredColumn.toLowerCase()
+                        });
+
+                t_sbForeignKeyStatementSetterImports.append(
+                    t_ForeignKeyStatementSetterImportFormatter.format(
+                        new Object[]
+                        {
+                            packageUtils.retrieveFkStatementSetterPackage(
+                                basePackageName,
+                                engineName,
+                                tableTemplate.getTableName()),
+                            stringUtils.capitalize(
+                                englishGrammarUtils.getSingular(
+                                    tableTemplate.getTableName().toLowerCase()),
+                                '_'),
+                            t_strReferredTableName
+                        }));
+
+                t_sbDeleteByFkMethod.append(
+                    t_DeleteByFkMethodFormatter.format(
+                        new Object[]
+                        {
+                            stringUtils.capitalize(
+                                englishGrammarUtils.getSingular(
+                                    tableTemplate.getTableName().toLowerCase()),
+                                '_'),
+                            t_strFkJavadoc,
+                            t_strReferredTableName,
+                            t_strFkDeclaration,
+                            t_sbFkFilter,
+                            t_strFkStatementSetterCall,
+                            t_strRepositoryName,
+                            tableTemplate.getTableName().toUpperCase(),
+                        }));
+
+            }
+        }
+
+        t_sbResult.append(
+            t_HeaderFormatter.format(
+                new Object[]
+                {
+                    engineName,
+                    engineVersion,
+                    t_strValueObjectName
+                }));
+
+        t_sbResult.append(
+            t_PackageDeclarationFormatter.format(
+                new Object[]{packageName}));
+
+        String t_strJdbcOperationsPackage =
+            packageUtils.retrieveJdbcOperationsPackage(
+                basePackageName,
+                engineName,
+                t_strCapitalizedValueObjectName);
+
+        t_sbResult.append(
+            t_ProjectImportFormatter.format(
+                new Object[]
+                {
+                    t_strJdbcOperationsPackage,
+                    t_strCapitalizedValueObjectName,
+                    buildCustomResultSetExtractorImports(
+                        tableTemplate.getTableName(),
+                        t_strJdbcOperationsPackage,
+                        customResultSetExtractorImport,
+                        customSqlProvider,
+                        daoTemplateUtils,
+                        stringUtils),
+                    packageUtils.retrieveValueObjectPackage(
+                        basePackageName),
+                    packageUtils.retrieveBaseDAOPackage(
+                        basePackageName),
+                    packageUtils.retrieveRdbPackage(
+                        basePackageName),
+                    packageUtils.retrieveTableRepositoryPackage(
+                        basePackageName),
+                    t_strRepositoryName,
+                    packageUtils.retrieveDataAccessManagerPackage(
+                        basePackageName),
+                    t_sbForeignKeyStatementSetterImports,
+                    t_sbForeignDAOImports
+                }));
+
+        t_sbResult.append(acmslImports);
+        t_sbResult.append(additionalImports);
+        t_sbResult.append(jdkImports);
+        t_sbResult.append(jdkExtensionImports);
+        t_sbResult.append(loggingImports);
+
+        t_sbResult.append(
+            t_JavadocFormatter.format(
+                new Object[]
+                {
+                    engineName,
+                    engineVersion,
+                    t_strValueObjectName
+                }));
+
+        t_sbResult.append(
+            t_ClassDefinitionFormatter.format(
+                new Object[]
+                {
+                    engineName,
+                    t_strCapitalizedValueObjectName
+                }));
+
+        t_sbResult.append(classStart);
+
+        t_sbResult.append(
+            t_ClassConstantsFormatter.format(
+                new Object[]
+                {
+                    t_strValueObjectName,
+                    t_strValueObjectName.toUpperCase(),
+                    t_strCapitalizedValueObjectName,
+                    buildCustomResultSetExtractorConstants(
+                        tableTemplate.getTableName(),
+                        customResultSetExtractorConstant,
+                        customSqlProvider,
+                        daoTemplateUtils,
+                        stringUtils),
+                }));
+
+        t_sbResult.append(
+            t_ClassConstructorFormatter.format(
+                new Object[]
+                {
+                    engineName,
+                    t_strCapitalizedValueObjectName
+                }));
 
         String[] t_astrColumnNames =
             metaDataManager.getColumnNames(tableTemplate.getTableName());
@@ -859,11 +1043,14 @@ public class DAOTemplate
                         t_sbPkFilter,
                         t_sbPkJavadoc,
                         t_sbPkDeclaration,
-                        t_sbPkStatementSetterCall
+                        t_sbPkStatementSetterCall,
+                        t_sbForeignDAODeleteCall
                     }));
 
             t_sbResult.append(t_sbDeleteMethod);
-        }
+
+            t_sbResult.append(t_sbDeleteByFkMethod);
+       }
 
         t_sbResult.append(buildCustomSql());
 

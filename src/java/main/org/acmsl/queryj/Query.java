@@ -502,7 +502,7 @@ public abstract class Query
     {
         int result = getIndex(list, object);
 
-        if  (result < 0)
+        if  (result < 1)
         {
             throw new SQLException("Field or Condition not found!");
         }

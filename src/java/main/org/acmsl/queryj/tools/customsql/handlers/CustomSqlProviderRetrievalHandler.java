@@ -197,16 +197,6 @@ public class CustomSqlProviderRetrievalHandler
 
             t_Parser.parse();
 
-            Project t_Project = command.getProject();
-
-            if  (t_Project != null)
-            {
-                t_Project.log(
-                    command.getTask(),
-                    "Parser result:" + t_Parser.getMap(),
-                    Project.MSG_ERR);
-            }
-
             result = t_Parser;
         }
 

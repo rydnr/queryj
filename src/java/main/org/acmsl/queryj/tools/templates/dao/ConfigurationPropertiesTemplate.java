@@ -115,6 +115,38 @@ public class ConfigurationPropertiesTemplate
     }
 
     /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return
+            buildHeader(
+                getRepository(),
+                DAOChooserTemplateUtils.getInstance());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param repository the repository.
+     * @param daoChooserTemplateUtils the <code>DAOChooserTemplateUtils</code>
+     * instance.
+     * @return such header.
+     * @precondition repository != null
+     * @precondition daoChooserTemplateUtils != null
+     */
+    protected String buildHeader(
+        final String repository,
+        final DAOChooserTemplateUtils daoChooserTemplateUtils)
+    {
+        return
+              "Generating "
+            + daoChooserTemplateUtils.retrievePropertiesFileName(
+                  repository.toLowerCase())
+            + ".";
+    }
+
+    /**
      * Retrieves the source code of the generated field tableName.
      * @return such source code.
      */

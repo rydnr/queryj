@@ -121,6 +121,7 @@ extends TestCase
         new org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate(
             null, // table template
             null, // database metadata manager
+            null, // custom sql provider
             "com.foo.bar.dao", // package name
             "com.foo.bar.vo", // vo package name
             null,

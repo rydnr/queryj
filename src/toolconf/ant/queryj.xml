@@ -259,6 +259,8 @@
         extractFunctions="${queryj.extractfunctions}"
         extractProcedures="${queryj.extractprocedures}"
         jndiDataSource="java:comp/env/jdbc/queryj"
+        generateMockDAOImplementation="false"
+        generateXMLDAOImplementation="false"
         customSqlModel="xml"
         sqlXmlFile="src/toolconf/queryj/sql.xml">
 

@@ -301,6 +301,12 @@ public abstract class TemplateMappingManager
         "pk.statement.setter.templates";
 
     /**
+     * The FkStatementSetter template type.
+     */
+    public static final String FK_STATEMENT_SETTER_TEMPLATES =
+        "fk.statement.setter.templates";
+
+    /**
      * The Mock DAO template prefix.
      */
     public static final String MOCK_DAO_TEMPLATE_PREFIX = "mock.dao.";

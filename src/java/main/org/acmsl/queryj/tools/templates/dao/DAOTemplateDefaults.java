@@ -138,6 +138,8 @@ public interface DAOTemplateDefaults
      * @param 6 table repository package
      * @param 7 table repository name.
      * @param 8 DataAccessManager package.
+     * @param 9 the foreign key statement setter imports.
+     * @param 10 the foreign DAO imports.
      */
     public static final String DEFAULT_PROJECT_IMPORTS =
           "/*\n"
@@ -161,7 +163,9 @@ public interface DAOTemplateDefaults
          // Table repository package - Table repository name
         + "import {8}.DataAccessManager;\n"
          // data access manager package
-        + "{9}";
+        + "{9}"
+         // foreign key statement setter imports.
+        + "{10}";
          // foreign DAO imports
 
     /**
@@ -170,6 +174,16 @@ public interface DAOTemplateDefaults
     public static final String DEFAULT_CUSTOM_RESULT_SET_EXTRACTOR_IMPORT =
         "import {0}.{1}Extractor;\n";
          // Specific JDBC operations package - custom result id
+
+    /**
+     * The foreign key statement setter imports.
+     * @param 0 statement setter package.
+     * @param 1 capitalized value object name.
+     * @param 2 capitalized referred table name.
+     */
+    public static final String
+        DEFAULT_FOREIGN_KEY_STATEMENT_SETTER_IMPORT =
+            "import {0}.{1}By{2}StatementSetter;\n";
 
     /**
      * Foreign DAO imports.
@@ -524,9 +538,16 @@ public interface DAOTemplateDefaults
     // table repository name - table name - field name
 
     /**
-     * The delete method.
+     * The delete method subtemplate.
+     * @param 0 the value object name.
+     * @param 1 the table repository name.
+     * @param 2 the table name
+     * @param 3 the pk filter.
+     * @param 4 the pk javadoc.
+     * @param 5 the pk declaration.
+     * @param 6 the pk statement setter call.
      */
-    public static final String DEFAULT_DELETE_METHOD =
+    public static final String DEFAULT_DELETE_METHOD_SUBTEMPLATE =
           "    // <delete>\n\n"
         + "    /**\n"
         + "     * Builds the query required to <i>delete</i> a concrete\n"
@@ -551,20 +572,14 @@ public interface DAOTemplateDefaults
         + "        DeleteQuery result = queryFactory.createDeleteQuery();\n\n"
         + "        result.deleteFrom({1}TableRepository.{2});\n\n"
         + "{3}\n"
-         // delete filter
         + "        return result;\n"
         + "    '}'\n\n"
         + "    /**\n"
         + "     * Deletes <code>{0}</code> information."
-         // table name
         + "{4}\n"
-         // pk javadoc
-        + "     * @throws DataAccessException if the operation fails.\n"
         + "     */\n"
-        + "    public void delete("
+        + "    protected void deleteNoFk("
         + "{5})\n"
-         // pk declaration
-        + "      throws DataAccessException\n"
         + "    '{'\n"
         + "        Query t_Query = buildDeleteQuery();\n\n"
         + "        update(\n"
@@ -572,6 +587,159 @@ public interface DAOTemplateDefaults
         + "            new {0}PkStatementSetter({6}));\n"
         + "    '}'\n\n"
         + "    // </delete>\n\n";
+
+    /**
+     * The delete method with no fks.
+     * @param 0 the value object name.
+     * @param 1 the table repository name.
+     * @param 2 the table name
+     * @param 3 the pk filter.
+     * @param 4 the pk javadoc.
+     * @param 5 the pk declaration.
+     * @param 6 the pk statement setter call.
+     */
+    public static final String DEFAULT_DELETE_METHOD_NO_FK =
+          DEFAULT_DELETE_METHOD_SUBTEMPLATE
+        + "    /**\n"
+        + "     * Deletes <code>{0}</code> information."
+        + "{4}\n"
+        + "     */\n"
+        + "    public void delete("
+        + "{5})\n"
+        + "    '{'\n"
+        + "        deleteNoFk({6});\n"
+        + "    '}'\n\n"
+        + "    // </delete>\n\n";
+
+    /**
+     * The delete method with fks.
+     * @param 0 the value object name.
+     * @param 1 the table repository name.
+     * @param 2 the table name
+     * @param 3 the pk filter.
+     * @param 4 the pk javadoc.
+     * @param 5 the pk declaration.
+     * @param 6 the pk statement setter call.
+     * @param 7 the foreign DAO delete call.
+     */
+    public static final String DEFAULT_DELETE_METHOD_FK =
+          DEFAULT_DELETE_METHOD_SUBTEMPLATE
+        + "    /**\n"
+        + "     * Deletes <code>{0}</code> information."
+        + "{4}\n"
+        + "     */\n"
+        + "    public void delete("
+        + "{5})\n"
+        + "    '{'\n"
+        + "        delete({6}, DataAccessManager.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Deletes <code>{0}</code> information."
+        + "{4}\n"
+        + "     * @param dataAccessManager the <code>DataAccessManager</code>"
+        + " instance.\n"
+        + "     * @precondition dataAccessManager != null\n"
+        + "     */\n"
+        + "    protected void delete("
+        + "{5},\n"
+        + "        final DataAccessManager dataAccessManager)\n"
+        + "    '{'\n"
+        + "{7}\n"
+        + "        deleteNoFk({6});\n"
+        + "    '}'\n\n"
+        + "    // </delete>\n\n";
+
+    /**
+     * The foreign DAO delete call.
+     * @param 0 the foreign DAO name.
+     * @param 1 the foreign key.
+     */
+    public static final String DEFAULT_FOREIGN_DAO_DELETE_CALL =
+          "        {0}DAO t_{0}DAO = dataAccessManager.get{0}DAO();\n\n"
+        + "        if  (t_{0}DAO != null)\n"
+        + "        '{'\n"
+        + "            t_{0}DAO.deleteBy{1}({2});\n"
+        + "        '}'\n";
+
+    /**
+     * The foreign DAO update call.
+     * @param 0 the foreign DAO name.
+     * @param 1 the foreign key.
+     */
+    public static final String DEFAULT_FOREIGN_DAO_UPDATE_CALL =
+          "        {0}DAO t_{0}DAO = dataAccessManager.get{0}DAO();\n\n"
+        + "        if  (t_{0}DAO != null)\n"
+        + "        '{'\n"
+        + "            t_{0}DAO.discardRelationTo{1}({2});\n"
+        + "        '}'\n";
+
+    /**
+     * The delete by fk method.
+     * @param 0 the value object name.
+     * @param 1 the fk javadoc
+     * @param 2 the fk value object name.
+     * @param 3 the fk declaration.
+     * @param 4 the fk attribute filter.
+     * @param 5 the fk statement setter call.
+     * @param 6 the repository name.
+     * @param 7 the table name.
+     */
+    public static final String DEFAULT_DELETE_BY_FK_METHOD =
+          "    /**\n"
+        + "     * Builds the query required to <i>delete</i> a concrete\n"
+        + "     * <code>{0}</code> entity, determined by a concrete foreign key.\n"
+        + "     * @return the <code>DeleteQuery</code> instance.\n"
+        + "     */\n"
+        + "    protected Query buildDeleteBy{2}Query()\n"
+        + "    '{'\n"
+        + "        return buildDeleteBy{2}Query(QueryFactory.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Builds the query required to <i>delete</i> a concrete\n"
+        + "     * <code>{0}</code> entity, determined by a concrete foreign key.\n"
+        + "     * @param queryFactory the <code>QueryFactory</code> "
+        + "instance.\n"
+        + "     * @return the <code>DeleteQuery</code> instance.\n"
+        + "     * @precondition queryFactory != null\n"
+        + "     */\n"
+        + "    protected Query buildDeleteBy{2}Query("
+        +          "final QueryFactory queryFactory)\n"
+        + "    '{'\n"
+        + "        DeleteQuery result = queryFactory.createDeleteQuery();\n\n"
+        + "        result.deleteFrom({6}TableRepository.{7});\n\n"
+        + "{4}\n"
+        + "        return result;\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Deletes {0} information from the persistence layer filtering\n"
+        + "     * by given foreign keys."
+        + "{1}\n"
+        + "     */\n"
+        + "    public void deleteBy{2}("
+        + "{3})\n"
+        + "    '{'\n"
+        + "        Query t_Query = buildDeleteBy{2}Query();\n\n"
+        + "        update(\n"
+        + "            new QueryPreparedStatementCreator(t_Query),\n"
+        + "            new {0}By{2}StatementSetter({5}));\n"
+        + "    '}'\n\n"
+        + "    // </delete>\n\n";
+
+    /**
+     * The delete method's primary keys javadoc.
+     * @param 0 the fk java name
+     * @param 1 the fk name.
+     */
+    public static final String DEFAULT_DELETE_FK_JAVADOC =
+        "\n     * @param {0} the <i>{1}</i> value to filter.";
+
+    /**
+     * The delete method's foreign keys declaration.
+     * @param fk java type
+     * @param fk name.
+     */
+    public static final String DEFAULT_DELETE_FK_DECLARATION =
+        "\n        final {0} {1}";
 
     /**
      * The custom select template.

@@ -33,7 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents conditions in SQL statements.
+ * Description: Bundles a pair of FkStatementSetter template
+ *              build and writing handlers.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,55 +45,35 @@
  * $Id$
  *
  */
-package org.acmsl.queryj;
+package org.acmsl.queryj.tools.templates.dao.handlers;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.Condition;
-import org.acmsl.queryj.ConditionOperator;
-import org.acmsl.queryj.Field;
-
-/*
- * Importing JDK classes.
- */
-import java.util.ArrayList;
-import java.util.Collection;
+import org.acmsl.queryj.tools.templates.dao.handlers.FkStatementSetterTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.handlers.FkStatementSetterTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Represents conditions in SQL statements.
- * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ * Bundles a pair of FkStatementSetter template build and writing
+ * handlers.
+ * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class VariableCondition
-    extends  AtomicCondition
+public class FkStatementSetterTemplateHandlerBundle
+    extends  TemplateHandlerBundle
 {
     /**
-     * Creates a variable condition using given information.
-     * @param field the left-side field.
-     * @param operator the operator.
+     * Builds a bundle with given handlers.
+     * @param buildHandler the template build handler.
+     * @param writingHandler the writing handler.
+     * @precondition buildHandler != null
+     * @precondition writingHandler != null
      */
-    public VariableCondition(final Field field, final ConditionOperator operator)
+    public FkStatementSetterTemplateHandlerBundle()
     {
-        super(field, operator, "?");
-    }
-
-    /**
-     * Retrieves the variable conditions.
-     * @return such collection.
-     */
-    public Collection getVariableConditions()
-    {
-        Collection result = super.getVariableConditions();
-
-        if  (result == null)
-        {
-            result = new ArrayList();
-        }
-
-        result.add(this);
-
-        return result;
+        super(
+            new FkStatementSetterTemplateBuildHandler(),
+            new FkStatementSetterTemplateWritingHandler());
     }
 }

@@ -135,6 +135,11 @@ public abstract class AbstractDAOTemplate
     private String m__strCustomResultSetExtractorImport;
 
     /**
+     * The foreign key statement setter import.
+     */
+    private String m__strForeignKeyStatementSetterImport;
+
+    /**
      * The foreign DAO imports.
      */
     private String m__strForeignDAOImports;
@@ -245,9 +250,39 @@ public abstract class AbstractDAOTemplate
     private String m__strUpdateParametersSpecification;
 
     /**
-     * The delete method.
+     * The delete method with no FK.
      */
-    private String m__strDeleteMethod;
+    private String m__strDeleteMethodNoFk;
+
+    /**
+     * The delete method with FK.
+     */
+    private String m__strDeleteMethodFk;
+
+    /**
+     * The foreign DAO delete call.
+     */
+    private String m__strForeignDAODeleteCall;
+
+    /**
+     * The foreign DAO update call.
+     */
+    private String m__strForeignDAOUpdateCall;
+
+    /**
+     * The delete method by fk.
+     */
+    private String m__strDeleteByFkMethod;
+
+    /**
+     * The delete FK javadoc.
+     */
+    private String m__strDeleteFkJavadoc;
+
+    /**
+     * The delete FK declaration.
+     */
+    private String m__strDeleteFkDeclaration;
 
     /**
      * The custom select.
@@ -375,6 +410,8 @@ public abstract class AbstractDAOTemplate
      * @param projectImports the project imports.
      * @param customResultSetExtractorImport the custom result set extractor
      * import subtemplate.
+     * @param foreignKeyStatementSetterImport the foreign key
+     * statement setter import subtemplate.
      * @param foreignDAOImports the foreign DAO imports.
      * @param acmslImports the ACM-SL imports.
      * @param additionalImports the additional imports.
@@ -400,7 +437,13 @@ public abstract class AbstractDAOTemplate
      * @param updateMethod the update method.
      * @param updateParametersSpecification the specification of the update
      * method's parameters.
-     * @param deleteMethod the delete method.
+     * @param deleteMethodNoFk the delete method with no fk.
+     * @param deleteMethodFk the delete method with fk.
+     * @param foreignDAODeleteCall the foreign DAO delete call.
+     * @param foreignDAOUpdateCall the foreign DAO update call.
+     * @param deleteByFkMethod the delete method.
+     * @param deleteFkJavadoc the delete FK javadoc.
+     * @param deleteFkDeclaration the delete FK declaration.
      * @param customSelect the custom select template.
      * @param customSelectParameterJavadoc the Javadoc for the parameters of
      * the custom selects.
@@ -458,6 +501,7 @@ public abstract class AbstractDAOTemplate
         final String repositoryName,
         final String projectImports,
         final String customResultSetExtractorImport,
+        final String foreignKeyStatementSetterImport,
         final String foreignDAOImports,
         final String additionalImports,
         final String acmslImports,
@@ -480,7 +524,13 @@ public abstract class AbstractDAOTemplate
         final String insertParametersSpecification,
         final String updateMethod,
         final String updateParametersSpecification,
-        final String deleteMethod,
+        final String deleteMethodNoFk,
+        final String deleteMethodFk,
+        final String foreignDAODeleteCall,
+        final String foreignDAOUpdateCall,
+        final String deleteByFkMethod,
+        final String deleteFkJavadoc,
+        final String deleteFkDeclaration,
         final String customSelect,
         final String customSelectParameterJavadoc,
         final String customSelectParameterDeclaration,
@@ -546,6 +596,9 @@ public abstract class AbstractDAOTemplate
         immutableSetCustomResultSetExtractorImport(
             customResultSetExtractorImport);
 
+        immutableSetForeignKeyStatementSetterImport(
+            foreignKeyStatementSetterImport);
+
         immutableSetForeignDAOImports(
             foreignDAOImports);
 
@@ -608,8 +661,21 @@ public abstract class AbstractDAOTemplate
         immutableSetUpdateParametersSpecification(
             updateParametersSpecification);
 
-        immutableSetDeleteMethod(
-            deleteMethod);
+        immutableSetDeleteMethodNoFk(
+            deleteMethodNoFk);
+
+        immutableSetDeleteMethodFk(
+            deleteMethodFk);
+
+        immutableSetForeignDAODeleteCall(
+            foreignDAODeleteCall);
+
+        immutableSetForeignDAOUpdateCall(
+            foreignDAOUpdateCall);
+
+        immutableSetDeleteByFkMethod(deleteByFkMethod);
+        immutableSetDeleteFkJavadoc(deleteFkJavadoc);
+        immutableSetDeleteFkDeclaration(deleteFkDeclaration);
 
         immutableSetCustomSelect(
             customSelect);
@@ -1036,6 +1102,35 @@ public abstract class AbstractDAOTemplate
     public String getCustomResultSetExtractorImport() 
     {
         return m__strCustomResultSetExtractorImport;
+    }
+
+    /**
+     * Specifies the foreign key statement setter import subtemplate.
+     * @param template such template.
+     */
+    private void immutableSetForeignKeyStatementSetterImport(
+        final String template)
+    {
+        m__strForeignKeyStatementSetterImport = template;
+    }
+
+    /**
+     * Specifies the foreign key statement setter import subtemplate.
+     * @param template such template.
+     */
+    protected void setForeignKeyStatementSetterImport(
+        final String template)
+    {
+        immutableSetForeignKeyStatementSetterImport(template);
+    }
+
+    /**
+     * Retrieves the foreign key statement setter import subtemplate.
+     * @return such subtemplate.
+     */
+    public String getForeignKeyStatementSetterImport()
+    {
+        return m__strForeignKeyStatementSetterImport;
     }
 
     /**
@@ -1647,33 +1742,212 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
-     * Specifies the delete method.
+     * Specifies the delete method with no fk.
      * @param deleteMethod such method.
      */
-    private void immutableSetDeleteMethod(
+    private void immutableSetDeleteMethodNoFk(
         final String deleteMethod)
     {
-        m__strDeleteMethod = deleteMethod;
+        m__strDeleteMethodNoFk = deleteMethod;
     }
 
     /**
-     * Specifies the delete method.
+     * Specifies the delete method with no fk.
      * @param deleteMethod such method.
      */
-    protected void setDeleteMethod(
+    protected void setDeleteMethodNoFk(
         final String deleteMethod)
     {
-        immutableSetDeleteMethod(
+        immutableSetDeleteMethodNoFk(
             deleteMethod);
     }
 
     /**
-     * Retrieves the delete method.
+     * Retrieves the delete method with no fk.
      * @return such method.
      */
-    public String getDeleteMethod()
+    public String getDeleteMethodNoFk()
     {
-        return m__strDeleteMethod;
+        return m__strDeleteMethodNoFk;
+    }
+
+    /**
+     * Specifies the delete method with fk.
+     * @param deleteMethod such method.
+     */
+    private void immutableSetDeleteMethodFk(
+        final String deleteMethod)
+    {
+        m__strDeleteMethodFk = deleteMethod;
+    }
+
+    /**
+     * Specifies the delete method with fk.
+     * @param deleteMethod such method.
+     */
+    protected void setDeleteMethodFk(
+        final String deleteMethod)
+    {
+        immutableSetDeleteMethodFk(
+            deleteMethod);
+    }
+
+    /**
+     * Retrieves the delete method with fk.
+     * @return such method.
+     */
+    public String getDeleteMethodFk()
+    {
+        return m__strDeleteMethodFk;
+    }
+
+    /**
+     * Specifies the foreign DAO delete call.
+     * @param call such subtemplate.
+     */
+    private void immutableSetForeignDAODeleteCall(
+        final String call)
+    {
+        m__strForeignDAODeleteCall = call;
+    }
+
+    /**
+     * Specifies the foreign DAO delete call.
+     * @param call such subtemplate.
+     */
+    protected void setForeignDAODeleteCall(
+        final String call)
+    {
+        immutableSetForeignDAODeleteCall(call);
+    }
+
+    /**
+     * Retrieves the foreign DAO delete call.
+     * @return such subtemplate.
+     */
+    public String getForeignDAODeleteCall()
+    {
+        return m__strForeignDAODeleteCall;
+    }
+
+    /**
+     * Specifies the foreign DAO update call.
+     * @param call such subtemplate.
+     */
+    private void immutableSetForeignDAOUpdateCall(
+        final String call)
+    {
+        m__strForeignDAOUpdateCall = call;
+    }
+
+    /**
+     * Specifies the foreign DAO update call.
+     * @param call such subtemplate.
+     */
+    protected void setForeignDAOUpdateCall(
+        final String call)
+    {
+        immutableSetForeignDAOUpdateCall(call);
+    }
+
+    /**
+     * Retrieves the foreign DAO update call.
+     * @return such subtemplate.
+     */
+    public String getForeignDAOUpdateCall()
+    {
+        return m__strForeignDAOUpdateCall;
+    }
+
+    /**
+     * Specifies the delete by fk method.
+     * @param deleteMethod such method.
+     */
+    private void immutableSetDeleteByFkMethod(
+        final String deleteMethod)
+    {
+        m__strDeleteByFkMethod = deleteMethod;
+    }
+
+    /**
+     * Specifies the delete by fk method.
+     * @param deleteMethod such method.
+     */
+    protected void setDeleteByFkMethod(
+        final String deleteMethod)
+    {
+        immutableSetDeleteByFkMethod(
+            deleteMethod);
+    }
+
+    /**
+     * Retrieves the delete by fk method.
+     * @return such method.
+     */
+    public String getDeleteByFkMethod()
+    {
+        return m__strDeleteByFkMethod;
+    }
+
+    /**
+     * Specifies the delete fk Javadoc.
+     * @param deleteFkJavadoc such Javadoc.
+     */
+    private void immutableSetDeleteFkJavadoc(
+        final String deleteFkJavadoc)
+    {
+        m__strDeleteFkJavadoc = deleteFkJavadoc;
+    }
+
+    /**
+     * Specifies the delete fk Javadoc.
+     * @param deleteFkJavadoc such Javadoc.
+     */
+    protected void setDeleteFkJavadoc(
+        final String deleteFkJavadoc)
+    {
+        immutableSetDeleteFkJavadoc(
+            deleteFkJavadoc);
+    }
+
+    /**
+     * Retrieves the delete fk Javadoc.
+     * @return such Javadoc.
+     */
+    public String getDeleteFkJavadoc()
+    {
+        return m__strDeleteFkJavadoc;
+    }
+    
+    /**
+     * Specifies the delete fk declaration.
+     * @param deleteFkDeclaration such declaration.
+     */
+    private void immutableSetDeleteFkDeclaration(
+        final String deleteFkDeclaration)
+    {
+        m__strDeleteFkDeclaration =
+            deleteFkDeclaration;
+    }
+
+    /**
+     * Specifies the delete fk declaration.
+     * @param deleteFkDeclaration such declaration.
+     */
+    protected void setDeleteFkdeclaration(
+        final String deleteFkDeclaration)
+    {
+        immutableSetDeleteFkDeclaration(
+            deleteFkDeclaration);
+    }
+
+    /**
+     * Retrieves the delete fk declaration.
+     * @return such declaration.
+     */
+    public String getDeleteFkDeclaration()
+    {
+        return m__strDeleteFkDeclaration;
     }
 
     /**

@@ -51,6 +51,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateFactory;
@@ -264,6 +265,7 @@ public class BaseDAOTemplateGenerator
      * Generates a base DAO template.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
+     * @param customSqlProvider the custom sql provider.
      * @param packageName the package name.
      * @param valueObjectPackageName the value object package name.
      * @param project the project, for logging purposes.
@@ -272,12 +274,14 @@ public class BaseDAOTemplateGenerator
      * @throws QueryJException if the input values are invalid.
      * @precondition tableTemplate != null
      * @precondition metaDataManager != null
+     * @precondition customSqlProvider != null
      * @precondition packageName != null
      * @precondition valueObjectPackageName != null
      */
     public BaseDAOTemplate createBaseDAOTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String valueObjectPackageName,
         final Project project,
@@ -295,6 +299,7 @@ public class BaseDAOTemplateGenerator
                 t_TemplateFactory.createBaseDAOTemplate(
                     tableTemplate,
                     metaDataManager,
+                    customSqlProvider,
                     packageName,
                     valueObjectPackageName,
                     project,
@@ -306,6 +311,7 @@ public class BaseDAOTemplateGenerator
                 new BaseDAOTemplate(
                     tableTemplate,
                     metaDataManager,
+                    customSqlProvider,
                     packageName,
                     valueObjectPackageName,
                     project,
