@@ -64,7 +64,7 @@
     <!--
      Creates the distribution release.
     -->
-    <attainGoal name="release"/>
+    <attainGoal name="dist"/>
 
   </preGoal>
 
