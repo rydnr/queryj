@@ -827,7 +827,7 @@ public interface DAOTemplateDefaults
         + "             && (t_lResult.size() > 0))\n"
         + "        {\n"
         + "            result = t_lResult.get(0);\n"
-        + "        }\n\n";
+        + "        }\n";
 
     /**
      * The custom select for update, returning multiple instances.
@@ -845,8 +845,8 @@ public interface DAOTemplateDefaults
      * The custom select-for-update return javadoc.
      */
     public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RETURN_JAVADOC =
-          "    * @return the information extracted from the persistence layer\n"
-        + "    * and/or processed.\n";
+          "     * @return the information extracted from the persistence layer\n"
+        + "     * and/or processed.\n";
 
     /**
      * The custom select-for-update parameter declaration.
