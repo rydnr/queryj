@@ -8,7 +8,7 @@
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>
-    <logo>http://www.acm-sl.org/images/logo.png</logo>
+    <logo>http://www.acm-sl.org/images/logo.jpg</logo>
   </organization>
   <inceptionYear>2003</inceptionYear>
   <package>org.acmsl.queryj</package>
@@ -23,15 +23,15 @@
     independent to the developer.
   </description>
 
-  <url>http://sourceforge.net/projects/queryj/</url>
-  <logo>http://sourceforge.net/projects/images/queryj.png</logo>
-  <issueTrackingUrl>http://sourceforge.net/tracker/?atid=587688&amp;group_id=88721&amp;func=browse</issueTrackingUrl>
+  <url>http://maven.acm-sl.org/queryj/</url>
+  <logo>http://www.acm-sl.org/images/queryj.png</logo>
+  <issueTrackingUrl>http://bugzilla.acm-sl.org</issueTrackingUrl>
   <siteAddress>liteserver</siteAddress>
   <siteDirectory>
-    /home/httpd/projects/queryj
+    /home/anoncvs/queryj
   </siteDirectory>
   <distributionDirectory>
-    /home/httpd/projects/queryj/builds/
+    /home/anoncvs/builds/queryj/
   </distributionDirectory>
 
   <repository>
@@ -39,7 +39,7 @@
       scm:cvs:pserver:anoncvs@cvs.acm-sl.org:/var/cvs:queryj
     </connection>
     <url>
-      http://dev.acm-sl.org/viewcvs/viewcvs.cgi/queryj
+      http://cvs.acm-sl.org/viewcvs/viewcvs.cgi/queryj
     </url>
   </repository>
 
