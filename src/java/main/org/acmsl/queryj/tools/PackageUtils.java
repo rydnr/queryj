@@ -51,15 +51,13 @@ package org.acmsl.queryj.tools;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.acmsl.commons.utils.StringValidator;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.sql.Types;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * Provides some useful methods for retrieving package information about
@@ -68,8 +66,48 @@ import java.util.HashMap;
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class PackageUtils
+public class PackageUtils
 {
+    /**
+     * The package prefix for unit tests.
+     */
+    public static final String UNITTESTS_PACKAGE_PREFIX = "unittests";
+
+    /**
+     * The subpackage for BaseDAO entitites.
+     */
+    public static final String BASE_DAO_SUBPACKAGE = "dao";
+
+    /**
+     * The subpackage for ValueObject entities.
+     */
+    public static final String VALUE_OBJECT_SUBPACKAGE = "vo";
+
+    /**
+     * The subpackage for JdbcDAO.
+     */
+    public static final String JDBC_DAO_SUBPACKAGE = "rdb";
+
+    /**
+     * The subpackage for TableRepository.
+     */
+    public static final String TABLE_REPOSITORY_SUBPACKAGE = "tables";
+
+    /**
+     * The subpackage for Function entities.
+     */
+    public static final String FUNCTIONS_SUBPACKAGE = "functions";
+
+    /**
+     * The subpackage for MockDAO entities.
+     */
+    public static final String MOCK_DAO_SUBPACKAGE = "mock";
+
+    /**
+     * The subpackage for XmlDAO entities.
+     */
+    public static final String XML_DAO_SUBPACKAGE = "xml";
+
     /**
      * Singleton implemented as a weak reference.
      */
@@ -115,7 +153,7 @@ public abstract class PackageUtils
 
         if  (result == null) 
         {
-            result = new PackageUtils() {};
+            result = new PackageUtils();
 
             setReference(result);
         }
@@ -124,13 +162,193 @@ public abstract class PackageUtils
     }
 
     /**
+     * Retrieves the package name for given subpackage.
+     * @param packageName the original package.
+     * @param subpackage the subpackage.
+     * @return the complate package information for given subpackage.
+     * @precondition packageName != null
+     */
+    protected String retrievePackage(
+        final String packageName, final String subpackage)
+    {
+        return
+            retrievePackage(
+                packageName, subpackage, StringValidator.getInstance());
+    }
+
+    /**
+     * Retrieves the package name for given subpackage.
+     * @param packageName the original package.
+     * @param subpackage the subpackage.
+     * @param stringValidator the <code>StringValidator</code> instance.
+     * @return the complate package information for given subpackage.
+     * @precondition packageName != null
+     * @precondition stringValidator != null
+     */
+    protected String retrievePackage(
+        final String packageName,
+        final String subpackage,
+        final StringValidator stringValidator)
+    {
+        String result = packageName;
+
+        if  (!stringValidator.isEmpty(subpackage))
+        {
+            result += "." + subpackage;
+        }
+
+             return result;
+    }
+
+    /**
+     * Retrieves the package name for given subpackage.
+     * @param packageName the original package.
+     * @param subpackage the subpackage.
+     * @return the complate package information for given subpackage.
+     * @precondition packageName != null
+     * @precondition subpackage != null
+     */
+    protected String retrieveTestPackage(
+        final String packageName, final String subpackage)
+    {
+        return
+            retrievePackage(
+                retrievePackage(UNITTESTS_PACKAGE_PREFIX, packageName),
+                subpackage);
+    }
+
+    /**
+     * Retrieves the package name for given subpackage.
+     * @param packageName the original package.
+     * @return the complate package information for given subpackage.
+     * @precondition packageName != null
+     */
+    protected String retrieveTestPackage(final String packageName)
+    {
+        return retrieveTestPackage(packageName, "");
+    }
+
+    /**
+     * Retrieves the folder for given subpackage.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param subpackage the subpackage.
+     * @return the folder in which the associated class should be
+     * generated.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     */
+    protected File retrieveFolder(
+        final File parentFolder,
+        final String packageName)
+    {
+        return retrieveFolder(parentFolder, packageName, "");
+    }
+
+    /**
+     * Retrieves the folder for given subpackage.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param subpackage the subpackage.
+     * @return the folder in which the associated class should be
+     * generated.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     */
+    protected File retrieveFolder(
+        final File parentFolder,
+        final String packageName,
+        final String subpackage)
+    {
+        return
+            retrieveFolder(
+                parentFolder,
+                packageName,
+                subpackage,
+                StringUtils.getInstance(),
+                StringValidator.getInstance());
+    }
+
+    /**
+     * Retrieves the folder for given subpackage.
+     * @param parentFolder the parent folder.
+     * @return the folder in which the associated class should be
+     * generated.
+     * @precondition parentFolder != null
+     */
+    protected File retrieveTestFolder(final File parentFolder)
+    {
+        return retrieveFolder(parentFolder, UNITTESTS_PACKAGE_PREFIX);
+    }
+
+    /**
+     * Retrieves the folder for given subpackage.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param subpackage the subpackage.
+     * @return the folder in which the associated class should be
+     * generated.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     */
+    protected File retrieveTestFolder(
+        final File parentFolder,
+        final String packageName,
+        final String subpackage)
+    {
+        return
+            retrieveFolder(
+                retrieveTestFolder(parentFolder),
+                packageName,
+                subpackage);
+    }
+
+    /**
+     * Retrieves the folder for given subpackage.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param subpackage the subpackage.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param stringValidator the <code>StringValidator</code> instance.
+     * @return the folder in which the associated DAO class should be
+     * generated.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     * @precondition subpackage != null
+     * @precondition stringUtils != null
+     * @precondition stringValidator != null
+     */
+    protected File retrieveFolder(
+        final File parentFolder,
+        final String packageName,
+        final String subpackage,
+        final StringUtils stringUtils,
+        final StringValidator stringValidator)
+    {
+        String t_strResult =
+              parentFolder.getPath()
+            + File.separator
+            + stringUtils.packageToFilePath(packageName);
+
+        if  (!stringValidator.isEmpty(subpackage))
+        {
+            t_strResult +=
+                  File.separator
+                + subpackage;
+        }
+
+        return new File(t_strResult);
+    }
+
+    /**
      * Retrieves the package name for base DAO templates.
      * @param packageName the original package.
      * @return the package for the associated base DAO interface.
+     * @precondition packageName != null
      */
-    public String retrieveBaseDAOPackage(String packageName)
+    public String retrieveBaseDAOPackage(final String packageName)
     {
-        return packageName + ".dao";
+        return retrievePackage(packageName, BASE_DAO_SUBPACKAGE);
     }
 
     /**
@@ -139,35 +357,25 @@ public abstract class PackageUtils
      * @param packageName the original package.
      * @return the folder in which the associated DAO class should be
      * generated.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
      */
-    public File retrieveBaseDAOFolder(File parentFolder, String packageName)
+    public File retrieveBaseDAOFolder(
+        final File parentFolder, final String packageName)
     {
-        File result = parentFolder;
-
-        StringUtils t_StringUtils = StringUtils.getInstance();
-
-        if  (   (result != null)
-             && (t_StringUtils != null))
-        {
-            result =
-                new File(
-                      parentFolder.getPath()
-                    + File.separator
-                    + t_StringUtils.packageToFilePath(packageName)
-                    + File.separator
-                    + "dao");
-        }
-
-        return result;
+        return
+            retrieveFolder(
+                parentFolder, packageName, BASE_DAO_SUBPACKAGE);
     }
 
     /**
      * Retrieves the package name for base DAO factory templates.
      * @param packageName the original package.
      * @return the package for the associated base DAO factory class.
+     * @precondition packageName != null
      */
     public String retrieveBaseDAOFactoryPackage(
-        String packageName)
+        final String packageName)
     {
         return retrieveBaseDAOPackage(packageName);
     }
@@ -178,9 +386,11 @@ public abstract class PackageUtils
      * @param packageName the package name.
      * @return the folder in which  the associated DAO factory should be
      * generated.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
      */
     public File retrieveBaseDAOFactoryFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
         return retrieveBaseDAOFolder(parentFolder, packageName);
     }
@@ -189,12 +399,12 @@ public abstract class PackageUtils
      * Retrieves the package name for value object templates.
      * @param packageName the original package.
      * @return the package for the associated value object class.
+     * @precondition packageName != null
      */
     public String retrieveValueObjectPackage(String packageName)
     {
-        return retrieveBaseDAOPackage(packageName);
+        return retrievePackage(packageName, VALUE_OBJECT_SUBPACKAGE);
     }
-
 
     /**
      * Retrieves the folder for value object templates.
@@ -204,9 +414,11 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveValueObjectFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
-        return retrieveBaseDAOFolder(parentFolder, packageName);
+        return
+            retrieveFolder(
+                parentFolder, packageName, VALUE_OBJECT_SUBPACKAGE);
     }
 
     /**
@@ -216,7 +428,7 @@ public abstract class PackageUtils
      * @return the package for the associated value object
      * factory class.
      */
-    public String retrieveValueObjectFactoryPackage(String packageName)
+    public String retrieveValueObjectFactoryPackage(final String packageName)
     {
         return retrieveValueObjectPackage(packageName);
     }
@@ -229,7 +441,7 @@ public abstract class PackageUtils
      * factories should be generated.
      */
     public File retrieveValueObjectFactoryFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
         return retrieveValueObjectFolder(parentFolder, packageName);
     }
@@ -240,7 +452,7 @@ public abstract class PackageUtils
      * @return the package for the associated manager class.
      */
     public String retrieveDataAccessManagerPackage(
-        String packageName)
+        final String packageName)
     {
         return retrieveBaseDAOPackage(packageName);
     }
@@ -253,7 +465,7 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveDataAccessManagerFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
         return retrieveBaseDAOFolder(parentFolder, packageName);
     }
@@ -263,9 +475,11 @@ public abstract class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated Jdbc DAO class.
      */
-    public String retrieveJdbcDAOPackage(String packageName)
+    public String retrieveJdbcDAOPackage(final String packageName)
     {
-        return retrieveBaseDAOPackage(packageName) + ".rdb";
+        return
+            retrievePackage(
+                retrieveBaseDAOPackage(packageName), JDBC_DAO_SUBPACKAGE);
     }
 
     /**
@@ -275,21 +489,14 @@ public abstract class PackageUtils
      * @return the folder in which the associated Jdbc DAO should be
      * generated.
      */
-    public File retrieveJdbcDAOFolder(File parentFolder, String packageName)
+    public File retrieveJdbcDAOFolder(
+        final File parentFolder, final String packageName)
     {
-        File result = parentFolder;
-
-        if  (result != null)
-        {
-            result =
-                new File(
-                      retrieveBaseDAOFolder(parentFolder, packageName)
-		          .getPath()
-                    + File.separator
-                    + "rdb");
-        }
-
-        return result;
+        return
+            retrieveFolder(
+                retrieveBaseDAOFolder(
+                    parentFolder, packageName),
+                JDBC_DAO_SUBPACKAGE);
     }
 
     /**
@@ -298,13 +505,14 @@ public abstract class PackageUtils
      * @param engineName the DAO engine.
      * @return the package for the associated DAO class.
      */
-    public String retrieveDAOPackage(String packageName, String engineName)
+    public String retrieveDAOPackage(
+        final String packageName, final String engineName)
     {
         String result = retrieveJdbcDAOPackage(packageName);
 
         if  (engineName != null)
         {
-            result += "." + engineName.toLowerCase();
+            result = retrievePackage(result, engineName.toLowerCase());
         }
 
         return result;
@@ -319,21 +527,17 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveDAOFolder(
-        File parentFolder, String packageName, String engineName)
+        final File parentFolder,
+        final String packageName,
+        final String engineName)
     {
-        File result = parentFolder;
+        File result = retrieveJdbcDAOFolder(parentFolder, packageName);
 
-        if  (result != null)
+        if  (engineName != null)
         {
-            String t_strPath =
-                retrieveJdbcDAOFolder(parentFolder, packageName).getPath();
-
-            if  (engineName != null)
-            {
-                t_strPath += File.separator + engineName.toLowerCase();
-            }
-
-            result = new File(t_strPath);
+            result =
+                retrieveFolder(
+                    result, engineName.toLowerCase());
         }
 
         return result;
@@ -346,7 +550,7 @@ public abstract class PackageUtils
      * @return the package for the associated DAO factory class.
      */
     public String retrieveDAOFactoryPackage(
-        String packageName, String engineName)
+        final String packageName, final String engineName)
     {
         return retrieveDAOPackage(packageName, engineName);
     }
@@ -360,7 +564,9 @@ public abstract class PackageUtils
      * should be generated.
      */
     public File retrieveDAOFactoryFolder(
-        File parentFolder, String packageName, String engineName)
+        final File parentFolder,
+        final String packageName,
+        final String engineName)
     {
         return retrieveDAOFolder(parentFolder, packageName, engineName);
     }
@@ -371,9 +577,9 @@ public abstract class PackageUtils
      * @return the package for the associated repository class.
      */
     public String retrieveTableRepositoryPackage(
-        String packageName)
+        final String packageName)
     {
-        return packageName + ".tables";
+        return retrievePackage(packageName, TABLE_REPOSITORY_SUBPACKAGE);
     }
 
     /**
@@ -384,25 +590,11 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveTableRepositoryFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
-        File result = parentFolder;
-
-        StringUtils t_StringUtils = StringUtils.getInstance();
-
-        if  (   (result        != null)
-             && (t_StringUtils != null))
-        {
-            result =
-                new File(
-                      parentFolder.getPath()
-                    + File.separator
-                    + t_StringUtils.packageToFilePath(packageName)
-                    + File.separator
-                    + "tables");
-        }
-
-        return result;
+        return
+            retrieveFolder(
+                parentFolder, packageName, TABLE_REPOSITORY_SUBPACKAGE);
     }
 
     /**
@@ -410,7 +602,7 @@ public abstract class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated table classes.
      */
-    public String retrieveTablePackage(String packageName)
+    public String retrieveTablePackage(final String packageName)
     {
         return retrieveTableRepositoryPackage(packageName);
     }
@@ -423,7 +615,7 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveTableFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
         return retrieveTableRepositoryFolder(parentFolder, packageName);
     }
@@ -434,9 +626,12 @@ public abstract class PackageUtils
      * @param engineName the engine name.
      * @return the package for the associated DAO tests.
      */
-    public String retrieveDAOTestPackage(String packageName, String engineName)
+    public String retrieveDAOTestPackage(
+        final String packageName, final String engineName)
     {
-        return "unittests." + retrieveDAOPackage(packageName, engineName);
+        return
+            retrieveTestPackage(
+                retrieveDAOPackage(packageName, engineName));
     }
 
     /**
@@ -448,26 +643,15 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveDAOTestFolder(
-        File parentFolder, String packageName, String engineName)
+        final File parentFolder,
+        final String packageName,
+        final String engineName)
     {
-        File result = parentFolder;
-
-        StringUtils t_StringUtils = StringUtils.getInstance();
-
-        if  (   (result != null)
-             && (t_StringUtils != null))
-        {
-            result =
-                retrieveDAOFolder(
-                    new File(
-                          parentFolder.getPath()
-                        + File.separator
-                        + "unittests"),
-                    packageName,
-                    engineName);
-        }
-
-        return result;
+        return
+            retrieveDAOFolder(
+                retrieveTestFolder(parentFolder),
+                packageName,
+                engineName);
     }
 
     /**
@@ -475,9 +659,10 @@ public abstract class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated suite.
      */
-    public String retrieveBaseTestSuitePackage(String packageName)
+    public String retrieveBaseTestSuitePackage(final String packageName)
     {
-        return "unittests." + packageName;
+        return
+            retrieveTestPackage(packageName);
     }
 
     /**
@@ -488,25 +673,12 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveBaseTestSuiteFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
-        File result = parentFolder;
-
-        StringUtils t_StringUtils = StringUtils.getInstance();
-
-        if  (   (result != null)
-             && (t_StringUtils != null))
-        {
-            result =
-                new File(
-                      parentFolder.getPath()
-                    + File.separator
-                    + "unittests"
-                    + File.separator
-                    + t_StringUtils.packageToFilePath(packageName));
-        }
-
-        return result;
+        return
+            retrieveFolder(
+                retrieveTestFolder(parentFolder),
+                packageName);
     }
 
     /**
@@ -514,9 +686,9 @@ public abstract class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated functions classes.
      */
-    public String retrieveFunctionsPackage(String packageName)
+    public String retrieveFunctionsPackage(final String packageName)
     {
-        return packageName + ".functions";
+        return retrievePackage(packageName, FUNCTIONS_SUBPACKAGE);
     }
 
     /**
@@ -527,25 +699,13 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveFunctionsFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
-        File result = parentFolder;
-
-        StringUtils t_StringUtils = StringUtils.getInstance();
-
-        if  (   (result        != null)
-             && (t_StringUtils != null))
-        {
-            result =
-                new File(
-                      parentFolder.getPath()
-                    + File.separator
-                    + t_StringUtils.packageToFilePath(packageName)
-                    + File.separator
-                    + "functions");
-        }
-
-        return result;
+        return
+            retrieveFolder(
+                parentFolder,
+                packageName,
+                FUNCTIONS_SUBPACKAGE);
     }
 
     /**
@@ -553,9 +713,10 @@ public abstract class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated test classes.
      */
-    public String retrieveTestFunctionsPackage(String packageName)
+    public String retrieveTestFunctionsPackage(final String packageName)
     {
-        return "unittests." + retrieveFunctionsPackage(packageName);
+        return
+            retrieveTestPackage(retrieveFunctionsPackage(packageName));
     }
 
     /**
@@ -566,25 +727,12 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveTestFunctionsFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
-        File result = parentFolder;
-
-        StringUtils t_StringUtils = StringUtils.getInstance();
-
-        if  (   (result        != null)
-             && (t_StringUtils != null))
-        {
-            result =
-                retrieveFunctionsFolder(
-                    new File(
-                          parentFolder.getPath()
-                        + File.separator
-                        + "unittests"),
-                    packageName);
-        }
-
-        return result;
+        return
+            retrieveFunctionsFolder(
+                retrieveTestFolder(parentFolder),
+                packageName);
     }
 
     /**
@@ -593,7 +741,7 @@ public abstract class PackageUtils
      * @return the package for the associated manager class.
      */
     public String retrieveDAOChooserPackage(
-        String packageName)
+        final String packageName)
     {
         return retrieveBaseDAOPackage(packageName);
     }
@@ -606,7 +754,7 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveDAOChooserFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
         return retrieveBaseDAOFolder(parentFolder, packageName);
     }
@@ -617,7 +765,7 @@ public abstract class PackageUtils
      * @return the package for the associated repository class.
      */
     public String retrieveProcedureRepositoryPackage(
-        String packageName)
+        final String packageName)
     {
         return retrieveFunctionsPackage(packageName);
     }
@@ -630,7 +778,7 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveProcedureRepositoryFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
         return retrieveFunctionsFolder(parentFolder, packageName);
     }
@@ -641,7 +789,7 @@ public abstract class PackageUtils
      * @return the package for the associated repository class.
      */
     public String retrieveKeywordRepositoryPackage(
-        String packageName)
+        final String packageName)
     {
         return retrieveProcedureRepositoryPackage(packageName);
     }
@@ -654,7 +802,7 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveKeywordRepositoryFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
         return retrieveProcedureRepositoryFolder(parentFolder, packageName);
     }
@@ -664,9 +812,12 @@ public abstract class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO class.
      */
-    public String retrieveMockDAOPackage(String packageName)
+    public String retrieveMockDAOPackage(final String packageName)
     {
-        return retrieveBaseDAOPackage(packageName) + ".mock";
+        return
+            retrievePackage(
+                retrieveBaseDAOPackage(packageName),
+                MOCK_DAO_SUBPACKAGE);
     }
 
     /**
@@ -677,21 +828,12 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveMockDAOFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
-        File result = parentFolder;
-
-        if  (result != null)
-        {
-            String t_strPath =
-                retrieveBaseDAOFolder(parentFolder, packageName).getPath();
-
-            t_strPath += File.separator + "mock";
-
-            result = new File(t_strPath);
-        }
-
-        return result;
+        return
+            retrieveFolder(
+                retrieveBaseDAOFolder(parentFolder, packageName),
+                MOCK_DAO_SUBPACKAGE);
     }
 
     /**
@@ -699,7 +841,7 @@ public abstract class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO factory class.
      */
-    public String retrieveMockDAOFactoryPackage(String packageName)
+    public String retrieveMockDAOFactoryPackage(final String packageName)
     {
         return retrieveMockDAOPackage(packageName);
     }
@@ -712,7 +854,7 @@ public abstract class PackageUtils
      * generated.
      */
     public File retrieveMockDAOFactoryFolder(
-        File parentFolder, String packageName)
+        final File parentFolder, final String packageName)
     {
         return retrieveMockDAOFolder(parentFolder, packageName);
     }
@@ -722,9 +864,9 @@ public abstract class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated Mock DAO tests.
      */
-    public String retrieveMockDAOTestPackage(String packageName)
+    public String retrieveMockDAOTestPackage(final String packageName)
     {
-        return "unittests." + retrieveMockDAOPackage(packageName);
+        return retrieveTestPackage(retrieveMockDAOPackage(packageName));
     }
 
     /**
@@ -737,25 +879,12 @@ public abstract class PackageUtils
     public File retrieveMockDAOTestFolder(
         final File parentFolder, final String packageName)
     {
-        File result = parentFolder;
-
-        StringUtils t_StringUtils = StringUtils.getInstance();
-
-        if  (   (result != null)
-             && (t_StringUtils != null))
-        {
-            result =
-                retrieveMockDAOFolder(
-                    new File(
-                          parentFolder.getPath()
-                        + File.separator
-                        + "unittests"),
-                    packageName);
-        }
-
-        return result;
+        return
+            retrieveMockDAOFolder(
+                retrieveTestFolder(parentFolder),
+                packageName);
     }
-//
+
     /**
      * Retrieves the package name for XML DAO templates.
      * @param packageName the original package.
@@ -763,7 +892,10 @@ public abstract class PackageUtils
      */
     public String retrieveXMLDAOPackage(final String packageName)
     {
-        return retrieveBaseDAOPackage(packageName) + ".xml";
+        return
+            retrievePackage(
+                retrieveBaseDAOPackage(packageName),
+                XML_DAO_SUBPACKAGE);
     }
 
     /**
@@ -776,19 +908,8 @@ public abstract class PackageUtils
     public File retrieveXMLDAOFolder(
         final File parentFolder, final String packageName)
     {
-        File result = parentFolder;
-
-        if  (result != null)
-        {
-            String t_strPath =
-                retrieveBaseDAOFolder(parentFolder, packageName).getPath();
-
-            t_strPath += File.separator + "xml";
-
-            result = new File(t_strPath);
-        }
-
-        return result;
+        return
+            retrieveFolder(parentFolder, packageName, XML_DAO_SUBPACKAGE);
     }
 
     /**
@@ -821,7 +942,8 @@ public abstract class PackageUtils
      */
     public String retrieveXMLDAOTestPackage(final String packageName)
     {
-        return "unittests." + retrieveXMLDAOPackage(packageName);
+        return 
+            retrieveTestPackage(retrieveXMLDAOPackage(packageName));
     }
 
     /**
@@ -834,23 +956,10 @@ public abstract class PackageUtils
     public File retrieveXMLDAOTestFolder(
         final File parentFolder, final String packageName)
     {
-        File result = parentFolder;
-
-        StringUtils t_StringUtils = StringUtils.getInstance();
-
-        if  (   (result != null)
-             && (t_StringUtils != null))
-        {
-            result =
-                retrieveXMLDAOFolder(
-                    new File(
-                          parentFolder.getPath()
-                        + File.separator
-                        + "unittests"),
-                    packageName);
-        }
-
-        return result;
+        return
+            retrieveXMLDAOFolder(
+                retrieveTestFolder(parentFolder),
+                packageName);
     }
 
     /**
@@ -875,5 +984,4 @@ public abstract class PackageUtils
     {
         return retrieveXMLDAOFolder(parentFolder, packageName);
     }
-
 }

@@ -260,7 +260,8 @@ public interface ValueObjectFactoryTemplateDefaults
         + "    public {0}ValueObject create{0}ValueObject(" // table
         + "{2})\n" // factory method field declaration
         + "    '{'\n"
-        + "        return create{0}("
+        + "        return\n"
+        + "            create{0}("
         + "{3});\n\n"  // factory method value object build.
         + "    '}'\n\n";
 

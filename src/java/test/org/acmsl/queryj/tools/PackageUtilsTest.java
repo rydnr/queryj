@@ -85,7 +85,7 @@ public class PackageUtilsTest
      * Constructs a test case with the given name.
      * @param name the test case name.
      */
-    public PackageUtilsTest(String name)
+    public PackageUtilsTest(final String name)
     {
         super(name);
     }
@@ -94,7 +94,7 @@ public class PackageUtilsTest
      * Executes the tests from command line.
      * @param args the command-line arguments. Not needed so far.
      */
-    public static void main(String args[])
+    public static void main(final String args[])
     {
         TestRunner.run(PackageUtilsTest.class);
     }
@@ -103,7 +103,7 @@ public class PackageUtilsTest
      * Specifies a new test file.
      * @param file a file just for testing.
      */
-    protected void setTestFile(File file)
+    protected void setTestFile(final File file)
     {
         m__File = file;
     }
@@ -256,7 +256,7 @@ public class PackageUtilsTest
             + File.separator
             + "bar"
             + File.separator
-            + "dao");
+            + PackageUtils.BASE_DAO_SUBPACKAGE);
     }
 
     /**
@@ -271,7 +271,7 @@ public class PackageUtilsTest
 
         assertEquals(
             t_PackageUtils.retrieveValueObjectPackage("com.foo.bar"),
-            "com.foo.bar.dao");
+            "com.foo.bar." + PackageUtils.VALUE_OBJECT_SUBPACKAGE);
     }
 
     /**
@@ -303,7 +303,7 @@ public class PackageUtilsTest
             + File.separator
             + "bar"
             + File.separator
-            + "dao");
+            + PackageUtils.VALUE_OBJECT_SUBPACKAGE);
     }
 
     /**
@@ -318,7 +318,7 @@ public class PackageUtilsTest
 
         assertEquals(
             t_PackageUtils.retrieveValueObjectFactoryPackage("com.foo.bar"),
-            "com.foo.bar.dao");
+            "com.foo.bar." + PackageUtils.VALUE_OBJECT_SUBPACKAGE);
     }
 
     /**
@@ -350,7 +350,7 @@ public class PackageUtilsTest
             + File.separator
             + "bar"
             + File.separator
-            + "dao");
+            + PackageUtils.VALUE_OBJECT_SUBPACKAGE);
     }
 
     /**
@@ -365,7 +365,7 @@ public class PackageUtilsTest
 
         assertEquals(
             t_PackageUtils.retrieveDataAccessManagerPackage("com.foo.bar"),
-            "com.foo.bar.dao");
+            "com.foo.bar." + PackageUtils.BASE_DAO_SUBPACKAGE);
     }
 
     /**
@@ -397,7 +397,7 @@ public class PackageUtilsTest
             + File.separator
             + "bar"
             + File.separator
-            + "dao");
+            + PackageUtils.BASE_DAO_SUBPACKAGE);
     }
 
     /**
@@ -412,7 +412,9 @@ public class PackageUtilsTest
 
         assertEquals(
             t_PackageUtils.retrieveJdbcDAOPackage("com.foo.bar"),
-            "com.foo.bar.dao.rdb");
+              "com.foo.bar"
+            + "." + PackageUtils.BASE_DAO_SUBPACKAGE
+            + "." + PackageUtils.JDBC_DAO_SUBPACKAGE);
     }
 
     /**
@@ -444,9 +446,9 @@ public class PackageUtilsTest
             + File.separator
             + "bar"
             + File.separator
-            + "dao"
+            + PackageUtils.BASE_DAO_SUBPACKAGE
             + File.separator
-            + "rdb");
+            + PackageUtils.JDBC_DAO_SUBPACKAGE);
     }
 
     /**
@@ -461,7 +463,10 @@ public class PackageUtilsTest
 
         assertEquals(
             t_PackageUtils.retrieveDAOPackage("com.foo.bar", "mysql"),
-            "com.foo.bar.dao.rdb.mysql");
+              "com.foo.bar"
+            + "." + PackageUtils.BASE_DAO_SUBPACKAGE
+            + "." + PackageUtils.JDBC_DAO_SUBPACKAGE
+            + ".mysql");
     }
 
     /**
@@ -493,9 +498,9 @@ public class PackageUtilsTest
             + File.separator
             + "bar"
             + File.separator
-            + "dao"
+            + PackageUtils.BASE_DAO_SUBPACKAGE
             + File.separator
-            + "rdb"
+            + PackageUtils.JDBC_DAO_SUBPACKAGE
             + File.separator
             + "mysql");
     }
@@ -512,7 +517,10 @@ public class PackageUtilsTest
 
         assertEquals(
             t_PackageUtils.retrieveDAOFactoryPackage("com.foo.bar", "mysql"),
-            "com.foo.bar.dao.rdb.mysql");
+              "com.foo.bar"
+            + "." + PackageUtils.BASE_DAO_SUBPACKAGE
+            + "." + PackageUtils.JDBC_DAO_SUBPACKAGE
+            + ".mysql");
     }
 
     /**
@@ -544,9 +552,9 @@ public class PackageUtilsTest
             + File.separator
             + "bar"
             + File.separator
-            + "dao"
+            + PackageUtils.BASE_DAO_SUBPACKAGE
             + File.separator
-            + "rdb"
+            + PackageUtils.JDBC_DAO_SUBPACKAGE
             + File.separator
             + "mysql");
     }

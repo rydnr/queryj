@@ -114,6 +114,7 @@ public class ToolsSuite
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntFieldFkElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntTableElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntFieldElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.PackageUtilsTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.ProcedureMetaDataTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntTablesElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntExternallyManagedFieldsElementTest.class);
