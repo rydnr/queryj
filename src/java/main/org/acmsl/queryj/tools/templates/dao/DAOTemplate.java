@@ -260,7 +260,7 @@ public abstract class DAOTemplate
      * The class definition.
      */
     public static final String CLASS_DEFINITION =
-          "public abstract class {0}{1}DAO\n"
+          "public class {0}{1}DAO\n"
         + "    extends     JdbcDAO\n"
         + "    implements  {1}DAO\n";
         // engine name - table name
@@ -280,8 +280,9 @@ public abstract class DAOTemplate
         // engine name - table name
         + "     * with given data source.\n"
         + "     * @param dataSource the required data source.\n"
+        + "     * @precondition dateSource != null\n"
         + "     */\n"
-        + "    public {0}{1}DAO(DataSource dataSource)\n"
+        + "    public {0}{1}DAO(final DataSource dataSource)\n"
         + "    '{'\n"
         + "        super(dataSource);\n"
         + "    '}'\n\n";
@@ -305,7 +306,7 @@ public abstract class DAOTemplate
          // java table name
         + "{3}\n"
          // FIND_BY_PRIMARY_KEY_PK_DECLARATION
-        + "        TransactionToken  transactionToken)\n"
+        + "        final TransactionToken transactionToken)\n"
         + "    '{'\n"
         + "        {2}ValueObject result = null;\n\n"
          // java table name
@@ -337,11 +338,11 @@ public abstract class DAOTemplate
         + "                '}'\n"
         + "            '}'\n"
         + "        '}'\n"
-        + "        catch  (SQLException sqlException)\n"
+        + "        catch  (final SQLException sqlException)\n"
         + "        '{'\n"
         + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
         + "        '}'\n"
-        + "        catch  (Exception exception)\n"
+        + "        catch  (final Exception exception)\n"
         + "        '{'\n"
         + "            LogFactory.getLog(getClass()).error(exception);\n"
         + "        '}'\n"
@@ -358,7 +359,7 @@ public abstract class DAOTemplate
         + "                    closeConnection(t_Connection, transactionToken);\n"
         + "                '}'\n"
         + "            '}'\n"
-        + "            catch  (Exception exception)\n"
+        + "            catch  (final Exception exception)\n"
         + "            '{'\n"
         + "                LogFactory.getLog(getClass()).error(exception);\n"
         + "            '}'\n"
@@ -475,7 +476,7 @@ public abstract class DAOTemplate
         + "    public void insert("
         + "{3}\n"
          // insert parameters declaration
-        + "        TransactionToken transactionToken)\n"
+        + "        final TransactionToken transactionToken)\n"
         + "    '{'\n"
         + "        Connection        t_Connection        = null;\n"
         + "        PreparedStatement t_PreparedStatement = null;\n\n"
@@ -498,11 +499,11 @@ public abstract class DAOTemplate
         + "                t_PreparedStatement.executeUpdate();\n"
         + "            '}'\n"
         + "        '}'\n"
-        + "        catch  (SQLException sqlException)\n"
+        + "        catch  (final SQLException sqlException)\n"
         + "        '{'\n"
         + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
         + "        '}'\n"
-        + "        catch  (Exception exception)\n"
+        + "        catch  (final Exception exception)\n"
         + "        '{'\n"
         + "            LogFactory.getLog(getClass()).error(exception);\n"
         + "        '}'\n"
@@ -575,7 +576,7 @@ public abstract class DAOTemplate
          // (optional) pk declaration
         + "{4}"
          // update parameters declaration
-        + "        TransactionToken transactionToken)\n"
+        + "        final TransactionToken transactionToken)\n"
         + "    '{'\n"
         + "        Connection        t_Connection        = null;\n"
         + "        PreparedStatement t_PreparedStatement = null;\n\n"
@@ -597,11 +598,11 @@ public abstract class DAOTemplate
         + "                t_PreparedStatement.executeUpdate();\n"
         + "            '}'\n"
         + "        '}'\n"
-        + "        catch  (SQLException sqlException)\n"
+        + "        catch  (final SQLException sqlException)\n"
         + "        '{'\n"
         + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
         + "        '}'\n"
-        + "        catch  (Exception exception)\n"
+        + "        catch  (final Exception exception)\n"
         + "        '{'\n"
         + "            LogFactory.getLog(getClass()).error(exception);\n"
         + "        '}'\n"
@@ -672,7 +673,7 @@ public abstract class DAOTemplate
          // java table name
         + "{2}"
          // DELETE_PK_DECLARATION
-        + "        TransactionToken  transactionToken)\n"
+        + "        final TransactionToken  transactionToken)\n"
         + "    '{'\n"
         + "        boolean result = false;\n\n"
         + "        Connection        t_Connection        = null;\n"
@@ -777,7 +778,7 @@ public abstract class DAOTemplate
         + "    public boolean delete(\n"
         + "{2}"
          // DELETE_PK_DECLARATION
-        + "        TransactionToken  transactionToken)\n"
+        + "        final TransactionToken  transactionToken)\n"
         + "    '{'\n"
         + "        return\n"
         + "            delete(\n"
@@ -794,10 +795,11 @@ public abstract class DAOTemplate
         + "     * see previously uncommited inserts/updates/deletes.\n"
         + "     * @return <code>true</code> if the information has been deleted\n"
         + "     * successfully.\n"
+        + "     * @precondition {4} != null\n"
         + "     */\n"
         + "    public boolean delete(\n"
-        + "        {0}ValueObject {4},\n"
-        + "        TransactionToken  transactionToken)\n"
+        + "        final {0}ValueObject {4},\n"
+        + "        final TransactionToken  transactionToken)\n"
         + "    '{'\n"
         + "        boolean result = false;\n\n"
         + "        TransactionToken  t_DeleteTransactionToken = transactionToken;\n"
@@ -828,7 +830,7 @@ public abstract class DAOTemplate
         + "                '}'\n"
         + "            '}'\n"
         + "        '}'\n"
-        + "        catch  (Exception exception)\n"
+        + "        catch  (final Exception exception)\n"
         + "        '{'\n"
         + "            LogFactory.getLog(getClass()).error(exception);\n"
         + "            result = false;\n"
@@ -855,7 +857,7 @@ public abstract class DAOTemplate
         + "                    '}'\n"
         + "                '}'\n"
         + "            '}'\n"
-        + "            catch  (Exception exception)\n"
+        + "            catch  (final Exception exception)\n"
         + "            '{'\n"
         + "                LogFactory.getLog(getClass()).error(exception);\n"
         + "            '}'\n"
