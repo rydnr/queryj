@@ -3175,12 +3175,24 @@ public class QueryResultSet
     public void updateBoolean(final int index, final boolean value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateBoolean(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateBoolean(index, value);
-        }
+    /**
+     * See ResultSet#updateBoolean(int,boolean)
+     * @see java.sql.ResultSet#updateBoolean(int,boolean)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBoolean(
+        final int index, final boolean value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBoolean(index, value);
     }
 
     /**
@@ -3194,12 +3206,26 @@ public class QueryResultSet
     public void updateBoolean(final String columnName, final boolean value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateBoolean(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateBoolean(columnName, value);
-        }
+    /**
+     * See ResultSet#updateBoolean(String,boolean)
+     * @see java.sql.ResultSet#updateBoolean(java.lang.String,boolean)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBoolean(
+        final String columnName,
+        final boolean value,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBoolean(columnName, value);
     }
 
     /**
@@ -3213,12 +3239,24 @@ public class QueryResultSet
     public void updateByte(final int index, final byte value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateByte(index, value);
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateByte(index, value);
-        }
+    /**
+     * See ResultSet#updateByte(int,byte)
+     * @see java.sql.ResultSet#updateByte(int,byte)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateByte(
+        final int index, final byte value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateByte(index, value);
     }
 
     /**
@@ -3232,12 +3270,24 @@ public class QueryResultSet
     public void updateByte(final String columnName, final byte value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateByte(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateByte(columnName, value);
-        }
+    /**
+     * See ResultSet#updateByte(String,byte)
+     * @see java.sql.ResultSet#updateByte(java.lang.String,byte)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateByte(
+        final String columnName, final byte value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateByte(columnName, value);
     }
 
     /**
@@ -3251,12 +3301,24 @@ public class QueryResultSet
     public void updateBytes(final int index, final byte[] value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateBytes(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateBytes(index, value);
-        }
+    /**
+     * See ResultSet#updateBytes(int,byte[])
+     * @see java.sql.ResultSet#updateBytes(int,byte[])
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBytes(
+        final int index, final byte[] value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBytes(index, value);
     }
 
     /**
@@ -3270,12 +3332,24 @@ public class QueryResultSet
     public void updateBytes(final String columnName, final byte[] value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateBytes(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateBytes(columnName, value);
-        }
+    /**
+     * See ResultSet#updateBytes(String,byte[])
+     * @see java.sql.ResultSet#updateBytes(java.lang.String,byte[])
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBytes(
+        final String columnName, final byte[] value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBytes(columnName, value);
     }
 
     /**
@@ -3290,12 +3364,25 @@ public class QueryResultSet
     public void updateCharacterStream(final int index, Reader value, final int length)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateCharacterStream(index, value, length, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateCharacterStream(index, value, length);
-        }
+    /**
+     * See ResultSet#updateCharacterStream(int,Reader,int)
+     * @see java.sql.ResultSet#updateCharacterStream(int,java.io.Reader,int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length (Taken from Sun's Javadoc) the length of the stream.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateCharacterStream(
+        final int index, Reader value, final int length, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateCharacterStream(index, value, length);
     }
 
     /**
@@ -3308,17 +3395,33 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      */
     public void updateCharacterStream(
-            String  columnName,
-            Reader  value,
-            int     length)
-        throws  SQLException
+        final String columnName,
+        final Reader value,
+        final int length)
+      throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateCharacterStream(columnName, value, length, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateCharacterStream(columnName, value, length);
-        }
+    /**
+     * See ResultSet#updateCharacterStream(String,Reader,int)
+     * @see java.sql.ResultSet#updateCharacterStream(java.lang.String,java.io.Reader,int)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length (Taken from Sun's Javadoc) the length of the stream.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateCharacterStream(
+        final String columnName,
+        final Reader value,
+        final int length,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateCharacterStream(columnName, value, length);
     }
 
     /**
@@ -3332,12 +3435,24 @@ public class QueryResultSet
     public void updateDate(final int index, final Date value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateDate(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateDate(index, value);
-        }
+    /**
+     * See ResultSet#updateDate(int,Date)
+     * @see java.sql.ResultSet#updateDate(int,java.sql.Date)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateDate(
+        final int index, final Date value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateDate(index, value);
     }
 
     /**
@@ -3351,12 +3466,24 @@ public class QueryResultSet
     public void updateDate(final String columnName, final Date value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateDate(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateDate(columnName, value);
-        }
+    /**
+     * See ResultSet#updateDate(String,Date)
+     * @see java.sql.ResultSet#updateDate(java.lang.String,java.sql.Date)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateDate(
+        final String columnName, final Date value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateDate(columnName, value);
     }
 
     /**
@@ -3370,12 +3497,24 @@ public class QueryResultSet
     public void updateDouble(final int index, final double value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateDouble(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateDouble(index, value);
-        }
+    /**
+     * See ResultSet#updateDouble(int,double)
+     * @see java.sql.ResultSet#updateDouble(int,double)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateDouble(
+        final int index, final double value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateDouble(index, value);
     }
 
     /**
@@ -3389,12 +3528,24 @@ public class QueryResultSet
     public void updateDouble(final String columnName, final double value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateDouble(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateDouble(columnName, value);
-        }
+    /**
+     * See ResultSet#updateDouble(String,double)
+     * @see java.sql.ResultSet#updateDouble(String,double)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateDouble(
+        final String columnName, final double value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateDouble(columnName, value);
     }
 
     /**
@@ -3408,12 +3559,24 @@ public class QueryResultSet
     public void updateFloat(final int index, final float value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateFloat(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateFloat(index, value);
-        }
+    /**
+     * See ResultSet#updateFloat(int,float)
+     * @see java.sql.ResultSet#updateFloat(int,float)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateFloat(
+        final int index, final float value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateFloat(index, value);
     }
 
     /**
@@ -3427,12 +3590,24 @@ public class QueryResultSet
     public void updateFloat(final String columnName, final float value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateFloat(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateFloat(columnName, value);
-        }
+    /**
+     * See ResultSet#updateFloat(String,float)
+     * @see java.sql.ResultSet#updateFloat(String,float)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs
+     * @precondition resultSet != null
+     */
+    protected void updateFloat(
+        final String columnName, final float value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateFloat(columnName, value);
     }
 
     /**
@@ -3446,12 +3621,24 @@ public class QueryResultSet
     public void updateInt(final int index, final int value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateInt(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateInt(index, value);
-        }
+    /**
+     * See ResultSet#updateInt(int,int)
+     * @see java.sql.ResultSet#updateInt(int,int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateInt(
+        final int index, final int value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateInt(index, value);
     }
 
     /**
@@ -3465,12 +3652,24 @@ public class QueryResultSet
     public void updateInt(final String columnName, final int value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateInt(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateInt(columnName, value);
-        }
+    /**
+     * See ResultSet#updateInt(String,int)
+     * @see java.sql.ResultSet#updateInt(java.lang.String,int)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateInt(
+        final String columnName, final int value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateInt(columnName, value);
     }
 
     /**
@@ -3484,12 +3683,24 @@ public class QueryResultSet
     public void updateLong(final int index, final long value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateLong(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateLong(index, value);
-        }
+    /**
+     * See ResultSet#updateLong(int,long)
+     * @see java.sql.ResultSet#updateLong(int,long)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateLong(
+        final int index, final long value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateLong(index, value);
     }
 
     /**
@@ -3503,12 +3714,24 @@ public class QueryResultSet
     public void updateLong(final String columnName, final long value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateLong(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateLong(columnName, value);
-        }
+    /**
+     * See ResultSet#updateLong(String,long)
+     * @see java.sql.ResultSet#updateLong(java.lang.String,long)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs
+     * @precondition resultSet != null
+     */
+    protected void updateLong(
+        final String columnName, final long value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateLong(columnName, value);
     }
 
     /**
@@ -3516,18 +3739,27 @@ public class QueryResultSet
      * @see java.sql.ResultSet#updateNull(int)
      * @param index (Taken from Sun's Javadoc) the first column
      * is 1, the second is 2, ...
-     *
      * @exception SQLException if an error occurs.
      */
     public void updateNull(final int index)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateNull(index, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateNull(index);
-        }
+    /**
+     * See ResultSet#updateNull(int)
+     * @see java.sql.ResultSet#updateNull(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateNull(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.updateNull(index);
     }
 
     /**
@@ -3540,12 +3772,23 @@ public class QueryResultSet
     public void updateNull(final String columnName)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateNull(columnName, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateNull(columnName);
-        }
+    /**
+     * See ResultSet#updateNull(String)
+     * @see java.sql.ResultSet#updateNull(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateNull(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateNull(columnName);
     }
 
     /**
@@ -3559,15 +3802,34 @@ public class QueryResultSet
      * the decimal point. For all other types this value will be ignored.
      * @exception SQLException if an error occurs.
      */
-    public void updateObject(final int index, final Object value, final int scale)
-        throws  SQLException
+    public void updateObject(
+        final int index, final Object value, final int scale)
+      throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateObject(index, value, scale, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateObject(index, value, scale);
-        }
+    /**
+     * See ResultSet#updateObject(int,Object,int)
+     * @see java.sql.ResultSet#updateObject(int,java.lang.Object,int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param scale (Taken from Sun's Javadoc) for java.sql.Types.DECIMA
+     * or java.sql.Types.NUMERIC types, this is the number of digits after
+     * the decimal point. For all other types this value will be ignored.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateObject(
+        final int index,
+        final Object value,
+        final int scale,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateObject(index, value, scale);
     }
 
     /**
@@ -3581,12 +3843,24 @@ public class QueryResultSet
     public void updateObject(final int index, final Object value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateObject(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateObject(index, value);
-        }
+    /**
+     * See ResultSet#updateObject(int,Object)
+     * @see java.sql.ResultSet#updateObject(int,java.lang.Object)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateObject(
+        final int index, final Object value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateObject(index, value);
     }
 
     /**
@@ -3600,15 +3874,34 @@ public class QueryResultSet
      * the decimal point. For all other types this value will be ignored.
      * @exception SQLException if an error occurs.
      */
-    public void updateObject(final String columnName, final Object value, final int scale)
-        throws  SQLException
+    public void updateObject(
+        final String columnName, final Object value, final int scale)
+      throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateObject(columnName, value, scale, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateObject(columnName, value, scale);
-        }
+    /**
+     * See ResultSet#updateObject(String,Object,int)
+     * @see java.sql.ResultSet#updateObject(java.lang.String,java.lang.Object,int)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param scale (Taken from Sun's Javadoc) for java.sql.Types.DECIMA
+     * or java.sql.Types.NUMERIC types, this is the number of digits after
+     * the decimal point. For all other types this value will be ignored.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateObject(
+        final String columnName,
+        final Object value,
+        final int scale,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateObject(columnName, value, scale);
     }
 
     /**
@@ -3622,12 +3915,24 @@ public class QueryResultSet
     public void updateObject(final String columnName, final Object value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateObject(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateObject(columnName, value);
-        }
+    /**
+     * See ResultSet#updateObject(String,Object)
+     * @see java.sql.ResultSet#updateObject(java.lang.String,java.lang.Object)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateObject(
+        final String columnName, final Object value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateObject(columnName, value);
     }
 
     /**
@@ -3638,12 +3943,20 @@ public class QueryResultSet
     public void updateRow()
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateRow(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateRow();
-        }
+    /**
+     * See ResultSet#updateRow()
+     * @param resultSet the result set.
+     * @see java.sql.ResultSet#updateRow()
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateRow(final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.updateRow();
     }
 
     /**
@@ -3657,12 +3970,24 @@ public class QueryResultSet
     public void updateShort(final int index, final short value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateShort(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateShort(index, value);
-        }
+    /**
+     * See ResultSet#updateShort(int,short)
+     * @see java.sql.ResultSet#updateShort(int,short)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateShort(
+        final int index, final short value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateShort(index, value);
     }
 
     /**
@@ -3676,12 +4001,24 @@ public class QueryResultSet
     public void updateShort(final String columnName, final short value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateShort(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateShort(columnName, value);
-        }
+    /**
+     * See ResultSet#updateShort(String,short)
+     * @see java.sql.ResultSet#updateShort(java.lang.String,short)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateShort(
+        final String columnName, final short value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateShort(columnName, value);
     }
 
     /**
@@ -3695,12 +4032,24 @@ public class QueryResultSet
     public void updateString(final int index, final String value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateString(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateString(index, value);
-        }
+    /**
+     * See ResultSet#updateString(int,String)
+     * @see java.sql.ResultSet#updateString(int,java.lang.String)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateString(
+        final int index, final String value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateString(index, value);
     }
 
     /**
@@ -3714,12 +4063,24 @@ public class QueryResultSet
     public void updateString(final String columnName, final String value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateString(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateString(columnName, value);
-        }
+    /**
+     * See ResultSet#updateString(String,String)
+     * @see java.sql.ResultSet#updateString(java.lang.String,java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateString(
+        final String columnName, final String value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateString(columnName, value);
     }
 
     /**
@@ -3733,12 +4094,24 @@ public class QueryResultSet
     public void updateTime(final int index, final Time value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateTime(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateTime(index, value);
-        }
+    /**
+     * See ResultSet#updateTime(int,Time)
+     * @see java.sql.ResultSet#updateTime(int,java.sql.Time)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateTime(
+        final int index, final Time value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateTime(index, value);
     }
 
     /**
@@ -3752,12 +4125,24 @@ public class QueryResultSet
     public void updateTime(final String columnName, final Time value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateTime(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateTime(columnName, value);
-        }
+    /**
+     * See ResultSet#updateTime(String,Time)
+     * @see java.sql.ResultSet#updateTime(java.lang.String,java.sql.Time)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateTime(
+        final String columnName, final Time value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateTime(columnName, value);
     }
 
     /**
@@ -3771,12 +4156,24 @@ public class QueryResultSet
     public void updateTimestamp(final int index, final Timestamp value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateTimestamp(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateTimestamp(index, value);
-        }
+    /**
+     * See ResultSet#updateTimestamp(int,Timestamp)
+     * @see java.sql.ResultSet#updateTimestamp(int,java.sql.Timestamp)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateTimestamp(
+        final int index, final Timestamp value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateTimestamp(index, value);
     }
 
     /**
@@ -3790,12 +4187,24 @@ public class QueryResultSet
     public void updateTimestamp(final String columnName, final Timestamp value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateTimestamp(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateTimestamp(columnName, value);
-        }
+    /**
+     * See ResultSet#updateTimestamp(String,Timestamp)
+     * @see java.sql.ResultSet#updateTimestamp(java.lang.String,java.sql.Timestamp)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateTimestamp(
+        final String columnName, final Timestamp value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateTimestamp(columnName, value);
     }
 
     // New methods from JDK 1.4 //
@@ -3813,16 +4222,25 @@ public class QueryResultSet
     public URL getURL(final int columnIndex)
         throws  SQLException
     {
-        URL result = null;
+        return getURL(columnIndex, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getURL(columnIndex);
-        }
-
-        return result;
+    /**
+     * See ResultSet#getURL(int)
+     * @see java.sql.ResultSet#getURL(int)
+     * @param columnIndex (Taken from Sun's Javadoc) the index of the column
+     * 1 is the first, 2 is the second,...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value as a java.net.URL
+     * object; if the value is SQL NULL, the value returned is null in the
+     * Java programming language.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected URL getURL(final int columnIndex, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getURL(columnIndex);
     }
 
     /**
@@ -3837,16 +4255,24 @@ public class QueryResultSet
     public URL getURL(final String columnName)
         throws  SQLException
     {
-        URL result = null;
+        return getURL(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getURL(columnName);
-        }
-
-        return result;
+    /**
+     * See ResultSet#getURL(String)
+     * @see java.sql.ResultSet#getURL(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value as a java.net.URL
+     * object; if the value is SQL NULL, the value returned is null in the
+     * Java programming language.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected URL getURL(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getURL(columnName);
     }
 
     /**
@@ -3860,12 +4286,24 @@ public class QueryResultSet
     public void updateRef(final int columnIndex, final Ref value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateRef(columnIndex, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateRef(columnIndex, value);
-        }
+    /**
+     * See ResultSet#updateRef(int,Ref)
+     * @see java.sql.ResultSet#updateRef(int,java.sql.Ref)
+     * @param columnIndex (Taken from Sun's Javadoc) the index of the column
+     * 1 is the first, 2 is the second,...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateRef(
+        final int columnIndex, final Ref value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateRef(columnIndex, value);
     }
 
     /**
@@ -3878,12 +4316,23 @@ public class QueryResultSet
     public void updateRef(final String columnName, final Ref value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateRef(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateRef(columnName, value);
-        }
+    /**
+     * See ResultSet#updateRef(String,Ref)
+     * @see java.sql.ResultSet#updateRef(java.lang.String,java.sql.Ref)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateRef(
+        final String columnName, final Ref value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateRef(columnName, value);
     }
 
     /**
@@ -3897,12 +4346,24 @@ public class QueryResultSet
     public void updateBlob(final int columnIndex, final Blob value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateBlob(columnIndex, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateBlob(columnIndex, value);
-        }
+    /**
+     * See ResultSet#updateBlob(int,Blob)
+     * @see java.sql.ResultSet#updateBlob(int,java.sql.Blob)
+     * @param columnIndex (Taken from Sun's Javadoc) the index of the column
+     * 1 is the first, 2 is the second,...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBlob(
+        final int columnIndex, final Blob value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBlob(columnIndex, value);
     }
 
     /**
@@ -3915,14 +4376,24 @@ public class QueryResultSet
     public void updateBlob(final String columnName, final Blob value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateBlob(columnName, value);
-        }
+        updateBlob(columnName, value, getResultSet());
     }
 
+    /**
+     * See ResultSet#updateBlob(String,Blob)
+     * @see java.sql.ResultSet#updateBlob(java.lang.String,java.sql.Blob)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBlob(
+        final String columnName, final Blob value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBlob(columnName, value);
+    }
 
     /**
      * See ResultSet#updateClob(int,Clob)
@@ -3935,12 +4406,24 @@ public class QueryResultSet
     public void updateClob(final int columnIndex, final Clob value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateClob(columnIndex, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateClob(columnIndex, value);
-        }
+    /**
+     * See ResultSet#updateClob(int,Clob)
+     * @see java.sql.ResultSet#updateClob(int,java.sql.Clob)
+     * @param columnIndex (Taken from Sun's Javadoc) the index of the column
+     * 1 is the first, 2 is the second,...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateClob(
+        final int columnIndex, final Clob value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateClob(columnIndex, value);
     }
 
     /**
@@ -3953,14 +4436,24 @@ public class QueryResultSet
     public void updateClob(final String columnName, final Clob value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateClob(columnName, value);
-        }
+        updateClob(columnName, value, getResultSet());
     }
 
+    /**
+     * See ResultSet#updateClob(String,Clob)
+     * @see java.sql.ResultSet#updateClob(java.lang.String,java.sql.Clob)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateClob(
+        final String columnName, final Clob value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateClob(columnName, value);
+    }
 
     /**
      * See ResultSet#updateArray(int,Array)
@@ -3973,12 +4466,24 @@ public class QueryResultSet
     public void updateArray(final int columnIndex, final Array value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateArray(columnIndex, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateArray(columnIndex, value);
-        }
+    /**
+     * See ResultSet#updateArray(int,Array)
+     * @see java.sql.ResultSet#updateArray(int,java.sql.Array)
+     * @param columnIndex (Taken from Sun's Javadoc) the index of the column
+     * 1 is the first, 2 is the second,...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateArray(
+        final int columnIndex, final Array value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateArray(columnIndex, value);
     }
 
     /**
@@ -3991,12 +4496,23 @@ public class QueryResultSet
     public void updateArray(final String columnName, final Array value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateArray(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateArray(columnName, value);
-        }
+    /**
+     * See ResultSet#updateArray(String,Array)
+     * @see java.sql.ResultSet#updateArray(java.lang.String,java.sql.Array)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateArray(
+        final String columnName, final Array value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateArray(columnName, value);
     }
 
     // Helper ResultSet methods //
@@ -4011,23 +4527,25 @@ public class QueryResultSet
     public byte[] getBytes(final Field field)
         throws  SQLException
     {
-        byte[] result = null;
+        return getBytes(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null)
-            {
-                result = t_ResultSet.getBytes(t_iFieldIndex);
-            }
-        }
-
-        return result;
+    /**
+     * Retrieves a byte array value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected byte[] getBytes(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getBytes(query.getFieldIndex(field));
     }
 
     /**
@@ -4040,23 +4558,25 @@ public class QueryResultSet
     public boolean getBoolean(final Field field)
         throws  SQLException
     {
-        boolean result = false;
+        return getBoolean(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getBoolean(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a boolean value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is <code>false</code>.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected boolean getBoolean(
+        final Field field, final Query query, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getBoolean(query.getFieldIndex(field));
     }
 
     /**
@@ -4069,23 +4589,25 @@ public class QueryResultSet
     public long getLong(final Field field)
         throws  SQLException
     {
-        long result = 0;
+        return getLong(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getLong(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a boolean value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected long getLong(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getLong(query.getFieldIndex(field));
     }
 
     /**
@@ -4096,23 +4618,23 @@ public class QueryResultSet
     public Object getObject(final Field field)
         throws  SQLException
     {
-        Object result = null;
+        return getObject(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getObject(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves an object value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Object getObject(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getObject(query.getFieldIndex(field));
     }
 
     /**
@@ -4128,23 +4650,31 @@ public class QueryResultSet
     public Object getObject(final Field field, final Map map)
         throws  SQLException
     {
-        Object result = null;
+        return getObject(field, map, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getObject(t_iFieldIndex, map);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves an object value using the field reference.
+     * @param field the field.
+     * @param map (Taken from Sun's Javadoc) a java.util.Map object that
+     * contains the mapping from SQL type names to classes in the Java
+     * programming language.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Object getObject(
+        final Field field,
+        final Map map,
+        final Query query,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getObject(query.getFieldIndex(field), map);
     }
 
     /**
@@ -4157,23 +4687,25 @@ public class QueryResultSet
     public Ref getRef(final Field field)
         throws  SQLException
     {
-        Ref result = null;
+        return getRef(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getRef(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a Ref value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Ref getRef(
+        final Field field, final Query query, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getRef(query.getFieldIndex(field));
     }
 
     /**
@@ -4186,23 +4718,25 @@ public class QueryResultSet
     public Time getTime(final Field field)
         throws  SQLException
     {
-        Time result = null;
+        return getTime(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getTime(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a Time value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Time getTime(
+        final Field field, final Query query, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getTime(query.getFieldIndex(field));
     }
 
     /**
@@ -4217,50 +4751,60 @@ public class QueryResultSet
     public Time getTime(final Field field, final Calendar calendar)
         throws  SQLException
     {
-        Time result = null;
+        return getTime(field, calendar, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getTime(t_iFieldIndex, calendar);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a Time value using the field reference.
+     * @param field the field.
+     * @param calendar (Taken from Sun's Javadoc) the java.util.Calendar
+     * object to use in constructing the time.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Time getTime(
+        final Field field,
+        final Calendar calendar,
+        final Query query,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getTime(query.getFieldIndex(field), calendar);
     }
 
     /**
      * Retrieves a Date value using the field reference.
      * @param field the field.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
     public Date getDate(final Field field)
         throws  SQLException
     {
-        Date result = null;
+        return getDate(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getDate(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a Date value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Date getDate(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getDate(query.getFieldIndex(field));
     }
 
     /**
@@ -4275,131 +4819,146 @@ public class QueryResultSet
     public Date getDate(final Field field, final Calendar calendar)
         throws  SQLException
     {
-        Date result = null;
+        return getDate(field, calendar, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getDate(t_iFieldIndex, calendar);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a Date value using the field reference.
+     * @param field the field.
+     * @param calendar (Taken from Sun's Javadoc) the java.util.Calendar
+     * object to use in constructing the time.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Date getDate(
+        final Field field,
+        final Calendar calendar,
+        final Query query,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getDate(query.getFieldIndex(field), calendar);
     }
 
     /**
      * Retrieves a byte value using the field reference.
      * @param field the field.
+     * @return see getByte(int).
      * @exception SQLException if an error occurs.
      */
     public byte getByte(final Field field)
         throws  SQLException
     {
-        byte result = 0;
+        return getByte(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getByte(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a byte value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return see getByte(int).
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected byte getByte(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getByte(query.getFieldIndex(field));
     }
 
     /**
      * Retrieves a short value using the field reference.
      * @param field the field.
+     * @return see getShort(int).
      * @exception SQLException if an error occurs.
      */
     public short getShort(final Field field)
         throws  SQLException
     {
-        short result = 0;
+        return getShort(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getShort(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a short value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return see getShort(int).
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected short getShort(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getShort(query.getFieldIndex(field));
     }
 
     /**
      * Retrieves an integer value using the field reference.
      * @param field the field.
+     * @return see getInt(int)
      * @exception SQLException if an error occurs.
      */
     public int getInt(final Field field)
         throws  SQLException
     {
-        int result = 0;
+        return getInt(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getInt(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves an integer value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return see getInt(int)
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected int getInt(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getInt(query.getFieldIndex(field));
     }
 
     /**
      * Retrieves a float value using the field reference.
      * @param field the field.
+     * @return see getFloat(int)
      * @exception SQLException if an error occurs.
      */
     public float getFloat(final Field field)
         throws  SQLException
     {
-        float result = 0;
+        return getFloat(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getFloat(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a float value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return see getFloat(int)
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected float getFloat(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getFloat(query.getFieldIndex(field));
     }
 
     /**
@@ -4412,188 +4971,209 @@ public class QueryResultSet
     public double getDouble(final Field field)
         throws  SQLException
     {
-        double result = 0;
+        return getDouble(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getDouble(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a double value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected double getDouble(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getDouble(query.getFieldIndex(field));
     }
 
     /**
      * Retrieves a text value using the field reference.
      * @param field the field.
+     * @return see getString(int)
      * @exception SQLException if an error occurs.
      */
     public String getString(final Field field)
         throws  SQLException
     {
-        String result = null;
+        return getString(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getString(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a text value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return see getString(int)
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     * @precondition resultSet != null
+     */
+    protected String getString(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getString(query.getFieldIndex(field));
     }
 
     /**
      * Retrieves an array value using the field reference.
      * @param field the field.
+     * @return see getArray(int)
      * @exception SQLException if an error occurs.
      */
     public Array getArray(final Field field)
         throws  SQLException
     {
-        Array result = null;
+        return getArray(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getArray(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves an array value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return see getArray(int)
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Array getArray(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getArray(query.getFieldIndex(field));
     }
 
     /**
      * Retrieves an ASCII stream using the field reference.
      * @param field the field.
+     * @return see getAsciiStream(int)
      * @exception SQLException if an error occurs.
      */
     public InputStream getAsciiStream(final Field field)
         throws  SQLException
     {
-        InputStream result = null;
+        return getAsciiStream(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getAsciiStream(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves an ASCII stream using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return see getAsciiStream(int)
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected InputStream getAsciiStream(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getAsciiStream(query.getFieldIndex(field));
     }
 
     /**
      * Retrieves a BigDecimal value using the field reference.
+     * @see getBigDecimal(int, int)
      * @param field the field.
      * @param scale (Taken from Sun's Javadoc) the number of digits to the
      * right of the decimal point.
+     * @return see getBigDecimal(int, int)
      * @exception SQLException if an error occurs.
      * @deprecated since it's deprecated in JDK 1.4 as well.
      */
     public BigDecimal getBigDecimal(final Field field, final int scale)
         throws  SQLException
     {
-        BigDecimal result = null;
+        return getBigDecimal(field, scale, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getBigDecimal(t_iFieldIndex, scale);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a BigDecimal value using the field reference.
+     * @see getBigDecimal(int, int)
+     * @param field the field.
+     * @param scale (Taken from Sun's Javadoc) the number of digits to the
+     * right of the decimal point.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @deprecated since it's deprecated in JDK 1.4 as well.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected BigDecimal getBigDecimal(
+        final Field field,
+        final int scale,
+        final Query query,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getBigDecimal(query.getFieldIndex(field), scale);
     }
 
     /**
      * Retrieves a BigDecimal value using the field reference.
      * @param field the field.
+     * @return see getBigDecimal(field)
      * @exception SQLException if an error occurs.
      */
     public BigDecimal getBigDecimal(final Field field)
         throws  SQLException
     {
-        BigDecimal result = null;
+        return getBigDecimal(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getBigDecimal(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a BigDecimal value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return see getBigDecimal(field)
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected BigDecimal getBigDecimal(
+        final Field field, final Query query, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getBigDecimal(query.getFieldIndex(field));
     }
 
     /**
      * Retrieves a binary stream using the field reference.
      * @param field the field.
+     * @return see getBinaryStream(int)
      * @exception SQLException if an error occurs.
      */
     public InputStream getBinaryStream(final Field field)
         throws  SQLException
     {
-        InputStream result = null;
+        return getBinaryStream(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getBinaryStream(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a binary stream using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return see getBinaryStream(int)
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected InputStream getBinaryStream(
+        final Field field, final Query query, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getBinaryStream(query.getFieldIndex(field));
     }
 
     /**
@@ -4606,23 +5186,25 @@ public class QueryResultSet
     public Blob getBlob(final Field field)
         throws  SQLException
     {
-        Blob result = null;
+        return getBlob(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getBlob(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a blob using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Blob getBlob(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getBlob(query.getFieldIndex(field));
     }
 
     /**
@@ -4635,23 +5217,25 @@ public class QueryResultSet
     public Clob getClob(final Field field)
         throws  SQLException
     {
-        Clob result = null;
+        return getClob(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getClob(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a clob value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Clob getClob(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getClob(query.getFieldIndex(field));
     }
 
     /**
@@ -4664,23 +5248,25 @@ public class QueryResultSet
     public Timestamp getTimestamp(final Field field)
         throws  SQLException
     {
-        Timestamp result = null;
+        return getTimestamp(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getTimestamp(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a timestamp value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Timestamp getTimestamp(
+        final Field field, final Query query, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getTimestamp(query.getFieldIndex(field));
     }
 
     /**
@@ -4695,52 +5281,61 @@ public class QueryResultSet
     public Timestamp getTimestamp(final Field field, final Calendar calendar)
         throws  SQLException
     {
-        Timestamp result = null;
+        return getTimestamp(field, calendar, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result =
-                    t_ResultSet.getTimestamp(t_iFieldIndex, calendar);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a timestamp value using the field reference.
+     * @param field the field.
+     * @param calendar (Taken from Sun's Javadoc) the java.util.Calendar
+     * object to use in constructing the time.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Timestamp getTimestamp(
+        final Field field,
+        final Calendar calendar,
+        final Query query,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getTimestamp(query.getFieldIndex(field), calendar);
     }
 
     /**
      * Retrieves an Unicode stream using the field reference.
      * @param field the field.
+     * @return see getUnicodeStream(int)
      * @exception SQLException if an error occurs.
      * @deprecated since it's deprecated in JDK 1.4 as well.
      */
     public InputStream getUnicodeStream(final Field field)
         throws  SQLException
     {
-        InputStream result = null;
+        return getUnicodeStream(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getUnicodeStream(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves an Unicode stream using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return see getUnicodeStream(int)
+     * @exception SQLException if an error occurs.
+     * @deprecated since it's deprecated in JDK 1.4 as well.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected InputStream getUnicodeStream(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getUnicodeStream(query.getFieldIndex(field));
     }
 
     /**
@@ -4753,23 +5348,25 @@ public class QueryResultSet
     public Reader getCharacterStream(final Field field)
         throws  SQLException
     {
-        Reader result = null;
+        return getCharacterStream(field, getQuery(), getResultSet());
+    }
 
-        Query t_Query = getQuery();
-
-        if  (t_Query != null) 
-        {
-            int t_iFieldIndex = t_Query.getFieldIndex(field);
-
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getCharacterStream(t_iFieldIndex);
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves a character stream using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition query != null
+     * @precondition resultSet != null
+     */
+    protected Reader getCharacterStream(
+        final Field field, final Query query, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getCharacterStream(query.getFieldIndex(field));
     }
 
     // New methods from JDK 1.4 //
