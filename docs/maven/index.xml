@@ -18,10 +18,11 @@
       </p>
       <subsection name="Status">
         <p>
-          <strong>QueryJ</strong> 0.6b1 supports:
+          <strong>QueryJ</strong> 0.6b3 supports:
           <ul>
             <li>Custom queries support,</li>
-            <li>JDBC flags support (Connection's, Statement's and ResultSet's),</li>
+            <li>Safe validation of custom queries at generation-time,</li>
+            <!--li>JDBC flags support (Connection's, Statement's and ResultSet's),</li-->
             <li>Value Object generation from database model,</li>
             <li>DAO interfaces generation from database model,</li>
             <li>Database vendor-specific DAO implementations
@@ -72,6 +73,16 @@
         <tr>
           <td>
             $Date$
+          </td>
+          <td>
+            Refixed the custom queries support, including their
+            validation at generation-time.br/>
+            Released <b>0.6b3</b>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/02/03 21:33:05
           </td>
           <td>
             The design update has been continued, at the same time new templates have been developed

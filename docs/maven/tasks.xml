@@ -12,35 +12,6 @@
         Lists of "to-do"s and ideas for future versions.
       </p>
 
-      <subsection name="0.7.5">
-        <p>
-          <ul>
-            <li>
-              Allow customization of queries via property files.
-            </li>
-          </ul>
-        </p>
-      </subsection>
-      <subsection name="0.7.1">
-        <p>
-          <ul>
-            <li>
-              Add support for COUNT() in SQL queries.
-            </li>
-          </ul>
-        </p>
-      </subsection>
-      <subsection name="0.7">
-        <p>
-          <ul>
-            <li>
-              Separate QueryJ (org.acmsl.queryj) from MagicWand
-              (org.acmsl.queryj.tools), and set up MagicWand's own
-              environment.
-            </li>
-          </ul>
-        </p>
-      </subsection>
       <subsection name="0.6.2">
         <p>
           <ul>
@@ -64,10 +35,10 @@
         <p>
           <ul>
             <li>
-              Support custom queries in Ant scripts: find out
-              if through the driver the query can be validated
-              directly.<br/>
-              Accomplish task <a href="${issue.url}566">566</a>.
+              <b>0.6b3</b><br/>
+              Support custom queries in Ant scripts.
+              (<a href="${issue.url}566">566</a>,
+               <a href="${issue.url}584">584</a>).
             </li>
             <li>
               <b>0.6b2</b><br/>

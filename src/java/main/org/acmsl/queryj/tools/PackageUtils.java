@@ -1231,25 +1231,45 @@ public class PackageUtils
     }
 
     /**
-     * Retrieves the package name for QueryPreparedStatementCreator class.
+     * Retrieves the package name for the PkStatementSetter classes.
      * @param packageName the original package.
-     * @return the package for such class.
+     * @param engineName the engine.
+     * @param tableName the table name.
+     * @return the package for the associated classes.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
      */
-    public String retrieveQueryPreparedStatementCreatorPackage(final String packageName)
+    public String retrievePkStatementSetterPackage(
+        final String packageName,
+        final String engineName,
+        final String tableName)
     {
-        return retrieveRdbPackage(packageName);
+        return
+            retrieveJdbcOperationsPackage(
+                packageName, engineName, tableName);
     }
 
     /**
-     * Retrieves the folder for QueryPreparedStatementCreator class.
+     * Retrieves the folder for the PkStatementSetter classes.
      * @param parentFolder the parent folder.
-     * @param packageName the package name.
-     * @return the folder in which the associated rdb classes should be
-     * generated.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param tableName the table name.
+     * @return the folder for the associated pointers.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
      */
-    public File retrieveQueryPreparedStatementCreatorFolder(
-        final File parentFolder, final String packageName)
+    public File retrievePkStatementSetterFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final String tableName)
     {
-        return retrieveRdbFolder(parentFolder, packageName);
+        return
+            retrieveJdbcOperationsFolder(
+                parentFolder, packageName, engineName, tableName);
     }
 }

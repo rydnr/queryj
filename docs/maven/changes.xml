@@ -6,11 +6,21 @@
   </properties>
   <body>
     <release
-      version="0.6b2"
+      version="0.6b3"
       date="$Date$"
       description="Feature implemented">
       <action
         dev="$Author$"
+        type="add">
+        Closed <a href="${issue.url}584">584</a>.
+      </action>
+    </release>
+    <release
+      version="0.6b2"
+      date="2004/11/09 08:33:29"
+      description="Feature implemented">
+      <action
+        dev="chous"
         type="add">
         Performed task <a href="${issue.url}540">540</a>
         and <a href="${issue.url}541">541</a>.

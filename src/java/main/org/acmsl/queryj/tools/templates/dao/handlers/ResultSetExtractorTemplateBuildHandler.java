@@ -51,6 +51,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
@@ -199,7 +200,9 @@ public class ResultSetExtractorTemplateBuildHandler
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 ResultSetExtractorTemplateGenerator.getInstance(),
-                retrieveTableTemplates(parameters),
+                filterTableTemplates(
+                    retrieveTableTemplates(parameters),
+                    retrieveCustomSqlProvider(parameters)),
                 project,
                 task);
     }
@@ -271,6 +274,21 @@ public class ResultSetExtractorTemplateBuildHandler
         }
         
         return result;
+    }
+
+    /**
+     * Filters the table templates to process.
+     * @param tableTemplates the table templates.
+     * @param customSqlProvider the custom SQL provider.
+     * @return the filtered templates.
+     * @precondition tableTemplates != null
+     * @precondition customSqlProvider != null
+     */
+    protected TableTemplate[] filterTableTemplates(
+        final TableTemplate[] tableTemplates,
+        final CustomSqlProvider customSqlProvider)
+    {
+        return tableTemplates;
     }
 
     /**
@@ -406,6 +424,21 @@ public class ResultSetExtractorTemplateBuildHandler
         return
             (TableTemplate[])
                 parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
+    }
+
+    /**
+     * Retrieves the custom-sql provider from the attribute map.
+     * @param parameters the parameter map.
+     * @return the provider.
+     * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    public static CustomSqlProvider retrieveCustomSqlProvider(
+        final Map parameters)
+      throws  BuildException
+    {
+        return
+            DAOTemplateBuildHandler.retrieveCustomSqlProvider(parameters);
     }
 
     /**
