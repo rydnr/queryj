@@ -68,7 +68,7 @@ import java.util.Iterator;
  * Provides some useful methods when generating DAO classes
  * via DAO template instances.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class DAOTemplateUtils

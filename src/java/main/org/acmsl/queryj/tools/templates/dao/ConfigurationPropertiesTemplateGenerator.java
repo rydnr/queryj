@@ -90,7 +90,7 @@ public class ConfigurationPropertiesTemplateGenerator
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        ConfigurationPropertiesTemplateGenerator generator)
+        final ConfigurationPropertiesTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -136,29 +136,22 @@ public class ConfigurationPropertiesTemplateGenerator
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
      * @return such template.
+     * @precondition repository != null
+     * @precondition engineName != null
+     * @precondition basePackageName != null
      */
     public ConfigurationPropertiesTemplate createConfigurationPropertiesTemplate(
-        String repository,
-        String engineName,
-        String engineVersion,
-        String basePackageName)
+        final String repository,
+        final String engineName,
+        final String engineVersion,
+        final String basePackageName)
     {
-        ConfigurationPropertiesTemplate result = null;
-
-        if  (   (repository      != null)
-             && (engineName      != null)
-             && (basePackageName != null))
-        {
-
-            result =
-                new ConfigurationPropertiesTemplate(
-                    repository,
-                    engineName,
-                    engineVersion,
-                    basePackageName) {};
-        }
-
-        return result;
+        return
+            new ConfigurationPropertiesTemplate(
+                repository,
+                engineName,
+                engineVersion,
+                basePackageName);
     }
 
     /**
@@ -166,30 +159,51 @@ public class ConfigurationPropertiesTemplateGenerator
      * @param configurationPropertiesTemplate the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
+     * @precondition configurationPropertiesTemplate != null
+     * @precondition outputDir != null
      */
     public void write(
-            ConfigurationPropertiesTemplate configurationPropertiesTemplate,
-            File                            outputDir)
-        throws  IOException
+        final ConfigurationPropertiesTemplate configurationPropertiesTemplate,
+        final File                            outputDir)
+      throws  IOException
     {
-        if  (   (configurationPropertiesTemplate != null)
-             && (outputDir                       != null))
-        {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            configurationPropertiesTemplate,
+            configurationPropertiesTemplate.getRepository(),
+            outputDir,
+            DAOChooserUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a <code>ConfigurationProperties</code> to disk.
+     * @param configurationPropertiesTemplate the template to write.
+     * @param repository the template repository.
+     * @param outputDir the output folder.
+     * @param daoChooserUtils the <code>DAOChooserUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition configurationPropertiesTemplate != null
+     * @precondition repository != null
+     * @precondition outputDir != null
+     * @precondition daoChooserUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final ConfigurationPropertiesTemplate configurationPropertiesTemplate,
+        final String repository,
+        final File outputDir,
+        final DAOChooserUtils daoChooserUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + (  configurationPropertiesTemplate.getRepository()
-                       + ".properties").toLowerCase(),
-                    configurationPropertiesTemplate.toString());
-            }
-        }
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + daoChooserUtils.retrievePropertiesFileName(
+                  repository.toLowerCase()),
+              configurationPropertiesTemplate.toString());
     }
 }
