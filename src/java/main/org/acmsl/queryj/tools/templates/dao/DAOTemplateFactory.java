@@ -128,14 +128,15 @@ public interface DAOTemplateFactory
      * selects.
      * @param customSelectResultPropertyValues the properties of the result set for
      * custom selects.
-     * @param customUpdate the custom update template.
-     * @param customUpdateParameterJavadoc the Javadoc for the parameters of the
-     * custom updates.
-     * @param customUpdateParameterDeclaration the parameter declaration of the
-     * custom updates.
-     * @param customUpdateParameterValues the parameter values of the custom
-     * updates.
-     * @param customUpdateQueryLine the custom update query line.
+     * @param customUpdateOrInsert the custom update template.
+     * @param customUpdateOrInsertParameterJavadoc the Javadoc for the
+     * parameters of the custom updates or inserts.
+     * @param customUpdateOrInsertParameterDeclaration the parameter
+     * declaration of the custom updates or inserts.
+     * @param customUpdateOrInsertParameterValues the parameter values of
+     * the custom updates or inserts.
+     * @param customUpdateOrInsertQueryLine the custom update or insert
+     * query line.
      * @param classEnd the class end.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
@@ -195,11 +196,11 @@ public interface DAOTemplateFactory
         final String                  customSelectParameterDeclaration,
         final String                  customSelectParameterValues,
         final String                  customSelectResultPropertyValues,
-        final String                  customUpdate,
-        final String                  customUpdateParameterJavadoc,
-        final String                  customUpdateParameterDeclaration,
-        final String                  customUpdateParameterValues,
-        final String                  customUpdateQueryLine,
+        final String                  customUpdateOrInsert,
+        final String                  customUpdateOrInsertParameterJavadoc,
+        final String                  customUpdateOrInsertParameterDeclaration,
+        final String                  customUpdateOrInsertParameterValues,
+        final String                  customUpdateOrInsertQueryLine,
         final String                  classEnd)
       throws  QueryJException;
 

@@ -73,10 +73,21 @@
             $Date$
           </td>
           <td>
+            Included support for custom
+            <a href="${issue.url}540}">UPDATE</a> and
+            <a href="${issue.url}541}">INSERT</a> operations.<br/>
+            Released <b>0.6b2</b>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/10/29 12:41:38
+          </td>
+          <td>
             The model to support custom SQL queries has been defined (see issue <a href="${issue.url}533">533</a>'s
             first attachment). Additionally, a layer to isolate all model implementations has been written, which
             includes a XML-based one. As a result, task <a href="${issue.url}534">534</a> is now done, and
-            QueryJ now supports custom (external) definition of SQL SELECT queries.
+            QueryJ now supports custom (external) definition of SQL SELECT queries.<br/>
             Released <b>0.6b1</b>.
           </td>
         </tr>

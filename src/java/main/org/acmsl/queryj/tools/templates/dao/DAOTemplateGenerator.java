@@ -309,9 +309,7 @@ public class DAOTemplateGenerator
      * custom updates.
      * @param customUpdateParameterValues the parameter values of the custom
      * updates.
-     * @param customSelectResultPropertyValues the properties of the result set for
-     * custom selects.
-     * @param customSelectQueryLine the custom update query line.
+     * @param customUpdateQueryLine the custom update query line.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -370,11 +368,11 @@ public class DAOTemplateGenerator
         final String                  customSelectParameterDeclaration,
         final String                  customSelectParameterValues,
         final String                  customSelectResultPropertyValues,
-        final String                  customUpdate,
-        final String                  customUpdateParameterJavadoc,
-        final String                  customUpdateParameterDeclaration,
-        final String                  customUpdateParameterValues,
-        final String                  customUpdateQueryLine,
+        final String                  customUpdateOrInsert,
+        final String                  customUpdateOrInsertParameterJavadoc,
+        final String                  customUpdateOrInsertParameterDeclaration,
+        final String                  customUpdateOrInsertParameterValues,
+        final String                  customUpdateOrInsertQueryLine,
         final String                  classEnd)
       throws  QueryJException
     {
@@ -449,11 +447,11 @@ public class DAOTemplateGenerator
                         customSelectParameterDeclaration,
                         customSelectParameterValues,
                         customSelectResultPropertyValues,
-                        customUpdate,
-                        customUpdateParameterJavadoc,
-                        customUpdateParameterDeclaration,
-                        customUpdateParameterValues,
-                        customUpdateQueryLine,
+                        customUpdateOrInsert,
+                        customUpdateOrInsertParameterJavadoc,
+                        customUpdateOrInsertParameterDeclaration,
+                        customUpdateOrInsertParameterValues,
+                        customUpdateOrInsertQueryLine,
                         classEnd);
             }
             else 
@@ -514,11 +512,11 @@ public class DAOTemplateGenerator
                         customSelectParameterDeclaration,
                         customSelectParameterValues,
                         customSelectResultPropertyValues,
-                        customUpdate,
-                        customUpdateParameterJavadoc,
-                        customUpdateParameterDeclaration,
-                        customUpdateParameterValues,
-                        customUpdateQueryLine,
+                        customUpdateOrInsert,
+                        customUpdateOrInsertParameterJavadoc,
+                        customUpdateOrInsertParameterDeclaration,
+                        customUpdateOrInsertParameterValues,
+                        customUpdateOrInsertQueryLine,
                         classEnd) {};
             }
         }

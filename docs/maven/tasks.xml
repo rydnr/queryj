@@ -69,6 +69,11 @@
               directly.
             </li>
             <li>
+              <b>0.6b2</b><br/>
+              Accomplish tasks <a href="${issue.url}540">540</a>
+              and <a href="${issue.url}541">541</a>.
+            </li>
+            <li>
               <b>0.6b1</b><br/>
               Accomplish task <a href="${issue.url}534">534</a>.
             </li>

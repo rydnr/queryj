@@ -1053,9 +1053,9 @@ public abstract class DAOTemplate
         "\n                        t_rsResults.get{0}({1})";
 
     /**
-     * The custom update template.
+     * The custom update or insert template.
      */
-    public static final String DEFAULT_CUSTOM_UPDATE =
+    public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT =
           "    /**\n"
         + "     * Performs the <i>{0}</i> operation\n"
          // query name
@@ -1070,7 +1070,7 @@ public abstract class DAOTemplate
         + "    public void {2}("
          // sql name
         + "{3}\n"
-         // CUSTOM_UPDATE_PARAMETER_DECLARATION
+         // CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION
         + "        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException\n"
         + "    '{'\n"
@@ -1085,7 +1085,7 @@ public abstract class DAOTemplate
         + "            t_PreparedStatement =\n"
         + "                t_Connection.prepareStatement(t_sbQuery.toString());\n"
         + "{5}\n\n"
-         // CUSTOM_UPDATE_PARAMETER_VALUES
+         // CUSTOM_UPDATE_OR_INSERT_PARAMETER_VALUES
         + "            t_PreparedStatement.executeUpdate();\n\n"
         + "        '}'\n"
         + "        catch  (final SQLException sqlException)\n"
@@ -1124,29 +1124,29 @@ public abstract class DAOTemplate
         + "    '}'\n\n";
 
     /**
-     * The custom update parameter javadoc.
+     * The custom update or insert parameter javadoc.
      */
-    public static final String DEFAULT_CUSTOM_UPDATE_PARAMETER_JAVADOC =
+    public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_JAVADOC =
         "\n     * @param {0} such information.";
          // parameter name
 
     /**
-     * The custom update parameter declaration.
+     * The custom update or insert parameter declaration.
      */
-    public static final String DEFAULT_CUSTOM_UPDATE_PARAMETER_DECLARATION =
+    public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION =
         "\n        final {0} {1},";
          // parameter type - parameter name
 
     /**
-     * The custom update parameter values.
+     * The custom update or insert parameter values.
      */
-    public static final String DEFAULT_CUSTOM_UPDATE_PARAMETER_VALUES =
+    public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_VALUES =
         "\n            t_PreparedStatement.set{0}({1}, {2});";
 
     /**
-     * The custom update query line.
+     * The custom update or insert query line.
      */
-    public static final String DEFAULT_CUSTOM_UPDATE_QUERY_LINE =
+    public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_QUERY_LINE =
         "            t_sbQuery.append({0}\"{1} \");";
 
     /**
@@ -1425,29 +1425,29 @@ public abstract class DAOTemplate
     private String m__strCustomSelectResultPropertyValues;
 
     /**
-     * The custom update.
+     * The custom update or insert.
      */
-    private String m__strCustomUpdate;
+    private String m__strCustomUpdateOrInsert;
 
     /**
-     * The custom update parameter javadoc.
+     * The custom update or insert parameter javadoc.
      */
-    private String m__strCustomUpdateParameterJavadoc;
+    private String m__strCustomUpdateOrInsertParameterJavadoc;
 
     /**
-     * The custom update parameter declaration.
+     * The custom update or insert parameter declaration.
      */
-    private String m__strCustomUpdateParameterDeclaration;
+    private String m__strCustomUpdateOrInsertParameterDeclaration;
 
     /**
-     * The custom update parameter values.
+     * The custom update or insert parameter values.
      */
-    private String m__strCustomUpdateParameterValues;
+    private String m__strCustomUpdateOrInsertParameterValues;
 
     /**
-     * The custom update query line.
+     * The custom update or insert query line.
      */
-    private String m__strCustomUpdateQueryLine;
+    private String m__strCustomUpdateOrInsertQueryLine;
 
     /**
      * The class end.
@@ -1481,22 +1481,29 @@ public abstract class DAOTemplate
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
      * declaration.
-     * @param findByPrimaryKeySelectFields the find by primary key select fields.
+     * @param findByPrimaryKeySelectFields the find by primary key select
+     * fields.
      * @param findByPrimaryKeyFilterDeclaration the find by primary key filter
      * declaration.
-     * @param findByPrimaryKeyFilterValues the find by primary key filter values.
+     * @param findByPrimaryKeyFilterValues the find by primary key filter
+     * values.
      * @param buildValueObjectMethod the build value object method.
-     * @param buildValueObjectValueRetrieval the build value object value retrieval.
+     * @param buildValueObjectValueRetrieval the build value object value
+     * retrieval.
      * @param insertMethod the insert method.
-     * @param insertParametersJavadoc the javadoc of the insert method's parameters.
-     * @param insertParametersDeclaration the declaration of the insert method's parameters.
+     * @param insertParametersJavadoc the javadoc of the insert method's
+     * parameters.
+     * @param insertParametersDeclaration the declaration of the insert
+     * method's parameters.
      * @param insertParametersSpecification the specification of the insert
      * method's parameters.
-     * @param insertKeywordParametersSpecification the specification of the insert
-     * method's keyword-based parameters.
+     * @param insertKeywordParametersSpecification the specification of the
+     * insert method's keyword-based parameters.
      * @param updateMethod the update method.
-     * @param updateParametersJavadoc the javadoc of the update method's parameters.
-     * @param updateParametersDeclaration the declaration of the update method's parameters.
+     * @param updateParametersJavadoc the javadoc of the update method's
+     * parameters.
+     * @param updateParametersDeclaration the declaration of the update
+     * method's parameters.
      * @param updateParametersSpecification the specification of the update
      * method's parameters.
      * @param updateFilter the update method's filter.
@@ -1508,25 +1515,27 @@ public abstract class DAOTemplate
      * @param deleteWithFkMethod the delete method.
      * @param deleteWithFkPkJavadoc the delete with FK PK javadoc.
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
-     * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete request.
+     * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete
+     * request.
      * @param deleteWithFkPkValues the delete with FK PK values.
      * @param customSelect the custom select template.
-     * @param customSelectParameterJavadoc the Javadoc for the parameters of the
-     * custom selects.
+     * @param customSelectParameterJavadoc the Javadoc for the parameters of
+     * the custom selects.
      * @param customSelectParameterDeclaration the parameter declaration of the
      * custom selects.
      * @param customSelectParameterValues the parameter values of the custom
      * selects.
-     * @param customSelectResultPropertyValues the properties of the result set for
-     * custom selects.
-     * @param customUpdate the custom update template.
-     * @param customUpdateParameterJavadoc the Javadoc for the parameters of the
-     * custom updates.
-     * @param customUpdateParameterDeclaration the parameter declaration of the
-     * custom updates.
-     * @param customUpdateParameterValues the parameter values of the custom
-     * updates.
-     * @param customUpdateQueryLine the custom update query line.
+     * @param customSelectResultPropertyValues the properties of the result
+     * set for custom selects.
+     * @param customUpdateOrInsert the custom update template.
+     * @param customUpdateOrInsertParameterJavadoc the Javadoc for the
+     * parameters of the custom updates or inserts.
+     * @param customUpdateOrInsertParameterDeclaration the parameter
+     * declaration of the custom updates or inserts.
+     * @param customUpdateOrInsertParameterValues the parameter values of
+     * the custom updates or inserts.
+     * @param customUpdateOrInsertQueryLine the custom update or insert
+     * query line.
      * @param classEnd the class end.
      */
     public DAOTemplate(
@@ -1584,11 +1593,11 @@ public abstract class DAOTemplate
         final String                  customSelectParameterDeclaration,
         final String                  customSelectParameterValues,
         final String                  customSelectResultPropertyValues,
-        final String                  customUpdate,
-        final String                  customUpdateParameterJavadoc,
-        final String                  customUpdateParameterDeclaration,
-        final String                  customUpdateParameterValues,
-        final String                  customUpdateQueryLine,
+        final String                  customUpdateOrInsert,
+        final String                  customUpdateOrInsertParameterJavadoc,
+        final String                  customUpdateOrInsertParameterDeclaration,
+        final String                  customUpdateOrInsertParameterValues,
+        final String                  customUpdateOrInsertQueryLine,
         final String                  classEnd)
     {
         immutableSetTableTemplate(
@@ -1753,20 +1762,20 @@ public abstract class DAOTemplate
         immutableSetCustomSelectResultPropertyValues(
             customSelectResultPropertyValues);
 
-        immutableSetCustomUpdate(
-            customUpdate);
+        immutableSetCustomUpdateOrInsert(
+            customUpdateOrInsert);
 
-        immutableSetCustomUpdateParameterJavadoc(
-            customUpdateParameterJavadoc);
+        immutableSetCustomUpdateOrInsertParameterJavadoc(
+            customUpdateOrInsertParameterJavadoc);
 
-        immutableSetCustomUpdateParameterDeclaration(
-            customUpdateParameterDeclaration);
+        immutableSetCustomUpdateOrInsertParameterDeclaration(
+            customUpdateOrInsertParameterDeclaration);
 
-        immutableSetCustomUpdateParameterValues(
-            customUpdateParameterValues);
+        immutableSetCustomUpdateOrInsertParameterValues(
+            customUpdateOrInsertParameterValues);
 
-        immutableSetCustomUpdateQueryLine(
-            customUpdateQueryLine);
+        immutableSetCustomUpdateOrInsertQueryLine(
+            customUpdateOrInsertQueryLine);
 
         immutableSetClassEnd(
             classEnd);
@@ -1850,11 +1859,11 @@ public abstract class DAOTemplate
             DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION,
             DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES,
             DEFAULT_CUSTOM_SELECT_RESULT_PROPERTIES,
-            DEFAULT_CUSTOM_UPDATE,
-            DEFAULT_CUSTOM_UPDATE_PARAMETER_JAVADOC,
-            DEFAULT_CUSTOM_UPDATE_PARAMETER_DECLARATION,
-            DEFAULT_CUSTOM_UPDATE_PARAMETER_VALUES,
-            DEFAULT_CUSTOM_UPDATE_QUERY_LINE,
+            DEFAULT_CUSTOM_UPDATE_OR_INSERT,
+            DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_JAVADOC,
+            DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION,
+            DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_VALUES,
+            DEFAULT_CUSTOM_UPDATE_OR_INSERT_QUERY_LINE,
             DEFAULT_CLASS_END);
     }
 
@@ -3397,148 +3406,148 @@ public abstract class DAOTemplate
     }
 
     /**
-     * Specifies the custom update template.
-     * @param update such template.
+     * Specifies the custom update or insert template.
+     * @param updateOrInsert such template.
      */
-    private void immutableSetCustomUpdate(
-        final String update)
+    private void immutableSetCustomUpdateOrInsert(
+        final String updateOrInsert)
     {
-        m__strCustomUpdate = update;
+        m__strCustomUpdateOrInsert = updateOrInsert;
     }
 
     /**
-     * Specifies the custom update template.
-     * @param update such template.
+     * Specifies the custom update or insert template.
+     * @param updateOrInsert such template.
      */
-    protected void setCustomUpdate(
-        final String update)
+    protected void setCustomUpdateOrInsert(
+        final String updateOrInsert)
     {
-        immutableSetCustomUpdate(update);
+        immutableSetCustomUpdateOrInsert(updateOrInsert);
     }
 
     /**
-     * Retrieves the custom update template.
+     * Retrieves the custom update or insert template.
      * @return such template.
      */
-    public String getCustomUpdate()
+    public String getCustomUpdateOrInsert()
     {
-        return m__strCustomUpdate;
+        return m__strCustomUpdateOrInsert;
     }
 
     /**
-     * Specifies the custom update parameter Javadoc template.
+     * Specifies the custom update or insert parameter Javadoc template.
      * @param update such template.
      */
-    private void immutableSetCustomUpdateParameterJavadoc(
+    private void immutableSetCustomUpdateOrInsertParameterJavadoc(
         final String template)
     {
-        m__strCustomUpdateParameterJavadoc = template;
+        m__strCustomUpdateOrInsertParameterJavadoc = template;
     }
 
     /**
-     * Specifies the custom update parameter Javadoc template.
+     * Specifies the custom update or insert parameter Javadoc template.
      * @param update such template.
      */
-    protected void setCustomUpdateParameterJavadoc(
+    protected void setCustomUpdateOrInsertParameterJavadoc(
         final String update)
     {
-        immutableSetCustomUpdateParameterJavadoc(update);
+        immutableSetCustomUpdateOrInsertParameterJavadoc(update);
     }
 
     /**
-     * Retrieves the custom update parameter Javadoc template.
+     * Retrieves the custom update or insert parameter Javadoc template.
      * @return such template.
      */
-    public String getCustomUpdateParameterJavadoc()
+    public String getCustomUpdateOrInsertParameterJavadoc()
     {
-        return m__strCustomUpdateParameterJavadoc;
+        return m__strCustomUpdateOrInsertParameterJavadoc;
     }
 
     /**
-     * Specifies the custom update parameter declaration template.
+     * Specifies the custom update or insert parameter declaration template.
      * @param update such template.
      */
-    private void immutableSetCustomUpdateParameterDeclaration(
+    private void immutableSetCustomUpdateOrInsertParameterDeclaration(
         final String template)
     {
-        m__strCustomUpdateParameterDeclaration = template;
+        m__strCustomUpdateOrInsertParameterDeclaration = template;
     }
 
     /**
-     * Specifies the custom update parameter declaration template.
+     * Specifies the custom update or insert parameter declaration template.
      * @param update such template.
      */
-    protected void setCustomUpdateParameterDeclaration(
+    protected void setCustomUpdateOrInsertParameterDeclaration(
         final String update)
     {
-        immutableSetCustomUpdateParameterDeclaration(update);
+        immutableSetCustomUpdateOrInsertParameterDeclaration(update);
     }
 
     /**
-     * Retrieves the custom update parameter declaration template.
+     * Retrieves the custom update or insert parameter declaration template.
      * @return such template.
      */
-    public String getCustomUpdateParameterDeclaration()
+    public String getCustomUpdateOrInsertParameterDeclaration()
     {
-        return m__strCustomUpdateParameterDeclaration;
+        return m__strCustomUpdateOrInsertParameterDeclaration;
     }
 
     /**
-     * Specifies the custom update parameter values template.
+     * Specifies the custom update or insert parameter values template.
      * @param update such template.
      */
-    private void immutableSetCustomUpdateParameterValues(
+    private void immutableSetCustomUpdateOrInsertParameterValues(
         final String template)
     {
-        m__strCustomUpdateParameterValues = template;
+        m__strCustomUpdateOrInsertParameterValues = template;
     }
 
     /**
-     * Specifies the custom update parameter values template.
+     * Specifies the custom update or insert parameter values template.
      * @param update such template.
      */
-    protected void setCustomUpdateParameterValues(
+    protected void setCustomUpdateOrInsertParameterValues(
         final String update)
     {
-        immutableSetCustomUpdateParameterValues(update);
+        immutableSetCustomUpdateOrInsertParameterValues(update);
     }
 
     /**
-     * Retrieves the custom update parameter values template.
+     * Retrieves the custom update or insert parameter values template.
      * @return such template.
      */
-    public String getCustomUpdateParameterValues()
+    public String getCustomUpdateOrInsertParameterValues()
     {
-        return m__strCustomUpdateParameterValues;
+        return m__strCustomUpdateOrInsertParameterValues;
     }
 
     /**
-     * Specifies the custom update query line template.
+     * Specifies the custom update or insert query line template.
      * @param update such template.
      */
-    private void immutableSetCustomUpdateQueryLine(
+    private void immutableSetCustomUpdateOrInsertQueryLine(
         final String template)
     {
-        m__strCustomUpdateQueryLine = template;
+        m__strCustomUpdateOrInsertQueryLine = template;
     }
 
     /**
-     * Specifies the custom update query line template.
+     * Specifies the custom update or insert query line template.
      * @param update such template.
      */
-    protected void setCustomUpdateQueryLine(
+    protected void setCustomUpdateOrInsertQueryLine(
         final String update)
     {
-        immutableSetCustomUpdateQueryLine(update);
+        immutableSetCustomUpdateOrInsertQueryLine(update);
     }
 
     /**
-     * Retrieves the custom update query line template.
+     * Retrieves the custom update or insert query line template.
      * @return such template.
      */
-    public String getCustomUpdateQueryLine()
+    public String getCustomUpdateOrInsertQueryLine()
     {
-        return m__strCustomUpdateQueryLine;
+        return m__strCustomUpdateOrInsertQueryLine;
     }
 
     /**
@@ -4207,6 +4216,7 @@ public abstract class DAOTemplate
         {
             result.append(buildCustomSelects(provider));
             result.append(buildCustomUpdates(provider));
+            result.append(buildCustomInserts(provider));
         }
 
         return result.toString();
@@ -4612,22 +4622,24 @@ public abstract class DAOTemplate
     protected String buildCustomUpdates(final CustomSqlProvider provider)
     {
         return
-            buildCustomUpdates(
+            buildCustomUpdatesOrInserts(
                 provider,
-                getCustomUpdate(),
-                getCustomUpdateParameterJavadoc(),
-                getCustomUpdateParameterDeclaration(),
-                getCustomUpdateParameterValues(),
-                getCustomUpdateQueryLine(),
+                SqlElement.UPDATE,
+                getCustomUpdateOrInsert(),
+                getCustomUpdateOrInsertParameterJavadoc(),
+                getCustomUpdateOrInsertParameterDeclaration(),
+                getCustomUpdateOrInsertParameterValues(),
+                getCustomUpdateOrInsertQueryLine(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
                 RegexpManager.createHelper());
     }
 
     /**
-     * Builds the custom updates.
+     * Builds the custom update or insert.
      * @param customSqlProvider the CustomSqlProvider instance.
-     * @param customUpdate the custom update.
+     * @param type the type of operation.
+     * @param customTemplate the custom template.
      * @param parameterJavadoc the Javadoc template
      * of the parameters.
      * @param parameterDeclaration the parameter declaration.
@@ -4638,7 +4650,8 @@ public abstract class DAOTemplate
      * @param helper the Helper instance.
      * @return such generated code.
      * @precondition customSqlProvider != null
-     * @precondition customUpdate != null
+     * @precondition type != null
+     * @precondition customTemplate != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
      * @precondition parameterValues != null
@@ -4647,9 +4660,10 @@ public abstract class DAOTemplate
      * @precondition stringValidator != null
      * @precondition helper != null
      */
-    protected String buildCustomUpdates(
+    protected String buildCustomUpdatesOrInserts(
         final CustomSqlProvider customSqlProvider,
-        final String customUpdate,
+        final String type,
+        final String customTemplate,
         final String parameterJavadoc,
         final String parameterDeclaration,
         final String parameterValues,
@@ -4675,7 +4689,7 @@ public abstract class DAOTemplate
                     SqlElement t_SqlElement =
                         (SqlElement) t_Content;
 
-                    if  (t_SqlElement.UPDATE.equals(t_SqlElement.getType()))
+                    if  (type.equals(t_SqlElement.getType()))
                     {
                         String[] t_astrParameterTemplates =
                             buildParameterTemplates(
@@ -4688,10 +4702,10 @@ public abstract class DAOTemplate
                                 stringValidator);
 
                         result.append(
-                            buildCustomUpdate(
+                            buildCustomUpdateOrInsert(
                                 customSqlProvider,
                                 t_SqlElement,
-                                customUpdate,
+                                customTemplate,
                                 t_astrParameterTemplates[0],
                                 t_astrParameterTemplates[1],
                                 t_astrParameterTemplates[2],
@@ -4707,10 +4721,10 @@ public abstract class DAOTemplate
     }
 
     /**
-     * Builds the complete custom update.
+     * Builds the complete custom update or insert.
      * @param provider the CustomSqlProvider instance.
      * @param sqlElement the SqlElement instance.
-     * @param customUpdate the custom update template.
+     * @param customTemplate the custom template.
      * @param parameterJavadoc the generated parameter Javadoc.
      * @param parameterDeclaration the generated parameter declaration.
      * @param parameterValues the generared parameter values.
@@ -4720,7 +4734,7 @@ public abstract class DAOTemplate
      * @return the generated code.
      * @precondition provider != null
      * @precondition sqlElement != null
-     * @precondition customUpdate != null
+     * @precondition customTemplate != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
      * @precondition parameterValues != null
@@ -4728,10 +4742,10 @@ public abstract class DAOTemplate
      * @precondition stringUtils != null
      * @precondition helper != null
      */
-    protected String buildCustomUpdate(
+    protected String buildCustomUpdateOrInsert(
         final CustomSqlProvider provider,
         final SqlElement sqlElement,
-        final String customUpdate,
+        final String customTemplate,
         final String parameterJavadoc,
         final String parameterDeclaration,
         final String parameterValues,
@@ -4741,8 +4755,8 @@ public abstract class DAOTemplate
     {
         String result = "";
 
-        MessageFormat t_CustomUpdateFormatter =
-            new MessageFormat(customUpdate);
+        MessageFormat t_CustomUpdateOrInsertFormatter =
+            new MessageFormat(customTemplate);
 
         ResultElement t_Result = null;
 
@@ -4754,7 +4768,7 @@ public abstract class DAOTemplate
         }
 
         result =
-            t_CustomUpdateFormatter.format(
+            t_CustomUpdateOrInsertFormatter.format(
                 new Object[]
                 {
                     sqlElement.getName(),
@@ -4779,4 +4793,27 @@ public abstract class DAOTemplate
 
         return result;
     }
+
+    /**
+     * Builds the custom inserts.
+     * @param provider the CustomSqlProvider instance.
+     * @return such generated code.
+     * @precondition provider != null
+     */
+    protected String buildCustomInserts(final CustomSqlProvider provider)
+    {
+        return
+            buildCustomUpdatesOrInserts(
+                provider,
+                SqlElement.INSERT,
+                getCustomUpdateOrInsert(),
+                getCustomUpdateOrInsertParameterJavadoc(),
+                getCustomUpdateOrInsertParameterDeclaration(),
+                getCustomUpdateOrInsertParameterValues(),
+                getCustomUpdateOrInsertQueryLine(),
+                StringUtils.getInstance(),
+                StringValidator.getInstance(),
+                RegexpManager.createHelper());
+    }
+
 }

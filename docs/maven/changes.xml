@@ -6,13 +6,24 @@
   </properties>
   <body>
     <release
-      version="0.6b1"
+      version="0.6b2"
       date="$Date$"
       description="Feature implemented">
       <action
         dev="$Author$"
         type="add">
-        Perform task <a href="${issue.url}534">534</a>.
+        Performed task <a href="${issue.url}540">540</a>
+        and <a href="${issue.url}541">541</a>.
+      </action>
+    </release>
+    <release
+      version="0.6b1"
+      date="2004/10/29 12:41:38"
+      description="Feature implemented">
+      <action
+        dev="chous"
+        type="add">
+        Performed task <a href="${issue.url}534">534</a>.
       </action>
     </release>
     <release
