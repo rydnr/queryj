@@ -12,6 +12,17 @@
       <action
         dev="$Author$"
         type="add">
+        Closed <a href="${issue.url}586">587</a>,
+        and <a href="${issue.url}586">588</a>.
+      </action>
+    </release>
+    <release
+      version="0.6b4"
+      date="2005/02/13 19:49:48"
+      description="Feature implemented">
+      <action
+        dev="chous"
+        type="add">
         Closed <a href="${issue.url}586">586</a>.
       </action>
     </release>

@@ -1734,7 +1734,7 @@ public class DatabaseMetaDataManager
                           < t_astrExternallyManagedFields.length;
                           t_iExternallyManagedFieldIndex++)
                 {
-                    if  (fieldName.equals(
+                    if  (fieldName.equalsIgnoreCase(
                              t_astrExternallyManagedFields[
                                  t_iExternallyManagedFieldIndex]))
                     {

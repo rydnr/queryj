@@ -401,87 +401,95 @@ public class AttributesStatementSetterTemplate
                       t_iColumnIndex < t_astrColumnNames.length;
                       t_iColumnIndex++)
             {
-                t_strCapitalizedParameterName =
-                    stringUtils.capitalize(
-                        t_astrColumnNames[t_iColumnIndex].toLowerCase(),
-                        '_');
+                boolean t_bManagedExternally =
+                    metaDataManager.isManagedExternally(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
 
-                t_strParameterName =
-                    stringUtils.unCapitalizeStart(
-                        t_strCapitalizedParameterName);
-
-                t_strParameterType =
-                    metaDataUtils.getFieldType(
-                        metaDataManager.getColumnType(
-                            t_strTableName,
-                            t_astrColumnNames[t_iColumnIndex]),
-                        project,
-                        task);
-
-                t_strPropertyName =
-                    t_astrColumnNames[t_iColumnIndex].toUpperCase();
-
-                t_strPropertyType =
-                    metaDataUtils.getObjectType(
-                        metaDataManager.getColumnType(
-                            t_strTableName,
-                            t_astrColumnNames[t_iColumnIndex]));
-
-                t_sbParameterSetterCalls.append(
-                    t_ParameterSetterCallFormatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedParameterName,
-                            t_strParameterName
-                        }));
-
-                t_sbParameterAccessors.append(
-                    t_ParameterAccessorFormatter.format(
-                        new Object[]
-                        {
-                            t_strPropertyName,
-                            t_strParameterType,
-                            t_strParameterName,
-                            t_strCapitalizedParameterName
-                        }));
-
-                t_sbParameterGetterCalls.append(
-                    t_ParameterGetterCallFormatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedParameterName
-                        }));
-
-                t_sbParameterJavadocs.append(
-                    t_ParameterJavadocFormatter.format(
-                        new Object[]
-                        {
-                            t_strParameterName,
-                            t_astrColumnNames[t_iColumnIndex].toUpperCase()
-                        }));
-
-                t_sbParameterDeclarations.append(
-                    t_ParameterDeclarationFormatter.format(
-                        new Object[]
-                        {
-                            t_strParameterType,
-                            t_strParameterName
-                        }));
-
-                t_sbParameterSpecifications.append(
-                    t_ParameterSpecificationFormatter.format(
-                        new Object[]
-                        {
-                            t_strPropertyType,
-                            t_strRepositoryName,
-                            t_strTableName.toUpperCase(),
-                            t_strPropertyName,
-                            t_strParameterName
-                        }));
-
-                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                if  (!t_bManagedExternally)
                 {
-                    t_sbParameterDeclarations.append(",");
+                    t_strParameterType =
+                        metaDataUtils.getFieldType(
+                            metaDataManager.getColumnType(
+                                t_strTableName,
+                                t_astrColumnNames[t_iColumnIndex]),
+                            project,
+                            task);
+
+                    t_strPropertyName =
+                        t_astrColumnNames[t_iColumnIndex].toUpperCase();
+
+                    t_strPropertyType =
+                        metaDataUtils.getObjectType(
+                            metaDataManager.getColumnType(
+                                t_strTableName,
+                                t_astrColumnNames[t_iColumnIndex]));
+
+                    t_strCapitalizedParameterName =
+                        stringUtils.capitalize(
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                            '_');
+
+                    t_strParameterName =
+                        stringUtils.unCapitalizeStart(
+                            t_strCapitalizedParameterName);
+
+                    t_sbParameterSetterCalls.append(
+                        t_ParameterSetterCallFormatter.format(
+                            new Object[]
+                            {
+                                t_strCapitalizedParameterName,
+                                t_strParameterName
+                            }));
+
+                    t_sbParameterAccessors.append(
+                        t_ParameterAccessorFormatter.format(
+                            new Object[]
+                            {
+                                t_strPropertyName,
+                                t_strParameterType,
+                                t_strParameterName,
+                                t_strCapitalizedParameterName
+                            }));
+
+                    t_sbParameterGetterCalls.append(
+                        t_ParameterGetterCallFormatter.format(
+                            new Object[]
+                            {
+                                t_strCapitalizedParameterName
+                            }));
+
+                    t_sbParameterJavadocs.append(
+                        t_ParameterJavadocFormatter.format(
+                            new Object[]
+                            {
+                                t_strParameterName,
+                                t_astrColumnNames[t_iColumnIndex].toUpperCase()
+                            }));
+
+                    t_sbParameterDeclarations.append(
+                        t_ParameterDeclarationFormatter.format(
+                            new Object[]
+                            {
+                                t_strParameterType,
+                                t_strParameterName
+                            }));
+
+                    if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                    {
+                        t_sbParameterDeclarations.append(",");
+                    }
+
+                    t_sbParameterSpecifications.append(
+                        t_ParameterSpecificationFormatter.format(
+                            new Object[]
+                            {
+                                t_strPropertyType,
+                                t_strRepositoryName,
+                                t_strTableName.toUpperCase(),
+                                t_strPropertyName,
+                                t_strParameterName
+                            }));
                 }
             }
         }

@@ -563,13 +563,18 @@ public abstract class DAOTestTemplate
 
         if  (t_astrColumnNames != null)
         {
+            boolean t_bManagedExternally = false;
+
             for  (int t_iColumnIndex = 0;
                   t_iColumnIndex < t_astrColumnNames.length;
                   t_iColumnIndex++)
             {
-                if  (!metaDataManager.isManagedExternally(
-                         tableTemplate.getTableName(),
-                         t_astrColumnNames[t_iColumnIndex]))
+                t_bManagedExternally = 
+                    metaDataManager.isManagedExternally(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                if  (!t_bManagedExternally)
                 {
                     t_sbInsertTestParametersValues.append(
                         t_Formatter.format(
@@ -623,10 +628,11 @@ public abstract class DAOTestTemplate
                     {
                         t_sbInsertParametersTypes.append(",");
                     }
-                }
-                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-                {
-                    t_sbInsertTestParametersValues.append(",");
+
+                    if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                    {
+                        t_sbInsertTestParametersValues.append(",");
+                    }
                 }
             }
         }

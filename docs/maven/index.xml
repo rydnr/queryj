@@ -18,9 +18,9 @@
       </p>
       <subsection name="Status">
         <p>
-          <strong>QueryJ</strong> 0.6b3 supports:
+          <strong>QueryJ</strong> 0.6b5 supports:
           <ul>
-            <li>Custom queries support,</li>
+            <li>Custom queries,</li>
             <li>Safe validation of custom queries at generation-time,</li>
             <!--li>JDBC flags support (Connection's, Statement's and ResultSet's),</li-->
             <li>Value Object generation from database model,</li>
@@ -73,6 +73,16 @@
         <tr>
           <td>
             $Date$
+          </td>
+          <td>
+            Added support for weak, type-like <a href="${issue.url}587">entities</a>.<br/>
+            Allowed customization of the (<a href="${issue.url}588">headers</a>) of the generated source files.<br/>
+            Released <b>0.6b5</b>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/02/13 19:49:48
           </td>
           <td>
             Added support for <a href="${issue.url}586">cascade deletetions</a>.<br/>

@@ -173,6 +173,7 @@ public class DAOTemplate
             DEFAULT_FIND_BY_PRIMARY_KEY_METHOD,
             DEFAULT_INSERT_METHOD,
             DEFAULT_INSERT_PARAMETERS_SPECIFICATION,
+            DEFAULT_EXTERNALLY_MANAGED_INSERT_PARAMETERS_SPECIFICATION,
             DEFAULT_UPDATE_METHOD,
             DEFAULT_UPDATE_PARAMETERS_SPECIFICATION,
             DEFAULT_DELETE_METHOD_NO_FK,
@@ -250,6 +251,7 @@ public class DAOTemplate
                 getFindByPrimaryKeyMethod(),
                 getInsertMethod(),
                 getInsertParametersSpecification(),
+                getExternallyManagedInsertParametersSpecification(),
                 getUpdateMethod(),
                 getUpdateParametersSpecification(),
                 getDeleteMethodNoFk(),
@@ -329,6 +331,8 @@ public class DAOTemplate
      * @param insertMethod the insert method.
      * @param insertParametersSpecification the specification of the insert
      * method's parameters.
+     * @param externallyManagedInsertParametersSpecification the specification
+     * of the insert method's parameters managed externally.
      * @param updateMethod the update method.
      * @param updateParametersSpecification the specification of the update
      * method's parameters.
@@ -430,6 +434,7 @@ public class DAOTemplate
         final String findByPrimaryKeyMethod,
         final String insertMethod,
         final String insertParametersSpecification,
+        final String externallyManagedInsertParametersSpecification,
         final String updateMethod,
         final String updateParametersSpecification,
         final String deleteMethodNoFk,
@@ -531,6 +536,9 @@ public class DAOTemplate
         MessageFormat t_InsertParametersSpecificationFormatter =
             new MessageFormat(insertParametersSpecification);
 
+        MessageFormat t_ExternallyManagedInsertParametersSpecificationFormatter =
+            new MessageFormat(externallyManagedInsertParametersSpecification);
+
         MessageFormat t_UpdateMethodFormatter =
             new MessageFormat(updateMethod);
 
@@ -555,9 +563,11 @@ public class DAOTemplate
             new StringBuffer();
         StringBuffer t_sbForeignDAOImports = new StringBuffer();
         StringBuffer t_sbAttributesJavadoc = new StringBuffer();
+        StringBuffer t_sbUpdateAttributesJavadoc = new StringBuffer();
         StringBuffer t_sbPkJavadoc = new StringBuffer();
         StringBuffer t_sbNonPkJavadoc = new StringBuffer();
         StringBuffer t_sbAttributesDeclaration = new StringBuffer();
+        StringBuffer t_sbUpdateAttributesDeclaration = new StringBuffer();
         StringBuffer t_sbPkDeclaration = new StringBuffer();
         StringBuffer t_sbNonPkDeclaration = new StringBuffer();
         StringBuffer t_sbPkFilter = new StringBuffer();
@@ -572,6 +582,8 @@ public class DAOTemplate
         StringBuffer t_sbDeleteByFkMethod = new StringBuffer();
                 
         StringBuffer t_sbInsertParametersSpecification = new StringBuffer();
+        StringBuffer t_sbExternallyManagedInsertParametersSpecification =
+            new StringBuffer();
         StringBuffer t_sbUpdateParametersSpecification = new StringBuffer();
 
         boolean t_bForeignKeys = false;
@@ -819,7 +831,7 @@ public class DAOTemplate
             packageUtils.retrieveJdbcOperationsPackage(
                 basePackageName,
                 engineName,
-                t_strCapitalizedValueObjectName);
+                tableTemplate.getTableName().toLowerCase());
 
         t_sbResult.append(
             t_ProjectImportFormatter.format(
@@ -906,9 +918,50 @@ public class DAOTemplate
                       t_iColumnIndex < t_astrColumnNames.length;
                       t_iColumnIndex++)
             {
-                if  (!metaDataManager.isManagedExternally(
-                         tableTemplate.getTableName(),
-                         t_astrColumnNames[t_iColumnIndex]))
+                t_sbUpdateAttributesJavadoc.append(
+                    t_AttributeJavadocFormatter.format(
+                        new Object[]
+                        {
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                            t_astrColumnNames[t_iColumnIndex]
+                        }));
+
+                t_sbUpdateAttributesDeclaration.append(
+                    t_AttributeDeclarationFormatter.format(
+                        new Object[]
+                        {
+                            metaDataUtils.getNativeType(
+                                metaDataManager.getColumnType(
+                                    tableTemplate.getTableName(),
+                                    t_astrColumnNames[t_iColumnIndex])),
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                        }));
+
+                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                {
+                    t_sbUpdateAttributesDeclaration.append(",");
+                }
+
+                boolean t_bManagedExternally =
+                    metaDataManager.isManagedExternally(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                if  (t_bManagedExternally)
+                {
+                    t_sbExternallyManagedInsertParametersSpecification.append(
+                        t_ExternallyManagedInsertParametersSpecificationFormatter.format(
+                            new Object[]
+                            {
+                                t_strRepositoryName,
+                                tableTemplate.getTableName().toUpperCase(),
+                                t_astrColumnNames[t_iColumnIndex].toUpperCase(),
+                                metaDataManager.getKeyword(
+                                    tableTemplate.getTableName(),
+                                    t_astrColumnNames[t_iColumnIndex])
+                            }));
+                }
+                else
                 {
                     t_sbAttributesJavadoc.append(
                         t_AttributeJavadocFormatter.format(
@@ -956,37 +1009,36 @@ public class DAOTemplate
                         t_sbAttributesStatementSetterCall.append(",");
                     }
 
-                    t_sbUpdateParametersSpecification.append(
-                        t_UpdateParametersSpecificationFormatter.format(
-                            new Object[]
-                            {
-                                t_strRepositoryName,
-                                tableTemplate.getTableName().toUpperCase(),
-                                t_astrColumnNames[t_iColumnIndex].toUpperCase()
-                            }));
-                }
+                    if  (!metaDataManager.isPrimaryKey(
+                             tableTemplate.getTableName(),
+                             t_astrColumnNames[t_iColumnIndex]))
+                    {
+                        t_sbUpdateParametersSpecification.append(
+                            t_UpdateParametersSpecificationFormatter.format(
+                                new Object[]
+                                {
+                                    t_strRepositoryName,
+                                    tableTemplate.getTableName().toUpperCase(),
+                                    t_astrColumnNames[t_iColumnIndex].toUpperCase()
+                                }));
 
-                if  (!metaDataManager.isPrimaryKey(
-                         tableTemplate.getTableName(),
-                         t_astrColumnNames[t_iColumnIndex]))
-                {
-                    t_sbNonPkJavadoc.append(
-                        t_AttributeJavadocFormatter.format(
-                            new Object[]
-                            {
-                                t_astrColumnNames[t_iColumnIndex].toLowerCase(),
-                                t_astrColumnNames[t_iColumnIndex]
-                            }));
+                        t_sbNonPkJavadoc.append(
+                            t_AttributeJavadocFormatter.format(
+                                new Object[]
+                                {
+                                    t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                                    t_astrColumnNames[t_iColumnIndex]
+                                }));
 
-                    t_sbNonPkFilter.append(
-                        t_AttributeFilterFormatter.format(
-                            new Object[]
-                            {
-                                t_strRepositoryName,
-                                tableTemplate.getTableName().toUpperCase(),
-                                t_astrColumnNames[t_iColumnIndex].toUpperCase()
-                            }));
-
+                        t_sbNonPkFilter.append(
+                            t_AttributeFilterFormatter.format(
+                                new Object[]
+                                {
+                                    t_strRepositoryName,
+                                    tableTemplate.getTableName().toUpperCase(),
+                                    t_astrColumnNames[t_iColumnIndex].toUpperCase()
+                                }));
+                    }
                 }
             }
 
@@ -1016,7 +1068,8 @@ public class DAOTemplate
                         t_sbInsertParametersSpecification,
                         t_sbAttributesJavadoc,
                         t_sbAttributesDeclaration,
-                        t_sbAttributesStatementSetterCall
+                        t_sbAttributesStatementSetterCall,
+                        t_sbExternallyManagedInsertParametersSpecification
                     }));
 
             t_sbResult.append(
@@ -1028,8 +1081,8 @@ public class DAOTemplate
                         tableTemplate.getTableName().toUpperCase(),
                         t_sbUpdateParametersSpecification,
                         t_sbPkFilter,
-                        t_sbAttributesJavadoc,
-                        t_sbAttributesDeclaration,
+                        t_sbUpdateAttributesJavadoc,
+                        t_sbUpdateAttributesDeclaration,
                         t_sbAttributesStatementSetterCall
                     }));
                 

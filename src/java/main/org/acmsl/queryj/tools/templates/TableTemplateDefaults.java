@@ -70,47 +70,13 @@ import java.util.Map;
  * @version $Revision$
  */
 public interface TableTemplateDefaults
+    extends  JavaTemplateDefaults
 {
     /**
      * The default header.
      */
     public static final String DEFAULT_HEADER =
-          "/*\n"
-        + "                        QueryJ\n"
-        + "\n"
-        + "    Copyright (C) 2002  Jose San Leandro Armendariz\n"
-        + "                        jsanleandro@yahoo.es\n"
-        + "                        chousz@yahoo.com\n"
-        + "\n"
-        + "    This library is free software; you can redistribute it and/or\n"
-        + "    modify it under the terms of the GNU General Public\n"
-        + "    License as published by the Free Software Foundation; either\n"
-        + "    version 2 of the License, or any later "
-        + "version.\n"
-        + "\n"
-        + "    This library is distributed in the hope that it will be "
-        + "useful,\n"
-        + "    but WITHOUT ANY WARRANTY; without even the implied warranty "
-        + "of\n"
-        + "    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
-        + "GNU\n"
-        + "    General Public License for more details.\n"
-        + "\n"
-        + "    You should have received a copy of the GNU General Public\n"
-        + "    License along with this library; if not, write to the Free "
-        + "Software\n"
-        + "    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  "
-        + "02111-1307  USA\n"
-        + "\n"
-        + "    Thanks to ACM S.L. for distributing this library under the GPL "
-        + "license.\n"
-        + "    Contact info: jsanleandro@yahoo.es\n"
-        + "    Postal Address: c/Playa de Lagoa, 1\n"
-        + "                    Urb. Valdecabanas\n"
-        + "                    Boadilla del monte\n"
-        + "                    28660 Madrid\n"
-        + "                    Spain\n"
-        + "\n"
+          HEADER
         + " *****************************************************************"
         + "*************\n"
         + " *\n"

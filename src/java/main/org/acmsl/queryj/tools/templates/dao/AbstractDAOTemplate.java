@@ -240,6 +240,11 @@ public abstract class AbstractDAOTemplate
     private String m__strInsertParametersSpecification;
 
     /**
+     * The externally-managed insert parameters specification.
+     */
+    private String m__strExternallyManagedInsertParametersSpecification;
+
+    /**
      * The update method.
      */
     private String m__strUpdateMethod;
@@ -434,6 +439,8 @@ public abstract class AbstractDAOTemplate
      * @param insertMethod the insert method.
      * @param insertParametersSpecification the specification of the insert
      * method's parameters.
+     * @param externallyManagedInsertParametersSpecification the
+     * specification of the insert parameters externally managed.
      * @param updateMethod the update method.
      * @param updateParametersSpecification the specification of the update
      * method's parameters.
@@ -522,6 +529,7 @@ public abstract class AbstractDAOTemplate
         final String findByPrimaryKeyMethod,
         final String insertMethod,
         final String insertParametersSpecification,
+        final String externallyManagedInsertParametersSpecification,
         final String updateMethod,
         final String updateParametersSpecification,
         final String deleteMethodNoFk,
@@ -654,6 +662,9 @@ public abstract class AbstractDAOTemplate
 
         immutableSetInsertParametersSpecification(
             insertParametersSpecification);
+
+        immutableSetExternallyManagedInsertParametersSpecification(
+            externallyManagedInsertParametersSpecification);
 
         immutableSetUpdateMethod(
             updateMethod);
@@ -1684,6 +1695,38 @@ public abstract class AbstractDAOTemplate
     public String getInsertParametersSpecification()
     {
         return m__strInsertParametersSpecification;
+    }
+
+    /**
+     * Specifies the externally-managed insert parameters
+     * specification.
+     * @param specification such specification.
+     */
+    private void immutableSetExternallyManagedInsertParametersSpecification(
+        final String specification)
+    {
+        m__strExternallyManagedInsertParametersSpecification =
+            specification;
+    }
+
+    /**
+     * Specifies the externally-managed insert parameters specification.
+     * @param specification such specification.
+     */
+    protected void setExternallyManagedInsertParametersSpecification(
+        final String specification)
+    {
+        immutableSetExternallyManagedInsertParametersSpecification(
+            specification);
+    }
+
+    /**
+     * Retrieves the externally-managed insert parameters specification.
+     * @return such information.
+     */
+    public String getExternallyManagedInsertParametersSpecification()
+    {
+        return m__strExternallyManagedInsertParametersSpecification;
     }
 
     /**

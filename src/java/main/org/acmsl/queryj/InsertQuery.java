@@ -96,6 +96,7 @@ public abstract class InsertQuery
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
     public void value(final StringField field, final String value)
     {
@@ -106,6 +107,7 @@ public abstract class InsertQuery
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
     public void value(final IntField field, final int value)
     {
@@ -113,9 +115,21 @@ public abstract class InsertQuery
     }
 
     /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    public void value(final IntField field, final String value)
+    {
+        addValue(field, value);
+    }
+
+    /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
     public void value(final LongField field, final long value)
     {
@@ -123,9 +137,21 @@ public abstract class InsertQuery
     }
 
     /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    public void value(final LongField field, final String value)
+    {
+        addValue(field, value);
+    }
+
+    /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
     public void value(final DoubleField field, final double value)
     {
@@ -133,9 +159,21 @@ public abstract class InsertQuery
     }
 
     /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    public void value(final DoubleField field, final String value)
+    {
+        addValue(field, value);
+    }
+
+    /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
     public void value(final CalendarField field, final Calendar value)
     {
@@ -143,9 +181,21 @@ public abstract class InsertQuery
     }
 
     /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    public void value(final CalendarField field, final String value)
+    {
+        addValue(field, value);
+    }
+
+    /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
     public void value(final DateField field, final Date value)
     {
@@ -153,11 +203,12 @@ public abstract class InsertQuery
     }
 
     /**
-     * Specifies the value of a field.
+     * Specifies the keyword of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    public void value(final BigDecimalField field, final BigDecimal value)
+    public void value(final DateField field, final String value)
     {
         addValue(field, value);
     }
@@ -166,6 +217,29 @@ public abstract class InsertQuery
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
+     */
+    public void value(final BigDecimalField field, final BigDecimal value)
+    {
+        addValue(field, value);
+    }
+
+    /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    public void value(final BigDecimalField field, final String value)
+    {
+        addValue(field, value);
+    }
+
+    /**
+     * Specifies the value of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
      */
     public void value(final Field field, final Object value)
     {
@@ -175,6 +249,7 @@ public abstract class InsertQuery
     /**
      * Specifies the value of a field.
      * @param field the field.
+     * @precondition field != null
      */
     public void value(final Field field)
     {

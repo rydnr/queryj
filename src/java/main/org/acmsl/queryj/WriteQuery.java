@@ -108,9 +108,18 @@ public abstract class WriteQuery
      * Specifies the table.
      * @param table the table.
      */
-    protected void setTable(Table table)
+    protected final void immutableSetTable(final Table table)
     {
         m__Table = table;
+    }
+
+    /**
+     * Specifies the table.
+     * @param table the table.
+     */
+    protected void setTable(final Table table)
+    {
+        immutableSetTable(table);
     }
 
     /**
@@ -126,7 +135,7 @@ public abstract class WriteQuery
      * Specifies new value collection.
      * @param map the new map.
      */
-    private void inmutableSetValues(Map map)
+    private void inmutableSetValues(final Map map)
     {
         m__mValues = map;
     }
@@ -135,7 +144,7 @@ public abstract class WriteQuery
      * Specifies new value collection.
      * @param map the new map.
      */
-    protected void setValues(Map map)
+    protected void setValues(final Map map)
     {
         inmutableSetValues(map);
     }
@@ -153,190 +162,360 @@ public abstract class WriteQuery
      * Puts a new value.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void putValue(StringField field, String value)
+    protected void putValue(final StringField field, final String value)
     {
-        if  (field != null)
-        {
-            if  (value == null)
-            {
-                value = "null";
-            }
-
-            Map t_mValues = getValues();
-
-            if  (t_mValues != null)
-            {
-                t_mValues.put(field, value);
-            }
-        }
+        putValue(field, value, getValues());
     }
 
     /**
      * Puts a new value.
      * @param field the field.
      * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
      */
-    protected void putValue(IntField field, int value)
+    protected void putValue(
+        final StringField field, final String value, final Map values)
     {
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
+        String t_strValue = value;
 
-            if  (t_mValues != null)
-            {
-                t_mValues.put(field, new Integer(value));
-            }
+        if  (t_strValue == null)
+        {
+            t_strValue = "null";
         }
+
+        values.put(field, t_strValue);
     }
 
     /**
      * Puts a new value.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void putValue(LongField field, long value)
+    protected void putValue(final IntField field, final int value)
     {
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
-
-            if  (t_mValues != null)
-            {
-                t_mValues.put(field, new Long(value));
-            }
-        }
+        putValue(field, value, getValues());
     }
 
     /**
      * Puts a new value.
      * @param field the field.
      * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
      */
-    protected void putValue(DoubleField field, double value)
+    protected void putValue(
+        final IntField field, final int value, final Map values)
     {
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
+        values.put(field, new Integer(value));
+    }
 
-            if  (t_mValues != null)
-            {
-                t_mValues.put(field, new Double(value));
-            }
-        }
+    /**
+     * Puts a new keyword-based value.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void putValue(final IntField field, final String value)
+    {
+        putValue(field, value, getValues());
+    }
+
+    /**
+     * Puts a new keyword-based value.
+     * @param field the field.
+     * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected void putValue(
+        final IntField field, final String value, final Map values)
+    {
+        values.put(field, value);
     }
 
     /**
      * Puts a new value.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void putValue(CalendarField field, Calendar value)
+    protected void putValue(final LongField field, final long value)
     {
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
-
-            if  (t_mValues != null)
-            {
-                t_mValues.put(field, value);
-            }
-        }
+        putValue(field, value, getValues());
     }
 
     /**
      * Puts a new value.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
+     * @precondition values != null
      */
-    protected void putValue(DateField field, Date value)
+    protected void putValue(final LongField field, final long value, final Map values)
     {
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
+        values.put(field, new Long(value));
+    }
 
-            if  (t_mValues != null)
-            {
-                t_mValues.put(field, value);
-            }
-        }
+    /**
+     * Puts a new keyword-based value.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void putValue(final LongField field, final String value)
+    {
+        putValue(field, value, getValues());
+    }
+
+    /**
+     * Puts a new keyword-based value.
+     * @param field the field.
+     * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected void putValue(
+        final LongField field, final String value, final Map values)
+    {
+        values.put(field, value);
     }
 
     /**
      * Puts a new value.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void putValue(BigDecimalField field, BigDecimal value)
+    protected void putValue(final DoubleField field, final double value)
     {
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
-
-            if  (t_mValues != null)
-            {
-                t_mValues.put(field, value);
-            }
-        }
+        putValue(field, value, getValues());
     }
 
     /**
      * Puts a new value.
      * @param field the field.
      * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
      */
-    protected void putValue(Field field, Object value)
+    protected void putValue(
+        final DoubleField field, final double value, final Map values)
     {
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
+        values.put(field, new Double(value));
+    }
 
-            if  (t_mValues != null)
-            {
-                t_mValues.put(field, value);
-            }
-        }
+    /**
+     * Puts a new value.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void putValue(final CalendarField field, final Calendar value)
+    {
+        putValue(field, value, getValues());
+    }
+
+    /**
+     * Puts a new value.
+     * @param field the field.
+     * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected void putValue(
+        final CalendarField field, final Calendar value, final Map values)
+    {
+        values.put(field, value);
+    }
+
+    /**
+     * Puts a new keyword.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void putValue(final CalendarField field, final String value)
+    {
+        putValue(field, value, getValues());
+    }
+
+    /**
+     * Puts a new keyword.
+     * @param field the field.
+     * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected void putValue(
+        final CalendarField field, final String value, final Map values)
+    {
+        values.put(field, value);
+    }
+
+    /**
+     * Puts a new value.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void putValue(final DateField field, final Date value)
+    {
+        putValue(field, value, getValues());
+    }
+
+    /**
+     * Puts a new value.
+     * @param field the field.
+     * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected void putValue(
+        final DateField field, final Date value, final Map values)
+    {
+        values.put(field, value);
+    }
+
+    /**
+     * Puts a new keyword.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void putValue(final DateField field, final String value)
+    {
+        putValue(field, value, getValues());
+    }
+
+    /**
+     * Puts a new keyword.
+     * @param field the field.
+     * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected void putValue(
+        final DateField field, final String value, final Map values)
+    {
+        values.put(field, value);
+    }
+
+    /**
+     * Puts a new value.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void putValue(
+        final BigDecimalField field, final BigDecimal value)
+    {
+        putValue(field, value, getValues());
+    }
+
+    /**
+     * Puts a new value.
+     * @param field the field.
+     * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected void putValue(
+        final BigDecimalField field, final BigDecimal value, final Map values)
+    {
+        values.put(field, value);
+    }
+
+    /**
+     * Puts a new value.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void putValue(final Field field, final Object value)
+    {
+        putValue(field, value, getValues());
+    }
+
+    /**
+     * Puts a new value.
+     * @param field the field.
+     * @param value the value.
+     * @param values the values.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected void putValue(
+        final Field field, final Object value, final Map values)
+    {
+        values.put(field, value);
     }
 
     /**
      * Retrieves the value of given field.
      * @param field the field.
      * @return the value.
+     * @precondition field != null
      */
-    protected Object getValue(Field field)
+    protected Object getValue(final Field field)
     {
-        Object result = null;
+        return getValue(field, getValues());
+    }
 
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
-
-            if  (t_mValues != null)
-            {
-                result = t_mValues.get(field);
-            }
-        }
-
-        return result;
+    /**
+     * Retrieves the value of given field.
+     * @param field the field.
+     * @param values the values.
+     * @return the value.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected Object getValue(final Field field, final Map values)
+    {
+        return values.get(field);
     }
 
     /**
      * Retrieves the value of given field.
      * @param field the field.
      * @return the value.
+     * @precondition field != null
      */
-    protected String getValue(StringField field)
+    protected String getValue(final StringField field)
+    {
+        return getValue(field, getValues());
+    }
+
+    /**
+     * Retrieves the value of given field.
+     * @param field the field.
+     * @param values the values.
+     * @return the value.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected String getValue(final StringField field, final Map values)
     {
         String result = "null";
 
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
+        Object t_Result = values.get(field);
 
-            if  (t_mValues != null)
-            {
-                result = (String) t_mValues.get(field);
-            }
+        if  (t_Result instanceof String)
+        {
+            result = (String) t_Result;
         }
 
         return result;
@@ -346,19 +525,30 @@ public abstract class WriteQuery
      * Retrieves the value of given field.
      * @param field the field.
      * @return the value.
+     * @precondition field != null
      */
-    protected int getValue(IntField field)
+    protected int getValue(final IntField field)
+    {
+        return getValue(field, getValues());
+    }
+
+    /**
+     * Retrieves the value of given field.
+     * @param field the field.
+     * @param values the values.
+     * @return the value.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected int getValue(final IntField field, final Map values)
     {
         int result = -1;
 
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
+        Object t_Result = values.get(field);
 
-            if  (t_mValues != null)
-            {
-                result = ((Integer) t_mValues.get(field)).intValue();
-            }
+        if  (t_Result instanceof Integer)
+        {
+            result = ((Integer) t_Result).intValue();
         }
 
         return result;
@@ -368,19 +558,30 @@ public abstract class WriteQuery
      * Retrieves the value of given field.
      * @param field the field.
      * @return the value.
+     * @precondition field != null
      */
-    protected long getValue(LongField field)
+    protected long getValue(final LongField field)
+    {
+        return getValue(field, getValues());
+    }
+
+    /**
+     * Retrieves the value of given field.
+     * @param field the field.
+     * @param values the values.
+     * @return the value.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected long getValue(final LongField field, final Map values)
     {
         long result = -1;
 
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
+        Object t_Result = values.get(field);
 
-            if  (t_mValues != null)
-            {
-                result = ((Long) t_mValues.get(field)).longValue();
-            }
+        if  (t_Result instanceof Long)
+        {
+            result = ((Long) t_Result).longValue();
         }
 
         return result;
@@ -390,19 +591,30 @@ public abstract class WriteQuery
      * Retrieves the value of given field.
      * @param field the field.
      * @return the value.
+     * @precondition field != null
      */
-    protected double getValue(DoubleField field)
+    protected double getValue(final DoubleField field)
+    {
+        return getValue(field, getValues());
+    }
+
+    /**
+     * Retrieves the value of given field.
+     * @param field the field.
+     * @param values the values.
+     * @return the value.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected double getValue(final DoubleField field, final Map values)
     {
         double result = -1.0;
 
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
+        Object t_Result = values.get(field);
 
-            if  (t_mValues != null)
-            {
-                result = ((Double) t_mValues.get(field)).doubleValue();
-            }
+        if  (t_Result instanceof Double)
+        {
+            result = ((Double) t_Result).doubleValue();
         }
 
         return result;
@@ -412,19 +624,30 @@ public abstract class WriteQuery
      * Retrieves the value of given field.
      * @param field the field.
      * @return the value.
+     * @precondition field != null
      */
-    protected Calendar getValue(CalendarField field)
+    protected Calendar getValue(final CalendarField field)
+    {
+        return getValue(field, getValues());
+    }
+
+    /**
+     * Retrieves the value of given field.
+     * @param field the field.
+     * @param values the values.
+     * @return the value.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected Calendar getValue(final CalendarField field, final Map values)
     {
         Calendar result = null;
 
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
+        Object t_Result = values.get(field);
 
-            if  (t_mValues != null)
-            {
-                result = (Calendar) t_mValues.get(field);
-            }
+        if  (t_Result instanceof Calendar)
+        {
+            result = (Calendar) t_Result;
         }
 
         return result;
@@ -434,19 +657,31 @@ public abstract class WriteQuery
      * Retrieves the value of given field.
      * @param field the field.
      * @return the value.
+     * @precondition field != null
      */
-    protected BigDecimal getValue(BigDecimalField field)
+    protected BigDecimal getValue(final BigDecimalField field)
+    {
+        return getValue(field, getValues());
+    }
+
+    /**
+     * Retrieves the value of given field.
+     * @param field the field.
+     * @param values the values.
+     * @return the value.
+     * @precondition field != null
+     * @precondition values != null
+     */
+    protected BigDecimal getValue(
+        final BigDecimalField field, final Map values)
     {
         BigDecimal result = null;
 
-        if  (field != null)
-        {
-            Map t_mValues = getValues();
+        Object t_Result = values.get(field);
 
-            if  (t_mValues != null)
-            {
-                result = (BigDecimal) t_mValues.get(field);
-            }
+        if  (t_Result instanceof BigDecimal)
+        {
+            result = (BigDecimal) t_Result;
         }
 
         return result;
@@ -456,111 +691,167 @@ public abstract class WriteQuery
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void addValue(StringField field, String value)
+    protected void addValue(final StringField field, final String value)
     {
-        if  (field != null)
-        {
-            addField(field);
-            putValue(field, value);
-        }
+        addField(field);
+        putValue(field, value);
     }
 
     /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void addValue(IntField field, int value)
+    protected void addValue(final IntField field, final int value)
     {
-        if  (field != null)
-        {
-            addField(field);
-            putValue(field, value);
-        }
+        addField(field);
+        putValue(field, value);
+    }
+
+    /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void addValue(final IntField field, final String value)
+    {
+        addField(field);
+        putValue(field, value);
     }
 
     /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void addValue(LongField field, long value)
+    protected void addValue(final LongField field, final long value)
     {
-        if  (field != null)
-        {
-            addField(field);
-            putValue(field, value);
-        }
+        addField(field);
+        putValue(field, value);
+    }
+
+    /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void addValue(final LongField field, final String value)
+    {
+        addField(field);
+        putValue(field, value);
     }
 
     /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void addValue(DoubleField field, double value)
+    protected void addValue(final DoubleField field, final double value)
     {
-        if  (field != null)
-        {
-            addField(field);
-            putValue(field, value);
-        }
+        addField(field);
+        putValue(field, value);
+    }
+
+    /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void addValue(final DoubleField field, final String value)
+    {
+        addField(field);
+        putValue(field, value);
     }
 
     /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void addValue(CalendarField field, Calendar value)
+    protected void addValue(final CalendarField field, final Calendar value)
     {
-        if  (field != null)
-        {
-            addField(field);
-            putValue(field, value);
-        }
+        addField(field);
+        putValue(field, value);
+    }
+
+    /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void addValue(final CalendarField field, final String value)
+    {
+        addField(field);
+        putValue(field, value);
     }
 
     /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void addValue(DateField field, Date value)
+    protected void addValue(final DateField field, final Date value)
     {
-        if  (field != null)
-        {
-            addField(field);
-            putValue(field, value);
-        }
+        addField(field);
+        putValue(field, value);
+    }
+
+    /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void addValue(final DateField field, final String value)
+    {
+        addField(field);
+        putValue(field, value);
     }
 
     /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void addValue(BigDecimalField field, BigDecimal value)
+    protected void addValue(final BigDecimalField field, final BigDecimal value)
     {
-        if  (field != null)
-        {
-            addField(field);
-            putValue(field, value);
-        }
+        addField(field);
+        putValue(field, value);
+    }
+
+    /**
+     * Specifies the keyword of a field.
+     * @param field the field.
+     * @param value the value.
+     * @precondition field != null
+     */
+    protected void addValue(final BigDecimalField field, final String value)
+    {
+        addField(field);
+        putValue(field, value);
     }
 
     /**
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
+     * @precondition field != null
      */
-    protected void addValue(Field field, Object value)
+    protected void addValue(final Field field, final Object value)
     {
-        if  (field != null)
-        {
-            addField(field);
-            putValue(field, value);
-        }
+        addField(field);
+        putValue(field, value);
     }
 }

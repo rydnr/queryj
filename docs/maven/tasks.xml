@@ -35,6 +35,11 @@
         <p>
           <ul>
             <li>
+              <b>0.6b5</b><br/>
+              Support constant generation for weak, type-like entities (<a href="${issue.url}587">587</a>).<br/>
+              Allow customizing the (<a href="${issue.url}588">headers</a>) of the generated source files.
+            </li>
+            <li>
               <b>0.6b4</b><br/>
               Support cascade deletions (<a href="${issue.url}586">586</a>).
             </li>

@@ -1052,10 +1052,9 @@ public class PackageUtils
             retrievePackage(
                 retrieveDAOPackage(
                     packageName, engineName),
-                englishGrammarUtils.getSingular(
-                    stringUtils.capitalize(
-                        tableName.toLowerCase(),
-                        '_').toLowerCase()));
+                stringUtils.capitalize(
+                    tableName.toLowerCase(),
+                    '_').toLowerCase());
     }
 
     /**
@@ -1115,10 +1114,9 @@ public class PackageUtils
             retrieveFolder(
                 retrieveDAOFolder(
                     parentFolder, packageName, engineName),
-                englishGrammarUtils.getSingular(
-                    stringUtils.capitalize(
-                        tableName.toLowerCase(),
-                        '_')).toLowerCase());
+                stringUtils.capitalize(
+                    tableName.toLowerCase(),
+                    '_').toLowerCase());
     }
 
     /**

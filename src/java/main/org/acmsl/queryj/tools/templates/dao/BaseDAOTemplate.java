@@ -1862,7 +1862,7 @@ public class BaseDAOTemplate
                         t_strColumnValue =
                             t_rsResults.getString(t_iIndex);
 
-                        if  (descriptionColumn.equals(t_strColumnName))
+                        if  (descriptionColumn.equalsIgnoreCase(t_strColumnName))
                         {
                             t_strRecordName = t_strColumnValue;
                         }
