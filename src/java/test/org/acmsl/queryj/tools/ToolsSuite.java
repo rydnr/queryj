@@ -110,17 +110,17 @@ public class ToolsSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.ProcedureMetaDataTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntTablesElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntExternallyManagedFieldsElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.QueryJTaskTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntFieldFkElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntTableElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntFieldElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.PackageUtilsTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.ProcedureMetaDataTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntTablesElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntExternallyManagedFieldsElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntCommandTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.ProcedureParameterMetaDataTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.DatabaseMetaDataManagerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.QueryJTaskTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntFieldFkElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntCommandTest.class);
     
     suite.addTest(unittests.org.acmsl.queryj.tools.customsql.CustomsqlSuite.suite());
     suite.addTest(unittests.org.acmsl.queryj.tools.handlers.HandlersSuite.suite());

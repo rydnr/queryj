@@ -126,7 +126,7 @@ public class TableRepositoryTemplateGenerator
 
         if  (result == null) 
         {
-            result = new TableRepositoryTemplateGenerator() {};
+            result = new TableRepositoryTemplateGenerator();
 
             setReference(result);
         }
@@ -139,22 +139,13 @@ public class TableRepositoryTemplateGenerator
      * @param packageName the package name.
      * @param repository the repository.
      * @return such template.
+     * @precondition packageName != null
+     * @precondition repository != null
      */
     public TableRepositoryTemplate createTableRepositoryTemplate(
-        String packageName,
-        String repository)
+        final String packageName, final String repository)
     {
-        TableRepositoryTemplate result = null;
-
-        if  (   (packageName != null)
-             && (repository  != null))
-        {
-
-            result =
-                new TableRepositoryTemplate(packageName, repository) {};
-        }
-
-        return result;
+        return new TableRepositoryTemplate(packageName, repository);
     }
 
     /**
@@ -166,46 +157,67 @@ public class TableRepositoryTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-            TableRepositoryTemplate tableRepositoryTemplate,
-            File                    outputDir,
-            Project                 project,
-            Task                    task)
-        throws  IOException
+        final TableRepositoryTemplate tableRepositoryTemplate,
+        final File outputDir,
+        final Project project,
+        final Task task)
+      throws  IOException
     {
-        if  (   (tableRepositoryTemplate != null)
-             && (outputDir               != null))
+        write(
+            tableRepositoryTemplate,
+            outputDir,
+            project,
+            task,
+            FileUtils.getInstance(),
+            TableRepositoryUtils.getInstance());
+    }
+            
+    /**
+     * Writes a table repository template to disk.
+     * @param tableRepositoryTemplate the table repository template to write.
+     * @param outputDir the output folder.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param tableRepositoryUtils the <code>TableRepositoryUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition tableRepositoryTemplate != null
+     * @precondition outputDir != null
+     * @precondition fileUtils != null
+     * @precondition tableRepositoryUtils != null
+     */
+    public void write(
+        final TableRepositoryTemplate tableRepositoryTemplate,
+        final File outputDir,
+        final Project project,
+        final Task task,
+        final FileUtils fileUtils,
+        final TableRepositoryUtils tableRepositoryUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
+
+        String t_strTableRepositoryClass =
+            tableRepositoryUtils.retrieveTableRepositoryClassName(
+                tableRepositoryTemplate.getRepository());
+
+        if  (project != null)
         {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
-
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
-
-                String t_strNormalizedRepository =
-                    t_StringUtils.normalize(
-                        tableRepositoryTemplate.getRepository(), '_');
-
-                if  (project != null)
-                {
-                    project.log(
-                        task,
-                          "Writing "
-                        + outputDir.getAbsolutePath()
-                        + File.separator
-                        + t_strNormalizedRepository
-                        + ".java",
-                        Project.MSG_VERBOSE);
-                }
-
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + t_strNormalizedRepository
-                    + ".java",
-                    tableRepositoryTemplate.toString());
-            }
+            project.log(
+                task,
+                  "Writing "
+                + outputDir.getAbsolutePath()
+                + File.separator
+                + t_strTableRepositoryClass
+                + ".java",
+                Project.MSG_VERBOSE);
         }
+
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + t_strTableRepositoryClass
+            + ".java",
+            tableRepositoryTemplate.toString());
     }
 }

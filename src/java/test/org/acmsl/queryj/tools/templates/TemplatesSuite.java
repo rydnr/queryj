@@ -110,6 +110,8 @@ public class TemplatesSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.templates");
     
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableRepositoryTemplateTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableRepositoryUtilsTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableTemplateGeneratorTest.class);

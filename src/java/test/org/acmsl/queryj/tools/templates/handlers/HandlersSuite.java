@@ -109,7 +109,6 @@ public class HandlersSuite
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateBuildHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateBuildHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateWritingHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateWritingHandlerTest.class);
@@ -122,6 +121,7 @@ public class HandlersSuite
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateHandlerBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateHandlerBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateWritingHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandlerTest.class);
     
     
     
