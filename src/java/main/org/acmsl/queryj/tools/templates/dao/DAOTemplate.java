@@ -937,7 +937,7 @@ public abstract class DAOTemplate
           "    /**\n"
         + "     * Retrieves {0} entities\n"
          // result class
-        + " from the persistence layer matching given criteria."
+        + "     * from the persistence layer matching given criteria."
         + "{1}\n"
          // CUSTOM_SELECT_PARAMETER_JAVADOC
         + "     * @param transactionToken needed to use an open connection and\n"
@@ -961,7 +961,7 @@ public abstract class DAOTemplate
         + "        '{'\n"
         + "            t_Connection = getConnection(transactionToken);\n\n"
         + "            String t_strQuery =\n"
-        + "                \"{4}\";\n"
+        + "                \"{4}\";\n\n"
         + "            t_PreparedStatement = t_Connection.prepareStatement(t_strQuery);\n"
         + "{5}\n\n"
          // CUSTOM_SELECT_PARAMETER_VALUES
