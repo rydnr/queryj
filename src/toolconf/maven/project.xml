@@ -147,7 +147,7 @@
     <dependency>
       <groupId>acmsl-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>0.5.5b11</version>
+      <version>0.5.5b12</version>
       <url>http://maven.acm-sl.com/commons</url>
       <properties>
         <required.to.compile>true</required.to.compile>
@@ -269,7 +269,7 @@
       <properties>
         <required.to.compile>false</required.to.compile>
         <required.to.run>true</required.to.run>
-        <required.to.test>true</required.to.test>
+        <required.to.test>false</required.to.test>
         <required.to.build>false</required.to.build>
         <injected.by>commons-digester</injected.by>
         <injected.by>acmsl-commons</injected.by>
@@ -291,7 +291,7 @@
       </properties>
     </dependency-->
 
-    <dependency>
+    <!--dependency>
       <groupId>jta</groupId>
       <artifactId>jta</artifactId>
       <version>1.0</version>
@@ -302,7 +302,7 @@
         <required.to.test>true</required.to.test>
         <required.to.build>false</required.to.build>
       </properties>
-    </dependency>
+    </dependency-->
 
     <dependency>
       <groupId>oro</groupId>
@@ -318,12 +318,12 @@
       </properties>
     </dependency>
 
-    <dependency>
+    <!--dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.0</version>
       <url>http://jakarta.apache.org/commons</url>
-    </dependency>
+    </dependency-->
 
   </dependencies>
 

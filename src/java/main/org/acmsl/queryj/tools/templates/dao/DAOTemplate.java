@@ -66,6 +66,8 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.regexpplugin.Helper;
+import org.acmsl.commons.regexpplugin.RegexpManager;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
@@ -937,7 +939,7 @@ public abstract class DAOTemplate
           "    /**\n"
         + "     * Retrieves {0} entities\n"
          // result class
-        + "     * from the persistence layer matching given criteria."
+        + "     * from the persistence layer matching given criteria.\n"
         + "{1}\n"
          // CUSTOM_SELECT_PARAMETER_JAVADOC
         + "     * @param transactionToken needed to use an open connection and\n"
@@ -1049,6 +1051,114 @@ public abstract class DAOTemplate
      */
     public static final String DEFAULT_CUSTOM_SELECT_RESULT_PROPERTIES =
         "\n                        t_rsResults.get{0}({1})";
+
+    /**
+     * The custom update template.
+     */
+    public static final String DEFAULT_CUSTOM_UPDATE =
+          "    /**\n"
+        + "     * Updates {0} entities\n"
+         // result class
+        + "     * from the persistence layer with the provided data.\n"
+        + "{1}\n"
+         // CUSTOM_SELECT_PARAMETER_JAVADOC
+        + "     * @param transactionToken needed to use an open connection and\n"
+        + "     * see previously uncommited inserts/updates/deletes.\n"
+        + "     * @return the information extracted from the persistence layer.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     */\n"
+        + "    public void {2}("
+         // sql name
+        + "{3}\n"
+         // CUSTOM_UPDATE_PARAMETER_DECLARATION
+        + "        final TransactionToken transactionToken)\n"
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
+         // java table name
+        + "        Connection        t_Connection        = null;\n"
+        + "        PreparedStatement t_PreparedStatement = null;\n\n"
+        + "        try\n"
+        + "        '{'\n"
+        + "            t_Connection = getConnection(transactionToken);\n\n"
+        + "            StringBuffer t_sbQuery = new StringBuffer();\n"
+        + "{4}\n\n"
+        + "            t_PreparedStatement = t_Connection.prepareStatement(t_sbQuery.toString());\n"
+        + "{5}\n\n"
+         // CUSTOM_UPDATE_PARAMETER_VALUES
+        + "            t_PreparedStatement.executeUpdate();\n\n"
+        + "        '}'\n"
+        + "        catch  (final SQLException sqlException)\n"
+        + "        '{'\n"
+        + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
+        + "        '}'\n"
+        + "        catch  (final Exception exception)\n"
+        + "        '{'\n"
+        + "            LogFactory.getLog(getClass()).error(exception);\n"
+        + "        '}'\n"
+        + "        finally\n"
+        + "        '{'\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                if  (t_rsResults != null)\n"
+        + "                '{'\n"
+        + "                    t_rsResults.close();\n"
+        + "                '}'\n"
+        + "            '}'\n"
+        + "            catch  (final Exception exception)\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).error(exception);\n"
+        + "            '}'\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                if  (t_PreparedStatement != null)\n"
+        + "                '{'\n"
+        + "                    t_PreparedStatement.close();\n"
+        + "                '}'\n"
+        + "            '}'\n"
+        + "            catch  (final Exception exception)\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).error(exception);\n"
+        + "            '}'\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                if  (t_Connection != null)\n"
+        + "                '{'\n"
+        + "                    closeConnection(t_Connection, transactionToken);\n"
+        + "                '}'\n"
+        + "            '}'\n"
+        + "            catch  (final Exception exception)\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).error(exception);\n"
+        + "            '}'\n"
+        + "        '}'\n\n"
+        + "        return result;\n"
+        + "    '}'\n\n";
+
+    /**
+     * The custom update parameter javadoc.
+     */
+    public static final String DEFAULT_CUSTOM_UPDATE_PARAMETER_JAVADOC =
+        "\n     * @param {0} such information.";
+         // parameter name
+
+    /**
+     * The custom update parameter declaration.
+     */
+    public static final String DEFAULT_CUSTOM_UPDATE_PARAMETER_DECLARATION =
+        "\n        final {0} {1},";
+         // parameter type - parameter name
+
+    /**
+     * The custom update parameter values.
+     */
+    public static final String DEFAULT_CUSTOM_UPDATE_PARAMETER_VALUES =
+        "\n            t_PreparedStatement.set{0}({1}, {2});";
+
+    /**
+     * The custom update query line.
+     */
+    public static final String DEFAULT_CUSTOM_UPDATE_QUERY_LINE =
+        "\n            t_sbQuery.append({0}\"{1} \");";
 
     /**
      * The default class end.
@@ -1326,6 +1436,31 @@ public abstract class DAOTemplate
     private String m__strCustomSelectResultPropertyValues;
 
     /**
+     * The custom update.
+     */
+    private String m__strCustomUpdate;
+
+    /**
+     * The custom update parameter javadoc.
+     */
+    private String m__strCustomUpdateParameterJavadoc;
+
+    /**
+     * The custom update parameter declaration.
+     */
+    private String m__strCustomUpdateParameterDeclaration;
+
+    /**
+     * The custom update parameter values.
+     */
+    private String m__strCustomUpdateParameterValues;
+
+    /**
+     * The custom update query line.
+     */
+    private String m__strCustomUpdateQueryLine;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
@@ -1395,6 +1530,14 @@ public abstract class DAOTemplate
      * selects.
      * @param customSelectResultPropertyValues the properties of the result set for
      * custom selects.
+     * @param customUpdate the custom update template.
+     * @param customUpdateParameterJavadoc the Javadoc for the parameters of the
+     * custom updates.
+     * @param customUpdateParameterDeclaration the parameter declaration of the
+     * custom updates.
+     * @param customUpdateParameterValues the parameter values of the custom
+     * updates.
+     * @param customUpdateQueryLine the custom update query line.
      * @param classEnd the class end.
      */
     public DAOTemplate(
@@ -1452,6 +1595,11 @@ public abstract class DAOTemplate
         final String                  customSelectParameterDeclaration,
         final String                  customSelectParameterValues,
         final String                  customSelectResultPropertyValues,
+        final String                  customUpdate,
+        final String                  customUpdateParameterJavadoc,
+        final String                  customUpdateParameterDeclaration,
+        final String                  customUpdateParameterValues,
+        final String                  customUpdateQueryLine,
         final String                  classEnd)
     {
         immutableSetTableTemplate(
@@ -1616,6 +1764,21 @@ public abstract class DAOTemplate
         immutableSetCustomSelectResultPropertyValues(
             customSelectResultPropertyValues);
 
+        immutableSetCustomUpdate(
+            customUpdate);
+
+        immutableSetCustomUpdateParameterJavadoc(
+            customUpdateParameterJavadoc);
+
+        immutableSetCustomUpdateParameterDeclaration(
+            customUpdateParameterDeclaration);
+
+        immutableSetCustomUpdateParameterValues(
+            customUpdateParameterValues);
+
+        immutableSetCustomUpdateQueryLine(
+            customUpdateQueryLine);
+
         immutableSetClassEnd(
             classEnd);
     }
@@ -1698,6 +1861,11 @@ public abstract class DAOTemplate
             DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION,
             DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES,
             DEFAULT_CUSTOM_SELECT_RESULT_PROPERTIES,
+            DEFAULT_CUSTOM_UPDATE,
+            DEFAULT_CUSTOM_UPDATE_PARAMETER_JAVADOC,
+            DEFAULT_CUSTOM_UPDATE_PARAMETER_DECLARATION,
+            DEFAULT_CUSTOM_UPDATE_PARAMETER_VALUES,
+            DEFAULT_CUSTOM_UPDATE_QUERY_LINE,
             DEFAULT_CLASS_END);
     }
 
@@ -3210,7 +3378,6 @@ public abstract class DAOTemplate
         return m__strCustomSelectParameterValues;
     }
 
-
     /**
      * Specifies the custom select result properties' values template.
      * @param select such template.
@@ -3239,6 +3406,152 @@ public abstract class DAOTemplate
     {
         return m__strCustomSelectResultPropertyValues;
     }
+
+    /**
+     * Specifies the custom update template.
+     * @param update such template.
+     */
+    private void immutableSetCustomUpdate(
+        final String update)
+    {
+        m__strCustomUpdate = update;
+    }
+
+    /**
+     * Specifies the custom update template.
+     * @param update such template.
+     */
+    protected void setCustomUpdate(
+        final String update)
+    {
+        immutableSetCustomUpdate(update);
+    }
+
+    /**
+     * Retrieves the custom update template.
+     * @return such template.
+     */
+    public String getCustomUpdate()
+    {
+        return m__strCustomUpdate;
+    }
+
+    /**
+     * Specifies the custom update parameter Javadoc template.
+     * @param update such template.
+     */
+    private void immutableSetCustomUpdateParameterJavadoc(
+        final String template)
+    {
+        m__strCustomUpdateParameterJavadoc = template;
+    }
+
+    /**
+     * Specifies the custom update parameter Javadoc template.
+     * @param update such template.
+     */
+    protected void setCustomUpdateParameterJavadoc(
+        final String update)
+    {
+        immutableSetCustomUpdateParameterJavadoc(update);
+    }
+
+    /**
+     * Retrieves the custom update parameter Javadoc template.
+     * @return such template.
+     */
+    public String getCustomUpdateParameterJavadoc()
+    {
+        return m__strCustomUpdateParameterJavadoc;
+    }
+
+    /**
+     * Specifies the custom update parameter declaration template.
+     * @param update such template.
+     */
+    private void immutableSetCustomUpdateParameterDeclaration(
+        final String template)
+    {
+        m__strCustomUpdateParameterDeclaration = template;
+    }
+
+    /**
+     * Specifies the custom update parameter declaration template.
+     * @param update such template.
+     */
+    protected void setCustomUpdateParameterDeclaration(
+        final String update)
+    {
+        immutableSetCustomUpdateParameterDeclaration(update);
+    }
+
+    /**
+     * Retrieves the custom update parameter declaration template.
+     * @return such template.
+     */
+    public String getCustomUpdateParameterDeclaration()
+    {
+        return m__strCustomUpdateParameterDeclaration;
+    }
+
+    /**
+     * Specifies the custom update parameter values template.
+     * @param update such template.
+     */
+    private void immutableSetCustomUpdateParameterValues(
+        final String template)
+    {
+        m__strCustomUpdateParameterValues = template;
+    }
+
+    /**
+     * Specifies the custom update parameter values template.
+     * @param update such template.
+     */
+    protected void setCustomUpdateParameterValues(
+        final String update)
+    {
+        immutableSetCustomUpdateParameterValues(update);
+    }
+
+    /**
+     * Retrieves the custom update parameter values template.
+     * @return such template.
+     */
+    public String getCustomUpdateParameterValues()
+    {
+        return m__strCustomUpdateParameterValues;
+    }
+
+    /**
+     * Specifies the custom update query line template.
+     * @param update such template.
+     */
+    private void immutableSetCustomUpdateQueryLine(
+        final String template)
+    {
+        m__strCustomUpdateQueryLine = template;
+    }
+
+    /**
+     * Specifies the custom update query line template.
+     * @param update such template.
+     */
+    protected void setCustomUpdateQueryLine(
+        final String update)
+    {
+        immutableSetCustomUpdateQueryLine(update);
+    }
+
+    /**
+     * Retrieves the custom update query line template.
+     * @return such template.
+     */
+    public String getCustomUpdateQueryLine()
+    {
+        return m__strCustomUpdateQueryLine;
+    }
+
     /**
      * Specifies the class end.
      * @param classEnd the new class end.
@@ -3904,6 +4217,7 @@ public abstract class DAOTemplate
         if  (provider != null)
         {
             result.append(buildCustomSelects(provider));
+            result.append(buildCustomUpdates(provider));
         }
 
         return result.toString();
@@ -3924,7 +4238,8 @@ public abstract class DAOTemplate
                 getCustomSelectParameterJavadoc(),
                 getCustomSelectParameterDeclaration(),
                 getCustomSelectParameterValues(),
-                getCustomSelectResultPropertyValues());
+                getCustomSelectResultPropertyValues(),
+                StringUtils.getInstance());
     }
 
     /**
@@ -3936,6 +4251,7 @@ public abstract class DAOTemplate
      * @param parameterDeclaration the parameter declaration.
      * @param parameterValues the parameter values.
      * @param resultPropertyValues the result property values.
+     * @param stringUtils the StringUtils isntance.
      * @return such generated code.
      * @precondition customSqlProvider != null
      * @precondition customSelect != null
@@ -3943,6 +4259,7 @@ public abstract class DAOTemplate
      * @precondition parameterDeclaration != null
      * @precondition parameterValues != null
      * @precondition resultPropertyValues != null
+     * @precondition stringUtils != null
      */
     protected String buildCustomSelects(
         final CustomSqlProvider customSqlProvider,
@@ -3950,7 +4267,8 @@ public abstract class DAOTemplate
         final String parameterJavadoc,
         final String parameterDeclaration,
         final String parameterValues,
-        final String resultPropertyValues)
+        final String resultPropertyValues,
+        final StringUtils stringUtils)
     {
         StringBuffer result = new StringBuffer();
 
@@ -3969,7 +4287,6 @@ public abstract class DAOTemplate
                     SqlElement t_SqlElement =
                         (SqlElement) t_Content;
 
-                    StringUtils t_StringUtils = StringUtils.getInstance();
                     if  (t_SqlElement.SELECT.equals(t_SqlElement.getType()))
                     {
                         String[] t_astrParameterTemplates =
@@ -3979,7 +4296,7 @@ public abstract class DAOTemplate
                                 parameterJavadoc,
                                 parameterDeclaration,
                                 parameterValues,
-                                t_StringUtils);
+                                stringUtils);
 
                         String t_strResultPropertyValues =
                             buildResultPropertyValues(
@@ -3996,7 +4313,7 @@ public abstract class DAOTemplate
                                 t_astrParameterTemplates[1],
                                 t_astrParameterTemplates[2],
                                 t_strResultPropertyValues,
-                                t_StringUtils));
+                                stringUtils));
                     }
                 }
             }
@@ -4275,6 +4592,180 @@ public abstract class DAOTemplate
                             t_Result.getClassValue())
                      :  "-no-result-type-defined-"),
                     resultPropertyValues
+                });
+
+        return result;
+    }
+
+    /**
+     * Builds the custom updates.
+     * @param provider the CustomSqlProvider instance.
+     * @return such generated code.
+     * @precondition provider != null
+     */
+    protected String buildCustomUpdates(final CustomSqlProvider provider)
+    {
+        return
+            buildCustomUpdates(
+                provider,
+                getCustomUpdate(),
+                getCustomUpdateParameterJavadoc(),
+                getCustomUpdateParameterDeclaration(),
+                getCustomUpdateParameterValues(),
+                getCustomUpdateQueryLine(),
+                StringUtils.getInstance(),
+                RegexpManager.createHelper());
+    }
+
+    /**
+     * Builds the custom updates.
+     * @param customSqlProvider the CustomSqlProvider instance.
+     * @param customUpdate the custom update.
+     * @param parameterJavadoc the Javadoc template
+     * of the parameters.
+     * @param parameterDeclaration the parameter declaration.
+     * @param parameterValues the parameter values.
+     * @param queryLine the query line.
+     * @param stringUtils the StringUtils instance.
+     * @param helper the Helper instance.
+     * @return such generated code.
+     * @precondition customSqlProvider != null
+     * @precondition customUpdate != null
+     * @precondition parameterJavadoc != null
+     * @precondition parameterDeclaration != null
+     * @precondition parameterValues != null
+     * @preoncition queryLine != null
+     * @precondition stringUtils != null
+     * @precondition helper != null
+     */
+    protected String buildCustomUpdates(
+        final CustomSqlProvider customSqlProvider,
+        final String customUpdate,
+        final String parameterJavadoc,
+        final String parameterDeclaration,
+        final String parameterValues,
+        final String queryLine,
+        final StringUtils stringUtils,
+        final Helper helper)
+    {
+        StringBuffer result = new StringBuffer();
+
+        Collection t_cContents = customSqlProvider.getCollection();
+
+        if  (t_cContents != null)
+        {
+            Iterator t_itContentIterator = t_cContents.iterator();
+
+            while  (t_itContentIterator.hasNext())
+            {
+                Object t_Content = t_itContentIterator.next();
+
+                if  (t_Content instanceof SqlElement)
+                {
+                    SqlElement t_SqlElement =
+                        (SqlElement) t_Content;
+
+                    if  (t_SqlElement.UPDATE.equals(t_SqlElement.getType()))
+                    {
+                        String[] t_astrParameterTemplates =
+                            buildParameterTemplates(
+                                customSqlProvider,
+                                t_SqlElement.getParameterRefs(),
+                                parameterJavadoc,
+                                parameterDeclaration,
+                                parameterValues,
+                                stringUtils);
+
+                        result.append(
+                            buildCustomUpdate(
+                                customSqlProvider,
+                                t_SqlElement,
+                                customUpdate,
+                                t_astrParameterTemplates[0],
+                                t_astrParameterTemplates[1],
+                                t_astrParameterTemplates[2],
+                                queryLine,
+                                stringUtils,
+                                helper));
+                    }
+                }
+            }
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * Builds the complete custom update.
+     * @param provider the CustomSqlProvider instance.
+     * @param sqlElement the SqlElement instance.
+     * @param customUpdate the custom update template.
+     * @param parameterJavadoc the generated parameter Javadoc.
+     * @param parameterDeclaration the generated parameter declaration.
+     * @param parameterValues the generared parameter values.
+     * @param queryLine the query line.
+     * @param stringUtils the StringUtils isntance.
+     * @param helper the Helper instance.
+     * @return the generated code.
+     * @precondition provider != null
+     * @precondition sqlElement != null
+     * @precondition customUpdate != null
+     * @precondition parameterJavadoc != null
+     * @precondition parameterDeclaration != null
+     * @precondition parameterValues != null
+     * @precondition queryLine != null
+     * @precondition stringUtils != null
+     * @precondition helper != null
+     */
+    protected String buildCustomUpdate(
+        final CustomSqlProvider provider,
+        final SqlElement sqlElement,
+        final String customUpdate,
+        final String parameterJavadoc,
+        final String parameterDeclaration,
+        final String parameterValues,
+        final String queryLine,
+        final StringUtils stringUtils,
+        final Helper helper)
+    {
+        String result = "";
+
+        MessageFormat t_CustomUpdateFormatter =
+            new MessageFormat(customUpdate);
+
+        ResultElement t_Result = null;
+
+        ResultRefElement t_ResultRef = sqlElement.getResultRef();
+
+        if  (t_ResultRef != null)
+        {
+            t_Result = provider.resolveReference(t_ResultRef);
+        }
+
+        result =
+            t_CustomUpdateFormatter.format(
+                new Object[]
+                {
+                    (   (t_Result != null)
+                     ?  t_Result.getClassValue()
+                     :  "-no-result-type-defined-"),
+                    parameterJavadoc,
+                    stringUtils.unCapitalizeStart(
+                        stringUtils.capitalize(
+                            sqlElement.getName(), '-')),
+                    parameterDeclaration,
+                    stringUtils.applyToEachLine(
+                        stringUtils.removeFirstAndLastBlankLines(
+                            helper.replaceAll(
+                                sqlElement.getValue(),
+                                "\"",
+                                "\\\"")),
+                        queryLine),
+                    parameterValues,
+                    (   (t_Result != null)
+                     ?  stringUtils.extractPackageName(
+                            t_Result.getClassValue())
+                     :  "-no-result-type-defined-")
                 });
 
         return result;

@@ -86,6 +86,12 @@
     <target name="init.properties">
 
       <!--
+       Ignores system classpath to make sure we have full control over
+       classpaths used.
+      -->
+      <property name="build.sysclasspath" value="ignore"/>
+
+      <!--
        Libraries base folder.
       -->
       <property name="lib.dir" value="dependencies/lib/java"/>
@@ -109,11 +115,6 @@
        Classes folder.
       -->
       <property name="classes.dir" value="${dist.dir}/classes"/>
-
-      <!--
-       Template folder.
-      -->
-      <property name="templates.dir" value="src/templates"/>
 
       <!--
        Using externally-defined properties.

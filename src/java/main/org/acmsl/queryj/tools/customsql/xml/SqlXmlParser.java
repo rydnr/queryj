@@ -280,7 +280,9 @@ public abstract class SqlXmlParser
             new SqlElementFactory());
 
         //     <value>
-        result.addCallMethod("sql-list/sql/value", "setValue", 0);
+        result.addRule(
+            "sql-list/sql/value",
+            new UntrimmedCallMethodRule("setValue", 0));
         //     </value>
 
         //     <parameter-ref>

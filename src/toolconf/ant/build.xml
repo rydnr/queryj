@@ -311,370 +311,362 @@
       -->
       <property name="build.sysclasspath" value="ignore"/>
 
-        <!--
-         Variable to check if JAVA_HOME variable is available.
-        -->
-        <condition property="java.home.available">
+      <!--
+       Variable to check if JAVA_HOME variable is available.
+      -->
+      <condition property="java.home.available">
 
-          <isset property="java.home"/>
+        <isset property="java.home"/>
 
-        </condition>
+      </condition>
 
-        <!--
-         Finds out current time and stores it in a variable called
-         <i>current.time</i>.
-        -->
-        <tstamp>
+      <!--
+       Finds out current time and stores it in a variable called
+       <i>current.time</i>.
+      -->
+      <tstamp>
 
-          <format property="current.time" pattern="yyyyMMdd"/>
+        <format property="current.time" pattern="yyyyMMdd"/>
 
-        </tstamp>
+      </tstamp>
 
-        <!--
-         Reads some specific properties from an external property files.
-        -->
-        <property file="src/toolconf/ant/build.properties"/>
-        <property file="src/toolconf/ant/project.properties"/>
-        <property file="src/toolconf/ant/user.properties"/>
+      <!--
+       Reads some specific properties from an external property files.
+      -->
+      <property file="src/toolconf/ant/build.properties"/>
+      <property file="src/toolconf/ant/project.properties"/>
+      <property file="src/toolconf/ant/user.properties"/>
 
-        <!--
-         Requests CVS to perform the keyword clean substitution.
-        -->
-        <cvs command="update -kv src/toolconf/ant/version.properties"/>
+      <!--
+       Requests CVS to perform the keyword clean substitution.
+      -->
+      <cvs command="update -kv src/toolconf/ant/version.properties"/>
 
-        <!--
-         Reads some specific properties from an external property file.
-        -->
-        <property file="src/toolconf/ant/version.properties"/>
+      <!--
+       Reads some specific properties from an external property file.
+      -->
+      <property file="src/toolconf/ant/version.properties"/>
 
-        <!--
-         Removes the version.properties file to get rid of the sticky
-         keyword substitution setting.
-        -->
-        <delete file="src/toolconf/ant/version.properties"/>
+      <!--
+       Removes the version.properties file to get rid of the sticky
+       keyword substitution setting.
+      -->
+      <delete file="src/toolconf/ant/version.properties"/>
 
-        <!--
-         Restores version.properties state.
-        -->
-        <cvs command="update -A src/toolconf/ant/version.properties"/>
+      <!--
+       Restores version.properties state.
+      -->
+      <cvs command="update -A src/toolconf/ant/version.properties"/>
 
-        <!--
-         Displays some project information.
-        -->
-        <echo message=""/>
-        <echo message="Project name: ${project.name}"/>
-        <echo message="version: ${project.tag.name}"/>
-        <echo message=""/>
+      <!--
+       Displays some project information.
+      -->
+      <echo message=""/>
+      <echo message="Project name: ${project.name}"/>
+      <echo message="version: ${project.tag.name}"/>
+      <echo message=""/>
 
 <!--         BEGIN OF FOLDER STRUCTURE SECTION                              -->
 
-        <!--
-         Configuration base folder.
-        -->
-        <property name="conf.dir" value="${project.base.folder}/conf"/>
+      <!--
+       Configuration base folder.
+      -->
+      <property name="conf.dir" value="${project.base.folder}/conf"/>
 
-        <!--
-           WEB-INF configuration folder. Under this folder are placed all
-           files that will be included in the project WAR/EAR file, so
-           be careful.
-        -->
-        <property name="web-inf.dir" value="${conf.dir}/web-inf"/>
+      <!--
+         WEB-INF configuration folder. Under this folder are placed all
+         files that will be included in the project WAR/EAR file, so
+         be careful.
+      -->
+      <property name="web-inf.dir" value="${conf.dir}/web-inf"/>
 
-        <!--
-             web.xml location, needed for web applications.
-        -->
-        <property name="web.xml.path" value="${web-inf.dir}/web.xml"/>
+      <!--
+           web.xml location, needed for web applications.
+      -->
+      <property name="web.xml.path" value="${web-inf.dir}/web.xml"/>
 
-        <!--
-           Configuration properties folder.
-        -->
-        <property name="properties.dir" value="${conf.dir}/properties"/>
+      <!--
+         Configuration properties folder.
+      -->
+      <property name="properties.dir" value="${conf.dir}/properties"/>
 
-        <!--
-           Log4J configuration folder.
-        -->
-        <property name="log4j.dir" value="${conf.dir}/log4j"/>
+      <!--
+         Log4J configuration folder.
+      -->
+      <property name="log4j.dir" value="${conf.dir}/log4j"/>
 
-        <!--
-           XML configuration files are placed in this folder.
-        -->
-        <property name="xml.dir" value="${conf.dir}/xml"/>
+      <!--
+         XML configuration files are placed in this folder.
+      -->
+      <property name="xml.dir" value="${conf.dir}/xml"/>
 
-        <!--
-           Internationalized message files in this folder.
-        -->
-        <property name="i18n.dir" value="${conf.dir}/i18n"/>
+      <!--
+         Internationalized message files in this folder.
+      -->
+      <property name="i18n.dir" value="${conf.dir}/i18n"/>
 
-        <!--
-         Compilation and distribution base folder.
-        -->
-        <property name="dist.dir" value="${project.base.folder}/dist"/>
+      <!--
+       Compilation and distribution base folder.
+      -->
+      <property name="dist.dir" value="${project.base.folder}/dist"/>
 
-        <!--
-           Where the jar files with the compiled classes are created.
-        -->
-        <property name="build.dir" value="${dist.dir}/build"/>
+      <!--
+         Where the jar files with the compiled classes are created.
+      -->
+      <property name="build.dir" value="${dist.dir}/build"/>
 
-        <!--
-           Where the .class files are created while compiling.
-        -->
-        <property name="classes.dir" value="${dist.dir}/classes"/>
+      <!--
+         Where the .class files are created while compiling.
+      -->
+      <property name="classes.dir" value="${dist.dir}/classes"/>
 
-        <!--
-         Documentation base folder.
-        -->
-        <property name="docs.dir" value="${project.base.folder}/docs"/>
+      <!--
+       Documentation base folder.
+      -->
+      <property name="docs.dir" value="${project.base.folder}/docs"/>
 
-        <!--
-             Documentation images base folder.
-        -->
-        <property
-          name="docs.images.dir"
-          value="${docs.dir}/images"/>
+      <!--
+           Documentation images base folder.
+      -->
+      <property
+        name="docs.images.dir"
+        value="${docs.dir}/images"/>
 
-        <!--
-           Sets where to place the automatically-generated documentation.
-        -->
-        <property name="autogenerated.dir" value="${docs.dir}/autogenerated"/>
+      <!--
+         Sets where to place the automatically-generated documentation.
+      -->
+      <property name="autogenerated.dir" value="${docs.dir}/autogenerated"/>
 
-        <!--
-           Sets where to place the Javadoc documentation for ANTLR compilers.
-        -->
-        <property name="antlr.javadoc.dir" value="${autogenerated.dir}/antlr"/>
+      <!--
+         Sets where to place the Javadoc documentation for ANTLR compilers.
+      -->
+      <property name="antlr.javadoc.dir" value="${autogenerated.dir}/antlr"/>
 
-        <!--
-           Sets where to place the Javadoc documentation.
-        -->
-        <property name="javadoc.dir" value="${autogenerated.dir}/javadoc"/>
+      <!--
+         Sets where to place the Javadoc documentation.
+      -->
+      <property name="javadoc.dir" value="${autogenerated.dir}/javadoc"/>
 
-        <!--
-           Specifies where the license-related files are located.
-        -->
-        <property name="license.dir" value="${docs.dir}/license"/>
+      <!--
+         Specifies where the license-related files are located.
+      -->
+      <property name="license.dir" value="${docs.dir}/license"/>
 
-        <!--
-         Dependencies base folder.
-        -->
-        <property
-          name="dependencies.dir"
-          value="${project.base.folder}/dependencies"/>
+      <!--
+       Dependencies base folder.
+      -->
+      <property
+        name="dependencies.dir"
+        value="${project.base.folder}/dependencies"/>
 
-        <!--
-         Libraries base folder.
-        -->
-        <property name="lib.dir" value="${dependencies.dir}/lib"/>
+      <!--
+       Libraries base folder.
+      -->
+      <property name="lib.dir" value="${dependencies.dir}/lib"/>
 
-        <!--
-           ANTLR-specific libraries folder. Files under this folder are
-           needed for compiling the sources and also at runtime.
-        -->
-        <property name="antlr.lib.dir" value="${lib.dir}/antlr"/>
+      <!--
+         ANTLR-specific libraries folder. Files under this folder are
+         needed for compiling the sources and also at runtime.
+      -->
+      <property name="antlr.lib.dir" value="${lib.dir}/antlr"/>
 
-        <!--
-             ANTLR libraries needed ONLY for building the project, not
-             required at runtime.
-        -->
-        <property
-          name="antlr.build.lib.dir"
-          value="${antlr.lib.dir}/build"/>
+      <!--
+           ANTLR libraries needed ONLY for building the project, not
+           required at runtime.
+      -->
+      <property
+        name="antlr.build.lib.dir"
+        value="${antlr.lib.dir}/build"/>
 
-        <!--
-             ANTLR libraries needed ONLY at runtime, not required for
-             building the project.
-        -->   
-        <property
-          name="antlr.runtime.lib.dir"
-          value="${antlr.lib.dir}/runtime"/>
+      <!--
+           ANTLR libraries needed ONLY at runtime, not required for
+           building the project.
+      -->   
+      <property
+        name="antlr.runtime.lib.dir"
+        value="${antlr.lib.dir}/runtime"/>
    
-        <!--
-             ANTLR libraries needed ONLY for unit tests, not required
-             for building the project.
-        -->   
-        <property
-          name="antlr.unit.test.lib.dir"
-          value="${antlr.lib.dir}/unittest"/>
+      <!--
+           ANTLR libraries needed ONLY for unit tests, not required
+           for building the project.
+      -->   
+      <property
+        name="antlr.unit.test.lib.dir"
+        value="${antlr.lib.dir}/unittest"/>
 
-        <!--
-           Java libraries folder. Files under this folder are needed for
-           compiling the Java sources and also at runtime.
-        -->
-        <property name="java.lib.dir" value="${lib.dir}/java"/>
+      <!--
+         Java libraries folder. Files under this folder are needed for
+         compiling the Java sources and also at runtime.
+      -->
+      <property name="java.lib.dir" value="${lib.dir}/java"/>
 
-        <!--
-             Java libraries needed ONLY while developing the project,
-             required by development tools, not required at build or
-             runtime.
-        -->
-        <property
-          name="java.development.lib.dir"
-          value="${java.lib.dir}/development"/>
+      <!--
+           Java libraries needed ONLY while developing the project,
+           required by development tools, not required at build or
+           runtime.
+      -->
+      <property
+        name="java.development.lib.dir"
+        value="${java.lib.dir}/development"/>
 
-        <!--
-            Java libraries needed ONLY for building the project, not required
-            at runtime.
-        -->
-        <property
-          name="java.build.lib.dir"
-          value="${java.lib.dir}/build"/>
+      <!--
+          Java libraries needed ONLY for building the project, not required
+          at runtime.
+      -->
+      <property
+        name="java.build.lib.dir"
+        value="${java.lib.dir}/build"/>
 
-        <!--
-             Java libraries needed ONLY at runtime, not required for building
-             the project.
-        -->   
-        <property
-          name="java.runtime.lib.dir"
-          value="${java.lib.dir}/runtime"/>
+      <!--
+           Java libraries needed ONLY at runtime, not required for building
+           the project.
+      -->   
+      <property
+        name="java.runtime.lib.dir"
+        value="${java.lib.dir}/runtime"/>
 
-        <!--
-             Java libraries needed ONLY for unit tests, not required
-             for building the project.
-        -->   
-        <property
-          name="java.unit.test.lib.dir"
-          value="${java.lib.dir}/unittest"/>
+      <!--
+           Java libraries needed ONLY for unit tests, not required
+           for building the project.
+      -->   
+      <property
+        name="java.unit.test.lib.dir"
+        value="${java.lib.dir}/unittest"/>
 
-        <!--
-         TagLibs descriptors base folder.
-        -->
-        <property name="tld.dir" value="${dependencies.dir}/tld"/>
+      <!--
+       TagLibs descriptors base folder.
+      -->
+      <property name="tld.dir" value="${dependencies.dir}/tld"/>
 
-        <!--
-         Base folder for all kind of source files.
-        -->
-        <property name="src.dir" value="${project.base.folder}/src"/>
+      <!--
+       Base folder for all kind of source files.
+      -->
+      <property name="src.dir" value="${project.base.folder}/src"/>
 
-        <!--
-           ANTLR source folder.
-        -->
-        <property name="antlr.src.dir" value="${src.dir}/antlr"/>
+      <!--
+         ANTLR source folder.
+      -->
+      <property name="antlr.src.dir" value="${src.dir}/antlr"/>
 
-        <!--
-             ANTLR generated Java sources location.
-        -->
-        <property
-          name="antlr.java.src.dir"
-          value="${antlr.src.dir}/java"/>
+      <!--
+           ANTLR generated Java sources location.
+      -->
+      <property
+        name="antlr.java.src.dir"
+        value="${antlr.src.dir}/java"/>
 
-        <!--
-             Javadoc HTML sources related to ANTLR generated compiler packages.
-        -->
-        <property
-          name="antlr.javadoc.src.dir"
-          value="${antlr.src.dir}/javadoc"/>
+      <!--
+           Javadoc HTML sources related to ANTLR generated compiler packages.
+      -->
+      <property
+        name="antlr.javadoc.src.dir"
+        value="${antlr.src.dir}/javadoc"/>
 
-        <!--
-             ANTLR input data used in tests.
-        -->
-        <property
-          name="antlr.input.src.dir"
-          value="${antlr.src.dir}/input"/>
+      <!--
+           ANTLR input data used in tests.
+      -->
+      <property
+        name="antlr.input.src.dir"
+        value="${antlr.src.dir}/input"/>
 
-        <!--
-             ANTLR output data generated by tests from previous input.
-        -->
-        <property
-          name="antlr.output.src.dir"
-          value="${antlr.src.dir}/output"/>
+      <!--
+           ANTLR output data generated by tests from previous input.
+      -->
+      <property
+        name="antlr.output.src.dir"
+        value="${antlr.src.dir}/output"/>
 
-        <!--
-           AspectJ source folder.
-        -->
-        <property name="aspectj.src.dir" value="${src.dir}/aspectj"/>
+      <!--
+         AspectJ source folder.
+      -->
+      <property name="aspectj.src.dir" value="${src.dir}/aspectj"/>
 
-        <!--
-           HTML source folder.
-        -->
-        <property name="html.dir" value="${src.dir}/html"/>
+      <!--
+         HTML source folder.
+      -->
+      <property name="html.dir" value="${src.dir}/html"/>
 
-        <!--
-           Where all images referred by web pages are located.
-        -->
-        <property name="web.images.dir" value="${src.dir}/images"/>
+      <!--
+         Where all images referred by web pages are located.
+      -->
+      <property name="web.images.dir" value="${src.dir}/images"/>
 
-        <!--
-           Where all stylesheets referred by web pages are located.
-        -->
-        <property name="web.css.dir" value="${src.dir}/css"/>
+      <!--
+         Where all stylesheets referred by web pages are located.
+      -->
+      <property name="web.css.dir" value="${src.dir}/css"/>
 
-        <!--
-           Java source folder.
-        -->
-        <property name="java.src.dir" value="${src.dir}/java"/>
+      <!--
+         Java source folder.
+      -->
+      <property name="java.src.dir" value="${src.dir}/java"/>
 
-        <!--
-           JDK version-specific Java source folder.
-        -->
-        <property
-          name="jdk.X.Y.src.dir"
-          value="${src.dir}/jdk${include.specific.jdk.version}"/>
+      <!--
+         JDK version-specific Java source folder.
+      -->
+      <property
+        name="jdk.X.Y.src.dir"
+        value="${src.dir}/jdk${include.specific.jdk.version}"/>
 
-        <!--
-           Javadoc source folder.
-        -->
-        <property name="javadoc.src.dir" value="${src.dir}/javadoc"/>
+      <!--
+         Javadoc source folder.
+      -->
+      <property name="javadoc.src.dir" value="${src.dir}/javadoc"/>
 
-        <!--
-           JSP source folder.
-        -->
-        <property name="jsp.dir" value="${src.dir}/jsp"/>
+      <!--
+         JSP source folder.
+      -->
+      <property name="jsp.dir" value="${src.dir}/jsp"/>
 
-        <!--
-           Shell scripts folder.
-        -->
-        <property name="shellscripts.dir" value="${src.dir}/shellscripts"/>
+      <!--
+         Shell scripts folder.
+      -->
+      <property name="shellscripts.dir" value="${src.dir}/shellscripts"/>
 
 <!--         END OF FOLDER STRUCTURE SECTION                                -->
 
 <!--         BEGIN MISC PROPERTIES DEFINITION SECTION                       -->
 
-        <!--
-         Defines the name and location of the project's jar file.
-        -->
-        <property
-          name="project.jar.file"
-          value="${build.dir}/${project.name}-${project.version}${project.status}.jar"/>
+      <!--
+       Defines the name and location of the project's jar file.
+      -->
+      <property
+        name="project.jar.file"
+        value="${build.dir}/${project.name}-${project.version}${project.status}.jar"/>
 
-        <!--
-         Defines the name and location of project's Javadoc packaged zip.
-        -->
-        <property
-            name="javadoc.zip.path"
-            value="${dist.dir}/${project.name}-javadoc.zip"/>
+      <!--
+       Defines the name and location of project's Javadoc packaged zip.
+      -->
+      <property
+          name="javadoc.zip.path"
+          value="${dist.dir}/${project.name}-javadoc.zip"/>
 
-        <!--
-         Prefix to use in WAR files to store the taglib descriptors.
-        -->
-        <property name="tld.war.prefix" value="tlds"/>
+      <!--
+       Prefix to use in WAR files to store the taglib descriptors.
+      -->
+      <property name="tld.war.prefix" value="tlds"/>
 
-        <!--
-         Prefix to use in WAR files to store the JSP pages.
-        -->
-        <property name="jsp.war.prefix" value=""/>
+      <!--
+       Prefix to use in WAR files to store the JSP pages.
+      -->
+      <property name="jsp.war.prefix" value=""/>
 
-        <!--
-         Prefix to use in WAR files to store the images.
-        -->
-        <property name="images.war.prefix" value="images"/>
+      <!--
+       Prefix to use in WAR files to store the images.
+      -->
+      <property name="images.war.prefix" value="images"/>
 
-        <!--
-         Prefix to use in WAR files to store the stylesheets.
-        -->
-        <property name="css.war.prefix" value="css"/>
+      <!--
+       Prefix to use in WAR files to store the stylesheets.
+      -->
+      <property name="css.war.prefix" value="css"/>
 
-        <!--
-         Prefix to use in WAR files to store the HTML pages.
-        -->
-        <property name="html.war.prefix" value=""/>
+      <!--
+       Prefix to use in WAR files to store the HTML pages.
+      -->
+      <property name="html.war.prefix" value=""/>
 
 <!--         END MISC PROPERTIES DEFINITION SECTION                         -->
-
-<!--         BEGIN CLASSPATH DEFINITIONS SECTION                            -->
-
-        <!--
-         Ignores system classpath to make sure we have full control over
-         classpaths used.
-        -->
-        <property name="build.sysclasspath" value="ignore"/>
 
     </target>
 
@@ -2507,7 +2499,7 @@
           action="single"
           overwrite="true"
           resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
-          link="${env.MAVEN_HOME}/repository/${project.name}/jars/${project.name}-${project.version}${project.status}.jar"/>
+          link="${env.MAVEN_HOME}/repository/${project.group}/jars/${project.name}-${project.version}${project.status}.jar"/>
 
     </target>
 

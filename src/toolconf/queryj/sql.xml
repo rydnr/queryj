@@ -73,6 +73,24 @@
     <value>insert into customers (customer_id, name) values (?, "test")</value>
     <parameter-ref id="long-parameter-1"/>
   </sql>
+  <sql
+    name="update-customer-name"
+    dao="customer"
+    implementation="all"
+    type="update">
+    <value>
+      update customers
+      set name = ?
+      where customer_id in
+      (
+        select person_id
+        from people
+        where last_name like '?%'
+      )
+    </value>
+    <parameter-ref id="customer-name"/>
+    <parameter-ref id="person-last-name-filter"/>
+  </sql>
 
   <!-- SQL parameter metadata -->
   <parameter-list>
@@ -81,6 +99,14 @@
       index="1"
       type="long"
       name="id"/>
+    <parameter
+      id="customer-name"
+      index="1"
+      type="String"/>
+    <parameter
+      id="person-last-name-filter"
+      index="2"
+      type="String"/>
   </parameter-list>
 
   <!-- Result metadata -->
