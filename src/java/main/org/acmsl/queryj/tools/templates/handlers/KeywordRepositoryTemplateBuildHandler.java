@@ -71,6 +71,12 @@ import org.acmsl.commons.utils.StringValidator;
 /*
  * Importing some Ant classes.
  */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
+ * Importing some Ant classes.
+ */
 import org.apache.tools.ant.BuildException;
 
 /*
@@ -117,7 +123,8 @@ public class KeywordRepositoryTemplateBuildHandler
             Map t_mAttributes = command.getAttributeMap();
 
             KeywordRepositoryTemplate t_KeywordRepositoryTemplate =
-                buildKeywordRepositoryTemplate(t_mAttributes);
+                buildKeywordRepositoryTemplate(
+                    t_mAttributes, command.getProject(), command.getTask());
 
             storeKeywordRepositoryTemplate(
                 t_KeywordRepositoryTemplate, t_mAttributes);
@@ -195,8 +202,8 @@ public class KeywordRepositoryTemplateBuildHandler
      * @throws BuildException if the manager retrieval process if faulty.
      */
     protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
         DatabaseMetaDataManager result = null;
 
@@ -219,8 +226,8 @@ public class KeywordRepositoryTemplateBuildHandler
      * @throws BuildException if the retrieval process cannot be performed.
      */
     protected AntExternallyManagedFieldsElement
-        retrieveExternallyManagedFieldsElement(Map parameters)
-        throws  BuildException
+        retrieveExternallyManagedFieldsElement(final Map parameters)
+      throws  BuildException
     {
         AntExternallyManagedFieldsElement result = null;
 
@@ -241,7 +248,7 @@ public class KeywordRepositoryTemplateBuildHandler
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      */
-    protected String retrieveProjectPackage(Map parameters)
+    protected String retrieveProjectPackage(final Map parameters)
         throws  BuildException
     {
         String result = null;
@@ -261,7 +268,7 @@ public class KeywordRepositoryTemplateBuildHandler
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      */
-    protected String retrievePackage(Map parameters)
+    protected String retrievePackage(final Map parameters)
         throws  BuildException
     {
         String result = null;
@@ -287,7 +294,7 @@ public class KeywordRepositoryTemplateBuildHandler
      * @return the repository name.
      * @throws BuildException if the repository retrieval process is faulty.
      */
-    protected String retrieveRepository(Map parameters)
+    protected String retrieveRepository(final Map parameters)
         throws  BuildException
     {
         String result = null;
@@ -305,11 +312,14 @@ public class KeywordRepositoryTemplateBuildHandler
      * Builds a procedure repository template using the information stored
      * in the attribute map.
      * @param parameters the parameter map.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return the ProcedureRepositoryTemplate instance.
      * @throws BuildException if the repository cannot be created.
      */
-    protected KeywordRepositoryTemplate buildKeywordRepositoryTemplate(Map parameters)
-        throws  BuildException
+    protected KeywordRepositoryTemplate buildKeywordRepositoryTemplate(
+        final Map parameters, final Project project, final Task task)
+      throws  BuildException
     {
         KeywordRepositoryTemplate result = null;
 
@@ -318,7 +328,9 @@ public class KeywordRepositoryTemplateBuildHandler
             result =
                 buildKeywordRepositoryTemplate(
                     retrievePackage(parameters),
-                    retrieveRepository(parameters));
+                    retrieveRepository(parameters),
+                    project,
+                    task);
         }
 
         return result;
@@ -328,14 +340,18 @@ public class KeywordRepositoryTemplateBuildHandler
      * Builds a procedure repository template using given information.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
      * information is not valid.
      */
     protected KeywordRepositoryTemplate buildKeywordRepositoryTemplate(
-            String packageName,
-            String repository)
-        throws  BuildException
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task)
+      throws  BuildException
     {
         KeywordRepositoryTemplate result = null;
 
@@ -349,7 +365,7 @@ public class KeywordRepositoryTemplateBuildHandler
             {
                 result =
                     t_KeywordRepositoryTemplateGenerator.createKeywordRepositoryTemplate(
-                        packageName, repository);
+                        packageName, repository, project, task);
             }
         }
 

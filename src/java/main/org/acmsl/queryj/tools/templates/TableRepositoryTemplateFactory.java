@@ -51,6 +51,12 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
 
+/*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
 /**
  * Represents entities able to create table repositories.
  * @author <a href="mailto:jsanleandro@yahoo.es"
@@ -63,10 +69,14 @@ public interface TableRepositoryTemplateFactory
      * Generates a table repository template.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return the template.
      * @exception IOException if the file cannot be created.
      */
     public TableRepositoryTemplate createTableRepositoryTemplate(
-        String packageName,
-        String repository);
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task);
 }

@@ -60,6 +60,12 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -134,16 +140,25 @@ public class ProcedureRepositoryTemplateGenerator
      * Generates a procedure repository template.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return such template.
      * @throws IOException if the file cannot be created.
      * @precondition packageName != null
      * @precondition repository != null
      */
     public ProcedureRepositoryTemplate createProcedureRepositoryTemplate(
-        final String packageName, final String repository)
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task)
     {
         return
-            new ProcedureRepositoryTemplate(packageName, repository);
+            new ProcedureRepositoryTemplate(
+                packageName,
+                repository,
+                project,
+                task);
     }
 
     /**
@@ -201,7 +216,7 @@ public class ProcedureRepositoryTemplateGenerator
                 + procedureRepositoryTemplateUtils
                       .retrieveProcedureRepositoryClassName(
                           procedureRepositoryTemplate.getRepository()),
-                procedureRepositoryTemplate.toString());
+                procedureRepositoryTemplate.generateOutput());
         }
     }
 }

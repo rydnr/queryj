@@ -60,6 +60,12 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -134,12 +140,16 @@ public class KeywordRepositoryTemplateGenerator
      * Generates a keyword repository template.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return such template.
      * @throws IOException if the file cannot be created.
      */
     public KeywordRepositoryTemplate createKeywordRepositoryTemplate(
-        String packageName,
-        String repository)
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task)
     {
         KeywordRepositoryTemplate result = null;
 
@@ -147,7 +157,8 @@ public class KeywordRepositoryTemplateGenerator
              && (repository  != null))
         {
             result =
-                new KeywordRepositoryTemplate(packageName, repository) {};
+                new KeywordRepositoryTemplate(
+                    packageName, repository, project, task) {};
         }
 
         return result;
@@ -160,32 +171,45 @@ public class KeywordRepositoryTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-            KeywordRepositoryTemplate keywordRepositoryTemplate,
-            File                      outputDir)
-        throws  IOException
+        final KeywordRepositoryTemplate keywordRepositoryTemplate,
+        final File outputDir)
+      throws  IOException
     {
-        if  (   (keywordRepositoryTemplate != null)
-             && (outputDir                 != null))
-        {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            keywordRepositoryTemplate,
+            outputDir,
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a keyword repository template to disk.
+     * @param keywordRepositoryTemplate the keyword repository to write.
+     * @param outputDir the output folder.
+     * @throws IOException if the file cannot be created.
+     * @precondition keywordRepositoryTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final KeywordRepositoryTemplate keywordRepositoryTemplate,
+        final File outputDir,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                String t_strNormalizedRepository =
-                    t_StringUtils.normalize(
-                        keywordRepositoryTemplate.getRepository(), '_');
+        String t_strNormalizedRepository =
+            stringUtils.normalize(
+                keywordRepositoryTemplate.getRepository(), '_');
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + t_strNormalizedRepository
-                    + "KeywordRepository.java",
-                    keywordRepositoryTemplate.toString());
-            }
-        }
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + t_strNormalizedRepository
+            + "KeywordRepository.java",
+            keywordRepositoryTemplate.generate());
     }
 }

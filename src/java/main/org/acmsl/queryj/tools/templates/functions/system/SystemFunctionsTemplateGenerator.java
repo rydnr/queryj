@@ -435,56 +435,6 @@ public class SystemFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    public SystemFunctionsTemplate createSystemFunctionsTemplate(
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-      throws  QueryJException
-    {
-        SystemFunctionsTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            SystemFunctionsTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createSystemFunctionsTemplate(
-                        packageName,
-                        engineName,
-                        engineVersion,
-                        quote);
-            }
-            else 
-            {
-                throw
-                    new QueryJException(
-                          "Cannot find system functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a system functions template.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @return a template.

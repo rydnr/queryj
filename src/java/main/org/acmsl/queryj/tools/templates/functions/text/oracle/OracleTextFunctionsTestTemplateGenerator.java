@@ -67,6 +67,12 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -96,7 +102,8 @@ public class OracleTextFunctionsTestTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(OracleTextFunctionsTestTemplateGenerator generator)
+    protected static void setReference(
+        final OracleTextFunctionsTestTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -122,7 +129,8 @@ public class OracleTextFunctionsTestTemplateGenerator
 
         if  (reference != null) 
         {
-            result = (OracleTextFunctionsTestTemplateGenerator) reference.get();
+            result =
+                (OracleTextFunctionsTestTemplateGenerator) reference.get();
         }
 
         if  (result == null) 
@@ -138,18 +146,24 @@ public class OracleTextFunctionsTestTemplateGenerator
     /**
      * Generates a text functions template.
      * @param packageName the package name.
+     * @param testedPackageName the tested package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the template factory is invalid.
      */
     public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-            String packageName,
-            String engineName,
-            String engineVersion,
-            String quote)
-        throws  QueryJException
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final Project project,
+        final Task task)
+      throws  QueryJException
     {
         OracleTextFunctionsTestTemplate result = null;
 
@@ -160,11 +174,13 @@ public class OracleTextFunctionsTestTemplateGenerator
         {
             result =
                 new OracleTextFunctionsTestTemplate(
-                    "unittests." + packageName,
                     packageName,
+                    testedPackageName,
                     engineName,
                     engineVersion,
-                    quote) {};
+                    quote,
+                    project,
+                    task) {};
         }
 
         return result;

@@ -213,202 +213,12 @@ public class MockDAOTemplateGenerator
     /**
      * Generates a Mock DAO template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param projectImports the project imports.
-     * @param foreignDAOImports the foreign DAO imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param jdkExtensionImports the JDK extension imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param classConstructor the class constructor.
-     * @param classInternalMethods the class' internal methods.
-     * @param buildKeyPkJavadoc the <i>buildKey</i> key pk javadoc.
-     * @param buildKeyPkDeclaration the <i>buildKey</i> pk declaration.
-     * @param buildKeyPkValues the <i>buildKey</i>  values.
-     * @param findByPrimaryKeyMethod the find by primary key method.
-     * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
-     * @param findByPrimaryKeyPkDeclaration the find by primary key pk
-     *        declaration.
-     * @param findByPrimaryKeyPkFilterValues the find by primary key pk
-     *        filter values.
-     * @param buildValueObjectMethod the build value object method.
-     * @param insertMethod the insert method.
-     * @param insertParametersJavadoc the javadoc of the insert method's parameters.
-     * @param insertParametersDeclaration the declaration of the insert method's parameters.
-     * @param updateMethod the update method.
-     * @param updateParametersJavadoc the javadoc of the update method's parameters.
-     * @param updateParametersDeclaration the declaration of the update method's parameters.
-     * @param deleteMethod the delete method.
-     * @param deletePkJavadoc the delete PK javadoc.
-     * @param deletePkDeclaration the delete PK declaration.
-     * @param deleteWithFkMethod the delete method.
-     * @param deleteWithFkPkJavadoc the delete with FK PK javadoc.
-     * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
-     * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete request.
-     * @param deleteWithFkPkValues the delete with FK PK values.
-     * @param classEnd the class end.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
-     * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
-     */
-    public MockDAOTemplate createMockDAOTemplate(
-        final TableTemplate           tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
-        final String                  header,
-        final String                  packageDeclaration,
-        final String                  packageName,
-        final String                  basePackageName,
-        final String                  repositoryName,
-        final String                  projectImports,
-        final String                  foreignDAOImports,
-        final String                  acmslImports,
-        final String                  jdkImports,
-        final String                  loggingImports,
-        final String                  javadoc,
-        final String                  classDefinition,
-        final String                  classStart,
-        final String                  classConstructor,
-        final String                  classInternalMethods,
-        final String                  buildKeyPkJavadoc,
-        final String                  buildKeyPkDeclaration,
-        final String                  buildKeyPkValues,
-        final String                  findByPrimaryKeyMethod,
-        final String                  findByPrimaryKeyPkJavadoc,
-        final String                  findByPrimaryKeyPkDeclaration,
-        final String                  findByPrimaryKeyPkFilterValues,
-        final String                  buildValueObjectMethod,
-        final String                  insertMethod,
-        final String                  insertParametersJavadoc,
-        final String                  insertParametersDeclaration,
-        final String                  updateMethod,
-        final String                  updateParametersJavadoc,
-        final String                  updateParametersDeclaration,
-        final String                  deleteMethod,
-        final String                  deletePkJavadoc,
-        final String                  deletePkDeclaration,
-        final String                  deleteWithFkMethod,
-        final String                  deleteWithFkPkJavadoc,
-        final String                  deleteWithFkPkDeclaration,
-        final String                  deleteWithFkDAODeleteRequest,
-        final String                  deleteWithFkPkValues,
-        final String                  classEnd)
-      throws  QueryJException
-    {
-        MockDAOTemplate result = null;
-
-        MockDAOTemplateFactory t_TemplateFactory =
-            getTemplateFactory(
-                tableTemplate.getTableName());
-
-        if  (t_TemplateFactory != null)
-        {
-            result =
-                t_TemplateFactory.createMockDAOTemplate(
-                    tableTemplate,
-                    metaDataManager,
-                    header,
-                    packageDeclaration,
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    projectImports,
-                    foreignDAOImports,
-                    acmslImports,
-                    jdkImports,
-                    loggingImports,
-                    javadoc,
-                    classDefinition,
-                    classStart,
-                    classConstructor,
-                    classInternalMethods,
-                    buildKeyPkJavadoc,
-                    buildKeyPkDeclaration,
-                    buildKeyPkValues,
-                    findByPrimaryKeyMethod,
-                    findByPrimaryKeyPkJavadoc,
-                    findByPrimaryKeyPkDeclaration,
-                    findByPrimaryKeyPkFilterValues,
-                    buildValueObjectMethod,
-                    insertMethod,
-                    insertParametersJavadoc,
-                    insertParametersDeclaration,
-                    updateMethod,
-                    updateParametersJavadoc,
-                    updateParametersDeclaration,
-                    deleteMethod,
-                    deletePkJavadoc,
-                    deletePkDeclaration,
-                    deleteWithFkMethod,
-                    deleteWithFkPkJavadoc,
-                    deleteWithFkPkDeclaration,
-                    deleteWithFkDAODeleteRequest,
-                    deleteWithFkPkValues,
-                    classEnd);
-        }
-        else 
-        {
-            result =
-                new MockDAOTemplate(
-                    tableTemplate,
-                    metaDataManager,
-                    header,
-                    packageDeclaration,
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    projectImports,
-                    foreignDAOImports,
-                    acmslImports,
-                    jdkImports,
-                    loggingImports,
-                    javadoc,
-                    classDefinition,
-                    classStart,
-                    classConstructor,
-                    classInternalMethods,
-                    buildKeyPkJavadoc,
-                    buildKeyPkDeclaration,
-                    buildKeyPkValues,
-                    findByPrimaryKeyMethod,
-                    findByPrimaryKeyPkJavadoc,
-                    findByPrimaryKeyPkDeclaration,
-                    findByPrimaryKeyPkFilterValues,
-                    buildValueObjectMethod,
-                    insertMethod,
-                    insertParametersJavadoc,
-                    insertParametersDeclaration,
-                    updateMethod,
-                    updateParametersJavadoc,
-                    updateParametersDeclaration,
-                    deleteMethod,
-                    deletePkJavadoc,
-                    deletePkDeclaration,
-                    deleteWithFkMethod,
-                    deleteWithFkPkJavadoc,
-                    deleteWithFkPkDeclaration,
-                    deleteWithFkDAODeleteRequest,
-                    deleteWithFkPkValues,
-                    classEnd) {};
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a Mock DAO template.
-     * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
@@ -420,7 +230,9 @@ public class MockDAOTemplateGenerator
         final DatabaseMetaDataManager metaDataManager,
         final String                  packageName,
         final String                  basePackageName,
-        final String                  repositoryName)
+        final String                  repositoryName,
+        final Project project,
+        final Task task)
       throws  QueryJException
     {
         MockDAOTemplate result = null;
@@ -437,7 +249,9 @@ public class MockDAOTemplateGenerator
                     metaDataManager,
                     packageName,
                     basePackageName,
-                    repositoryName);
+                    repositoryName,
+                    project,
+                    task);
         }
         else 
         {
@@ -447,7 +261,9 @@ public class MockDAOTemplateGenerator
                     metaDataManager,
                     packageName,
                     basePackageName,
-                    repositoryName) {};
+                    repositoryName,
+                    project,
+                    task) {};
         }
 
         return result;
@@ -509,7 +325,7 @@ public class MockDAOTemplateGenerator
                                   .getTableName().toLowerCase()),
                     '_')
                 + "DAO.java",
-                mockDAOTemplate.toString());
+                mockDAOTemplate.generateOutput());
         }
     }
 }

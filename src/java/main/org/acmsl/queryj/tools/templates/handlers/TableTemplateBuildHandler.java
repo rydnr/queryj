@@ -141,7 +141,10 @@ public class TableTemplateBuildHandler
                     {
                         t_aTableTemplates[t_iTableIndex] =
                             t_TableTemplateGenerator.createTableTemplate(
-                                t_strPackage, t_astrTableNames[t_iTableIndex]);
+                                t_strPackage,
+                                t_astrTableNames[t_iTableIndex],
+                                command.getProject(),
+                                command.getTask());
 
                         t_astrColumnNames =
                             t_MetaDataManager.getColumnNames(

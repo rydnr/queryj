@@ -351,7 +351,7 @@
        Removes the version.properties file to get rid of the sticky
        keyword substitution setting.
       -->
-      <delete file="src/toolconf/ant/version.properties"/>
+      <!--delete file="src/toolconf/ant/version.properties"/-->
 
       <!--
        Restores version.properties state.

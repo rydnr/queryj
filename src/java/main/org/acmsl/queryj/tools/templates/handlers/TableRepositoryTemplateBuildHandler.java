@@ -187,7 +187,10 @@ public class TableRepositoryTemplateBuildHandler
         throws  BuildException
     {
         storeTableRepositoryTemplate(
-            buildTableRepositoryTemplate(command.getAttributeMap()),
+            buildTableRepositoryTemplate(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask()),
             command.getAttributeMap());
 
         return false;
@@ -481,13 +484,17 @@ public class TableRepositoryTemplateBuildHandler
      * Builds a table repository template using the information stored in the
      * attribute map.
      * @param parameters the parameter map.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return the TableRepositoryTemplate instance.
      * @throws BuildException if the repository cannot be created.
      * @precondition parameters != null
      * @precondition PackageUtils.getInstance() != null
      */
     protected TableRepositoryTemplate buildTableRepositoryTemplate(
-        final Map parameters)
+        final Map parameters,
+        final Project project,
+        final Task task)
       throws  BuildException
     {
         TableRepositoryTemplate result = null;
@@ -502,7 +509,9 @@ public class TableRepositoryTemplateBuildHandler
                             ParameterValidationHandler.PACKAGE)),
                 (String)
                     parameters.get(
-                        ParameterValidationHandler.REPOSITORY));
+                        ParameterValidationHandler.REPOSITORY),
+                project,
+                task);
 
         if  (result != null) 
         {
@@ -530,6 +539,8 @@ public class TableRepositoryTemplateBuildHandler
      * Builds a table repository template using given information.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
      * information is not valid.
@@ -538,14 +549,16 @@ public class TableRepositoryTemplateBuildHandler
      * @precondition TableRepositoryTemplateGenerator.getInstance() != null
      */
     protected TableRepositoryTemplate buildTableRepositoryTemplate(
-            String packageName,
-            String repository)
-        throws  BuildException
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task)
+      throws  BuildException
     {
         return
             TableRepositoryTemplateGenerator.getInstance()
                 .createTableRepositoryTemplate(
-                    packageName, repository);
+                    packageName, repository, project, task);
     }
 
     /**

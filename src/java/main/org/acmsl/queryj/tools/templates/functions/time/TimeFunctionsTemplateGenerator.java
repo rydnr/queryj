@@ -103,7 +103,7 @@ public class TimeFunctionsTemplateGenerator
         {
             t_TemplateMappingManager.addDefaultTemplateFactoryClass(
                 TemplateMappingManager.TIME_FUNCTIONS_TEMPLATE,
-                this.getClass().getName());
+                getClass().getName());
         }
     }
 
@@ -111,7 +111,7 @@ public class TimeFunctionsTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(TimeFunctionsTemplateGenerator generator)
+    protected static void setReference(final TimeFunctionsTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -389,56 +389,6 @@ public class TimeFunctionsTemplateGenerator
                         Project.MSG_WARN);
                 }
 
-                throw
-                    new QueryJException(
-                          "Cannot find time functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a time functions template.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    public TimeFunctionsTemplate createTimeFunctionsTemplate(
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-      throws  QueryJException
-    {
-        TimeFunctionsTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            TimeFunctionsTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createTimeFunctionsTemplate(
-                        packageName,
-                        engineName,
-                        engineVersion,
-                        quote);
-            }
-            else 
-            {
                 throw
                     new QueryJException(
                           "Cannot find time functions' "

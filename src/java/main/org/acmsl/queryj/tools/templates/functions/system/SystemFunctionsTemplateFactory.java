@@ -156,22 +156,6 @@ public interface SystemFunctionsTemplateFactory
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    public SystemFunctionsTemplate createSystemFunctionsTemplate(
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-      throws  QueryJException;
-
-    /**
-     * Generates a system functions template.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @return a template.

@@ -53,6 +53,12 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -74,9 +80,14 @@ public class TableRepositoryTemplate
      * Builds a <code>TableRepositoryTemplate</code> using given information.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     public TableRepositoryTemplate(
-        final String packageName, final String repository)
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task)
     {
         super(
             DEFAULT_HEADER,
@@ -91,128 +102,169 @@ public class TableRepositoryTemplate
             DEFAULT_CLASS_START,
             DEFAULT_TABLE_JAVADOC,
             DEFAULT_TABLE_DEFINITION,
-            DEFAULT_CLASS_END);
+            DEFAULT_CLASS_END,
+            project,
+            task);
     }
 
     /**
      * Retrieves the source code of the generated table repository.
      * @return such source code.
      */
-    public String toString()
+    protected String generateOutput()
     {
         return
-            toString(
+            generateOutput(
+                getHeader(),
+                getPackageDeclaration(),
+                getPackageName(),
+                getRepository(),
+                getProjectImportsJavadoc(),
+                getProjectImports(),
+                getAcmslImports(),
+                getJavadoc(),
+                getClassDefinition(),
+                getClassStart(),
+                getTableJavadoc(),
+                getTableDefinition(),
+                getClassEnd(),
+                getTables(),
                 TableRepositoryTemplateUtils.getInstance(),
                 StringUtils.getInstance());
     }
 
     /**
      * Retrieves the source code of the generated table repository.
+     * @param header the header.
+     * @param packageDeclaration the package declaration.
+     * @param packageName the package name.
+     * @param repository the repository.
+     * @param importsJavadoc the project imports javadoc.
+     * @param projectImports the project imports.
+     * @param acmslImports the ACM-SL imports.
+     * @param javadoc the class Javadoc.
+     * @param classDefinition the class definition.
+     * @param classStart the class start.
+     * @param tableJavadoc the table Javadoc.
+     * @param tableDefinition the table definition.
+     * @param classEnd the class end.
+     * @param tables the tables.
      * @param tableRepositoryTemplateUtils the
      * <code>TableRepositoryTemplateUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return such source code.
+     * @precondition tables != null
      * @precondition tableRepositoryUtils != null
      * @precondition stringUtils != null
      */
-    protected String toString(
+    protected String generateOutput(
+        final String header,
+        final String packageDeclaration,
+        final String packageName,
+        final String repository,
+        final String importsJavadoc,
+        final String projectImports,
+        final String acmslImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String tableJavadoc,
+        final String tableDefinition,
+        final String classEnd,
+        final List tables,
         final TableRepositoryTemplateUtils tableRepositoryTemplateUtils,
         final StringUtils stringUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
         Object[] t_aRepository =
-            new Object[]{
-                stringUtils.normalize(getRepository(), '_')};
+            new Object[]
+            {
+                stringUtils.normalize(repository, '_')
+            };
 
-        Object[] t_aPackageName = new Object[]{getPackageName()};
+        Object[] t_aPackageName = new Object[]{packageName};
 
-        MessageFormat t_Formatter = new MessageFormat(getHeader());
+        MessageFormat t_Formatter = new MessageFormat(header);
         t_sbResult.append(t_Formatter.format(t_aRepository));
 
-        t_Formatter = new MessageFormat(getPackageDeclaration());
+        t_Formatter = new MessageFormat(packageDeclaration);
         t_sbResult.append(t_Formatter.format(t_aPackageName));
 
-        List t_lTables = getTables();
+        Iterator t_itTables = tables.iterator();
 
-        if  (t_lTables != null) 
+        if  (t_itTables.hasNext()) 
         {
-            Iterator t_itTables = t_lTables.iterator();
+            t_sbResult.append(importsJavadoc);
+        }
 
-            if  (t_itTables.hasNext()) 
+        MessageFormat t_ImportFormatter =
+            new MessageFormat(projectImports);
+
+        while  (t_itTables.hasNext()) 
+        {
+            String t_strTable = (String) t_itTables.next();
+
+            if  (t_strTable != null)
             {
-                t_sbResult.append(getProjectImportsJavadoc());
-            }
-
-            MessageFormat t_ImportFormatter =
-                new MessageFormat(getProjectImports());
-
-            while  (t_itTables.hasNext()) 
-            {
-                String t_strTable = (String) t_itTables.next();
-
-                if  (t_strTable != null)
-                {
-                    t_sbResult.append(
-                        t_ImportFormatter.format(
-                            new Object[]{
-                                getPackageName(),
-                                stringUtils.capitalize(
-                                    t_strTable.toLowerCase(),
-                                    '_')}));
-                }
+                t_sbResult.append(
+                    t_ImportFormatter.format(
+                        new Object[]{
+                            packageName,
+                            stringUtils.capitalize(
+                                t_strTable.toLowerCase(),
+                                '_')}));
             }
         }
 
-        t_sbResult.append(getAcmslImports());
+        t_sbResult.append(acmslImports);
 
-        t_Formatter = new MessageFormat(getJavadoc());
+        t_Formatter = new MessageFormat(javadoc);
         t_sbResult.append(t_Formatter.format(t_aRepository));
 
-        t_Formatter = new MessageFormat(getClassDefinition());
+        t_Formatter = new MessageFormat(classDefinition);
         t_sbResult.append(
             t_Formatter.format(
                 new Object[]
                 {
                     tableRepositoryTemplateUtils
                         .retrieveTableRepositoryClassName(
-                            getRepository())
+                            repository)
                 }));
 
-        t_sbResult.append(getClassStart());
+        t_sbResult.append(classStart);
 
-        if  (t_lTables != null)
+        t_itTables = tables.iterator();
+
+        MessageFormat t_JavadocFormatter =
+            new MessageFormat(tableJavadoc);
+
+        MessageFormat t_DefinitionFormatter =
+            new MessageFormat(tableDefinition);
+
+        while  (t_itTables.hasNext()) 
         {
-            Iterator t_itTables = t_lTables.iterator();
+            String t_strTable = (String) t_itTables.next();
 
-            MessageFormat t_JavadocFormatter =
-                new MessageFormat(getTableJavadoc());
-
-            MessageFormat t_DefinitionFormatter =
-                new MessageFormat(getTableDefinition());
-
-            while  (t_itTables.hasNext()) 
+            if  (t_strTable != null)
             {
-                String t_strTable = (String) t_itTables.next();
+                t_sbResult.append(
+                    t_JavadocFormatter.format(
+                        new Object[]{t_strTable}));
 
-                if  (t_strTable != null)
-                {
-                    t_sbResult.append(
-                        t_JavadocFormatter.format(
-                            new Object[]{t_strTable}));
-
-                    t_sbResult.append(
-                        t_DefinitionFormatter.format(
-                            new Object[]{
-                                t_strTable.toUpperCase(),
-                                stringUtils.capitalize(
-                                    t_strTable.toLowerCase(),
-                                    '_')}));
-                }
+                t_sbResult.append(
+                    t_DefinitionFormatter.format(
+                        new Object[]
+                        {
+                            t_strTable.toUpperCase(),
+                            stringUtils.capitalize(
+                                t_strTable.toLowerCase(),
+                                '_')
+                        }));
             }
         }
 
-        t_sbResult.append(getClassEnd());
+        t_sbResult.append(classEnd);
 
         return t_sbResult.toString();
     }

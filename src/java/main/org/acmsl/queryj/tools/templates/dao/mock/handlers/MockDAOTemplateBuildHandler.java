@@ -160,7 +160,9 @@ public class MockDAOTemplateBuildHandler
                                 t_MetaDataManager,
                                 t_strPackage,
                                 t_strBasePackage,
-                                t_strRepositoryName);
+                                t_strRepositoryName,
+                                command.getProject(),
+                                command.getTask());
                     }
 
                     storeMockDAOTemplates(t_aMockDAOTemplates, attributes);

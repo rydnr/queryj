@@ -56,6 +56,12 @@ import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTestTemplate;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.util.Map;
@@ -70,118 +76,32 @@ public abstract class OracleSystemFunctionsTestTemplate
     extends  SystemFunctionsTestTemplate
 {
     /**
-     * Builds a OracleSystemFunctionsTestTemplate using given information.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param projectImports the JDK imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param junitImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param testFunctionMethod the test function method.
-     * @param classConstructor the class constructor.
-     * @param memberAccessors the member accessors.
-     * @param setUpTearDownMethods the setUp and tearDown methods.
-     * @param mainMethod the main method.
-     * @param getInstanceTest the getInstance test.
-     * @param innerClass the inner class.
-     * @param innerTable the inner table.
-     * @param classEnd the class end.
-     */
-    public OracleSystemFunctionsTestTemplate(
-        String header,
-        String packageDeclaration,
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote,
-        String projectImports,
-        String acmslImports,
-        String jdkImports,
-        String junitImports,
-        String javadoc,
-        String classDefinition,
-        String classStart,
-        String classConstructor,
-        String memberAccessors,
-        String setUpTearDownMethods,
-        String mainMethod,
-        String getInstanceTest,
-        String innerClass,
-        String innerTable,
-        String classEnd)
-    {
-        super(
-            header,
-            packageDeclaration,
-            packageName,
-            testedPackageName,
-            engineName,
-            engineVersion,
-            quote,
-            projectImports,
-            acmslImports,
-            jdkImports,
-            junitImports,
-            javadoc,
-            classDefinition,
-            classStart,
-            classConstructor,
-            memberAccessors,
-            setUpTearDownMethods,
-            mainMethod,
-            getInstanceTest,
-            innerClass,
-            innerTable,
-            classEnd);
-    }
-
-    /**
      * Builds a SystemFunctionsTestTemplate using given information.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     public OracleSystemFunctionsTestTemplate(
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote)
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final Project project,
+        final Task task)
     {
-        this(
-            DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
+        super(
             packageName,
             testedPackageName,
             engineName,
             engineVersion,
             quote,
-            PROJECT_IMPORTS,
-            ACMSL_IMPORTS,
-            JDK_IMPORTS,
-            JUNIT_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            CLASS_CONSTRUCTOR,
-            MEMBER_ACCESSORS,
-            SETUP_TEARDOWN_METHODS,
-            MAIN_METHOD,
-            GET_INSTANCE_TEST,
-            INNER_CLASS,
-            INNER_TABLE,
-            DEFAULT_CLASS_END);
+            project,
+            task);
     }
 
     /**
@@ -189,7 +109,7 @@ public abstract class OracleSystemFunctionsTestTemplate
      * @param mapping the initial mapping.
      * @return the updated mapping.
      */
-    protected Map fillUpMappings(Map mappings)
+    protected Map fillUpMappings(final Map mappings)
     {
         return buildMappings(mappings);
     }
@@ -199,7 +119,7 @@ public abstract class OracleSystemFunctionsTestTemplate
      * @param mapping the initial mapping.
      * @return the updated mapping.
      */
-    public static Map buildMappings(Map mappings)
+    public static Map buildMappings(final Map mappings)
     {
         return OracleSystemFunctionsTemplate.buildMappings(mappings);
     }
@@ -209,7 +129,7 @@ public abstract class OracleSystemFunctionsTestTemplate
      * @param mapping the initial mapping.
      * @return the updated mapping.
      */
-    protected Map fillUpSpecialMappings(Map mappings)
+    protected Map fillUpSpecialMappings(final Map mappings)
     {
         return buildSpecialMappings(mappings);
     }
@@ -220,7 +140,7 @@ public abstract class OracleSystemFunctionsTestTemplate
      * @param mapping the concrete mapping.
      * @return <code>true</code> to generate the warning message.
      */
-    protected boolean generateWarning(String mapping)
+    protected boolean generateWarning(final String mapping)
     {
         return false;
     }
@@ -230,7 +150,7 @@ public abstract class OracleSystemFunctionsTestTemplate
      * @param mapping the initial mapping.
      * @return the updated mapping.
      */
-    public static Map buildSpecialMappings(Map mappings)
+    public static Map buildSpecialMappings(final Map mappings)
     {
         Map result = mappings;
 
@@ -266,7 +186,7 @@ public abstract class OracleSystemFunctionsTestTemplate
      * @param function the function.
      * @return the mapping.
      */
-    protected String getMapping(String function)
+    protected String getMapping(final String function)
     {
         // It's not OracleSystemFunctionsTestTemplate.class since
         // the mappings are performed by OracleSystemFunctionsTemplate.
@@ -278,7 +198,7 @@ public abstract class OracleSystemFunctionsTestTemplate
      * @param function the function.
      * @return the mapping.
      */
-    protected String getSpecialMapping(String function)
+    protected String getSpecialMapping(final String function)
     {
         return
             getSpecialMapping(
@@ -293,7 +213,7 @@ public abstract class OracleSystemFunctionsTestTemplate
      * @return <code>true</code> if the map contains the specific
      * mapping entries for this template.
      */
-    protected boolean isFilledIn(Map mappings)
+    protected boolean isFilledIn(final Map mappings)
     {
         return
             (   (mappings != null)

@@ -160,9 +160,9 @@ public class TextFunctionsTemplateGenerator
      * @param templateFactoryClass the template factory.
      */
     public void addTemplateFactoryClass(
-        String engineName,
-        String engineVersion,
-        String templateFactoryClass)
+        final String engineName,
+        final String engineVersion,
+        final String templateFactoryClass)
     {
         TemplateMappingManager t_MappingManager =
             TemplateMappingManager.getInstance();
@@ -186,7 +186,7 @@ public class TextFunctionsTemplateGenerator
      * @return the template factory class name.
      */
     protected String getTemplateFactoryClass(
-        String engineName, String engineVersion)
+        final String engineName, final String engineVersion)
     {
         String result = null;
 
@@ -214,8 +214,8 @@ public class TextFunctionsTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      */
     protected TextFunctionsTemplateFactory getTemplateFactory(
-            String engineName, String engineVersion)
-        throws  QueryJException
+        final String engineName, final String engineVersion)
+      throws  QueryJException
     {
         TextFunctionsTemplateFactory result = null;
 
@@ -243,89 +243,6 @@ public class TextFunctionsTemplateGenerator
                 {
                     result = (TextFunctionsTemplateFactory) t_TemplateFactory;
                 }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a text functions template.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param singletonBody the singleton body.
-     * @param classConstructor the class constructor.
-     * @param innerClass the inner class.
-     * @param classEnd the class end.
-     * @return a template.
-     * @throws QueryJException if the input information is invalid.
-     */
-    public TextFunctionsTemplate createTextFunctionsTemplate(
-        String header,
-        String packageDeclaration,
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote,
-        String acmslImports,
-        String jdkImports,
-        String javadoc,
-        String classDefinition,
-        String classStart,
-        String singletonBody,
-        String classConstructor,
-        String innerClass,
-        String classEnd)
-      throws  QueryJException
-    {
-        TextFunctionsTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            TextFunctionsTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createTextFunctionsTemplate(
-                        header,
-                        packageDeclaration,
-                        packageName,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        acmslImports,
-                        jdkImports,
-                        javadoc,
-                        classDefinition,
-                        classStart,
-                        singletonBody,
-                        classConstructor,
-                        innerClass,
-                        classEnd);
-            }
-            else 
-            {
-                throw
-                    new QueryJException(
-                          "Cannot find text functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
             }
         }
 
@@ -436,56 +353,6 @@ public class TextFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @return a template.
-     * @throws QueryJException if the input information is invalid.
-     */
-    public TextFunctionsTemplate createTextFunctionsTemplate(
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-      throws  QueryJException
-    {
-        TextFunctionsTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            TextFunctionsTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createTextFunctionsTemplate(
-                        packageName,
-                        engineName,
-                        engineVersion,
-                        quote);
-            }
-            else 
-            {
-                throw
-                    new QueryJException(
-                          "Cannot find text functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a text functions template.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @return a template.
@@ -552,9 +419,9 @@ public class TextFunctionsTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-            TextFunctionsTemplate textFunctionsTemplate,
-            File                  outputDir)
-        throws  IOException
+        final TextFunctionsTemplate textFunctionsTemplate,
+        final File outputDir)
+      throws  IOException
     {
         if  (   (textFunctionsTemplate != null)
              && (outputDir             != null))

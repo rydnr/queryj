@@ -33,8 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate JUnit templates test the Database's
- *              text functions.
+ * Description: Represents any kind of templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,52 +44,19 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.functions.text;
-
-/*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.templates.TemplateFactory;
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTestTemplate;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+package org.acmsl.queryj.tools.templates;
 
 /**
- * Is able to generate JUnit templates test the Database's
- * text functions.
+ * Represents any kind of templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface TextFunctionsTestTemplateFactory
-    extends  TemplateFactory
+public interface Template
 {
     /**
-     * Generates a text functions test template.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return a template.
-     * @throws QueryJException if the provided information is
-     * invalid.
+     * Generates the output source code.
+     * @return such output.
      */
-    public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
-      throws  QueryJException;
+    public String generate();
 }

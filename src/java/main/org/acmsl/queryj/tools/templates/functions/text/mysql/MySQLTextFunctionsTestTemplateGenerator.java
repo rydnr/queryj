@@ -102,7 +102,8 @@ public class MySQLTextFunctionsTestTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(MySQLTextFunctionsTestTemplateGenerator generator)
+    protected static void setReference(
+        final MySQLTextFunctionsTestTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -143,230 +144,6 @@ public class MySQLTextFunctionsTestTemplateGenerator
 
     /**
      * Generates a text functions test template.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param projectImports the JDK imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param junitImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param testFunctionMethod the test function method.
-     * @param classConstructor the class constructor.
-     * @param memberAccessors the member accessors.
-     * @param setUpTearDownMethods the setUp and tearDown methods.
-     * @param mainMethod the main method.
-     * @param getInstanceTest the getInstance test.
-     * @param innerClass the inner class.
-     * @param innerTable the inner table.
-     * @param classEnd the class end.
-     * @return a template.
-     * @throws QueryJException if the provided information is
-     * invalid.
-     */
-    public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        String header,
-        String packageDeclaration,
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote,
-        String projectImports,
-        String acmslImports,
-        String jdkImports,
-        String junitImports,
-        String javadoc,
-        String classDefinition,
-        String classStart,
-        String classConstructor,
-        String memberAccessors,
-        String setUpTearDownMethods,
-        String mainMethod,
-        String getInstanceTest,
-        String innerClass,
-        String innerTable,
-        String classEnd)
-      throws  QueryJException
-    {
-        TextFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            result =
-                new MySQLTextFunctionsTestTemplate(
-                    header,
-                    packageDeclaration,
-                    packageName,
-                    testedPackageName,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    projectImports,
-                    acmslImports,
-                    jdkImports,
-                    junitImports,
-                    javadoc,
-                    classDefinition,
-                    classStart,
-                    classConstructor,
-                    memberAccessors,
-                    setUpTearDownMethods,
-                    mainMethod,
-                    getInstanceTest,
-                    innerClass,
-                    innerTable,
-                    classEnd) {};
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a text functions test template.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param projectImports the JDK imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param junitImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param testFunctionMethod the test function method.
-     * @param classConstructor the class constructor.
-     * @param memberAccessors the member accessors.
-     * @param setUpTearDownMethods the setUp and tearDown methods.
-     * @param mainMethod the main method.
-     * @param getInstanceTest the getInstance test.
-     * @param innerClass the inner class.
-     * @param innerTable the inner table.
-     * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return a template.
-     * @throws QueryJException if the provided information is
-     * invalid.
-     */
-    public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        String  header,
-        String  packageDeclaration,
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        String  projectImports,
-        String  acmslImports,
-        String  jdkImports,
-        String  junitImports,
-        String  javadoc,
-        String  classDefinition,
-        String  classStart,
-        String  classConstructor,
-        String  memberAccessors,
-        String  setUpTearDownMethods,
-        String  mainMethod,
-        String  getInstanceTest,
-        String  innerClass,
-        String  innerTable,
-        String  classEnd,
-        Project project,
-        Task    task)
-      throws  QueryJException
-    {
-        TextFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            result =
-                new MySQLTextFunctionsTestTemplate(
-                    header,
-                    packageDeclaration,
-                    packageName,
-                    testedPackageName,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    projectImports,
-                    acmslImports,
-                    jdkImports,
-                    junitImports,
-                    javadoc,
-                    classDefinition,
-                    classStart,
-                    classConstructor,
-                    memberAccessors,
-                    setUpTearDownMethods,
-                    mainMethod,
-                    getInstanceTest,
-                    innerClass,
-                    innerTable,
-                    classEnd,
-                    project,
-                    task) {};
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a text functions test template.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @return a template.
-     * @throws QueryJException if the provided information is
-     * invalid.
-     */
-    public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-      throws  QueryJException
-    {
-        TextFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            result =
-                new MySQLTextFunctionsTestTemplate(
-                    packageName,
-                    testedPackageName,
-                    engineName,
-                    engineVersion,
-                    quote) {};
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a text functions test template.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
      * @param engineName the engine name.
@@ -379,13 +156,13 @@ public class MySQLTextFunctionsTestTemplateGenerator
      * invalid.
      */
     public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
+        final String  packageName,
+        final String  testedPackageName,
+        final String  engineName,
+        final String  engineVersion,
+        final String  quote,
+        final Project project,
+        final Task    task)
       throws  QueryJException
     {
         TextFunctionsTestTemplate result = null;

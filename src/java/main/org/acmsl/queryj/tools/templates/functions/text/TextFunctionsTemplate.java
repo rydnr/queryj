@@ -90,82 +90,27 @@ public abstract class TextFunctionsTemplate
      * @param classConstructor the class constructor.
      * @param innerClass the inner class.
      * @param classEnd the class end.
-     */
-    public TextFunctionsTemplate(
-        String header,
-        String packageDeclaration,
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote,
-        String acmslImports,
-        String jdkImports,
-        String javadoc,
-        String classDefinition,
-        String classStart,
-        String singletonBody,
-        String classConstructor,
-        String innerClass,
-        String classEnd)
-    {
-        super(
-            "text",
-            "Text",
-            header,
-            packageDeclaration,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            acmslImports,
-            jdkImports,
-            javadoc,
-            classDefinition,
-            classStart,
-            singletonBody,
-            classConstructor,
-            innerClass,
-            classEnd);
-    }
-
-    /**
-     * Builds a TextFunctionsTemplate using given information.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param singletonBody the singleton body.
-     * @param classConstructor the class constructor.
-     * @param innerClass the inner class.
-     * @param classEnd the class end.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      */
     public TextFunctionsTemplate(
-        String  header,
-        String  packageDeclaration,
-        String  packageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        String  acmslImports,
-        String  jdkImports,
-        String  javadoc,
-        String  classDefinition,
-        String  classStart,
-        String  singletonBody,
-        String  classConstructor,
-        String  innerClass,
-        String  classEnd,
-        Project project,
-        Task    task)
+        final String  header,
+        final String  packageDeclaration,
+        final String  packageName,
+        final String  engineName,
+        final String  engineVersion,
+        final String  quote,
+        final String  acmslImports,
+        final String  jdkImports,
+        final String  javadoc,
+        final String  classDefinition,
+        final String  classStart,
+        final String  singletonBody,
+        final String  classConstructor,
+        final String  innerClass,
+        final String  classEnd,
+        final Project project,
+        final Task    task)
     {
         super(
             "text",
@@ -195,64 +140,24 @@ public abstract class TextFunctionsTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     */
-    public TextFunctionsTemplate(
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-    {
-        this(
-            DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            ACMSL_IMPORTS,
-            JDK_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            SINGLETON_BODY,
-            CLASS_CONSTRUCTOR,
-            INNER_CLASS,
-            DEFAULT_CLASS_END);
-    }
-
-    /**
-     * Builds a TextFunctionsTemplate using given information.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      */
     public TextFunctionsTemplate(
-        String  packageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
+        final String  packageName,
+        final String  engineName,
+        final String  engineVersion,
+        final String  quote,
+        final Project project,
+        final Task    task)
     {
-        this(
-            DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
+        super(
+            "text",
+            "Text",
             packageName,
             engineName,
             engineVersion,
             quote,
-            ACMSL_IMPORTS,
-            JDK_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            SINGLETON_BODY,
-            CLASS_CONSTRUCTOR,
-            INNER_CLASS,
-            DEFAULT_CLASS_END,
             project,
             task);
     }

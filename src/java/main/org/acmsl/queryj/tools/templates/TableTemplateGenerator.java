@@ -59,6 +59,12 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -130,14 +136,19 @@ public class TableTemplateGenerator
      * Generates a table template.
      * @param packageName the package name.
      * @param tableName the table name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @precondition packageName != null
      * @precondition tableName != null
      */
     public TableTemplate createTableTemplate(
-        final String packageName, final String tableName)
+        final String packageName,
+        final String tableName,
+        final Project project,
+        final Task task)
     {
-        return new TableTemplate(packageName, tableName);
+        return new TableTemplate(packageName, tableName, project, task);
     }
 
     /**
@@ -171,7 +182,7 @@ public class TableTemplateGenerator
      * @precondition fileUtils != null
      * @precondition tableTemplateUtils != null
      */
-    public void write(
+    protected void write(
         final TableTemplate tableTemplate,
         final File outputDir,
         final FileUtils fileUtils,
@@ -186,6 +197,6 @@ public class TableTemplateGenerator
             + tableTemplateUtils.retrieveTableClassName(
                   tableTemplate.getTableName())
             + ".java",
-            tableTemplate.toString());
+            tableTemplate.generateOutput());
     }
 }

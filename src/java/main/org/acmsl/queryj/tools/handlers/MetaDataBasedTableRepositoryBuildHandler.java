@@ -86,7 +86,10 @@ public class MetaDataBasedTableRepositoryBuildHandler
         if  (command != null) 
         {
             storeTableRepositoryTemplate(
-                buildTableRepositoryTemplate(command.getAttributeMap()),
+                buildTableRepositoryTemplate(
+                    command.getAttributeMap(),
+                    command.getProject(),
+                    command.getTask()),
                 command.getAttributeMap());
         }
         

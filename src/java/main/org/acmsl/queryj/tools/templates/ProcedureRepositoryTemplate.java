@@ -61,6 +61,12 @@ import org.acmsl.queryj.tools.ProcedureParameterMetaData;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -86,9 +92,14 @@ public class ProcedureRepositoryTemplate
      * information.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     public ProcedureRepositoryTemplate(
-        final String packageName, final String repository)
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task)
     {
         super(
             DEFAULT_HEADER,
@@ -111,17 +122,41 @@ public class ProcedureRepositoryTemplate
             DEFAULT_IN_PARAMETER_SPECIFICATION,
             DEFAULT_OUT_PARAMETER_RETRIEVAL,
             DEFAULT_VALUE_OBJECT_CONSTRUCTION,
-            DEFAULT_CLASS_END);
+            DEFAULT_CLASS_END,
+            project,
+            task);
     }
 
     /**
      * Retrieves the source code of the generated procedure repository.
      * @return such source code.
      */
-    public String toString()
+    protected String generateOutput()
     {
         return
-            toString(
+            generateOutput(
+                getHeader(),
+                getPackageDeclaration(),
+                getPackageName(),
+                getRepository(),
+                getProjectImportsJavadoc(),
+                getProjectImports(),
+                getAcmslImports(),
+                getJdkImports(),
+                getJavadoc(),
+                getClassDefinition(),
+                getClassStart(),
+                getProcedureJavadoc(),
+                getProcedureParameterJavadoc(),
+                getProcedureBody(),
+                getProcedureParameterDeclaration(),
+                getProcedureSentence(),
+                getOutParameterRegistration(),
+                getInParameterSpecification(),
+                getOutParameterRetrieval(),
+                getValueObjectConstruction(),
+                getClassEnd(),
+                getProceduresMetaData(),
                 ProcedureRepositoryTemplateUtils.getInstance(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance());
@@ -129,16 +164,61 @@ public class ProcedureRepositoryTemplate
 
     /**
      * Retrieves the source code of the generated procedure repository.
+     * @param header the header.
+     * @param packageDeclaration the package declaration.
+     * @param packageName the package name.
+     * @param repository the repository.
+     * @param projectImportsJavadoc the project imports javadoc.
+     * @param projectImports the project imports.
+     * @param acmslImports the ACM-SL imports.
+     * @param jdkImports the JDK imports.
+     * @param javadoc the class Javadoc.
+     * @param classDefinition the class definition.
+     * @param classStart the class start.
+     * @param procedureJavadoc the procedure Javadoc.
+     * @param procedureParameterJavadoc the procedure parameter javadoc.
+     * @param procedureBody the procedure body.
+     * @param procedureParameterDeclaration the procedure parameter declaration.
+     * @param procedureSentence the procedure sentence.
+     * @param outParameterRegistration the OUT parameter registration.
+     * @param inParameterSpecification the IN parameter specification.
+     * @param outParameterRetrieval the OUT parameter retrieval.
+     * @param valueObjectConstruction the value object construction.
+     * @param classEnd the class end.
+     * @param proceduresMetaData the procedures' meta data.
      * @param procedureRepositoryTemplateUtils the
      * <code>ProcedureRepositoryTemplateUtils</code> instance.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return such source code.
+     * @precondition proceduresMetaData != null
      * @precondition procedureRepositoryTemplateUtils != null
      * @precondition metaDataUtils != null
      * @precondition stringUtils != null
      */
-    protected String toString(
+    protected String generateOutput(
+        final String header,
+        final String packageDeclaration,
+        final String packageName,
+        final String repository,
+        final String projectImportsJavadoc,
+        final String projectImports,
+        final String acmslImports,
+        final String jdkImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String procedureJavadoc,
+        final String procedureParameterJavadoc,
+        final String procedureBody,
+        final String procedureParameterDeclaration,
+        final String procedureSentence,
+        final String outParameterRegistration,
+        final String inParameterSpecification,
+        final String outParameterRetrieval,
+        final String valueObjectConstruction,
+        final String classEnd,
+        final List proceduresMetaData,
         final ProcedureRepositoryTemplateUtils procedureRepositoryTemplateUtils,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils)
@@ -146,337 +226,334 @@ public class ProcedureRepositoryTemplate
         StringBuffer t_sbResult = new StringBuffer();
 
         Object[] t_aRepository =
-            new Object[]{
-                stringUtils.normalize(getRepository(), '_')};
+            new Object[]
+            {
+                stringUtils.normalize(repository, '_')
+            };
 
-        Object[] t_aPackageName = new Object[]{getPackageName()};
+        Object[] t_aPackageName = new Object[]{packageName};
 
-        MessageFormat t_Formatter = new MessageFormat(getHeader());
+        MessageFormat t_Formatter = new MessageFormat(header);
         t_sbResult.append(t_Formatter.format(t_aRepository));
 
-        t_Formatter = new MessageFormat(getPackageDeclaration());
+        t_Formatter = new MessageFormat(packageDeclaration);
         t_sbResult.append(t_Formatter.format(t_aPackageName));
 
-        t_sbResult.append(getProjectImportsJavadoc());
-        t_sbResult.append(getProjectImports());
-        t_sbResult.append(getAcmslImports());
-        t_sbResult.append(getJdkImports());
+        t_sbResult.append(projectImportsJavadoc);
+        t_sbResult.append(projectImports);
+        t_sbResult.append(acmslImports);
+        t_sbResult.append(jdkImports);
 
-        t_Formatter = new MessageFormat(getJavadoc());
+        t_Formatter = new MessageFormat(javadoc);
         t_sbResult.append(t_Formatter.format(t_aRepository));
 
-        t_Formatter = new MessageFormat(getClassDefinition());
+        t_Formatter = new MessageFormat(classDefinition);
         t_sbResult.append(
             t_Formatter.format(
                 new Object[]
                 {
                       procedureRepositoryTemplateUtils
                           .retrieveProcedureRepositoryClassName(
-                              getRepository())
+                              repository)
                 }));
 
-        t_sbResult.append(getClassStart());
+        t_sbResult.append(classStart);
 
-        List t_lProceduresMetaData = getProceduresMetaData();
+        Iterator t_itProceduresMetaData = proceduresMetaData.iterator();
 
-        if  (t_lProceduresMetaData != null)
+        MessageFormat t_JavadocFormatter =
+            new MessageFormat(procedureJavadoc);
+
+        MessageFormat t_ParameterJavadocFormatter =
+            new MessageFormat(procedureParameterJavadoc);
+
+        MessageFormat t_ParameterDeclarationFormatter =
+            new MessageFormat(procedureParameterDeclaration);
+
+        MessageFormat t_ProcedureSentenceFormatter =
+            new MessageFormat(procedureSentence);
+
+        MessageFormat t_OutParameterRegistrationFormatter =
+            new MessageFormat(outParameterRegistration);
+
+        MessageFormat t_InParameterSpecificationFormatter =
+            new MessageFormat(inParameterSpecification);
+
+        MessageFormat t_ValueObjectConstructionFormatter =
+            new MessageFormat(valueObjectConstruction);
+
+        String t_strComment = null;
+
+        int t_iReturnType = -1;
+
+        while  (t_itProceduresMetaData.hasNext())
         {
-            Iterator t_itProceduresMetaData = t_lProceduresMetaData.iterator();
+            ProcedureMetaData t_ProcedureMetaData =
+                (ProcedureMetaData) t_itProceduresMetaData.next();
 
-            MessageFormat t_JavadocFormatter =
-                new MessageFormat(getProcedureJavadoc());
+            ProcedureParameterMetaData[] t_aProcedureParametersMetaData =
+                getProcedureParametersMetaData(t_ProcedureMetaData);
 
-            MessageFormat t_ParameterJavadocFormatter =
-                new MessageFormat(getProcedureParameterJavadoc());
-
-            MessageFormat t_ParameterDeclarationFormatter =
-                new MessageFormat(getProcedureParameterDeclaration());
-
-            MessageFormat t_ProcedureSentenceFormatter =
-                new MessageFormat(getProcedureSentence());
-
-            MessageFormat t_OutParameterRegistrationFormatter =
-                new MessageFormat(getOutParameterRegistration());
-
-            MessageFormat t_InParameterSpecificationFormatter =
-                new MessageFormat(getInParameterSpecification());
-
-            MessageFormat t_ValueObjectConstructionFormatter =
-                new MessageFormat(getValueObjectConstruction());
-
-            String t_strComment = null;
-
-            int t_iReturnType = -1;
-
-            while  (t_itProceduresMetaData.hasNext())
+            if  (   (t_ProcedureMetaData            != null)
+                 && (t_aProcedureParametersMetaData != null))
             {
-                ProcedureMetaData t_ProcedureMetaData =
-                    (ProcedureMetaData) t_itProceduresMetaData.next();
+                StringBuffer t_sbParametersJavadoc = new StringBuffer();
+                StringBuffer t_sbParametersDeclaration = new StringBuffer();
+                StringBuffer t_sbProcedureSentenceParameters = new StringBuffer();
+                StringBuffer t_sbOutParametersRegistration = new StringBuffer();
+                StringBuffer t_sbInParametersSpecification = new StringBuffer();
+                StringBuffer t_sbOutParametersRetrieval = new StringBuffer();
+                StringBuffer t_sbValueObjectConstruction = new StringBuffer();
 
-                ProcedureParameterMetaData[] t_aProcedureParametersMetaData =
-                    getProcedureParametersMetaData(t_ProcedureMetaData);
+                int t_iInParameterIndex = 1;
 
-                if  (   (t_ProcedureMetaData            != null)
-                     && (t_aProcedureParametersMetaData != null))
+                for  (int t_iIndex = 0;
+                          t_iIndex < t_aProcedureParametersMetaData.length;
+                          t_iIndex++)
                 {
-                    StringBuffer t_sbParametersJavadoc = new StringBuffer();
-                    StringBuffer t_sbParametersDeclaration = new StringBuffer();
-                    StringBuffer t_sbProcedureSentenceParameters = new StringBuffer();
-                    StringBuffer t_sbOutParametersRegistration = new StringBuffer();
-                    StringBuffer t_sbInParametersSpecification = new StringBuffer();
-                    StringBuffer t_sbOutParametersRetrieval = new StringBuffer();
-                    StringBuffer t_sbValueObjectConstruction = new StringBuffer();
-
-                    int t_iInParameterIndex = 1;
-
-                    for  (int t_iIndex = 0;
-                              t_iIndex < t_aProcedureParametersMetaData.length;
-                              t_iIndex++)
+                    if  (t_aProcedureParametersMetaData[t_iIndex] != null)
                     {
-                        if  (t_aProcedureParametersMetaData[t_iIndex] != null)
+                        if  (   (   t_aProcedureParametersMetaData[
+                                        t_iIndex].getType()
+                                 == ProcedureParameterMetaData
+                                        .IN_PARAMETER)
+                             || (   t_aProcedureParametersMetaData[
+                                        t_iIndex].getType()
+                                 == ProcedureParameterMetaData
+                                        .IN_OUT_PARAMETER))
                         {
-                            if  (   (   t_aProcedureParametersMetaData[
+                            if  (t_iInParameterIndex > 2)
+                            {
+                                t_sbProcedureSentenceParameters.append(",");
+                            }
+
+                            t_sbProcedureSentenceParameters.append("?");
+
+                            t_sbInParametersSpecification.append(
+                                t_InParameterSpecificationFormatter.format(
+                                    new Object[]
+                                    {
+                                        metaDataUtils.getSetterMethod(
+                                            t_aProcedureParametersMetaData[
+                                                t_iIndex].getDataType(),
+                                            t_iInParameterIndex,
+                                            t_aProcedureParametersMetaData[
+                                                t_iIndex].getName().toLowerCase())
+                                    }));
+                        }
+
+                        if  (   (t_aProcedureParametersMetaData[
+                                     t_iIndex].getName() != null)
+                             && (   (   t_aProcedureParametersMetaData[
                                             t_iIndex].getType()
                                      == ProcedureParameterMetaData
                                             .IN_PARAMETER)
                                  || (   t_aProcedureParametersMetaData[
                                             t_iIndex].getType()
                                      == ProcedureParameterMetaData
-                                            .IN_OUT_PARAMETER))
-                            {
-                                if  (t_iInParameterIndex > 2)
-                                {
-                                    t_sbProcedureSentenceParameters.append(",");
-                                }
+                                            .IN_OUT_PARAMETER)))
+                        {
+                            t_strComment =
+                                t_aProcedureParametersMetaData[
+                                    t_iIndex].getComment();
 
-                                t_sbProcedureSentenceParameters.append("?");
-
-                                t_sbInParametersSpecification.append(
-                                    t_InParameterSpecificationFormatter.format(
-                                        new Object[]
-                                        {
-                                            metaDataUtils.getSetterMethod(
-                                                t_aProcedureParametersMetaData[
-                                                    t_iIndex].getDataType(),
-                                                t_iInParameterIndex,
-                                                t_aProcedureParametersMetaData[
-                                                    t_iIndex].getName().toLowerCase())
-                                        }));
-                            }
-
-                            if  (   (t_aProcedureParametersMetaData[
-                                         t_iIndex].getName() != null)
-                                 && (   (   t_aProcedureParametersMetaData[
-                                                t_iIndex].getType()
-                                         == ProcedureParameterMetaData
-                                                .IN_PARAMETER)
-                                     || (   t_aProcedureParametersMetaData[
-                                                t_iIndex].getType()
-                                         == ProcedureParameterMetaData
-                                                .IN_OUT_PARAMETER)))
+                            if  (t_strComment == null)
                             {
                                 t_strComment =
-                                    t_aProcedureParametersMetaData[
-                                        t_iIndex].getComment();
-
-                                if  (t_strComment == null)
-                                {
-                                    t_strComment =
-                                        "No documentation available.";
-                                }
+                                    "No documentation available.";
+                            }
                                 
-                                t_sbParametersJavadoc.append(
-                                    t_ParameterJavadocFormatter.format(
-                                        new Object[]
-                                        {
-                                            t_aProcedureParametersMetaData[
-                                                t_iIndex]
-                                                    .getName().toLowerCase(),
-                                            t_strComment
-                                        }));                                        
-                            }
-
-                            if  (   t_aProcedureParametersMetaData[
-                                        t_iIndex].getType()
-                                 == ProcedureParameterMetaData
-                                        .RESULT_PARAMETER)
-                            {
-                                t_iReturnType =
-                                    t_aProcedureParametersMetaData[
-                                        t_iIndex].getDataType();
-                            }
-
-                            t_iInParameterIndex++;
+                            t_sbParametersJavadoc.append(
+                                t_ParameterJavadocFormatter.format(
+                                    new Object[]
+                                    {
+                                        t_aProcedureParametersMetaData[
+                                            t_iIndex]
+                                                .getName().toLowerCase(),
+                                        t_strComment
+                                    }));                                        
                         }
-                    }
 
-                    int t_iInParameterCount = t_iInParameterIndex;
-
-                    int t_iParameterIndex = t_iInParameterCount;
-
-                    for  (int t_iIndex = 0;
-                              t_iIndex < t_aProcedureParametersMetaData.length;
-                              t_iIndex++)
-                    {
-                        if  (t_aProcedureParametersMetaData[t_iIndex] != null)
+                        if  (   t_aProcedureParametersMetaData[
+                                    t_iIndex].getType()
+                             == ProcedureParameterMetaData
+                                    .RESULT_PARAMETER)
                         {
-                            if  (   t_aProcedureParametersMetaData[t_iIndex]
-                                        .getType()
-                                 == ProcedureParameterMetaData
-                                        .RESULT_PARAMETER)
-                            {
-                                t_iReturnType =
-                                    t_aProcedureParametersMetaData[t_iIndex]
-                                        .getType();
-                            }
+                            t_iReturnType =
+                                t_aProcedureParametersMetaData[
+                                    t_iIndex].getDataType();
+                        }
 
-                            if  (   (   t_aProcedureParametersMetaData[
-                                            t_iIndex].getName()
-                                     != null)
-                                 && (   (   t_aProcedureParametersMetaData[
-                                                t_iIndex].getType()
-                                         == ProcedureParameterMetaData
-                                                .OUT_PARAMETER)
-                                     || (   t_aProcedureParametersMetaData[
-                                                t_iIndex].getType()
-                                         == ProcedureParameterMetaData
-                                                .IN_OUT_PARAMETER)))
-                            {
-                                t_sbOutParametersRegistration.append(
-                                    t_OutParameterRegistrationFormatter.format(
-                                        new Object[]
-                                        {
-                                            new Integer(t_iIndex + 1),
-                                            metaDataUtils.getConstantName(
-                                                t_aProcedureParametersMetaData[
-                                                    t_iIndex].getType())
-                                        }));
+                        t_iInParameterIndex++;
+                    }
+                }
 
-                                t_sbValueObjectConstruction.append(
-                                    t_ValueObjectConstructionFormatter.format(
-                                        new Object[]
-                                        {
+                int t_iInParameterCount = t_iInParameterIndex;
+
+                int t_iParameterIndex = t_iInParameterCount;
+
+                for  (int t_iIndex = 0;
+                          t_iIndex < t_aProcedureParametersMetaData.length;
+                          t_iIndex++)
+                {
+                    if  (t_aProcedureParametersMetaData[t_iIndex] != null)
+                    {
+                        if  (   t_aProcedureParametersMetaData[t_iIndex]
+                                    .getType()
+                             == ProcedureParameterMetaData
+                                    .RESULT_PARAMETER)
+                        {
+                            t_iReturnType =
+                                t_aProcedureParametersMetaData[t_iIndex]
+                                    .getType();
+                        }
+
+                        if  (   (   t_aProcedureParametersMetaData[
+                                        t_iIndex].getName()
+                                 != null)
+                             && (   (   t_aProcedureParametersMetaData[
+                                            t_iIndex].getType()
+                                     == ProcedureParameterMetaData
+                                           .OUT_PARAMETER)
+                                 || (   t_aProcedureParametersMetaData[
+                                            t_iIndex].getType()
+                                     == ProcedureParameterMetaData
+                                            .IN_OUT_PARAMETER)))
+                        {
+                            t_sbOutParametersRegistration.append(
+                                t_OutParameterRegistrationFormatter.format(
+                                    new Object[]
+                                    {
+                                        new Integer(t_iIndex + 1),
+                                        metaDataUtils.getConstantName(
+                                            t_aProcedureParametersMetaData[
+                                                t_iIndex].getType())
+                                    }));
+
+                            t_sbValueObjectConstruction.append(
+                                t_ValueObjectConstructionFormatter.format(
+                                    new Object[]
+                                    {
+                                        metaDataUtils.getObjectType(
+                                            t_aProcedureParametersMetaData[
+                                                t_iIndex].getDataType()),
+                                        t_aProcedureParametersMetaData[
+                                            t_iIndex].getName().toLowerCase(),
+                                        stringUtils.capitalize(
                                             metaDataUtils.getObjectType(
                                                 t_aProcedureParametersMetaData[
                                                     t_iIndex].getDataType()),
-                                            t_aProcedureParametersMetaData[
-                                                t_iIndex].getName().toLowerCase(),
-                                            stringUtils.capitalize(
-                                                metaDataUtils.getObjectType(
-                                                    t_aProcedureParametersMetaData[
-                                                        t_iIndex].getDataType()),
-                                                '_'),
-                                            new Integer(t_iIndex + 1)
-                                        }));
+                                            '_'),
+                                        new Integer(t_iIndex + 1)
+                                    }));
 
-                                t_iParameterIndex++;
-                            }
+                            t_iParameterIndex++;
                         }
                     }
+                }
 
-                    int t_iOutParameterCount = t_iParameterIndex - t_iInParameterIndex;
+                int t_iOutParameterCount = t_iParameterIndex - t_iInParameterIndex;
 
-                    t_iInParameterIndex = 1;
+                t_iInParameterIndex = 1;
 
-                    boolean t_bFirstInParameter = true;
+                boolean t_bFirstInParameter = true;
 
-                    for  (int t_iIndex = 0;
-                              t_iIndex < t_aProcedureParametersMetaData.length;
-                              t_iIndex++)
+                for  (int t_iIndex = 0;
+                          t_iIndex < t_aProcedureParametersMetaData.length;
+                          t_iIndex++)
+                {
+                    if  (t_aProcedureParametersMetaData[t_iIndex] != null)
                     {
-                        if  (t_aProcedureParametersMetaData[t_iIndex] != null)
+                        if  (   (t_aProcedureParametersMetaData[t_iIndex]
+                                     .getName() != null)
+                             && (   (   t_aProcedureParametersMetaData[
+                                            t_iIndex].getType()
+                                     == ProcedureParameterMetaData
+                                           .IN_PARAMETER)
+                                 || (   t_aProcedureParametersMetaData[
+                                            t_iIndex].getType()
+                                     == ProcedureParameterMetaData
+                                            .IN_OUT_PARAMETER)))
                         {
-                            if  (   (t_aProcedureParametersMetaData[t_iIndex]
-                                         .getName() != null)
-                                 && (   (   t_aProcedureParametersMetaData[
-                                                t_iIndex].getType()
-                                         == ProcedureParameterMetaData
-                                                .IN_PARAMETER)
-                                     || (   t_aProcedureParametersMetaData[
-                                                t_iIndex].getType()
-                                         == ProcedureParameterMetaData
-                                                .IN_OUT_PARAMETER)))
+                            if  (t_bFirstInParameter)
                             {
-                                if  (t_bFirstInParameter)
-                                {
-                                    t_sbParametersDeclaration.append(",");
-                                    t_bFirstInParameter = false;
-                                }
-                                    
-                                t_sbParametersDeclaration.append(
-                                    t_ParameterDeclarationFormatter.format(
-                                        new Object[]
-                                        {
-                                            metaDataUtils.getNativeType(
-                                                t_aProcedureParametersMetaData[
-                                                    t_iIndex].getDataType()),
-                                            t_aProcedureParametersMetaData[
-                                                t_iIndex]
-                                                    .getName().toLowerCase()
-                                            + (  (  t_iInParameterIndex
-                                                  + t_iOutParameterCount
-                                                  < t_aProcedureParametersMetaData
-                                                        .length)
-                                               ? ","
-                                               : "")
-                                        }));
+                                t_sbParametersDeclaration.append(",");
+                                t_bFirstInParameter = false;
                             }
-
-                            t_iInParameterIndex++;
-                        }
-                    }
-
-                    t_strComment = t_ProcedureMetaData.getComment();
-
-                    if  (t_strComment == null)
-                    {
-                        t_strComment = "No documentation available.";
-                    }
-                                
-                    t_sbResult.append(
-                        t_JavadocFormatter.format(
-                            new Object[]
-                            {
-                                t_strComment,
-                                t_sbParametersJavadoc.toString()}
-                            ));
-
-                    String t_strReturnType =
-                        metaDataUtils.getProcedureResultType(t_iReturnType);
-
-                    MessageFormat t_ProcedureBodyFormatter =
-                        new MessageFormat(getProcedureBody());
-
-                    t_sbResult.append(
-                        t_ProcedureBodyFormatter.format(
-                            new Object[]
-                            {
-                                t_strReturnType,
-                                t_ProcedureMetaData.getName().toLowerCase(),
-                                t_sbParametersDeclaration.toString(),
-                                metaDataUtils.getProcedureDefaultValue(
-                                    t_iReturnType),
-                                t_ProcedureSentenceFormatter.format(
+                                    
+                            t_sbParametersDeclaration.append(
+                                t_ParameterDeclarationFormatter.format(
                                     new Object[]
                                     {
-                                        t_ProcedureMetaData.getName(),
-                                        t_sbProcedureSentenceParameters
-                                            .toString()
-                                    }),
-                                t_sbOutParametersRegistration.toString(),
-                                t_sbInParametersSpecification.toString(),
-                                t_sbOutParametersRetrieval.toString(),
-                                t_sbValueObjectConstruction.toString(),
-                                t_strReturnType,
-                                metaDataUtils.getGetterMethod(
-                                    t_iReturnType, 1),
-                                t_ProcedureMetaData.getName()
-                            }));
+                                        metaDataUtils.getNativeType(
+                                            t_aProcedureParametersMetaData[
+                                                t_iIndex].getDataType()),
+                                        t_aProcedureParametersMetaData[
+                                            t_iIndex]
+                                        .getName().toLowerCase()
+                                        + (  (  t_iInParameterIndex
+                                                + t_iOutParameterCount
+                                                < t_aProcedureParametersMetaData
+                                                .length)
+                                             ? ","
+                                             : "")
+                                    }));
+                        }
+
+                        t_iInParameterIndex++;
+                    }
                 }
+
+                t_strComment = t_ProcedureMetaData.getComment();
+
+                if  (t_strComment == null)
+                {
+                    t_strComment = "No documentation available.";
+                }
+                                
+                t_sbResult.append(
+                    t_JavadocFormatter.format(
+                        new Object[]
+                        {
+                            t_strComment,
+                            t_sbParametersJavadoc.toString()}
+                        ));
+
+                String t_strReturnType =
+                    metaDataUtils.getProcedureResultType(t_iReturnType);
+
+                MessageFormat t_ProcedureBodyFormatter =
+                    new MessageFormat(procedureBody);
+
+                t_sbResult.append(
+                    t_ProcedureBodyFormatter.format(
+                        new Object[]
+                        {
+                            t_strReturnType,
+                            t_ProcedureMetaData.getName().toLowerCase(),
+                            t_sbParametersDeclaration.toString(),
+                            metaDataUtils.getProcedureDefaultValue(
+                                t_iReturnType),
+                            t_ProcedureSentenceFormatter.format(
+                                new Object[]
+                                {
+                                    t_ProcedureMetaData.getName(),
+                                    t_sbProcedureSentenceParameters
+                                    .toString()
+                                }),
+                            t_sbOutParametersRegistration.toString(),
+                            t_sbInParametersSpecification.toString(),
+                            t_sbOutParametersRetrieval.toString(),
+                            t_sbValueObjectConstruction.toString(),
+                            t_strReturnType,
+                            metaDataUtils.getGetterMethod(
+                                t_iReturnType, 1),
+                            t_ProcedureMetaData.getName()
+                        }));
             }
         }
 
-        t_sbResult.append(getClassEnd());
+        t_sbResult.append(classEnd);
 
         return t_sbResult.toString();
     }

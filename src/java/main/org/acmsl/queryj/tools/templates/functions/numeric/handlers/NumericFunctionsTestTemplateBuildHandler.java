@@ -102,7 +102,7 @@ public class NumericFunctionsTestTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -156,7 +156,9 @@ public class NumericFunctionsTestTemplateBuildHandler
                                         t_strTestedPackage,
                                         t_MetaData.getDatabaseProductName(),
                                         t_MetaData.getDatabaseProductVersion(),
-                                        t_strQuote);
+                                        t_strQuote,
+                                        command.getProject(),
+                                        command.getTask());
 
                         Collection t_cFunctions =
                             t_StringUtils.tokenize(

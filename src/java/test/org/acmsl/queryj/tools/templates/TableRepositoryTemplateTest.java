@@ -120,7 +120,9 @@ extends TestCase
     return
         new org.acmsl.queryj.tools.templates.TableRepositoryTemplate(
             "com.foo.bar", // package name
-            "query"); // repository
+            "query",
+            null,
+            null); // repository
     // JUnitDoclet end method testcase.createInstance
   }
   

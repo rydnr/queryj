@@ -437,7 +437,7 @@ public abstract class TemplateMappingManager
      * Specifies a new weak reference.
      * @param manager the manager instance to use.
      */
-    protected static void setReference(TemplateMappingManager manager)
+    protected static void setReference(final TemplateMappingManager manager)
     {
         singleton = new WeakReference(manager);
     }
@@ -480,7 +480,7 @@ public abstract class TemplateMappingManager
      * Specifies the mapping between engines and templates.
      * @param mapping the mapping.
      */
-    private void inmutableSetMapping(Map mapping)
+    private void inmutableSetMapping(final Map mapping)
     {
         m__mMapping = mapping;
     }
@@ -489,7 +489,7 @@ public abstract class TemplateMappingManager
      * Specifies the mapping between engines and templates.
      * @param mapping the mapping.
      */
-    protected void setMapping(Map mapping)
+    protected void setMapping(final Map mapping)
     {
         inmutableSetMapping(mapping);
     }
@@ -509,8 +509,7 @@ public abstract class TemplateMappingManager
      * @param templateFactoryClass the template factory.
      */
     public void addDefaultTemplateFactoryClass(
-        String type,
-        String templateFactoryClass)
+        final String type, final String templateFactoryClass)
     {
         addTemplateFactoryClass(
             type, DEFAULT_TEMPLATE, templateFactoryClass);
@@ -523,9 +522,9 @@ public abstract class TemplateMappingManager
      * @param templateFactoryClass the template factory.
      */
     public void addTemplateFactoryClass(
-        String type,
-        String engineName,
-        String templateFactoryClass)
+        final String type,
+        final String engineName,
+        final String templateFactoryClass)
     {
         addTemplateFactoryClass(type, engineName, null, templateFactoryClass);
     }
@@ -538,10 +537,10 @@ public abstract class TemplateMappingManager
      * @param templateFactoryClass the template factory.
      */
     public void addTemplateFactoryClass(
-        String type,
-        String engineName,
-        String engineVersion,
-        String templateFactoryClass)
+        final String type,
+        final String engineName,
+        final String engineVersion,
+        final String templateFactoryClass)
     {
         if  (   (type                 != null)
              && (engineName           != null)
@@ -581,8 +580,7 @@ public abstract class TemplateMappingManager
      * @param type the template type.
      * @return the template factory class name.
      */
-    public String getDefaultTemplateFactoryClass(
-        String type)
+    public String getDefaultTemplateFactoryClass(final String type)
     {
         return getTemplateFactoryClass(type, DEFAULT_TEMPLATE, null);
     }
@@ -595,9 +593,9 @@ public abstract class TemplateMappingManager
      * @return the template factory class name.
      */
     public String getTemplateFactoryClass(
-        String type,
-        String engineName,
-        String engineVersion)
+        final String type,
+        final String engineName,
+        final String engineVersion)
     {
         String result = null;
 
@@ -649,8 +647,8 @@ public abstract class TemplateMappingManager
      * @throws QueryJException if the factory class is invalid.
      */
     public TemplateFactory getTemplateFactory(
-            String type, String engineName, String engineVersion)
-        throws  QueryJException
+        final String type, final String engineName, final String engineVersion)
+      throws  QueryJException
     {
         TemplateFactory result = null;
 
@@ -680,21 +678,21 @@ public abstract class TemplateMappingManager
                             type + ".template.factory.class.not.available");
                 }
             }
-            catch  (ClassNotFoundException classNotFoundException)
+            catch  (final ClassNotFoundException classNotFoundException)
             {
                 throw
                     new QueryJException(
                         type + ".template.factory.not.found",
                         classNotFoundException);
             }
-            catch  (InstantiationException instantiationException)
+            catch  (final InstantiationException instantiationException)
             {
                 throw
                     new QueryJException(
                         "invalid." + type + ".template.factory",
                         instantiationException);
             }
-            catch  (IllegalAccessException illegalAccessException)
+            catch  (final IllegalAccessException illegalAccessException)
             {
                 throw
                     new QueryJException(
@@ -712,7 +710,7 @@ public abstract class TemplateMappingManager
      * @param type the template type.
      * @return the key.
      */
-    private String buildKey(String type)
+    protected final String buildKey(final String type)
     {
         return buildKey(type, DEFAULT_TEMPLATE);
     }
@@ -723,7 +721,7 @@ public abstract class TemplateMappingManager
      * @param engineName the engine name.
      * @return the key.
      */
-    private String buildKey(String type, String engineName)
+    private String buildKey(final String type, final String engineName)
     {
         String result = "";
 
@@ -744,7 +742,7 @@ public abstract class TemplateMappingManager
      * @return the key.
      */
     private String buildKey(
-        String type, String engineName, String engineVersion)
+        final String type, final String engineName, final String engineVersion)
     {
         String result = buildKey(type, engineName);
 

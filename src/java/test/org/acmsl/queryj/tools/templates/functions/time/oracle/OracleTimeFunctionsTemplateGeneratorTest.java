@@ -162,7 +162,7 @@ extends TestCase
   /**
   * Tests OracleTimeFunctionsTemplateGeneratorTestcreateTimeFunctionsTemplate()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.functions.time.oracle.OracleTimeFunctionsTemplateGenerator#createTimeFunctionsTemplate(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+  * @see org.acmsl.queryj.tools.templates.functions.time.oracle.OracleTimeFunctionsTemplateGenerator#createTimeFunctionsTemplate(java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.apache.tools.ant.Project, org.apache.tools.ant.Task)
   */
   public void testCreateTimeFunctionsTemplate()
   throws Exception

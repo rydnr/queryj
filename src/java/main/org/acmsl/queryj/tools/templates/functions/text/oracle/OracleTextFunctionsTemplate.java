@@ -53,6 +53,12 @@ package org.acmsl.queryj.tools.templates.functions.text.oracle;
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.util.Map;
@@ -93,86 +99,28 @@ public abstract class OracleTextFunctionsTemplate
 
     /**
      * Builds a OracleTextFunctionsTemplate using given information.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param singletonBody the singleton body.
-     * @param classConstructor the class constructor.
-     * @param innerClass the inner class.
-     * @param classEnd the class end.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     public OracleTextFunctionsTemplate(
-        String header,
-        String packageDeclaration,
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote,
-        String acmslImports,
-        String jdkImports,
-        String javadoc,
-        String classDefinition,
-        String classStart,
-        String singletonBody,
-        String classConstructor,
-        String innerClass,
-        String classEnd)
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final Project project,
+        final Task task)
     {
         super(
-            header,
-            packageDeclaration,
             packageName,
             engineName,
             engineVersion,
             quote,
-            acmslImports,
-            jdkImports,
-            javadoc,
-            classDefinition,
-            classStart,
-            singletonBody,
-            classConstructor,
-            innerClass,
-            classEnd);
-    }
-
-    /**
-     * Builds a OracleTextFunctionsTemplate using given information.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     */
-    public OracleTextFunctionsTemplate(
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-    {
-        this(
-            DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            ACMSL_IMPORTS,
-            JDK_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            SINGLETON_BODY,
-            CLASS_CONSTRUCTOR,
-            INNER_CLASS,
-            DEFAULT_CLASS_END);
+            project,
+            task);
     }
 
     /**
@@ -180,7 +128,7 @@ public abstract class OracleTextFunctionsTemplate
      * @param mappings the initial mapping collection.
      * @return the updated collection.
      */
-    protected Map fillUpMappings(Map mappings)
+    protected Map fillUpMappings(final Map mappings)
     {
         return buildMappings(mappings);
     }
@@ -190,7 +138,7 @@ public abstract class OracleTextFunctionsTemplate
      * @param mappings the initial mapping collection.
      * @return the updated collection.
      */
-    public static Map buildMappings(Map mappings)
+    public static Map buildMappings(final Map mappings)
     {
         Map result = mappings;
 
@@ -240,7 +188,7 @@ public abstract class OracleTextFunctionsTemplate
      * @param mapping the initial mapping.
      * @return the updated mapping.
      */
-    protected Map fillUpSpecialMappings(Map mappings)
+    protected Map fillUpSpecialMappings(final Map mappings)
     {
         return buildSpecialMappings(mappings);
     }
@@ -250,7 +198,7 @@ public abstract class OracleTextFunctionsTemplate
      * @param mapping the initial mapping.
      * @return the updated mapping.
      */
-    public static Map buildSpecialMappings(Map mappings)
+    public static Map buildSpecialMappings(final Map mappings)
     {
         Map result = mappings;
 
@@ -309,7 +257,7 @@ public abstract class OracleTextFunctionsTemplate
      * @param mapping the initial mapping.
      * @return the updated mapping.
      */
-    protected Map fillUpSpecialMappingsReturnTypes(Map mappings)
+    protected Map fillUpSpecialMappingsReturnTypes(final Map mappings)
     {
         return buildSpecialMappingsReturnTypes(mappings);
     }
@@ -319,7 +267,7 @@ public abstract class OracleTextFunctionsTemplate
      * @param mapping the initial mapping.
      * @return the updated mapping.
      */
-    public static Map buildSpecialMappingsReturnTypes(Map mappings)
+    public static Map buildSpecialMappingsReturnTypes(final Map mappings)
     {
         Map result = mappings;
 
@@ -365,7 +313,7 @@ public abstract class OracleTextFunctionsTemplate
      * @param function the function.
      * @return the mapping.
      */
-    protected String getMapping(String function)
+    protected String getMapping(final String function)
     {
         return getMapping(function, OracleTextFunctionsTemplate.class);
     }
@@ -375,7 +323,7 @@ public abstract class OracleTextFunctionsTemplate
      * @param function the function.
      * @return the mapping.
      */
-    protected String getSpecialMapping(String function)
+    protected String getSpecialMapping(final String function)
     {
         return
             getSpecialMapping(
@@ -387,7 +335,7 @@ public abstract class OracleTextFunctionsTemplate
      * @param function the function.
      * @return the field type.
      */
-    protected String getSpecialMappingReturnType(String function)
+    protected String getSpecialMappingReturnType(final String function)
     {
         return
             getSpecialMappingReturnType(
@@ -401,7 +349,7 @@ public abstract class OracleTextFunctionsTemplate
      * @return <code>true</code> if the map contains the specific
      * mapping entries for this template.
      */
-    protected boolean isFilledIn(Map mappings)
+    protected boolean isFilledIn(final Map mappings)
     {
         return
             (   (mappings != null)
@@ -417,7 +365,7 @@ public abstract class OracleTextFunctionsTemplate
      * @param mapping the concrete mapping.
      * @return <code>true</code> to generate the warning message.
      */
-    protected boolean generateWarning(String mapping)
+    protected boolean generateWarning(final String mapping)
     {
         return false;
     }

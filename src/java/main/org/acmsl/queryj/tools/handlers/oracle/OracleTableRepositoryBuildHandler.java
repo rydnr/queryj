@@ -83,7 +83,10 @@ public class OracleTableRepositoryBuildHandler
         throws  BuildException
     {
         storeTableRepositoryTemplate(
-            buildTableRepositoryTemplate(command.getAttributeMap()),
+            buildTableRepositoryTemplate(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask()),
             command.getAttributeMap());
         
         return false;

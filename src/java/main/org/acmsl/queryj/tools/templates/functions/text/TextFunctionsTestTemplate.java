@@ -97,111 +97,34 @@ public abstract class TextFunctionsTestTemplate
      * @param innerClass the inner class.
      * @param innerTable the inner table.
      * @param classEnd the class end.
-     */
-    public TextFunctionsTestTemplate(
-        String header,
-        String packageDeclaration,
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote,
-        String projectImports,
-        String acmslImports,
-        String jdkImports,
-        String junitImports,
-        String javadoc,
-        String classDefinition,
-        String classStart,
-        String classConstructor,
-        String memberAccessors,
-        String setUpTearDownMethods,
-        String mainMethod,
-        String getInstanceTest,
-        String innerClass,
-        String innerTable,
-        String classEnd)
-    {
-        super(
-            "text",
-            "Text",
-            header,
-            packageDeclaration,
-            packageName,
-            testedPackageName,
-            engineName,
-            engineVersion,
-            quote,
-            projectImports,
-            acmslImports,
-            jdkImports,
-            junitImports,
-            javadoc,
-            classDefinition,
-            classStart,
-            classConstructor,
-            memberAccessors,
-            setUpTearDownMethods,
-            mainMethod,
-            getInstanceTest,
-            innerClass,
-            innerTable,
-            classEnd);
-    }
-
-    /**
-     * Builds a TextFunctionsTestTemplate using given information.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param projectImports the JDK imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param junitImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param testFunctionMethod the test function method.
-     * @param classConstructor the class constructor.
-     * @param memberAccessors the member accessors.
-     * @param setUpTearDownMethods the setUp and tearDown methods.
-     * @param mainMethod the main method.
-     * @param getInstanceTest the getInstance test.
-     * @param innerClass the inner class.
-     * @param innerTable the inner table.
-     * @param classEnd the class end.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      */
     public TextFunctionsTestTemplate(
-        String  header,
-        String  packageDeclaration,
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        String  projectImports,
-        String  acmslImports,
-        String  jdkImports,
-        String  junitImports,
-        String  javadoc,
-        String  classDefinition,
-        String  classStart,
-        String  classConstructor,
-        String  memberAccessors,
-        String  setUpTearDownMethods,
-        String  mainMethod,
-        String  getInstanceTest,
-        String  innerClass,
-        String  innerTable,
-        String  classEnd,
-        Project project,
-        Task    task)
+        final String  header,
+        final String  packageDeclaration,
+        final String  packageName,
+        final String  testedPackageName,
+        final String  engineName,
+        final String  engineVersion,
+        final String  quote,
+        final String  projectImports,
+        final String  acmslImports,
+        final String  jdkImports,
+        final String  junitImports,
+        final String  javadoc,
+        final String  classDefinition,
+        final String  classStart,
+        final String  classConstructor,
+        final String  memberAccessors,
+        final String  setUpTearDownMethods,
+        final String  mainMethod,
+        final String  getInstanceTest,
+        final String  innerClass,
+        final String  innerTable,
+        final String  classEnd,
+        final Project project,
+        final Task    task)
     {
         super(
             "text",
@@ -239,81 +162,26 @@ public abstract class TextFunctionsTestTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     */
-    public TextFunctionsTestTemplate(
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-    {
-        this(
-            DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
-            packageName,
-            testedPackageName,
-            engineName,
-            engineVersion,
-            quote,
-            PROJECT_IMPORTS,
-            ACMSL_IMPORTS,
-            JDK_IMPORTS,
-            JUNIT_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            CLASS_CONSTRUCTOR,
-            MEMBER_ACCESSORS,
-            SETUP_TEARDOWN_METHODS,
-            MAIN_METHOD,
-            GET_INSTANCE_TEST,
-            INNER_CLASS,
-            INNER_TABLE,
-            DEFAULT_CLASS_END);
-    }
-
-    /**
-     * Builds a TextFunctionsTestTemplate using given information.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      */
     public TextFunctionsTestTemplate(
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
+        final String  packageName,
+        final String  testedPackageName,
+        final String  engineName,
+        final String  engineVersion,
+        final String  quote,
+        final Project project,
+        final Task    task)
     {
-        this(
-            DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
+        super(
+            "text",
+            "Text",
             packageName,
             testedPackageName,
             engineName,
             engineVersion,
             quote,
-            PROJECT_IMPORTS,
-            ACMSL_IMPORTS,
-            JDK_IMPORTS,
-            JUNIT_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            CLASS_CONSTRUCTOR,
-            MEMBER_ACCESSORS,
-            SETUP_TEARDOWN_METHODS,
-            MAIN_METHOD,
-            GET_INSTANCE_TEST,
-            INNER_CLASS,
-            INNER_TABLE,
-            DEFAULT_CLASS_END,
             project,
             task);
     }

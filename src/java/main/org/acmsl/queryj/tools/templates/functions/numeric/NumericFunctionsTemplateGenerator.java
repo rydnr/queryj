@@ -209,8 +209,8 @@ public class NumericFunctionsTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      */
     protected NumericFunctionsTemplateFactory getTemplateFactory(
-            String engineName, String engineVersion)
-        throws  QueryJException
+        final String engineName, final String engineVersion)
+      throws  QueryJException
     {
         NumericFunctionsTemplateFactory result = null;
 
@@ -264,21 +264,21 @@ public class NumericFunctionsTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      */
     public NumericFunctionsTemplate createNumericFunctionsTemplate(
-        String header,
-        String packageDeclaration,
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote,
-        String acmslImports,
-        String jdkImports,
-        String javadoc,
-        String classDefinition,
-        String classStart,
-        String singletonBody,
-        String classConstructor,
-        String innerClass,
-        String classEnd)
+        final String header,
+        final String packageDeclaration,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String acmslImports,
+        final String jdkImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String singletonBody,
+        final String classConstructor,
+        final String innerClass,
+        final String classEnd)
       throws  QueryJException
     {
         NumericFunctionsTemplate result = null;
@@ -349,23 +349,23 @@ public class NumericFunctionsTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      */
     public NumericFunctionsTemplate createNumericFunctionsTemplate(
-        String  header,
-        String  packageDeclaration,
-        String  packageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        String  acmslImports,
-        String  jdkImports,
-        String  javadoc,
-        String  classDefinition,
-        String  classStart,
-        String  singletonBody,
-        String  classConstructor,
-        String  innerClass,
-        String  classEnd,
-        Project project,
-        Task    task)
+        final String  header,
+        final String  packageDeclaration,
+        final String  packageName,
+        final String  engineName,
+        final String  engineVersion,
+        final String  quote,
+        final String  acmslImports,
+        final String  jdkImports,
+        final String  javadoc,
+        final String  classDefinition,
+        final String  classStart,
+        final String  singletonBody,
+        final String  classConstructor,
+        final String  innerClass,
+        final String  classEnd,
+        final Project project,
+        final Task    task)
       throws  QueryJException
     {
         NumericFunctionsTemplate result = null;
@@ -434,10 +434,10 @@ public class NumericFunctionsTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      */
     public NumericFunctionsTemplate createNumericFunctionsTemplate(
-        String packageName,
-        String engineName,
-        String engineVersion,
-        String quote)
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
       throws  QueryJException
     {
         NumericFunctionsTemplate result = null;
@@ -486,12 +486,12 @@ public class NumericFunctionsTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      */
     public NumericFunctionsTemplate createNumericFunctionsTemplate(
-        String  packageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
+        final String  packageName,
+        final String  engineName,
+        final String  engineVersion,
+        final String  quote,
+        final Project project,
+        final Task    task)
       throws  QueryJException
     {
         NumericFunctionsTemplate result = null;
@@ -546,8 +546,8 @@ public class NumericFunctionsTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-            NumericFunctionsTemplate numericFunctionsTemplate,
-            File                     outputDir)
+        final NumericFunctionsTemplate numericFunctionsTemplate,
+        final File outputDir)
         throws  IOException
     {
         if  (   (numericFunctionsTemplate != null)

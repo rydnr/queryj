@@ -469,72 +469,19 @@ public class NumericFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @return a template.
-     * @throws QueryJException if the template factory is invalid.
-     */
-    public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-      throws  QueryJException
-    {
-        NumericFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            NumericFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createNumericFunctionsTestTemplate(
-                        packageName,
-                        testedPackageName,
-                        engineName,
-                        engineVersion,
-                        quote);
-            }
-            else 
-            {
-                throw
-                    new QueryJException(
-                          "Cannot find numeric test functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a numeric functions template.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the template factory is invalid.
      */
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
+        final String  packageName,
+        final String  testedPackageName,
+        final String  engineName,
+        final String  engineVersion,
+        final String  quote,
+        final Project project,
+        final Task    task)
       throws  QueryJException
     {
         NumericFunctionsTestTemplate result = null;
@@ -590,9 +537,9 @@ public class NumericFunctionsTestTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-            NumericFunctionsTestTemplate numericFunctionsTestTemplate,
-            File                      outputDir)
-        throws  IOException
+        final NumericFunctionsTestTemplate numericFunctionsTestTemplate,
+        final File outputDir)
+      throws  IOException
     {
         if  (   (numericFunctionsTestTemplate != null)
              && (outputDir                 != null))

@@ -103,7 +103,7 @@ public class TextFunctionsTestTemplateGenerator
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        TextFunctionsTestTemplateGenerator generator)
+        final TextFunctionsTestTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -149,9 +149,9 @@ public class TextFunctionsTestTemplateGenerator
      * @param templateFactoryClass the template factory.
      */
     public void addTemplateFactoryClass(
-        String engineName,
-        String engineVersion,
-        String templateFactoryClass)
+        final String engineName,
+        final String engineVersion,
+        final String templateFactoryClass)
     {
         TemplateMappingManager t_MappingManager =
             TemplateMappingManager.getInstance();
@@ -175,7 +175,7 @@ public class TextFunctionsTestTemplateGenerator
      * @return the template factory class name.
      */
     protected String getTemplateFactoryClass(
-        String engineName, String engineVersion)
+        final String engineName, final String engineVersion)
     {
         String result = null;
 
@@ -203,8 +203,8 @@ public class TextFunctionsTestTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      */
     protected TextFunctionsTestTemplateFactory getTemplateFactory(
-            String engineName, String engineVersion)
-        throws  QueryJException
+        final String engineName, final String engineVersion)
+      throws  QueryJException
     {
         TextFunctionsTestTemplateFactory result = null;
 
@@ -233,287 +233,6 @@ public class TextFunctionsTestTemplateGenerator
                     result =
                         (TextFunctionsTestTemplateFactory) t_TemplateFactory;
                 }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a text functions test template.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param projectImports the JDK imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param junitImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param testFunctionMethod the test function method.
-     * @param classConstructor the class constructor.
-     * @param memberAccessors the member accessors.
-     * @param setUpTearDownMethods the setUp and tearDown methods.
-     * @param mainMethod the main method.
-     * @param getInstanceTest the getInstance test.
-     * @param innerClass the inner class.
-     * @param innerTable the inner table.
-     * @param classEnd the class end.
-     * @return a template.
-     * @throws QueryJException if the provided information is
-     * invalid.
-     */
-    public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        String header,
-        String packageDeclaration,
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote,
-        String projectImports,
-        String acmslImports,
-        String jdkImports,
-        String junitImports,
-        String javadoc,
-        String classDefinition,
-        String classStart,
-        String classConstructor,
-        String memberAccessors,
-        String setUpTearDownMethods,
-        String mainMethod,
-        String getInstanceTest,
-        String innerClass,
-        String innerTable,
-        String classEnd)
-      throws  QueryJException
-    {
-        TextFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            TextFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createTextFunctionsTestTemplate(
-                        header,
-                        packageDeclaration,
-                        packageName,
-                        testedPackageName,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        projectImports,
-                        acmslImports,
-                        jdkImports,
-                        junitImports,
-                        javadoc,
-                        classDefinition,
-                        classStart,
-                        classConstructor,
-                        memberAccessors,
-                        setUpTearDownMethods,
-                        mainMethod,
-                        getInstanceTest,
-                        innerClass,
-                        innerTable,
-                        classEnd);
-            }
-            else 
-            {
-                throw
-                    new QueryJException(
-                          "Cannot find text test functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a text functions test template.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param projectImports the JDK imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param junitImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param testFunctionMethod the test function method.
-     * @param classConstructor the class constructor.
-     * @param memberAccessors the member accessors.
-     * @param setUpTearDownMethods the setUp and tearDown methods.
-     * @param mainMethod the main method.
-     * @param getInstanceTest the getInstance test.
-     * @param innerClass the inner class.
-     * @param innerTable the inner table.
-     * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return a template.
-     * @throws QueryJException if the provided information is
-     * invalid.
-     */
-    public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        String  header,
-        String  packageDeclaration,
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        String  projectImports,
-        String  acmslImports,
-        String  jdkImports,
-        String  junitImports,
-        String  javadoc,
-        String  classDefinition,
-        String  classStart,
-        String  classConstructor,
-        String  memberAccessors,
-        String  setUpTearDownMethods,
-        String  mainMethod,
-        String  getInstanceTest,
-        String  innerClass,
-        String  innerTable,
-        String  classEnd,
-        Project project,
-        Task    task)
-      throws  QueryJException
-    {
-        TextFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            TextFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createTextFunctionsTestTemplate(
-                        header,
-                        packageDeclaration,
-                        packageName,
-                        testedPackageName,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        projectImports,
-                        acmslImports,
-                        jdkImports,
-                        junitImports,
-                        javadoc,
-                        classDefinition,
-                        classStart,
-                        classConstructor,
-                        memberAccessors,
-                        setUpTearDownMethods,
-                        mainMethod,
-                        getInstanceTest,
-                        innerClass,
-                        innerTable,
-                        classEnd,
-                        project,
-                        task);
-            }
-            else 
-            {
-                if  (project != null)
-                {
-                    project.log(
-                        task,
-                          "Invalid text functions test template "
-                        + "generator: " + t_TemplateFactory,
-                        Project.MSG_WARN);
-                }
-                
-                throw
-                    new QueryJException(
-                          "Cannot find text test functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a text functions test template.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @return a template.
-     * @throws QueryJException if the provided information is
-     * invalid.
-     */
-    public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-      throws  QueryJException
-    {
-        TextFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            TextFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createTextFunctionsTestTemplate(
-                        packageName,
-                        testedPackageName,
-                        engineName,
-                        engineVersion,
-                        quote);
-            }
-            else 
-            {
-                throw
-                    new QueryJException(
-                          "Cannot find text test functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
             }
         }
 
@@ -596,9 +315,9 @@ public class TextFunctionsTestTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-            TextFunctionsTestTemplate textFunctionsTestTemplate,
-            File                      outputDir)
-        throws  IOException
+        final TextFunctionsTestTemplate textFunctionsTestTemplate,
+        final File outputDir)
+      throws  IOException
     {
         if  (   (textFunctionsTestTemplate != null)
              && (outputDir                 != null))

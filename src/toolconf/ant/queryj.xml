@@ -262,14 +262,14 @@
         customSqlModel="xml"
         sqlXmlFile="src/toolconf/queryj/sql.xml">
 
-        <externally-managed-fields>
+        <!--externally-managed-fields>
 
           <field
             name="ADDRESSID"
             table-name="ADDRESSES"
             keyword="testseq.nextval"/>
 
-        </externally-managed-fields>
+        </externally-managed-fields-->
 
         <!--
         <tables>
@@ -482,6 +482,27 @@
         </sourcepath>
 
       </javadoc>
+
+    </target>
+
+    <!--
+     Debugs QueryJ execution.
+     @depends init.properties to make sure the environment is defined.
+     @calls ant to invoke QueryJ via Ant.
+     @return the debugging environment.
+    -->
+    <target
+      name="debug.queryj"
+      depends="init.properties"
+      description="Debugs QueryJ execution.">
+
+      <!--
+       Debug QueryJ.
+      -->
+      <exec executable="ant" dir="${basedir}/src/toolconf/queryj">
+        <env key="ANT_OPTS" value="-Xdebug -Xrunjdwp:transport=dt_socket,address=4000,server=y,suspend=y"/>
+        <arg line="-f ${basedir}/src/toolconf/ant/queryj.xml queryj"/>
+      </exec>
 
     </target>
 

@@ -405,55 +405,6 @@ public class TimeFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @return a template.
-     * @throws QueryJException if the template factory is invalid.
-     */
-    public TimeFunctionsTestTemplate createTimeFunctionsTestTemplate(
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote)
-      throws  QueryJException
-    {
-        TimeFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            TimeFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (t_TemplateFactory != null)
-            {
-                result =
-                    t_TemplateFactory.createTimeFunctionsTestTemplate(
-                        packageName,
-                        testedPackageName,
-                        engineName,
-                        engineVersion,
-                        quote);
-            }
-            else 
-            {
-                throw
-                    new QueryJException(
-                        "cannot.find.test.template.factory.for." + engineName);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a time functions test template.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @return a template.

@@ -138,14 +138,19 @@ public class TableRepositoryTemplateGenerator
      * Generates a table repository template.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return such template.
      * @precondition packageName != null
      * @precondition repository != null
      */
     public TableRepositoryTemplate createTableRepositoryTemplate(
-        final String packageName, final String repository)
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task)
     {
-        return new TableRepositoryTemplate(packageName, repository);
+        return new TableRepositoryTemplate(packageName, repository, project, task);
     }
 
     /**

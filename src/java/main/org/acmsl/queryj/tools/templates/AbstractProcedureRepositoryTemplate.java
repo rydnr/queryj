@@ -55,6 +55,12 @@ import org.acmsl.queryj.tools.ProcedureMetaData;
 import org.acmsl.queryj.tools.ProcedureParameterMetaData;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
@@ -71,6 +77,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public abstract class AbstractProcedureRepositoryTemplate
+    extends  AbstractTemplate
 {
     /**
      * The header.
@@ -233,8 +240,11 @@ public abstract class AbstractProcedureRepositoryTemplate
         final String inParameterSpecification,
         final String outParameterRetrieval,
         final String valueObjectConstruction,
-        final String classEnd)
+        final String classEnd,
+        final Project project,
+        final Task task)
     {
+        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
