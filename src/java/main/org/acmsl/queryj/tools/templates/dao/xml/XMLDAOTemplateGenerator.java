@@ -232,6 +232,7 @@ public class XMLDAOTemplateGenerator
      * @param buildKeyPkJavadoc the <i>buildKey</i> key pk javadoc.
      * @param buildKeyPkDeclaration the <i>buildKey</i> pk declaration.
      * @param buildKeyPkValues the <i>buildKey</i>  values.
+     * @param processPkAttributes the <i>process</i> pk attributes.
      * @param findByPrimaryKeyMethod the find by primary key method.
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
@@ -280,6 +281,7 @@ public class XMLDAOTemplateGenerator
         final String                  buildKeyPkJavadoc,
         final String                  buildKeyPkDeclaration,
         final String                  buildKeyPkValues,
+        final String                  processPkAttributes,
         final String                  findByPrimaryKeyMethod,
         final String                  findByPrimaryKeyPkJavadoc,
         final String                  findByPrimaryKeyPkDeclaration,
@@ -332,6 +334,7 @@ public class XMLDAOTemplateGenerator
                     buildKeyPkJavadoc,
                     buildKeyPkDeclaration,
                     buildKeyPkValues,
+                    processPkAttributes,
                     findByPrimaryKeyMethod,
                     findByPrimaryKeyPkJavadoc,
                     findByPrimaryKeyPkDeclaration,
@@ -377,6 +380,7 @@ public class XMLDAOTemplateGenerator
                     buildKeyPkJavadoc,
                     buildKeyPkDeclaration,
                     buildKeyPkValues,
+                    processPkAttributes,
                     findByPrimaryKeyMethod,
                     findByPrimaryKeyPkJavadoc,
                     findByPrimaryKeyPkDeclaration,

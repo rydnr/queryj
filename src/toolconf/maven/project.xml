@@ -4,7 +4,7 @@
   <name>QueryJ</name>
   <id>queryj</id>
   <groupId>org.acmlsl.queryj</groupId>
-  <currentVersion>0.5.6b3</currentVersion>
+  <currentVersion>0.5.6</currentVersion>
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>
@@ -91,7 +91,7 @@
     <dependency>
       <groupId>acmsl-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>0.5.5b9</version>
+      <version>0.5.5b10</version>
       <url>http://maven.acm-sl.com/commons</url>
     </dependency>
 

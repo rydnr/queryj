@@ -18,7 +18,7 @@
       </p>
       <subsection name="Status">
         <p>
-          <strong>QueryJ</strong> 0.5.5 supports:
+          <strong>QueryJ</strong> 0.5.6 supports:
           <ul>
             <li>Value Object generation from database model,</li>
             <li>DAO interfaces generation from database model,</li>
@@ -29,6 +29,8 @@
             <li>Base DAO class generation, with transaction-aware
               logic reusable by all DAO implementations,</li>
             <li>JUnit DAO tests generation,</li>
+            <li>XML DAO generation,</li>
+            <li>XML DAO test generation,</li>
             <li>Mock DAO generation,</li>
             <li>Mock DAO test generation,</li>
             <li>Table model: complete database schema, subset of it or
@@ -68,6 +70,14 @@
         <tr>
           <td>
             $Date$
+          </td>
+          <td>
+            QueryJ now generates <a href="${issue.url}521">XML</a>-based DAO implementations for each table.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/10/15 07:22:56
           </td>
           <td>
             Finished the code generation work for <a href="${issue.url}519">XMLDAOTest</a> template.

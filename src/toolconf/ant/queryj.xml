@@ -364,6 +364,18 @@
 
       </javac>
 
+      <!-- copies any property or resource to the output folder -->
+      <copy todir="${queryj.outputdir}" flatten="false">
+
+        <fileset dir="${queryj.outputdir}">
+
+          <include name="**/*.properties"/>
+          <include name="**/*.xml"/>
+
+        </fileset>
+
+      </copy>
+
     </target>
 
     <!--
@@ -385,6 +397,31 @@
         <arg value="unittests.com.foo.bar.BarSuite"/>
 
       </java>
+
+    </target>
+
+    <!--
+     Debugs defined unit tests.
+     @depends compile to make sure the classes are compiled.
+     @param project.base.suite the JUnit suite that contains all tests.
+     @param classpath the classpath.
+     @param project.build the project compiled classes.
+     @calls java to invoke the JUnit framework.
+     @return the debugging environment.
+    -->
+    <target
+        name="debug.unit.tests"
+        depends="compile"
+        description="DEbugs defined unit tests.">
+
+        <property name="unit-test-path" refid="unittests.queryj.classpath"/>
+
+        <!--
+         Debug unit tests.
+        -->
+        <exec executable="java">
+          <arg line="-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y -cp ${unit-test-path} junit.textui.TestRunner unittests.com.foo.bar.BarSuite"/>
+        </exec>
 
     </target>
 

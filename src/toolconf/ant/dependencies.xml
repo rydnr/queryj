@@ -149,8 +149,8 @@
 
         <jarDependency
           name="acmsl-commons"
-          version="0.5.5b9"
-          jar="commons-0.5.5b9.jar"/>
+          version="0.5.5b10"
+          jar="commons-0.5.5b10.jar"/>
 
         <jarDependency
           name="commons-logging"
@@ -218,6 +218,17 @@
           name="commons-digester"
           version="1.4.1"
           jar="commons-digester-1.4.1.jar"/>
+
+        <!-- Required by Digester -->
+        <jarDependency
+          name="commons-collections"
+          version="2.1"
+          jar="commons-collections-2.1.jar"/>
+
+        <jarDependency
+          name="commons-beanutils"
+          version="1.7.0"
+          jar="commons-beanutils-1.7.0.jar"/>
 
         <jarDependency
           name="aspectj"

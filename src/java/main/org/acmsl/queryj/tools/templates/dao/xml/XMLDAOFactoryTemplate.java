@@ -898,8 +898,7 @@ public abstract class XMLDAOFactoryTemplate
                 t_Formatter.format(
                     new Object[]
                     {
-                        t_EnglishGrammarUtils.getPlural(
-                            t_TableTemplate.getTableName().toLowerCase())
+                        t_TableTemplate.getTableName().toLowerCase()
                     }));
 
             t_Formatter = new MessageFormat(getSingletonBody());

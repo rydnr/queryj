@@ -161,7 +161,8 @@ public abstract class BaseDAOTemplate
         + "/*\n"
         + " * Importing ACM-SL Commons classes.\n"
         + " */\n"
-        + "import org.acmsl.commons.patterns.dao.DAO;\n\n";
+        + "import org.acmsl.commons.patterns.dao.DAO;\n"
+        + "import org.acmsl.commons.patterns.dao.DataAccessException;\n\n";
 
     /**
      * The JDK imports.
@@ -213,12 +214,14 @@ public abstract class BaseDAOTemplate
         + "     * @param transactionToken needed to use an open connection and\n"
         + "     * see previously uncommited inserts/updates/deletes.\n"
         + "     * @return the information extracted from the persistence layer.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public {2}ValueObject findByPrimaryKey(\n"
          // java table name
         + "{3}"
          // FIND_BY_PRIMARY_KEY_PK_DECLARATION
-        + "        TransactionToken  transactionToken);\n\n";
+        + "        TransactionToken  transactionToken)\n"
+        + "      throws DataAccessException;\n\n";
 
     /**
      * The find-by-primary-key method's primary keys javadoc.
@@ -246,13 +249,15 @@ public abstract class BaseDAOTemplate
         + "{2}\n"
          // insert parameters javadoc
         + "     * @param transactionToken the transaction boundary.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public void insert("
         + "{3}"
          // (optional) pk declaration
         + "{4}\n"
          // insert parameters declaration
-        + "        TransactionToken transactionToken);\n\n";
+        + "        TransactionToken transactionToken)\n"
+        + "      throws DataAccessException;\n\n";
 
     /**
      * The insert parameters javadoc.
@@ -281,13 +286,15 @@ public abstract class BaseDAOTemplate
         + "{2}\n"
          // update parameters javadoc
         + "     * @param transactionToken the transaction boundary.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public void update(\n"
         + "{3}"
          // (optional) pk declaration
         + "{4}\n"
          // update parameters declaration
-        + "        TransactionToken transactionToken);\n\n";
+        + "        TransactionToken transactionToken)\n"
+        + "      throws DataAccessException;\n\n";
 
     /**
      * The update parameters javadoc.
@@ -317,12 +324,14 @@ public abstract class BaseDAOTemplate
         + "     * see previously uncommited inserts/updates/deletes.\n"
         + "     * @return <code>true</code> if the information has been deleted\n"
         + "     * successfully.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public boolean delete(\n"
          // java table name
         + "{2}"
          // DELETE_PK_DECLARATION
-        + "        TransactionToken  transactionToken);\n";
+        + "        TransactionToken  transactionToken)\n"
+        + "      throws DataAccessException;\n";
 
     /**
      * The delete method's primary keys javadoc.

@@ -186,7 +186,8 @@ public abstract class XMLDAOTemplate
         + " * Importing some ACM-SL classes.\n"
         + " */\n"
         + "import org.acmsl.queryj.dao.TransactionToken;\n\n"
-        + "\n/*\n"
+        + "\n"
+        + "/*\n"
         + " * Importing ACM-SL Commons classes.\n"
         + " */\n"
         + "import org.acmsl.commons.patterns.dao.DataAccessException;\n\n";
@@ -255,6 +256,10 @@ public abstract class XMLDAOTemplate
         + "     */\n"
         + "    private static Map m__m{1}Map;\n\n"
         + "    /**\n"
+        + "     * The ordered pointers to {0} entities.\n"
+        + "     */\n"
+        + "    private static Collection m__c{1}Collection;\n\n"
+        + "    /**\n"
         + "     * The input stream.\n"
         + "     */\n"
         + "    private InputStream m__isInput;\n\n"
@@ -293,8 +298,7 @@ public abstract class XMLDAOTemplate
      */
     public static final String DEFAULT_CLASS_INTERNAL_METHODS =
           "    /**\n"
-        + "     * Specifies the map used to simulate the persistence\n"
-        + "     * layer.\n"
+        + "     * Specifies the map with {0} information\n"
         + "     * @param map the new map.\n"
         + "     */\n"
         + "    protected static void set{0}Map(final Map map)\n"
@@ -302,13 +306,28 @@ public abstract class XMLDAOTemplate
         + "        m__m{0}Map = map;\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Retrieves the map used to simulate the persistence\n"
-        + "     * layer.\n"
+        + "     * Retrieves the map with {0} information\n"
         + "     * return such map.\n"
         + "     */\n"
         + "    protected static Map get{0}Map()\n"
         + "    '{'\n"
         + "        return m__m{0}Map;\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Specifies the {0} collection\n"
+        + "     * @param collection the new collection.\n"
+        + "     */\n"
+        + "    protected static void set{0}Collection(final Collection collection)\n"
+        + "    '{'\n"
+        + "        m__c{0}Collection = collection;\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Retrieves the {0} collection\n"
+        + "     * return such collection.\n"
+        + "     */\n"
+        + "    protected static Collection get{0}Collection()\n"
+        + "    '{'\n"
+        + "        return m__c{0}Collection;\n"
         + "    '}'\n\n"
         + "    /**\n"
         + "     * Builds a key using given information."
@@ -373,10 +392,10 @@ public abstract class XMLDAOTemplate
         + "    '}'\n\n"
         + "    /**\n"
         + "     * Loads the information from the XML resource.\n"
-        + "     * @return the {0} collection.\n"
+        + "     * @return the {0} information.\n"
         + "     * @throws DataAccessException if the data can not be parsed.\n"
         + "     */\n"
-        + "    protected Collection load()\n"
+        + "    protected Map load()\n"
         + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        return load(configureDigester(), getInput(), getReader());\n"
@@ -386,21 +405,21 @@ public abstract class XMLDAOTemplate
         + "     * @param digester the Digester instance.\n"
         + "     * @param stream the input stream.\n"
         + "     * @param reader the input reader.\n"
-        + "     * @return the {0} collection.\n"
+        + "     * @return the {0} information.\n"
         + "     * @throws DataAccessException if the data can not be parsed.\n"
         + "     * @precondition (stream != null || reader != null)\n"
         + "     */\n"
-        + "    protected synchronized Collection load(\n"
+        + "    protected synchronized Map load(\n"
         + "        final Digester digester,\n"
         + "        final InputStream input,\n"
         + "        final Reader reader)\n"
         + "      throws  DataAccessException\n"
         + "    '{'\n"
-        + "        Collection result = null;\n\n"
+        + "        Map result = null;\n\n"
         + "        if  (digester != null)\n"
         + "        '{'\n"
-        + "            result = new ArrayList();\n\n"
-        + "            digester.push(result);\n\n"
+        + "            Collection collection = new ArrayList();\n\n"
+        + "            digester.push(collection);\n\n"
         + "            try\n"
         + "            '{'\n"
         + "                boolean t_bParsed = false;\n\n"
@@ -419,17 +438,20 @@ public abstract class XMLDAOTemplate
         + "                '}'\n\n"
         + "                if  (t_bParsed)\n"
         + "                '{'\n"
-        + "                    //process{0}Collection(result);\n"
+        + "                    result = new Hashtable();\n"
+        + "                    process{0}(collection, result);\n"
+        + "                    set{0}Collection(collection);\n"
+        + "                    set{0}Map(result);\n"
         + "                '}'\n"
         + "            '}'\n"
         + "            catch (final Exception exception)\n"
         + "            '{'\n"
         + "                LogFactory.getLog(getClass()).error(\n"
         + "                    \"Cannot read XML {0} information.\",\n"
-        + "                    exception);\n"
+        + "                    exception);\n\n"
         + "                throw\n"
         + "                    new DataAccessException(\n"
-        + "                        \"Cannot read XML {0} information\",\n"
+        + "                        \"Cannot.read.xml.{0}.information\",\n"
         + "                        exception,\n"
         + "                        this);\n"
         + "            '}'\n"
@@ -453,6 +475,31 @@ public abstract class XMLDAOTemplate
         + "            \"add\",\n"
         + "            \"{5}.{0}ValueObject\");\n\n"
         + "        return result;\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Processes given {0} information.\n"
+        + "     * @param collection the {0} collection.\n"
+        + "     * @param map the {0} map.\n"
+        + "     * @precondition collection != null\n"
+        + "     * @precondition map != null\n"
+        + "     */\n"
+        + "    protected synchronized void process{0}(\n"
+        + "        final Collection collection, final Map map)\n"
+        + "    '{'\n"
+        + "        Iterator t_Iterator = collection.iterator();\n\n"
+        + "        if  (t_Iterator != null)\n"
+        + "        '{'\n"
+        + "            while  (t_Iterator.hasNext())\n"
+        + "            '{'\n"
+        + "                {0}ValueObject t_ValueObject =\n"
+        + "                    ({0}ValueObject) t_Iterator.next();\n"
+        + "                if  (t_ValueObject != null)\n"
+        + "                '{'\n"
+        + "                    map.put(buildKey({6}), t_ValueObject);\n"
+         // PROCESS_PK_ATTRIBUTES
+        + "                '}'\n"
+        + "            '}'\n"
+        + "        '}'\n"
         + "    '}'\n\n";
 
     /**
@@ -477,6 +524,13 @@ public abstract class XMLDAOTemplate
          // value
 
     /**
+     * The process method's pk attributes.
+     */
+    public static final String DEFAULT_PROCESS_PK_ATTRIBUTES =
+          "t_ValueObject.get{0}()";
+         // value
+
+    /**
      * The find by primary key method.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_METHOD =
@@ -489,12 +543,14 @@ public abstract class XMLDAOTemplate
         + "     * @param transactionToken <i>not used in this implementation</i>.\n"
         + "     * @return the information extracted from the simulated\n"
         + "     * persistence layer.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public {2}ValueObject findByPrimaryKey(\n"
          // java table name
         + "{3}"
          // FIND_BY_PRIMARY_KEY_PK_DECLARATION
         + "        final TransactionToken transactionToken)\n"
+        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        {2}ValueObject result = null;\n\n"
          // java table name
@@ -502,6 +558,10 @@ public abstract class XMLDAOTemplate
         + "        synchronized (LOCK)\n"
         + "        '{'\n"
         + "            t_m{2}Map = get{2}Map();\n\n"
+        + "            if  (t_m{2}Map == null)\n"
+        + "            '{'\n"
+        + "                t_m{2}Map = load();\n"
+        + "            '}'\n\n"
         + "            if  (t_m{2}Map == null)\n"
         + "            '{'\n"
         + "                t_m{2}Map = new Hashtable();\n"
@@ -548,8 +608,7 @@ public abstract class XMLDAOTemplate
          // (optional) pk javadoc
         + "{3}"
          // insert parameters javadoc
-        + "\n     * @return a {1}ValueObject filled up with the"
-        + "\n     * simulated persisted contents."
+        + "\n     * @return the {1}ValueObject."
         + "\n     */\n"
         + "    protected {1}ValueObject build{1}({4})\n"
          // build value object  parameters declaration
@@ -572,23 +631,29 @@ public abstract class XMLDAOTemplate
      */
     public static final String DEFAULT_INSERT_METHOD =
           "    /**\n"
-        + "     * Simulates given {0} information is persisted."
+        + "     * Persists given {0} information."
          // table name
         + "{2}"
          // (optional) pk javadoc
         + "{3}\n"
          // insert parameters javadoc
         + "     * @param transactionToken <i>not used in this implementation</i>.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public void insert("
         + "{4}\n"
          // insert parameters declaration
         + "        final TransactionToken transactionToken)\n"
+        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        Map t_m{1}Map = null;\n\n"
         + "        synchronized (LOCK)\n"
         + "        '{'\n"
         + "            t_m{1}Map = get{1}Map();\n\n"
+        + "            if  (t_m{1}Map == null)\n"
+        + "            '{'\n"
+        + "                t_m{1}Map = load();\n"
+        + "            '}'\n\n"
         + "            if  (t_m{1}Map == null)\n"
         + "            '{'\n"
         + "                t_m{1}Map = new Hashtable();\n"
@@ -630,6 +695,7 @@ public abstract class XMLDAOTemplate
         + "{2}\n"
          // update parameters javadoc
         + "     * @param transactionToken <i>not used in this implementation</i>.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public void update(\n"
         + "{3}"
@@ -637,6 +703,7 @@ public abstract class XMLDAOTemplate
         + "{4}"
          // update parameters declaration
         + "        final TransactionToken transactionToken)\n"
+        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        {0}ValueObject t_{0}ValueObject =\n"
         + "            findByPrimaryKey(\n"
@@ -652,6 +719,15 @@ public abstract class XMLDAOTemplate
         + "        synchronized (LOCK)\n"
         + "        '{'\n"
         + "            Map t_m{0}Map = get{0}Map();\n\n"
+        + "            if  (t_m{0}Map == null)\n"
+        + "            '{'\n"
+        + "                t_m{0}Map = load();\n"
+        + "            '}'\n\n"
+        + "            if  (t_m{0}Map == null)\n"
+        + "            '{'\n"
+        + "                t_m{0}Map = new Hashtable();\n"
+        + "                set{0}Map(t_m{0}Map);\n"
+        + "            '}'\n"
         + "            if  (t_m{0}Map != null)\n"
         + "            '{'\n"
         + "                t_m{0}Map.put(\n"
@@ -688,17 +764,28 @@ public abstract class XMLDAOTemplate
         + "     * @param transactionToken the transaction token.\n"
         + "     * @return <code>true</code> if the information has been deleted\n"
         + "     * successfully.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    {4} boolean delete{5}(\n"
          // java table name
         + "{3}"
          // DELETE_PK_DECLARATION
         + "        final TransactionToken transactionToken)\n"
+        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        boolean result = false;\n\n"
         + "        synchronized (LOCK)\n"
         + "        '{'\n"
         + "            Map t_m{1}Map = get{1}Map();\n\n"
+        + "            if  (t_m{1}Map == null)\n"
+        + "            '{'\n"
+        + "                t_m{1}Map = load();\n"
+        + "            '}'\n\n"
+        + "            if  (t_m{1}Map == null)\n"
+        + "            '{'\n"
+        + "                t_m{1}Map = new Hashtable();\n"
+        + "                set{1}Map(t_m{1}Map);\n"
+        + "            '}'\n"
         + "            if  (t_m{1}Map != null)\n"
         + "            '{'\n"
         + "                t_m{1}Map.remove(\n"
@@ -736,11 +823,13 @@ public abstract class XMLDAOTemplate
         + "     * @param transactionToken <i>not used in this implementation</i>.\n"
         + "     * @return <code>true</code> if the information has been deleted\n"
         + "     * successfully.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public boolean delete(\n"
         + "{2}"
          // DELETE_PK_DECLARATION
         + "        final TransactionToken  transactionToken)\n"
+        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        return\n"
         + "        // delete with fk, comparing for xml implementations.\n"
@@ -897,6 +986,11 @@ public abstract class XMLDAOTemplate
     private String m__strBuildKeyPkValues;
 
     /**
+     * The process method's pk attributes.
+     */
+    private String m__strProcessPkAttributes;
+
+    /**
      * The find-by-primary-key method.
      */
     private String m__strFindByPrimaryKeyMethod;
@@ -1023,6 +1117,7 @@ public abstract class XMLDAOTemplate
      * @param buildKeyPkJavadoc the <i>buildKey</i> key pk javadoc.
      * @param buildKeyPkDeclaration the <i>buildKey</i> pk declaration.
      * @param buildKeyPkValues the <i>buildKey</i>  values.
+     * @param processPkAttributes the <i>process</i> pk attributes.
      * @param findByPrimaryKeyMethod the find by primary key method.
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
@@ -1068,6 +1163,7 @@ public abstract class XMLDAOTemplate
         final String                  buildKeyPkJavadoc,
         final String                  buildKeyPkDeclaration,
         final String                  buildKeyPkValues,
+        final String                  processPkAttributes,
         final String                  findByPrimaryKeyMethod,
         final String                  findByPrimaryKeyPkJavadoc,
         final String                  findByPrimaryKeyPkDeclaration,
@@ -1089,124 +1185,127 @@ public abstract class XMLDAOTemplate
         final String                  deleteWithFkPkValues,
         final String                  classEnd)
     {
-        inmutableSetTableTemplate(
+        immutableSetTableTemplate(
             tableTemplate);
 
-        inmutableSetMetaDataManager(
+        immutableSetMetaDataManager(
             metaDataManager);
 
-        inmutableSetHeader(
+        immutableSetHeader(
             header);
 
-        inmutableSetPackageDeclaration(
+        immutableSetPackageDeclaration(
             packageDeclaration);
 
-        inmutableSetPackageName(
+        immutableSetPackageName(
             packageName);
 
-        inmutableSetBasePackageName(
+        immutableSetBasePackageName(
             basePackageName);
 
-        inmutableSetRepositoryName(
+        immutableSetRepositoryName(
             repositoryName);
 
-        inmutableSetProjectImports(
+        immutableSetProjectImports(
             projectImports);
 
-        inmutableSetForeignDAOImports(
+        immutableSetForeignDAOImports(
             foreignDAOImports);
 
-        inmutableSetAcmslImports(
+        immutableSetAcmslImports(
             acmslImports);
 
-        inmutableSetJdkImports(
+        immutableSetJdkImports(
             jdkImports);
 
-        inmutableSetExtraImports(
+        immutableSetExtraImports(
             extraImports);
 
-        inmutableSetJavadoc(
+        immutableSetJavadoc(
             javadoc);
 
-        inmutableSetClassDefinition(
+        immutableSetClassDefinition(
             classDefinition);
 
-        inmutableSetClassStart(
+        immutableSetClassStart(
             classStart);
 
-        inmutableSetClassConstructor(
+        immutableSetClassConstructor(
             classConstructor);
 
-        inmutableSetClassInternalMethods(
+        immutableSetClassInternalMethods(
             classInternalMethods);
 
-        inmutableSetBuildKeyPkJavadoc(
+        immutableSetBuildKeyPkJavadoc(
             buildKeyPkJavadoc);
 
-        inmutableSetBuildKeyPkDeclaration(
+        immutableSetBuildKeyPkDeclaration(
             buildKeyPkDeclaration);
 
-        inmutableSetBuildKeyPkValues(
+        immutableSetBuildKeyPkValues(
             buildKeyPkValues);
 
-        inmutableSetFindByPrimaryKeyMethod(
+        immutableSetProcessPkAttributes(
+            processPkAttributes);
+
+        immutableSetFindByPrimaryKeyMethod(
             findByPrimaryKeyMethod);
 
-        inmutableSetFindByPrimaryKeyPkJavadoc(
+        immutableSetFindByPrimaryKeyPkJavadoc(
             findByPrimaryKeyPkJavadoc);
 
-        inmutableSetFindByPrimaryKeyPkDeclaration(
+        immutableSetFindByPrimaryKeyPkDeclaration(
             findByPrimaryKeyPkDeclaration);
 
-        inmutableSetFindByPrimaryKeyPkFilterValues(
+        immutableSetFindByPrimaryKeyPkFilterValues(
             findByPrimaryKeyPkFilterValues);
 
-        inmutableSetBuildValueObjectMethod(
+        immutableSetBuildValueObjectMethod(
             buildValueObjectMethod);
 
-        inmutableSetInsertMethod(
+        immutableSetInsertMethod(
             insertMethod);
 
-        inmutableSetInsertParametersJavadoc(
+        immutableSetInsertParametersJavadoc(
             insertParametersJavadoc);
 
-        inmutableSetInsertParametersDeclaration(
+        immutableSetInsertParametersDeclaration(
             insertParametersDeclaration);
 
-        inmutableSetUpdateMethod(
+        immutableSetUpdateMethod(
             updateMethod);
 
-        inmutableSetUpdateParametersJavadoc(
+        immutableSetUpdateParametersJavadoc(
             updateParametersJavadoc);
 
-        inmutableSetUpdateParametersDeclaration(
+        immutableSetUpdateParametersDeclaration(
             updateParametersDeclaration);
 
-        inmutableSetDeleteMethod(
+        immutableSetDeleteMethod(
             deleteMethod);
 
-        inmutableSetDeletePkJavadoc(
+        immutableSetDeletePkJavadoc(
             deletePkJavadoc);
 
-        inmutableSetDeletePkDeclaration(
+        immutableSetDeletePkDeclaration(
             deletePkDeclaration);
 
-        inmutableSetDeleteWithFkMethod(
+        immutableSetDeleteWithFkMethod(
             deleteWithFkMethod);
 
-        inmutableSetDeleteWithFkPkJavadoc(
+        immutableSetDeleteWithFkPkJavadoc(
             deleteWithFkPkJavadoc);
 
-        inmutableSetDeleteWithFkPkDeclaration(
+        immutableSetDeleteWithFkPkDeclaration(
             deleteWithFkPkDeclaration);
 
-        inmutableSetDeleteWithFkDAODeleteRequest(
+        immutableSetDeleteWithFkDAODeleteRequest(
             deleteWithFkDAODeleteRequest);
 
-        inmutableSetDeleteWithFkPkValues(
+        immutableSetDeleteWithFkPkValues(
             deleteWithFkPkValues);
 
-        inmutableSetClassEnd(
+        immutableSetClassEnd(
             classEnd);
     }
 
@@ -1246,6 +1345,7 @@ public abstract class XMLDAOTemplate
             DEFAULT_BUILD_KEY_PK_JAVADOC,
             DEFAULT_BUILD_KEY_PK_DECLARATION,
             DEFAULT_BUILD_KEY_PK_VALUES,
+            DEFAULT_PROCESS_PK_ATTRIBUTES,
             DEFAULT_FIND_BY_PRIMARY_KEY_METHOD,
             DEFAULT_FIND_BY_PRIMARY_KEY_PK_JAVADOC,
             DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION,
@@ -1272,7 +1372,7 @@ public abstract class XMLDAOTemplate
      * Specifies the table template.
      * @param tableTemplate the table template.
      */
-    private void inmutableSetTableTemplate(final TableTemplate tableTemplate)
+    private void immutableSetTableTemplate(final TableTemplate tableTemplate)
     {
         m__TableTemplate = tableTemplate;
     }
@@ -1283,7 +1383,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setTableTemplate(final TableTemplate tableTemplate)
     {
-        inmutableSetTableTemplate(tableTemplate);
+        immutableSetTableTemplate(tableTemplate);
     }
 
     /**
@@ -1300,7 +1400,7 @@ public abstract class XMLDAOTemplate
      * Specifies the metadata manager.
      * @param metaDataManager the metadata manager.
      */
-    private void inmutableSetMetaDataManager(
+    private void immutableSetMetaDataManager(
         final DatabaseMetaDataManager metaDataManager)
     {
         m__MetaDataManager = metaDataManager;
@@ -1313,7 +1413,7 @@ public abstract class XMLDAOTemplate
     protected void setMetaDataManager(
         final DatabaseMetaDataManager metaDataManager)
     {
-        inmutableSetMetaDataManager(metaDataManager);
+        immutableSetMetaDataManager(metaDataManager);
     }
 
     /**
@@ -1329,7 +1429,7 @@ public abstract class XMLDAOTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    private void inmutableSetHeader(final String header)
+    private void immutableSetHeader(final String header)
     {
         m__strHeader = header;
     }
@@ -1340,7 +1440,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setHeader(final String header)
     {
-        inmutableSetHeader(header);
+        immutableSetHeader(header);
     }
 
     /**
@@ -1356,7 +1456,7 @@ public abstract class XMLDAOTemplate
      * Specifies the package declaration.
      * @param packageDeclaration the new package declaration.
      */
-    private void inmutableSetPackageDeclaration(final String packageDeclaration)
+    private void immutableSetPackageDeclaration(final String packageDeclaration)
     {
         m__strPackageDeclaration = packageDeclaration;
     }
@@ -1367,7 +1467,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setPackageDeclaration(final String packageDeclaration)
     {
-        inmutableSetPackageDeclaration(packageDeclaration);
+        immutableSetPackageDeclaration(packageDeclaration);
     }
 
     /**
@@ -1383,7 +1483,7 @@ public abstract class XMLDAOTemplate
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    private void inmutableSetPackageName(final String packageName)
+    private void immutableSetPackageName(final String packageName)
     {
         m__strPackageName = packageName;
     }
@@ -1394,7 +1494,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setPackageName(final String packageName)
     {
-        inmutableSetPackageName(packageName);
+        immutableSetPackageName(packageName);
     }
 
     /**
@@ -1410,7 +1510,7 @@ public abstract class XMLDAOTemplate
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
-    private void inmutableSetBasePackageName(final String basePackageName)
+    private void immutableSetBasePackageName(final String basePackageName)
     {
         m__strBasePackageName = basePackageName;
     }
@@ -1421,7 +1521,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setBasePackageName(final String basePackageName)
     {
-        inmutableSetBasePackageName(basePackageName);
+        immutableSetBasePackageName(basePackageName);
     }
 
     /**
@@ -1437,7 +1537,7 @@ public abstract class XMLDAOTemplate
      * Specifies the repository name.
      * @param repositoryName the new repository name.
      */
-    private void inmutableSetRepositoryName(final String repositoryName)
+    private void immutableSetRepositoryName(final String repositoryName)
     {
         m__strRepositoryName = repositoryName;
     }
@@ -1448,7 +1548,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setRepositoryName(final String repositoryName)
     {
-        inmutableSetRepositoryName(repositoryName);
+        immutableSetRepositoryName(repositoryName);
     }
 
     /**
@@ -1464,7 +1564,7 @@ public abstract class XMLDAOTemplate
      * Specifies the project imports.
      * @param projectImports the new project imports.
      */
-    private void inmutableSetProjectImports(final String projectImports)
+    private void immutableSetProjectImports(final String projectImports)
     {
         m__strProjectImports = projectImports;
     }
@@ -1475,7 +1575,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setProjectImports(final String projectImports)
     {
-        inmutableSetProjectImports(projectImports);
+        immutableSetProjectImports(projectImports);
     }
 
     /**
@@ -1491,7 +1591,7 @@ public abstract class XMLDAOTemplate
      * Specifies the foreign DAO imports.
      * @param foreignDAOImports the new foreign DAO imports.
      */
-    private void inmutableSetForeignDAOImports(final String foreignDAOImports)
+    private void immutableSetForeignDAOImports(final String foreignDAOImports)
     {
         m__strForeignDAOImports = foreignDAOImports;
     }
@@ -1502,7 +1602,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setForeignDAOImports(final String foreignDAOImports)
     {
-        inmutableSetForeignDAOImports(foreignDAOImports);
+        immutableSetForeignDAOImports(foreignDAOImports);
     }
 
     /**
@@ -1518,7 +1618,7 @@ public abstract class XMLDAOTemplate
      * Specifies the ACM-SL imports.
      * @param acmslImports the new ACM-SL imports.
      */
-    private void inmutableSetAcmslImports(final String acmslImports)
+    private void immutableSetAcmslImports(final String acmslImports)
     {
         m__strAcmslImports = acmslImports;
     }
@@ -1529,7 +1629,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setAcmslImports(final String acmslImports)
     {
-        inmutableSetAcmslImports(acmslImports);
+        immutableSetAcmslImports(acmslImports);
     }
 
     /**
@@ -1545,7 +1645,7 @@ public abstract class XMLDAOTemplate
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
-    private void inmutableSetJdkImports(final String jdkImports)
+    private void immutableSetJdkImports(final String jdkImports)
     {
         m__strJdkImports = jdkImports;
     }
@@ -1556,7 +1656,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setJdkImports(final String jdkImports)
     {
-        inmutableSetJdkImports(jdkImports);
+        immutableSetJdkImports(jdkImports);
     }
 
     /**
@@ -1572,7 +1672,7 @@ public abstract class XMLDAOTemplate
      * Specifies the extra imports.
      * @param extraImports the new extra imports.
      */
-    private void inmutableSetExtraImports(final String extraImports)
+    private void immutableSetExtraImports(final String extraImports)
     {
         m__strExtraImports = extraImports;
     }
@@ -1583,7 +1683,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setExtraImports(final String extraImports)
     {
-        inmutableSetExtraImports(extraImports);
+        immutableSetExtraImports(extraImports);
     }
 
     /**
@@ -1599,7 +1699,7 @@ public abstract class XMLDAOTemplate
      * Specifies the javadoc.
      * @param javadoc the new javadoc.
      */
-    private void inmutableSetJavadoc(final String javadoc)
+    private void immutableSetJavadoc(final String javadoc)
     {
         m__strJavadoc = javadoc;
     }
@@ -1610,7 +1710,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setJavadoc(final String javadoc)
     {
-        inmutableSetJavadoc(javadoc);
+        immutableSetJavadoc(javadoc);
     }
 
     /**
@@ -1626,7 +1726,7 @@ public abstract class XMLDAOTemplate
      * Specifies the class definition.
      * @param classDefinition the new class definition.
      */
-    private void inmutableSetClassDefinition(final String classDefinition)
+    private void immutableSetClassDefinition(final String classDefinition)
     {
         m__strClassDefinition = classDefinition;
     }
@@ -1637,7 +1737,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setClassDefinition(final String classDefinition)
     {
-        inmutableSetClassDefinition(classDefinition);
+        immutableSetClassDefinition(classDefinition);
     }
 
     /**
@@ -1653,7 +1753,7 @@ public abstract class XMLDAOTemplate
      * Specifies the class start.
      * @param classStart the new class start.
      */
-    private void inmutableSetClassStart(final String classStart)
+    private void immutableSetClassStart(final String classStart)
     {
         m__strClassStart = classStart;
     }
@@ -1664,7 +1764,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setClassStart(final String classStart)
     {
-        inmutableSetClassStart(classStart);
+        immutableSetClassStart(classStart);
     }
 
     /**
@@ -1680,7 +1780,7 @@ public abstract class XMLDAOTemplate
      * Specifies the class constructor
      * @param constructor such source code.
      */
-    private void inmutableSetClassConstructor(final String constructor)
+    private void immutableSetClassConstructor(final String constructor)
     {
         m__strClassConstructor = constructor;
     }
@@ -1691,7 +1791,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setClassConstructor(final String constructor)
     {
-        inmutableSetClassConstructor(constructor);
+        immutableSetClassConstructor(constructor);
     }
 
     /**
@@ -1707,7 +1807,7 @@ public abstract class XMLDAOTemplate
      * Specifies the class' internal methods.
      * @param internalMethods such source code.
      */
-    private void inmutableSetClassInternalMethods(final String internalMethods)
+    private void immutableSetClassInternalMethods(final String internalMethods)
     {
         m__strClassInternalMethods = internalMethods;
     }
@@ -1718,7 +1818,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setClassInternalMethods(final String internalMethods)
     {
-        inmutableSetClassInternalMethods(internalMethods);
+        immutableSetClassInternalMethods(internalMethods);
     }
 
     /**
@@ -1734,7 +1834,7 @@ public abstract class XMLDAOTemplate
      * Specifies the build-key pk Javadoc.
      * @param buildKeyPkJavadoc such Javadoc.
      */
-    private void inmutableSetBuildKeyPkJavadoc(
+    private void immutableSetBuildKeyPkJavadoc(
         String buildKeyPkJavadoc)
     {
         m__strBuildKeyPkJavadoc = buildKeyPkJavadoc;
@@ -1747,7 +1847,7 @@ public abstract class XMLDAOTemplate
     protected void setBuildKeyPkJavadoc(
         String buildKeyPkJavadoc)
     {
-        inmutableSetBuildKeyPkJavadoc(
+        immutableSetBuildKeyPkJavadoc(
             buildKeyPkJavadoc);
     }
 
@@ -1764,7 +1864,7 @@ public abstract class XMLDAOTemplate
      * Specifies the build-key pk declaration.
      * @param buildKeyPkDeclaration such declaration.
      */
-    private void inmutableSetBuildKeyPkDeclaration(
+    private void immutableSetBuildKeyPkDeclaration(
         String buildKeyPkDeclaration)
     {
         m__strBuildKeyPkDeclaration =
@@ -1778,7 +1878,7 @@ public abstract class XMLDAOTemplate
     protected void setBuildKeyPkdeclaration(
         String buildKeyPkDeclaration)
     {
-        inmutableSetBuildKeyPkDeclaration(
+        immutableSetBuildKeyPkDeclaration(
             buildKeyPkDeclaration);
     }
 
@@ -1795,7 +1895,7 @@ public abstract class XMLDAOTemplate
      * Specifies the build-key pk values.
      * @param buildKeyPkValues such values.
      */
-    private void inmutableSetBuildKeyPkValues(
+    private void immutableSetBuildKeyPkValues(
         String buildKeyPkValues)
     {
         m__strBuildKeyPkValues = buildKeyPkValues;
@@ -1808,7 +1908,7 @@ public abstract class XMLDAOTemplate
     protected void setBuildKeyPkValues(
         String buildKeyPkValues)
     {
-        inmutableSetBuildKeyPkValues(
+        immutableSetBuildKeyPkValues(
             buildKeyPkValues);
     }
 
@@ -1822,10 +1922,40 @@ public abstract class XMLDAOTemplate
     }
 
     /**
+     * Specifies the process pk attributes.
+     * @param processPkAttributes such attributes.
+     */
+    private void immutableSetProcessPkAttributes(
+        String processPkAttributes)
+    {
+        m__strProcessPkAttributes = processPkAttributes;
+    }
+
+    /**
+     * Specifies the process pk attributes.
+     * @param processPkAttributes such attributes.
+     */
+    protected void setProcessPkAttributes(
+        String processPkAttributes)
+    {
+        immutableSetProcessPkAttributes(
+            processPkAttributes);
+    }
+
+    /**
+     * Retrieves the process pk attributes.
+     * @return such attributes.
+     */
+    public String getProcessPkAttributes()
+    {
+        return m__strProcessPkAttributes;
+    }
+
+    /**
      * Specifies the find-by-primary-key method.
      * @param findByPrimaryKeyMethod such method.
      */
-    private void inmutableSetFindByPrimaryKeyMethod(
+    private void immutableSetFindByPrimaryKeyMethod(
         String findByPrimaryKeyMethod)
     {
         m__strFindByPrimaryKeyMethod = findByPrimaryKeyMethod;
@@ -1838,7 +1968,7 @@ public abstract class XMLDAOTemplate
     protected void setFindByPrimaryKeyMethod(
         String findByPrimaryKeyMethod)
     {
-        inmutableSetFindByPrimaryKeyMethod(
+        immutableSetFindByPrimaryKeyMethod(
             findByPrimaryKeyMethod);
     }
 
@@ -1855,7 +1985,7 @@ public abstract class XMLDAOTemplate
      * Specifies the find-by-primary-key pk Javadoc.
      * @param findByPrimaryKeyPkJavadoc such Javadoc.
      */
-    private void inmutableSetFindByPrimaryKeyPkJavadoc(
+    private void immutableSetFindByPrimaryKeyPkJavadoc(
         String findByPrimaryKeyPkJavadoc)
     {
         m__strFindByPrimaryKeyPkJavadoc = findByPrimaryKeyPkJavadoc;
@@ -1868,7 +1998,7 @@ public abstract class XMLDAOTemplate
     protected void setFindByPrimaryKeyPkJavadoc(
         String findByPrimaryKeyPkJavadoc)
     {
-        inmutableSetFindByPrimaryKeyPkJavadoc(
+        immutableSetFindByPrimaryKeyPkJavadoc(
             findByPrimaryKeyPkJavadoc);
     }
 
@@ -1885,7 +2015,7 @@ public abstract class XMLDAOTemplate
      * Specifies the find-by-primary-key pk declaration.
      * @param findByPrimaryKeyPkDeclaration such declaration.
      */
-    private void inmutableSetFindByPrimaryKeyPkDeclaration(
+    private void immutableSetFindByPrimaryKeyPkDeclaration(
         String findByPrimaryKeyPkDeclaration)
     {
         m__strFindByPrimaryKeyPkDeclaration =
@@ -1899,7 +2029,7 @@ public abstract class XMLDAOTemplate
     protected void setFindByPrimaryKeyPkdeclaration(
         String findByPrimaryKeyPkDeclaration)
     {
-        inmutableSetFindByPrimaryKeyPkDeclaration(
+        immutableSetFindByPrimaryKeyPkDeclaration(
             findByPrimaryKeyPkDeclaration);
     }
 
@@ -1917,7 +2047,7 @@ public abstract class XMLDAOTemplate
      * Specifies the find-by-primary-key pk filter values.
      * @param findByPrimaryKeyPkFilterValues such filter values.
      */
-    private void inmutableSetFindByPrimaryKeyPkFilterValues(
+    private void immutableSetFindByPrimaryKeyPkFilterValues(
         String findByPrimaryKeyPkFilterValues)
     {
         m__strFindByPrimaryKeyPkFilterValues =
@@ -1931,7 +2061,7 @@ public abstract class XMLDAOTemplate
     protected void setFindByPrimaryKeyPkfilterValues(
         String findByPrimaryKeyPkFilterValues)
     {
-        inmutableSetFindByPrimaryKeyPkFilterValues(
+        immutableSetFindByPrimaryKeyPkFilterValues(
             findByPrimaryKeyPkFilterValues);
     }
 
@@ -1948,7 +2078,7 @@ public abstract class XMLDAOTemplate
      * Specifies the build-value-object method.
      * @param buildValueObjectMethod such method.
      */
-    private void inmutableSetBuildValueObjectMethod(
+    private void immutableSetBuildValueObjectMethod(
         String buildValueObjectMethod)
     {
         m__strBuildValueObjectMethod = buildValueObjectMethod;
@@ -1961,7 +2091,7 @@ public abstract class XMLDAOTemplate
     protected void setBuildValueObjectMethod(
         String buildValueObjectMethod)
     {
-        inmutableSetBuildValueObjectMethod(
+        immutableSetBuildValueObjectMethod(
             buildValueObjectMethod);
     }
 
@@ -1978,7 +2108,7 @@ public abstract class XMLDAOTemplate
      * Specifies the insert method.
      * @param insertMethod such method.
      */
-    private void inmutableSetInsertMethod(final String insertMethod)
+    private void immutableSetInsertMethod(final String insertMethod)
     {
         m__strInsertMethod = insertMethod;
     }
@@ -1989,7 +2119,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setInsertMethod(final String insertMethod)
     {
-        inmutableSetInsertMethod(insertMethod);
+        immutableSetInsertMethod(insertMethod);
     }
 
     /**
@@ -2005,7 +2135,7 @@ public abstract class XMLDAOTemplate
      * Specifies the insert parameters Javadoc.
      * @param javadoc such javadoc.
      */
-    private void inmutableSetInsertParametersJavadoc(final String javadoc)
+    private void immutableSetInsertParametersJavadoc(final String javadoc)
     {
         m__strInsertParametersJavadoc = javadoc;
     }
@@ -2016,7 +2146,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setInsertParametersJavadoc(final String javadoc)
     {
-        inmutableSetInsertParametersJavadoc(javadoc);
+        immutableSetInsertParametersJavadoc(javadoc);
     }
 
     /**
@@ -2032,7 +2162,7 @@ public abstract class XMLDAOTemplate
      * Specifies the insert parameters Declaration.
      * @param declaration such declaration.
      */
-    private void inmutableSetInsertParametersDeclaration(final String declaration)
+    private void immutableSetInsertParametersDeclaration(final String declaration)
     {
         m__strInsertParametersDeclaration = declaration;
     }
@@ -2043,7 +2173,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setInsertParametersDeclaration(final String declaration)
     {
-        inmutableSetInsertParametersDeclaration(declaration);
+        immutableSetInsertParametersDeclaration(declaration);
     }
 
     /**
@@ -2059,7 +2189,7 @@ public abstract class XMLDAOTemplate
      * Specifies the update method.
      * @param updateMethod such method.
      */
-    private void inmutableSetUpdateMethod(final String updateMethod)
+    private void immutableSetUpdateMethod(final String updateMethod)
     {
         m__strUpdateMethod = updateMethod;
     }
@@ -2070,7 +2200,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setUpdateMethod(final String updateMethod)
     {
-        inmutableSetUpdateMethod(updateMethod);
+        immutableSetUpdateMethod(updateMethod);
     }
 
     /**
@@ -2086,7 +2216,7 @@ public abstract class XMLDAOTemplate
      * Specifies the update parameters Javadoc.
      * @param javadoc such javadoc.
      */
-    private void inmutableSetUpdateParametersJavadoc(final String javadoc)
+    private void immutableSetUpdateParametersJavadoc(final String javadoc)
     {
         m__strUpdateParametersJavadoc = javadoc;
     }
@@ -2097,7 +2227,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setUpdateParametersJavadoc(final String javadoc)
     {
-        inmutableSetUpdateParametersJavadoc(javadoc);
+        immutableSetUpdateParametersJavadoc(javadoc);
     }
 
     /**
@@ -2113,7 +2243,7 @@ public abstract class XMLDAOTemplate
      * Specifies the update parameters Declaration.
      * @param declaration such declaration.
      */
-    private void inmutableSetUpdateParametersDeclaration(final String declaration)
+    private void immutableSetUpdateParametersDeclaration(final String declaration)
     {
         m__strUpdateParametersDeclaration = declaration;
     }
@@ -2124,7 +2254,7 @@ public abstract class XMLDAOTemplate
      */
     protected void setUpdateParametersDeclaration(final String declaration)
     {
-        inmutableSetUpdateParametersDeclaration(declaration);
+        immutableSetUpdateParametersDeclaration(declaration);
     }
 
     /**
@@ -2140,7 +2270,7 @@ public abstract class XMLDAOTemplate
      * Specifies the delete method.
      * @param deleteMethod such method.
      */
-    private void inmutableSetDeleteMethod(
+    private void immutableSetDeleteMethod(
         String deleteMethod)
     {
         m__strDeleteMethod = deleteMethod;
@@ -2153,7 +2283,7 @@ public abstract class XMLDAOTemplate
     protected void setDeleteMethod(
         String deleteMethod)
     {
-        inmutableSetDeleteMethod(
+        immutableSetDeleteMethod(
             deleteMethod);
     }
 
@@ -2170,7 +2300,7 @@ public abstract class XMLDAOTemplate
      * Specifies the delete pk Javadoc.
      * @param deletePkJavadoc such Javadoc.
      */
-    private void inmutableSetDeletePkJavadoc(
+    private void immutableSetDeletePkJavadoc(
         String deletePkJavadoc)
     {
         m__strDeletePkJavadoc = deletePkJavadoc;
@@ -2183,7 +2313,7 @@ public abstract class XMLDAOTemplate
     protected void setDeletePkJavadoc(
         String deletePkJavadoc)
     {
-        inmutableSetDeletePkJavadoc(
+        immutableSetDeletePkJavadoc(
             deletePkJavadoc);
     }
 
@@ -2200,7 +2330,7 @@ public abstract class XMLDAOTemplate
      * Specifies the delete pk declaration.
      * @param deletePkDeclaration such declaration.
      */
-    private void inmutableSetDeletePkDeclaration(
+    private void immutableSetDeletePkDeclaration(
         String deletePkDeclaration)
     {
         m__strDeletePkDeclaration =
@@ -2214,7 +2344,7 @@ public abstract class XMLDAOTemplate
     protected void setDeletePkdeclaration(
         String deletePkDeclaration)
     {
-        inmutableSetDeletePkDeclaration(
+        immutableSetDeletePkDeclaration(
             deletePkDeclaration);
     }
 
@@ -2231,7 +2361,7 @@ public abstract class XMLDAOTemplate
      * Specifies the delete with FK method.
      * @param deleteWithFkMethod such method.
      */
-    private void inmutableSetDeleteWithFkMethod(
+    private void immutableSetDeleteWithFkMethod(
         String deleteWithFkMethod)
     {
         m__strDeleteWithFkMethod = deleteWithFkMethod;
@@ -2244,7 +2374,7 @@ public abstract class XMLDAOTemplate
     protected void setDeleteWithFkMethod(
         String deleteWithFkMethod)
     {
-        inmutableSetDeleteWithFkMethod(
+        immutableSetDeleteWithFkMethod(
             deleteWithFkMethod);
     }
 
@@ -2261,7 +2391,7 @@ public abstract class XMLDAOTemplate
      * Specifies the delete with FK PK Javadoc.
      * @param deleteWithFkPkJavadoc such Javadoc.
      */
-    private void inmutableSetDeleteWithFkPkJavadoc(
+    private void immutableSetDeleteWithFkPkJavadoc(
         String deleteWithFkPkJavadoc)
     {
         m__strDeleteWithFkPkJavadoc = deleteWithFkPkJavadoc;
@@ -2274,7 +2404,7 @@ public abstract class XMLDAOTemplate
     protected void setDeleteWithFkPkJavadoc(
         String deleteWithFkPkJavadoc)
     {
-        inmutableSetDeleteWithFkPkJavadoc(
+        immutableSetDeleteWithFkPkJavadoc(
             deleteWithFkPkJavadoc);
     }
 
@@ -2291,7 +2421,7 @@ public abstract class XMLDAOTemplate
      * Specifies the delete with FK PK declaration.
      * @param deleteWithFkPkDeclaration such declaration.
      */
-    private void inmutableSetDeleteWithFkPkDeclaration(
+    private void immutableSetDeleteWithFkPkDeclaration(
         String deleteWithFkPkDeclaration)
     {
         m__strDeleteWithFkPkDeclaration =
@@ -2305,7 +2435,7 @@ public abstract class XMLDAOTemplate
     protected void setDeleteWithFkPkdeclaration(
         String deleteWithFkPkDeclaration)
     {
-        inmutableSetDeleteWithFkPkDeclaration(
+        immutableSetDeleteWithFkPkDeclaration(
             deleteWithFkPkDeclaration);
     }
 
@@ -2322,7 +2452,7 @@ public abstract class XMLDAOTemplate
      * Specifies the delete with FK DAO delete request.
      * @param deleteWithFkDAODeleteRequest such request.
      */
-    private void inmutableSetDeleteWithFkDAODeleteRequest(
+    private void immutableSetDeleteWithFkDAODeleteRequest(
         String deleteWithFkDAODeleteRequest)
     {
         m__strDeleteWithFkDAODeleteRequest =
@@ -2336,7 +2466,7 @@ public abstract class XMLDAOTemplate
     protected void setDeleteWithFkDAODeleteRequest(
         String deleteWithFkDAODeleteRequest)
     {
-        inmutableSetDeleteWithFkDAODeleteRequest(
+        immutableSetDeleteWithFkDAODeleteRequest(
             deleteWithFkDAODeleteRequest);
     }
 
@@ -2353,7 +2483,7 @@ public abstract class XMLDAOTemplate
      * Specifies the delete with FK PK values.
      * @param deleteWithFkPkValues such values.
      */
-    private void inmutableSetDeleteWithFkPkValues(
+    private void immutableSetDeleteWithFkPkValues(
         String deleteWithFkPkValues)
     {
         m__strDeleteWithFkPkValues =
@@ -2367,7 +2497,7 @@ public abstract class XMLDAOTemplate
     protected void setDeleteWithFkPkValues(
         String deleteWithFkPkValues)
     {
-        inmutableSetDeleteWithFkPkValues(
+        immutableSetDeleteWithFkPkValues(
             deleteWithFkPkValues);
     }
 
@@ -2384,7 +2514,7 @@ public abstract class XMLDAOTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    private void inmutableSetClassEnd(final String classEnd)
+    private void immutableSetClassEnd(final String classEnd)
     {
         m__strClassEnd = classEnd;
     }
@@ -2393,9 +2523,9 @@ public abstract class XMLDAOTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    protected void setClassEnd(String classEnd)
+    protected void setClassEnd(final String classEnd)
     {
-        inmutableSetClassEnd(classEnd);
+        immutableSetClassEnd(classEnd);
     }
 
     /**
@@ -2469,6 +2599,9 @@ public abstract class XMLDAOTemplate
             MessageFormat t_BuildKeyPkDeclarationFormatter =
                 new MessageFormat(getBuildKeyPkDeclaration());
 
+            MessageFormat t_ProcessPkAttributesFormatter =
+                new MessageFormat(getProcessPkAttributes());
+
             MessageFormat t_FindByPrimaryKeyFormatter =
                 new MessageFormat(getFindByPrimaryKeyMethod());
 
@@ -2525,6 +2658,7 @@ public abstract class XMLDAOTemplate
             StringBuffer t_sbPkDeclaration = new StringBuffer();
             StringBuffer t_sbBuildKeyPkDeclaration = new StringBuffer();
             StringBuffer t_sbBuildKeyValues = new StringBuffer();
+            StringBuffer t_sbProcessPkAttributes = new StringBuffer();
             StringBuffer t_sbPkFilterValues = new StringBuffer();
             StringBuffer t_sbUpdateFilter = new StringBuffer();
             StringBuffer t_sbDeleteMethod = new StringBuffer();
@@ -2725,6 +2859,14 @@ public abstract class XMLDAOTemplate
 
                     t_sbPkFilterValues.append(t_strPks);
                     t_sbBuildKeyValues.append(t_strPks);
+                    t_sbProcessPkAttributes.append(
+                        t_ProcessPkAttributesFormatter.format(
+                            new Object[]
+                            {
+                                t_StringUtils.capitalize(
+                                    t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                                    '_')
+                            }));
 
                     if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
                     {
@@ -2860,7 +3002,8 @@ public abstract class XMLDAOTemplate
                                 t_StringUtils.unCapitalize(
                                     t_TableTemplate.getTableName(), "-")),
                             t_PackageUtils.retrieveValueObjectPackage(
-                                getBasePackageName())
+                                getBasePackageName()),
+                            t_sbProcessPkAttributes
                         }));
 
                 t_sbResult.append(
