@@ -68,8 +68,7 @@ import java.lang.ref.WeakReference;
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
  * @version $Revision$
  */
-
-public abstract class OracleUserConsColumnsTable
+public class OracleUserConsColumnsTable
     extends  Table
 {
     /**
@@ -81,31 +80,31 @@ public abstract class OracleUserConsColumnsTable
      * The user_cons_columns table constraint_name field.
      */
     public StringField CONSTRAINT_NAME =
-        new StringField("CONSTRAINT_NAME", this) {};
+        new StringField("CONSTRAINT_NAME", this);
 
     /**
      * The user_cons_columns table table_name field.
      */
     public StringField TABLE_NAME =
-        new StringField("TABLE_NAME", this) {};
+        new StringField("TABLE_NAME", this);
 
     /**
      * The user_cons_columns table column_name field.
      */
     public StringField COLUMN_NAME =
-        new StringField("COLUMN_NAME", this) {};
+        new StringField("COLUMN_NAME", this);
 
     /**
      * The user_constraints table position field.
      */
     public IntField POSITION =
-        new IntField("POSITION", this) {};
+        new IntField("POSITION", this);
 
     /**
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */
-    protected OracleUserConsColumnsTable(String alias)
+    protected OracleUserConsColumnsTable(final String alias)
     {
         super("USER_CONS_COLUMNS", alias);
     }
@@ -122,7 +121,7 @@ public abstract class OracleUserConsColumnsTable
      * Specifies a new weak reference.
      * @param table the table instance to use.
      */
-    protected static void setReference(OracleUserConsColumnsTable table)
+    protected static void setReference(final OracleUserConsColumnsTable table)
     {
         singleton = new WeakReference(table);
     }
@@ -141,7 +140,7 @@ public abstract class OracleUserConsColumnsTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserConsColumnsTable getInstance(String alias)
+    public static OracleUserConsColumnsTable getInstance(final String alias)
     {
         OracleUserConsColumnsTable result = null;
 
@@ -174,7 +173,7 @@ public abstract class OracleUserConsColumnsTable
 
         if  (result == null) 
         {
-            result = new OracleUserConsColumnsTable() { };
+            result = new OracleUserConsColumnsTable();
 
             setReference(result);
         }

@@ -49,6 +49,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.Template;
 
 /*
@@ -145,8 +146,10 @@ public abstract class AbstractTemplate
     /**
      * Generates the source code.
      * @return such output.
+     * @throws InvalidTemplateException if the template cannot be generated.
      */
     public String generate()
+      throws  InvalidTemplateException
     {
         return generate(getProject(), getTask());
     }
@@ -156,22 +159,50 @@ public abstract class AbstractTemplate
      * @param project the project.
      * @param task the task.
      * @return such output.
-     * @precondition project != null
-     * @precondition task != null
+     * @throws InvalidTemplateException if the template cannot be generated.
      */
-    public final String generate(final Project project, final Task task)
+    protected final String generate(final Project project, final Task task)
+      throws  InvalidTemplateException
     {
-        project.log(
-            task,
-            "Generating " + getClass().getName() + ".",
-            Project.MSG_VERBOSE);
+        if   (   (project != null)
+              && (task    != null))
+        {
+            logHeader(project, task);
+        }
 
         return generateOutput();
     }
 
     /**
-     * Generates the actual source code.
-     * @return such output.
+     * Logs a custom header.
+     * @param project the project.
+     * @param task the task.
+     * @precondition project != null
+     * @precondition task != null
      */
-    protected abstract String generateOutput();
+    protected void logHeader(final Project project, final Task task)
+    {
+        project.log(
+            task,
+            buildHeader(),
+            Project.MSG_VERBOSE);
+
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return "Generating " + getClass().getName() + ".";
+    }
+
+    /**
+     * Generates the actual source code.
+     * @return such output. 
+     * @throws InvalidTemplateException if the template cannot be generated.
+     */
+    protected abstract String generateOutput()
+      throws  InvalidTemplateException;
 }

@@ -57,13 +57,15 @@ import org.acmsl.queryj.Field;
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class IntField
+public class IntField
     extends  Field
 {
     /**
      * Creates an integer field using given information.
      * @param name the field name.
      * @param table the table.
+     * @precondition name != null
+     * @precondition table != null
      */
     public IntField(final String name, final Table table)
     {

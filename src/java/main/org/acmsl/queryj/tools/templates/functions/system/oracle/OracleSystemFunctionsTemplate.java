@@ -72,10 +72,10 @@ import org.apache.commons.logging.LogFactory;
  * Is able to generate system function repositories according to Oracle
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class OracleSystemFunctionsTemplate
+public class OracleSystemFunctionsTemplate
     extends  SystemFunctionsTemplate
 {
     /**

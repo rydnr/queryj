@@ -133,7 +133,7 @@ public class BaseDAOTemplateGenerator
 
         if  (result == null) 
         {
-            result = new BaseDAOTemplateGenerator() {};
+            result = new BaseDAOTemplateGenerator();
 
             setReference(result);
         }
@@ -256,12 +256,6 @@ public class BaseDAOTemplateGenerator
                 result = (BaseDAOTemplateFactory) t_TemplateFactory;
             }
         }
-        else
-        {
-            throw
-                new QueryJException(
-                    "base.dao.template.factory.not.found");
-        }
 
         return result;
     }
@@ -271,6 +265,7 @@ public class BaseDAOTemplateGenerator
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
+     * @param valueObjectPackageName the value object package name.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @return a template.
@@ -278,11 +273,13 @@ public class BaseDAOTemplateGenerator
      * @precondition tableTemplate != null
      * @precondition metaDataManager != null
      * @precondition packageName != null
+     * @precondition valueObjectPackageName != null
      */
     public BaseDAOTemplate createBaseDAOTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
+        final String valueObjectPackageName,
         final Project project,
         final Task task)
       throws  QueryJException
@@ -299,6 +296,7 @@ public class BaseDAOTemplateGenerator
                     tableTemplate,
                     metaDataManager,
                     packageName,
+                    valueObjectPackageName,
                     project,
                     task);
         }
@@ -309,8 +307,9 @@ public class BaseDAOTemplateGenerator
                     tableTemplate,
                     metaDataManager,
                     packageName,
+                    valueObjectPackageName,
                     project,
-                    task) {};
+                    task);
         }
 
         return result;

@@ -64,10 +64,10 @@ import javax.sql.DataSource;
  * follows the FactoryMethod pattern, but could be refactored as an abstract
  * factory as new technologies are supported.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro Armendariz</a>
+ *         >Jose San Leandro Armendariz</a>
  * @version $Revision$
  */
-public abstract class TransactionTokenFactory
+public class TransactionTokenFactory
 {
     /**
      * Singleton implemented as a weak reference.
@@ -114,7 +114,7 @@ public abstract class TransactionTokenFactory
 
         if  (result == null) 
         {
-            result = new TransactionTokenFactory() {};
+            result = new TransactionTokenFactory();
 
             setReference(result);
         }

@@ -727,4 +727,13 @@ public abstract class AbstractJdbcDAOTemplate
     {
         return m__strClassEnd;
     }
+
+    /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return"Generating JdbcDAO.";
+    }
 }

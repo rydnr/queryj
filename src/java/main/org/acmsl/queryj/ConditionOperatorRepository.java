@@ -110,7 +110,7 @@ public class ConditionOperatorRepository
 
         if  (result == null) 
         {
-            result = new ConditionOperatorRepository() {};
+            result = new ConditionOperatorRepository();
 
             setReference(result);
         }

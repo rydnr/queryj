@@ -97,51 +97,55 @@ public class XMLDAOTemplateWritingHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+                
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+    {
+        return
+            handle(
+                retrieveXMLDAOTemplates(parameters),
+                retrieveOutputDir(parameters),
+                XMLDAOTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Handles given information.
+     * @param templates the templates.
+     * @param outputDir the output dir.
+     * @param generator the generator.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition templates != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final XMLDAOTemplate[] templates,
+        final File outputDir,
+        final XMLDAOTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
         try 
         {
-            Map attributes = command.getAttributeMap();
-
-            XMLDAOTemplateGenerator t_XMLDAOTemplateGenerator =
-                XMLDAOTemplateGenerator.getInstance();
-
-            XMLDAOTemplate[] t_aXMLDAOTemplates =
-                retrieveXMLDAOTemplates(attributes);
-
-            if  (   (t_aXMLDAOTemplates        != null)
-                 && (t_XMLDAOTemplateGenerator != null))
+            for  (int t_iXMLDAOIndex = 0;
+                      t_iXMLDAOIndex < templates.length;
+                      t_iXMLDAOIndex++)
             {
-                File t_OutputDir =
-                    retrieveOutputDir(
-                        attributes);
-
-                for  (int t_iXMLDAOIndex = 0;
-                          t_iXMLDAOIndex < t_aXMLDAOTemplates.length;
-                          t_iXMLDAOIndex++)
-                {
-                    t_XMLDAOTemplateGenerator.write(
-                        t_aXMLDAOTemplates[t_iXMLDAOIndex],
-                        t_OutputDir,
-                        command.getProject(),
-                        command.getTask());
-                }
+                generator.write(templates[t_iXMLDAOIndex], outputDir);
             }
         }
-        catch  (IOException ioException)
+        catch  (final IOException ioException)
         {
-            Project t_Project = command.getProject();
-
-            if  (t_Project != null)
-            {
-                t_Project.log(
-                      command.getTask(),
-                    "Cannot write XML DAO template ("
-                    + ioException.getMessage()
-                    + ")",
-                    Project.MSG_WARN);
-            }
-            
             throw new BuildException(ioException);
         }
         
@@ -174,19 +178,31 @@ public class XMLDAOTemplateWritingHandler
     protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
+        return
+            retrieveOutputDir(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (t_PackageUtils != null)
-        {
-            result =
-                t_PackageUtils.retrieveXMLDAOFolder(
-                    retrieveProjectOutputDir(parameters),
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param parameters the parameter map.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition outputDir != null
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
+     */
+    protected File retrieveOutputDir(
+        final File outputDir,
+        final String projectPackage,
+        final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveXMLDAOFolder(
+                outputDir, projectPackage);
     }
 
     /**
@@ -196,11 +212,10 @@ public class XMLDAOTemplateWritingHandler
      * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected File retrieveProjectOutputDir(Map parameters)
+    protected File retrieveProjectOutputDir(final Map parameters)
         throws  BuildException
     {
-        return
-            (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
+        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
     }
 
     /**
@@ -210,10 +225,9 @@ public class XMLDAOTemplateWritingHandler
      * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected String retrieveProjectPackage(Map parameters)
+    protected String retrieveProjectPackage(final Map parameters)
         throws  BuildException
     {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
+        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 }

@@ -296,12 +296,6 @@ public class DAOTemplateGenerator
                 result = (DAOTemplateFactory) t_TemplateFactory;
             }
         }
-        else
-        {
-            throw
-                new QueryJException(
-                    "dao.template.factory.not.found");
-        }
 
         return result;
     }
@@ -441,6 +435,6 @@ public class DAOTemplateGenerator
                             .getTableName().toLowerCase()),
                 '_')
             + "DAO.java",
-            daoTemplate.toString());
+            daoTemplate.generate());
     }
 }

@@ -307,7 +307,7 @@ public class DAOTemplateBuildHandler
      * @param quote the quote.
      * @return the correct one.
      */
-    protected String fixQuote(final String quote)
+    public static String fixQuote(final String quote)
     {
         String result = quote;
 

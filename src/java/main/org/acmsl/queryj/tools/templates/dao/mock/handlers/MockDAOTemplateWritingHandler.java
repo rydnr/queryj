@@ -97,51 +97,61 @@ public class MockDAOTemplateWritingHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveOutputDir(parameters),
+                retrieveMockDAOTemplates(parameters),
+                MockDAOTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param outputDir the output dir.
+     * @param templates the templates.
+     * @param templateFactory != null
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition outputDir != null
+     * @precondition templates != null
+     * @precondition templateFactory != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final File outputDir,
+        final MockDAOTemplate[] templates,
+        final MockDAOTemplateGenerator templateGenerator)
+      throws  BuildException
+    {
         boolean result = false;
 
         try 
         {
-            Map attributes = command.getAttributeMap();
-
-            MockDAOTemplateGenerator t_MockDAOTemplateGenerator =
-                MockDAOTemplateGenerator.getInstance();
-
-            MockDAOTemplate[] t_aMockDAOTemplates =
-                retrieveMockDAOTemplates(attributes);
-
-            if  (   (t_aMockDAOTemplates        != null)
-                 && (t_MockDAOTemplateGenerator != null))
+            for  (int t_iMockDAOIndex = 0;
+                      t_iMockDAOIndex < templates.length;
+                      t_iMockDAOIndex++)
             {
-                File t_OutputDir =
-                    retrieveOutputDir(
-                        attributes);
-
-                for  (int t_iMockDAOIndex = 0;
-                          t_iMockDAOIndex < t_aMockDAOTemplates.length;
-                          t_iMockDAOIndex++)
-                {
-                    t_MockDAOTemplateGenerator.write(
-                        t_aMockDAOTemplates[t_iMockDAOIndex],
-                        t_OutputDir,
-                        command.getProject(),
-                        command.getTask());
-                }
+                templateGenerator.write(
+                    templates[t_iMockDAOIndex], outputDir);
             }
         }
-        catch  (IOException ioException)
+        catch  (final IOException ioException)
         {
-            Project t_Project = command.getProject();
-
-            if  (t_Project != null)
-            {
-                t_Project.log(
-                      command.getTask(),
-                    "Cannot write Mock DAO template ("
-                    + ioException.getMessage()
-                    + ")",
-                    Project.MSG_WARN);
-            }
-            
             throw new BuildException(ioException);
         }
         
@@ -171,22 +181,29 @@ public class MockDAOTemplateWritingHandler
      * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
+    protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (t_PackageUtils != null)
-        {
-            result =
-                t_PackageUtils.retrieveMockDAOFolder(
-                    retrieveProjectOutputDir(parameters),
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveMockDAOFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters));
     }
 
     /**
@@ -196,11 +213,10 @@ public class MockDAOTemplateWritingHandler
      * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected File retrieveProjectOutputDir(Map parameters)
+    protected File retrieveProjectOutputDir(final Map parameters)
         throws  BuildException
     {
-        return
-            (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
+        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
     }
 
     /**
@@ -210,10 +226,9 @@ public class MockDAOTemplateWritingHandler
      * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected String retrieveProjectPackage(Map parameters)
+    protected String retrieveProjectPackage(final Map parameters)
         throws  BuildException
     {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
+        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 }

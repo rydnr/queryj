@@ -197,6 +197,16 @@ public class QueryJTask
     private boolean m__bGenerateMockDAOImplementation = true;
 
     /**
+     * The "generate-xml-dao-implementation" value.
+     */
+    private String m__strGenerateXMLDAOImplementation;
+
+    /**
+     * The "generate-xml-dao-implementation" flag.
+     */
+    private boolean m__bGenerateXMLDAOImplementation = true;
+
+    /**
      * The "custom-sql-model" type.
      */
     private String m__strCustomSqlModel =
@@ -614,10 +624,51 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to generate XML DAO implementations.
+     * @param generate such setting.
+     */
+    public void setGenerateXMLDAOImplementation(final String generate)
+    {
+        m__strGenerateXMLDAOImplementation = generate;
+
+        setGenerateXMLDAOImplementationFlag(
+            (   (generate == null)
+             || (   (generate.trim().toLowerCase().equals("yes"))
+                 || (generate.trim().toLowerCase().equals("true")))));
+    }
+
+    /**
+     * Retrieves whether to generate XML DAO implementations.
+     * @return such setting.
+     */
+    public String getGenerateXMLDAOImplementation()
+    {
+        return m__strGenerateXMLDAOImplementation;
+    }
+
+    /**
+     * Specifies the "generate-xml-dao-implementation" flag.
+     * @param flag such flag.
+     */
+    protected void setGenerateXMLDAOImplementationFlag(final boolean flag)
+    {
+        m__bGenerateXMLDAOImplementation = flag;
+    }
+
+    /**
+     * Retrieves the "generate-xml-dao-implementation" flag.
+     * @return such flag.
+     */
+    protected boolean getGenerateXMLDAOImplementationFlag()
+    {
+        return m__bGenerateXMLDAOImplementation;
+    }
+
+    /**
      * Specifies the "tables" nested element.
      * @param tables the tables xml element.
      */
-    protected void setTables(AntTablesElement tables)
+    protected void setTables(final AntTablesElement tables)
     {
         m__Tables = tables;
     }
@@ -694,6 +745,25 @@ public class QueryJTask
      */
     protected Chain buildChain(final Chain chain)
     {
+        return
+            buildChain(
+                chain,
+                getGenerateMockDAOImplementationFlag(),
+                getGenerateXMLDAOImplementationFlag());
+    }
+
+    /**
+     * Builds the chain.
+     * @param chain the chain to be configured.
+     * @param includeMock whether to include Mock implementations.
+     * @param includeXML whether to include XML implementations.
+     * @return the updated chain.
+     */
+    protected Chain buildChain(
+        final Chain chain,
+        final boolean generateMock,
+        final boolean generateXML)
+    {
         Chain result = chain;
 
         if  (result != null) 
@@ -720,7 +790,7 @@ public class QueryJTask
 
             result.add(new KeywordRepositoryTemplateHandlerBundle());
 
-            result.add(new DAOBundle());
+            result.add(new DAOBundle(generateMock, generateXML));
 
             result.add(new ValueObjectTemplateHandlerBundle());
 

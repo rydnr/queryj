@@ -75,7 +75,7 @@ import java.lang.ref.WeakReference;
 /**
  * Is able to generate the JUnit suite to execute the generated test cases.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class TestSuiteTemplateGenerator
@@ -127,7 +127,7 @@ public class TestSuiteTemplateGenerator
 
         if  (result == null) 
         {
-            result = new TestSuiteTemplateGenerator() {};
+            result = new TestSuiteTemplateGenerator();
 
             setReference(result);
         }
@@ -185,7 +185,7 @@ public class TestSuiteTemplateGenerator
                 packageUtils.retrieveBaseTestSuitePackage(packageName),
                 suiteName,
                 project,
-                task) {};
+                task);
     }
 
     /**

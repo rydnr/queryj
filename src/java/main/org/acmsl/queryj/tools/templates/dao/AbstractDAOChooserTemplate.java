@@ -703,4 +703,13 @@ public abstract class AbstractDAOChooserTemplate
             t_lTables.add(table);
         }
     }
+
+    /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return "Generating DAOChooser.";
+    }
 }

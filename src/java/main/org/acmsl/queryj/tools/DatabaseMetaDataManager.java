@@ -75,11 +75,6 @@ import java.util.Map;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Manages the information provided by database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
@@ -220,12 +215,12 @@ public class DatabaseMetaDataManager
     protected DatabaseMetaDataManager()
     {
         Map t_UniqueMap = new HashMap();
-        inmutableSetColumnNames(t_UniqueMap);
-        inmutableSetColumnTypes(t_UniqueMap);
-        inmutableSetProcedureParametersMetaData(t_UniqueMap);
-        inmutableSetPrimaryKeys(t_UniqueMap);
-        inmutableSetForeignKeys(t_UniqueMap);
-        inmutableSetExternallyManagedFields(t_UniqueMap);
+        immutableSetColumnNames(t_UniqueMap);
+        immutableSetColumnTypes(t_UniqueMap);
+        immutableSetProcedureParametersMetaData(t_UniqueMap);
+        immutableSetPrimaryKeys(t_UniqueMap);
+        immutableSetForeignKeys(t_UniqueMap);
+        immutableSetExternallyManagedFields(t_UniqueMap);
     }
 
     /**
@@ -247,34 +242,40 @@ public class DatabaseMetaDataManager
      * @param schema the database schema.
      * @param retrieveMetaData <code>true</code> for retrieving the metadata
      * directly in the constructor.
+     * @param project the project, for logging purposes
+     * @param task the task, for logging purposes.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     protected DatabaseMetaDataManager(
-            String[]         tableNames,
-            String[]         procedureNames,
-            boolean          disableTableExtraction,
-            boolean          lazyTableExtraction,
-            boolean          disableProcedureExtraction,
-            boolean          lazyProcedureExtraction,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema,
-            boolean          retrieveMetaData)
-        throws  SQLException,
-                QueryJException
+        final String[] tableNames,
+        final String[] procedureNames,
+        final boolean disableTableExtraction,
+        final boolean lazyTableExtraction,
+        final boolean disableProcedureExtraction,
+        final boolean lazyProcedureExtraction,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final boolean retrieveMetaData,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         this();
-        inmutableSetTableNames(tableNames);
-        inmutableSetProcedureNames(procedureNames);
-        inmutableSetDisableTableExtraction(disableTableExtraction);
-        inmutableSetLazyTableExtraction(lazyTableExtraction);
-        inmutableSetDisableProcedureExtraction(disableProcedureExtraction);
-        inmutableSetLazyProcedureExtraction(lazyProcedureExtraction);
-        inmutableSetMetaData(metaData);
-        inmutableSetCatalog(catalog);
-        inmutableSetSchema(schema);
+        immutableSetTableNames(tableNames);
+        immutableSetProcedureNames(procedureNames);
+        immutableSetDisableTableExtraction(disableTableExtraction);
+        immutableSetLazyTableExtraction(lazyTableExtraction);
+        immutableSetDisableProcedureExtraction(disableProcedureExtraction);
+        immutableSetLazyProcedureExtraction(lazyProcedureExtraction);
+        immutableSetMetaData(metaData);
+        immutableSetCatalog(catalog);
+        immutableSetSchema(schema);
+        immutableSetProject(project);
+        immutableSetTask(task);
 
         if  (retrieveMetaData)
         {
@@ -287,7 +288,9 @@ public class DatabaseMetaDataManager
                 lazyProcedureExtraction,
                 metaData,
                 catalog,
-                schema);
+                schema,
+                project,
+                task);
         }
     }
 
@@ -309,22 +312,26 @@ public class DatabaseMetaDataManager
      * @param metaData the database meta data.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param project the project, for logging purposes
+     * @param task the task, for logging purposes.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     public DatabaseMetaDataManager(
-            String[]         tableNames,
-            String[]         procedureNames,
-            boolean          disableTableExtraction,
-            boolean          lazyTableExtraction,
-            boolean          disableProcedureExtraction,
-            boolean          lazyProcedureExtraction,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
-        throws  SQLException,
-                QueryJException
+        final String[] tableNames,
+        final String[] procedureNames,
+        final boolean disableTableExtraction,
+        final boolean lazyTableExtraction,
+        final boolean disableProcedureExtraction,
+        final boolean lazyProcedureExtraction,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         this(
             tableNames,
@@ -336,7 +343,9 @@ public class DatabaseMetaDataManager
             metaData,
             catalog,
             schema,
-            true);
+            true,
+            project,
+            task);
     }
 
     /**
@@ -346,18 +355,22 @@ public class DatabaseMetaDataManager
      * @param metaData the database meta data.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param project the project, for logging purposes
+     * @param task the task, for logging purposes.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     protected DatabaseMetaDataManager(
-            String[]         tableNames,
-            String[]         procedureNames,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
-        throws  SQLException,
-                QueryJException
+        final String[] tableNames,
+        final String[] procedureNames,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         this(
             tableNames,
@@ -368,7 +381,9 @@ public class DatabaseMetaDataManager
             false,
             metaData,
             catalog,
-            schema);
+            schema,
+            project,
+            task);
     }
 
     /**
@@ -380,19 +395,23 @@ public class DatabaseMetaDataManager
      * @param schema the database schema.
      * @param retrieveMetaData <code>true</code> for retrieving the metadata
      * directly in the constructor.
+     * @param project the project, for logging purposes
+     * @param task the task, for logging purposes.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     protected DatabaseMetaDataManager(
-            String[]         tableNames,
-            String[]         procedureNames,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema,
-            boolean          retrieveMetaData)
-        throws  SQLException,
-                QueryJException
+        final String[] tableNames,
+        final String[] procedureNames,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final boolean retrieveMetaData,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         this(
             tableNames,
@@ -404,121 +423,9 @@ public class DatabaseMetaDataManager
             metaData,
             catalog,
             schema,
-            retrieveMetaData);
-    }
-
-    /**
-     * Creates a DatabaseMetaDataManager using given information.
-     * @param tableNames explicitly specified table names.
-     * @param procedureNames explicitly specified procedure names.
-     * @param disableTableExtraction <code>true</code> to disable table
-     * extraction.
-     * @param lazyTableExtraction if the table metadata should not be
-     * retrieved from the database until the tables to extract are
-     * specified.
-     * @param disableProcedureExtraction <code>true</code> to disable
-     * procedure extraction.
-     * @param lazyProcedureExtraction if the procedure metadata should not
-     * be retrieved from the database until the procedures to extract are
-     * specified.
-     * @param metaData the database meta data.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
-     * @param project the project, for logging purposes
-     * (optional).
-     * @param task the task, for logging purposes (optional).
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ,
-     * occurs.
-     */
-    public DatabaseMetaDataManager(
-            String[]         tableNames,
-            String[]         procedureNames,
-            boolean          disableTableExtraction,
-            boolean          lazyTableExtraction,
-            boolean          disableProcedureExtraction,
-            boolean          lazyProcedureExtraction,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema,
-            Project          project,
-            Task             task)
-        throws  SQLException,
-                QueryJException
-    {
-        this(
-            tableNames,
-            procedureNames,
-            disableTableExtraction,
-            lazyTableExtraction,
-            disableProcedureExtraction,
-            lazyProcedureExtraction,
-            metaData,
-            catalog,
-            schema,
-            false);
-
-        inmutableSetProject(project);
-        inmutableSetTask(task);
-
-        retrieveMetaData(
-            tableNames,
-            procedureNames,
-            disableTableExtraction,
-            lazyTableExtraction,
-            disableProcedureExtraction,
-            lazyProcedureExtraction,
-            metaData,
-            catalog,
-            schema);
-    }
-
-    /**
-     * Creates a DatabaseMetaDataManager using given information.
-     * @param tableNames explicitly specified table names.
-     * @param procedureNames explicitly specified procedure names.
-     * @param metaData the database meta data.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
-     * @param task the task, for logging purposes (optional).
-     * @param project the project, for logging purposes
-     * (optional).
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ,
-     * occurs.
-     */
-    public DatabaseMetaDataManager(
-            String[]         tableNames,
-            String[]         procedureNames,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema,
-            Project          project,
-            Task             task)
-        throws  SQLException,
-                QueryJException
-    {
-        this(
-            tableNames,
-            procedureNames,
-            metaData,
-            catalog,
-            schema,
-            false);
-
-        inmutableSetProject(project);
-        inmutableSetTask(task);
-
-        retrieveMetaData(
-            tableNames,
-            getProcedureNames(),
-            getDisableTableExtraction(),
-            getLazyTableExtraction(),
-            getDisableProcedureExtraction(),
-            getLazyProcedureExtraction(),
-            metaData,
-            catalog,
-            schema);
+            retrieveMetaData,
+            project,
+            task);
     }
 
     /**
@@ -538,22 +445,26 @@ public class DatabaseMetaDataManager
      * @param metaData the database meta data.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     private void retrieveMetaData(
-            String[]         tableNames,
-            String[]         procedureNames,
-            boolean          disableTableExtraction,
-            boolean          lazyTableExtraction,
-            boolean          disableProcedureExtraction,
-            boolean          lazyProcedureExtraction,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
-        throws  SQLException,
-                QueryJException
+        final String[] tableNames,
+        final String[] procedureNames,
+        final boolean disableTableExtraction,
+        final boolean lazyTableExtraction,
+        final boolean disableProcedureExtraction,
+        final boolean lazyProcedureExtraction,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         if  (   (!disableTableExtraction)
              && (!lazyTableExtraction))
@@ -562,10 +473,12 @@ public class DatabaseMetaDataManager
                 tableNames,
                 metaData,
                 catalog,
-                schema);
+                schema,
+                project,
+                task);
 
-            extractPrimaryKeys(metaData, catalog, schema);
-            extractForeignKeys(metaData, catalog, schema);
+            extractPrimaryKeys(metaData, catalog, schema, project, task);
+            extractForeignKeys(metaData, catalog, schema, project, task);
         }
 
         if  (   (!disableProcedureExtraction)
@@ -575,7 +488,9 @@ public class DatabaseMetaDataManager
                 procedureNames,
                 metaData,
                 catalog,
-                schema);
+                schema,
+                project,
+                task);
         }
     }
 
@@ -583,7 +498,7 @@ public class DatabaseMetaDataManager
      * Specifies the meta data.
      * @param metaData the database meta data.
      */
-    private void inmutableSetMetaData(DatabaseMetaData metaData)
+    private void immutableSetMetaData(final DatabaseMetaData metaData)
     {
         m__MetaData = metaData;
     }
@@ -592,9 +507,9 @@ public class DatabaseMetaDataManager
      * Specifies the meta data.
      * @param metaData the database meta data.
      */
-    protected void setMetaData(DatabaseMetaData metaData)
+    protected void setMetaData(final DatabaseMetaData metaData)
     {
-        inmutableSetMetaData(metaData);
+        immutableSetMetaData(metaData);
     }
 
     /**
@@ -610,7 +525,7 @@ public class DatabaseMetaDataManager
      * Specifies the catalog.
      * @param catalog the database catalog.
      */
-    private void inmutableSetCatalog(String catalog)
+    private void immutableSetCatalog(final String catalog)
     {
         m__strCatalog = catalog;
     }
@@ -619,9 +534,9 @@ public class DatabaseMetaDataManager
      * Specifies the catalog.
      * @param catalog the database catalog.
      */
-    protected void setCatalog(String catalog)
+    protected void setCatalog(final String catalog)
     {
-        inmutableSetCatalog(catalog);
+        immutableSetCatalog(catalog);
     }
 
     /**
@@ -637,7 +552,7 @@ public class DatabaseMetaDataManager
      * Specifies the schema.
      * @param schema the database schema.
      */
-    private void inmutableSetSchema(String schema)
+    private void immutableSetSchema(final String schema)
     {
         m__strSchema = schema;
     }
@@ -646,9 +561,9 @@ public class DatabaseMetaDataManager
      * Specifies the schema.
      * @param schema the database schema.
      */
-    protected void setSchema(String schema)
+    protected void setSchema(final String schema)
     {
-        inmutableSetSchema(schema);
+        immutableSetSchema(schema);
     }
 
     /**
@@ -664,7 +579,7 @@ public class DatabaseMetaDataManager
      * Specifies the whether the table extraction should be disabled.
      * @param flag such flag.
      */
-    private void inmutableSetDisableTableExtraction(boolean flag)
+    private void immutableSetDisableTableExtraction(final boolean flag)
     {
         m__bDisableTableExtraction = flag;
     }
@@ -673,9 +588,9 @@ public class DatabaseMetaDataManager
      * Specifies the whether the table extraction should be disabled.
      * @param flag such flag.
      */
-    protected void setDisableTableExtraction(boolean flag)
+    protected void setDisableTableExtraction(final boolean flag)
     {
-        inmutableSetDisableTableExtraction(flag);
+        immutableSetDisableTableExtraction(flag);
     }
 
     /**
@@ -691,7 +606,7 @@ public class DatabaseMetaDataManager
      * Specifies the lazy table extraction flag.
      * @param flag such flag.
      */
-    private void inmutableSetLazyTableExtraction(boolean flag)
+    private void immutableSetLazyTableExtraction(final boolean flag)
     {
         m__bLazyTableExtraction = flag;
     }
@@ -700,9 +615,9 @@ public class DatabaseMetaDataManager
      * Specifies the lazy table extraction flag.
      * @param flag such flag.
      */
-    protected void setLazyTableExtraction(boolean flag)
+    protected void setLazyTableExtraction(final boolean flag)
     {
-        inmutableSetLazyTableExtraction(flag);
+        immutableSetLazyTableExtraction(flag);
     }
 
     /**
@@ -718,7 +633,7 @@ public class DatabaseMetaDataManager
      * Specifies the whether the procedure extraction should be disabled.
      * @param flag such flag.
      */
-    private void inmutableSetDisableProcedureExtraction(boolean flag)
+    private void immutableSetDisableProcedureExtraction(final boolean flag)
     {
         m__bDisableProcedureExtraction = flag;
     }
@@ -727,9 +642,9 @@ public class DatabaseMetaDataManager
      * Specifies the whether the procedure extraction should be disabled.
      * @param flag such flag.
      */
-    protected void setDisableProcedureExtraction(boolean flag)
+    protected void setDisableProcedureExtraction(final boolean flag)
     {
-        inmutableSetDisableProcedureExtraction(flag);
+        immutableSetDisableProcedureExtraction(flag);
     }
 
     /**
@@ -745,7 +660,7 @@ public class DatabaseMetaDataManager
      * Specifies the lazy procedure extraction flag.
      * @param flag such flag.
      */
-    private void inmutableSetLazyProcedureExtraction(boolean flag)
+    private void immutableSetLazyProcedureExtraction(final boolean flag)
     {
         m__bLazyProcedureExtraction = flag;
     }
@@ -754,9 +669,9 @@ public class DatabaseMetaDataManager
      * Specifies the lazy procedure extraction flag.
      * @param flag such flag.
      */
-    protected void setLazyProcedureExtraction(boolean flag)
+    protected void setLazyProcedureExtraction(final boolean flag)
     {
-        inmutableSetLazyProcedureExtraction(flag);
+        immutableSetLazyProcedureExtraction(flag);
     }
 
     /**
@@ -772,7 +687,7 @@ public class DatabaseMetaDataManager
      * Specifies the table names.
      * @param names such names.
      */
-    private void inmutableSetTableNames(String[] names)
+    private void immutableSetTableNames(final String[] names)
     {
         m__astrTableNames = names;
     }
@@ -781,9 +696,9 @@ public class DatabaseMetaDataManager
      * Specifies the table names.
      * @param names such names.
      */
-    protected void setTableNames(String[] names)
+    protected void setTableNames(final String[] names)
     {
-        inmutableSetTableNames(names);
+        immutableSetTableNames(names);
     }
 
     /**
@@ -799,7 +714,7 @@ public class DatabaseMetaDataManager
      * Specifies the column names.
      * @param map the column names map.
      */
-    private void inmutableSetColumnNames(Map map)
+    private void immutableSetColumnNames(final Map map)
     {
         m__mColumnNames = map;
     }
@@ -808,9 +723,9 @@ public class DatabaseMetaDataManager
      * Specifies the column names.
      * @param map the column names map.
      */
-    protected void setColumnNames(Map map)
+    protected void setColumnNames(final Map map)
     {
-        inmutableSetColumnNames(map);
+        immutableSetColumnNames(map);
     }
 
     /**
@@ -822,56 +737,67 @@ public class DatabaseMetaDataManager
         return m__mColumnNames;
     }
 
+    /**
+     * Adds the column names of given table.
+     * @param tableName the table name.
+     * @param columnNames the column names.
+     * @precondition tableName != null
+     * @precondition columnNames != null
+     */
+    public void addColumnNames(
+        final String tableName,
+        final String[] columnNames)
+    {
+        addColumnNames(tableName, columnNames, getColumnNames());
+    }
 
     /**
      * Adds the column names of given table.
      * @param tableName the table name.
      * @param columnNames the column names.
+     * @param map the map.
+     * @precondition tableName != null
+     * @precondition columnNames != null
+     * @precondition map != null
      */
-    public void addColumnNames(
-        String   tableName,
-        String[] columnNames)
+    protected void addColumnNames(
+        final String tableName,
+        final String[] columnNames,
+        final Map map)
     {
-        if  (columnNames != null) 
-        {
-            Map t_mColumnNames = getColumnNames();
-
-            if  (t_mColumnNames != null) 
-            {
-                t_mColumnNames.put(
-                    buildKey(tableName),
-                    columnNames);
-            }
-        }
+        map.put(buildKey(tableName), columnNames);
     }
 
     /**
      * Retrieves the column names.
      * @param tableName the table name.
      * @return the column names.
+     * @precondition tableName != null
      */
-    public String[] getColumnNames(String tableName)
+    public String[] getColumnNames(final String tableName)
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        return getColumnNames(tableName, getColumnNames());
+    }
 
-        if  (tableName != null) 
-        {
-            Map t_mColumnNames = getColumnNames();
-
-            if  (t_mColumnNames != null) 
-            {
-                result = (String[]) t_mColumnNames.get(buildKey(tableName));
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves the column names.
+     * @param tableName the table name.
+     * @param columnNames the column names.
+     * @return the column names.
+     * @precondition tableName != null
+     * @precondition columnNames != null
+     */
+    protected String[] getColumnNames(
+        final String tableName, final Map columnNames)
+    {
+        return (String[]) columnNames.get(buildKey(tableName));
     }
 
     /**
      * Specifies the column types.
      * @param map the column types map.
      */
-    private void inmutableSetColumnTypes(Map map)
+    private void immutableSetColumnTypes(final Map map)
     {
         m__mColumnTypes = map;
     }
@@ -880,9 +806,9 @@ public class DatabaseMetaDataManager
      * Specifies the column types.
      * @param map the column types map.
      */
-    protected void setColumnTypes(Map map)
+    protected void setColumnTypes(final Map map)
     {
-        inmutableSetColumnTypes(map);
+        immutableSetColumnTypes(map);
     }
 
     /**
@@ -900,27 +826,37 @@ public class DatabaseMetaDataManager
      * @param columnName the column name.
      * @return the column type.
      * @see java.sql.Types
+     * @precondition tableName != null
+     * @precondition columnName != null
      */
-    public int getColumnType(String tableName, String columnName)
+    public int getColumnType(
+        final String tableName, final String columnName)
+    {
+        return getColumnType(tableName, columnName, getColumnTypes());
+    }
+
+    /**
+     * Retrieves the column type.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnTypes the column types.
+     * @return the column type.
+     * @see java.sql.Types
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnTypes != null
+     */
+    protected int getColumnType(
+        final String tableName, final String columnName, final Map columnTypes)
     {
         int result = -1;
 
-        if  (   (tableName  != null)
-             && (columnName != null))
+        Object t_Result = columnTypes.get(buildKey(tableName, columnName));
+
+        if  (   (t_Result != null)
+             && (t_Result instanceof Integer))
         {
-            Map t_mColumnTypes = getColumnTypes();
-
-            if  (t_mColumnTypes != null) 
-            {
-                Object t_Result =
-                    t_mColumnTypes.get(buildKey(tableName, columnName));
-
-                if  (   (t_Result != null)
-                     && (t_Result instanceof Integer))
-                {
-                    result = ((Integer) t_Result).intValue();
-                }
-            }
+            result = ((Integer) t_Result).intValue();
         }
         
         return result;
@@ -931,27 +867,45 @@ public class DatabaseMetaDataManager
      * @param tableName the table name.
      * @param columnName the column name.
      * @param columnType the column type.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnType != null
      */
     public void addColumnType(
-        String tableName,
-        String columnName,
-        int    columnType)
+        final String tableName,
+        final String columnName,
+        final int columnType)
     {
-        Map t_mColumnTypes = getColumnTypes();
+        addColumnType(tableName, columnName, columnType, getColumnTypes());
+    }
 
-        if  (t_mColumnTypes != null) 
-        {
-            t_mColumnTypes.put(
-                buildKey(tableName, columnName),
-                new Integer(columnType));
-        }
+    /**
+     * Adds a column type.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnType the column type.
+     * @param columnTypes the column types.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnType != null
+     * @precondition columnTypes != null
+     */
+    protected void addColumnType(
+        final String tableName,
+        final String columnName,
+        final int columnType,
+        final Map columnTypes)
+    {
+        columnTypes.put(
+            buildKey(tableName, columnName),
+            new Integer(columnType));
     }
 
     /**
      * Specifies the primary keys
      * @param map the primary keys map.
      */
-    private void inmutableSetPrimaryKeys(Map map)
+    private void immutableSetPrimaryKeys(final Map map)
     {
         m__mPrimaryKeys = map;
     }
@@ -960,9 +914,9 @@ public class DatabaseMetaDataManager
      * Specifies the primary keys.
      * @param map the primary keys map.
      */
-    protected void setPrimaryKeys(Map map)
+    protected void setPrimaryKeys(final Map map)
     {
-        inmutableSetPrimaryKeys(map);
+        immutableSetPrimaryKeys(map);
     }
 
     /**
@@ -978,56 +932,76 @@ public class DatabaseMetaDataManager
      * Adds a primary key.
      * @param tableName the table name.
      * @param columnName the column name.
+     * @precondition tableName != null
+     * @precondition columnName != null
      */
     public void addPrimaryKey(
-        String tableName,
-        String columnName)
+        final String tableName,
+        final String columnName)
     {
-        Map t_mPrimaryKeys = getPrimaryKeys();
+        addPrimaryKey(tableName, columnName, getPrimaryKeys());
+    }
 
-        if  (t_mPrimaryKeys != null) 
+    /**
+     * Adds a primary key.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param primaryKeys the primary keys.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition primaryKeys != null
+     */
+    protected void addPrimaryKey(
+        final String tableName,
+        final String columnName,
+        final Map primaryKeys)
+    {
+        logVerbose(
+            "Adding pk:" + tableName + "." + columnName);
+
+        primaryKeys.put(
+            buildPkKey(tableName, columnName),
+            columnName);
+
+        Collection t_cPks = (Collection) primaryKeys.get(buildPkKey(tableName));
+
+        if  (t_cPks == null)
         {
-            logVerbose(
-                "Adding pk:" + tableName + "." + columnName);
-
-            t_mPrimaryKeys.put(
-                buildPkKey(tableName, columnName),
-                columnName);
-
-            Collection t_cPks = (Collection) t_mPrimaryKeys.get(buildPkKey(tableName));
-
-            if  (t_cPks == null)
-            {
-                t_cPks = new ArrayList();
-                t_mPrimaryKeys.put(buildPkKey(tableName), t_cPks);
-            }
-
-            t_cPks.add(columnName);
+            t_cPks = new ArrayList();
+            primaryKeys.put(buildPkKey(tableName), t_cPks);
         }
+
+        t_cPks.add(columnName);
     }
 
     /**
      * Retrieves the primary keys.
      * @param tableName the table name.
      * @return the primary keys.
+     * @precondition tableName != null
      */
-    public String[] getPrimaryKeys(String tableName)
+    public String[] getPrimaryKeys(final String tableName)
+    {
+        return getPrimaryKeys(tableName, getPrimaryKeys());
+    }
+
+    /**
+     * Retrieves the primary keys.
+     * @param tableName the table name.
+     * @param primaryKeys the primary keys.
+     * @return the primary keys.
+     * @precondition tableName != null
+     * @precondition primaryKeys != null
+     */
+    protected String[] getPrimaryKeys(final String tableName, final Map primaryKeys)
     {
         String[] result = EMPTY_STRING_ARRAY;
 
-        if  (tableName != null)
+        Collection t_cPks = (Collection) primaryKeys.get(buildPkKey(tableName));
+
+        if  (t_cPks != null)
         {
-            Map t_mPrimaryKeys = getPrimaryKeys();
-
-            if  (t_mPrimaryKeys != null)
-            {
-                Collection t_cPks = (Collection) t_mPrimaryKeys.get(buildPkKey(tableName));
-
-                if  (t_cPks != null)
-                {
-                    result = (String[]) t_cPks.toArray(result);
-                }
-            }
+            result = (String[]) t_cPks.toArray(result);
         }
         
         return result;
@@ -1037,29 +1011,37 @@ public class DatabaseMetaDataManager
      * Checks whether given field is a primary key or not.
      * @param tableName the table name.
      * @param fieldName the field name.
-     * @return true if such field identifies a concrete row.
+     * @return <code>true</code> if such field identifies a concrete row.
+     * @precondition tableName != null
+     * @precondition fieldName != null
      */
-    public boolean isPrimaryKey(String tableName, String fieldName)
+    public boolean isPrimaryKey(final String tableName, final String fieldName)
+    {
+        return isPrimaryKey(fieldName, getPrimaryKeys(tableName));
+    }
+
+    /**
+     * Checks whether given field is a primary key or not.
+     * @param fieldName the field name.
+     * @param primaryKeys the primary keys.
+     * @return <code>true</code> if such field identifies a concrete row.
+     * @precondition fieldName != null
+     */
+    protected boolean isPrimaryKey(final String fieldName, final String[] primaryKeys)
     {
         boolean result = false;
 
-        if  (   (tableName != null)
-             && (fieldName != null))
+        if  (primaryKeys != null)
         {
-            String[] t_astrPks = getPrimaryKeys(tableName);
-
-            if  (t_astrPks != null)
+            for  (int t_iPkIndex = 0;
+                      t_iPkIndex < primaryKeys.length;
+                      t_iPkIndex++)
             {
-                for  (int t_iPkIndex = 0;
-                          t_iPkIndex < t_astrPks.length;
-                          t_iPkIndex++)
+                if  (fieldName.equals(primaryKeys[t_iPkIndex]))
                 {
-                    if  (fieldName.equals(t_astrPks[t_iPkIndex]))
-                    {
-                        result = true;
+                    result = true;
 
-                        break;
-                    }
+                    break;
                 }
             }
         }
@@ -1071,7 +1053,7 @@ public class DatabaseMetaDataManager
      * Specifies the foreign keys.
      * @param map the foreign keys map.
      */
-    private void inmutableSetForeignKeys(Map map)
+    private void immutableSetForeignKeys(final Map map)
     {
         m__mForeignKeys = map;
     }
@@ -1080,9 +1062,9 @@ public class DatabaseMetaDataManager
      * Specifies the foreign keys.
      * @param map the foreign keys map.
      */
-    protected void setForeignKeys(Map map)
+    protected void setForeignKeys(final Map map)
     {
-        inmutableSetForeignKeys(map);
+        immutableSetForeignKeys(map);
     }
 
     /**
@@ -1100,12 +1082,16 @@ public class DatabaseMetaDataManager
      * @param columnName the column name.
      * @param refTableName the referred table name.
      * @param refColumnName the referred column name.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition refRableName != null
+     * @precondition refColumnName != null
      */
     public void addForeignKey(
-        String tableName,
-        String columnName,
-        String refTableName,
-        String refColumnName)
+        final String tableName,
+        final String columnName,
+        final String refTableName,
+        final String refColumnName)
     {
         logVerbose(
               "Adding foreign key: ("
@@ -1159,7 +1145,7 @@ public class DatabaseMetaDataManager
      * @param tableName the table name.
      * @return such tables.
      */
-    public String[] getReferredTables(String tableName)
+    public String[] getReferredTables(final String tableName)
     {
         String[] result = EMPTY_STRING_ARRAY;
 
@@ -1187,7 +1173,7 @@ public class DatabaseMetaDataManager
      * @param refTableName the referred table name.
      * @return such field.
      */
-    public String getForeignKey(String tableName, String refTableName)
+    public String getForeignKey(final String tableName, String refTableName)
     {
         String result = null;
 
@@ -1211,7 +1197,7 @@ public class DatabaseMetaDataManager
      * @param refTableName the referred table name.
      * @return such field.
      */
-    public String getReferredKey(String tableName, String refTableName)
+    public String getReferredKey(final String tableName, String refTableName)
     {
         String result = null;
 
@@ -1233,7 +1219,7 @@ public class DatabaseMetaDataManager
      * Specifies the externally managed fields.
      * @param map the externally managed fields map.
      */
-    private void inmutableSetExternallyManagedFields(Map map)
+    private void immutableSetExternallyManagedFields(Map map)
     {
         m__mExternallyManagedFields = map;
     }
@@ -1244,7 +1230,7 @@ public class DatabaseMetaDataManager
      */
     protected void setExternallyManagedFields(Map map)
     {
-        inmutableSetExternallyManagedFields(map);
+        immutableSetExternallyManagedFields(map);
     }
 
     /**
@@ -1317,7 +1303,7 @@ public class DatabaseMetaDataManager
      * @param tableName the table name.
      * @return the externally-managed fields of such table.
      */
-    public String[] getExternallyManagedFields(String tableName)
+    public String[] getExternallyManagedFields(final String tableName)
     {
         String[] result = EMPTY_STRING_ARRAY;
 
@@ -1348,7 +1334,7 @@ public class DatabaseMetaDataManager
      * @param fieldName the field name.
      * @return <code>true</code> if such field is managed externally.
      */
-    public boolean isManagedExternally(String tableName, String fieldName)
+    public boolean isManagedExternally(final String tableName, String fieldName)
     {
         boolean result = false;
 
@@ -1386,7 +1372,7 @@ public class DatabaseMetaDataManager
      * @return such keyword, or <code>null</code> if such information is
      * unknown.
      */
-    public String getKeyword(String tableName, String fieldName)
+    public String getKeyword(final String tableName, String fieldName)
     {
         String result = null;
 
@@ -1427,7 +1413,7 @@ public class DatabaseMetaDataManager
      * Specifies the procedure names.
      * @param names such names.
      */
-    private void inmutableSetProcedureNames(String[] names)
+    private void immutableSetProcedureNames(String[] names)
     {
         m__astrProcedureNames = names;
     }
@@ -1438,7 +1424,7 @@ public class DatabaseMetaDataManager
      */
     protected void setProcedureNames(String[] names)
     {
-        inmutableSetProcedureNames(names);
+        immutableSetProcedureNames(names);
     }
 
     /**
@@ -1454,7 +1440,7 @@ public class DatabaseMetaDataManager
      * Specifies the procedures metadata.
      * @param proceduresMetaData such metadata.
      */
-    private void inmutableSetProceduresMetaData(ProcedureMetaData[] proceduresMetaData)
+    private void immutableSetProceduresMetaData(ProcedureMetaData[] proceduresMetaData)
     {
         m__aProceduresMetaData = proceduresMetaData;
     }
@@ -1465,7 +1451,7 @@ public class DatabaseMetaDataManager
      */
     protected void setProceduresMetaData(ProcedureMetaData[] proceduresMetaData)
     {
-        inmutableSetProceduresMetaData(proceduresMetaData);
+        immutableSetProceduresMetaData(proceduresMetaData);
     }
 
     /**
@@ -1481,7 +1467,7 @@ public class DatabaseMetaDataManager
      * Specifies the procedure parameter metadata.
      * @param map the parameter metadata map.
      */
-    private void inmutableSetProcedureParametersMetaData(Map map)
+    private void immutableSetProcedureParametersMetaData(Map map)
     {
         m__mProcedureParametersMetaData = map;
     }
@@ -1492,7 +1478,7 @@ public class DatabaseMetaDataManager
      */
     protected void setProcedureParametersMetaData(Map map)
     {
-        inmutableSetProcedureParametersMetaData(map);
+        immutableSetProcedureParametersMetaData(map);
     }
 
     /**
@@ -1551,7 +1537,7 @@ public class DatabaseMetaDataManager
      * @return the parameters metadata.
      */
     public ProcedureParameterMetaData[] getProcedureParametersMetaData(
-        String procedureName)
+        final String procedureName)
     {
         ProcedureParameterMetaData[] result =
             EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY;
@@ -1575,7 +1561,7 @@ public class DatabaseMetaDataManager
      * Specifies the task.
      * @param task the task.
      */
-    private void inmutableSetTask(Task task)
+    private void immutableSetTask(final Task task)
     {
         m__Task = task;
     }
@@ -1584,9 +1570,9 @@ public class DatabaseMetaDataManager
      * Specifies the task.
      * @param task the task.
      */
-    protected void setTask(Task task)
+    protected void setTask(final Task task)
     {
-        inmutableSetTask(task);
+        immutableSetTask(task);
     }
 
     /**
@@ -1602,7 +1588,7 @@ public class DatabaseMetaDataManager
      * Specifies the project.
      * @param project the project.
      */
-    private void inmutableSetProject(Project project)
+    private void immutableSetProject(final Project project)
     {
         m__Project = project;
     }
@@ -1611,9 +1597,9 @@ public class DatabaseMetaDataManager
      * Specifies the project.
      * @param project the project.
      */
-    protected void setProject(Project project)
+    protected void setProject(final Project project)
     {
-        inmutableSetProject(project);
+        immutableSetProject(project);
     }
 
     /**
@@ -1784,17 +1770,21 @@ public class DatabaseMetaDataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     private void extractTableMetaData(
-            String[]         tableNames,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
-        throws  SQLException,
-                QueryJException
+        final String[] tableNames,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         String[] t_astrTableNames = tableNames;
 
@@ -1802,7 +1792,8 @@ public class DatabaseMetaDataManager
 
         if  (t_astrTableNames == null) 
         {
-            t_astrTableNames = getTableNames(metaData, catalog, schema);
+            t_astrTableNames =
+                getTableNames(metaData, catalog, schema, project, task);
 
         }
 
@@ -1866,17 +1857,21 @@ public class DatabaseMetaDataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     private void extractProcedureMetaData(
-            String[]         procedureNames,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
-        throws  SQLException,
-                QueryJException
+        final String[] procedureNames,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         String[] t_astrProcedureNames = procedureNames;
 
@@ -1913,15 +1908,19 @@ public class DatabaseMetaDataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      */
     protected String[] getTableNames(
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
-        throws  SQLException,
-                QueryJException
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         String[] result = EMPTY_STRING_ARRAY;
 
@@ -1940,7 +1939,7 @@ public class DatabaseMetaDataManager
                             null,
                             new String[]{ "TABLE" });
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
                     throw
                         new QueryJException(
@@ -1950,11 +1949,11 @@ public class DatabaseMetaDataManager
 
                 result = extractTableNames(t_rsTables);
             }
-            catch  (SQLException sqlException)
+            catch  (final SQLException sqlException)
             {
                 throw sqlException;
             }
-            catch  (QueryJException queryjException)
+            catch  (final QueryJException queryjException)
             {
                 throw queryjException;
             }
@@ -2534,48 +2533,50 @@ public class DatabaseMetaDataManager
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
+     * @precondition metaData != null
      */
     protected void extractPrimaryKeys(
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
-        throws  SQLException,
-                QueryJException
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         try 
         {
-            if  (metaData != null) 
+            String[] t_astrTableNames = getTableNames();
+
+            for  (int t_iTableIndex = 0;
+                      t_iTableIndex < t_astrTableNames.length;
+                      t_iTableIndex++)
             {
-                String[] t_astrTableNames = getTableNames();
+                ResultSet t_rsPrimaryKeys =
+                    metaData.getPrimaryKeys(
+                        catalog,
+                        schema,
+                        t_astrTableNames[t_iTableIndex]);
 
-                for  (int t_iTableIndex = 0;
-                          t_iTableIndex < t_astrTableNames.length;
-                          t_iTableIndex++)
+                while  (   (t_rsPrimaryKeys != null)
+                        && (t_rsPrimaryKeys.next()))
                 {
-                    ResultSet t_rsPrimaryKeys =
-                        metaData.getPrimaryKeys(
-                            catalog,
-                            schema,
-                            t_astrTableNames[t_iTableIndex]);
+                    addPrimaryKey(
+                        t_astrTableNames[t_iTableIndex],
+                        t_rsPrimaryKeys.getString("COLUMN_NAME"));
+                }
 
-                    while  (   (t_rsPrimaryKeys != null)
-                            && (t_rsPrimaryKeys.next()))
-                    {
-                        addPrimaryKey(
-                            t_astrTableNames[t_iTableIndex],
-                            t_rsPrimaryKeys.getString("COLUMN_NAME"));
-                    }
-
-                    if  (t_rsPrimaryKeys != null)
-                    {
-                        t_rsPrimaryKeys.close();
-                    }
+                if  (t_rsPrimaryKeys != null)
+                {
+                    t_rsPrimaryKeys.close();
                 }
             }
         }
-        catch  (SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "Cannot retrieve the primary keys.",
@@ -2590,50 +2591,52 @@ public class DatabaseMetaDataManager
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
+     * @precondition metaData != null
      */
     protected void extractForeignKeys(
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
         throws  SQLException,
                 QueryJException
     {
         try 
         {
-            if  (metaData != null) 
+            String[] t_astrTableNames = getTableNames();
+
+            for  (int t_iTableIndex = 0;
+                      t_iTableIndex < t_astrTableNames.length;
+                      t_iTableIndex++)
             {
-                String[] t_astrTableNames = getTableNames();
+                ResultSet t_rsForeignKeys =
+                    metaData.getImportedKeys(
+                        catalog,
+                        schema,
+                        t_astrTableNames[t_iTableIndex]);
 
-                for  (int t_iTableIndex = 0;
-                          t_iTableIndex < t_astrTableNames.length;
-                          t_iTableIndex++)
+                while  (   (t_rsForeignKeys != null)
+                        && (t_rsForeignKeys.next()))
                 {
-                    ResultSet t_rsForeignKeys =
-                        metaData.getImportedKeys(
-                            catalog,
-                            schema,
-                            t_astrTableNames[t_iTableIndex]);
+                    addForeignKey(
+                        t_astrTableNames[t_iTableIndex],
+                        t_rsForeignKeys.getString("PKCOLUMN_NAME"),
+                        t_rsForeignKeys.getString("FKTABLE_NAME"),
+                        t_rsForeignKeys.getString("FKCOLUMN_NAME"));
+                }
 
-                    while  (   (t_rsForeignKeys != null)
-                            && (t_rsForeignKeys.next()))
-                    {
-                        addForeignKey(
-                            t_astrTableNames[t_iTableIndex],
-                            t_rsForeignKeys.getString("PKCOLUMN_NAME"),
-                            t_rsForeignKeys.getString("FKTABLE_NAME"),
-                            t_rsForeignKeys.getString("FKCOLUMN_NAME"));
-                    }
-
-                    if  (t_rsForeignKeys != null)
-                    {
-                        t_rsForeignKeys.close();
-                    }
+                if  (t_rsForeignKeys != null)
+                {
+                    t_rsForeignKeys.close();
                 }
             }
         }
-        catch  (SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "Cannot retrieve the foreign keys.",
@@ -2651,7 +2654,7 @@ public class DatabaseMetaDataManager
      * @throws SQLException if the database operation fails.
      */
     protected int[] extractIntFields(
-            ResultSet resultSet, String    field)
+        final ResultSet resultSet, final String field)
         throws  SQLException
     {
         return extractIntFields(resultSet, field, -1);
@@ -2664,69 +2667,67 @@ public class DatabaseMetaDataManager
      * @param size the number of fields to extract.
      * @return the list of field values.
      * @throws SQLException if the database operation fails.
+     * @precondition resultSet != null
+     * @precondition field != null
      */
     protected int[] extractIntFields(
-            ResultSet resultSet,
-            String    field,
-            int       size)
+        final ResultSet resultSet,
+        final String field,
+        final int size)
         throws  SQLException
     {
         int[] result = EMPTY_INT_ARRAY;
 
-        if  (   (resultSet != null)
-             && (field     != null))
-        {
-            boolean t_bBounded = (size > 0);
+        boolean t_bBounded = (size > 0);
 
-            Collection t_cResult = null;
+        Collection t_cResult = null;
+
+        if  (t_bBounded)
+        {
+            result = new int[size];
+        }
+        else
+        {
+            t_cResult = new ArrayList();
+        }
+            
+        int t_iCounter = 0;
+
+        int t_iCurrentRecord = -1;
+
+        while  (resultSet.next())
+        {
+            t_iCurrentRecord = resultSet.getInt(field);
 
             if  (t_bBounded)
             {
-                result = new int[size];
+                result[t_iCounter] = t_iCurrentRecord;
+
+                if  (t_iCounter == size - 1)
+                {
+                    break;
+                }
+
+                t_iCounter++;
             }
             else
             {
-                t_cResult = new ArrayList();
+                t_cResult.add(new Integer(t_iCurrentRecord));
             }
-            
-            int t_iCounter = 0;
+        }
 
-            int t_iCurrentRecord = -1;
+        if  (!t_bBounded)
+        {
+            result = new int[t_cResult.size()];
 
-            while  (resultSet.next())
+            t_iCounter = 0;
+
+            Iterator t_itResults = t_cResult.iterator();
+
+            while  (   (t_itResults != null)
+                       && (t_itResults.hasNext()))
             {
-                t_iCurrentRecord = resultSet.getInt(field);
-
-                if  (t_bBounded)
-                {
-                    result[t_iCounter] = t_iCurrentRecord;
-
-                    if  (t_iCounter == size - 1)
-                    {
-                        break;
-                    }
-
-                    t_iCounter++;
-                }
-                else
-                {
-                    t_cResult.add(new Integer(t_iCurrentRecord));
-                }
-            }
-
-            if  (!t_bBounded)
-            {
-                result = new int[t_cResult.size()];
-
-                t_iCounter = 0;
-
-                Iterator t_itResults = t_cResult.iterator();
-
-                while  (   (t_itResults != null)
-                        && (t_itResults.hasNext()))
-                {
-                    result[t_iCounter++] = ((Integer) t_itResults.next()).intValue();
-                }
+                result[t_iCounter++] = ((Integer) t_itResults.next()).intValue();
             }
         }
 
@@ -2736,46 +2737,63 @@ public class DatabaseMetaDataManager
     /**
      * Logs a verbose message.
      * @param message the message to log.
+     * @precondition message != null
      */
-    protected void logVerbose(String message)
+    protected void logVerbose(final String message)
     {
-        Project t_Project = getProject();
+        logVerbose(message, getProject(), getTask());
+    }
 
-        if  (t_Project != null)
-        {
-            t_Project.log(
-                getTask(),
-                message,
-                Project.MSG_VERBOSE);
-        }
-        else 
-        {
-            LogFactory.getLog(DatabaseMetaDataManager.class).info(
-                message);
-        }
+    /**
+     * Logs a verbose message.
+     * @param message the message to log.
+     * @param project the project.
+     * @param task the task.
+     * @precondition message != null
+     * @precondition project != null
+     * @precondition task != nul
+     */
+    protected void logVerbose(
+        final String message, final Project project, final Task task)
+    {
+        project.log(
+            task,
+            message,
+            Project.MSG_VERBOSE);
     }
 
     /**
      * Logs a warning message.
      * @param message the message to log.
      * @param exception the exception
+     * @precondition message != null
+     * @precondition exception != null
      */
-    protected void logWarn(String message, Exception exception)
+    protected void logWarn(final String message, final Exception exception)
     {
-        Project t_Project = getProject();
+        logWarn(message, exception, getProject(), getTask());
+    }
 
-        if  (t_Project != null)
-        {
-            t_Project.log(
-                getTask(),
-                message + "(" + exception + ")",
-                Project.MSG_WARN);
-        }
-        else 
-        {
-            LogFactory.getLog(DatabaseMetaDataManager.class).warn(
-                message,
-                exception);
-        }
+    /**
+     * Logs a warning message.
+     * @param message the message to log.
+     * @param exception the exception
+     * @param project the project.
+     * @param task the task.
+     * @precondition message != null
+     * @precondition exception != null
+     * @precondition project != null
+     * @precondition task != null
+     */
+    protected void logWarn(
+        final String message,
+        final Exception exception,
+        final Project project,
+        final Task task)
+    {
+        project.log(
+            task,
+            message + "(" + exception + ")",
+            Project.MSG_WARN);
     }
 }

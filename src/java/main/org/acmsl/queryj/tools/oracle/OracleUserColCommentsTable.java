@@ -68,7 +68,7 @@ import java.lang.ref.WeakReference;
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
  * @version $Revision$
  */
-public abstract class OracleUserColCommentsTable
+public class OracleUserColCommentsTable
     extends  Table
 {
     /**
@@ -80,25 +80,25 @@ public abstract class OracleUserColCommentsTable
      * The user_col_comments table table_name field.
      */
     public StringField TABLE_NAME =
-        new StringField("TABLE_NAME", this) {};
+        new StringField("TABLE_NAME", this);
 
     /**
      * The user_col_comments table column_name field.
      */
     public StringField COLUMN_NAME =
-        new StringField("COLUMN_NAME", this) {};
+        new StringField("COLUMN_NAME", this);
 
     /**
      * The user_col_comments table comments field.
      */
     public StringField COMMENTS =
-        new StringField("COMMENTS", this) {};
+        new StringField("COMMENTS", this);
 
     /**
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */
-    protected OracleUserColCommentsTable(String alias)
+    protected OracleUserColCommentsTable(final String alias)
     {
         super("USER_COL_COMMENTS", alias);
     }
@@ -115,7 +115,8 @@ public abstract class OracleUserColCommentsTable
      * Specifies a new weak reference.
      * @param table the table instance to use.
      */
-    protected static void setReference(OracleUserColCommentsTable table)
+    protected static void setReference(
+        final OracleUserColCommentsTable table)
     {
         singleton = new WeakReference(table);
     }
@@ -134,13 +135,13 @@ public abstract class OracleUserColCommentsTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserColCommentsTable getInstance(String alias)
+    public static OracleUserColCommentsTable getInstance(final String alias)
     {
         OracleUserColCommentsTable result = null;
 
         if  (alias != null)
         {
-            result = new OracleUserColCommentsTable(alias) { };
+            result = new OracleUserColCommentsTable(alias);
         }
         else
         {
@@ -167,7 +168,7 @@ public abstract class OracleUserColCommentsTable
 
         if  (result == null) 
         {
-            result = new OracleUserColCommentsTable() { };
+            result = new OracleUserColCommentsTable();
 
             setReference(result);
         }

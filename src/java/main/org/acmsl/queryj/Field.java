@@ -73,6 +73,8 @@ public abstract class Field
      * Creates a field using given information.
      * @param name the field name.
      * @param table the table.
+     * @precondition name != null
+     * @precondition table != null
      */
     public Field(final String name, final Table table)
     {

@@ -338,7 +338,7 @@ public class BaseDAOFactoryTemplateGenerator
                 packageName,
                 projectPackageName,
                 project,
-                task) {};
+                task);
     }
 
     /**

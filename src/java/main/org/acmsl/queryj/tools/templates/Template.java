@@ -46,6 +46,11 @@
  */
 package org.acmsl.queryj.tools.templates;
 
+/*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.templates.InvalidTemplateException;
+
 /**
  * Represents any kind of templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
@@ -57,6 +62,8 @@ public interface Template
     /**
      * Generates the output source code.
      * @return such output.
+     * @throws QueryJException if the template cannot be generated.
      */
-    public String generate();
+    public String generate()
+      throws  InvalidTemplateException;
 }

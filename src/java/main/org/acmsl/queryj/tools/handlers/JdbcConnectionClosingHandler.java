@@ -62,6 +62,7 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 
 /*
  * Importing some JDK classes.
@@ -69,11 +70,6 @@ import org.apache.tools.ant.BuildException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
-
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Closes a JDBC connection.
@@ -94,7 +90,7 @@ public class JdbcConnectionClosingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      */
-    public boolean handle(Command command)
+    public boolean handle(final Command command)
     {
         boolean result = false;
 
@@ -106,9 +102,10 @@ public class JdbcConnectionClosingHandler
             }
             catch  (final BuildException buildException)
             {
-                LogFactory.getLog(getClass()).error(
-                    "unhandled.exception",
-                    buildException);
+                ((AntCommand) command).getProject().log(
+                    ((AntCommand) command).getTask(),
+                    buildException.getMessage(),
+                    Project.MSG_ERR);
             }
         }
         
@@ -120,37 +117,44 @@ public class JdbcConnectionClosingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        boolean result = false;
+        return handle(command.getAttributeMap());
+    }
 
-        if  (command != null) 
-        {
-            closeConnection(command.getAttributeMap());
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        closeConnection(parameters);
 
-            removeConnection(command.getAttributeMap());
-        }
-        
-        return result;
+        removeConnection(parameters);
+
+        return false;
     }
 
     /**
      * Closes the JDBC connection stored in the attribute map.
      * @param parameters the parameter map.
      * @throws BuildException if the connection cannot be closed.
+     * @precondition parameters != null
      */
     protected void closeConnection(final Map parameters)
         throws  BuildException
     {
-        if  (parameters != null) 
-        {
-            closeConnection(
-                (Connection)
-                    parameters.get(
-                        JdbcConnectionOpeningHandler.JDBC_CONNECTION));
-        }
+        closeConnection(
+            (Connection)
+                parameters.get(
+                    JdbcConnectionOpeningHandler.JDBC_CONNECTION));
     }
 
     /**
@@ -158,20 +162,18 @@ public class JdbcConnectionClosingHandler
      * @param connection the JDBC connection.
      * @throws org.apache.tools.ant.BuildException whenever the required
      * connection is not present or valid.
+     * @precondition connection != null
      */
     protected void closeConnection(final Connection connection)
         throws  BuildException
     {
-        if  (connection != null)
+        try
         {
-            try
-            {
-                connection.close();
-            }
-            catch  (final SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
+            connection.close();
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw new BuildException(sqlException);
         }
     }
 
@@ -179,13 +181,11 @@ public class JdbcConnectionClosingHandler
      * Removes the JDBC connection in given attribute map.
      * @param parameters the parameter map.
      * @throws BuildException if the connection cannot be removed for any reason.
+     * @precondition parameters != null
      */
     protected void removeConnection(final Map parameters)
         throws  BuildException
     {
-        if  (parameters != null)
-        {
-            parameters.remove(JdbcConnectionOpeningHandler.JDBC_CONNECTION);
-        }
+        parameters.remove(JdbcConnectionOpeningHandler.JDBC_CONNECTION);
     }
 }

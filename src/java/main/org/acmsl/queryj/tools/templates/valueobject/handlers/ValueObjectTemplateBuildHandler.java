@@ -230,7 +230,7 @@ public class ValueObjectTemplateBuildHandler
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      */
-    protected String retrievePackage(final Map parameters)
+    public static String retrievePackage(final Map parameters)
         throws  BuildException
     {
         String result = null;

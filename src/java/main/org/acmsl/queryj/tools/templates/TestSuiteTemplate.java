@@ -73,7 +73,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class TestSuiteTemplate
+public class TestSuiteTemplate
     extends  AbstractTestSuiteTemplate
     implements  TestSuiteTemplateDefaults
 {

@@ -90,10 +90,10 @@ import org.apache.commons.logging.LogFactory;
  * are working correctly.
  * See <a href="bugzilla.acm-sl.org/show_bug.cgi?id=502">502</a>.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class MockDAOTestTemplate
+public class MockDAOTestTemplate
     extends  AbstractMockDAOTestTemplate
     implements  MockDAOTestTemplateDefaults
 {

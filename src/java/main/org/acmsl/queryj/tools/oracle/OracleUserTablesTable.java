@@ -68,8 +68,7 @@ import java.lang.ref.WeakReference;
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
  * @version $Revision$
  */
-
-public abstract class OracleUserTablesTable
+public class OracleUserTablesTable
     extends  Table
 {
     /**
@@ -81,13 +80,13 @@ public abstract class OracleUserTablesTable
      * The user_tables table table_name field.
      */
     public StringField TABLE_NAME =
-        new StringField("TABLE_NAME", this) {};
+        new StringField("TABLE_NAME", this);
 
     /**
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */
-    protected OracleUserTablesTable(String alias)
+    protected OracleUserTablesTable(final String alias)
     {
         super("USER_TABLES", alias);
     }
@@ -104,7 +103,7 @@ public abstract class OracleUserTablesTable
      * Specifies a new weak reference.
      * @param table the table instance to use.
      */
-    protected static void setReference(OracleUserTablesTable table)
+    protected static void setReference(final OracleUserTablesTable table)
     {
         singleton = new WeakReference(table);
     }
@@ -123,13 +122,13 @@ public abstract class OracleUserTablesTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserTablesTable getInstance(String alias)
+    public static OracleUserTablesTable getInstance(final String alias)
     {
         OracleUserTablesTable result = null;
 
         if  (alias != null)
         {
-            result = new OracleUserTablesTable(alias) { };
+            result = new OracleUserTablesTable(alias);
         }
         else
         {
@@ -156,7 +155,7 @@ public abstract class OracleUserTablesTable
 
         if  (result == null) 
         {
-            result = new OracleUserTablesTable() { };
+            result = new OracleUserTablesTable();
 
             setReference(result);
         }

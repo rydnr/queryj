@@ -83,19 +83,20 @@ public abstract class Table
      * Builds a table using given information.
      * @param name the name.
      * @param alias the alias.
+     * @precondition name != null
      */
-    protected Table(String name, String alias)
+    protected Table(final String name, final String alias)
     {
         inmutableSetName(name);
-
         inmutableSetTableAliasName(alias);
     }
 
     /**
      * Builds a table using given information.
      * @param name the name.
+     * @precondition name != null
      */
-    protected Table(String name)
+    protected Table(final String name)
     {
         this(name, null);
     }
@@ -111,7 +112,7 @@ public abstract class Table
      * Specifies the table name.
      * @param name the name.
      */
-    private void inmutableSetName(String name)
+    private void inmutableSetName(final String name)
     {
         m__strName = name;
     }
@@ -120,7 +121,7 @@ public abstract class Table
      * Specifies the table name.
      * @param name the name.
      */
-    protected void setName(String name)
+    protected void setName(final String name)
     {
         inmutableSetName(name);
     }
@@ -138,7 +139,7 @@ public abstract class Table
      * Specifies the table alias.
      * @param alias the alias.
      */
-    private void inmutableSetTableAliasName(String alias)
+    private void inmutableSetTableAliasName(final String alias)
     {
         m__strTableAliasName = alias;
     }
@@ -147,7 +148,7 @@ public abstract class Table
      * Specifies the table alias name.
      * @param alias the alias.
      */
-    protected void setTableAliasName(String alias)
+    protected void setTableAliasName(final String alias)
     {
         inmutableSetTableAliasName(alias);
     }
@@ -165,7 +166,7 @@ public abstract class Table
      * Specifies the table alias reference.
      * @param reference the reference.
      */
-    protected void setTableAliasReference(WeakReference reference)
+    protected void setTableAliasReference(final WeakReference reference)
     {
         m__TableAliasReference = reference;
     }
@@ -201,7 +202,7 @@ public abstract class Table
         {
             if  (t_strTableAliasName != null)
             {
-                result = new TableAlias(t_strTableAliasName, this) {};
+                result = new TableAlias(t_strTableAliasName, this);
                 setTableAliasReference(new WeakReference(result));
             }
         }

@@ -62,13 +62,15 @@ import java.util.Date;
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class DateField
+public class DateField
     extends  Field
 {
     /**
      * Creates a Date field using given information.
      * @param name the field name.
      * @param table the table.
+     * @precondition name != null
+     * @precondition table != null
      */
     public DateField(final String name, final Table table)
     {

@@ -105,53 +105,43 @@ public class OracleMetaDataRetrievalHandler
      * @return the metadata manager instance.
      * @throws org.apache.tools.ant.BuildException whenever the required
      * parameters are not present or valid.
+     * @precondition metaData != null
      */
     protected DatabaseMetaDataManager buildMetaDataManager(
-            String[]         tableNames,
-            String[]         procedureNames,
-            boolean          disableTableExtraction,
-            boolean          lazyTableExtraction,
-            boolean          disableProcedureExtraction,
-            boolean          lazyProcedureExtraction,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema,
-            Project          project,
-            Task             task)
+        final String[] tableNames,
+        final String[] procedureNames,
+        final boolean disableTableExtraction,
+        final boolean lazyTableExtraction,
+        final boolean disableProcedureExtraction,
+        final boolean lazyProcedureExtraction,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
         throws  BuildException
     {
         DatabaseMetaDataManager result = null;
 
-        if  (metaData != null)
+        try 
         {
-            try 
-            {
-                result =
-                    new OracleMetaDataManager(
-                        tableNames,
-                        procedureNames,
-                        disableTableExtraction,
-                        lazyTableExtraction,
-                        disableProcedureExtraction,
-                        lazyProcedureExtraction,
-                        metaData,
-                        catalog,
-                        schema);
-            }
-            catch  (Exception exception)
-            {
-                if  (project != null)
-                {
-                    project.log(
-                        task,
-                        "Error building Oracle metadata manager ("
-                        + exception
-                        + ")",
-                        Project.MSG_ERR);
-                }
-                
-                throw new BuildException(exception);
-            }
+            result =
+                new OracleMetaDataManager(
+                    tableNames,
+                    procedureNames,
+                    disableTableExtraction,
+                    lazyTableExtraction,
+                    disableProcedureExtraction,
+                    lazyProcedureExtraction,
+                    metaData,
+                    catalog,
+                    schema,
+                    project,
+                    task);
+        }
+        catch  (final Exception exception)
+        {
+            throw new BuildException(exception);
         }
 
         return result;

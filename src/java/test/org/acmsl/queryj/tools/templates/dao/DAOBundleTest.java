@@ -117,7 +117,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.templates.dao.DAOBundle();
+    return new org.acmsl.queryj.tools.templates.dao.DAOBundle(false, false);
     // JUnitDoclet end method testcase.createInstance
   }
   

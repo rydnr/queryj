@@ -390,4 +390,24 @@ public abstract class AbstractTestSuiteTemplate
             t_cTestCases.add(testCase);
         }
     }
+
+    /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return buildHeader(getTestPackageName());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param testPackageName the test package name.
+     * @return such header.
+     * @precondition testPackageName != null
+     */
+    protected String buildHeader(final String testPackageName)
+    {
+        return "Generating TestSuiteTemplate for package " + testPackageName;
+    }
 }

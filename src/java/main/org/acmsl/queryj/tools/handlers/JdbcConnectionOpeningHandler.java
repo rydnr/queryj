@@ -62,6 +62,7 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 
 /*
  * Importing some JDK classes.
@@ -111,9 +112,10 @@ public class JdbcConnectionOpeningHandler
             }
             catch  (final BuildException buildException)
             {
-                LogFactory.getLog(getClass()).error(
-                    "unhandled.exception",
-                    buildException);
+                ((AntCommand) command).getProject().log(
+                    ((AntCommand) command).getTask(),
+                    buildException.getMessage(),
+                    Project.MSG_ERR);
             }
         }
         

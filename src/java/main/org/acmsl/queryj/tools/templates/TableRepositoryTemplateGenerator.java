@@ -95,7 +95,8 @@ public class TableRepositoryTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(TableRepositoryTemplateGenerator generator)
+    protected static void setReference(
+        final TableRepositoryTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -203,27 +204,12 @@ public class TableRepositoryTemplateGenerator
     {
         outputDir.mkdirs();
 
-        String t_strTableRepositoryClass =
-            tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
-                tableRepositoryTemplate.getRepository());
-
-        if  (project != null)
-        {
-            project.log(
-                task,
-                  "Writing "
-                + outputDir.getAbsolutePath()
-                + File.separator
-                + t_strTableRepositoryClass
-                + ".java",
-                Project.MSG_VERBOSE);
-        }
-
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + t_strTableRepositoryClass
+            + tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
+                  tableRepositoryTemplate.getRepository())
             + ".java",
-            tableRepositoryTemplate.toString());
+            tableRepositoryTemplate.generate());
     }
 }

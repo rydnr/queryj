@@ -63,6 +63,7 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 
@@ -296,9 +297,10 @@ public class ParameterValidationHandler
             }
             catch  (final BuildException buildException)
             {
-                LogFactory.getLog(getClass()).error(
-                    "unhandled.exception",
-                    buildException);
+                ((AntCommand) command).getProject().log(
+                    ((AntCommand) command).getTask(),
+                    buildException.getMessage(),
+                    Project.MSG_ERR);
             }
         }
         

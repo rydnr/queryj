@@ -67,10 +67,10 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Provides some useful methods when working with database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class MetaDataUtils
+public class MetaDataUtils
 {
     /**
      * The native to Java type mapping.
@@ -91,7 +91,7 @@ public abstract class MetaDataUtils
      * Specifies a new weak reference.
      * @param utils the utils instance to use.
      */
-    protected static void setReference(MetaDataUtils utils)
+    protected static void setReference(final MetaDataUtils utils)
     {
         singleton = new WeakReference(utils);
     }
@@ -122,7 +122,7 @@ public abstract class MetaDataUtils
 
         if  (result == null) 
         {
-            result = new MetaDataUtils() {};
+            result = new MetaDataUtils();
 
             setReference(result);
         }

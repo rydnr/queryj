@@ -231,12 +231,6 @@ public class JdbcDAOTemplateGenerator
                 result = (JdbcDAOTemplateFactory) t_TemplateFactory;
             }
         }
-        else
-        {
-            throw
-                new QueryJException(
-                    "jdbc.dao.template.factory.not.found");
-        }
 
         return result;
     }

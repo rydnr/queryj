@@ -80,7 +80,7 @@ import java.util.Map;
  * Is able to generate procedure repositories according to
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class AbstractKeywordRepositoryTemplate
@@ -723,5 +723,15 @@ public abstract class AbstractKeywordRepositoryTemplate
         }
 
         return result;
+    }
+
+
+    /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return "Generating KeywordRepository.";
     }
 }

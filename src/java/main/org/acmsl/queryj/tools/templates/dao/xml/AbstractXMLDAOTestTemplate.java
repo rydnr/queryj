@@ -1165,4 +1165,24 @@ public abstract class AbstractXMLDAOTestTemplate
     {
         return true;
     }
+
+    /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return buildHeader(getTableTemplate());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @precondition tableTemplate the table template.
+     * @return such header.
+     * @precondition tableTemplate != null
+     */
+    protected String buildHeader(final TableTemplate tableTemplate)
+    {
+        return "Generating XMLDAOTest for " + tableTemplate.getTableName() + ".";
+    }
 }

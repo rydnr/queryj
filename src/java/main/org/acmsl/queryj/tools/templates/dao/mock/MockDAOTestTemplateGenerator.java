@@ -81,7 +81,7 @@ import java.lang.ref.WeakReference;
  * Is able to generate Mock DAO test implementations according to database
  * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class MockDAOTestTemplateGenerator
@@ -133,7 +133,7 @@ public class MockDAOTestTemplateGenerator
 
         if  (result == null) 
         {
-            result = new MockDAOTestTemplateGenerator() {};
+            result = new MockDAOTestTemplateGenerator();
 
             setReference(result);
         }
@@ -321,7 +321,7 @@ public class MockDAOTestTemplateGenerator
                     daoPackageName,
                     valueObjectPackageName,
                     project,
-                    task) {};
+                    task);
         }
 
         return result;
@@ -383,24 +383,6 @@ public class MockDAOTestTemplateGenerator
     {
         outputDir.mkdirs();
 
-        if  (project != null)
-        {
-            project.log(
-                task,
-                  "Writing "
-                + outputDir.getAbsolutePath()
-                + File.separator
-                + "Mock"
-                + stringUtils.capitalize(
-                      englishGrammarUtils.getSingular(
-                          mockDAOTestTemplate
-                              .getTableTemplate()
-                                  .getTableName().toLowerCase()),
-                      '_')
-                + "DAOTest.java",
-                Project.MSG_VERBOSE);
-        }
-            
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator

@@ -60,6 +60,12 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -70,7 +76,7 @@ import java.lang.ref.WeakReference;
  * Is able to generate data access manager instances according
  * to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class DataAccessManagerTemplateGenerator
@@ -91,7 +97,7 @@ public class DataAccessManagerTemplateGenerator
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        DataAccessManagerTemplateGenerator generator)
+        final DataAccessManagerTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -122,7 +128,7 @@ public class DataAccessManagerTemplateGenerator
 
         if  (result == null) 
         {
-            result = new DataAccessManagerTemplateGenerator() {};
+            result = new DataAccessManagerTemplateGenerator();
 
             setReference(result);
         }
@@ -134,22 +140,21 @@ public class DataAccessManagerTemplateGenerator
      * Creates a data access manager template instance.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return such template.
+     * @precondition packageName != null
+     * @precondition repository != null
      */
     public DataAccessManagerTemplate createDataAccessManagerTemplate(
-        String packageName,
-        String repository)
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task)
     {
-        DataAccessManagerTemplate result = null;
-
-        if  (   (packageName != null)
-             && (repository  != null))
-        {
-
-            result = new DataAccessManagerTemplate(packageName, repository) {};
-        }
-
-        return result;
+        return
+            new DataAccessManagerTemplate(
+                packageName, repository, project, task);
     }
 
     /**
@@ -157,29 +162,46 @@ public class DataAccessManagerTemplateGenerator
      * @param dataAccessManagerTemplate the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
+     * @precondition dataAccessManagerTemplate != null
+     * @precondition outputDir != null
      */
     public void write(
-            DataAccessManagerTemplate dataAccessManagerTemplate,
-            File                      outputDir)
-        throws  IOException
+        final DataAccessManagerTemplate dataAccessManagerTemplate,
+        final File outputDir)
+      throws  IOException
     {
-        if  (   (dataAccessManagerTemplate != null)
-             && (outputDir                 != null))
-        {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            dataAccessManagerTemplate,
+            outputDir,
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a data acccess manager to disk.
+     * @param dataAccessManagerTemplate the template to write.
+     * @param outputDir the output folder.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition dataAccessManagerTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final DataAccessManagerTemplate dataAccessManagerTemplate,
+        final File outputDir,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + "DataAccessManager.java",
-                    dataAccessManagerTemplate.toString());
-            }
-        }
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + "DataAccessManager.java",
+            dataAccessManagerTemplate.generate());
     }
 }

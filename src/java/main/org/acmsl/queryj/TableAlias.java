@@ -54,10 +54,10 @@ import org.acmsl.queryj.Table;
 /**
  * Represents SQL fields.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class TableAlias
+public class TableAlias
 {
     /**
      * The alias name.
@@ -73,18 +73,20 @@ public abstract class TableAlias
      * Creates a table alias using given information.
      * @param name the field name.
      * @param table the table.
+     * @precondition name != null
+     * @precondition table != null
      */
-    public TableAlias(String name, Table table)
+    public TableAlias(final String name, final Table table)
     {
-        unmodifiableSetName(name);
-        unmodifiableSetTable(table);
+        immutableSetName(name);
+        immutableSetTable(table);
     }
 
     /**
      * Specifies the alias name.
      * @param name the name.
      */
-    private void unmodifiableSetName(String name)
+    private void immutableSetName(final String name)
     {
         m__strName = name;
     }
@@ -93,9 +95,9 @@ public abstract class TableAlias
      * Specifies the alias name.
      * @param name the name.
      */
-    protected void setName(String name)
+    protected void setName(final String name)
     {
-        unmodifiableSetName(name);
+        immutableSetName(name);
     }
 
     /**
@@ -111,7 +113,7 @@ public abstract class TableAlias
      * Specifies the table.
      * @param table the table.
      */
-    private void unmodifiableSetTable(Table table)
+    private void immutableSetTable(final Table table)
     {
         m__Table = table;
     }
@@ -120,9 +122,9 @@ public abstract class TableAlias
      * Specifies the table.
      * @param table the table.
      */
-    protected void setTable(Table table)
+    protected void setTable(final Table table)
     {
-        unmodifiableSetTable(table);
+        immutableSetTable(table);
     }
 
     /**

@@ -88,7 +88,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class XMLDAOTestTemplate
+public class XMLDAOTestTemplate
     extends  AbstractXMLDAOTestTemplate
     implements XMLDAOTestTemplateDefaults
 {

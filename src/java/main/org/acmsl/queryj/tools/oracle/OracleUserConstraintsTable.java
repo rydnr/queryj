@@ -68,8 +68,7 @@ import java.lang.ref.WeakReference;
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
  * @version $Revision$
  */
-
-public abstract class OracleUserConstraintsTable
+public class OracleUserConstraintsTable
     extends  Table
 {
     /**
@@ -81,43 +80,43 @@ public abstract class OracleUserConstraintsTable
      * The user_constraints table constraint_name field.
      */
     public StringField CONSTRAINT_NAME =
-        new StringField("CONSTRAINT_NAME", this) {};
+        new StringField("CONSTRAINT_NAME", this);
 
     /**
      * The user_constraints table r_constraint_name field.
      */
     public StringField R_CONSTRAINT_NAME =
-        new StringField("R_CONSTRAINT_NAME", this) {};
+        new StringField("R_CONSTRAINT_NAME", this);
 
     /**
      * The user_constraints table constraint_type field.
      */
     public StringField CONSTRAINT_TYPE =
-        new StringField("CONSTRAINT_TYPE", this) {};
+        new StringField("CONSTRAINT_TYPE", this);
 
     /**
      * The user_constraints table table_name field.
      */
     public StringField TABLE_NAME =
-        new StringField("TABLE_NAME", this) {};
+        new StringField("TABLE_NAME", this);
 
     /**
      * The user_constraints table column_name field.
      */
     public StringField COLUMN_NAME =
-        new StringField("COLUMN_NAME", this) {};
+        new StringField("COLUMN_NAME", this);
 
     /**
      * The user_constraints table position field.
      */
     public IntField POSITION =
-        new IntField("POSITION", this) {};
+        new IntField("POSITION", this);
 
     /**
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */
-    protected OracleUserConstraintsTable(String alias)
+    protected OracleUserConstraintsTable(final String alias)
     {
         super("USER_CONSTRAINTS", alias);
     }
@@ -134,7 +133,7 @@ public abstract class OracleUserConstraintsTable
      * Specifies a new weak reference.
      * @param table the table instance to use.
      */
-    protected static void setReference(OracleUserConstraintsTable table)
+    protected static void setReference(final OracleUserConstraintsTable table)
     {
         singleton = new WeakReference(table);
     }
@@ -153,13 +152,13 @@ public abstract class OracleUserConstraintsTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserConstraintsTable getInstance(String alias)
+    public static OracleUserConstraintsTable getInstance(final String alias)
     {
         OracleUserConstraintsTable result = null;
 
         if  (alias != null)
         {
-            result = new OracleUserConstraintsTable(alias) { };
+            result = new OracleUserConstraintsTable(alias);
         }
         else
         {

@@ -94,6 +94,11 @@ public abstract class AbstractBaseDAOTemplate
     private String m__strPackageName;
 
     /**
+     * The value object package name.
+     */
+    private String m__strValueObjectPackageName;
+
+    /**
      * The engine name.
      */
     private String m__strEngineName;
@@ -107,6 +112,11 @@ public abstract class AbstractBaseDAOTemplate
      * The quote.
      */
     private String m__strQuote;
+
+    /**
+     * The project import statements.
+     */
+    private String m__strProjectImports;
 
     /**
      * The ACM-SL import statements.
@@ -205,6 +215,8 @@ public abstract class AbstractBaseDAOTemplate
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
+     * @param valueObjectPackageName the value object package name.
+     * @param projectImports the project imports.
      * @param acmslImports the ACM-SL imports.
      * @param jdkImports the JDK imports.
      * @param javadoc the class Javadoc.
@@ -233,6 +245,8 @@ public abstract class AbstractBaseDAOTemplate
         final String header,
         final String packageDeclaration,
         final String packageName,
+        final String valueObjectPackageName,
+        final String projectImports,
         final String acmslImports,
         final String jdkImports,
         final String javadoc,
@@ -260,6 +274,8 @@ public abstract class AbstractBaseDAOTemplate
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
+        immutableSetValueObjectPackageName(valueObjectPackageName);
+        immutableSetProjectImports(projectImports);
         immutableSetAcmslImports(acmslImports);
         immutableSetJdkImports(jdkImports);
         immutableSetJavadoc(javadoc);
@@ -416,6 +432,60 @@ public abstract class AbstractBaseDAOTemplate
     public String getPackageName() 
     {
         return m__strPackageName;
+    }
+
+    /**
+     * Specifies the value object package name.
+     * @param packageName the new package name.
+     */
+    private void immutableSetValueObjectPackageName(final String packageName)
+    {
+        m__strValueObjectPackageName = packageName;
+    }
+
+    /**
+     * Specifies the value object package name.
+     * @param packageName the new package name.
+     */
+    protected void setValueObjectPackageName(final String packageName)
+    {
+        immutableSetValueObjectPackageName(packageName);
+    }
+
+    /**
+     * Retrieves the value object package name.
+     * @return such information.
+     */
+    public String getValueObjectPackageName() 
+    {
+        return m__strValueObjectPackageName;
+    }
+
+    /**
+     * Specifies the project imports.
+     * @param jdkImports the new project imports.
+     */
+    private void immutableSetProjectImports(final String jdkImports)
+    {
+        m__strProjectImports = jdkImports;
+    }
+
+    /**
+     * Specifies the project imports.
+     * @param jdkImports the new project imports.
+     */
+    protected void setProjectImports(final String jdkImports)
+    {
+        immutableSetProjectImports(jdkImports);
+    }
+
+    /**
+     * Retrieves the project imports.
+     * @return such information.
+     */
+    public String getProjectImports() 
+    {
+        return m__strProjectImports;
     }
 
     /**
@@ -922,5 +992,27 @@ public abstract class AbstractBaseDAOTemplate
     public String getClassEnd() 
     {
         return m__strClassEnd;
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return buildHeader(getTableTemplate());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param tableTemplate the table template.
+     * @return such header.
+     * @precondition tableTemplate != null
+     */
+    protected String buildHeader(final TableTemplate tableTemplate)
+    {
+        return
+              "Generating BaseDAO for "
+            + tableTemplate.getTableName() + ".";
     }
 }

@@ -57,13 +57,15 @@ import org.acmsl.queryj.Field;
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class DoubleField
+public class DoubleField
     extends  Field
 {
     /**
      * Creates a double field using given information.
      * @param name the field name.
      * @param table the table.
+     * @precondition name != null
+     * @precondition table != null
      */
     public DoubleField(final String name, final Table table)
     {

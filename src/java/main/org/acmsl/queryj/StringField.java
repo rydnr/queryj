@@ -54,18 +54,20 @@ import org.acmsl.queryj.Field;
 /**
  * Represents text fields.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class StringField
+public class StringField
     extends  Field
 {
     /**
      * Creates a String field using given information.
      * @param name the field name.
      * @param table the table.
+     * @precondition name != null
+     * @precondition table != null
      */
-    public StringField(String name, Table table)
+    public StringField(final String name, final Table table)
     {
         super(name, table);
     }

@@ -69,6 +69,7 @@ import org.acmsl.commons.utils.StringValidator;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 
 /*
  * Importing some JDK classes.
@@ -81,16 +82,11 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Retrieves the externally-managed fields declaration and
  * configures DatabaseMetaDataManager accordingly.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class ExternallyManagedFieldsRetrievalHandler
@@ -118,9 +114,10 @@ public class ExternallyManagedFieldsRetrievalHandler
             }
             catch  (BuildException buildException)
             {
-                LogFactory.getLog(getClass()).error(
-                    "unhandled.exception",
-                    buildException);
+                ((AntCommand) command).getProject().log(
+                    ((AntCommand) command).getTask(),
+                    buildException.getMessage(),
+                    Project.MSG_ERR);
             }
         }
         

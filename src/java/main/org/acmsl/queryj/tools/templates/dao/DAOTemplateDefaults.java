@@ -129,6 +129,15 @@ public interface DAOTemplateDefaults
 
     /**
      * The project imports.
+     * @param 0 JDBC operations package.
+     * @param 1 Capitalized value object name.
+     * @param 2 custom result set extractor imports
+     * @param 3 value object package
+     * @param 4 base DAO package
+     * @param 5 rdb package
+     * @param 6 table repository package
+     * @param 7 table repository name.
+     * @param 8 DataAccessManager package.
      */
     public static final String DEFAULT_PROJECT_IMPORTS =
           "/*\n"
@@ -142,13 +151,13 @@ public interface DAOTemplateDefaults
          // Specific JDBC operations package - table name
         + "{2}"
          // Custom resultset extractors' imports
-        + "import {3}.{1};\n"
+        + "import {3}.{1}ValueObject;\n"
          // ValueObject package - table name
         + "import {4}.{1}DAO;\n"
          // DAO interface package - table name
         + "import {5}.QueryPreparedStatementCreator;\n"
          // RDB base package - table name
-        + "import {6}.{7};\n"
+        + "import {6}.{7}TableRepository;\n"
          // Table repository package - Table repository name
         + "import {8}.DataAccessManager;\n"
          // data access manager package
@@ -376,7 +385,7 @@ public interface DAOTemplateDefaults
          // PK_JAVADOC
         + "     * @throws DataAccessException if the operation fails.\n"
         + "     */\n"
-        + "    public {6} findByPrimaryKey("
+        + "    public {6}ValueObject findByPrimaryKey("
          // Capitalized Value Object name
         + "{7})\n"
         + "      throws DataAccessException\n"

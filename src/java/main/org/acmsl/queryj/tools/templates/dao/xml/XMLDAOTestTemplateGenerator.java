@@ -256,12 +256,6 @@ public class XMLDAOTestTemplateGenerator
                 result = (XMLDAOTestTemplateFactory) t_TemplateFactory;
             }
         }
-        else
-        {
-            throw
-                new QueryJException(
-                    "xml.dao.test.template.factory.not.found");
-        }
 
         return result;
     }
@@ -280,6 +274,11 @@ public class XMLDAOTestTemplateGenerator
      * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
+     * @precondition tableTemplate != null
+     * @precondition metaDataManager != null
+     * @precondition packageName != null
+     * @precondition daoPackageName != null
+     * @precondition valueObjectPackageName != null
      */
     public XMLDAOTestTemplate createXMLDAOTestTemplate(
         final TableTemplate tableTemplate,
@@ -293,39 +292,32 @@ public class XMLDAOTestTemplateGenerator
     {
         XMLDAOTestTemplate result = null;
 
-        if  (   (tableTemplate          != null)
-             && (metaDataManager        != null)
-             && (packageName            != null)
-             && (daoPackageName         != null)
-             && (valueObjectPackageName != null))
-        {
-            XMLDAOTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(tableTemplate.getTableName());
+        XMLDAOTestTemplateFactory t_TemplateFactory =
+            getTemplateFactory(tableTemplate.getTableName());
 
-            if  (t_TemplateFactory != null)
-            {
-                result =
-                    t_TemplateFactory.createXMLDAOTestTemplate(
-                        tableTemplate,
-                        metaDataManager,
-                        packageName,
-                        daoPackageName,
-                        valueObjectPackageName,
-                        project,
-                        task);
-            }
-            else 
-            {
-                result =
-                    new XMLDAOTestTemplate(
-                        tableTemplate,
-                        metaDataManager,
-                        packageName,
-                        daoPackageName,
-                        valueObjectPackageName,
-                        project,
-                        task) {};
-            }
+        if  (t_TemplateFactory != null)
+        {
+            result =
+                t_TemplateFactory.createXMLDAOTestTemplate(
+                    tableTemplate,
+                    metaDataManager,
+                    packageName,
+                    daoPackageName,
+                    valueObjectPackageName,
+                    project,
+                    task);
+        }
+        else 
+        {
+            result =
+                new XMLDAOTestTemplate(
+                    tableTemplate,
+                    metaDataManager,
+                    packageName,
+                    daoPackageName,
+                    valueObjectPackageName,
+                    project,
+                    task);
         }
 
         return result;
@@ -343,51 +335,53 @@ public class XMLDAOTestTemplateGenerator
      */
     public void write(
         final XMLDAOTestTemplate xmlDAOTestTemplate,
-        final File                outputDir,
-        final Project             project,
-        final Task                task)
+        final File outputDir)
       throws  IOException
     {
-        StringUtils t_StringUtils = StringUtils.getInstance();
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
-        FileUtils t_FileUtils     = FileUtils.getInstance();
+        write(
+            xmlDAOTestTemplate,
+            outputDir,
+            StringUtils.getInstance(),
+            EnglishGrammarUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-        if  (   (t_StringUtils != null)
-             && (t_FileUtils   != null))
-        {
-            outputDir.mkdirs();
+    /**
+     * Writes a XML DAO template to disk.
+     * @param xmlDAOTestTemplate the XML DAO test template to write.
+     * @param outputDir the output folder.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition xmlDAOTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final XMLDAOTestTemplate xmlDAOTestTemplate,
+        final File outputDir,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-            if  (project != null)
-            {
-                project.log(
-                    task,
-                    "Writing "
-                    + outputDir.getAbsolutePath()
-                    + File.separator
-                    + "XML"
-                    + t_StringUtils.capitalize(
-                          t_EnglishGrammarUtils.getSingular(
-                              xmlDAOTestTemplate
-                                  .getTableTemplate()
-                                      .getTableName().toLowerCase()),
-                        '_')
-                    + "DAOTest.java",
-                    Project.MSG_VERBOSE);
-            }
-            
-            t_FileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "XML"
-                + t_StringUtils.capitalize(
-                      t_EnglishGrammarUtils.getSingular(
-                          xmlDAOTestTemplate
-                              .getTableTemplate()
-                                  .getTableName().toLowerCase()),
+        fileUtils.writeFile(
+            outputDir.getAbsolutePath()
+            + File.separator
+            + "XML"
+            + stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    xmlDAOTestTemplate
+                        .getTableTemplate()
+                            .getTableName().toLowerCase()),
                       '_')
-                + "DAOTest.java",
-                xmlDAOTestTemplate.toString());
-        }
+            + "DAOTest.java",
+            xmlDAOTestTemplate.generate());
     }
 }

@@ -226,11 +226,11 @@ public class MockDAOTemplateGenerator
      * @precondition packageName != null
      */
     public MockDAOTemplate createMockDAOTemplate(
-        final TableTemplate           tableTemplate,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final String                  packageName,
-        final String                  basePackageName,
-        final String                  repositoryName,
+        final String packageName,
+        final String basePackageName,
+        final String repositoryName,
         final Project project,
         final Task task)
       throws  QueryJException
@@ -263,7 +263,7 @@ public class MockDAOTemplateGenerator
                     basePackageName,
                     repositoryName,
                     project,
-                    task) {};
+                    task);
         }
 
         return result;
@@ -273,59 +273,59 @@ public class MockDAOTemplateGenerator
      * Writes a Mock DAO template to disk.
      * @param mockDAOTemplate the Mock DAO template to write.
      * @param outputDir the output folder.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws IOException if the file cannot be created.
      * @precondition mockDAOTemplate != null
      * @precondition outputDir != null
      */
     public void write(
         final MockDAOTemplate mockDAOTemplate,
-        final File            outputDir,
-        final Project         project,
-        final Task            task)
+        final File outputDir)
       throws  IOException
     {
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
-        StringUtils t_StringUtils = StringUtils.getInstance();
-        FileUtils t_FileUtils     = FileUtils.getInstance();
+        write(
+            mockDAOTemplate,
+            outputDir,
+            StringUtils.getInstance(),
+            EnglishGrammarUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-        if  (   (t_StringUtils != null)
-             && (t_FileUtils   != null))
-        {
-            outputDir.mkdirs();
+    /**
+     * Writes a Mock DAO template to disk.
+     * @param mockDAOTemplate the Mock DAO template to write.
+     * @param outputDir the output folder.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition mockDAOTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final MockDAOTemplate mockDAOTemplate,
+        final File outputDir,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-            if  (project != null)
-            {
-                project.log(
-                    task,
-                    "Writing "
-                    + outputDir.getAbsolutePath()
-                    + File.separator
-                    + "Mock"
-                    + t_StringUtils.capitalize(
-                          t_EnglishGrammarUtils.getSingular(
-                              mockDAOTemplate
-                                  .getTableTemplate()
-                                      .getTableName().toLowerCase()),
-                          '_')
-                    + "DAO.java",
-                    Project.MSG_VERBOSE);
-            }
-            
-            t_FileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "Mock"
-                + t_StringUtils.capitalize(
-                      t_EnglishGrammarUtils.getSingular(
-                          mockDAOTemplate
-                              .getTableTemplate()
-                                  .getTableName().toLowerCase()),
-                    '_')
-                + "DAO.java",
-                mockDAOTemplate.generateOutput());
-        }
+        fileUtils.writeFile(
+            outputDir.getAbsolutePath()
+            + File.separator
+            + "Mock"
+            + stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    mockDAOTemplate
+                        .getTableTemplate()
+                            .getTableName().toLowerCase()),
+                '_')
+            + "DAO.java",
+            mockDAOTemplate.generateOutput());
     }
 }

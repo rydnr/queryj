@@ -133,7 +133,7 @@ public class XMLDAOTemplateGenerator
 
         if  (result == null) 
         {
-            result = new XMLDAOTemplateGenerator() {};
+            result = new XMLDAOTemplateGenerator();
 
             setReference(result);
         }
@@ -147,13 +147,33 @@ public class XMLDAOTemplateGenerator
      * @param templateFactoryClass the template factory.
      * @precondition daoName != null
      * @precondition templateFactoryClass != null
-     * @precondition TemplateMappingManager.getInstance() != null
      */
     public void addTemplateFactoryClass(
         final String daoName,
         final String templateFactoryClass)
     {
-        TemplateMappingManager.getInstance().addDefaultTemplateFactoryClass(
+        addTemplateFactoryClass(
+            daoName,
+            templateFactoryClass,
+            TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Adds a new template factory class.
+     * @param daoName the DAO name.
+     * @param templateFactoryClass the template factory.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @precondition daoName != null
+     * @precondition templateFactoryClass != null
+     * @precondition templateMappingManager != null
+     */
+    protected void addTemplateFactoryClass(
+        final String daoName,
+        final String templateFactoryClass,
+        final TemplateMappingManager templateMappingManager)
+    {
+        templateMappingManager.addDefaultTemplateFactoryClass(
             TemplateMappingManager.XML_DAO_TEMPLATE_PREFIX + daoName,
             templateFactoryClass);
     }
@@ -161,8 +181,6 @@ public class XMLDAOTemplateGenerator
     /**
      * Retrieves the template factory class.
      * @param daoName the DAO name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @return the template factory class name.
      * @precondition daoName != null
      * @precondition TemplateMappingManager.getInstance() != null
@@ -170,9 +188,26 @@ public class XMLDAOTemplateGenerator
     protected String getTemplateFactoryClass(final String daoName)
     {
         return
-            TemplateMappingManager.getInstance()
-                .getDefaultTemplateFactoryClass(
-                    TemplateMappingManager.XML_DAO_TEMPLATE_PREFIX + daoName);
+            getTemplateFactoryClass(
+                daoName, TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Retrieves the template factory class.
+     * @param daoName the DAO name.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @precondition daoName != null
+     * @precondition templateMappingManager != null
+     */
+    protected String getTemplateFactoryClass(
+        final String daoName,
+        final TemplateMappingManager templateMappingManager)
+    {
+        return
+            templateMappingManager.getDefaultTemplateFactoryClass(
+                TemplateMappingManager.XML_DAO_TEMPLATE_PREFIX + daoName);
     }
 
     /**
@@ -186,12 +221,30 @@ public class XMLDAOTemplateGenerator
     protected XMLDAOTemplateFactory getTemplateFactory(final String daoName)
       throws  QueryJException
     {
+        return
+            getTemplateFactory(daoName, TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Retrieves the template factory instance.
+     * @param daoName the DAO name.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition daoName != null
+     * @precondition templateMappingManager != null
+     */
+    protected XMLDAOTemplateFactory getTemplateFactory(
+        final String daoName,
+        final TemplateMappingManager templateMappingManager)
+      throws  QueryJException
+    {
         XMLDAOTemplateFactory result = null;
 
         Object t_TemplateFactory =
-            TemplateMappingManager.getInstance()
-                .getDefaultTemplateFactoryClass(
-                    TemplateMappingManager.XML_DAO_TEMPLATE_PREFIX + daoName);
+            templateMappingManager.getDefaultTemplateFactoryClass(
+                TemplateMappingManager.XML_DAO_TEMPLATE_PREFIX + daoName);
 
         if  (t_TemplateFactory != null)
         {
@@ -213,214 +266,12 @@ public class XMLDAOTemplateGenerator
     /**
      * Generates a XML DAO template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param projectImports the project imports.
-     * @param foreignDAOImports the foreign DAO imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param jdkExtensionImports the JDK extension imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param classConstructor the class constructor.
-     * @param classInternalMethods the class' internal methods.
-     * @param buildKeyPkJavadoc the <i>buildKey</i> key pk javadoc.
-     * @param buildKeyPkDeclaration the <i>buildKey</i> pk declaration.
-     * @param buildKeyPkValues the <i>buildKey</i>  values.
-     * @param processPkAttributes the <i>process</i> pk attributes.
-     * @param findByPrimaryKeyMethod the find by primary key method.
-     * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
-     * @param findByPrimaryKeyPkDeclaration the find by primary key pk
-     *        declaration.
-     * @param findByPrimaryKeyPkFilterValues the find by primary key pk
-     *        filter values.
-     * @param buildValueObjectMethod the build value object method.
-     * @param insertMethod the insert method.
-     * @param insertParametersJavadoc the javadoc of the insert method's parameters.
-     * @param insertParametersDeclaration the declaration of the insert method's parameters.
-     * @param updateMethod the update method.
-     * @param updateParametersJavadoc the javadoc of the update method's parameters.
-     * @param updateParametersDeclaration the declaration of the update method's parameters.
-     * @param deleteMethod the delete method.
-     * @param deletePkJavadoc the delete PK javadoc.
-     * @param deletePkDeclaration the delete PK declaration.
-     * @param deleteWithFkMethod the delete method.
-     * @param deleteWithFkPkJavadoc the delete with FK PK javadoc.
-     * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
-     * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete request.
-     * @param deleteWithFkPkValues the delete with FK PK values.
-     * @param persistMethod the persist method.
-     * @param undigesterPropertyRules the Undigester property rules.
-     * @param classEnd the class end.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
-     * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
-     */
-    public XMLDAOTemplate createXMLDAOTemplate(
-        final TableTemplate           tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
-        final String                  header,
-        final String                  packageDeclaration,
-        final String                  packageName,
-        final String                  basePackageName,
-        final String                  repositoryName,
-        final String                  projectImports,
-        final String                  foreignDAOImports,
-        final String                  acmslImports,
-        final String                  jdkImports,
-        final String                  loggingImports,
-        final String                  javadoc,
-        final String                  classDefinition,
-        final String                  classStart,
-        final String                  classConstructor,
-        final String                  classInternalMethods,
-        final String                  buildKeyPkJavadoc,
-        final String                  buildKeyPkDeclaration,
-        final String                  buildKeyPkValues,
-        final String                  processPkAttributes,
-        final String                  findByPrimaryKeyMethod,
-        final String                  findByPrimaryKeyPkJavadoc,
-        final String                  findByPrimaryKeyPkDeclaration,
-        final String                  findByPrimaryKeyPkFilterValues,
-        final String                  buildValueObjectMethod,
-        final String                  insertMethod,
-        final String                  insertParametersJavadoc,
-        final String                  insertParametersDeclaration,
-        final String                  updateMethod,
-        final String                  updateParametersJavadoc,
-        final String                  updateParametersDeclaration,
-        final String                  deleteMethod,
-        final String                  deletePkJavadoc,
-        final String                  deletePkDeclaration,
-        final String                  deleteWithFkMethod,
-        final String                  deleteWithFkPkJavadoc,
-        final String                  deleteWithFkPkDeclaration,
-        final String                  deleteWithFkDAODeleteRequest,
-        final String                  deleteWithFkPkValues,
-        final String                  persistMethod,
-        final String                  undigesterPropertyRules,
-        final String                  classEnd)
-      throws  QueryJException
-    {
-        XMLDAOTemplate result = null;
-
-        XMLDAOTemplateFactory t_TemplateFactory =
-            getTemplateFactory(
-                tableTemplate.getTableName());
-
-        if  (t_TemplateFactory != null)
-        {
-            result =
-                t_TemplateFactory.createXMLDAOTemplate(
-                    tableTemplate,
-                    metaDataManager,
-                    header,
-                    packageDeclaration,
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    projectImports,
-                    foreignDAOImports,
-                    acmslImports,
-                    jdkImports,
-                    loggingImports,
-                    javadoc,
-                    classDefinition,
-                    classStart,
-                    classConstructor,
-                    classInternalMethods,
-                    buildKeyPkJavadoc,
-                    buildKeyPkDeclaration,
-                    buildKeyPkValues,
-                    processPkAttributes,
-                    findByPrimaryKeyMethod,
-                    findByPrimaryKeyPkJavadoc,
-                    findByPrimaryKeyPkDeclaration,
-                    findByPrimaryKeyPkFilterValues,
-                    buildValueObjectMethod,
-                    insertMethod,
-                    insertParametersJavadoc,
-                    insertParametersDeclaration,
-                    updateMethod,
-                    updateParametersJavadoc,
-                    updateParametersDeclaration,
-                    deleteMethod,
-                    deletePkJavadoc,
-                    deletePkDeclaration,
-                    deleteWithFkMethod,
-                    deleteWithFkPkJavadoc,
-                    deleteWithFkPkDeclaration,
-                    deleteWithFkDAODeleteRequest,
-                    deleteWithFkPkValues,
-                    persistMethod,
-                    undigesterPropertyRules,
-                    classEnd);
-        }
-        else 
-        {
-            result =
-                new XMLDAOTemplate(
-                    tableTemplate,
-                    metaDataManager,
-                    header,
-                    packageDeclaration,
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    projectImports,
-                    foreignDAOImports,
-                    acmslImports,
-                    jdkImports,
-                    loggingImports,
-                    javadoc,
-                    classDefinition,
-                    classStart,
-                    classConstructor,
-                    classInternalMethods,
-                    buildKeyPkJavadoc,
-                    buildKeyPkDeclaration,
-                    buildKeyPkValues,
-                    processPkAttributes,
-                    findByPrimaryKeyMethod,
-                    findByPrimaryKeyPkJavadoc,
-                    findByPrimaryKeyPkDeclaration,
-                    findByPrimaryKeyPkFilterValues,
-                    buildValueObjectMethod,
-                    insertMethod,
-                    insertParametersJavadoc,
-                    insertParametersDeclaration,
-                    updateMethod,
-                    updateParametersJavadoc,
-                    updateParametersDeclaration,
-                    deleteMethod,
-                    deletePkJavadoc,
-                    deletePkDeclaration,
-                    deleteWithFkMethod,
-                    deleteWithFkPkJavadoc,
-                    deleteWithFkPkDeclaration,
-                    deleteWithFkDAODeleteRequest,
-                    deleteWithFkPkValues,
-                    persistMethod,
-                    undigesterPropertyRules,
-                    classEnd) {};
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a XML DAO template.
-     * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
@@ -428,11 +279,13 @@ public class XMLDAOTemplateGenerator
      * @precondition packageName != null
      */
     public XMLDAOTemplate createXMLDAOTemplate(
-        final TableTemplate           tableTemplate,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final String                  packageName,
-        final String                  basePackageName,
-        final String                  repositoryName)
+        final String packageName,
+        final String basePackageName,
+        final String repositoryName,
+        final Project project,
+        final Task task)
       throws  QueryJException
     {
         XMLDAOTemplate result = null;
@@ -449,7 +302,9 @@ public class XMLDAOTemplateGenerator
                     metaDataManager,
                     packageName,
                     basePackageName,
-                    repositoryName);
+                    repositoryName,
+                    project,
+                    task);
         }
         else 
         {
@@ -459,7 +314,9 @@ public class XMLDAOTemplateGenerator
                     metaDataManager,
                     packageName,
                     basePackageName,
-                    repositoryName) {};
+                    repositoryName,
+                    project,
+                    task);
         }
 
         return result;
@@ -469,59 +326,59 @@ public class XMLDAOTemplateGenerator
      * Writes a XML DAO template to disk.
      * @param mockDAOTemplate the XML DAO template to write.
      * @param outputDir the output folder.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws IOException if the file cannot be created.
      * @precondition mockDAOTemplate != null
      * @precondition outputDir != null
      */
     public void write(
         final XMLDAOTemplate mockDAOTemplate,
-        final File           outputDir,
-        final Project        project,
-        final Task           task)
+        final File outputDir)
       throws  IOException
     {
-        StringUtils t_StringUtils = StringUtils.getInstance();
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
-        FileUtils t_FileUtils     = FileUtils.getInstance();
+        write(
+            mockDAOTemplate,
+            outputDir,
+            StringUtils.getInstance(),
+            EnglishGrammarUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-        if  (   (t_StringUtils != null)
-             && (t_FileUtils   != null))
-        {
-            outputDir.mkdirs();
+    /**
+     * Writes a XML DAO template to disk.
+     * @param mockDAOTemplate the XML DAO template to write.
+     * @param outputDir the output folder.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition mockDAOTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final XMLDAOTemplate mockDAOTemplate,
+        final File outputDir,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-            if  (project != null)
-            {
-                project.log(
-                    task,
-                    "Writing "
-                    + outputDir.getAbsolutePath()
-                    + File.separator
-                    + "XML"
-                    + t_StringUtils.capitalize(
-                          t_EnglishGrammarUtils.getSingular(
-                              mockDAOTemplate
-                                  .getTableTemplate()
-                                      .getTableName().toLowerCase()),
-                        '_')
-                    + "DAO.java",
-                    Project.MSG_VERBOSE);
-            }
-            
-            t_FileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "XML"
-                + t_StringUtils.capitalize(
-                      t_EnglishGrammarUtils.getSingular(
-                          mockDAOTemplate
-                              .getTableTemplate()
-                                  .getTableName().toLowerCase()),
-                      '_')
-                + "DAO.java",
-                mockDAOTemplate.toString());
-        }
+        fileUtils.writeFile(
+            outputDir.getAbsolutePath()
+            + File.separator
+            + "XML"
+            + stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    mockDAOTemplate
+                        .getTableTemplate()
+                            .getTableName().toLowerCase()),
+                '_')
+            + "DAO.java",
+            mockDAOTemplate.generate());
     }
 }

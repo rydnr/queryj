@@ -109,7 +109,8 @@ public class NumericFunctionsTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(NumericFunctionsTemplateGenerator generator)
+    protected static void setReference(
+        final NumericFunctionsTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -140,7 +141,7 @@ public class NumericFunctionsTemplateGenerator
 
         if  (result == null) 
         {
-            result = new NumericFunctionsTemplateGenerator() {};
+            result = new NumericFunctionsTemplateGenerator();
 
             setReference(result);
         }
@@ -153,25 +154,43 @@ public class NumericFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param templateFactoryClass the template factory.
+     * @precondition engineName != null
+     * @precondition templateFactoryClass != null
      */
     public void addTemplateFactoryClass(
-        String engineName,
-        String engineVersion,
-        String templateFactoryClass)
+        final String engineName,
+        final String engineVersion,
+        final String templateFactoryClass)
     {
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
+        addTemplateFactoryClass(
+            engineName,
+            engineVersion,
+            templateFactoryClass,
+            TemplateMappingManager.getInstance());
+    }
 
-        if  (   (t_MappingManager     != null)
-             && (engineName           != null)
-             && (templateFactoryClass != null))
-        {
-            t_MappingManager.addTemplateFactoryClass(
-                TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
-                engineName,
-                engineVersion,
-                templateFactoryClass);
-        }
+    /**
+     * Adds a new template factory class.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param templateFactoryClass the template factory.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @precondition engineName != null
+     * @precondition templateFactoryClass != null
+     * @precondition templateMappingManager != null
+     */
+    protected void addTemplateFactoryClass(
+        final String engineName,
+        final String engineVersion,
+        final String templateFactoryClass,
+        final TemplateMappingManager templateMappingManager)
+    {
+        templateMappingManager.addTemplateFactoryClass(
+            TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
+            engineName,
+            engineVersion,
+            templateFactoryClass);
     }
 
     /**
@@ -179,26 +198,38 @@ public class NumericFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
+     * @precondition engineName != null
      */
     protected String getTemplateFactoryClass(
-        String engineName, String engineVersion)
+        final String engineName, final String engineVersion)
     {
-        String result = null;
+        return
+            getTemplateFactoryClass(
+                engineName,
+                engineVersion,
+                TemplateMappingManager.getInstance());
+    }
 
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (   (t_MappingManager != null)
-             && (engineName       != null))
-        {
-            result =
-                t_MappingManager.getTemplateFactoryClass(
-                    TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
-                    engineName,
-                    engineVersion);
-        }
-
-        return result;
+    /**
+     * Retrieves the template factory class.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @precondition engineName != null
+     * @precondition templateMappingManager != null
+     */
+    protected String getTemplateFactoryClass(
+        final String engineName,
+        final String engineVersion,
+        final TemplateMappingManager templateMappingManager)
+    {
+        return
+            templateMappingManager.getTemplateFactoryClass(
+                TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
+                engineName,
+                engineVersion);
     }
 
     /**
@@ -212,31 +243,48 @@ public class NumericFunctionsTemplateGenerator
         final String engineName, final String engineVersion)
       throws  QueryJException
     {
+        return
+            getTemplateFactory(
+                engineName,
+                engineVersion,
+                TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Retrieves the template factory instance.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition templateMappingManager != null
+     */
+    protected NumericFunctionsTemplateFactory getTemplateFactory(
+        final String engineName,
+        final String engineVersion,
+        final TemplateMappingManager templateMappingManager)
+      throws  QueryJException
+    {
         NumericFunctionsTemplateFactory result = null;
 
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
+        Object t_TemplateFactory =
+            templateMappingManager.getTemplateFactory(
+                TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
+                engineName,
+                engineVersion);
 
-        if  (t_MappingManager != null)
+        if  (t_TemplateFactory != null)
         {
-            Object t_TemplateFactory =
-                t_MappingManager.getTemplateFactory(
-                    TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
-                    engineName,
-                    engineVersion);
-
-            if  (t_TemplateFactory != null)
+            if  (!(t_TemplateFactory instanceof NumericFunctionsTemplateFactory))
             {
-                if  (!(t_TemplateFactory instanceof NumericFunctionsTemplateFactory))
-                {
-                    throw
-                        new QueryJException(
-                            "invalid.numeric.function.template.factory");
-                }
-                else 
-                {
-                    result = (NumericFunctionsTemplateFactory) t_TemplateFactory;
-                }
+                throw
+                    new QueryJException(
+                        "invalid.numeric.function.template.factory");
+            }
+            else 
+            {
+                result = (NumericFunctionsTemplateFactory) t_TemplateFactory;
             }
         }
 
@@ -245,295 +293,52 @@ public class NumericFunctionsTemplateGenerator
 
     /**
      * Generates a numeric functions template.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param singletonBody the singleton body.
-     * @param classConstructor the class constructor.
-     * @param innerClass the inner class.
-     * @param classEnd the class end.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition quote != null
      */
     public NumericFunctionsTemplate createNumericFunctionsTemplate(
-        final String header,
-        final String packageDeclaration,
         final String packageName,
         final String engineName,
         final String engineVersion,
         final String quote,
-        final String acmslImports,
-        final String jdkImports,
-        final String javadoc,
-        final String classDefinition,
-        final String classStart,
-        final String singletonBody,
-        final String classConstructor,
-        final String innerClass,
-        final String classEnd)
-      throws  QueryJException
-    {
-        NumericFunctionsTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            NumericFunctionsTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createNumericFunctionsTemplate(
-                        header,
-                        packageDeclaration,
-                        packageName,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        acmslImports,
-                        jdkImports,
-                        javadoc,
-                        classDefinition,
-                        classStart,
-                        singletonBody,
-                        classConstructor,
-                        innerClass,
-                        classEnd);
-            }
-            else 
-            {
-                throw
-                    new QueryJException(
-                          "Cannot find numeric functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a numeric functions template.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param singletonBody the singleton body.
-     * @param classConstructor the class constructor.
-     * @param innerClass the inner class.
-     * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    public NumericFunctionsTemplate createNumericFunctionsTemplate(
-        final String  header,
-        final String  packageDeclaration,
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote,
-        final String  acmslImports,
-        final String  jdkImports,
-        final String  javadoc,
-        final String  classDefinition,
-        final String  classStart,
-        final String  singletonBody,
-        final String  classConstructor,
-        final String  innerClass,
-        final String  classEnd,
         final Project project,
-        final Task    task)
+        final Task   task)
       throws  QueryJException
     {
         NumericFunctionsTemplate result = null;
 
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            NumericFunctionsTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
+        NumericFunctionsTemplateFactory t_TemplateFactory =
+            getTemplateFactory(engineName, engineVersion);
 
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createNumericFunctionsTemplate(
-                        header,
-                        packageDeclaration,
-                        packageName,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        acmslImports,
-                        jdkImports,
-                        javadoc,
-                        classDefinition,
-                        classStart,
-                        singletonBody,
-                        classConstructor,
-                        innerClass,
-                        classEnd,
-                        project,
-                        task);
-            }
-            else 
-            {
-                if  (project != null)
-                {
-                    project.log(
-                        task,
-                          "Invalid numeric functions generator class: "
-                        + t_TemplateFactory,
-                        Project.MSG_WARN);
-                }
-                
-                throw
-                    new QueryJException(
-                          "Cannot find numeric functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
-            }
+        if  (   (t_TemplateFactory != null)
+             && (!t_TemplateFactory.getClass().equals(getClass())))
+        {
+            result =
+                t_TemplateFactory.createNumericFunctionsTemplate(
+                    packageName,
+                    engineName,
+                    engineVersion,
+                    quote,
+                    project,
+                    task);
         }
-
-        return result;
-    }
-
-    /**
-     * Generates a numeric functions template.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    public NumericFunctionsTemplate createNumericFunctionsTemplate(
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote)
-      throws  QueryJException
-    {
-        NumericFunctionsTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
+        else 
         {
-            NumericFunctionsTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createNumericFunctionsTemplate(
-                        packageName,
-                        engineName,
-                        engineVersion,
-                        quote);
-            }
-            else 
-            {
-                throw
-                    new QueryJException(
-                          "Cannot find numeric functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a numeric functions template.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    public NumericFunctionsTemplate createNumericFunctionsTemplate(
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote,
-        final Project project,
-        final Task    task)
-      throws  QueryJException
-    {
-        NumericFunctionsTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            NumericFunctionsTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (   (t_TemplateFactory != null)
-                 && (!t_TemplateFactory.getClass().equals(getClass())))
-            {
-                result =
-                    t_TemplateFactory.createNumericFunctionsTemplate(
-                        packageName,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        project,
-                        task);
-            }
-            else 
-            {
-                if  (project != null)
-                {
-                    project.log(
-                        task,
-                          "Invalid numeric functions generator class: "
-                        + t_TemplateFactory,
-                        Project.MSG_WARN);
-                }
-                
-                throw
-                    new QueryJException(
-                          "Cannot find numeric functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
-            }
+            throw
+                new QueryJException(
+                      "Cannot find numeric functions' "
+                    + "template factory for "
+                    + engineName + "\n"
+                    + "Disable extractfunctions setting.");
         }
 
         return result;
@@ -544,29 +349,46 @@ public class NumericFunctionsTemplateGenerator
      * @param numericFunctionsTemplate the numeric functions template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
+     * @precondition numericFunctionsTemplate != null
+     * @precondition outputDir != null
      */
     public void write(
         final NumericFunctionsTemplate numericFunctionsTemplate,
         final File outputDir)
-        throws  IOException
+      throws  IOException
     {
-        if  (   (numericFunctionsTemplate != null)
-             && (outputDir             != null))
-        {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            numericFunctionsTemplate,
+            outputDir,
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a numeric functions template to disk.
+     * @param numericFunctionsTemplate the numeric functions template to write.
+     * @param outputDir the output folder.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition numericFunctionsTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final NumericFunctionsTemplate numericFunctionsTemplate,
+        final File outputDir,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + "NumericFunctions.java",
-                    numericFunctionsTemplate.toString());
-            }
-        }
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + "NumericFunctions.java",
+            numericFunctionsTemplate.generate());
     }
 }

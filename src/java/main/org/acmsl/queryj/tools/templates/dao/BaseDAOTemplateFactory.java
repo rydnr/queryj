@@ -73,6 +73,7 @@ public interface BaseDAOTemplateFactory
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
+     * @param valueObjectPackageName the value object package name.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @return a template.
@@ -82,6 +83,7 @@ public interface BaseDAOTemplateFactory
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
+        final String valueObjectPackageName,
         final Project project,
         final Task task)
       throws  QueryJException;

@@ -54,16 +54,18 @@ import org.acmsl.queryj.Field;
 /**
  * Represents long fields.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class LongField
+public class LongField
     extends  Field
 {
     /**
      * Creates a long field using given information.
      * @param name the field name.
      * @param table the table.
+     * @precondition name != null
+     * @precondition table != null
      */
     public LongField(final String name, final Table table)
     {

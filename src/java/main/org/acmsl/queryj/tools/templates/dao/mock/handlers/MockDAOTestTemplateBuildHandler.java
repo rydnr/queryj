@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
+import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -69,6 +70,8 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -106,77 +109,167 @@ public class MockDAOTestTemplateBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(
+        final Map parameters, final Project project, final Task task)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveDatabaseMetaData(parameters),
+                project,
+                task);
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaData metaData,
+        final Project project, final Task task)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try
         {
-            try
+            result =
+                handle(
+                    parameters,
+                    metaData.getDatabaseProductName(),
+                    project,
+                    task);
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw new BuildException(sqlException);
+        }
+
+        return result;
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param engineName the engine name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition engineName != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final String engineName,
+        final Project project,
+        final Task task)
+    {
+        return
+            handle(
+                parameters,
+                retrieveDatabaseMetaDataManager(parameters),
+                retrieveTableTemplates(parameters),
+                retrieveValueObjectPackage(parameters),
+                retrieveMockDAOPackage(engineName, parameters),
+                retrieveMockDAOTestPackage(parameters),
+                MockDAOTestTemplateGenerator.getInstance(),
+                project,
+                task);
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param metaDataManager the database metadata manager.
+     * @param tableTemplates the table templates.
+     * @param valueObjectPackage such package.
+     * @param mockDAOPackage such package.
+     * @param mockDAOTestPackage such package.
+     * @param templateFactory the template factory.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaDataManager != null
+     * @precondition tableTemplates != null
+     * @precondition valueObjectPackage != null
+     * @precondition mockDAOPackage != null
+     * @precondition mockDAOTestPackage != null
+     * @precondition templateFactory != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaDataManager metaDataManager,
+        final TableTemplate[] tableTemplates,
+        final String valueObjectPackage,
+        final String mockDAOPackage,
+        final String mockDAOTestPackage,
+        final MockDAOTestTemplateFactory templateFactory,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
+        boolean result = false;
+
+        try
+        {
+            MockDAOTestTemplate[] t_aMockDAOTestTemplates =
+                new MockDAOTestTemplate[tableTemplates.length];
+
+            for  (int t_iMockDAOTestIndex = 0;
+                      t_iMockDAOTestIndex < t_aMockDAOTestTemplates.length;
+                      t_iMockDAOTestIndex++) 
             {
-                Map attributes = command.getAttributeMap();
+                t_aMockDAOTestTemplates[t_iMockDAOTestIndex] =
+                    templateFactory.createMockDAOTestTemplate(
+                        tableTemplates[t_iMockDAOTestIndex],
+                        metaDataManager,
+                        mockDAOTestPackage,
+                        mockDAOPackage,
+                        valueObjectPackage,
+                        project,
+                        task);
 
-                DatabaseMetaData t_MetaData =
-                    retrieveDatabaseMetaData(attributes);
-
-                DatabaseMetaDataManager t_MetaDataManager =
-                    retrieveDatabaseMetaDataManager(attributes);
-
-                String t_strPackage =
-                    retrieveMockDAOTestPackage(attributes);
-
-                MockDAOTestTemplateGenerator t_MockDAOTestTemplateGenerator =
-                    MockDAOTestTemplateGenerator.getInstance();
-
-                if  (   (t_MetaData                     != null)
-                     && (t_MetaDataManager              != null)
-                     && (t_MockDAOTestTemplateGenerator != null))
-                {
-                    TableTemplate[] t_aTableTemplates =
-                        retrieveTableTemplates(attributes);
-
-                    if  (t_aTableTemplates != null)
-                    {
-                        MockDAOTestTemplate[] t_aMockDAOTestTemplates =
-                            new MockDAOTestTemplate[t_aTableTemplates.length];
-
-                        for  (int t_iMockDAOTestIndex = 0;
-                                  t_iMockDAOTestIndex < t_aMockDAOTestTemplates.length;
-                                  t_iMockDAOTestIndex++) 
-                        {
-                            t_aMockDAOTestTemplates[t_iMockDAOTestIndex] =
-                                t_MockDAOTestTemplateGenerator
-                                    .createMockDAOTestTemplate(
-                                        t_aTableTemplates[t_iMockDAOTestIndex],
-                                        t_MetaDataManager,
-                                        t_strPackage,
-                                        retrieveMockDAOPackage(
-                                            t_MetaData
-                                                .getDatabaseProductName(),
-                                            attributes),
-                                        retrieveValueObjectPackage(attributes),
-                                        command.getProject(),
-                                        command.getTask());
-
-                            storeTestTemplate(
-                                t_aMockDAOTestTemplates[t_iMockDAOTestIndex],
-                                attributes);
-                        }
-
-                        storeMockDAOTestTemplates(t_aMockDAOTestTemplates, attributes);
-                    }
-                }
+                storeTestTemplate(
+                    t_aMockDAOTestTemplates[t_iMockDAOTestIndex],
+                    parameters);
             }
-            catch  (SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-            catch  (QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
+
+            storeMockDAOTestTemplates(t_aMockDAOTestTemplates, parameters);
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw new BuildException(queryjException);
         }
         
         return result;
@@ -337,19 +430,13 @@ public class MockDAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the test templates.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected Collection retrieveTestTemplates(final Map parameters)
         throws  BuildException
     {
-        Collection result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
-        }
-        
-        return result;
+        return
+            (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
     }
 
     /**
@@ -357,19 +444,17 @@ public class MockDAOTestTemplateBuildHandler
      * @param mockDAOTestTemplates the Mock DAO templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition mockDAOTestTemplates != null
+     * @precondition parameters != null
      */
     protected void storeMockDAOTestTemplates(
         final MockDAOTestTemplate[] mockDAOTestTemplates,
         final Map parameters)
       throws  BuildException
     {
-        if  (   (mockDAOTestTemplates != null)
-             && (parameters       != null))
-        {
-            parameters.put(
-                TemplateMappingManager.MOCK_DAO_TEST_TEMPLATES,
-                mockDAOTestTemplates);
-        }
+        parameters.put(
+            TemplateMappingManager.MOCK_DAO_TEST_TEMPLATES,
+            mockDAOTestTemplates);
     }
 
     /**

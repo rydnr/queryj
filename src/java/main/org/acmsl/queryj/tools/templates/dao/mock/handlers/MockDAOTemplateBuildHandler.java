@@ -147,13 +147,6 @@ public class MockDAOTemplateBuildHandler
                               t_iMockDAOIndex < t_aMockDAOTemplates.length;
                               t_iMockDAOIndex++) 
                     {
-                        command.getProject().log(
-                            command.getTask(),
-                            "Building mock dao template ("
-                            + t_aTableTemplates[t_iMockDAOIndex].getTableName()
-                            + ")",
-                            Project.MSG_VERBOSE);
-
                         t_aMockDAOTemplates[t_iMockDAOIndex] =
                             t_MockDAOTemplateGenerator.createMockDAOTemplate(
                                 t_aTableTemplates[t_iMockDAOIndex],
@@ -169,7 +162,7 @@ public class MockDAOTemplateBuildHandler
                 }
             }
         }
-        catch  (QueryJException queryjException)
+        catch  (final QueryJException queryjException)
         {
             Project t_Project = command.getProject();
 

@@ -68,6 +68,12 @@ import org.acmsl.queryj.tools.ProcedureMetaData;
 import org.acmsl.queryj.tools.ProcedureParameterMetaData;
 
 /*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.sql.Connection;
@@ -81,15 +87,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Manages the information metadata stored in an Oracle database.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class OracleMetaDataManager
@@ -120,20 +121,24 @@ public class OracleMetaDataManager
      * @param metaData the database meta data.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     public OracleMetaDataManager(
-            String[]         tableNames,
-            String[]         procedureNames,
-            boolean          disableTableExtraction,
-            boolean          lazyTableExtraction,
-            boolean          disableProcedureExtraction,
-            boolean          lazyProcedureExtraction,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
+        final String[] tableNames,
+        final String[] procedureNames,
+        final boolean disableTableExtraction,
+        final boolean lazyTableExtraction,
+        final boolean disableProcedureExtraction,
+        final boolean lazyProcedureExtraction,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
         throws  SQLException,
                 QueryJException
     {
@@ -146,7 +151,9 @@ public class OracleMetaDataManager
             lazyProcedureExtraction,
             metaData,
             catalog,
-            schema);
+            schema,
+            project,
+            task);
     }
 
     /**
@@ -156,16 +163,20 @@ public class OracleMetaDataManager
      * @param metaData the database meta data.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     public OracleMetaDataManager(
-            String[]         tableNames,
-            String[]         procedureNames,
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
+        final String[] tableNames,
+        final String[] procedureNames,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
         throws  SQLException,
                 QueryJException
     {
@@ -174,7 +185,9 @@ public class OracleMetaDataManager
             procedureNames,
             metaData,
             catalog,
-            schema);
+            schema,
+            project,
+            task);
     }
 
     /**
@@ -182,15 +195,19 @@ public class OracleMetaDataManager
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      */
     protected void extractPrimaryKeys(
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
-        throws  SQLException,
-                QueryJException
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
@@ -199,7 +216,7 @@ public class OracleMetaDataManager
         PreparedStatement t_PreparedStatement = null;
 
         String[] t_astrTableNames =
-            getTableNames(metaData, catalog, schema);
+            getTableNames(metaData, catalog, schema, project, task);
 
         if  (   (t_astrTableNames != null)
              && (metaData         != null)
@@ -253,7 +270,10 @@ public class OracleMetaDataManager
                         //WHERE ((USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
                         // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)) AND (USER_CONSTRAINTS.CONSTRAINT_TYPE = 'P')
 
-                        org.apache.commons.logging.LogFactory.getLog(getClass()).info("query:" + t_Query);
+                        project.log(
+                            task,
+                            "query:" + t_Query,
+                            Project.MSG_DEBUG);
 
                         t_rsResults = t_Query.executeQuery();
 
@@ -288,11 +308,12 @@ public class OracleMetaDataManager
                         t_rsResults.close();
                     }
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).error(
-                        "cannot.close.result.set",
-                        sqlException);
+                    project.log(
+                        task,
+                        "Cannot close the result set " + sqlException,
+                        Project.MSG_ERR);
                 }
 
                 try 
@@ -302,11 +323,12 @@ public class OracleMetaDataManager
                         t_PreparedStatement.close();
                     }
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).error(
-                        "cannot.close.statement",
-                        sqlException);
+                    project.log(
+                        task,
+                        "Cannot close the statement " + sqlException,
+                        Project.MSG_ERR);
                 }
             }
         }
@@ -317,13 +339,19 @@ public class OracleMetaDataManager
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
+     * @precondition project != null
+     * @precondition task != null
      */
     protected void extractForeignKeys(
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
         throws  SQLException,
                 QueryJException
     {
@@ -334,7 +362,7 @@ public class OracleMetaDataManager
         PreparedStatement t_PreparedStatement = null;
 
         String[] t_astrTableNames =
-            getTableNames(metaData, catalog, schema);
+            getTableNames(metaData, catalog, schema, project, task);
 
         if  (   (t_astrTableNames != null)
              && (metaData         != null)
@@ -423,11 +451,12 @@ public class OracleMetaDataManager
                         t_Results.close();
                     }
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).error(
-                        "cannot.close.result.set",
-                        sqlException);
+                    project.log(
+                        task,
+                        "Cannot close the result set " + sqlException,
+                        Project.MSG_ERR);
                 }
 
                 try 
@@ -437,11 +466,12 @@ public class OracleMetaDataManager
                         t_PreparedStatement.close();
                     }
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).error(
-                        "cannot.close.statement",
-                        sqlException);
+                    project.log(
+                        task,
+                        "Cannot close the statement " + sqlException,
+                        Project.MSG_ERR);
                 }
             }
         }
@@ -452,15 +482,19 @@ public class OracleMetaDataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      */
     protected String[] getTableNames(
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema)
-        throws  SQLException,
-                QueryJException
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         String[] result = EMPTY_STRING_ARRAY;
 
@@ -492,11 +526,13 @@ public class OracleMetaDataManager
 
                     t_Query.from(OracleTableRepository.USER_TABLES);
 
+                    t_Query.where(OracleTableRepository.USER_TABLES.TABLE_NAME.notEquals("PLAN_TABLE"));
+
                     t_PreparedStatement = t_Query.prepareStatement(t_Connection);
 
                     t_Results = t_Query.retrieveMatchingResults();
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
                     throw
                         new QueryJException(
@@ -523,11 +559,12 @@ public class OracleMetaDataManager
                         t_Results.close();
                     }
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).error(
-                        "cannot.close.result.set",
-                        sqlException);
+                    project.log(
+                        task,
+                        "Cannot close the result set " + sqlException,
+                        Project.MSG_ERR);
                 }
 
                 try 
@@ -537,11 +574,12 @@ public class OracleMetaDataManager
                         t_PreparedStatement.close();
                     }
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).error(
-                        "cannot.close.statement",
-                        sqlException);
+                    project.log(
+                        task,
+                        "Cannot close the statement " + sqlException,
+                        Project.MSG_ERR);
                 }
             }
         }
@@ -555,7 +593,7 @@ public class OracleMetaDataManager
      * @return the list of table names.
      * @throws SQLException if the database operation fails.
      */
-    protected String[] extractTableNames(QueryResultSet resultSet)
+    protected String[] extractTableNames(final QueryResultSet resultSet)
         throws  SQLException
     {
         String[] result = EMPTY_STRING_ARRAY;
@@ -577,15 +615,19 @@ public class OracleMetaDataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
      */
     protected String[] getColumnNames(
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema,
-            String           tableName)
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final Project project,
+        final Task task)
         throws  SQLException,
                 QueryJException
     {
@@ -671,9 +713,10 @@ public class OracleMetaDataManager
                 }
                 catch  (SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).error(
-                        "cannot.close.result.set",
-                        sqlException);
+                    project.log(
+                        task,
+                        "Cannot close the result set " + sqlException,
+                        Project.MSG_ERR);
                 }
 
                 try 
@@ -683,11 +726,12 @@ public class OracleMetaDataManager
                         t_PreparedStatement.close();
                     }
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).error(
-                        "cannot.close.statement",
-                        sqlException);
+                    project.log(
+                        task,
+                        "Cannot close the statement " + sqlException,
+                        Project.MSG_ERR);
                 }
             }
         }
@@ -701,7 +745,7 @@ public class OracleMetaDataManager
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      */
-    protected String[] extractColumnNames(ResultSet resultSet)
+    protected String[] extractColumnNames(final ResultSet resultSet)
         throws  SQLException
     {
         String[] result = EMPTY_STRING_ARRAY;
@@ -724,16 +768,20 @@ public class OracleMetaDataManager
      * @param schema the schema.
      * @param tableName the table name.
      * @param size the number of fields to extract.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
      */
     protected int[] getColumnTypes(
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema,
-            String           tableName,
-            int              size)
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final int size,
+        final Project project,
+        final Task task)
         throws  SQLException,
                 QueryJException
     {
@@ -804,11 +852,12 @@ public class OracleMetaDataManager
                         t_rsResults.close();
                     }
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).error(
-                        "cannot.close.result.set",
-                        sqlException);
+                    project.log(
+                        task,
+                        "Cannot close the result set " + sqlException,
+                        Project.MSG_ERR);
                 }
 
                 try 
@@ -818,11 +867,12 @@ public class OracleMetaDataManager
                         t_PreparedStatement.close();
                     }
                 }
-                catch  (SQLException sqlException)
+                catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).error(
-                        "cannot.close.statement",
-                        sqlException);
+                    project.log(
+                        task,
+                        "Cannot close the statement " + sqlException,
+                        Project.MSG_ERR);
                 }
             }
         }
@@ -837,8 +887,9 @@ public class OracleMetaDataManager
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      */
-    protected int[] extractColumnTypes(ResultSet resultSet, String fieldName)
-        throws  SQLException
+    protected int[] extractColumnTypes(
+        final ResultSet resultSet, final String fieldName)
+      throws  SQLException
     {
         int[] result = EMPTY_INT_ARRAY;
 

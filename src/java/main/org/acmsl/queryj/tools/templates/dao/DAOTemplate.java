@@ -537,7 +537,8 @@ public class DAOTemplate
                 String t_strReferredTableName =
                     stringUtils.capitalize(
                         englishGrammarUtils.getSingular(
-                            t_astrReferredTables[t_iRefTableIndex]),
+                            t_astrReferredTables[t_iRefTableIndex]
+                                .toLowerCase()),
                         '_');
 
                 String t_strFkName =
@@ -574,7 +575,7 @@ public class DAOTemplate
             packageUtils.retrieveJdbcOperationsPackage(
                 basePackageName,
                 engineName,
-                t_strValueObjectName);
+                t_strCapitalizedValueObjectName);
 
         t_sbResult.append(
             t_ProjectImportFormatter.format(

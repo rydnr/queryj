@@ -59,6 +59,7 @@ import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOTestTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOBundle;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
@@ -73,8 +74,10 @@ public class DAOBundle
 {
     /**
      * Builds a bundle with DAO-related handlers.
+     * @param includeMock whether to include Mock implementations.
+     * @param includeXML whether to include XML implementations.
      */
-    public DAOBundle()
+    public DAOBundle(final boolean includeMock, final boolean includeXML)
     {
         super(
             new TemplateHandlerBundle[]
@@ -88,8 +91,9 @@ public class DAOBundle
                 new DAOTestTemplateHandlerBundle(),
                 new DataAccessManagerTemplateHandlerBundle(),
                 new JdbcDAOTemplateHandlerBundle(),
-                new MockDAOBundle(),
-                new XMLDAOBundle()
+                new QueryPreparedStatementCreatorTemplateHandlerBundle(),
+                (includeMock ? new MockDAOBundle() : null),
+                (includeXML ? new XMLDAOBundle() : null)
             });
     }
 }

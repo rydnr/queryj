@@ -128,7 +128,7 @@ public class KeywordRepositoryTemplateGenerator
 
         if  (result == null) 
         {
-            result = new KeywordRepositoryTemplateGenerator() {};
+            result = new KeywordRepositoryTemplateGenerator();
 
             setReference(result);
         }
@@ -158,7 +158,7 @@ public class KeywordRepositoryTemplateGenerator
         {
             result =
                 new KeywordRepositoryTemplate(
-                    packageName, repository, project, task) {};
+                    packageName, repository, project, task);
         }
 
         return result;

@@ -122,6 +122,18 @@ public interface BaseDAOTemplateDefaults
     public static final String PACKAGE_DECLARATION = "package {0};\n\n"; // package
 
     /**
+     * The project imports.
+     * @param 0 the value object package name.
+     * @param 1 the capitalized table name.
+     */
+    public static final String DEFAULT_PROJECT_IMPORTS =
+          "/*\n"
+        + " * Importing project classes.\n"
+        + " */\n"
+        + "import {0}.{1}ValueObject;\n\n";
+
+
+    /**
      * The ACM-SL imports.
      */
     public static final String ACMSL_IMPORTS = "";
@@ -175,7 +187,7 @@ public interface BaseDAOTemplateDefaults
         + "     * @return the information extracted from the persistence layer.\n"
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public {2} findByPrimaryKey("
+        + "    public {2}ValueObject findByPrimaryKey("
          // java table name
         + "{3});\n\n";
          // FIND_BY_PRIMARY_KEY_PK_DECLARATION

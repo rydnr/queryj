@@ -271,6 +271,12 @@ public abstract class TemplateMappingManager
     public static final String JDBC_DAO_TEMPLATE_FACTORY = "jdbc.dao.template.factory";
 
     /**
+     * The QueryPreparedStatementCreator template type.
+     */
+    public static final String QUERY_PREPARED_STATEMENT_CREATOR_TEMPLATE =
+        "query.prepared.statement.creator.template";
+
+    /**
      * The Mock DAO template prefix.
      */
     public static final String MOCK_DAO_TEMPLATE_PREFIX = "mock.dao.";

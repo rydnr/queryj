@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
+import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -73,6 +74,8 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -85,7 +88,7 @@ import java.util.Map;
 /**
  * Builds a DAO factory template using database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class DAOFactoryTemplateBuildHandler
@@ -108,93 +111,161 @@ public class DAOFactoryTemplateBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveDatabaseMetaData(parameters),
+                retrieveBasePackage(parameters),
+                project,
+                task);
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param metaData the database metadata.
+     * @param basePackage the base package.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     * @precondition basePackage != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaData metaData,
+        final String basePackage,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try
         {
-            try
-            {
-                Map attributes = command.getAttributeMap();
-
-                DatabaseMetaData t_MetaData =
-                    retrieveDatabaseMetaData(attributes);
-
-                DatabaseMetaDataManager t_MetaDataManager =
-                    retrieveDatabaseMetaDataManager(attributes);
-
-                String t_strBasePackage =
-                    retrieveBasePackage(attributes);
-
-                String t_strPackage =
-                    retrievePackage(
-                        t_strBasePackage,
-                        t_MetaData.getDatabaseProductName().toLowerCase());
-
-                String t_strJNDIDataSource =
-                    retrieveJNDIDataSource(attributes);
-
-                DAOFactoryTemplateGenerator t_DAOFactoryTemplateGenerator =
-                    DAOFactoryTemplateGenerator.getInstance();
-
-                if  (   (t_MetaData                    != null)
-                     && (t_MetaDataManager             != null)
-                     && (t_DAOFactoryTemplateGenerator != null))
-                {
-                    TableTemplate[] t_aTableTemplates =
-                        retrieveTableTemplates(attributes);
-
-                    if  (t_aTableTemplates != null)
-                    {
-                        DAOFactoryTemplate[] t_aDAOFactoryTemplates =
-                            new DAOFactoryTemplate[t_aTableTemplates.length];
-
-                        for  (int t_iDAOFactoryIndex = 0;
-                                  t_iDAOFactoryIndex < t_aDAOFactoryTemplates.length;
-                                  t_iDAOFactoryIndex++) 
-                        {
-                            String t_strQuote = t_MetaData.getIdentifierQuoteString();
-
-                            if  (t_strQuote == null)
-                            {
-                                t_strQuote = "\"";
-                            }
-
-                            if  (t_strQuote.equals("\""))
-                            {
-                                t_strQuote = "\\\"";
-                            }
-
-                            t_aDAOFactoryTemplates[t_iDAOFactoryIndex] =
-                                t_DAOFactoryTemplateGenerator.createDAOFactoryTemplate(
-                                    t_aTableTemplates[t_iDAOFactoryIndex],
-                                    t_MetaDataManager,
-                                    t_strPackage,
-                                    t_MetaData.getDatabaseProductName(),
-                                    t_MetaData.getDatabaseProductVersion(),
-                                    t_strQuote,
-                                    t_strBasePackage,
-                                    t_strJNDIDataSource);
-                        }
-
-                        storeDAOFactoryTemplates(t_aDAOFactoryTemplates, attributes);
-                    }
-                }
-            }
-            catch  (SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-            catch  (QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
+            handle(
+                parameters,
+                retrieveDatabaseMetaDataManager(parameters),
+                retrieveJNDIDataSource(parameters),
+                retrievePackage(
+                    basePackage,
+                    metaData.getDatabaseProductName().toLowerCase()),
+                basePackage,
+                metaData.getDatabaseProductName(),
+                metaData.getDatabaseProductVersion(),
+                DAOTemplateBuildHandler.fixQuote(
+                    metaData.getIdentifierQuoteString()),
+                retrieveTableTemplates(parameters),
+                DAOFactoryTemplateGenerator.getInstance(),
+                project,
+                task);
         }
-        
+        catch  (final SQLException sqlException)
+        {
+            throw new BuildException(sqlException);
+        }
+
         return result;
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param metaDataManager the database metadata manager.
+     * @param jndiDataSource the JNDI location of the data source.
+     * @param packageName the package name.
+     * @param basePackage the base package.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote.
+     * @param tableTemplates the table templates.
+     * @param templateFactory the template factory.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaDataManager != null
+     * @precondition jndiDataSource != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition quote != null
+     * @precondition tableTemplates != null
+     * @precondition templateFactory != null
+     */
+    protected void handle(
+        final Map parameters,
+        final DatabaseMetaDataManager metaDataManager,
+        final String jndiDataSource,
+        final String packageName,
+        final String basePackage,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final TableTemplate[] tableTemplates,
+        final DAOFactoryTemplateFactory templateFactory,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
+        try
+        {
+            DAOFactoryTemplate[] t_aDAOFactoryTemplates =
+                new DAOFactoryTemplate[tableTemplates.length];
+
+            for  (int t_iDAOFactoryIndex = 0;
+                      t_iDAOFactoryIndex < t_aDAOFactoryTemplates.length;
+                      t_iDAOFactoryIndex++) 
+            {
+                t_aDAOFactoryTemplates[t_iDAOFactoryIndex] =
+                    templateFactory.createDAOFactoryTemplate(
+                        tableTemplates[t_iDAOFactoryIndex],
+                        metaDataManager,
+                        packageName,
+                        engineName,
+                        engineVersion,
+                        quote,
+                        basePackage,
+                        jndiDataSource,
+                        project,
+                        task);
+            }
+
+            storeDAOFactoryTemplates(t_aDAOFactoryTemplates, parameters);
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw new BuildException(queryjException);
+        }
     }
 
     /**
@@ -202,22 +273,16 @@ public class DAOFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the metadata.
      * @throws BuildException if the metadata retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected DatabaseMetaData retrieveDatabaseMetaData(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
+        return
+            (DatabaseMetaData)
+                parameters.get(
+                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
     }
 
     /**
@@ -225,22 +290,16 @@ public class DAOFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the manager.
      * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
-        DatabaseMetaDataManager result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-        }
-        
-        return result;
+        return
+            (DatabaseMetaDataManager)
+                parameters.get(
+                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**
@@ -248,19 +307,12 @@ public class DAOFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveBasePackage(Map parameters)
+    protected String retrieveBasePackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**
@@ -269,24 +321,36 @@ public class DAOFactoryTemplateBuildHandler
      * @param engineName the engine name.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrievePackage(String basePackage, String engineName)
-        throws  BuildException
+    protected String retrievePackage(
+        final String basePackage, final String engineName)
+      throws  BuildException
     {
-        String result = null;
+        return
+            retrievePackage(
+                basePackage, engineName, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (basePackage     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveDAOFactoryPackage(
-                    basePackage,
-                    engineName);
-        }
-        
-        return result;
+    /**
+     * Retrieves the package name from the attribute map.
+     * @param basePackage the base package.
+     * @param engineName the engine name.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected String retrievePackage(
+        final String basePackage,
+        final String engineName,
+        final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveDAOFactoryPackage(
+                basePackage, engineName);
     }
 
     /**
@@ -295,27 +359,42 @@ public class DAOFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition engineName != null
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(String engineName, Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final String engineName, final Map parameters)
+      throws  BuildException
     {
-        File result = null;
+        return
+            retrieveOutputDir(
+                engineName, parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveDAOFactoryFolder(
-                    (File)
-                        parameters.get(
-                            ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters),
-                    engineName);
-        }
-
-        return result;
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param engineName the engine name.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition engineName != null
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected File retrieveOutputDir(
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveDAOFactoryFolder(
+                (File)
+                    parameters.get(
+                        ParameterValidationHandler.OUTPUT_DIR),
+                retrieveProjectPackage(parameters),
+                engineName);
     }
 
     /**
@@ -323,21 +402,15 @@ public class DAOFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the JNDI location.
      * @throws BuildException if the JNDI location retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveJNDIDataSource(Map parameters)
+    protected String retrieveJNDIDataSource(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String)
-                    parameters.get(
-                        ParameterValidationHandler.JNDI_DATASOURCES);
-        }
-
-        return result;
+        return
+            (String)
+                parameters.get(
+                    ParameterValidationHandler.JNDI_DATASOURCES);
     }
 
     /**
@@ -345,19 +418,17 @@ public class DAOFactoryTemplateBuildHandler
      * @param daoFactoryTemplates the DAO factory templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition daoFactoryTemplates != null
+     * @precondition parameters != null
      */
     protected void storeDAOFactoryTemplates(
-            DAOFactoryTemplate[] daoFactoryTemplates,
-            Map                  parameters)
-        throws  BuildException
+        final DAOFactoryTemplate[] daoFactoryTemplates,
+        final Map parameters)
+      throws  BuildException
     {
-        if  (   (daoFactoryTemplates != null)
-             && (parameters          != null))
-        {
-            parameters.put(
-                TemplateMappingManager.DAO_FACTORY_TEMPLATES,
-                daoFactoryTemplates);
-        }
+        parameters.put(
+            TemplateMappingManager.DAO_FACTORY_TEMPLATES,
+            daoFactoryTemplates);
     }
 
     /**
@@ -365,21 +436,15 @@ public class DAOFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return such templates.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition parameters != null
      */
     protected TableTemplate[] retrieveTableTemplates(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
-        TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (TableTemplate[])
-                    parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-        }
-
-        return result;
+        return
+            (TableTemplate[])
+                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
     }
 
     /**
@@ -387,18 +452,11 @@ public class DAOFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveProjectPackage(Map parameters)
+    protected String retrieveProjectPackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 }

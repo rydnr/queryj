@@ -69,7 +69,7 @@ import java.lang.ref.WeakReference;
  * @version $Revision$
  */
 
-public abstract class OracleUserTabColumnsTable
+public class OracleUserTabColumnsTable
     extends  Table
 {
     /**
@@ -81,25 +81,25 @@ public abstract class OracleUserTabColumnsTable
      * The user_tab_columns table table_name field.
      */
     public StringField TABLE_NAME =
-        new StringField("TABLE_NAME", this) {};
+        new StringField("TABLE_NAME", this);
 
     /**
      * The user_tab_columns table column_name field.
      */
     public StringField COLUMN_NAME =
-        new StringField("COLUMN_NAME", this) {};
+        new StringField("COLUMN_NAME", this);
 
     /**
      * The user_tab_columns table data_type field.
      */
     public StringField DATA_TYPE =
-        new StringField("DATA_TYPE", this) {};
+        new StringField("DATA_TYPE", this);
 
     /**
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */
-    protected OracleUserTabColumnsTable(String alias)
+    protected OracleUserTabColumnsTable(final String alias)
     {
         super("USER_TAB_COLUMNS", alias);
     }
@@ -116,7 +116,8 @@ public abstract class OracleUserTabColumnsTable
      * Specifies a new weak reference.
      * @param table the table instance to use.
      */
-    protected static void setReference(OracleUserTabColumnsTable table)
+    protected static void setReference(
+        final OracleUserTabColumnsTable table)
     {
         singleton = new WeakReference(table);
     }
@@ -135,13 +136,13 @@ public abstract class OracleUserTabColumnsTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserTabColumnsTable getInstance(String alias)
+    public static OracleUserTabColumnsTable getInstance(final String alias)
     {
         OracleUserTabColumnsTable result = null;
 
         if  (alias != null)
         {
-            result = new OracleUserTabColumnsTable(alias) { };
+            result = new OracleUserTabColumnsTable(alias);
         }
         else
         {
@@ -168,7 +169,7 @@ public abstract class OracleUserTabColumnsTable
 
         if  (result == null) 
         {
-            result = new OracleUserTabColumnsTable() { };
+            result = new OracleUserTabColumnsTable();
 
             setReference(result);
         }

@@ -217,6 +217,6 @@ public class ConfigurationPropertiesTemplateGenerator
             + File.separator
             + daoChooserTemplateUtils.retrievePropertiesFileName(
                   repository.toLowerCase()),
-              configurationPropertiesTemplate.toString());
+              configurationPropertiesTemplate.generate());
     }
 }

@@ -92,11 +92,15 @@ public class BaseDAOTemplate
      * @param tableTemplate the table template.
      * @param metaDataManager the database metadata manager.
      * @param packageName the package name.
+     * @param valueObjectPackageName the value object package name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     public BaseDAOTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
+        final String valueObjectPackageName,
         final Project project,
         final Task task)
     {
@@ -106,6 +110,8 @@ public class BaseDAOTemplate
             DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             packageName,
+            valueObjectPackageName,
+            DEFAULT_PROJECT_IMPORTS,
             ACMSL_IMPORTS,
             JDK_IMPORTS,
             DEFAULT_JAVADOC,
@@ -141,6 +147,8 @@ public class BaseDAOTemplate
                 getHeader(),
                 getPackageDeclaration(),
                 getPackageName(),
+                getValueObjectPackageName(),
+                getProjectImports(),
                 getAcmslImports(),
                 getJdkImports(),
                 getJavadoc(),
@@ -171,6 +179,8 @@ public class BaseDAOTemplate
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
+     * @param valueObjectPackageName the value object package name.
+     * @param projectImports the project imports.
      * @param acmslImports the ACM-SL imports.
      * @param jdkImports the JDK imports.
      * @param javadoc the class Javadoc.
@@ -207,6 +217,8 @@ public class BaseDAOTemplate
         final String header,
         final String packageDeclaration,
         final String packageName,
+        final String valueObjectPackageName,
+        final String projectImports,
         final String acmslImports,
         final String jdkImports,
         final String javadoc,
@@ -246,6 +258,20 @@ public class BaseDAOTemplate
         t_sbResult.append(
             t_PackageDeclarationFormatter.format(
                 new Object[]{packageName}));
+
+        MessageFormat t_ProjectImportsFormatter =
+            new MessageFormat(projectImports);
+
+        t_sbResult.append(
+            t_ProjectImportsFormatter.format(
+                new Object[]
+                {
+                    valueObjectPackageName,
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_')
+                }));
 
         t_sbResult.append(acmslImports);
         t_sbResult.append(jdkImports);

@@ -290,18 +290,12 @@ public class DAOTestTemplateGenerator
             {
                 throw
                     new QueryJException(
-                        "invalid.dao.template.factory");
+                        "invalid.dao.test.template.factory");
             }
             else 
             {
                 result = (DAOTestTemplateFactory) t_TemplateFactory;
             }
-        }
-        else
-        {
-            throw
-                new QueryJException(
-                    "dao.template.factory.not.found");
         }
 
         return result;
@@ -459,6 +453,6 @@ public class DAOTestTemplateGenerator
                         .getTableTemplate().getTableName().toLowerCase()),
                 '_')
             + "DAOTest.java",
-            daoTestTemplate.toString());
+            daoTestTemplate.generate());
     }
 }

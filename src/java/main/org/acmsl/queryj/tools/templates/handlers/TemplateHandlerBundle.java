@@ -94,7 +94,10 @@ public class TemplateHandlerBundle
     {
         for  (int t_iIndex = 0; t_iIndex < bundles.length; t_iIndex++)
         {
-            immutableAddHandler(bundles[t_iIndex]);
+            if  (bundles[t_iIndex] != null)
+            {
+                immutableAddHandler(bundles[t_iIndex]);
+            }
         }
     }
 

@@ -65,6 +65,8 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -86,13 +88,6 @@ public class MockDAOFactoryTemplateWritingHandler
     implements TemplateWritingHandler
 {
     /**
-     * A cached empty Mock DAO factory template array.
-     */
-    public static final MockDAOFactoryTemplate[]
-        EMPTY_MOCK_DAO_FACTORY_TEMPLATE_ARRAY =
-            new MockDAOFactoryTemplate[0];
-
-    /**
      * Creates a MockDAOFactoryTemplateWritingHandler.
      */
     public MockDAOFactoryTemplateWritingHandler() {};
@@ -102,46 +97,77 @@ public class MockDAOFactoryTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
+        return
+            handle(
+                retrieveMockDAOFactoryTemplates(parameters),
+                retrieveOutputDir(parameters),
+                MockDAOFactoryTemplateGenerator.getInstance(),
+                project,
+                task);
+    }
+
+    /**
+     * Handles given information.
+     * @param templates the templates.
+     * @param outputDir the output dir.
+     * @param generator the generator.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition templates != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final MockDAOFactoryTemplate[] templates,
+        final File outputDir,
+        final MockDAOFactoryTemplateGenerator generator,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
+            for  (int t_iMockDAOFactoryIndex = 0;
+                      t_iMockDAOFactoryIndex < templates.length;
+                      t_iMockDAOFactoryIndex++)
             {
-                Map attributes = command.getAttributeMap();
-
-                MockDAOFactoryTemplateGenerator
-                    t_MockDAOFactoryTemplateGenerator =
-                        MockDAOFactoryTemplateGenerator.getInstance();
-
-                MockDAOFactoryTemplate[] t_aMockDAOFactoryTemplates =
-                    retrieveMockDAOFactoryTemplates(attributes);
-
-                if  (   (t_aMockDAOFactoryTemplates        != null)
-                     && (t_MockDAOFactoryTemplateGenerator != null))
-                {
-                    File t_OutputDir =
-                        retrieveOutputDir(attributes);
-
-                    for  (int t_iMockDAOFactoryIndex = 0;
-                                t_iMockDAOFactoryIndex
-                              < t_aMockDAOFactoryTemplates.length;
-                              t_iMockDAOFactoryIndex++)
-                    {
-                        t_MockDAOFactoryTemplateGenerator.write(
-                            t_aMockDAOFactoryTemplates[t_iMockDAOFactoryIndex],
-                            t_OutputDir);
-                    }
-                }
+                generator.write(templates[t_iMockDAOFactoryIndex], outputDir);
             }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -152,22 +178,16 @@ public class MockDAOFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected MockDAOFactoryTemplate[] retrieveMockDAOFactoryTemplates(
         final Map parameters)
       throws  BuildException
     {
-        MockDAOFactoryTemplate[] result = EMPTY_MOCK_DAO_FACTORY_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (MockDAOFactoryTemplate[])
-                    parameters.get(
-                        TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATES);
-        }
-        
-        return result;
+        return
+            (MockDAOFactoryTemplate[])
+                parameters.get(
+                    TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATES);
     }
 
     /**
@@ -175,25 +195,31 @@ public class MockDAOFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveMockDAOFactoryFolder(
-                    (File)
-                        parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveMockDAOFactoryFolder(
+                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
+                retrieveProjectPackage(parameters));
     }
 
     /**
@@ -201,18 +227,11 @@ public class MockDAOFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected String retrieveProjectPackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 }

@@ -173,7 +173,7 @@ public interface MockDAOTemplateDefaults
      */
     public static final String LOGGING_IMPORTS =
           "/*\n"
-        + " * Importing Jakarta Commons Loggig classes\n"
+        + " * Importing Jakarta Commons Logging classes\n"
         + " */\n"
         + "import org.apache.commons.logging.LogFactory;\n\n";
     
@@ -229,7 +229,7 @@ public interface MockDAOTemplateDefaults
         + "     * layer.\n"
         + "     * @param map the new map.\n"
         + "     */\n"
-        + "    protected static void set{0}Map(Map map)\n"
+        + "    protected static void set{0}Map(final Map map)\n"
         + "    '{'\n"
         + "        m__m{0}Map = map;\n"
         + "    '}'\n\n"
@@ -287,15 +287,13 @@ public interface MockDAOTemplateDefaults
         + "     * layer filtering by its primary keys."
         + "{1}\n"
          // FIND_BY_PRIMARY_KEY_PK_JAVADOC
-        + "     * @param transactionToken <i>not used in this implementation</i>.\n"
         + "     * @return the information extracted from the simulated\n"
         + "     * persistence layer.\n"
         + "     */\n"
-        + "    public {2}ValueObject findByPrimaryKey(\n"
+        + "    public {2}ValueObject findByPrimaryKey("
          // java table name
-        + "{3}"
+        + "{3})\n"
          // FIND_BY_PRIMARY_KEY_PK_DECLARATION
-        + "        TransactionToken transactionToken)\n"
         + "    '{'\n"
         + "        {2}ValueObject result = null;\n\n"
          // java table name
@@ -328,7 +326,7 @@ public interface MockDAOTemplateDefaults
      * The find-by-primary-key method's primary keys declaration.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION =
-        "        {0} {1},\n";
+        "\n        final {0} {1}";
          // pk type - java pk
 
     /**
@@ -379,12 +377,10 @@ public interface MockDAOTemplateDefaults
          // (optional) pk javadoc
         + "{3}\n"
          // insert parameters javadoc
-        + "     * @param transactionToken <i>not used in this implementation</i>.\n"
         + "     */\n"
         + "    public void insert("
-        + "{4}\n"
+        + "{4})\n"
          // insert parameters declaration
-        + "        TransactionToken transactionToken)\n"
         + "    '{'\n"
         + "        Map t_m{1}Map = null;\n\n"
         + "        synchronized (LOCK)\n"
@@ -430,19 +426,16 @@ public interface MockDAOTemplateDefaults
          // (optional) pk javadoc
         + "{2}\n"
          // update parameters javadoc
-        + "     * @param transactionToken <i>not used in this implementation</i>.\n"
         + "     */\n"
         + "    public void update(\n"
         + "{3}"
          // pk declaration
-        + "{4}"
+        + "{4})\n"
          // update parameters declaration
-        + "        TransactionToken transactionToken)\n"
         + "    '{'\n"
         + "        {0}ValueObject t_{0}ValueObject =\n"
         + "            findByPrimaryKey(\n"
-        + "                {5},\n"
-        + "                transactionToken);\n\n"
+        + "                {5});\n\n"
          // pk values
         + "        if  (t_{0}ValueObject != null)\n"
         + "        '{'\n"
@@ -486,15 +479,13 @@ public interface MockDAOTemplateDefaults
         + "     * by its primary keys."
         + "{2}\n"
          // DELETE_PK_JAVADOC
-        + "     * @param transactionToken the transaction token.\n"
         + "     * @return <code>true</code> if the information has been deleted\n"
         + "     * successfully.\n"
         + "     */\n"
         + "    {4} boolean delete{5}(\n"
          // java table name
-        + "{3}"
+        + "{3})\n"
          // DELETE_PK_DECLARATION
-        + "        TransactionToken transactionToken)\n"
         + "    '{'\n"
         + "        boolean result = false;\n\n"
         + "        synchronized (LOCK)\n"
@@ -534,14 +525,12 @@ public interface MockDAOTemplateDefaults
         + "     * by its primary keys."
         + "{1}\n"
          // DELETE_PK_JAVADOC
-        + "     * @param transactionToken <i>not used in this implementation</i>.\n"
         + "     * @return <code>true</code> if the information has been deleted\n"
         + "     * successfully.\n"
         + "     */\n"
         + "    public boolean delete(\n"
-        + "{2}"
+        + "{2})\n"
          // DELETE_PK_DECLARATION
-        + "        TransactionToken  transactionToken)\n"
         + "    '{'\n"
         + "        return\n"
         + "        // delete with fk, comparing for mock implementations.\n"
@@ -573,8 +562,7 @@ public interface MockDAOTemplateDefaults
         + "                    '{'\n"
         + "                        result =\n"
         + "                            t_{0}DAO.delete(\n"
-        + "                                {1}.get{2}(),\n"
-        + "                                t_DeleteTransactionToken);\n"
+        + "                                {1}.get{2}());\n"
         + "                    '}'\n"
         + "                    else\n"
         + "                    '{'\n"

@@ -338,6 +338,33 @@
       <url>http://jakarta.apache.org/commons</url>
     </dependency-->
 
+    <dependency>
+      <groupId>spring</groupId>
+      <artifactId>spring-dao</artifactId>
+      <version>1.1.4</version>
+      <url>http://www.springframework.org</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>true</required.to.build>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>spring</groupId>
+      <artifactId>spring</artifactId>
+      <version>1.1.4</version>
+      <url>http://www.springframework.org</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>true</required.to.build>
+        <injected.by>spring/spring-dao</injected.by>
+      </properties>
+    </dependency>
+
   </dependencies>
 
   <build>

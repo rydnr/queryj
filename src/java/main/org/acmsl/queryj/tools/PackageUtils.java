@@ -122,7 +122,7 @@ public class PackageUtils
      * Specifies a new weak reference.
      * @param utils the utils instance to use.
      */
-    protected static void setReference(PackageUtils utils)
+    protected static void setReference(final PackageUtils utils)
     {
         singleton = new WeakReference(utils);
     }
@@ -1052,5 +1052,28 @@ public class PackageUtils
                 retrieveDAOFolder(
                     parentFolder, packageName, engineName),
                 tableName.toLowerCase());
+    }
+
+    /**
+     * Retrieves the package name for QueryPreparedStatementCreator class.
+     * @param packageName the original package.
+     * @return the package for such class.
+     */
+    public String retrieveQueryPreparedStatementCreatorPackage(final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for QueryPreparedStatementCreator class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveQueryPreparedStatementCreatorFolder(
+        final File parentFolder, final String packageName)
+    {
+        return retrieveRdbFolder(parentFolder, packageName);
     }
 }

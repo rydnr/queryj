@@ -81,7 +81,7 @@ import java.lang.ref.WeakReference;
 /**
  * Is able to generate Oracle's system function repositories.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class OracleSystemFunctionsTemplateGenerator
@@ -101,7 +101,8 @@ public class OracleSystemFunctionsTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setOracleReference(OracleSystemFunctionsTemplateGenerator generator)
+    protected static void setOracleReference(
+        final OracleSystemFunctionsTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -132,7 +133,7 @@ public class OracleSystemFunctionsTemplateGenerator
 
         if  (result == null) 
         {
-            result = new OracleSystemFunctionsTemplateGenerator() {};
+            result = new OracleSystemFunctionsTemplateGenerator();
 
             setReference(result);
         }
@@ -150,6 +151,10 @@ public class OracleSystemFunctionsTemplateGenerator
      * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition quote != null
      */
     public SystemFunctionsTemplate createSystemFunctionsTemplate(
         final String packageName,
@@ -160,23 +165,13 @@ public class OracleSystemFunctionsTemplateGenerator
         final Task task)
       throws  QueryJException
     {
-        SystemFunctionsTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            result =
-                new OracleSystemFunctionsTemplate(
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    project,
-                    task) {};
-        }
-
-        return result;
+        return
+            new OracleSystemFunctionsTemplate(
+                packageName,
+                engineName,
+                engineVersion,
+                quote,
+                project,
+                task);
     }
 }

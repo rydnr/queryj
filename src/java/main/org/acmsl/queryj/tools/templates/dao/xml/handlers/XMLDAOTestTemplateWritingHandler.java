@@ -64,6 +64,8 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -85,12 +87,6 @@ public class XMLDAOTestTemplateWritingHandler
     implements TemplateWritingHandler
 {
     /**
-     * A cached empty DAO test template array.
-     */
-    public static final XMLDAOTestTemplate[] EMPTY_XML_DAO_TEST_TEMPLATE_ARRAY =
-        new XMLDAOTestTemplate[0];
-
-    /**
      * Creates a XMLDAOTestTemplateWritingHandler.
      */
     public XMLDAOTestTemplateWritingHandler() {};
@@ -100,49 +96,79 @@ public class XMLDAOTestTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(
+        final Map parameters, final Project project, final Task task)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveXMLDAOTestTemplates(parameters),
+                retrieveOutputDir(parameters),
+                XMLDAOTestTemplateGenerator.getInstance(),
+                project,
+                task);
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param templates the templates.
+     * @param outputDir the output dir.
+     * @param generator the generator.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition templates != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final XMLDAOTestTemplate[] templates,
+        final File outputDir,
+        final XMLDAOTestTemplateGenerator generator,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
+            for  (int t_iXMLDAOTestIndex = 0;
+                      t_iXMLDAOTestIndex < templates.length;
+                      t_iXMLDAOTestIndex++)
             {
-                Map attributes = command.getAttributeMap();
-
-                XMLDAOTestTemplateGenerator t_XMLDAOTestTemplateGenerator =
-                    XMLDAOTestTemplateGenerator.getInstance();
-
-                XMLDAOTestTemplate[] t_aXMLDAOTestTemplates =
-                    retrieveXMLDAOTestTemplates(attributes);
-
-                DatabaseMetaData t_DatabaseMetaData =
-                    retrieveDatabaseMetaData(attributes);
-
-                if  (   (t_DatabaseMetaData             != null) 
-                     && (t_aXMLDAOTestTemplates        != null)
-                     && (t_XMLDAOTestTemplateGenerator != null))
-                {
-                    File t_OutputDir = retrieveOutputDir(attributes);
-
-                    for  (int t_iXMLDAOTestIndex = 0;
-                              t_iXMLDAOTestIndex < t_aXMLDAOTestTemplates.length;
-                              t_iXMLDAOTestIndex++)
-                    {
-                        t_XMLDAOTestTemplateGenerator.write(
-                            t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex],
-                            t_OutputDir,
-                            command.getTask().getProject(),
-                            command.getTask());
-                    }
-                }
+                generator.write(templates[t_iXMLDAOTestIndex], outputDir);
             }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -153,45 +179,16 @@ public class XMLDAOTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the templates.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected XMLDAOTestTemplate[] retrieveXMLDAOTestTemplates(
         final Map parameters)
       throws  BuildException
     {
-        XMLDAOTestTemplate[] result = EMPTY_XML_DAO_TEST_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (XMLDAOTestTemplate[])
-                    parameters.get(
-                        TemplateMappingManager.XML_DAO_TEST_TEMPLATES);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
+        return
+            (XMLDAOTestTemplate[])
+                parameters.get(
+                    TemplateMappingManager.XML_DAO_TEST_TEMPLATES);
     }
 
     /**
@@ -199,19 +196,12 @@ public class XMLDAOTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected String retrieveProjectPackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**
@@ -219,19 +209,12 @@ public class XMLDAOTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the output dir.
      * @throws BuildException if the output dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveProjectFolder(Map parameters)
+    protected File retrieveProjectFolder(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-        }
-        
-        return result;
+        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
     }
 
     /**
@@ -239,23 +222,38 @@ public class XMLDAOTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveXMLDAOTestFolder(
-                    retrieveProjectFolder(parameters),
-                    retrieveProjectPackage(parameters));
-        }
+        return
+            retrieveOutputDir(
+                retrieveProjectFolder(parameters),
+                retrieveProjectPackage(parameters),
+                PackageUtils.getInstance());
+    }
         
-        return result;
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project package.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition projectFolder != null
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
+     */
+    protected File retrieveOutputDir(
+        final File projectFolder,
+        final String projectPackage,
+        final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveXMLDAOTestFolder(
+                projectFolder,
+                projectPackage);
     }
 }

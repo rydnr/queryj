@@ -63,6 +63,7 @@ import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateBuildHandler;
 
 /*
  * Importing some ACM-SL classes.
@@ -134,6 +135,7 @@ public class BaseDAOTemplateBuildHandler
                 parameters,
                 retrieveDatabaseMetaDataManager(parameters),
                 retrievePackage(parameters),
+                retrieveValueObjectPackageName(parameters),
                 retrieveTableTemplates(parameters),
                 BaseDAOTemplateGenerator.getInstance(),
                 project,
@@ -146,6 +148,7 @@ public class BaseDAOTemplateBuildHandler
      * @param databaseMetaDataManager the manager instance
      * of the database metadata.
      * @param packageName the package name.
+     * @param valueObjectPackageName the value object package name.
      * @param tableTemplates the table templates.
      * @param templateFactory the template factory.
      * @param project the project, for logging purposes.
@@ -155,6 +158,7 @@ public class BaseDAOTemplateBuildHandler
      * @precondition parameters != null
      * @precondition databaseMetaDataManager != null
      * @precondition packageName != null
+     * @precondition valueObjectPackageName != null
      * @precondition tableTemplates != null
      * @precondition templateFactory != null
      */
@@ -162,6 +166,7 @@ public class BaseDAOTemplateBuildHandler
         final Map parameters,
         final DatabaseMetaDataManager databaseMetaDataManager,
         final String packageName,
+        final String valueObjectPackageName,
         final TableTemplate[] tableTemplates,
         final BaseDAOTemplateFactory templateFactory,
         final Project project,
@@ -184,6 +189,7 @@ public class BaseDAOTemplateBuildHandler
                         tableTemplates[t_iBaseDAOIndex],
                         databaseMetaDataManager,
                         packageName,
+                        valueObjectPackageName,
                         project,
                         task);
             }
@@ -196,6 +202,17 @@ public class BaseDAOTemplateBuildHandler
         }
         
         return result;
+    }
+
+    /**
+     * Retrieves the value object package name.
+     * @param parameters the parameters.
+     * @return such package name.
+     * @precondition parameters != null
+     */
+    protected String retrieveValueObjectPackageName(final Map parameters)
+    {
+        return ValueObjectTemplateBuildHandler.retrievePackage(parameters);
     }
 
     /**

@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
@@ -74,17 +75,13 @@ import org.acmsl.commons.patterns.Command;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
 import java.util.Map;
-
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Builds a XML DAO template using database metadata.
@@ -111,75 +108,100 @@ public class XMLDAOTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveDatabaseMetaDataManager(parameters),
+                retrieveProjectPackage(parameters),
+                retrievePackage(parameters),
+                retrieveTableRepositoryName(parameters),
+                retrieveTableTemplates(parameters),
+                XMLDAOTemplateGenerator.getInstance(),
+                project,
+                task);
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param metaDataManager the database metadata manager.
+     * @param basePackage the base package.
+     * @param packageName the package name.
+     * @param repositoryName the repository name.
+     * @param tableTemplates the table templates.
+     * @param templateFactory the template factory.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaDataManager != null
+     * @precondition basePackage != null
+     * @precondition packageName != null
+     * @precondition repositoryName != null
+     * @precondition tableTemplates != null
+     * @precondition templateFactory != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaDataManager metaDataManager,
+        final String basePackage,
+        final String packageName,
+        final String repositoryName,
+        final TableTemplate[] tableTemplates,
+        final XMLDAOTemplateFactory templateFactory,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
         boolean result = false;
 
         try
         {
-            Map attributes = command.getAttributeMap();
+            XMLDAOTemplate[] t_aXMLDAOTemplates =
+                new XMLDAOTemplate[tableTemplates.length];
 
-            DatabaseMetaDataManager t_MetaDataManager =
-                retrieveDatabaseMetaDataManager(attributes);
-
-            XMLDAOTemplateGenerator t_XMLDAOTemplateGenerator =
-                XMLDAOTemplateGenerator.getInstance();
-
-            if  (t_XMLDAOTemplateGenerator != null)
+            for  (int t_iXMLDAOIndex = 0;
+                      t_iXMLDAOIndex < t_aXMLDAOTemplates.length;
+                      t_iXMLDAOIndex++) 
             {
-                String t_strBasePackage =
-                    retrieveProjectPackage(attributes);
-
-                String t_strPackage =
-                    retrievePackage(attributes);
-
-                String t_strRepositoryName =
-                    retrieveTableRepositoryName(attributes);
-
-                TableTemplate[] t_aTableTemplates =
-                    retrieveTableTemplates(attributes);
-
-                if  (t_aTableTemplates != null)
-                {
-                    XMLDAOTemplate[] t_aXMLDAOTemplates =
-                        new XMLDAOTemplate[t_aTableTemplates.length];
-
-                    for  (int t_iXMLDAOIndex = 0;
-                              t_iXMLDAOIndex < t_aXMLDAOTemplates.length;
-                              t_iXMLDAOIndex++) 
-                    {
-                        command.getProject().log(
-                            command.getTask(),
-                            "Building XML dao template ("
-                            + t_aTableTemplates[t_iXMLDAOIndex].getTableName()
-                            + ")",
-                            Project.MSG_VERBOSE);
-
-                        t_aXMLDAOTemplates[t_iXMLDAOIndex] =
-                            t_XMLDAOTemplateGenerator.createXMLDAOTemplate(
-                                t_aTableTemplates[t_iXMLDAOIndex],
-                                t_MetaDataManager,
-                                t_strPackage,
-                                t_strBasePackage,
-                                t_strRepositoryName);
-                    }
-
-                    storeXMLDAOTemplates(t_aXMLDAOTemplates, attributes);
-                }
+                t_aXMLDAOTemplates[t_iXMLDAOIndex] =
+                    templateFactory.createXMLDAOTemplate(
+                        tableTemplates[t_iXMLDAOIndex],
+                        metaDataManager,
+                        packageName,
+                        basePackage,
+                        repositoryName,
+                        project,
+                        task);
             }
+
+            storeXMLDAOTemplates(t_aXMLDAOTemplates, parameters);
         }
-        catch  (QueryJException queryjException)
+        catch  (final QueryJException queryjException)
         {
-            Project t_Project = command.getProject();
-
-            if  (t_Project != null)
-            {
-                t_Project.log(
-                    command.getTask(),
-                      "Error building XML DAO ("
-                    + queryjException.getMessage()
-                    + ")",
-                    Project.MSG_WARN);
-            }
-
             throw new BuildException(queryjException);
         }
         
@@ -218,7 +240,6 @@ public class XMLDAOTemplateBuildHandler
 
     /**
      * Retrieves the package name from the attribute map.
-     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
@@ -227,18 +248,26 @@ public class XMLDAOTemplateBuildHandler
     protected String retrievePackage(final Map parameters)
       throws  BuildException
     {
-        String result = null;
+        return
+            retrievePackage(
+                retrieveProjectPackage(parameters),
+                PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (t_PackageUtils != null)
-        {
-            result =
-                t_PackageUtils.retrieveXMLDAOPackage(
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+    /**
+     * Retrieves the package name from the attribute map.
+     * @param projectPackage the project package.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
+     */
+    protected String retrievePackage(
+        final String projectPackage, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return packageUtils.retrieveXMLDAOPackage(projectPackage);
     }
 
     /**
@@ -260,11 +289,12 @@ public class XMLDAOTemplateBuildHandler
      * @param mockDAOTemplates the XML DAO templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition mockDAOTemplates != null
      * @precondition parameters != null
      */
     protected void storeXMLDAOTemplates(
         final XMLDAOTemplate[] mockDAOTemplates,
-        final Map               parameters)
+        final Map parameters)
       throws  BuildException
     {
         parameters.put(

@@ -128,7 +128,7 @@ public class DAOChooserTemplateGenerator
 
         if  (result == null) 
         {
-            result = new DAOChooserTemplateGenerator() {};
+            result = new DAOChooserTemplateGenerator();
 
             setReference(result);
         }
@@ -152,8 +152,7 @@ public class DAOChooserTemplateGenerator
         final Project project,
         final Task task)
     {
-        return
-            new DAOChooserTemplate(packageName, repository, project, task) {};
+        return new DAOChooserTemplate(packageName, repository, project, task);
     }
 
     /**
@@ -180,6 +179,8 @@ public class DAOChooserTemplateGenerator
      * Writes a DAOChooser to disk.
      * @param daoChooserTemplate the template to write.
      * @param outputDir the output folder.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition daoChooserTemplate != null
      * @precondition outputDir != null
@@ -199,6 +200,6 @@ public class DAOChooserTemplateGenerator
               outputDir.getAbsolutePath()
             + File.separator
             + "DAOChooser.java",
-            daoChooserTemplate.toString());
+            daoChooserTemplate.generate());
     }
 }

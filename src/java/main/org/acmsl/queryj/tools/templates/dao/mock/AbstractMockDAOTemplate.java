@@ -1632,4 +1632,26 @@ public abstract class AbstractMockDAOTemplate
     {
         return m__strClassEnd;
     }
+
+    /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return buildHeader(getTableTemplate());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param tableTemplate the table template.
+     * @return such header.
+     * @precondition tableTemplate != null
+     */
+    protected String buildHeader(final TableTemplate tableTemplate)
+    {
+        return
+              "Generating MockDAO for "
+            + tableTemplate.getTableName() + ".";
+    }
 }
