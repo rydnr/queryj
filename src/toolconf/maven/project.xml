@@ -8,7 +8,7 @@
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>
-    <logo>http://www.acm-sl.org/images/logo.jpg</logo>
+    <logo>http://www.acm-sl.org/images/logo.png</logo>
   </organization>
   <inceptionYear>2003</inceptionYear>
   <package>org.acmsl.queryj</package>
