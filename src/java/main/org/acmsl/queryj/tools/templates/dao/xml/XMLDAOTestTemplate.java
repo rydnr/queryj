@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Template for creating JUnit tests to ensure generated Mock
+ * Description: Template for creating JUnit tests to ensure generated XML
  *              DAOs are working correctly.
  *
  * Last modified by: $Author$ at $Date$
@@ -45,7 +45,7 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.mock;
+package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
  * Importing some project-specific classes.
@@ -80,14 +80,14 @@ import java.util.Map;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Template for creating JUnit tests to ensure generated Mock DAOs
+ * Template for creating JUnit tests to ensure generated XML DAOs
  * are working correctly.
  * See <a href="bugzilla.acm-sl.org/show_bug.cgi?id=502">502</a>.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class MockDAOTestTemplate
+public abstract class XMLDAOTestTemplate
     implements  TestTemplate
 {
     /**
@@ -137,7 +137,7 @@ public abstract class MockDAOTestTemplate
         + " *\n"
         + " * Author: QueryJ\n"
         + " *\n"
-        + " * Description: Executes JUnit tests to ensure Mock{0}DAO works as\n"
+        + " * Description: Executes JUnit tests to ensure XML{0}DAO works as\n"
          // table
         + " *              expected.\n"
         + " *\n"
@@ -164,20 +164,22 @@ public abstract class MockDAOTestTemplate
           "/*\n"
         + " * Importing project classes.\n"
         + " */\n"
-        + "import {0}.Mock{1}DAO;\n"
+        + "import {0}.XML{1}DAO;\n"
+        + "import {0}.XML{1}DAOFactory;\n"
     // DAO package - engine name - table name
         + "import {2}.{1}ValueObject;\n\n";
     // package - table name
 
     /**
      * The ACMSL imports.
-     * See <a href="bugzilla.acm-sl.org/show_bug.cgi?id=503">503</a>
      */
-    public static final String DEFAULT_ACMSL_IMPORTS =
+    public static final String DEFAULT_ACMSL_IMPORTS = "";
+    /*
           "/*\n"
         + " * Importing some ACM-SL classes.\n"
-        + " */\n"
+        + " *" + "/\n"
         + "import org.acmsl.queryj.dao.MockDataSource;\n\n";
+    */
 
     /**
      * The JDK imports.
@@ -209,19 +211,19 @@ public abstract class MockDAOTestTemplate
      */
     public static final String DEFAULT_JAVADOC =
           "/**\n"
-        + " * Executes JUnit tests to ensure Mock{1}DAO works as\n"
+        + " * Executes JUnit tests to ensure XML{1}DAO works as\n"
          // table
         + " * expected and connections are correctly managed.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
-        + " * @see {0}.Mock{1}DAO\n"
+        + " * @see {0}.XML{1}DAO\n"
         + " */\n";
 
     /**
      * The class definition.
      */
     public static final String DEFAULT_CLASS_DEFINITION =
-          "public class Mock{0}DAOTest\n"
+          "public class XML{0}DAOTest\n"
          // Table
         + "    extends  TestSuite\n";
 
@@ -239,7 +241,7 @@ public abstract class MockDAOTestTemplate
         + "    /**\n"
         + "     * The tested instance.\n"
         + "     */\n"
-        + "    private static Mock{0}DAO m__TestedInstance;\n\n";
+        + "    private static XML{0}DAO m__TestedInstance;\n\n";
          // DAO name.
 
     /**
@@ -333,11 +335,11 @@ public abstract class MockDAOTestTemplate
      */
     public static final String DEFAULT_CONSTRUCTOR =
           "    /**\n"
-        + "     * Constructs a Mock{0}DAOTest with given name.\n"
+        + "     * Constructs a XML{0}DAOTest with given name.\n"
          // engine - DAO name.
         + "     * @param name the test name.\n"
         + "     */\n"
-        + "    public Mock{0}DAOTest(final String name)\n"
+        + "    public XML{0}DAOTest(final String name)\n"
         + "    '{'\n"
         + "        super(name);\n"
         + "    '}'\n\n";
@@ -355,7 +357,7 @@ public abstract class MockDAOTestTemplate
         + "     * Specifies the DAO to test.\n"
         + "     * @param dao the DAO to test.\n"
         + "     */\n"
-        + "    private static void setTestedInstance(final Mock{0}DAO dao)\n"
+        + "    private static void setTestedInstance(final XML{0}DAO dao)\n"
          // engine name - DAO name.
         + "    '{'\n"
         + "        m__TestedInstance = dao;\n"
@@ -364,7 +366,7 @@ public abstract class MockDAOTestTemplate
         + "     * Retrieves the DAO under test.\n"
         + "     * @return such DAO.\n"
         + "     */\n"
-        + "    public static Mock{0}DAO getTestedInstance()\n"
+        + "    public static XML{0}DAO getTestedInstance()\n"
          // engine name - DAO name.
         + "    '{'\n"
         + "        return m__TestedInstance;\n"
@@ -392,12 +394,22 @@ public abstract class MockDAOTestTemplate
         + "        return m__ValueObject;\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Sets up the mock objects.\n"
+        + "     * Sets up the xml objects.\n"
         + "     */\n"
         + "    protected static void init()\n"
         + "    '{'\n"
+        + "        init(XML{0}DAOFactory.getXMLInstance());\n"
+         // DAO name.
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Sets up the xml objects.\n"
+        + "     * @param factory the XML{0}DAOFactory instance.\n"
+        + "     * @precondition factory != null\n"
+        + "     */\n"
+        + "    protected static void init(final XML{0}DAOFactory factory)\n"
+        + "    '{'\n"
         + "        setTestedInstance(\n"
-        + "            new Mock{0}DAO() '{' '}');\n"
+        + "            (XML{0}DAO) factory.create{0}DAO());\n"
          // DAO name.
         + "    '}'\n\n";
 
@@ -411,16 +423,16 @@ public abstract class MockDAOTestTemplate
         + "     */\n"
         + "    public static Test suite()\n"
         + "    '{'\n"
-        + "        TestSuite result = new TestSuite(\"Mock{0}DAOTest - test suite\");\n\n"
+        + "        TestSuite result = new TestSuite(\"XML{0}DAOTest - test suite\");\n\n"
          // DAO name.
         + "        init();\n\n"
-        + "        result.addTest(new InsertMock{0}Test(\"testInsert\"));\n"
+        + "        result.addTest(new InsertXML{0}Test(\"testInsert\"));\n"
          // Value Object Name - Value Object Name.
-        + "        result.addTest(new FindByPrimaryKeyMock{0}Test(\"testFindByPrimaryKey\"));\n"
+        + "        result.addTest(new FindByPrimaryKeyXML{0}Test(\"testFindByPrimaryKey\"));\n"
          // Value Object Name - Value Object Name.
-        + "        result.addTest(new UpdateMock{0}Test(\"testUpdate\"));\n"
+        + "        result.addTest(new UpdateXML{0}Test(\"testUpdate\"));\n"
          // Value Object Name - Value Object Name.
-        + "        result.addTest(new DeleteMock{0}Test(\"testDelete\"));\n"
+        + "        result.addTest(new DeleteXML{0}Test(\"testDelete\"));\n"
          // Value Object Name - Value Object Name.
         + "        return result;\n"
         + "    '}'\n\n";
@@ -431,20 +443,20 @@ public abstract class MockDAOTestTemplate
      */
     public static final String DEFAULT_STORE_TEST =
           "    /**\n"
-        + "     * Tests Mock{1}DAO.insert() method.\n"
+        + "     * Tests XML{1}DAO.insert() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.Mock{1}DAO#insert({2},org.acmsl.queryj.dao.TransactionToken)\n"
+        + "     * @see {0}.XML{1}DAO#insert({2},org.acmsl.queryj.dao.TransactionToken)\n"
          // method parameter type declaration
         + "     */\n"
-        + "    public static class InsertMock{1}Test\n"
+        + "    public static class InsertXML{1}Test\n"
         + "        extends  TestCase\n"
         + "    '{'\n"
         + "        /**\n"
-        + "         * Constructs a InsertMock{1}Test with given name.\n"
+        + "         * Constructs a InsertXML{1}Test with given name.\n"
         + "         * @param name the test name.\n"
         + "         */\n"
-        + "        public InsertMock{1}Test(final String name)\n"
+        + "        public InsertXML{1}Test(final String name)\n"
         + "        '{'\n"
         + "            super(name);\n"
         + "        '}'\n\n"
@@ -474,19 +486,19 @@ public abstract class MockDAOTestTemplate
      */
     public static final String DEFAULT_LOAD_TEST =
           "    /**\n"
-        + "     * Tests Mock{1}DAO.findByPrimaryKey()} method.\n"
+        + "     * Tests XML{1}DAO.findByPrimaryKey()} method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.Mock{1}DAO#findByPrimaryKey({2},org.acmsl.queryj.dao.TransactionToken)\n"
+        + "     * @see {0}.XML{1}DAO#findByPrimaryKey({2},org.acmsl.queryj.dao.TransactionToken)\n"
         + "     */\n"
-        + "    public static class FindByPrimaryKeyMock{1}Test\n"
+        + "    public static class FindByPrimaryKeyXML{1}Test\n"
         + "        extends  TestCase\n"
         + "    '{'\n"
         + "        /**\n"
-        + "         * Constructs a FindByPrimaryKeyMock{1}Test with given name.\n"
+        + "         * Constructs a FindByPrimaryKeyXML{1}Test with given name.\n"
         + "         * @param name the test name.\n"
         + "         */\n"
-        + "        public FindByPrimaryKeyMock{1}Test(final String name)\n"
+        + "        public FindByPrimaryKeyXML{1}Test(final String name)\n"
         + "        '{'\n"
         + "            super(name);\n"
         + "        '}'\n\n"
@@ -513,20 +525,20 @@ public abstract class MockDAOTestTemplate
      */
     public static final String DEFAULT_UPDATE_TEST =
           "    /**\n"
-        + "     * Tests Mock{1}DAO.update() method.\n"
+        + "     * Tests XML{1}DAO.update() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.Mock{1}DAO#update({2},org.acmsl.queryj.dao.TransactionToken)\n"
+        + "     * @see {0}.XML{1}DAO#update({2},org.acmsl.queryj.dao.TransactionToken)\n"
          // method parameter type declaration
         + "     */\n"
-        + "    public static class UpdateMock{1}Test\n"
+        + "    public static class UpdateXML{1}Test\n"
         + "        extends  TestCase\n"
         + "    '{'\n"
         + "        /**\n"
-        + "         * Constructs a UpdateMock{1}Test with given name.\n"
+        + "         * Constructs a UpdateXML{1}Test with given name.\n"
         + "         * @param name the test name.\n"
         + "         */\n"
-        + "        public UpdateMock{1}Test(final String name)\n"
+        + "        public UpdateXML{1}Test(final String name)\n"
         + "        '{'\n"
         + "            super(name);\n"
         + "        '}'\n\n"
@@ -565,19 +577,19 @@ public abstract class MockDAOTestTemplate
      */
     public static final String DEFAULT_REMOVE_TEST =
           "    /**\n"
-        + "     * Tests Mock{1}DAO.delete() method.\n"
+        + "     * Tests XML{1}DAO.delete() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.Mock{1}DAO#delete({2},org.acmsl.queryj.dao.TransactionToken)\n"
+        + "     * @see {0}.XML{1}DAO#delete({2},org.acmsl.queryj.dao.TransactionToken)\n"
         + "     */\n"
-        + "    public static class DeleteMock{1}Test\n"
+        + "    public static class DeleteXML{1}Test\n"
         + "        extends  TestCase\n"
         + "    '{'\n"
         + "        /**\n"
-        + "         * Constructs a DeleteMock{1}Test with given name.\n"
+        + "         * Constructs a DeleteXML{1}Test with given name.\n"
         + "         * @param name the test name.\n"
         + "         */\n"
-        + "        public DeleteMock{1}Test(final String name)\n"
+        + "        public DeleteXML{1}Test(final String name)\n"
         + "        '{'\n"
         + "            super(name);\n"
         + "        '}'\n\n"
@@ -789,7 +801,7 @@ public abstract class MockDAOTestTemplate
      * subtemplate.
      * @param classEnd the class end.
      */
-    public MockDAOTestTemplate(
+    public XMLDAOTestTemplate(
         TableTemplate           tableTemplate,
         DatabaseMetaDataManager metaDataManager,
         String                  header,
@@ -859,7 +871,7 @@ public abstract class MockDAOTestTemplate
      * @param daoPackageName the DAO's package name.
      * @param valueObjectsPackageName the value objects' package name.
      */
-    public MockDAOTestTemplate(
+    public XMLDAOTestTemplate(
         TableTemplate           tableTemplate,
         DatabaseMetaDataManager metaDataManager,
         String                  packageName,
@@ -1707,7 +1719,7 @@ public abstract class MockDAOTestTemplate
         final EnglishGrammarUtils englishGrammarUtils)
     {
         return
-              "Mock"
+              "XML"
             + stringUtils.capitalize(
                   englishGrammarUtils.getSingular(
                       getTableTemplate().getTableName().toLowerCase()),

@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a Mock DAO test template using database metadata.
+ * Description: Builds a XML DAO test template using database metadata.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,7 +44,7 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.mock.handlers;
+package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 
 /*
  * Importing some project classes.
@@ -57,8 +57,8 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -80,13 +80,13 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Handles the building of Mock DAO test templates using database
+ * Handles the building of XML DAO test templates using database
  * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$ at $Date$
  */
-public class MockDAOTestTemplateBuildHandler
+public class XMLDAOTestTemplateBuildHandler
     extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
@@ -97,9 +97,9 @@ public class MockDAOTestTemplateBuildHandler
         new TableTemplate[0];
 
     /**
-     * Creates a MockDAOTestTemplateBuildHandler.
+     * Creates a XMLDAOTestTemplateBuildHandler.
      */
-    public MockDAOTestTemplateBuildHandler() {};
+    public XMLDAOTestTemplateBuildHandler() {};
 
     /**
      * Handles given command.
@@ -125,45 +125,45 @@ public class MockDAOTestTemplateBuildHandler
                     retrieveDatabaseMetaDataManager(attributes);
 
                 String t_strPackage =
-                    retrieveMockDAOTestPackage(attributes);
+                    retrieveXMLDAOTestPackage(attributes);
 
-                MockDAOTestTemplateGenerator t_MockDAOTestTemplateGenerator =
-                    MockDAOTestTemplateGenerator.getInstance();
+                XMLDAOTestTemplateGenerator t_XMLDAOTestTemplateGenerator =
+                    XMLDAOTestTemplateGenerator.getInstance();
 
                 if  (   (t_MetaData                     != null)
                      && (t_MetaDataManager              != null)
-                     && (t_MockDAOTestTemplateGenerator != null))
+                     && (t_XMLDAOTestTemplateGenerator != null))
                 {
                     TableTemplate[] t_aTableTemplates =
                         retrieveTableTemplates(attributes);
 
                     if  (t_aTableTemplates != null)
                     {
-                        MockDAOTestTemplate[] t_aMockDAOTestTemplates =
-                            new MockDAOTestTemplate[t_aTableTemplates.length];
+                        XMLDAOTestTemplate[] t_aXMLDAOTestTemplates =
+                            new XMLDAOTestTemplate[t_aTableTemplates.length];
 
-                        for  (int t_iMockDAOTestIndex = 0;
-                                  t_iMockDAOTestIndex < t_aMockDAOTestTemplates.length;
-                                  t_iMockDAOTestIndex++) 
+                        for  (int t_iXMLDAOTestIndex = 0;
+                                  t_iXMLDAOTestIndex < t_aXMLDAOTestTemplates.length;
+                                  t_iXMLDAOTestIndex++) 
                         {
-                            t_aMockDAOTestTemplates[t_iMockDAOTestIndex] =
-                                t_MockDAOTestTemplateGenerator
-                                    .createMockDAOTestTemplate(
-                                        t_aTableTemplates[t_iMockDAOTestIndex],
+                            t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex] =
+                                t_XMLDAOTestTemplateGenerator
+                                    .createXMLDAOTestTemplate(
+                                        t_aTableTemplates[t_iXMLDAOTestIndex],
                                         t_MetaDataManager,
                                         t_strPackage,
-                                        retrieveMockDAOPackage(
+                                        retrieveXMLDAOPackage(
                                             t_MetaData
                                                 .getDatabaseProductName(),
                                             attributes),
                                         retrieveValueObjectPackage(attributes));
 
                             storeTestTemplate(
-                                t_aMockDAOTestTemplates[t_iMockDAOTestIndex],
+                                t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex],
                                 attributes);
                         }
 
-                        storeMockDAOTestTemplates(t_aMockDAOTestTemplates, attributes);
+                        storeXMLDAOTestTemplates(t_aXMLDAOTestTemplates, attributes);
                     }
                 }
             }
@@ -247,12 +247,12 @@ public class MockDAOTestTemplateBuildHandler
     }
 
     /**
-     * Retrieves the Mock DAO Test's package name from the attribute map.
+     * Retrieves the XML DAO Test's package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      */
-    protected String retrieveMockDAOTestPackage(final Map parameters)
+    protected String retrieveXMLDAOTestPackage(final Map parameters)
       throws  BuildException
     {
         String result = null;
@@ -263,7 +263,7 @@ public class MockDAOTestTemplateBuildHandler
              && (t_PackageUtils != null))
         {
             result =
-                t_PackageUtils.retrieveMockDAOTestPackage(
+                t_PackageUtils.retrieveXMLDAOTestPackage(
                     retrieveProjectPackage(parameters));
         }
         
@@ -271,13 +271,13 @@ public class MockDAOTestTemplateBuildHandler
     }
 
     /**
-     * Retrieves the Mock DAO's package name from the attribute map.
+     * Retrieves the XML DAO's package name from the attribute map.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      */
-    protected String retrieveMockDAOPackage(
+    protected String retrieveXMLDAOPackage(
         final String engineName, final Map parameters)
       throws  BuildException
     {
@@ -289,7 +289,7 @@ public class MockDAOTestTemplateBuildHandler
              && (t_PackageUtils != null))
         {
             result =
-                t_PackageUtils.retrieveMockDAOPackage(
+                t_PackageUtils.retrieveXMLDAOPackage(
                     retrieveProjectPackage(parameters));
         }
         
@@ -341,22 +341,22 @@ public class MockDAOTestTemplateBuildHandler
     }
 
     /**
-     * Stores the Mock DAO template collection in given attribute map.
-     * @param mockDAOTestTemplates the Mock DAO templates.
+     * Stores the XML DAO template collection in given attribute map.
+     * @param xmlDAOTestTemplates the XML DAO templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
      */
-    protected void storeMockDAOTestTemplates(
-        final MockDAOTestTemplate[] mockDAOTestTemplates,
+    protected void storeXMLDAOTestTemplates(
+        final XMLDAOTestTemplate[] xmlDAOTestTemplates,
         final Map parameters)
       throws  BuildException
     {
-        if  (   (mockDAOTestTemplates != null)
+        if  (   (xmlDAOTestTemplates != null)
              && (parameters       != null))
         {
             parameters.put(
-                TemplateMappingManager.MOCK_DAO_TEST_TEMPLATES,
-                mockDAOTestTemplates);
+                TemplateMappingManager.XML_DAO_TEST_TEMPLATES,
+                xmlDAOTestTemplates);
         }
     }
 

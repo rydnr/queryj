@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes Mock DAO test templates.
+ * Description: Writes XML DAO test templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,7 +44,7 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.mock.handlers;
+package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 
 /*
  * Importing some project classes.
@@ -54,9 +54,9 @@ import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
@@ -75,25 +75,25 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Writes Mock DAO test templates.
+ * Writes XML DAO test templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public class MockDAOTestTemplateWritingHandler
+public class XMLDAOTestTemplateWritingHandler
     extends    AbstractAntCommandHandler
     implements TemplateWritingHandler
 {
     /**
      * A cached empty DAO test template array.
      */
-    public static final MockDAOTestTemplate[] EMPTY_MOCK_DAO_TEST_TEMPLATE_ARRAY =
-        new MockDAOTestTemplate[0];
+    public static final XMLDAOTestTemplate[] EMPTY_XML_DAO_TEST_TEMPLATE_ARRAY =
+        new XMLDAOTestTemplate[0];
 
     /**
-     * Creates a MockDAOTestTemplateWritingHandler.
+     * Creates a XMLDAOTestTemplateWritingHandler.
      */
-    public MockDAOTestTemplateWritingHandler() {};
+    public XMLDAOTestTemplateWritingHandler() {};
 
     /**
      * Handles given command.
@@ -112,27 +112,27 @@ public class MockDAOTestTemplateWritingHandler
             {
                 Map attributes = command.getAttributeMap();
 
-                MockDAOTestTemplateGenerator t_MockDAOTestTemplateGenerator =
-                    MockDAOTestTemplateGenerator.getInstance();
+                XMLDAOTestTemplateGenerator t_XMLDAOTestTemplateGenerator =
+                    XMLDAOTestTemplateGenerator.getInstance();
 
-                MockDAOTestTemplate[] t_aMockDAOTestTemplates =
-                    retrieveMockDAOTestTemplates(attributes);
+                XMLDAOTestTemplate[] t_aXMLDAOTestTemplates =
+                    retrieveXMLDAOTestTemplates(attributes);
 
                 DatabaseMetaData t_DatabaseMetaData =
                     retrieveDatabaseMetaData(attributes);
 
                 if  (   (t_DatabaseMetaData             != null) 
-                     && (t_aMockDAOTestTemplates        != null)
-                     && (t_MockDAOTestTemplateGenerator != null))
+                     && (t_aXMLDAOTestTemplates        != null)
+                     && (t_XMLDAOTestTemplateGenerator != null))
                 {
                     File t_OutputDir = retrieveOutputDir(attributes);
 
-                    for  (int t_iMockDAOTestIndex = 0;
-                              t_iMockDAOTestIndex < t_aMockDAOTestTemplates.length;
-                              t_iMockDAOTestIndex++)
+                    for  (int t_iXMLDAOTestIndex = 0;
+                              t_iXMLDAOTestIndex < t_aXMLDAOTestTemplates.length;
+                              t_iXMLDAOTestIndex++)
                     {
-                        t_MockDAOTestTemplateGenerator.write(
-                            t_aMockDAOTestTemplates[t_iMockDAOTestIndex],
+                        t_XMLDAOTestTemplateGenerator.write(
+                            t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex],
                             t_OutputDir,
                             command.getTask().getProject(),
                             command.getTask());
@@ -154,18 +154,18 @@ public class MockDAOTestTemplateWritingHandler
      * @return the templates.
      * @throws BuildException if the template retrieval process if faulty.
      */
-    protected MockDAOTestTemplate[] retrieveMockDAOTestTemplates(
+    protected XMLDAOTestTemplate[] retrieveXMLDAOTestTemplates(
         final Map parameters)
       throws  BuildException
     {
-        MockDAOTestTemplate[] result = EMPTY_MOCK_DAO_TEST_TEMPLATE_ARRAY;
+        XMLDAOTestTemplate[] result = EMPTY_XML_DAO_TEST_TEMPLATE_ARRAY;
 
         if  (parameters != null)
         {
             result =
-                (MockDAOTestTemplate[])
+                (XMLDAOTestTemplate[])
                     parameters.get(
-                        TemplateMappingManager.MOCK_DAO_TEST_TEMPLATES);
+                        TemplateMappingManager.XML_DAO_TEST_TEMPLATES);
         }
         
         return result;
@@ -251,7 +251,7 @@ public class MockDAOTestTemplateWritingHandler
              && (t_PackageUtils != null))
         {
             result =
-                t_PackageUtils.retrieveMockDAOTestFolder(
+                t_PackageUtils.retrieveXMLDAOTestFolder(
                     retrieveProjectFolder(parameters),
                     retrieveProjectPackage(parameters));
         }

@@ -70,7 +70,15 @@
             $Date$
           </td>
           <td>
-            Implemented <a href="${issue.url}517}">XMLDAOFactory</a> template.
+            Finished the code generation work for <a href="${issue.url}519">XMLDAOTest</a> template.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/10/14 07:42:01
+          </td>
+          <td>
+            Implemented <a href="${issue.url}517">XMLDAOFactory</a> template.
           </td>
         </tr>
         <tr>

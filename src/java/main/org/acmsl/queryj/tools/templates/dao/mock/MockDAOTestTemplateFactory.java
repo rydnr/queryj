@@ -55,7 +55,7 @@ import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /**
- * Is able to create DAO test templates.
+ * Is able to create Mock DAO test templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
@@ -73,10 +73,10 @@ public interface MockDAOTestTemplateFactory
      * @throws QueryJException if the factory class is invalid.
      */
     public MockDAOTestTemplate createMockDAOTestTemplate(
-            TableTemplate           tableTemplate,
-            DatabaseMetaDataManager metaDataManager,
-            String                  packageName,
-            String                  daoPackageName,
-            String                  valueObjectPackageName)
-        throws  QueryJException;
+        final TableTemplate           tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String                  packageName,
+        final String                  daoPackageName,
+        final String                  valueObjectPackageName)
+      throws  QueryJException;
 }

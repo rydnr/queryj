@@ -33,8 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles the complete set of handlers related to XML DAO
- *              templates.
+ * Description: Is able to create XML DAO test templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -48,34 +47,36 @@
 package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
- * Importing some project classes.
+ * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplate;
+import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /**
- * Bundles the complete set of handlers related to XML DAO templates.
- * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
+ * Is able to create XML DAO test templates.
+ * @author <a href="mailto:jsanleandro@yahoo.es"
+           >Jose San Leandro</a>
+ * @version $Revision$
  */
-public class XMLDAOBundle
-    extends  TemplateHandlerBundle
+public interface XMLDAOTestTemplateFactory
 {
     /**
-     * Builds a bundle with XMLDAO-related handlers.
+     * Generates a XML DAO test template.
+     * @param tableTemplate the table template.
+     * @param metaDataManager the metadata manager.
+     * @param packageName the package name.
+     * @param daoPackageName the DAO's package name.
+     * @param valueObjectPackageName the value object's package name.
+     * @return a template.
+     * @throws QueryJException if the factory class is invalid.
      */
-    public XMLDAOBundle()
-    {
-        super(
-            new TemplateHandlerBundle[]
-            {
-                new XMLDAOTemplateHandlerBundle(),
-                new XMLValueObjectFactoryTemplateHandlerBundle(),
-                new XMLDAOFactoryTemplateHandlerBundle(),
-                new XMLDAOTestTemplateHandlerBundle()
-            });
-    }
+    public XMLDAOTestTemplate createXMLDAOTestTemplate(
+        final TableTemplate           tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String                  packageName,
+        final String                  daoPackageName,
+        final String                  valueObjectPackageName)
+      throws  QueryJException;
 }

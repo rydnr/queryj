@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles the complete set of handlers related to XML DAO
- *              templates.
+ * Description: Bundles a pair of XMLDAOTest template build and writing
+ *              handlers.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,37 +45,31 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.xml;
+package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles the complete set of handlers related to XML DAO templates.
+ * Bundles a pair of XMLDAOTest template build and writing
+ * handlers.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
+ * @version $Revision$
  */
-public class XMLDAOBundle
+public class XMLDAOTestTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {
     /**
-     * Builds a bundle with XMLDAO-related handlers.
+     * Builds a bundle form XML DAO test templates.
      */
-    public XMLDAOBundle()
+    public XMLDAOTestTemplateHandlerBundle()
     {
         super(
-            new TemplateHandlerBundle[]
-            {
-                new XMLDAOTemplateHandlerBundle(),
-                new XMLValueObjectFactoryTemplateHandlerBundle(),
-                new XMLDAOFactoryTemplateHandlerBundle(),
-                new XMLDAOTestTemplateHandlerBundle()
-            });
+            new XMLDAOTestTemplateBuildHandler(),
+            new XMLDAOTestTemplateWritingHandler());
     }
 }

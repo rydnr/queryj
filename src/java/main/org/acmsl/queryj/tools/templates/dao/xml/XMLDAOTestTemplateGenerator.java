@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate Mock DAO test implementations according to
+ * Description: Is able to generate XML DAO test implementations according to
  *              database metadata.
  *
  * Last modified by: $Author$ at $Date$
@@ -45,15 +45,15 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.mock;
+package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
@@ -78,14 +78,14 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Is able to generate Mock DAO test implementations according to database
+ * Is able to generate XML DAO test implementations according to database
  * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public class MockDAOTestTemplateGenerator
-    implements  MockDAOTestTemplateFactory
+public class XMLDAOTestTemplateGenerator
+    implements  XMLDAOTestTemplateFactory
 {
     /**
      * Singleton implemented as a weak reference.
@@ -95,14 +95,14 @@ public class MockDAOTestTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected MockDAOTestTemplateGenerator() {};
+    protected XMLDAOTestTemplateGenerator() {};
 
     /**
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        final MockDAOTestTemplateGenerator generator)
+        final XMLDAOTestTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -117,23 +117,23 @@ public class MockDAOTestTemplateGenerator
     }
 
     /**
-     * Retrieves a MockDAOTestTemplateGenerator instance.
+     * Retrieves a XMLDAOTestTemplateGenerator instance.
      * @return such instance.
      */
-    public static MockDAOTestTemplateGenerator getInstance()
+    public static XMLDAOTestTemplateGenerator getInstance()
     {
-        MockDAOTestTemplateGenerator result = null;
+        XMLDAOTestTemplateGenerator result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (MockDAOTestTemplateGenerator) reference.get();
+            result = (XMLDAOTestTemplateGenerator) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new MockDAOTestTemplateGenerator() {};
+            result = new XMLDAOTestTemplateGenerator() {};
 
             setReference(result);
         }
@@ -154,7 +154,7 @@ public class MockDAOTestTemplateGenerator
         final String templateFactoryClass)
     {
         TemplateMappingManager.getInstance().addDefaultTemplateFactoryClass(
-            TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX + daoName,
+            TemplateMappingManager.XML_DAO_TEST_TEMPLATE_PREFIX + daoName,
             templateFactoryClass);
     }
 
@@ -172,7 +172,7 @@ public class MockDAOTestTemplateGenerator
         return
             TemplateMappingManager.getInstance()
                 .getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX
+                      TemplateMappingManager.XML_DAO_TEST_TEMPLATE_PREFIX
                     + daoName);
     }
 
@@ -184,28 +184,28 @@ public class MockDAOTestTemplateGenerator
      * @precondition daoName != null
      * @precondition TemplateMappingManager.getInstance() != null
      */
-    protected MockDAOTestTemplateFactory getTemplateFactory(final String daoName)
+    protected XMLDAOTestTemplateFactory getTemplateFactory(final String daoName)
         throws  QueryJException
     {
-        MockDAOTestTemplateFactory result = null;
+        XMLDAOTestTemplateFactory result = null;
 
         Object t_TemplateFactory =
             TemplateMappingManager.getInstance()
                 .getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX
+                      TemplateMappingManager.XML_DAO_TEST_TEMPLATE_PREFIX
                     + daoName);
 
         if  (t_TemplateFactory != null)
         {
-            if  (!(t_TemplateFactory instanceof MockDAOTestTemplateFactory))
+            if  (!(t_TemplateFactory instanceof XMLDAOTestTemplateFactory))
             {
                 throw
                     new QueryJException(
-                        "invalid.mock.dao.test.template.factory");
+                        "invalid.xml.dao.test.template.factory");
             }
             else 
             {
-                result = (MockDAOTestTemplateFactory) t_TemplateFactory;
+                result = (XMLDAOTestTemplateFactory) t_TemplateFactory;
             }
         }
 
@@ -225,7 +225,7 @@ public class MockDAOTestTemplateGenerator
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
-    public MockDAOTestTemplate createMockDAOTestTemplate(
+    public XMLDAOTestTemplate createXMLDAOTestTemplate(
         final TableTemplate           tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String                  packageName,
@@ -233,7 +233,7 @@ public class MockDAOTestTemplateGenerator
         final String                  valueObjectPackageName)
       throws  QueryJException
     {
-        MockDAOTestTemplate result = null;
+        XMLDAOTestTemplate result = null;
 
         if  (   (tableTemplate          != null)
              && (metaDataManager        != null)
@@ -241,13 +241,13 @@ public class MockDAOTestTemplateGenerator
              && (daoPackageName         != null)
              && (valueObjectPackageName != null))
         {
-            MockDAOTestTemplateFactory t_TemplateFactory =
+            XMLDAOTestTemplateFactory t_TemplateFactory =
                 getTemplateFactory(tableTemplate.getTableName());
 
             if  (t_TemplateFactory != null)
             {
                 result =
-                    t_TemplateFactory.createMockDAOTestTemplate(
+                    t_TemplateFactory.createXMLDAOTestTemplate(
                         tableTemplate,
                         metaDataManager,
                         packageName,
@@ -257,7 +257,7 @@ public class MockDAOTestTemplateGenerator
             else 
             {
                 result =
-                    new MockDAOTestTemplate(
+                    new XMLDAOTestTemplate(
                         tableTemplate,
                         metaDataManager,
                         packageName,
@@ -270,17 +270,17 @@ public class MockDAOTestTemplateGenerator
     }
 
     /**
-     * Writes a Mock DAO template to disk.
-     * @param mockDAOTestTemplate the Mock DAO test template to write.
+     * Writes a XML DAO template to disk.
+     * @param xmlDAOTestTemplate the XML DAO test template to write.
      * @param outputDir the output folder.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @throws IOException if the file cannot be created.
-     * @precondition mockDAOTemplate != null
+     * @precondition xmlDAOTemplate != null
      * @precondition outputDir != null
      */
     public void write(
-        final MockDAOTestTemplate mockDAOTestTemplate,
+        final XMLDAOTestTemplate xmlDAOTestTemplate,
         final File                outputDir,
         final Project             project,
         final Task                task)
@@ -303,10 +303,10 @@ public class MockDAOTestTemplateGenerator
                     "Writing "
                     + outputDir.getAbsolutePath()
                     + File.separator
-                    + "Mock"
+                    + "XML"
                     + t_StringUtils.capitalize(
                           t_EnglishGrammarUtils.getSingular(
-                              mockDAOTestTemplate
+                              xmlDAOTestTemplate
                                   .getTableTemplate()
                                       .getTableName().toLowerCase()),
                         '_')
@@ -317,15 +317,15 @@ public class MockDAOTestTemplateGenerator
             t_FileUtils.writeFile(
                   outputDir.getAbsolutePath()
                 + File.separator
-                + "Mock"
+                + "XML"
                 + t_StringUtils.capitalize(
                       t_EnglishGrammarUtils.getSingular(
-                          mockDAOTestTemplate
+                          xmlDAOTestTemplate
                               .getTableTemplate()
                                   .getTableName().toLowerCase()),
                       '_')
                 + "DAOTest.java",
-                mockDAOTestTemplate.toString());
+                xmlDAOTestTemplate.toString());
         }
     }
 }
