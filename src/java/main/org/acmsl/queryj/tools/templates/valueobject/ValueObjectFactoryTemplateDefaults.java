@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Defines the default subtemplates used to generate value
- *              objects according to database metadata.
+ * Description: Defines the default subtemplates used to generate value object
+ *              factories according to database metadata.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -48,13 +48,13 @@
 package org.acmsl.queryj.tools.templates.valueobject;
 
 /**
- * Defines the default subtemplates used to generate value objects according
- * to database metadata.
+ * Defines the default subtemplates used to generate value object
+ * factories according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface ValueObjectTemplateDefaults
+public interface ValueObjectFactoryTemplateDefaults
 {
     /**
      * The default header.
@@ -103,7 +103,8 @@ public interface ValueObjectTemplateDefaults
         + " *\n"
         + " * Author: QueryJ\n"
         + " *\n"
-        + " * Description: Represents the \"{0}\" information stored in the\n"
+        + " * Description: Is able to create \"{0}\" value objects\n"
+        + " *              according to the information stored in the\n"
         + " *              persistence domain.\n"
         + " *\n"
         + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
@@ -124,18 +125,20 @@ public interface ValueObjectTemplateDefaults
     /**
      * The ACM-SL imports.
      */
-    public static final String ACMSL_IMPORTS =
+    public static final String DEFAULT_PROJECT_IMPORTS =
           "/*\n"
-        + " * Importing some ACM-SL classes.\n"
-        + " */\n\n";
+        + " * Importing some project classes.\n"
+        + " */\n"
+        + "import {0}.{1}ValueObject;\n\n"; // package - Table
 
     /**
      * The JDK imports.
      */
-    public static final String JDK_IMPORTS =
+    public static final String DEFAULT_JDK_IMPORTS =
           "/*\n"
         + " * Importing some JDK classes.\n"
         + " */\n"
+        + "import java.lang.ref.WeakReference;\n"
         + "import java.math.BigDecimal;\n"
         + "import java.util.Calendar;\n"
         + "import java.util.Date;\n\n";
@@ -145,7 +148,8 @@ public interface ValueObjectTemplateDefaults
      */
     public static final String DEFAULT_JAVADOC =
           "/**\n"
-        + " * Represents the <i>{0}</i> information in the persistence domain.\n" // table
+        + " * Is able to create <i>{0}</i> value objects according to\n"
+        + " * information in the persistence domain.\n" // table
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
         + " */\n";
@@ -154,92 +158,111 @@ public interface ValueObjectTemplateDefaults
      * The class definition.
      */
     public static final String CLASS_DEFINITION =
-           "public class {0}ValueObject\n"; // table
+           "public class {0}ValueObjectFactory\n"; // table
 
     /**
      * The class start.
      */
-    public static final String DEFAULT_CLASS_START = "{\n";
-
-    /**
-     * The field declaration.
-     */
-    public static final String DEFAULT_FIELD_DECLARATION =
-          "    /**\n"
-        + "     * The <i>{0}</i> information.\n" // field
+    public static final String DEFAULT_CLASS_START =
+          "{\n"
+        + "    /**\n"
+        + "     * Singleton implemented as a weak reference.\n"
         + "     */\n"
-        + "    private {1} {2};\n\n"; // field type - field
+        + "    private static WeakReference singleton;\n\n";
 
     /**
-     * The class constructor.
+     * The class singleton logic.
      */
-    public static final String DEFAULT_CONSTRUCTOR =
+    public static final String DEFAULT_SINGLETON_BODY =
           "    /**\n"
-        + "     * Creates a {0}ValueObject with given information.\n"
+        + "     * Protected constructor to avoid accidental instantiation.\n"
+        + "     */\n"
+        + "    public {0}ValueObjectFactory() '{' '}';\n\n" // table
+        + "    /**\n"
+        + "     * Specifies a new weak reference.\n"
+        + "     * @param factory the factory instance to use.\n"
+        + "     */\n"
+        + "    protected static void setReference(\n"
+        + "        final {0}ValueObjectFactory factory)\n" // table
+        + "    '{'\n"
+        + "        singleton = new WeakReference(factory);\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Retrieves the weak reference.\n"
+        + "     * @return such reference.\n"
+        + "     */\n"
+        + "    protected static WeakReference getReference()\n"
+        + "    '{'\n"
+        + "        return singleton;\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Retrieves a <code>{0}ValueObjectFactory</code> instance.\n"
+        + "     * @return such instance.\n"
+        + "     */\n"
+        + "    public static {0}ValueObjectFactory getInstance()\n"
+        + "    '{'\n"
+        + "        {0}ValueObjectFactory result = null;\n\n"
+        + "        WeakReference reference = getReference();\n\n"
+        + "        if  (reference != null) \n"
+        + "        '{'\n"
+        + "            result = ({0}ValueObjectFactory) reference.get();\n"
+        + "        '}'\n\n"
+        + "        if  (result == null) \n"
+        + "        '{'\n"
+        + "            result = new {0}ValueObjectFactory();\n\n"
+        + "            setReference(result);\n"
+        + "        '}'\n\n"
+        + "        return result;\n"
+        + "    '}'\n\n";
+
+    /**
+     * The factory method.
+     */
+    public static final String DEFAULT_FACTORY_METHOD =
+          "    /**\n"
+        + "     * Creates a {0} value object.\n"
         + "{1}" // constructor field javadoc
         + "     */\n"
-        + "    protected {0}ValueObject(" // table
-        + "{2})\n" // constructor field declaration
-        + "    '{'"
-        + "{3}\n"  // constructor field value setter.
-        + "    '}'\n";
+        + "    public {0}ValueObject create{0}(" // table
+        + "{2})\n" // factory method field declaration
+        + "    '{'\n"
+        + "        return\n"
+        + "            new {0}ValueObject("
+        + "{3});\n"  // factory method value object build.
+        + "    '}'\n\n";
 
     /**
-     * The default constructor field Javadoc.
+     * The default factory method field Javadoc.
      */
-    public static final String DEFAULT_CONSTRUCTOR_FIELD_JAVADOC =
+    public static final String DEFAULT_FACTORY_METHOD_FIELD_JAVADOC =
         "     * @param {0} the <i>{1}</i> information.\n"; // field - FIELD;
 
     /**
-     * The default constructor field declaration.
+     * The default factory method field declaration.
      */
-    public static final String DEFAULT_CONSTRUCTOR_FIELD_DECLARATION =
+    public static final String DEFAULT_FACTORY_METHOD_FIELD_DECLARATION =
         "\n        final {0} {1}"; // field type - field;
 
     /**
-     * The default constructor field value setter.
+     * The default factory method value object build.
      */
-    public static final String DEFAULT_CONSTRUCTOR_FIELD_VALUE_SETTER =
-          "\n        immutableSet{0}(\n"
-        + "            {1});"; // Field - field;
+    public static final String DEFAULT_FACTORY_METHOD_VALUE_OBJECT_BUILD =
+        "\n                {1}"; // field;
 
     /**
-     * The default field setter method.
+     * The factory alias method.
      */
-    public static final String DEFAULT_FIELD_VALUE_SETTER_METHOD =
-          "\n"
-        + "    /**\n"
-        + "     * Specifies the <i>{0}</i> information.\n" // field
-        + "     * @param {0} the <i>{0}</i> value.\n"
+    public static final String DEFAULT_FACTORY_ALIAS_METHOD =
+          "    /**\n"
+        + "     * Creates a <i>{0}</i> value object.\n"
+        + "{1}" // constructor field javadoc
         + "     */\n"
-        + "    private void immutableSet{2}(\n" // capitalized field
-        + "        final {1} {0})\n" // field type - field name
+        + "    public {0}ValueObject create{0}ValueObject(" // table
+        + "{2})\n" // factory method field declaration
         + "    '{'\n"
-        + "        this.{0} = {0};\n" // field
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Specifies the <i>{0}</i> information.\n" // field
-        + "     * @param {0} the new <i>{0}</i> value.\n"
-        + "     */\n"
-        + "    protected void set{2}(\n" // capitalized field
-        + "        final {1} {0})\n" // field type - field name
-        + "    '{'\n"
-        + "        immutableSet{2}({0});\n" // field
-        + "    '}'\n";
-
-    /**
-     * The default field getter method.
-     */
-    public static final String DEFAULT_FIELD_VALUE_GETTER_METHOD =
-          "\n"
-        + "    /**\n"
-        + "     * Retrieves the <i>{0}</i> information.\n" // field
-        + "     * @return such value.\n"
-        + "     */\n"
-        + "    public {1} get{2}()\n" // field type - capitalized field
-        + "    '{'\n"
-        + "        return {0};\n" // field
-        + "    '}'\n";
+        + "        return create{0}("
+        + "{3});\n\n"  // factory method value object build.
+        + "    '}'\n\n";
 
     /**
      * The default class end.

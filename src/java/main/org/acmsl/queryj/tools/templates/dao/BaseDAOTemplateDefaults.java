@@ -204,7 +204,7 @@ public interface BaseDAOTemplateDefaults
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_METHOD =
           "    /**\n"
-        + "     * Loads {0} information from the persistence layer filtering\n"
+        + "     * Loads <i>{0}</i> information from the persistence layer filtering\n"
          // table name
         + "     * by its primary keys."
         + "{1}\n"
@@ -225,7 +225,7 @@ public interface BaseDAOTemplateDefaults
      * The find-by-primary-key method's primary keys javadoc.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_JAVADOC =
-        "\n     * @param {0} the {1} value to filter.";
+        "\n     * @param {0} the <i>{1}</i> value to filter.";
          // java pk - pk
 
     /**
@@ -261,7 +261,7 @@ public interface BaseDAOTemplateDefaults
      * The insert parameters javadoc.
      */
     public static final String DEFAULT_INSERT_PARAMETERS_JAVADOC =
-        "\n     * @param {0} the {1} information.";
+        "\n     * @param {0} the <i>{1}</i> information.";
     // field name - field Name
 
     /**
@@ -276,7 +276,7 @@ public interface BaseDAOTemplateDefaults
      */
     public static final String DEFAULT_UPDATE_METHOD =
           "    /**\n"
-        + "     * Updates {0} information\n"
+        + "     * Updates <i>{0}</i> information\n"
         + "     * in the persistence layer."
          // table name
         + "{1}"
@@ -298,7 +298,7 @@ public interface BaseDAOTemplateDefaults
      * The update parameters javadoc.
      */
     public static final String DEFAULT_UPDATE_PARAMETERS_JAVADOC =
-        "\n     * @param {0} the {1} information.";
+        "\n     * @param {0} the <i>{1}</i> information.";
     // field name - field Name
 
     /**
@@ -335,7 +335,7 @@ public interface BaseDAOTemplateDefaults
      * The delete method's primary keys javadoc.
      */
     public static final String DEFAULT_DELETE_PK_JAVADOC =
-        "\n     * @param {0} the {1} value to filter.";
+        "\n     * @param {0} the <i>{1}</i> value to filter.";
          // java pk - pk
 
     /**
@@ -348,5 +348,5 @@ public interface BaseDAOTemplateDefaults
     /**
      * The default class end.
      */
-    public static final String DEFAULT_CLASS_END = "}\n";
+    public static final String DEFAULT_CLASS_END = "}";
 }
