@@ -70,8 +70,8 @@ public interface MockDAOFactoryTemplateFactory
      * @throws QueryJException if the input values are invalid.
      */
     public MockDAOFactoryTemplate createMockDAOFactoryTemplate(
-            TableTemplate tableTemplate,
-            String        packageName,
-            String        basePackageName)
-        throws  QueryJException;
+        final TableTemplate tableTemplate,
+        final String        packageName,
+        final String        basePackageName)
+      throws  QueryJException;
 }

@@ -404,6 +404,18 @@ public abstract class TemplateMappingManager
         "xml.value-object.factory.templates";
 
     /**
+     * The XML DAO factory templates attribute name.
+     */
+    public static final String XML_DAO_FACTORY_TEMPLATES =
+        "xml.DAO.factory.templates";
+
+    /**
+     * The XML DAO factory template prefix.
+     */
+    public static final String XML_DAO_FACTORY_TEMPLATE_PREFIX =
+        "xml.dao.factory.";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;

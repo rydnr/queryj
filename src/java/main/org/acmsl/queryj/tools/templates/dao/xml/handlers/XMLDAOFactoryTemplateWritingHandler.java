@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes Mock DAO factory templates.
+ * Description: Writes XML DAO factory templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,7 +44,7 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.mock.handlers;
+package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 
 /*
  * Importing some project classes.
@@ -53,11 +53,11 @@ import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplate;
-import org.acmsl.queryj.tools.templates.dao.mock
-    .MockDAOFactoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.mock.handlers
-    .MockDAOFactoryTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml
+    .XMLDAOFactoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers
+    .XMLDAOFactoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
@@ -76,26 +76,26 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Writes Mock DAO factory templates.
+ * Writes XML DAO factory templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public class MockDAOFactoryTemplateWritingHandler
+public class XMLDAOFactoryTemplateWritingHandler
     extends    AbstractAntCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * A cached empty Mock DAO factory template array.
+     * A cached empty XML DAO factory template array.
      */
-    public static final MockDAOFactoryTemplate[]
-        EMPTY_MOCK_DAO_FACTORY_TEMPLATE_ARRAY =
-            new MockDAOFactoryTemplate[0];
+    public static final XMLDAOFactoryTemplate[]
+        EMPTY_XML_DAO_FACTORY_TEMPLATE_ARRAY =
+            new XMLDAOFactoryTemplate[0];
 
     /**
-     * Creates a MockDAOFactoryTemplateWritingHandler.
+     * Creates a XMLDAOFactoryTemplateWritingHandler.
      */
-    public MockDAOFactoryTemplateWritingHandler() {};
+    public XMLDAOFactoryTemplateWritingHandler() {};
 
     /**
      * Handles given command.
@@ -114,26 +114,26 @@ public class MockDAOFactoryTemplateWritingHandler
             {
                 Map attributes = command.getAttributeMap();
 
-                MockDAOFactoryTemplateGenerator
-                    t_MockDAOFactoryTemplateGenerator =
-                        MockDAOFactoryTemplateGenerator.getInstance();
+                XMLDAOFactoryTemplateGenerator
+                    t_XMLDAOFactoryTemplateGenerator =
+                        XMLDAOFactoryTemplateGenerator.getInstance();
 
-                MockDAOFactoryTemplate[] t_aMockDAOFactoryTemplates =
-                    retrieveMockDAOFactoryTemplates(attributes);
+                XMLDAOFactoryTemplate[] t_aXMLDAOFactoryTemplates =
+                    retrieveXMLDAOFactoryTemplates(attributes);
 
-                if  (   (t_aMockDAOFactoryTemplates        != null)
-                     && (t_MockDAOFactoryTemplateGenerator != null))
+                if  (   (t_aXMLDAOFactoryTemplates        != null)
+                     && (t_XMLDAOFactoryTemplateGenerator != null))
                 {
                     File t_OutputDir =
                         retrieveOutputDir(attributes);
 
-                    for  (int t_iMockDAOFactoryIndex = 0;
-                                t_iMockDAOFactoryIndex
-                              < t_aMockDAOFactoryTemplates.length;
-                              t_iMockDAOFactoryIndex++)
+                    for  (int t_iXMLDAOFactoryIndex = 0;
+                                t_iXMLDAOFactoryIndex
+                              < t_aXMLDAOFactoryTemplates.length;
+                              t_iXMLDAOFactoryIndex++)
                     {
-                        t_MockDAOFactoryTemplateGenerator.write(
-                            t_aMockDAOFactoryTemplates[t_iMockDAOFactoryIndex],
+                        t_XMLDAOFactoryTemplateGenerator.write(
+                            t_aXMLDAOFactoryTemplates[t_iXMLDAOFactoryIndex],
                             t_OutputDir);
                     }
                 }
@@ -148,23 +148,23 @@ public class MockDAOFactoryTemplateWritingHandler
     }
 
     /**
-     * Retrieves the Mock DAO factory templates from the attribute map.
+     * Retrieves the XML DAO factory templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
      */
-    protected MockDAOFactoryTemplate[] retrieveMockDAOFactoryTemplates(
+    protected XMLDAOFactoryTemplate[] retrieveXMLDAOFactoryTemplates(
         final Map parameters)
       throws  BuildException
     {
-        MockDAOFactoryTemplate[] result = EMPTY_MOCK_DAO_FACTORY_TEMPLATE_ARRAY;
+        XMLDAOFactoryTemplate[] result = EMPTY_XML_DAO_FACTORY_TEMPLATE_ARRAY;
 
         if  (parameters != null)
         {
             result =
-                (MockDAOFactoryTemplate[])
+                (XMLDAOFactoryTemplate[])
                     parameters.get(
-                        TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATES);
+                        TemplateMappingManager.XML_DAO_FACTORY_TEMPLATES);
         }
         
         return result;
@@ -187,7 +187,7 @@ public class MockDAOFactoryTemplateWritingHandler
              && (t_PackageUtils != null))
         {
             result =
-                t_PackageUtils.retrieveMockDAOFactoryFolder(
+                t_PackageUtils.retrieveXMLDAOFactoryFolder(
                     (File)
                         parameters.get(ParameterValidationHandler.OUTPUT_DIR),
                     retrieveProjectPackage(parameters));

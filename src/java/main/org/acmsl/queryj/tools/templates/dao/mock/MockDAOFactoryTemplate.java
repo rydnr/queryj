@@ -126,7 +126,7 @@ public abstract class MockDAOFactoryTemplate
         + " *\n"
         + " * Author: QueryJ\n"
         + " *\n"
-        + " * Description: Is able to create {0} DAOs according to\n"
+        + " * Description: Is able to create Mock {0} DAOs according to\n"
         + " *              the information stored in the persistence domain.\n"
         + " *\n"
         + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
@@ -232,6 +232,14 @@ public abstract class MockDAOFactoryTemplate
         + "     * Retrieves a Mock{0}DAOFactory instance.\n"
         + "     * @return such instance.\n"
         + "     */\n"
+        + "    public static {0}DAOFactory getInstance()\n"
+        + "    '{'\n"
+        + "        return getMockInstance();\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Retrieves a Mock{0}DAOFactory instance.\n"
+        + "     * @return such instance.\n"
+        + "     */\n"
         + "    public static Mock{0}DAOFactory getMockInstance()\n"
         + "    '{'\n"
         + "        Mock{0}DAOFactory result = null;\n\n"
@@ -258,9 +266,8 @@ public abstract class MockDAOFactoryTemplate
         + "     */\n"
         + "    public {0}DAO create{0}DAO()\n" // table
         + "    '{'\n"
-        + "        return null;//new Mock{0}DAO() '{'}';\n"
+        + "        return new Mock{0}DAO() '{'}';\n"
         + "    '}'\n\n";
-
 
     /**
      * The default class end.
@@ -355,35 +362,35 @@ public abstract class MockDAOFactoryTemplate
      * @param classEnd the class end.
      */
     public MockDAOFactoryTemplate(
-        String                  header,
-        String                  packageDeclaration,
-        TableTemplate           tableTemplate,
-        String                  packageName,
-        String                  basePackageName,
-        String                  projectImports,
-        String                  jdkImports,
-        String                  commonsLoggingImports,
-        String                  javadoc,
-        String                  classDefinition,
-        String                  classStart,
-        String                  singletonBody,
-        String                  factoryMethod,
-        String                  classEnd)
+        final String                  header,
+        final String                  packageDeclaration,
+        final TableTemplate           tableTemplate,
+        final String                  packageName,
+        final String                  basePackageName,
+        final String                  projectImports,
+        final String                  jdkImports,
+        final String                  commonsLoggingImports,
+        final String                  javadoc,
+        final String                  classDefinition,
+        final String                  classStart,
+        final String                  singletonBody,
+        final String                  factoryMethod,
+        final String                  classEnd)
     {
-        inmutableSetHeader(header);
-        inmutableSetPackageDeclaration(packageDeclaration);
-        inmutableSetTableTemplate(tableTemplate);
-        inmutableSetPackageName(packageName);
-        inmutableSetBasePackageName(basePackageName);
-        inmutableSetProjectImports(projectImports);
-        inmutableSetJdkImports(jdkImports);
-        inmutableSetCommonsLoggingImports(commonsLoggingImports);
-        inmutableSetJavadoc(javadoc);
-        inmutableSetClassDefinition(classDefinition);
-        inmutableSetClassStart(classStart);
-        inmutableSetSingletonBody(singletonBody);
-        inmutableSetFactoryMethod(factoryMethod);
-        inmutableSetClassEnd(classEnd);
+        immutableSetHeader(header);
+        immutableSetPackageDeclaration(packageDeclaration);
+        immutableSetTableTemplate(tableTemplate);
+        immutableSetPackageName(packageName);
+        immutableSetBasePackageName(basePackageName);
+        immutableSetProjectImports(projectImports);
+        immutableSetJdkImports(jdkImports);
+        immutableSetCommonsLoggingImports(commonsLoggingImports);
+        immutableSetJavadoc(javadoc);
+        immutableSetClassDefinition(classDefinition);
+        immutableSetClassStart(classStart);
+        immutableSetSingletonBody(singletonBody);
+        immutableSetFactoryMethod(factoryMethod);
+        immutableSetClassEnd(classEnd);
     }
 
     /**
@@ -393,9 +400,9 @@ public abstract class MockDAOFactoryTemplate
      * @param basePackageName the base package name.
      */
     public MockDAOFactoryTemplate(
-        TableTemplate tableTemplate,
-        String        packageName,
-        String        basePackageName)
+        final TableTemplate tableTemplate,
+        final String        packageName,
+        final String        basePackageName)
     {
         this(
             DEFAULT_HEADER,
@@ -418,7 +425,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    private void inmutableSetHeader(String header)
+    private void immutableSetHeader(final String header)
     {
         m__strHeader = header;
     }
@@ -427,9 +434,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    protected void setHeader(String header)
+    protected void setHeader(final String header)
     {
-        inmutableSetHeader(header);
+        immutableSetHeader(header);
     }
 
     /**
@@ -445,7 +452,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the package declaration.
      * @param packageDeclaration the new package declaration.
      */
-    private void inmutableSetPackageDeclaration(String packageDeclaration)
+    private void immutableSetPackageDeclaration(final String packageDeclaration)
     {
         m__strPackageDeclaration = packageDeclaration;
     }
@@ -454,9 +461,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the package declaration.
      * @param packageDeclaration the new package declaration.
      */
-    protected void setPackageDeclaration(String packageDeclaration)
+    protected void setPackageDeclaration(final String packageDeclaration)
     {
-        inmutableSetPackageDeclaration(packageDeclaration);
+        immutableSetPackageDeclaration(packageDeclaration);
     }
 
     /**
@@ -471,7 +478,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the table template.
      * @param tableTemplate the new table template.
      */
-    private void inmutableSetTableTemplate(TableTemplate tableTemplate)
+    private void immutableSetTableTemplate(TableTemplate tableTemplate)
     {
         m__TableTemplate = tableTemplate;
     }
@@ -482,7 +489,7 @@ public abstract class MockDAOFactoryTemplate
      */
     protected void setTableTemplate(TableTemplate tableTemplate)
     {
-        inmutableSetTableTemplate(tableTemplate);
+        immutableSetTableTemplate(tableTemplate);
     }
 
     /**
@@ -498,7 +505,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    private void inmutableSetPackageName(String packageName)
+    private void immutableSetPackageName(final String packageName)
     {
         m__strPackageName = packageName;
     }
@@ -507,9 +514,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    protected void setPackageName(String packageName)
+    protected void setPackageName(final String packageName)
     {
-        inmutableSetPackageName(packageName);
+        immutableSetPackageName(packageName);
     }
 
     /**
@@ -525,7 +532,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
-    private void inmutableSetBasePackageName(String basePackageName)
+    private void immutableSetBasePackageName(final String basePackageName)
     {
         m__strBasePackageName = basePackageName;
     }
@@ -534,9 +541,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
-    protected void setBasePackageName(String basePackageName)
+    protected void setBasePackageName(final String basePackageName)
     {
-        inmutableSetBasePackageName(basePackageName);
+        immutableSetBasePackageName(basePackageName);
     }
 
     /**
@@ -552,7 +559,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the project imports.
      * @param projectImports the new project imports.
      */
-    private void inmutableSetProjectImports(String projectImports)
+    private void immutableSetProjectImports(final String projectImports)
     {
         m__strProjectImports = projectImports;
     }
@@ -561,9 +568,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the project imports.
      * @param projectImports the new project imports.
      */
-    protected void setProjectImports(String projectImports)
+    protected void setProjectImports(final String projectImports)
     {
-        inmutableSetProjectImports(projectImports);
+        immutableSetProjectImports(projectImports);
     }
 
     /**
@@ -579,7 +586,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
-    private void inmutableSetJdkImports(String jdkImports)
+    private void immutableSetJdkImports(final String jdkImports)
     {
         m__strJdkImports = jdkImports;
     }
@@ -588,9 +595,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
-    protected void setJdkImports(String jdkImports)
+    protected void setJdkImports(final String jdkImports)
     {
-        inmutableSetJdkImports(jdkImports);
+        immutableSetJdkImports(jdkImports);
     }
 
     /**
@@ -606,7 +613,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the commons-logging imports.
      * @param commonsLoggingImports the new commons-logging imports.
      */
-    private void inmutableSetCommonsLoggingImports(String commonsLoggingImports)
+    private void immutableSetCommonsLoggingImports(final String commonsLoggingImports)
     {
         m__strCommonsLoggingImports = commonsLoggingImports;
     }
@@ -615,9 +622,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the commons-logging imports.
      * @param commonsLoggingImports the new commons-logging imports.
      */
-    protected void setCommonsLoggingImports(String commonsLoggingImports)
+    protected void setCommonsLoggingImports(final String commonsLoggingImports)
     {
-        inmutableSetCommonsLoggingImports(commonsLoggingImports);
+        immutableSetCommonsLoggingImports(commonsLoggingImports);
     }
 
     /**
@@ -633,7 +640,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the javadoc.
      * @param javadoc the new javadoc.
      */
-    private void inmutableSetJavadoc(String javadoc)
+    private void immutableSetJavadoc(final String javadoc)
     {
         m__strJavadoc = javadoc;
     }
@@ -642,9 +649,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the javadoc.
      * @param javadoc the new javadoc.
      */
-    protected void setJavadoc(String javadoc)
+    protected void setJavadoc(final String javadoc)
     {
-        inmutableSetJavadoc(javadoc);
+        immutableSetJavadoc(javadoc);
     }
 
     /**
@@ -660,7 +667,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the class definition.
      * @param classDefinition the new class definition.
      */
-    private void inmutableSetClassDefinition(String classDefinition)
+    private void immutableSetClassDefinition(final String classDefinition)
     {
         m__strClassDefinition = classDefinition;
     }
@@ -669,9 +676,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the class definition.
      * @param classDefinition the new class definition.
      */
-    protected void setClassDefinition(String classDefinition)
+    protected void setClassDefinition(final String classDefinition)
     {
-        inmutableSetClassDefinition(classDefinition);
+        immutableSetClassDefinition(classDefinition);
     }
 
     /**
@@ -687,7 +694,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the class start.
      * @param classStart the new class start.
      */
-    private void inmutableSetClassStart(String classStart)
+    private void immutableSetClassStart(final String classStart)
     {
         m__strClassStart = classStart;
     }
@@ -696,9 +703,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the class start.
      * @param classStart the new class start.
      */
-    protected void setClassStart(String classStart)
+    protected void setClassStart(final String classStart)
     {
-        inmutableSetClassStart(classStart);
+        immutableSetClassStart(classStart);
     }
 
     /**
@@ -714,7 +721,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the singleton body.
      * @param singletonBody the singleton body.
      */
-    private void inmutableSetSingletonBody(String singletonBody)
+    private void immutableSetSingletonBody(final String singletonBody)
     {
         m__strSingletonBody = singletonBody;
     }
@@ -723,9 +730,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the singleton body.
      * @param singletonBody the singleton body.
      */
-    protected void setSingletonBody(String singletonBody)
+    protected void setSingletonBody(final String singletonBody)
     {
-        inmutableSetSingletonBody(singletonBody);
+        immutableSetSingletonBody(singletonBody);
     }
 
     /**
@@ -741,7 +748,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the factory method.
      * @param factoryMethod such source code.
      */
-    private void inmutableSetFactoryMethod(String factoryMethod)
+    private void immutableSetFactoryMethod(final String factoryMethod)
     {
         m__strFactoryMethod = factoryMethod;
     }
@@ -750,9 +757,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the factory method.
      * @param factoryMethod such source code.
      */
-    protected void setFactoryMethod(String factoryMethod)
+    protected void setFactoryMethod(final String factoryMethod)
     {
-        inmutableSetFactoryMethod(factoryMethod);
+        immutableSetFactoryMethod(factoryMethod);
     }
 
     /**
@@ -768,7 +775,7 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    private void inmutableSetClassEnd(String classEnd)
+    private void immutableSetClassEnd(final String classEnd)
     {
         m__strClassEnd = classEnd;
     }
@@ -777,9 +784,9 @@ public abstract class MockDAOFactoryTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    protected void setClassEnd(String classEnd)
+    protected void setClassEnd(final String classEnd)
     {
-        inmutableSetClassEnd(classEnd);
+        immutableSetClassEnd(classEnd);
     }
 
     /**

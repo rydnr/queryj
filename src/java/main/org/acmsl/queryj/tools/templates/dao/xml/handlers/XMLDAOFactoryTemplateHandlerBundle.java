@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles the complete set of handlers related to XML DAO
- *              templates.
+ * Description: Bundles a pair of XMLDAOFactory template build and writing
+ *              handlers.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,37 +45,31 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.xml;
+package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateHandlerBundle;
-//import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles the complete set of handlers related to XML DAO templates.
+ * Bundles a pair of template XMLDAOFactory template build and writing
+ * handlers.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
+ * @version $Revision$
  */
-public class XMLDAOBundle
+public class XMLDAOFactoryTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {
     /**
-     * Builds a bundle with XMLDAO-related handlers.
+     * Builds a bundle with given handlers.
      */
-    public XMLDAOBundle()
+    public XMLDAOFactoryTemplateHandlerBundle()
     {
         super(
-            new TemplateHandlerBundle[]
-            {
-                new XMLDAOTemplateHandlerBundle(),
-                new XMLValueObjectFactoryTemplateHandlerBundle(),
-                new XMLDAOFactoryTemplateHandlerBundle()
-//                new XMLDAOTestTemplateHandlerBundle()
-            });
+            new XMLDAOFactoryTemplateBuildHandler(),
+            new XMLDAOFactoryTemplateWritingHandler());
     }
 }

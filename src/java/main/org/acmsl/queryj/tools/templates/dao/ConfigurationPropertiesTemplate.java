@@ -188,12 +188,12 @@ public abstract class ConfigurationPropertiesTemplate
      * @param daoFactorySetting the DAO factory setting.
      */
     public ConfigurationPropertiesTemplate(
-        String header,
-        String repository,
-        String engineName,
-        String engineVersion,
-        String basePackageName,
-        String daoFactorySetting)
+        final String header,
+        final String repository,
+        final String engineName,
+        final String engineVersion,
+        final String basePackageName,
+        final String daoFactorySetting)
     {
         immutableSetHeader(header);
         immutableSetRepository(repository);
@@ -212,10 +212,10 @@ public abstract class ConfigurationPropertiesTemplate
      * @param basePackageName the base package name.
      */
     public ConfigurationPropertiesTemplate(
-        String repository,
-        String engineName,
-        String engineVersion,
-        String basePackageName)
+        final String repository,
+        final String engineName,
+        final String engineVersion,
+        final String basePackageName)
     {
         this(
             DEFAULT_HEADER,
@@ -230,7 +230,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    private void immutableSetHeader(String header)
+    private void immutableSetHeader(final String header)
     {
         m__strHeader = header;
     }
@@ -239,7 +239,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    protected void setHeader(String header)
+    protected void setHeader(final String header)
     {
         immutableSetHeader(header);
     }
@@ -257,7 +257,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the repository.
      * @param repository the new repository.
      */
-    private void immutableSetRepository(String repository)
+    private void immutableSetRepository(final String repository)
     {
         m__strRepository = repository;
     }
@@ -266,7 +266,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the repository.
      * @param repository the new repository.
      */
-    protected void setRepository(String repository)
+    protected void setRepository(final String repository)
     {
         immutableSetRepository(repository);
     }
@@ -284,7 +284,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the engine name.
      * @param engineName the new engine name.
      */
-    private void immutableSetEngineName(String engineName)
+    private void immutableSetEngineName(final String engineName)
     {
         m__strEngineName = engineName;
     }
@@ -293,7 +293,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the engine name.
      * @param engineName the new engine name.
      */
-    protected void setEngineName(String engineName)
+    protected void setEngineName(final String engineName)
     {
         immutableSetEngineName(engineName);
     }
@@ -311,7 +311,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the engine version.
      * @param engineVersion the new engine version.
      */
-    private void immutableSetEngineVersion(String engineVersion)
+    private void immutableSetEngineVersion(final String engineVersion)
     {
         m__strEngineVersion = engineVersion;
     }
@@ -320,7 +320,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the engine version.
      * @param engineVersion the new engine version.
      */
-    protected void setEngineVersion(String engineVersion)
+    protected void setEngineVersion(final String engineVersion)
     {
         immutableSetEngineVersion(engineVersion);
     }
@@ -338,7 +338,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
-    private void immutableSetBasePackageName(String basePackageName)
+    private void immutableSetBasePackageName(final String basePackageName)
     {
         m__strBasePackageName = basePackageName;
     }
@@ -347,7 +347,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
-    protected void setBasePackageName(String basePackageName)
+    protected void setBasePackageName(final String basePackageName)
     {
         immutableSetBasePackageName(basePackageName);
     }

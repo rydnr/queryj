@@ -70,6 +70,14 @@
             $Date$
           </td>
           <td>
+            Implemented <a href="${issue.url}517}">XMLDAOFactory</a> template.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/10/13 07:03:32
+          </td>
+          <td>
             Some more work on XML DAO implementations. The Digester instances are now
             configured depending on the table definitions. The code is pretty close to reach
             a point in which in can be tested.

@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate DAO factories according to+
+ * Description: Is able to generate XML DAO factories according to
  *              database metadata.
  *
  * Last modified by: $Author$ at $Date$
@@ -45,12 +45,11 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -72,13 +71,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Is able to generate DAO factories according to
+ * Is able to generate XML DAO factories according to
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class DAOFactoryTemplate
+public abstract class XMLDAOFactoryTemplate
 {
     /**
      * The default header.
@@ -127,7 +126,7 @@ public abstract class DAOFactoryTemplate
         + " *\n"
         + " * Author: QueryJ\n"
         + " *\n"
-        + " * Description: Is able to create {0} DAOs according to\n"
+        + " * Description: Is able to create {0} XML DAOs according to\n"
         + " *              the information stored in the persistence domain.\n"
         + " *\n"
         + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
@@ -153,11 +152,11 @@ public abstract class DAOFactoryTemplate
         + " * Importing some project classes.\n"
         + " */\n"
         + "import {0}.{1}DAO;\n"
-         // DAO package - Engine - Table
+         // DAO package - Table
         + "import {2}.{1}DAOFactory;\n"
-         // DAO factory package - Engine - Table
-        + "import {3}.{4}{1}DAO;\n\n";
-         // DAO implementation package - Engine - Table
+         // DAO factory package - Table
+        + "//import {3}.XML{1}DAO;\n\n";
+         // XML DAO package - Table
 
     /**
      * The JDK imports.
@@ -166,18 +165,8 @@ public abstract class DAOFactoryTemplate
           "/*\n"
         + " * Importing some JDK classes.\n"
         + " */\n"
+        + "import java.io.InputStream;\n"
         + "import java.lang.ref.WeakReference;\n\n";
-
-    /**
-     * The extension imports.
-     */
-    public static final String DEFAULT_EXTENSION_IMPORTS =
-          "/*\n"
-        + " * Importing some extension classes.\n"
-        + " */\n"
-        + "import javax.sql.DataSource;\n"
-        + "import javax.naming.InitialContext;\n"
-        + "import javax.naming.NamingException;\n\n";
 
     /**
      * The commons-logging imports.
@@ -193,8 +182,7 @@ public abstract class DAOFactoryTemplate
      */
     public static final String DEFAULT_JAVADOC =
           "/**\n"
-        + " * Is able to create {1} DAOs according to\n"
-        + " * information in the {0} persistence domain.\n" // table
+        + " * Is able to create XML {0} DAOs.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
         + " */\n";
@@ -203,8 +191,8 @@ public abstract class DAOFactoryTemplate
      * The class definition.
      */
     public static final String CLASS_DEFINITION =
-          "public class {0}{1}DAOFactory\n"
-        + "    extends  {1}DAOFactory\n";
+          "public class XML{0}DAOFactory\n"
+        + "    extends  {0}DAOFactory\n";
 
     /**
      * The class start.
@@ -212,9 +200,9 @@ public abstract class DAOFactoryTemplate
     public static final String DEFAULT_CLASS_START =
           "'{'\n"
         + "    /**\n"
-        + "     * The data source JNDI location.\n"
+        + "     * The default file location.\n"
         + "     */\n"
-        + "    public static final String JNDI_LOCATION = \"{0}\";\n\n"
+        + "    protected static final String FILE_PATH = \"{0}.xml\";\n\n"
         + "    /**\n"
         + "     * Singleton implemented as a weak reference.\n"
         + "     */\n"
@@ -228,12 +216,12 @@ public abstract class DAOFactoryTemplate
         + "     * Protected constructor to avoid accidental instantiation.\n"
         + "     * @param alias the table alias.\n"
         + "     */\n"
-        + "    protected {0}{1}DAOFactory() '{' '}';\n\n" // table
+        + "    protected XML{0}DAOFactory() '{' '}';\n\n" // table
         + "    /**\n"
         + "     * Specifies a new weak reference.\n"
         + "     * @param factory the new factory instance.\n"
         + "     */\n"
-        + "    protected static void setReference(final {0}{1}DAOFactory factory)\n" // table
+        + "    protected static void setReference(final XML{0}DAOFactory factory)\n" // table
         + "    '{'\n"
         + "        singleton = new WeakReference(factory);\n"
         + "    '}'\n\n"
@@ -246,20 +234,20 @@ public abstract class DAOFactoryTemplate
         + "        return singleton;\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Retrieves a {0}{1}DAOFactory instance.\n"
+        + "     * Retrieves a XML{0}DAOFactory instance.\n" // table
         + "     * @return such instance.\n"
         + "     */\n"
-        + "    public static {0}{1}DAOFactory get{0}Instance()\n"
+        + "    public static XML{0}DAOFactory getXMLInstance()\n" // table
         + "    '{'\n"
-        + "        {0}{1}DAOFactory result = null;\n\n"
-        + "        WeakReference reference = getReference();\n\n"
-        + "        if  (reference != null) \n"
+        + "        XML{0}DAOFactory result = null;\n\n" // table
+        + "        WeakReference t_Reference = getReference();\n\n"
+        + "        if  (t_Reference != null) \n"
         + "        '{'\n"
-        + "            result = ({0}{1}DAOFactory) reference.get();\n"
+        + "            result = (XML{0}DAOFactory) t_Reference.get();\n" // table
         + "        '}'\n\n"
         + "        if  (result == null) \n"
         + "        '{'\n"
-        + "            result = new {0}{1}DAOFactory();\n\n"
+        + "            result = new XML{0}DAOFactory() '{' '}';\n\n" // table
         + "            setReference(result);\n"
         + "        '}'\n\n"
         + "        return result;\n"
@@ -270,44 +258,34 @@ public abstract class DAOFactoryTemplate
      */
     public static final String DEFAULT_FACTORY_METHOD =
           "    /**\n"
-        + "     * Creates {0}-specific {1} DAO.\n"
+        + "     * Creates a XML {0} DAO.\n" // table
         + "     * @return such DAO.\n"
         + "     */\n"
-        + "    public {1}DAO create{1}DAO()\n" // table
+        + "    public {0}DAO create{0}DAO()\n" // table
         + "    '{'\n"
-        + "        {0}{1}DAO result = null;\n\n"
-        + "        DataSource t_DataSource = getDataSource();\n\n"
-        + "        if  (t_DataSource != null)\n"
+        + "        return create{0}DAO(FILE_PATH);\n" // table
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Creates a XML {0} DAO.\n" // table
+        + "     * @param filePath the file path (retrieved via Class.getResourceAsStream()).\n"
+        + "     * @return such DAO.\n"
+        + "     * @precondition filePath != null\n"
+        + "     */\n"
+        + "    public {0}DAO create{0}DAO(final String filePath)\n" // table
+        + "    '{'\n"
+        + "        XML{0}DAO result = null;\n\n" // table
+        + "        InputStream t_isInput = getClass().getResourceAsStream(filePath);\n\n"
+        + "        if  (t_isInput == null)\n"
         + "        '{'\n"
-        + "            result =\n"
-        + "                new {0}{1}DAO(t_DataSource) '{'}';\n"
-        + "        '}'\n"
+        + "            t_isInput = getClass().getResourceAsStream(\"/\" + filePath);\n"
+        + "        '}'\n\n"
+        + "        if  (t_isInput != null)\n"
+        + "        '{'\n"
+        + "            result = new XML{0}DAO(t_isInput) '{' '}';\n" // table
+        + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n\n";
 
-    /**
-     * The default data source retrieval method.
-     */
-    public static final String DEFAULT_DATA_SOURCE_RETRIEVAL_METHOD =
-         "    /**\n"
-       + "     * Retrieves the data source.\n"
-       + "     * @return such data source.\n"
-       + "     */\n"
-       + "    protected DataSource getDataSource()\n"
-       + "    {\n"
-       + "        DataSource result = null;\n"
-       + "        try\n"
-       + "        {\n"
-       + "            InitialContext t_InitialContext = new InitialContext();\n"
-       + "            result = (DataSource) t_InitialContext.lookup(JNDI_LOCATION);\n"
-       + "        }\n"
-       + "        catch  (final NamingException namingException)\n"
-       + "        {\n"
-       + "            LogFactory.getLog(getClass()).error(\n"
-       + "                \"cannot.retrieve.data.source\", namingException);\n"
-       + "        }\n\n"
-       + "        return result;\n"
-       + "   }\n";
 
     /**
      * The default class end.
@@ -335,34 +313,9 @@ public abstract class DAOFactoryTemplate
     private TableTemplate m__TableTemplate;
 
     /**
-     * The metadata manager.
-     */
-    private DatabaseMetaDataManager m__MetaDataManager;
-
-    /**
-     * The engine name.
-     */
-    private String m__strEngineName;
-
-    /**
-     * The engine's version.
-     */
-    private String m__strEngineVersion;
-
-    /**
-     * The quote.
-     */
-    private String m__strQuote;
-
-    /**
      * The base package name.
      */
     private String m__strBasePackageName;
-
-    /**
-     * The datasource's JNDI location.
-     */
-    private String m__strJNDIDataSource;
 
     /**
      * The project import statements.
@@ -373,11 +326,6 @@ public abstract class DAOFactoryTemplate
      * The JDK import statements.
      */
     private String m__strJdkImports;
-
-    /**
-     * The extension import statements.
-     */
-    private String m__strExtensionImports;
 
     /**
      * The commons-logging import statements.
@@ -410,127 +358,84 @@ public abstract class DAOFactoryTemplate
     private String m__strFactoryMethod;
 
     /**
-     * The data source retrieval method.
-     */
-    private String m__strDataSourceRetrievalMethod;
-
-    /**
      * The class end.
      */
     private String m__strClassEnd;
 
     /**
-     * Builds a DAOFactoryTemplate using given information.
+     * Builds a XMLDAOFactoryTemplate using given information.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param jndiDataSource the JNDI location of the data source.
      * @param projectImports the project imports.
      * @param jdkImports the JDK imports.
-     * @param extensionImports the extension imports.
      * @param commonsLoggingImports the commons-logging imports.
      * @param javadoc the class Javadoc.
      * @param classDefinition the class definition.
      * @param classStart the class start.
      * @param singletonBody the singleton body.
      * @param factoryMethod the factory method.
-     * @param dataSourceRetrievalMethod the data source retrieval method.
      * @param classEnd the class end.
      */
-    public DAOFactoryTemplate(
-        String                  header,
-        String                  packageDeclaration,
-        TableTemplate           tableTemplate,
-        DatabaseMetaDataManager metaDataManager,
-        String                  packageName,
-        String                  engineName,
-        String                  engineVersion,
-        String                  quote,
-        String                  basePackageName,
-        String                  jndiDataSource,
-        String                  projectImports,
-        String                  jdkImports,
-        String                  extensionImports,
-        String                  commonsLoggingImports,
-        String                  javadoc,
-        String                  classDefinition,
-        String                  classStart,
-        String                  singletonBody,
-        String                  factoryMethod,
-        String                  dataSourceRetrievalMethod,
-        String                  classEnd)
+    public XMLDAOFactoryTemplate(
+        final String                  header,
+        final String                  packageDeclaration,
+        final TableTemplate           tableTemplate,
+        final String                  packageName,
+        final String                  basePackageName,
+        final String                  projectImports,
+        final String                  jdkImports,
+        final String                  commonsLoggingImports,
+        final String                  javadoc,
+        final String                  classDefinition,
+        final String                  classStart,
+        final String                  singletonBody,
+        final String                  factoryMethod,
+        final String                  classEnd)
     {
-        inmutableSetHeader(header);
-        inmutableSetPackageDeclaration(packageDeclaration);
-        inmutableSetTableTemplate(tableTemplate);
-        inmutableSetMetaDataManager(metaDataManager);
-        inmutableSetPackageName(packageName);
-        inmutableSetEngineName(engineName);
-        inmutableSetEngineVersion(engineVersion);
-        inmutableSetQuote(quote);
-        inmutableSetBasePackageName(basePackageName);
-        inmutableSetJNDIDataSource(jndiDataSource);
-        inmutableSetProjectImports(projectImports);
-        inmutableSetJdkImports(jdkImports);
-        inmutableSetExtensionImports(extensionImports);
-        inmutableSetCommonsLoggingImports(commonsLoggingImports);
-        inmutableSetJavadoc(javadoc);
-        inmutableSetClassDefinition(classDefinition);
-        inmutableSetClassStart(classStart);
-        inmutableSetSingletonBody(singletonBody);
-        inmutableSetFactoryMethod(factoryMethod);
-        inmutableSetDataSourceRetrievalMethod(dataSourceRetrievalMethod);
-        inmutableSetClassEnd(classEnd);
+        immutableSetHeader(header);
+        immutableSetPackageDeclaration(packageDeclaration);
+        immutableSetTableTemplate(tableTemplate);
+        immutableSetPackageName(packageName);
+        immutableSetBasePackageName(basePackageName);
+        immutableSetProjectImports(projectImports);
+        immutableSetJdkImports(jdkImports);
+        immutableSetCommonsLoggingImports(commonsLoggingImports);
+        immutableSetJavadoc(javadoc);
+        immutableSetClassDefinition(classDefinition);
+        immutableSetClassStart(classStart);
+        immutableSetSingletonBody(singletonBody);
+        immutableSetFactoryMethod(factoryMethod);
+        immutableSetClassEnd(classEnd);
     }
 
     /**
-     * Builds a DAOFactoryTemplate using given information.
+     * Builds a XMLDAOFactoryTemplate using given information.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param jndiDataSource the JNDI location of the data source.
      */
-    public DAOFactoryTemplate(
-        TableTemplate           tableTemplate,
-        DatabaseMetaDataManager metaDataManager,
-        String                  packageName,
-        String                  engineName,
-        String                  engineVersion,
-        String                  quote,
-        String                  basePackageName,
-        String                  jndiDataSource)
+    public XMLDAOFactoryTemplate(
+        final TableTemplate tableTemplate,
+        final String        packageName,
+        final String        basePackageName)
     {
         this(
             DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             tableTemplate,
-            metaDataManager,
             packageName,
-            engineName,
-            engineVersion,
-            quote,
             basePackageName,
-            jndiDataSource,
             DEFAULT_PROJECT_IMPORTS,
             DEFAULT_JDK_IMPORTS,
-            DEFAULT_EXTENSION_IMPORTS,
             DEFAULT_COMMONS_LOGGING_IMPORTS,
             DEFAULT_JAVADOC,
             CLASS_DEFINITION,
             DEFAULT_CLASS_START,
             DEFAULT_SINGLETON_BODY,
             DEFAULT_FACTORY_METHOD,
-            DEFAULT_DATA_SOURCE_RETRIEVAL_METHOD,
             DEFAULT_CLASS_END);
     }
 
@@ -538,7 +443,7 @@ public abstract class DAOFactoryTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    private void inmutableSetHeader(String header)
+    private void immutableSetHeader(final String header)
     {
         m__strHeader = header;
     }
@@ -547,9 +452,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    protected void setHeader(String header)
+    protected void setHeader(final String header)
     {
-        inmutableSetHeader(header);
+        immutableSetHeader(header);
     }
 
     /**
@@ -565,7 +470,7 @@ public abstract class DAOFactoryTemplate
      * Specifies the package declaration.
      * @param packageDeclaration the new package declaration.
      */
-    private void inmutableSetPackageDeclaration(String packageDeclaration)
+    private void immutableSetPackageDeclaration(final String packageDeclaration)
     {
         m__strPackageDeclaration = packageDeclaration;
     }
@@ -574,9 +479,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the package declaration.
      * @param packageDeclaration the new package declaration.
      */
-    protected void setPackageDeclaration(String packageDeclaration)
+    protected void setPackageDeclaration(final String packageDeclaration)
     {
-        inmutableSetPackageDeclaration(packageDeclaration);
+        immutableSetPackageDeclaration(packageDeclaration);
     }
 
     /**
@@ -591,7 +496,7 @@ public abstract class DAOFactoryTemplate
      * Specifies the table template.
      * @param tableTemplate the new table template.
      */
-    private void inmutableSetTableTemplate(TableTemplate tableTemplate)
+    private void immutableSetTableTemplate(TableTemplate tableTemplate)
     {
         m__TableTemplate = tableTemplate;
     }
@@ -602,7 +507,7 @@ public abstract class DAOFactoryTemplate
      */
     protected void setTableTemplate(TableTemplate tableTemplate)
     {
-        inmutableSetTableTemplate(tableTemplate);
+        immutableSetTableTemplate(tableTemplate);
     }
 
     /**
@@ -615,40 +520,10 @@ public abstract class DAOFactoryTemplate
     }
 
     /**
-     * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
-     */
-    private void inmutableSetMetaDataManager(
-        DatabaseMetaDataManager metaDataManager)
-    {
-        m__MetaDataManager = metaDataManager;
-    }
-
-    /**
-     * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
-     */
-    protected void setMetaDataManager(
-        DatabaseMetaDataManager metaDataManager)
-    {
-        inmutableSetMetaDataManager(metaDataManager);
-    }
-
-    /**
-     * Retrieves the metadata manager.
-     * @return such information.
-     */
-    public DatabaseMetaDataManager getMetaDataManager()
-    {
-        return m__MetaDataManager;
-    }
-
-
-    /**
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    private void inmutableSetPackageName(String packageName)
+    private void immutableSetPackageName(final String packageName)
     {
         m__strPackageName = packageName;
     }
@@ -657,9 +532,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    protected void setPackageName(String packageName)
+    protected void setPackageName(final String packageName)
     {
-        inmutableSetPackageName(packageName);
+        immutableSetPackageName(packageName);
     }
 
     /**
@@ -672,91 +547,10 @@ public abstract class DAOFactoryTemplate
     }
 
     /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
-     */
-    private void inmutableSetEngineName(String engineName)
-    {
-        m__strEngineName = engineName;
-    }
-
-    /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
-     */
-    protected void setEngineName(String engineName)
-    {
-        inmutableSetEngineName(engineName);
-    }
-
-    /**
-     * Retrieves the engine name.
-     * @return such information.
-     */
-    public String getEngineName() 
-    {
-        return m__strEngineName;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    private void inmutableSetEngineVersion(String engineVersion)
-    {
-        m__strEngineVersion = engineVersion;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    protected void setEngineVersion(String engineVersion)
-    {
-        inmutableSetEngineVersion(engineVersion);
-    }
-
-    /**
-     * Retrieves the engine version.
-     * @return such information.
-     */
-    public String getEngineVersion()
-    {
-        return m__strEngineVersion;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    private void inmutableSetQuote(String quote)
-    {
-        m__strQuote = quote;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    protected void setQuote(String quote)
-    {
-        inmutableSetQuote(quote);
-    }
-
-    /**
-     * Retrieves the identifier quote string.
-     * @return such identifier.
-     */
-    public String getQuote()
-    {
-        return m__strQuote;
-    }
-
-    /**
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
-    private void inmutableSetBasePackageName(String basePackageName)
+    private void immutableSetBasePackageName(final String basePackageName)
     {
         m__strBasePackageName = basePackageName;
     }
@@ -765,9 +559,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
-    protected void setBasePackageName(String basePackageName)
+    protected void setBasePackageName(final String basePackageName)
     {
-        inmutableSetBasePackageName(basePackageName);
+        immutableSetBasePackageName(basePackageName);
     }
 
     /**
@@ -780,37 +574,10 @@ public abstract class DAOFactoryTemplate
     }
 
     /**
-     * Specifies the JNDI data source.
-     * @param jndiDataSource the new JNDI data source.
-     */
-    private void inmutableSetJNDIDataSource(String jndiDataSource)
-    {
-        m__strJNDIDataSource = jndiDataSource;
-    }
-
-    /**
-     * Specifies the JNDI data source.
-     * @param jndiDataSource the new JNDI data source.
-     */
-    protected void setJNDIDataSource(String jndiDataSource)
-    {
-        inmutableSetJNDIDataSource(jndiDataSource);
-    }
-
-    /**
-     * Retrieves the JNDI data source.
-     * @return such information.
-     */
-    public String getJNDIDataSource() 
-    {
-        return m__strJNDIDataSource;
-    }
-
-    /**
      * Specifies the project imports.
      * @param projectImports the new project imports.
      */
-    private void inmutableSetProjectImports(String projectImports)
+    private void immutableSetProjectImports(final String projectImports)
     {
         m__strProjectImports = projectImports;
     }
@@ -819,9 +586,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the project imports.
      * @param projectImports the new project imports.
      */
-    protected void setProjectImports(String projectImports)
+    protected void setProjectImports(final String projectImports)
     {
-        inmutableSetProjectImports(projectImports);
+        immutableSetProjectImports(projectImports);
     }
 
     /**
@@ -837,7 +604,7 @@ public abstract class DAOFactoryTemplate
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
-    private void inmutableSetJdkImports(String jdkImports)
+    private void immutableSetJdkImports(final String jdkImports)
     {
         m__strJdkImports = jdkImports;
     }
@@ -846,9 +613,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
-    protected void setJdkImports(String jdkImports)
+    protected void setJdkImports(final String jdkImports)
     {
-        inmutableSetJdkImports(jdkImports);
+        immutableSetJdkImports(jdkImports);
     }
 
     /**
@@ -861,37 +628,10 @@ public abstract class DAOFactoryTemplate
     }
 
     /**
-     * Specifies the extension imports.
-     * @param extensionImports the new extension imports.
-     */
-    private void inmutableSetExtensionImports(String extensionImports)
-    {
-        m__strExtensionImports = extensionImports;
-    }
-
-    /**
-     * Specifies the extension imports.
-     * @param extensionImports the new extension imports.
-     */
-    protected void setExtensionImports(String extensionImports)
-    {
-        inmutableSetExtensionImports(extensionImports);
-    }
-
-    /**
-     * Retrieves the extension imports.
-     * @return such information.
-     */
-    public String getExtensionImports() 
-    {
-        return m__strExtensionImports;
-    }
-
-    /**
      * Specifies the commons-logging imports.
      * @param commonsLoggingImports the new commons-logging imports.
      */
-    private void inmutableSetCommonsLoggingImports(String commonsLoggingImports)
+    private void immutableSetCommonsLoggingImports(final String commonsLoggingImports)
     {
         m__strCommonsLoggingImports = commonsLoggingImports;
     }
@@ -900,9 +640,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the commons-logging imports.
      * @param commonsLoggingImports the new commons-logging imports.
      */
-    protected void setCommonsLoggingImports(String commonsLoggingImports)
+    protected void setCommonsLoggingImports(final String commonsLoggingImports)
     {
-        inmutableSetCommonsLoggingImports(commonsLoggingImports);
+        immutableSetCommonsLoggingImports(commonsLoggingImports);
     }
 
     /**
@@ -918,7 +658,7 @@ public abstract class DAOFactoryTemplate
      * Specifies the javadoc.
      * @param javadoc the new javadoc.
      */
-    private void inmutableSetJavadoc(String javadoc)
+    private void immutableSetJavadoc(final String javadoc)
     {
         m__strJavadoc = javadoc;
     }
@@ -927,9 +667,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the javadoc.
      * @param javadoc the new javadoc.
      */
-    protected void setJavadoc(String javadoc)
+    protected void setJavadoc(final String javadoc)
     {
-        inmutableSetJavadoc(javadoc);
+        immutableSetJavadoc(javadoc);
     }
 
     /**
@@ -945,7 +685,7 @@ public abstract class DAOFactoryTemplate
      * Specifies the class definition.
      * @param classDefinition the new class definition.
      */
-    private void inmutableSetClassDefinition(String classDefinition)
+    private void immutableSetClassDefinition(final String classDefinition)
     {
         m__strClassDefinition = classDefinition;
     }
@@ -954,9 +694,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the class definition.
      * @param classDefinition the new class definition.
      */
-    protected void setClassDefinition(String classDefinition)
+    protected void setClassDefinition(final String classDefinition)
     {
-        inmutableSetClassDefinition(classDefinition);
+        immutableSetClassDefinition(classDefinition);
     }
 
     /**
@@ -972,7 +712,7 @@ public abstract class DAOFactoryTemplate
      * Specifies the class start.
      * @param classStart the new class start.
      */
-    private void inmutableSetClassStart(String classStart)
+    private void immutableSetClassStart(final String classStart)
     {
         m__strClassStart = classStart;
     }
@@ -981,9 +721,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the class start.
      * @param classStart the new class start.
      */
-    protected void setClassStart(String classStart)
+    protected void setClassStart(final String classStart)
     {
-        inmutableSetClassStart(classStart);
+        immutableSetClassStart(classStart);
     }
 
     /**
@@ -999,7 +739,7 @@ public abstract class DAOFactoryTemplate
      * Specifies the singleton body.
      * @param singletonBody the singleton body.
      */
-    private void inmutableSetSingletonBody(String singletonBody)
+    private void immutableSetSingletonBody(final String singletonBody)
     {
         m__strSingletonBody = singletonBody;
     }
@@ -1008,9 +748,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the singleton body.
      * @param singletonBody the singleton body.
      */
-    protected void setSingletonBody(String singletonBody)
+    protected void setSingletonBody(final String singletonBody)
     {
-        inmutableSetSingletonBody(singletonBody);
+        immutableSetSingletonBody(singletonBody);
     }
 
     /**
@@ -1026,7 +766,7 @@ public abstract class DAOFactoryTemplate
      * Specifies the factory method.
      * @param factoryMethod such source code.
      */
-    private void inmutableSetFactoryMethod(String factoryMethod)
+    private void immutableSetFactoryMethod(final String factoryMethod)
     {
         m__strFactoryMethod = factoryMethod;
     }
@@ -1035,9 +775,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the factory method.
      * @param factoryMethod such source code.
      */
-    protected void setFactoryMethod(String factoryMethod)
+    protected void setFactoryMethod(final String factoryMethod)
     {
-        inmutableSetFactoryMethod(factoryMethod);
+        immutableSetFactoryMethod(factoryMethod);
     }
 
     /**
@@ -1050,37 +790,10 @@ public abstract class DAOFactoryTemplate
     }
 
     /**
-     * Specifies the data source retrieval method.
-     * @param dataSourceRetrievalMethod such source code.
-     */
-    private void inmutableSetDataSourceRetrievalMethod(String dataSourceRetrievalMethod)
-    {
-        m__strDataSourceRetrievalMethod = dataSourceRetrievalMethod;
-    }
-
-    /**
-     * Specifies the data source retrieval method.
-     * @param dataSourceRetrievalMethod such source code.
-     */
-    protected void setDataSourceRetrievalMethod(String dataSourceRetrievalMethod)
-    {
-        inmutableSetDataSourceRetrievalMethod(dataSourceRetrievalMethod);
-    }
-
-    /**
-     * Retrieves the data source retrieval method.
-     * @return such source code.
-     */
-    public String getDataSourceRetrievalMethod()
-    {
-        return m__strDataSourceRetrievalMethod;
-    }
-
-    /**
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    private void inmutableSetClassEnd(String classEnd)
+    private void immutableSetClassEnd(final String classEnd)
     {
         m__strClassEnd = classEnd;
     }
@@ -1089,9 +802,9 @@ public abstract class DAOFactoryTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    protected void setClassEnd(String classEnd)
+    protected void setClassEnd(final String classEnd)
     {
-        inmutableSetClassEnd(classEnd);
+        immutableSetClassEnd(classEnd);
     }
 
     /**
@@ -1118,8 +831,6 @@ public abstract class DAOFactoryTemplate
 
         TableTemplate t_TableTemplate = getTableTemplate();
 
-        DatabaseMetaDataManager t_MetaDataManager = getMetaDataManager();
-
         MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
 
         PackageUtils t_PackageUtils = PackageUtils.getInstance();
@@ -1127,9 +838,17 @@ public abstract class DAOFactoryTemplate
         if  (   (t_StringUtils     != null)
              && (t_TableTemplate   != null)
              && (t_MetaDataUtils   != null)
-             && (t_MetaDataManager != null)
              && (t_PackageUtils    != null))
         {
+            Object[] t_aCapitalizedTableName =
+                new Object[]
+                {
+                    t_StringUtils.capitalize(
+                        t_EnglishGrammarUtils.getSingular(
+                            t_TableTemplate.getTableName().toLowerCase()),
+                        '_'),
+                };
+
             MessageFormat t_Formatter = new MessageFormat(getHeader());
             t_sbResult.append(
                 t_Formatter.format(
@@ -1153,20 +872,14 @@ public abstract class DAOFactoryTemplate
                     {
                         t_PackageUtils.retrieveBaseDAOPackage(
                             getBasePackageName()),
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_'),
+                        t_aCapitalizedTableName[0],
                         t_PackageUtils.retrieveBaseDAOFactoryPackage(
                             getBasePackageName()),
-                        t_PackageUtils.retrieveDAOPackage(
-                            getBasePackageName(),
-                            getEngineName()),
-                        getEngineName()
+                        t_PackageUtils.retrieveXMLDAOPackage(
+                            getBasePackageName())
                     }));
 
             t_sbResult.append(getJdkImports());
-            t_sbResult.append(getExtensionImports());
             t_sbResult.append(getCommonsLoggingImports());
 
             t_Formatter = new MessageFormat(getJavadoc());
@@ -1174,62 +887,28 @@ public abstract class DAOFactoryTemplate
                 t_Formatter.format(
                     new Object[]
                     {
-                        getEngineName(),
                         t_TableTemplate.getTableName()
                     }));
 
             t_Formatter = new MessageFormat(getClassDefinition());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        getEngineName(),
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_')
-                    }));
+            t_sbResult.append(t_Formatter.format(t_aCapitalizedTableName));
 
             t_Formatter = new MessageFormat(getClassStart());
             t_sbResult.append(
                 t_Formatter.format(
                     new Object[]
                     {
-                        getJNDIDataSource()
+                        t_EnglishGrammarUtils.getPlural(
+                            t_TableTemplate.getTableName().toLowerCase())
                     }));
 
+            t_Formatter = new MessageFormat(getSingletonBody());
 
-            MessageFormat t_SingletonBodyFormatter =
-                new MessageFormat(getSingletonBody());
+            t_sbResult.append(t_Formatter.format(t_aCapitalizedTableName));
 
-            t_sbResult.append(
-                t_SingletonBodyFormatter.format(
-                    new Object[]
-                    {
-                        getEngineName(),
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_')
-                    }));
+            t_Formatter = new MessageFormat(getFactoryMethod());
 
-            List t_lFields = t_TableTemplate.getFields();
-
-            MessageFormat t_FactoryMethodFormatter =
-                    new MessageFormat(getFactoryMethod());
-
-            t_sbResult.append(
-                t_FactoryMethodFormatter.format(
-                    new Object[]
-                    {
-                        getEngineName(),
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_'),
-                    }));
-
-            t_sbResult.append(getDataSourceRetrievalMethod());
+            t_sbResult.append(t_Formatter.format(t_aCapitalizedTableName));
 
             t_sbResult.append(getClassEnd());
         }

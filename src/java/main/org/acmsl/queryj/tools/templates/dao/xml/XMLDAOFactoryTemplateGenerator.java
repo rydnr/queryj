@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate Mock DAO factories.
+ * Description: Is able to generate XML DAO factories.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,14 +44,14 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.mock;
+package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplate;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
@@ -70,13 +70,13 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Is able to generate Mock DAO factories.
+ * Is able to generate XML DAO factories.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public class MockDAOFactoryTemplateGenerator
-    implements  MockDAOFactoryTemplateFactory
+public class XMLDAOFactoryTemplateGenerator
+    implements  XMLDAOFactoryTemplateFactory
 {
     /**
      * Singleton implemented as a weak reference.
@@ -86,14 +86,14 @@ public class MockDAOFactoryTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected MockDAOFactoryTemplateGenerator() {};
+    protected XMLDAOFactoryTemplateGenerator() {};
 
     /**
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        final MockDAOFactoryTemplateGenerator generator)
+        final XMLDAOFactoryTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -108,23 +108,23 @@ public class MockDAOFactoryTemplateGenerator
     }
 
     /**
-     * Retrieves a MockDAOFactoryTemplateGenerator instance.
+     * Retrieves a XMLDAOFactoryTemplateGenerator instance.
      * @return such instance.
      */
-    public static MockDAOFactoryTemplateGenerator getInstance()
+    public static XMLDAOFactoryTemplateGenerator getInstance()
     {
-        MockDAOFactoryTemplateGenerator result = null;
+        XMLDAOFactoryTemplateGenerator result = null;
 
         WeakReference t_Reference = getReference();
 
         if  (t_Reference != null) 
         {
-            result = (MockDAOFactoryTemplateGenerator) t_Reference.get();
+            result = (XMLDAOFactoryTemplateGenerator) t_Reference.get();
         }
 
         if  (result == null) 
         {
-            result = new MockDAOFactoryTemplateGenerator() {};
+            result = new XMLDAOFactoryTemplateGenerator() {};
 
             setReference(result);
         }
@@ -134,11 +134,11 @@ public class MockDAOFactoryTemplateGenerator
 
     /**
      * Adds a new template factory class.
-     * @param mockDAOFactoryName the Mock DAO factory name.
+     * @param xmlDAOFactoryName the XML DAO factory name.
      * @param templateFactoryClass the template factory.
      */
     public void addTemplateFactoryClass(
-        final String mockDAOFactoryName,
+        final String xmlDAOFactoryName,
         final String templateFactoryClass)
     {
         TemplateMappingManager t_MappingManager =
@@ -148,19 +148,19 @@ public class MockDAOFactoryTemplateGenerator
              && (templateFactoryClass != null))
         {
             t_MappingManager.addDefaultTemplateFactoryClass(
-                  TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATE_PREFIX
-                + mockDAOFactoryName,
+                  TemplateMappingManager.XML_DAO_FACTORY_TEMPLATE_PREFIX
+                + xmlDAOFactoryName,
                 templateFactoryClass);
         }
     }
 
     /**
      * Retrieves the template factory class.
-     * @param mockDAOFactoryName the Mock DAO factory name.
+     * @param xmlDAOFactoryName the XML DAO factory name.
      * @return the template factory class name.
      */
     protected String getTemplateFactoryClass(
-        final String mockDAOFactoryName)
+        final String xmlDAOFactoryName)
     {
         String result = null;
 
@@ -171,8 +171,8 @@ public class MockDAOFactoryTemplateGenerator
         {
             result =
                 t_MappingManager.getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATE_PREFIX
-                    + mockDAOFactoryName);
+                      TemplateMappingManager.XML_DAO_FACTORY_TEMPLATE_PREFIX
+                    + xmlDAOFactoryName);
         }
 
         return result;
@@ -180,15 +180,15 @@ public class MockDAOFactoryTemplateGenerator
 
     /**
      * Retrieves the template factory instance.
-     * @param mockDAOFactoryName the Mock DAO factory name.
+     * @param xmlDAOFactoryName the XML DAO factory name.
      * @return the template factory class name.
      * @throws QueryJException if the factory class is invalid.
      */
-    protected MockDAOFactoryTemplateFactory getTemplateFactory(
-        final String mockDAOFactoryName)
+    protected XMLDAOFactoryTemplateFactory getTemplateFactory(
+        final String xmlDAOFactoryName)
       throws  QueryJException
     {
-        MockDAOFactoryTemplateFactory result = null;
+        XMLDAOFactoryTemplateFactory result = null;
 
         TemplateMappingManager t_MappingManager =
             TemplateMappingManager.getInstance();
@@ -197,20 +197,20 @@ public class MockDAOFactoryTemplateGenerator
         {
             Object t_TemplateFactory =
                 t_MappingManager.getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATE_PREFIX
-                    + mockDAOFactoryName);
+                      TemplateMappingManager.XML_DAO_FACTORY_TEMPLATE_PREFIX
+                    + xmlDAOFactoryName);
 
             if  (t_TemplateFactory != null)
             {
-                if  (!(t_TemplateFactory instanceof MockDAOFactoryTemplateFactory))
+                if  (!(t_TemplateFactory instanceof XMLDAOFactoryTemplateFactory))
                 {
                     throw
                         new QueryJException(
-                            "invalid.mock.dao.factory.template.factory");
+                            "invalid.xml.dao.factory.template.factory");
                 }
                 else 
                 {
-                    result = (MockDAOFactoryTemplateFactory) t_TemplateFactory;
+                    result = (XMLDAOFactoryTemplateFactory) t_TemplateFactory;
                 }
             }
         }
@@ -219,27 +219,27 @@ public class MockDAOFactoryTemplateGenerator
     }
 
     /**
-     * Generates a Mock DAO factory template.
+     * Generates a XML DAO factory template.
      * @param tableTemplate the table template.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
-    public MockDAOFactoryTemplate createMockDAOFactoryTemplate(
+    public XMLDAOFactoryTemplate createXMLDAOFactoryTemplate(
         final TableTemplate tableTemplate,
         final String        packageName,
         final String        basePackageName)
       throws  QueryJException
     {
-        MockDAOFactoryTemplate result = null;
+        XMLDAOFactoryTemplate result = null;
 
         if  (   (tableTemplate   != null)
              && (packageName     != null)
              && (basePackageName != null))
         {
             result =
-                new MockDAOFactoryTemplate(
+                new XMLDAOFactoryTemplate(
                     tableTemplate,
                     packageName,
                     basePackageName) {};
@@ -249,13 +249,13 @@ public class MockDAOFactoryTemplateGenerator
     }
 
     /**
-     * Writes a Mock DAO factory template to disk.
-     * @param template the Mock DAO factory template to write.
+     * Writes a XML DAO factory template to disk.
+     * @param template the XML DAO factory template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
      */
     public void write(
-        final MockDAOFactoryTemplate template,
+        final XMLDAOFactoryTemplate template,
         final File                   outputDir)
       throws  IOException
     {
@@ -275,7 +275,7 @@ public class MockDAOFactoryTemplateGenerator
                 t_FileUtils.writeFile(
                       outputDir.getAbsolutePath()
                     + File.separator
-                    + "Mock"
+                    + "XML"
                     + t_StringUtils.capitalize(
                           t_EnglishGrammarUtils.getSingular(
                               template
