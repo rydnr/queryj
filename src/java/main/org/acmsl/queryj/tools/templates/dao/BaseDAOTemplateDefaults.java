@@ -179,7 +179,7 @@ public interface BaseDAOTemplateDefaults
     public static final String DEFAULT_JAVADOC =
           "/**\n"
         + " * DAO abstract class responsible of requesting services\n"
-        + " * to manage \"{0}\" structures from persistence layers.\n"
+        + " * to manage <i>{0}</i> structures from persistence layers.\n"
          // Table name
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"

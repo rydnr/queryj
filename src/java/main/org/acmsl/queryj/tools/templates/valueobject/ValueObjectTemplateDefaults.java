@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Defines the default subtemplates used to generate base DAO
- *              factories according to database metadata.
+ * Description: Defines the default subtemplates used to generate value
+ *              objects according to database metadata.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,16 +45,16 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.valueobject;
 
 /**
- * Defines the default subtemplates used to generate base DAO factories
- * according to database metadata.
+ * Defines the default subtemplates used to generate value objects according
+ * to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface BaseDAOFactoryTemplateDefaults
+public interface ValueObjectTemplateDefaults
 {
     /**
      * The default header.
@@ -103,8 +103,8 @@ public interface BaseDAOFactoryTemplateDefaults
         + " *\n"
         + " * Author: QueryJ\n"
         + " *\n"
-        + " * Description: Is able to create \"{0}\" DAO instances.\n"
-        + " *              (Abstract Factory pattern)\n"
+        + " * Description: Represents the \"{0}\" information stored in the\n"
+        + " *              persistence domain.\n"
         + " *\n"
         + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
         + " *\n"
@@ -119,44 +119,33 @@ public interface BaseDAOFactoryTemplateDefaults
     /**
      * The package declaration.
      */
-    public static final String PACKAGE_DECLARATION =
-        "package {0};\n\n"; // package
+    public static final String PACKAGE_DECLARATION = "package {0};\n\n"; // package
 
     /**
      * The ACM-SL imports.
      */
-    public static final String DEFAULT_PROJECT_IMPORTS =
+    public static final String ACMSL_IMPORTS =
           "/*\n"
-        + " * Importing some project classes.\n"
-        + " */\n"
-        + "import {0}.{1}DAO;\n" // package - Table
-        + "import {2}.DAOChooser;\n\n"; // DAOChooser package
+        + " * Importing some ACM-SL classes.\n"
+        + " */\n\n";
 
     /**
      * The JDK imports.
      */
-    public static final String DEFAULT_JDK_IMPORTS =
+    public static final String JDK_IMPORTS =
           "/*\n"
         + " * Importing some JDK classes.\n"
         + " */\n"
-        + "import java.lang.IllegalAccessException;\n"
-        + "import java.lang.InstantiationException;\n\n";
-
-    /**
-     * The commons-logging imports.
-     */
-    public static final String DEFAULT_COMMONS_LOGGING_IMPORTS =
-          "/*\n"
-        + " * Importing some commons-logging classes.\n"
-        + " */\n"
-        + "import org.apache.commons.logging.LogFactory;\n\n";
+        + "import java.math.BigDecimal;\n"
+        + "import java.util.Calendar;\n"
+        + "import java.util.Date;\n\n";
 
     /**
      * The default class Javadoc.
      */
     public static final String DEFAULT_JAVADOC =
           "/**\n"
-        + " * Is able to create <i>{0}</i> DAO instances (Abstract Factory pattern).\n"
+        + " * Represents the <i>{0}</i> information in the persistence domain.\n" // table
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
         + " */\n";
@@ -165,83 +154,89 @@ public interface BaseDAOFactoryTemplateDefaults
      * The class definition.
      */
     public static final String CLASS_DEFINITION =
-           "public abstract class {0}DAOFactory\n"; // table
+           "public class {0}ValueObject\n"; // table
 
     /**
      * The class start.
      */
-    public static final String DEFAULT_CLASS_START =
-        "{\n";
+    public static final String DEFAULT_CLASS_START = "{\n";
 
     /**
-     * The class getInstance() method.
+     * The field declaration.
      */
-    public static final String DEFAULT_GET_INSTANCE_METHOD =
+    public static final String DEFAULT_FIELD_DECLARATION =
           "    /**\n"
-        + "     * Retrieves a {0}DAOFactory instance.\n"
-        + "     * @return such instance.\n"
+        + "     * The <i>{0}</i> information.\n" // field
         + "     */\n"
-        + "    public static {0}DAOFactory getInstance()\n"
+        + "    private {1} {2};\n\n"; // field type - field
+
+    /**
+     * The class constructor.
+     */
+    public static final String DEFAULT_CONSTRUCTOR =
+          "    /**\n"
+        + "     * Creates a {0]ValueObject with given information.\n"
+        + "{1}" // constructor field javadoc
+        + "     */\n"
+        + "    protected {0}ValueObject(" // table
+        + "{2})\n" // constructor field declaration
+        + "    '{'"
+        + "{3}\n"  // constructor field value setter.
+        + "    '}'\n";
+
+    /**
+     * The default constructor field Javadoc.
+     */
+    public static final String DEFAULT_CONSTRUCTOR_FIELD_JAVADOC =
+        "     * @param {0} the {1} information.\n"; // field - FIELD;
+
+    /**
+     * The default constructor field declaration.
+     */
+    public static final String DEFAULT_CONSTRUCTOR_FIELD_DECLARATION =
+        "\n        final {0} {1}"; // field type - field;
+
+    /**
+     * The default constructor field value setter.
+     */
+    public static final String DEFAULT_CONSTRUCTOR_FIELD_VALUE_SETTER =
+        "\n        immutableSet{0}({1});"; // Field - field;
+
+    /**
+     * The default field setter method.
+     */
+    public static final String DEFAULT_FIELD_VALUE_SETTER_METHOD =
+          "\n"
+        + "    /**\n"
+        + "     * Specifies the {0} information.\n" // field
+        + "     * @param {0} the new {0} value.\n"
+        + "     */\n"
+        + "    private void immutableSet{2}(final {1} {0})\n" // capitalized field - field type
         + "    '{'\n"
-        + "        return getInstance(DAOChooser.getInstance());\n"
+        + "        this.{0} = {0};\n" // field
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Retrieves a {0}DAOFactory instance.\n"
-        + "     * @param daoChooser the DAOChooser instance.\n"
-        + "     * @return such instance.\n"
-        + "     * @precondition daoChooser != null\n"
+        + "     * Specifies the {0} information.\n" // field
+        + "     * @param {0} the new {0} value.\n"
         + "     */\n"
-        + "    protected static {0}DAOFactory getInstance(final DAOChooser daoChooser)\n"
+        + "    protected void set{2}({1} {0})\n" // capitalized field - field type
         + "    '{'\n"
-        + "        {0}DAOFactory result = null;\n\n"
-        + "        String t_str{0}DAOFactoryClassName =\n"
-        + "            daoChooser.get{0}DAOFactoryClassName();\n\n"
-        + "        if  (t_str{0}DAOFactoryClassName != null)\n"
-        + "        '{'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                Class t_FactoryClass =\n"
-        + "                    Class.forName(\n"
-        + "                        t_str{0}DAOFactoryClassName);\n\n"
-        + "                result =\n"
-        + "                    ({0}DAOFactory) t_FactoryClass.newInstance();\n"
-        + "            '}'\n"
-        + "            catch  (final ClassNotFoundException classNotFoundException)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog({0}DAOFactory.class).error(\n"
-        + "                    \"Cannot find {0} DAO Factory implementation class\",\n"
-        + "                    classNotFoundException);\n"
-        + "            '}'\n"
-        + "            catch  (final InstantiationException instantiationException)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog({0}DAOFactory.class).error(\n"
-        + "                    \"Cannot instantiate {0} DAO Factory implementation\",\n"
-        + "                    instantiationException);\n"
-        + "            '}'\n"
-        + "            catch  (final IllegalAccessException illegalAccessException)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog({0}DAOFactory.class).error(\n"
-        + "                    \"Cannot access {0} DAO Factory implementation\",\n"
-        + "                    illegalAccessException);\n"
-        + "            '}'\n"
-        + "        '}'\n"
-        + "        else\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog({0}DAOFactory.class).error(\n"
-        + "                \"{0} DAO Factory implementation not specified\");\n"
-        + "        '}'\n\n"
-        + "        return result;\n"
-        + "    '}'\n\n";
+        + "        immutableSet{2}({0});\n" // field
+        + "    '}'\n";
 
     /**
-     * The factory method.
+     * The default field getter method.
      */
-    public static final String DEFAULT_FACTORY_METHOD =
-          "    /**\n"
-        + "     * Creates an <i>{0}</i> DAO.\n"
-        + "     * @return such DAO.\n"
+    public static final String DEFAULT_FIELD_VALUE_GETTER_METHOD =
+          "\n"
+        + "    /**\n"
+        + "     * Retrieves the {0} information.\n" // field
+        + "     * @return such value.\n"
         + "     */\n"
-        + "    public abstract {0}DAO create{0}DAO();\n"; // table
+        + "    public {1} get{2}()\n" // field type - capitalized field
+        + "    '{'\n"
+        + "        return {0};\n" // field
+        + "    '}'\n";
 
     /**
      * The default class end.
