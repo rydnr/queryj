@@ -74,6 +74,8 @@ public class ParameterElement
      * @param index the <i>index</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
+     * @precondition id != null
+     * @precondition type != null
      */
     public ParameterElement(
         final String id,

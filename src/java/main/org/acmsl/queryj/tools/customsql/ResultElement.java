@@ -104,6 +104,8 @@ public class ResultElement
      * @param id the <i>id</i> attribute.
      * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
+     * @precondition id != null
+     * @precondition matches != null
      */
     public ResultElement(
         final String id,
@@ -130,7 +132,7 @@ public class ResultElement
      */
     protected void setClassValue(final String classValue)
     {
-        m__strClass = classValue;
+        immutableSetClassValue(classValue);
     }
 
     /**
@@ -157,7 +159,7 @@ public class ResultElement
      */
     protected void setMatches(final String matches)
     {
-        m__strMatches = matches;
+        immutableSetMatches(matches);
     }
 
     /**
@@ -173,9 +175,18 @@ public class ResultElement
      * Specifies the &lt;property-ref&gt; elements.
      * @param propertyRefs such elements.
      */
-    protected void setPropertyRefs(final Collection collection)
+    protected final void immutableSetPropertyRefs(final Collection collection)
     {
         m__cPropertyRefs = collection;
+    }
+
+    /**
+     * Specifies the &lt;property-ref&gt; elements.
+     * @param propertyRefs such elements.
+     */
+    protected void setPropertyRefs(final Collection collection)
+    {
+        immutableSetPropertyRefs(collection);
     }
 
     /**

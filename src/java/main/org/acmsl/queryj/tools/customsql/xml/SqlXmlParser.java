@@ -50,6 +50,8 @@ package org.acmsl.queryj.tools.customsql.xml;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
+import org.acmsl.queryj.tools.customsql.ConnectionFlagsElement;
+import org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
@@ -57,14 +59,21 @@ import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
+import org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement;
+import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
+import org.acmsl.queryj.tools.customsql.StatementFlagsRefElement;
 import org.acmsl.queryj.tools.customsql.SqlElement;
-import org.acmsl.queryj.tools.customsql.xml.SqlElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.ParameterElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.PropertyElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.PropertyRefElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.ResultElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.SqlElementFactory;
+import org.acmsl.queryj.tools.customsql.xml.StatementFlagsElementFactory;
 
 /*
  * Importing some JDK classes.
@@ -300,6 +309,30 @@ public abstract class SqlXmlParser
             "sql-list/sql/result-ref", "setResultRef");
         //     </result-ref>
 
+        //     <connection-flags-ref>
+        result.addFactoryCreate(
+            "sql-list/sql/connection-flags-ref",
+            new ConnectionFlagsRefElementFactory());
+        result.addSetNext(
+            "sql-list/sql/connection-flags-ref", "setConnectionFlagsRef");
+        //     </connection-flags-ref>
+
+        //     <statement-flags-ref>
+        result.addFactoryCreate(
+            "sql-list/sql/statement-flags-ref",
+            new StatementFlagsRefElementFactory());
+        result.addSetNext(
+            "sql-list/sql/statement-flags-ref", "setStatementFlagsRef");
+        //     </statement-flags-ref>
+
+        //     <resultset-flags-ref>
+        result.addFactoryCreate(
+            "sql-list/sql/resultset-flags-ref",
+            new ResultSetFlagsRefElementFactory());
+        result.addSetNext(
+            "sql-list/sql/resultset-flags-ref", "setResultSetFlagsRef");
+        //     </resultset-flags-ref>
+
         result.addSetNext("sql-list/sql", "add");
 
         //   </sql>
@@ -347,6 +380,30 @@ public abstract class SqlXmlParser
             "sql-list/property-list/property", "add");
         //     </property>
         //   </property-list>
+
+        //   <flag-list>
+        //     <connection-flags>
+        result.addFactoryCreate(
+            "sql-list/flag-list/connection-flags",
+            new ConnectionFlagsElementFactory());
+        result.addSetRoot(
+            "sql-list/flag-list/connection-flags", "add");
+        //     </connection-flags>
+        //     <statement-flags>
+        result.addFactoryCreate(
+            "sql-list/flag-list/statement-flags",
+            new StatementFlagsElementFactory());
+        result.addSetRoot(
+            "sql-list/flag-list/statement-flags", "add");
+        //     </statement-flags>
+        //     <resultset-flags>
+        result.addFactoryCreate(
+            "sql-list/flag-list/resultset-flags",
+            new ResultSetFlagsElementFactory());
+        result.addSetRoot(
+            "sql-list/flag-list/resultset-flags", "add");
+        //     </resultset-flags>
+        //   </flag-list>
 
         // <sql-list>
 
@@ -396,6 +453,27 @@ public abstract class SqlXmlParser
                     {
                         map.put(
                             buildPropertyKey(
+                                (AbstractIdElement) t_Object),
+                            t_Object);
+                    }
+                    else if  (t_Object instanceof ConnectionFlagsElement)
+                    {
+                        map.put(
+                            buildConnectionFlagsKey(
+                                (AbstractIdElement) t_Object),
+                            t_Object);
+                    }
+                    else if  (t_Object instanceof StatementFlagsElement)
+                    {
+                        map.put(
+                            buildStatementFlagsKey(
+                                (AbstractIdElement) t_Object),
+                            t_Object);
+                    }
+                    else if  (t_Object instanceof ResultSetFlagsElement)
+                    {
+                        map.put(
+                            buildResultSetFlagsKey(
                                 (AbstractIdElement) t_Object),
                             t_Object);
                     }
@@ -485,6 +563,69 @@ public abstract class SqlXmlParser
     protected Object buildPropertyKey(final String propertyElementId)
     {
         return "\\/property\\::" + propertyElementId;
+    }
+
+    /**
+     * Builds a key for &lt;connection-flags&gt; elements.
+     * @param connectionFlagsElement such element.
+     * @return the key.
+     */
+    protected Object buildConnectionFlagsKey(
+        final AbstractIdElement connectionFlagsElement)
+    {
+        return buildConnectionFlagsKey(connectionFlagsElement.getId());
+    }
+
+    /**
+     * Builds a key for &lt;connection-flags&gt; elements, via their id.
+     * @param connectionFlagsElementId such element id.
+     * @return the key.
+     */
+    protected Object buildConnectionFlagsKey(final String connectionFlagsElementId)
+    {
+        return "\\/connection|flags\\::" + connectionFlagsElementId;
+    }
+
+    /**
+     * Builds a key for &lt;statement-flags&gt; elements.
+     * @param statementFlagsElement such element.
+     * @return the key.
+     */
+    protected Object buildStatementFlagsKey(
+        final AbstractIdElement statementFlagsElement)
+    {
+        return buildStatementFlagsKey(statementFlagsElement.getId());
+    }
+
+    /**
+     * Builds a key for &lt;statement-flags&gt; elements, via their id.
+     * @param statementFlagsElementId such element id.
+     * @return the key.
+     */
+    protected Object buildStatementFlagsKey(final String statementFlagsElementId)
+    {
+        return "\\/statement|flags\\::" + statementFlagsElementId;
+    }
+
+    /**
+     * Builds a key for &lt;resultset-flags&gt; elements.
+     * @param resultSetFlagsElement such element.
+     * @return the key.
+     */
+    protected Object buildResultSetFlagsKey(
+        final AbstractIdElement resultSetFlagsElement)
+    {
+        return buildResultSetFlagsKey(resultSetFlagsElement.getId());
+    }
+
+    /**
+     * Builds a key for &lt;resultset-flags&gt; elements, via their id.
+     * @param resultSetFlagsElementId such element id.
+     * @return the key.
+     */
+    protected Object buildResultSetFlagsKey(final String resultSetFlagsElementId)
+    {
+        return "\\/resultset|flags\\::" + resultSetFlagsElementId;
     }
 
     /**
@@ -587,6 +728,111 @@ public abstract class SqlXmlParser
             result =
                 (PropertyElement)
                     map.get(buildPropertyKey(reference.getId()));
+        }
+
+        return result;
+    }
+
+    /**
+     * Resolves the connection-flags reference.
+     * @param reference such reference.
+     * @return the referenced connection flags.
+     * @precondition reference != null
+     */
+    public ConnectionFlagsElement resolveReference(
+        final ConnectionFlagsRefElement reference)
+    {
+        return resolveReference(reference, getMap());
+    }
+
+    /**
+     * Resolves given connection-flags reference.
+     * @param reference such reference.
+     * @param map the map.
+     * @return the referenced connection flags.
+     * @precondition reference != null
+     */
+    protected ConnectionFlagsElement resolveReference(
+        final ConnectionFlagsRefElement reference,
+        final Map map)
+    {
+        ConnectionFlagsElement result = null;
+
+        if  (map != null)
+        {
+            result =
+                (ConnectionFlagsElement)
+                    map.get(buildConnectionFlagsKey(reference.getId()));
+        }
+
+        return result;
+    }
+
+    /**
+     * Resolves the statement-flags reference.
+     * @param reference such reference.
+     * @return the referenced statement flags.
+     * @precondition reference != null
+     */
+    public StatementFlagsElement resolveReference(
+        final StatementFlagsRefElement reference)
+    {
+        return resolveReference(reference, getMap());
+    }
+
+    /**
+     * Resolves given statement-flags reference.
+     * @param reference such reference.
+     * @param map the map.
+     * @return the referenced statement flags.
+     * @precondition reference != null
+     */
+    protected StatementFlagsElement resolveReference(
+        final StatementFlagsRefElement reference,
+        final Map map)
+    {
+        StatementFlagsElement result = null;
+
+        if  (map != null)
+        {
+            result =
+                (StatementFlagsElement)
+                    map.get(buildStatementFlagsKey(reference.getId()));
+        }
+
+        return result;
+    }
+
+    /**
+     * Resolves the resultset-flags reference.
+     * @param reference such reference.
+     * @return the referenced resultset flags.
+     * @precondition reference != null
+     */
+    public ResultSetFlagsElement resolveReference(
+        final ResultSetFlagsRefElement reference)
+    {
+        return resolveReference(reference, getMap());
+    }
+
+    /**
+     * Resolves given resultset-flags reference.
+     * @param reference such reference.
+     * @param map the map.
+     * @return the referenced resultset flags.
+     * @precondition reference != null
+     */
+    protected ResultSetFlagsElement resolveReference(
+        final ResultSetFlagsRefElement reference,
+        final Map map)
+    {
+        ResultSetFlagsElement result = null;
+
+        if  (map != null)
+        {
+            result =
+                (ResultSetFlagsElement)
+                    map.get(buildResultSetFlagsKey(reference.getId()));
         }
 
         return result;

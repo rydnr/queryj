@@ -68,6 +68,7 @@ public class PropertyRefElement
     /**
      * Creates a PropertyRefElement with given information.
      * @param id the <i>id</i> attribute.
+     * @precondition id != null
      */
     public PropertyRefElement(final String id)
     {

@@ -176,12 +176,32 @@ public class SqlElement
     private ResultRefElement m__ResultRef;
 
     /**
-     * Creates a ParameterElement with given information.
+     * The <i>connection-flags-ref</i> element.
+     */
+    private ConnectionFlagsRefElement m__ConnectionFlagsRef;
+
+    /**
+     * The <i>statement-flags-ref</i> element.
+     */
+    private StatementFlagsRefElement m__StatementFlagsRef;
+
+    /**
+     * The <i>resultset-flags-ref</i> element.
+     */
+    private ResultSetFlagsRefElement m__ResultSetFlagsRef;
+
+    /**
+     * Creates a SqlElement with given information.
      * @param id the <i>id</i> attribute.
      * @param dao the <i>dao</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
      * @param implementation the <i>implementation</i> attribute.
+     * @precondition id != null
+     * @precondition dao != null
+     * @precondition name != null
+     * @precondition type != null
+     * @precondition implementation != null
      */
     public SqlElement(
         final String id,
@@ -212,7 +232,7 @@ public class SqlElement
      */
     protected void setDao(final String dao)
     {
-        m__strDAO = dao;
+        immutableSetDAO(dao);
     }
 
     /**
@@ -239,7 +259,7 @@ public class SqlElement
      */
     protected void setName(final String name)
     {
-        m__strName = name;
+        immutableSetName(name);
     }
 
     /**
@@ -266,7 +286,7 @@ public class SqlElement
      */
     protected void setType(final String type)
     {
-        m__strType = type;
+        immutableSetType(type);
     }
 
     /**
@@ -293,7 +313,7 @@ public class SqlElement
      */
     protected void setImplementation(final String implementation)
     {
-        m__strImplementation = implementation;
+        immutableSetImplementation(implementation);
     }
 
     /**
@@ -309,9 +329,18 @@ public class SqlElement
      * Specifies the &lt;value&gt; element.
      * @param value such value.
      */
-    public void setValue(final String value)
+    protected final void immutableSetValue(final String value)
     {
         m__strValue = value;
+    }
+
+    /**
+     * Specifies the &lt;value&gt; element.
+     * @param value such value.
+     */
+    public void setValue(final String value)
+    {
+        immutableSetValue(value);
     }
 
     /**
@@ -327,9 +356,19 @@ public class SqlElement
      * Specifies the &lt;parameter-ref&gt; elements.
      * @param parameterRefs such elements.
      */
-    protected void setParameterRefs(final Collection collection)
+    protected final void immutableSetParameterRefs(
+        final Collection collection)
     {
         m__cParameterRefs = collection;
+    }
+
+    /**
+     * Specifies the &lt;parameter-ref&gt; elements.
+     * @param parameterRefs such elements.
+     */
+    protected void setParameterRefs(final Collection collection)
+    {
+        immutableSetParameterRefs(collection);
     }
 
     /**
@@ -373,9 +412,19 @@ public class SqlElement
      * Specifies the &lt;result-ref&gt; element.
      * @param resultRef such element.
      */
-    public void setResultRef(final ResultRefElement resultRef)
+    protected final void immutableSetResultRef(
+        final ResultRefElement resultRef)
     {
         m__ResultRef = resultRef;
+    }
+
+    /**
+     * Specifies the &lt;result-ref&gt; element.
+     * @param resultRef such element.
+     */
+    public void setResultRef(final ResultRefElement resultRef)
+    {
+        immutableSetResultRef(resultRef);
     }
 
     /**
@@ -385,6 +434,90 @@ public class SqlElement
     public ResultRefElement getResultRef()
     {
         return m__ResultRef;
+    }
+
+    /**
+     * Specifies the &lt;connection-flags-ref&gt; element.
+     * @param connectionflagsRef such element.
+     */
+    protected final void immutableSetConnectionFlagsRef(
+        final ConnectionFlagsRefElement connectionflagsRef)
+    {
+        m__ConnectionFlagsRef = connectionflagsRef;
+    }
+
+    /**
+     * Specifies the &lt;connection-flags-ref&gt; element.
+     * @param connectionflagsRef such element.
+     */
+    public void setConnectionFlagsRef(final ConnectionFlagsRefElement connectionflagsRef)
+    {
+        immutableSetConnectionFlagsRef(connectionflagsRef);
+    }
+
+    /**
+     * Retrieves the &lt;connection-flags-ref&gt; element.
+     * @return such element.
+     */
+    public ConnectionFlagsRefElement getConnectionFlagsRef()
+    {
+        return m__ConnectionFlagsRef;
+    }
+
+    /**
+     * Specifies the &lt;statement-flags-ref&gt; element.
+     * @param statementflagsRef such element.
+     */
+    protected final void immutableSetStatementFlagsRef(
+        final StatementFlagsRefElement statementflagsRef)
+    {
+        m__StatementFlagsRef = statementflagsRef;
+    }
+
+    /**
+     * Specifies the &lt;statement-flags-ref&gt; element.
+     * @param statementflagsRef such element.
+     */
+    public void setStatementFlagsRef(final StatementFlagsRefElement statementflagsRef)
+    {
+        immutableSetStatementFlagsRef(statementflagsRef);
+    }
+
+    /**
+     * Retrieves the &lt;statement-flags-ref&gt; element.
+     * @return such element.
+     */
+    public StatementFlagsRefElement getStatementFlagsRef()
+    {
+        return m__StatementFlagsRef;
+    }
+
+    /**
+     * Specifies the &lt;resultset-flags-ref&gt; element.
+     * @param resultsetflagsRef such element.
+     */
+    protected final void immutableSetResultSetFlagsRef(
+        final ResultSetFlagsRefElement resultsetflagsRef)
+    {
+        m__ResultSetFlagsRef = resultsetflagsRef;
+    }
+
+    /**
+     * Specifies the &lt;resultset-flags-ref&gt; element.
+     * @param resultsetflagsRef such element.
+     */
+    public void setResultSetFlagsRef(final ResultSetFlagsRefElement resultsetflagsRef)
+    {
+        immutableSetResultSetFlagsRef(resultsetflagsRef);
+    }
+
+    /**
+     * Retrieves the &lt;resultset-flags-ref&gt; element.
+     * @return such element.
+     */
+    public ResultSetFlagsRefElement getResultSetFlagsRef()
+    {
+        return m__ResultSetFlagsRef;
     }
 
     /**
@@ -402,7 +535,10 @@ public class SqlElement
                 getImplementation(),
                 getValue(),
                 getParameterRefs(),
-                getResultRef());
+                getResultRef(),
+                getConnectionFlagsRef(),
+                getStatementFlagsRef(),
+                getResultSetFlagsRef());
     }
 
     /**
@@ -415,6 +551,9 @@ public class SqlElement
      * @param value the <i>value</i> element.
      * @param parameterRefs the <i>parameter-ref</i> elements.
      * @param resultRef the <i>result-ref</i> element.
+     * @param connectionFlagsRef the <i>connection-flags-ref</i> element.
+     * @param statementFlagsRef the <i>statement-flags-ref</i> element.
+     * @param resultSetFlagsRef the <i>resultset-flags-ref</i> element.
      * @return such information.
      */
     protected String toString(
@@ -425,7 +564,10 @@ public class SqlElement
         final String implementation,
         final String value,
         final Collection parameterRefs,
-        final ResultRefElement resultRef)
+        final ResultRefElement resultRef,
+        final ConnectionFlagsRefElement connectionFlagsRef,
+        final StatementFlagsRefElement statementFlagsRef,
+        final ResultSetFlagsRefElement resultSetFlagsRef)
     {
         return
               getClass().getName()
@@ -436,6 +578,9 @@ public class SqlElement
             + "[" + "value=" + value + "]"
             + "[" + "implementation=" + implementation + "]"
             + "[" + "parameter-refs=" + parameterRefs + "]"
-            + "[" + "result-ref=" + resultRef + "]";
+            + "[" + "result-ref=" + resultRef + "]"
+            + "[" + "connection-flags-ref=" + connectionFlagsRef + "]"
+            + "[" + "statement-flags-ref=" + statementFlagsRef + "]"
+            + "[" + "resultset-flags-ref=" + resultSetFlagsRef + "]";
     }
 }

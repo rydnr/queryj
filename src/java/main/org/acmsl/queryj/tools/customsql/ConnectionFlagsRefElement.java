@@ -33,8 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Common parent to all <b>sql.xml</b> elements with <i>id</i>
- *              attributes.
+ * Description: Models <connection-flags-ref> elements in custom-sql models.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -47,78 +46,32 @@
  */
 package org.acmsl.queryj.tools.customsql;
 
+/*
+ * Importing project-specific classes.
+ */
+import org.acmsl.queryj.tools.customsql.AbstractIdElement;
+
 /**
- * Common parent to all <i>custom-sql</i> elements with <i>id</i>
- * attributes.
+ * Models &lt;connection-flags-ref&gt; elements in <i>custom-sql</i> models, which
+ * satisfy the following DTD extract (to describe the model even in
+ * non-xml implementations):
+ *  <!ELEMENT connection-flags-ref EMPTY>
+ *  <!ATTLIST connection-flags-ref
+ *    id IDREF #REQUIRED>
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class AbstractIdElement
+public class ConnectionFlagsRefElement
+    extends  AbstractIdElement
 {
     /**
-     * The <i>id</i> attribute.
-     */
-    private String m__strId;
-
-    /**
-     * Builds an AbstractIdElement with given <i>id</i>.
-     * @param id the id.
+     * Creates a ConnectionFlagsRefElement with given information.
+     * @param id the <i>id</i> attribute.
      * @precondition id != null
      */
-    protected AbstractIdElement(final String id)
+    public ConnectionFlagsRefElement(final String id)
     {
-        immutableSetId(id);
-    }
-
-    /**
-     * Specifies the <i>id</i> value.
-     * @param id the id.
-     */
-    protected final void immutableSetId(final String id)
-    {
-        m__strId = id;
-    }
-
-    /**
-     * Specifies the <i>id</i> value.
-     * @param id the id.
-     */
-    protected void setId(final String id)
-    {
-        immutableSetId(id);
-    }
-
-    /**
-     * Retrieves the <i>id</i> value.
-     * @return such information.
-     */
-    public String getId()
-    {
-        return m__strId;
-    }
-
-    /**
-     * Provides a text information about this instance.
-     * @return such information.
-     */
-    public String toString()
-    {
-        return toString(getId());
-    }
-
-    /**
-     * Provides a text information about this instance.
-     * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
-     * @param matches the <i>matches</i> attribute.
-     * @param propertyRefs the <i>property-ref</i> elements.
-     * @return such information.
-     */
-    protected String toString(final String id)
-    {
-        return
-              getClass().getName()
-            + "[" + "id=" + id + "]";
+        super(id);
     }
 }

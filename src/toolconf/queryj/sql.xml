@@ -3,22 +3,28 @@
 <!DOCTYPE sql-list
 [
   <!ELEMENT sql-list (sql+,parameter-list,result-list,property-list,flag-list)>
-  <!ELEMENT sql (value,parameter-ref,result-ref?)>
+  <!ELEMENT sql (value,parameter-ref,result-ref?,connection-flags-ref?,statement-flags-ref?,resultset-flags-ref?)>
   <!ATTLIST sql
-    id ID #IMPLIED
+    id ID #REQUIRED
     dao CDATA #REQUIRED
     name CDATA #REQUIRED
     type (select | insert | update | delete | select-for-update) #REQUIRED
-    implementation (mysql | oracle | postgres | odbc | all-jdbc | mock | xml | all) #REQUIRED
-    connection-flags IDREF #IMPLIED
-    statement-flags IDREF #IMPLIED
-    resultset-flags IDREF #IMPLIED>
+    implementation (mysql | oracle | postgres | odbc | all-jdbc | mock | xml | all) #REQUIRED>
   <!ELEMENT value (#PCDATA)>
   <!ELEMENT parameter-ref EMPTY>
   <!ATTLIST parameter-ref
     id IDREF #REQUIRED>
   <!ELEMENT result-ref EMPTY>
   <!ATTLIST result-ref
+    id IDREF #REQUIRED>
+  <!ELEMENT connection-flags-ref EMPTY>
+  <!ATTLIST connection-flags-ref
+    id IDREF #REQUIRED>
+  <!ELEMENT statement-flags-ref EMPTY>
+  <!ATTLIST statement-flags-ref
+    id IDREF #REQUIRED>
+  <!ELEMENT resultset-flags-ref EMPTY>
+  <!ATTLIST resultset-flags-ref
     id IDREF #REQUIRED>
   <!ELEMENT parameter-list (parameter)*>
   <!ELEMENT parameter EMPTY>
@@ -44,7 +50,7 @@
     index CDATA #IMPLIED
     name CDATA #IMPLIED
     type CDATA #REQUIRED>
-  <!ELEMENT flag-list (connection-flags?,statement-flags?,resultset-flags?)>
+  <!ELEMENT flag-list (connection-flags*,statement-flags*,resultset-flags*)>
   <!ELEMENT connection-flags EMPTY>
   <!ATTLIST connection-flags
     id ID #REQUIRED
@@ -105,13 +111,13 @@
     dao="customer"
     name="find-customer-for-update"
     type="select-for-update"
-    implementation="all"
-    connection-flags="connection-flag-transaction-serializable"
-    statement-flags="find-customer-for-update-statement-flags"
-    resultset-flags="find-customer-for-update-resultset-flags">
+    implementation="all">
     <value>select * from customers where customer_id = ? for update</value>
     <parameter-ref id="long-parameter-1"/>
     <result-ref id="find-customer-for-update.result"/>
+    <connection-flags-ref id="connection-flag-transaction-serializable"/>
+    <statement-flags-ref id="find-customer-for-update-statement-flags"/>
+    <resultset-flags-ref id="find-customer-for-update-resultset-flags"/>
   </sql>
 
   <!-- SQL parameter metadata -->

@@ -153,7 +153,7 @@ public abstract class AbstractParameterElement
      */
     protected void setIndex(final int index)
     {
-        m__iIndex = index;
+        immutableSetIndex(index);
     }
 
     /**
@@ -180,7 +180,7 @@ public abstract class AbstractParameterElement
      */
     protected void setName(final String name)
     {
-        m__strName = name;
+        immutableSetName(name);
     }
 
     /**
@@ -207,7 +207,7 @@ public abstract class AbstractParameterElement
      */
     protected void setType(final String type)
     {
-        m__strType = type;
+        immutableSetType(type);
     }
 
     /**

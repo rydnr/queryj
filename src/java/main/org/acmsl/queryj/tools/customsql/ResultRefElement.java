@@ -68,6 +68,7 @@ public class ResultRefElement
     /**
      * Creates a ResultRefElement with given information.
      * @param id the <i>id</i> attribute.
+     * @precondition id != null
      */
     public ResultRefElement(final String id)
     {

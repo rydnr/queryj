@@ -68,6 +68,7 @@ public class ParameterRefElement
     /**
      * Creates a ParameterRefElement with given information.
      * @param id the <i>id</i> attribute.
+     * @precondition id != null
      */
     public ParameterRefElement(final String id)
     {
