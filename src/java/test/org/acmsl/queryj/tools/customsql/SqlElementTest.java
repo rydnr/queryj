@@ -261,6 +261,81 @@ extends TestCase
   }
   
   /**
+  * Tests SqlElementTest accessor methods.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  public void testSetGetConnectionFlagsRef()
+  throws Exception
+  {
+    // JUnitDoclet begin method setConnectionFlagsRef getConnectionFlagsRef
+    org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement[] t_aTests =
+        {
+            new org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement(
+                "connection-flags-1"),
+            null
+        };
+    
+    for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
+    {
+      sqlelement.setConnectionFlagsRef(t_aTests[t_iTestIndex]);
+      assertEquals(
+      t_aTests[t_iTestIndex],
+      sqlelement.getConnectionFlagsRef());
+    }
+    // JUnitDoclet end method setConnectionFlagsRef getConnectionFlagsRef
+  }
+  
+  /**
+  * Tests SqlElementTest accessor methods.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  public void testSetGetStatementFlagsRef()
+  throws Exception
+  {
+    // JUnitDoclet begin method setStatementFlagsRef getStatementFlagsRef
+    org.acmsl.queryj.tools.customsql.StatementFlagsRefElement[] t_aTests =
+        {
+            new org.acmsl.queryj.tools.customsql.StatementFlagsRefElement(
+                "statement-flags-1"),
+            null
+        };
+    
+    for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
+    {
+      sqlelement.setStatementFlagsRef(t_aTests[t_iTestIndex]);
+      assertEquals(
+      t_aTests[t_iTestIndex],
+      sqlelement.getStatementFlagsRef());
+    }
+    // JUnitDoclet end method setStatementFlagsRef getStatementFlagsRef
+  }
+  
+  /**
+  * Tests SqlElementTest accessor methods.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  public void testSetGetResultSetFlagsRef()
+  throws Exception
+  {
+    // JUnitDoclet begin method setResultSetFlagsRef getResultSetFlagsRef
+    org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement[] t_aTests =
+        {
+            new org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement(
+                "resultset-flags-1"),
+            null
+        };
+    
+    for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
+    {
+      sqlelement.setResultSetFlagsRef(t_aTests[t_iTestIndex]);
+      assertEquals(
+      t_aTests[t_iTestIndex],
+      sqlelement.getResultSetFlagsRef());
+    }
+    // JUnitDoclet end method setResultSetFlagsRef getResultSetFlagsRef
+  }
+  
+  /**
   * Tests SqlElementTesttoString()
   * @throws Exception if an unexpected situation occurs.
   * @see org.acmsl.queryj.tools.customsql.SqlElement#toString()

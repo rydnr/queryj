@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.customsql.xml.
+*              unittests.org.acmsl.queryj.tools.customsql.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.tools.customsql.xml;
+package unittests.org.acmsl.queryj.tools.customsql;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory;
+import org.acmsl.queryj.tools.customsql.ConnectionFlagsElement;
 // JUnitDoclet end import
 
 /*
@@ -84,28 +84,28 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests SqlXmlParserFactoryTest class.
+* Tests ConnectionFlagsElementTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory
+* @see org.acmsl.queryj.tools.customsql.ConnectionFlagsElement
 */
-public class SqlXmlParserFactoryTest
+public class ConnectionFlagsElementTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory sqlxmlparserfactory = null;
+  org.acmsl.queryj.tools.customsql.ConnectionFlagsElement connectionflagselement = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a SqlXmlParserFactoryTest with given name.
+  * Creates a ConnectionFlagsElementTest with given name.
   * @param name such name.
   */
-  public SqlXmlParserFactoryTest(String name)
+  public ConnectionFlagsElementTest(String name)
   {
-    // JUnitDoclet begin method SqlXmlParserFactoryTest
+    // JUnitDoclet begin method ConnectionFlagsElementTest
     super(name);
-    // JUnitDoclet end method SqlXmlParserFactoryTest
+    // JUnitDoclet end method ConnectionFlagsElementTest
   }
   
   /**
@@ -113,11 +113,14 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory createInstance()
+  public org.acmsl.queryj.tools.customsql.ConnectionFlagsElement createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory.getInstance();
+    return
+        new org.acmsl.queryj.tools.customsql.ConnectionFlagsElement(
+            "connection-flags-1",
+            org.acmsl.queryj.tools.customsql.ConnectionFlagsElement.TRANSACTION_NONE);
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -130,7 +133,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    sqlxmlparserfactory = createInstance();
+    connectionflagselement = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -142,34 +145,33 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    sqlxmlparserfactory = null;
+    connectionflagselement = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
   }
   
   /**
-  * Tests SqlXmlParserFactoryTestgetInstance()
+  * Tests ConnectionFlagsElementTestgetTransactionIsolation()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory#getInstance()
+  * @see org.acmsl.queryj.tools.customsql.ConnectionFlagsElement#getTransactionIsolation()
   */
-  public void testGetInstance()
+  public void testGetTransactionIsolation()
   throws Exception
   {
-    // JUnitDoclet begin method getInstance
-      assertNotNull(sqlxmlparserfactory);
-    // JUnitDoclet end method getInstance
+    // JUnitDoclet begin method getTransactionIsolation
+    // JUnitDoclet end method getTransactionIsolation
   }
   
   /**
-  * Tests SqlXmlParserFactoryTestcreateSqlXmlParser()
+  * Tests ConnectionFlagsElementTesttoString()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory#createSqlXmlParser()
+  * @see org.acmsl.queryj.tools.customsql.ConnectionFlagsElement#toString()
   */
-  public void testCreateSqlXmlParser()
+  public void testToString()
   throws Exception
   {
-    // JUnitDoclet begin method createSqlXmlParser
-    // JUnitDoclet end method createSqlXmlParser
+    // JUnitDoclet begin method toString
+    // JUnitDoclet end method toString
   }
   
   
@@ -191,7 +193,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(SqlXmlParserFactoryTest.class);
+    junit.textui.TestRunner.run(ConnectionFlagsElementTest.class);
     // JUnitDoclet end method testcase.main
   }
 }

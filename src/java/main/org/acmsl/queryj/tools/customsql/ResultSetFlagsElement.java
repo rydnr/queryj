@@ -61,14 +61,12 @@ import java.util.Collection;
  * Models &lt;resultSet-flags&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
  * non-xml implementations):
- * <!ELEMENT resultSet-flags EMPTY>
- * <!ATTLIST resultSet-flags
- *   id ID #REQUIRED
- *   transactionisolation (  TRANSACTION_NONE
- *                         | TRANSACTION_READ_COMMITTED
- *                         | TRANSACTION_READ_UNCOMMITTED
- *                         | TRANSACTION_REPEATABLE_READ
- *                         | TRANSACTION_SERIALIZABLE ) #REQUIRED>
+ * <!ELEMENT resultset-flags EMPTY><br/>
+ * <!ATTLIST resultset-flags<br/>
+ *   id ID #REQUIRED<br/>
+ *   type (TYPE_FORWARD_ONLY | TYPE_SCROLL_INSENSITIVE | TYPE_SCROLL_SENSITIVE) #IMPLIED<br/>
+ *   concurrency (CONCUR_READ_ONLY | CONCUR_UPDATABLE) #IMPLIED<br/>
+ *   holdability (HOLD_CURSORS_OVER_COMMIT | CLOSE_CURSORS_AT_COMMIT) #IMPLIED><br/>
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$

@@ -50,7 +50,7 @@ package unittests.org.acmsl.queryj.tools.customsql.xml;
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory;
+import org.acmsl.queryj.tools.customsql.xml.StatementFlagsRefElementFactory;
 // JUnitDoclet end import
 
 /*
@@ -84,28 +84,28 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests SqlXmlParserFactoryTest class.
+* Tests StatementFlagsRefElementFactoryTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory
+* @see org.acmsl.queryj.tools.customsql.xml.StatementFlagsRefElementFactory
 */
-public class SqlXmlParserFactoryTest
+public class StatementFlagsRefElementFactoryTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory sqlxmlparserfactory = null;
+  org.acmsl.queryj.tools.customsql.xml.StatementFlagsRefElementFactory statementflagsrefelementfactory = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a SqlXmlParserFactoryTest with given name.
+  * Creates a StatementFlagsRefElementFactoryTest with given name.
   * @param name such name.
   */
-  public SqlXmlParserFactoryTest(String name)
+  public StatementFlagsRefElementFactoryTest(String name)
   {
-    // JUnitDoclet begin method SqlXmlParserFactoryTest
+    // JUnitDoclet begin method StatementFlagsRefElementFactoryTest
     super(name);
-    // JUnitDoclet end method SqlXmlParserFactoryTest
+    // JUnitDoclet end method StatementFlagsRefElementFactoryTest
   }
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory createInstance()
+  public org.acmsl.queryj.tools.customsql.xml.StatementFlagsRefElementFactory createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory.getInstance();
+    return new org.acmsl.queryj.tools.customsql.xml.StatementFlagsRefElementFactory();
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -130,7 +130,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    sqlxmlparserfactory = createInstance();
+    statementflagsrefelementfactory = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -142,34 +142,21 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    sqlxmlparserfactory = null;
+    statementflagsrefelementfactory = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
   }
   
   /**
-  * Tests SqlXmlParserFactoryTestgetInstance()
+  * Tests StatementFlagsRefElementFactoryTestcreateObject()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory#getInstance()
+  * @see org.acmsl.queryj.tools.customsql.xml.StatementFlagsRefElementFactory#createObject(org.xml.sax.Attributes, org.apache.commons.digester.Digester, org.acmsl.commons.utils.ConversionUtils)
   */
-  public void testGetInstance()
+  public void testCreateObject()
   throws Exception
   {
-    // JUnitDoclet begin method getInstance
-      assertNotNull(sqlxmlparserfactory);
-    // JUnitDoclet end method getInstance
-  }
-  
-  /**
-  * Tests SqlXmlParserFactoryTestcreateSqlXmlParser()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory#createSqlXmlParser()
-  */
-  public void testCreateSqlXmlParser()
-  throws Exception
-  {
-    // JUnitDoclet begin method createSqlXmlParser
-    // JUnitDoclet end method createSqlXmlParser
+    // JUnitDoclet begin method createObject
+    // JUnitDoclet end method createObject
   }
   
   
@@ -191,7 +178,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(SqlXmlParserFactoryTest.class);
+    junit.textui.TestRunner.run(StatementFlagsRefElementFactoryTest.class);
     // JUnitDoclet end method testcase.main
   }
 }

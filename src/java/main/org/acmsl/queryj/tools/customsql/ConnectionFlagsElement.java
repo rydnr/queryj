@@ -60,15 +60,15 @@ import java.util.Collection;
 /**
  * Models &lt;connection-flags&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
- * non-xml implementations):
- * <!ELEMENT connection-flags EMPTY>
- * <!ATTLIST connection-flags
- *   id ID #REQUIRED
- *   transactionisolation (  TRANSACTION_NONE
- *                         | TRANSACTION_READ_COMMITTED
- *                         | TRANSACTION_READ_UNCOMMITTED
- *                         | TRANSACTION_REPEATABLE_READ
- *                         | TRANSACTION_SERIALIZABLE ) #REQUIRED>
+ * non-xml implementations):<br/>
+ * <!ELEMENT connection-flags EMPTY><br/>
+ * <!ATTLIST connection-flags<br/>
+ *   id ID #REQUIRED<br/>
+ *   transactionisolation (  TRANSACTION_NONE<br/>
+ *                         | TRANSACTION_READ_COMMITTED<br/>
+ *                         | TRANSACTION_READ_UNCOMMITTED<br/>
+ *                         | TRANSACTION_REPEATABLE_READ<br/>
+ *                         | TRANSACTION_SERIALIZABLE ) #REQUIRED><br/>
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$

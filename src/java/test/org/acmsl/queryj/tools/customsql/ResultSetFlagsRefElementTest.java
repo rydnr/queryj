@@ -46,22 +46,17 @@ Spain
 */
 package unittests.org.acmsl.queryj.tools.customsql;
 
-
 /*
 * Importing project classes.
 */
-
-import unittests.org.acmsl.queryj.tools.customsql.handlers.HandlersSuite;
-import unittests.org.acmsl.queryj.tools.customsql.xml.XmlSuite;
-
+// JUnitDoclet begin import
+import org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement;
+// JUnitDoclet end import
 
 /*
-/* Importing JUnit classes.
+* Importing JUnit classes.
 */
-import junit.framework.TestSuite;
-
-// JUnitDoclet begin import
-// JUnitDoclet end import
+import junit.framework.TestCase;
 
 /*
 This file is part of  JUnitDoclet, a project to generate basic
@@ -89,53 +84,91 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Executes all tests defined for package
-* org.acmsl.queryj.tools.customsql
+* Tests ResultSetFlagsRefElementTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.customsql
+* @see org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement
 */
-public class CustomsqlSuite
+public class ResultSetFlagsRefElementTest
 // JUnitDoclet begin extends_implements
+extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
+  org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement resultsetflagsrefelement = null;
   // JUnitDoclet end class
   
-  public static TestSuite suite()
+  /**
+  * Creates a ResultSetFlagsRefElementTest with given name.
+  * @param name such name.
+  */
+  public ResultSetFlagsRefElementTest(String name)
   {
-    TestSuite suite;
-    
-    suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.customsql");
-    
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.StatementFlagsRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ConnectionFlagsElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ParameterElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultSetFlagsElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.SqlElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.StatementFlagsElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ParameterRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.PropertyRefElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.PropertyElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElementTest.class);
-    
-    suite.addTest(unittests.org.acmsl.queryj.tools.customsql.handlers.HandlersSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.customsql.xml.XmlSuite.suite());
-    
-    
-    // JUnitDoclet begin method suite
-    // JUnitDoclet end method suite
-    
-    return suite;
+    // JUnitDoclet begin method ResultSetFlagsRefElementTest
+    super(name);
+    // JUnitDoclet end method ResultSetFlagsRefElementTest
+  }
+  
+  /**
+  * Creates an instance of the tested class.
+  * @return such instance.
+  
+  */
+  public org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement createInstance()
+  throws Exception
+  {
+    // JUnitDoclet begin method testcase.createInstance
+    return
+        new org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement(
+            "resultset-flags-1");
+    // JUnitDoclet end method testcase.createInstance
+  }
+  
+  /**
+  * Performs any required steps before each test.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  protected void setUp()
+  throws Exception
+  {
+    // JUnitDoclet begin method testcase.setUp
+    super.setUp();
+    resultsetflagsrefelement = createInstance();
+    // JUnitDoclet end method testcase.setUp
+  }
+  
+  /**
+  * Performs any required steps after each test.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  protected void tearDown()
+  throws Exception
+  {
+    // JUnitDoclet begin method testcase.tearDown
+    resultsetflagsrefelement = null;
+    super.tearDown();
+    // JUnitDoclet end method testcase.tearDown
+  }
+  
+  
+  
+  /**
+  * JUnitDoclet moves marker to this method, if there is not match
+  * for them in the regenerated code and if the marker is not empty.
+  * This way, no test gets lost when regenerating after renaming.
+  * Method testVault is supposed to be empty.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  public void testVault()
+  throws Exception
+  {
+    // JUnitDoclet begin method testcase.testVault
+    // JUnitDoclet end method testcase.testVault
   }
   
   public static void main(String[] args)
   {
-    // JUnitDoclet begin method testsuite.main
-    junit.textui.TestRunner.run(suite());
-    // JUnitDoclet end method testsuite.main
+    // JUnitDoclet begin method testcase.main
+    junit.textui.TestRunner.run(ResultSetFlagsRefElementTest.class);
+    // JUnitDoclet end method testcase.main
   }
 }

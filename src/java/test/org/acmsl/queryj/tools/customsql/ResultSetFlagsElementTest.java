@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.customsql.xml.
+*              unittests.org.acmsl.queryj.tools.customsql.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.tools.customsql.xml;
+package unittests.org.acmsl.queryj.tools.customsql;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory;
+import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
 // JUnitDoclet end import
 
 /*
@@ -84,28 +84,28 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests SqlXmlParserFactoryTest class.
+* Tests ResultSetFlagsElementTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory
+* @see org.acmsl.queryj.tools.customsql.ResultSetFlagsElement
 */
-public class SqlXmlParserFactoryTest
+public class ResultSetFlagsElementTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory sqlxmlparserfactory = null;
+  org.acmsl.queryj.tools.customsql.ResultSetFlagsElement resultsetflagselement = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a SqlXmlParserFactoryTest with given name.
+  * Creates a ResultSetFlagsElementTest with given name.
   * @param name such name.
   */
-  public SqlXmlParserFactoryTest(String name)
+  public ResultSetFlagsElementTest(String name)
   {
-    // JUnitDoclet begin method SqlXmlParserFactoryTest
+    // JUnitDoclet begin method ResultSetFlagsElementTest
     super(name);
-    // JUnitDoclet end method SqlXmlParserFactoryTest
+    // JUnitDoclet end method ResultSetFlagsElementTest
   }
   
   /**
@@ -113,11 +113,16 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory createInstance()
+  public org.acmsl.queryj.tools.customsql.ResultSetFlagsElement createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory.getInstance();
+    return
+        new org.acmsl.queryj.tools.customsql.ResultSetFlagsElement(
+            "resultset-flags-1",
+            org.acmsl.queryj.tools.customsql.ResultSetFlagsElement.TYPE_FORWARD_ONLY,
+            org.acmsl.queryj.tools.customsql.ResultSetFlagsElement.CONCUR_READ_ONLY,
+            org.acmsl.queryj.tools.customsql.ResultSetFlagsElement.CLOSE_CURSORS_AT_COMMIT);
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -130,7 +135,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    sqlxmlparserfactory = createInstance();
+    resultsetflagselement = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -142,34 +147,57 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    sqlxmlparserfactory = null;
+    resultsetflagselement = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
   }
   
   /**
-  * Tests SqlXmlParserFactoryTestgetInstance()
+  * Tests ResultSetFlagsElementTestgetType()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory#getInstance()
+  * @see org.acmsl.queryj.tools.customsql.ResultSetFlagsElement#getType()
   */
-  public void testGetInstance()
+  public void testGetType()
   throws Exception
   {
-    // JUnitDoclet begin method getInstance
-      assertNotNull(sqlxmlparserfactory);
-    // JUnitDoclet end method getInstance
+    // JUnitDoclet begin method getType
+    // JUnitDoclet end method getType
   }
   
   /**
-  * Tests SqlXmlParserFactoryTestcreateSqlXmlParser()
+  * Tests ResultSetFlagsElementTestgetConcurrency()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory#createSqlXmlParser()
+  * @see org.acmsl.queryj.tools.customsql.ResultSetFlagsElement#getConcurrency()
   */
-  public void testCreateSqlXmlParser()
+  public void testGetConcurrency()
   throws Exception
   {
-    // JUnitDoclet begin method createSqlXmlParser
-    // JUnitDoclet end method createSqlXmlParser
+    // JUnitDoclet begin method getConcurrency
+    // JUnitDoclet end method getConcurrency
+  }
+  
+  /**
+  * Tests ResultSetFlagsElementTestgetHoldability()
+  * @throws Exception if an unexpected situation occurs.
+  * @see org.acmsl.queryj.tools.customsql.ResultSetFlagsElement#getHoldability()
+  */
+  public void testGetHoldability()
+  throws Exception
+  {
+    // JUnitDoclet begin method getHoldability
+    // JUnitDoclet end method getHoldability
+  }
+  
+  /**
+  * Tests ResultSetFlagsElementTesttoString()
+  * @throws Exception if an unexpected situation occurs.
+  * @see org.acmsl.queryj.tools.customsql.ResultSetFlagsElement#toString()
+  */
+  public void testToString()
+  throws Exception
+  {
+    // JUnitDoclet begin method toString
+    // JUnitDoclet end method toString
   }
   
   
@@ -191,7 +219,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(SqlXmlParserFactoryTest.class);
+    junit.textui.TestRunner.run(ResultSetFlagsElementTest.class);
     // JUnitDoclet end method testcase.main
   }
 }
