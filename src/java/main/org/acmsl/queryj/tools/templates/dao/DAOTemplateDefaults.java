@@ -106,7 +106,7 @@ public interface DAOTemplateDefaults
         + " * Author: QueryJ\n"
         + " *\n"
         + " * Description: DAO layer responsible of retrieving\n"
-        + "                {2} structures from "
+        + "                \"{2}\" structures from "
          // Table name
         + "{0} {1} persistence layers.\n"
          // engine name - driver version
@@ -124,7 +124,7 @@ public interface DAOTemplateDefaults
     /**
      * The package declaration.
      */
-    public static final String PACKAGE_DECLARATION = "package {0};\n\n"; // package
+    public static final String DEFAULT_PACKAGE_DECLARATION = "package {0};\n\n"; // package
 
     /**
      * The project imports.
@@ -133,21 +133,23 @@ public interface DAOTemplateDefaults
           "/*\n"
         + " * Importing project-specific classes.\n"
         + " */\n"
-        + "import {0}.JdbcDAO;\n"
-         // JDBC DAO package
-        + "import {1}.{2}ValueObject;\n"
-         // ValueObject DAO package - table name
-        + "import {3}.{2}ValueObjectFactory;\n"
-         // ValueObject factory DAO package - table name
-        + "import {4}.{2}DAO;\n"
+        + "import {0}.{1}AttributesStatementSetter;\n"
+         // Specific JDBC operations package - table name
+        + "import {0}.{1}PkStatementSetter;\n"
+         // Specific JDBC operations package - table name
+        + "import {0}.{1}ResultSetExtractor;\n"
+         // Specific JDBC operations package - table name
+        + "import {2}.{1};\n"
+         // ValueObject package - table name
+        + "import {3}.{1}DAO;\n"
          // DAO interface package - table name
+        + "import {4}.QueryPreparedStatementCreator;\n"
+         // RDB base package - table name
         + "import {5}.{6};\n"
          // Table repository package - Table repository name
         + "import {7}.DataAccessManager;\n"
          // data access manager package
-        + "import {8}.{6}KeywordRepository;\n"
-         // Keyword repository package - Table repository name
-        + "{9}";
+        + "{8}";
          // foreign DAO imports
 
     /**
@@ -159,49 +161,44 @@ public interface DAOTemplateDefaults
     /**
      * The ACM-SL imports.
      */
-    public static final String ACMSL_IMPORTS =
+    public static final String DEFAULT_ACMSL_IMPORTS =
           "\n/*\n"
         + " * Importing some ACM-SL classes.\n"
         + " */\n"
-        + "import org.acmsl.commons.patterns.dao.DataAccessException;\n"
-        + "import org.acmsl.queryj.dao.TransactionToken;\n"
-        + "import org.acmsl.queryj.BigDecimalField;\n"
-        + "import org.acmsl.queryj.CalendarField;\n"
         + "import org.acmsl.queryj.DeleteQuery;\n"
-        + "import org.acmsl.queryj.DoubleField;\n"
-        + "import org.acmsl.queryj.Field;\n"
         + "import org.acmsl.queryj.InsertQuery;\n"
-        + "import org.acmsl.queryj.IntField;\n"
-        + "import org.acmsl.queryj.LongField;\n"
         + "import org.acmsl.queryj.Query;\n"
         + "import org.acmsl.queryj.QueryFactory;\n"
-        + "import org.acmsl.queryj.QueryResultSet;\n"
-        + "import org.acmsl.queryj.QueryUtils;\n"
         + "import org.acmsl.queryj.SelectQuery;\n"
-        + "import org.acmsl.queryj.StringField;\n"
-        + "import org.acmsl.queryj.Table;\n"
         + "import org.acmsl.queryj.UpdateQuery;\n\n";
 
     /**
+     * Additional imports.
+     */
+    public static final String DEFAULT_ADDITIONAL_IMPORTS =
+          "\n/*\n"
+        + " * Importing Spring classes.\n"
+        + " */\n"
+        + "import org.springframework.dao.DataAccessException;\n"
+        + "import org.springframework.jdbc.core.JdbcTemplate;\n"
+        + "import org.springframework.jdbc.core.ResultSetExtractor;\n";
+    
+    /**
      * The JDK imports.
      */
-    public static final String JDK_IMPORTS =
+    public static final String DEFAULT_JDK_IMPORTS =
           "/*\n"
         + " * Importing some JDK classes.\n"
         + " */\n"
         + "import java.math.BigDecimal;\n"
-        + "import java.sql.Connection;\n"
-        + "import java.sql.PreparedStatement;\n"
-        + "import java.sql.ResultSet;\n"
         + "import java.sql.SQLException;\n"
-        + "import java.sql.Statement;\n"
         + "import java.util.Calendar;\n"
         + "import java.util.Date;\n\n";
 
     /**
      * The JDK extension imports.
      */
-    public static final String JDK_EXTENSION_IMPORTS =
+    public static final String DEFAULT_JDK_EXTENSION_IMPORTS =
           "/*\n"
         + " * Importing some JDK extension classes\n"
         + " */\n"
@@ -210,9 +207,9 @@ public interface DAOTemplateDefaults
     /**
      * The logging imports.
      */
-    public static final String LOGGING_IMPORTS =
+    public static final String DEFAULT_LOGGING_IMPORTS =
           "/*\n"
-        + " * Importing Jakarta Commons Loggig classes\n"
+        + " * Importing Jakarta Commons Logging classes\n"
         + " */\n"
         + "import org.apache.commons.logging.LogFactory;\n\n";
     
@@ -222,7 +219,7 @@ public interface DAOTemplateDefaults
     public static final String DEFAULT_JAVADOC =
           "/**\n"
         + " * DAO class responsible of retrieving\n"
-        + " * {2} structures from "
+        + " * <code>{2}</code> structures from\n"
          // Table name
         + " * {0} {1} persistence layers.\n"
          // engine name - driver version
@@ -233,9 +230,9 @@ public interface DAOTemplateDefaults
     /**
      * The class definition.
      */
-    public static final String CLASS_DEFINITION =
+    public static final String DEFAULT_CLASS_DEFINITION =
           "public class {0}{1}DAO\n"
-        + "    extends     JdbcDAO\n"
+        + "    extends     JdbcTemplate\n"
         + "    implements  {1}DAO\n";
         // engine name - table name
 
@@ -246,9 +243,22 @@ public interface DAOTemplateDefaults
         "{\n";
 
     /**
+     * The class' constants.
+     */
+    public static final String DEFAULT_CLASS_CONSTANTS =
+          "    // <constants>\n\n"
+        + "    /**\n"
+        + "     * The result set extractor for <i>{0}</i>\n"
+        + "     * value objects.\n"
+        + "     */\n"
+        + "    public static final ResultSetExtractor {1}_RESULT_SET_EXTRACTOR =\n"
+        + "        new {2}ResultSetExtractor();\n\n"
+        + "    // </constants>\n\n";
+
+    /**
      * The class constructor.
      */
-    public static final String CLASS_CONSTRUCTOR =
+    public static final String DEFAULT_CLASS_CONSTRUCTOR =
           "    /**\n"
         + "     * Builds a {0}{1}DAO\n"
         // engine name - table name
@@ -266,281 +276,76 @@ public interface DAOTemplateDefaults
      * The find by primary key method.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_METHOD =
-          "    /**\n"
-        + "     * Loads {0} information from the persistence layer filtering\n"
-         // table name
-        + "     * by its primary keys."
-        + "{1}\n"
-         // FIND_BY_PRIMARY_KEY_PK_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @return the information extracted from the persistence layer.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
+          "     //<find by primary key>\n\n"
+        + "    /**\n"
+        + "     * Builds the query for <i>FindByPrimaryKey</i>.\n"
+        + "     * @return the <code>SelectQuery</code> instance.\n"
         + "     */\n"
-        + "    public {2}ValueObject findByPrimaryKey("
-         // java table name
-        + "{3}\n"
-         // FIND_BY_PRIMARY_KEY_PK_DECLARATION
-        + "        final TransactionToken transactionToken)\n"
-        + "      throws DataAccessException\n"
+        + "    protected Query buildFindByPrimaryKeyQuery()\n"
         + "    '{'\n"
-        + "        return\n"
-        + "            findByPrimaryKey("
-        + "{4}\n"
-         // FIND_BY_PRIMARY_KEY_PK_VALUES
-        + "                transactionToken,\n"
-        + "                QueryFactory.getInstance());\n"
+        + "        return buildFindByPrimaryKeyQuery(QueryFactory.getInstance());\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Loads {0} information from the persistence layer filtering\n"
-         // table name
-        + "     * by its primary keys."
-        + "{1}\n"
-         // FIND_BY_PRIMARY_KEY_PK_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @param queryFactory the QueryFactory instance.\n"
-        + "     * @return the information extracted from the persistence layer.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     * Creates the query for <i>FindByPrimaryKey</i>.\n"
+        + "     * @param queryFactory the <code>QueryFactory</code> instance.\n"
+        + "     * @return the <code>SelectQuery</code> instance.\n"
         + "     * @precondition queryFactory != null\n"
         + "     */\n"
-        + "    public {2}ValueObject findByPrimaryKey("
-         // java table name
-        + "{3}\n"
-         // FIND_BY_PRIMARY_KEY_PK_DECLARATION
-        + "        final TransactionToken transactionToken,\n"
-        + "        final QueryFactory queryFactory)\n"
-        + "      throws DataAccessException\n"
+        + "    protected Query buildFindByPrimaryKeyQuery(final QueryFactory queryFactory)\n"
         + "    '{'\n"
-        + "        return\n"
-        + "            findByPrimaryKey("
-        + "{4}\n"
-         // FIND_BY_PRIMARY_KEY_PK_VALUES
-        + "                transactionToken,\n"
-        + "                queryFactory.createSelectQuery());\n"
+        + "        SelectQuery result = queryFactory.createSelectQuery();\n\n"
+        + "        result.select({0}.{1}.getAll());\n\n"
+         // table repository name - table instance name
+        + "        result.from({0}.{1});\n\n"
+         // table repository name - table instance name
+        + "{2}"
+         // FIND_BY_PRIMARY_KEY_PK_FILTER
+        + "        return result;\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Loads {0} information from the persistence layer filtering\n"
-         // table name
-        + "     * by its primary keys."
-        + "{1}\n"
+        + "     * Retrieves <code>{3}</code> information filtering by its primary key."
+        + "{4}\n"
          // FIND_BY_PRIMARY_KEY_PK_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @param query the SelectQuery instance.\n"
-        + "     * @return the information extracted from the persistence layer.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
-        + "     * @precondition query != null\n"
         + "     */\n"
-        + "    public {2}ValueObject findByPrimaryKey("
-         // java table name
-        + "{3}\n"
-         // FIND_BY_PRIMARY_KEY_PK_DECLARATION
-        + "        final TransactionToken transactionToken,\n"
-        + "        final SelectQuery query)\n"
-        + "      throws DataAccessException\n"
+        + "    public {5} findByPrimaryKey("
+        + "{6})\n"
         + "    '{'\n"
-        + "        {2}ValueObject result = null;\n\n"
-         // java table name
-        + "        Connection        t_Connection        = null;\n"
-        + "        PreparedStatement t_PreparedStatement = null;\n\n"
-        + "        try\n"
-        + "        '{'\n"
-        + "            t_Connection = getConnection(transactionToken);\n\n"
-        + "            if  (t_Connection != null)\n"
-        + "            '{'\n"
-        + "{5}\n"
-         // conditionally process connection flags
-        + "{6}"
-         // FIND_BY_PRIMARY_KEY_SELECT_FIELDS
-        + "                query.from({7}.{8});\n\n"
-         // table repository name - table name
-        + "{9}"
-         // FIND_BY_PRIMARY_KEY_PK_FILTER_DECLARATION
-        + "{10}"
-         // FIND_BY_PRIMARY_KEY_PK_FILTER_VALUES
-        + "{11}\n"
-         // conditionally process resultset flags
-        + "{12}\n"
-         // conditionally process statement flags
-        + "                QueryResultSet t_Results = query.retrieveMatchingResults();\n\n"
-        + "                if  (   (t_Results != null)\n"
-        + "                     && (t_Results.next()))\n"
-        + "                '{'\n"
-        + "                    result = build{2}(t_Results);\n\n"
-        + "                    t_Results.close();\n"
-        + "                '}'\n\n"
-        + "{13}"
-         // conditionally restore connection flags
-        + "            '}'\n"
-        + "        '}'\n"
-        + "        catch  (final SQLException sqlException)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
-        + "        '}'\n"
-        + "        catch  (final Exception exception)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).error(exception);\n"
-        + "        '}'\n"
-        + "        finally\n"
-        + "        '{'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_PreparedStatement != null)\n"
-        + "                '{'\n"
-        + "                    t_PreparedStatement.close();\n"
-        + "                '}'\n"
-        + "                if  (t_Connection != null)\n"
-        + "                '{'\n"
-        + "                    closeConnection(t_Connection, transactionToken);\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "        '}'\n\n"
-        + "        return result;\n"
+        + "        Query t_Query = buildFindByPrimaryKeyQuery();\n\n"
+        + "        return\n"
+        + "            (User)\n"
+        + "                query(\n"
+        + "                    new QueryPreparedStatementCreator(t_Query),\n"
+        + "                    new UserPkStatementSetter({7}),\n"
+        + "                    {8}_RESULT_SET_EXTRACTOR);\n"
         + "    '}'\n\n";
 
     /**
      * The find-by-primary-key method's primary keys javadoc.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_JAVADOC =
-        "\n     * @param {0} the {1} value to filter.";
+        "\n     * @param {0} the <i>{1}</i> value to filter.";
          // java pk - pk
 
     /**
      * The find-by-primary-key method's primary keys declaration.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION =
-        "\n        final {0} {1},";
+        "\n        final {0} {1}";
          // pk type - java pk
 
     /**
-     * The find-by-primary-key method's primary keys values.
+     * The primary keys filter subtemplate.
      */
-    public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_VALUES =
-        "\n                {0},";
-         // java pk
+    public static final String DEFAULT_PK_FILTER =
+        "        result.where({0}.{1}.{2}.equals());\n\n";
+         // table repository name - table instance name - primary key
 
     /**
-     * The conditionally process of the connection flags.
+     * The find-by-primary-key statement setter call.
      */
-    public static final String DEFAULT_PROCESS_CONNECTION_FLAGS =
-          "                int t_iPreviousTransactionIsolation =\n"
-        + "                    t_Connection.getTransactionIsolation();\n\n"
-        + "                t_Connection.setTransactionIsolation(\n"
-        + "                    Connection.{0});\n";
-
-    /**
-     * The conditionally restore of the connection flags.
-     */
-    public static final String DEFAULT_RESTORE_CONNECTION_FLAGS =
-          "                t_Connection.setTransactionIsolation(\n"
-        + "                    t_iPreviousTransactionIsolation);\n";
-
-    /**
-     * The conditionally process of the statement flags.
-     */
-    public static final String DEFAULT_PROCESS_STATEMENT_FLAGS =
-        "                t_PreparedStatement.{0};\n";
-    // statement flag setter, flag value
-
-    /**
-     * The conditionally process of the resultset flags.
-     */
-    public static final String DEFAULT_PROCESS_RESULTSET_FLAGS =
-          "                t_PreparedStatement =\n"
-        + "                    query.prepareStatement(\n"
-        + "                        t_Connection{0}{1}{2});\n\n";
-    // ResultSet type, ResultSet concurrency, ResultSet holdability
-
-    /**
-     * The resultset flag subtemplate.
-     */
-    public static final String DEFAULT_PROCESS_RESULTSET_FLAG_SUBTEMPLATE =
-          ",\n"
-        + "                        ResultSet.{0}";
-
-    /**
-     * The find-by-primary-key method's select fields.
-     */
-    public static final String DEFAULT_FIND_BY_PRIMARY_KEY_SELECT_FIELDS =
-        "                query.select({0}.{1}.{2});\n";
-         // table repository name - table name - field name
-
-    /**
-     * The find-by-primary-key method's filter declaration.
-     */
-    public static final String DEFAULT_FIND_BY_PRIMARY_KEY_FILTER_DECLARATION = "";
-    /*
-        "                t_Query.where({0}.{1}.{2}.equals());\n\n";
-         // table repository name - table name - pk field name
-     */
-
-    /**
-     * The find-by-primary-key method's filter values.
-     *
-    public static final String DEFAULT_FIND_BY_PRIMARY_KEY_FILTER_VALUES =
-          "                t_Query.set{0}(\n"
-         // pk field type
-        + "                    {1}.{2}.{3}.equals(),\n"
-         // table repository name - table name - pk field name
-        + "                    {4});\n\n";
-         // java pk
-     */
-
-    /**
-     * The find-by-primary-key method's filter values.
-     */
-    public static final String DEFAULT_FIND_BY_PRIMARY_KEY_FILTER_VALUES =
-          "                query.where(\n"
-        + "                    {1}.{2}.{3}.equals({4}));\n\n";
-         // table repository name - table name - field name - value
-
-    /**
-     * The build-value-object method.
-     */
-    public static final String BUILD_VALUE_OBJECT_METHOD =
-          "    /**\n"
-        + "     * Fills up a {0} with the information provided by given\n"
-         // java table name
-        + "     * result set.\n"
-        + "     * @param queryResults the result set with the row values.\n"
-        + "     * @return the {0} filled up with the persisted contents, or\n"
-        + "     * <code>null</code> if something wrong occurs.\n"
-        + "     * @exception SQLException if any invalid operation is performed\n"
-        + "     * on the result set.\n"
-        + "     */\n"
-        + "    protected {0}ValueObject build{0}(final QueryResultSet queryResultSet)\n"
-        + "        throws  SQLException\n"
-        + "    '{'\n"
-        + "        {0}ValueObject result = null;\n\n"
-        + "        if  (queryResultSet != null) \n"
-        + "        '{'\n"
-        + "            {0}ValueObjectFactory t_{0}Factory =\n"
-        + "                {0}ValueObjectFactory.getInstance();\n\n"
-        + "            if  (t_{0}Factory != null) \n"
-        + "            '{'\n"
-        + "                result =\n"
-        + "                    t_{0}Factory.create{0}("
-        + "{1});\n"
-         // BUILD_VALUE_OBJECT_VALUE_RETRIEVAL
-        + "            '}'\n"
-        + "        '}'\n\n"
-        + "        return result;\n"
-        + "    '}'\n\n";
-
-    /**
-     * The build-value-object method's value retrieval
-     */
-    public static final String BUILD_VALUE_OBJECT_VALUE_RETRIEVAL =
-         "\n                        queryResultSet.{0}";
-         //"\n                        queryResultSet.{0}(\n"
-         // field type
-         //+ "                            {1}.{2}.{3})";
-         // table repository name - table name - field name
+    public static final String DEFAULT_PK_STATEMENT_SETTER_CALL =
+        "\n                        {0}";
+        // java pk
 
     /**
      * The store method.
@@ -889,7 +694,7 @@ public interface DAOTemplateDefaults
      * The delete method's primary keys declaration.
      */
     public static final String DEFAULT_DELETE_PK_VALUES =
-        DEFAULT_FIND_BY_PRIMARY_KEY_PK_VALUES;
+        "\n                {0},";
 
     /**
      * The delete method's filter declaration.

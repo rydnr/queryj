@@ -78,14 +78,14 @@ public interface DAOTemplateFactory
      * @throws QueryJException if the input values are invalid.
      */
     public DAOTemplate createDAOTemplate(
-        final TableTemplate           tableTemplate,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final CustomSqlProvider       customSqlProvider,
-        final String                  packageName,
-        final String                  engineName,
-        final String                  engineVersion,
-        final String                  quote,
-        final String                  basePackageName,
-        final String                  repositoryName)
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName)
       throws  QueryJException;
 }

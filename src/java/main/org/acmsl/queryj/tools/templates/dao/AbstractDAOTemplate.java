@@ -141,6 +141,11 @@ public abstract class AbstractDAOTemplate
     private String m__strAcmslImports;
 
     /**
+     * The additional import statements.
+     */
+    private String m__strAdditionalImports;
+
+    /**
      * The JDK import statements.
      */
     private String m__strJdkImports;
@@ -171,6 +176,11 @@ public abstract class AbstractDAOTemplate
     private String m__strClassStart;
 
     /**
+     * The class constants.
+     */
+    private String m__strClassConstants;
+
+    /**
      * The class constructor.
      */
     private String m__strClassConstructor;
@@ -191,59 +201,14 @@ public abstract class AbstractDAOTemplate
     private String m__strFindByPrimaryKeyPkDeclaration;
 
     /**
-     * The find-by-primary-key pk values.
+     * The pk filter subtemplate.
      */
-    private String m__strFindByPrimaryKeyPkValues;
+    private String m__strPkFilter;
 
     /**
-     * The process-connection-flags template.
+     * The pk statement setter call.
      */
-    private String m__strProcessConnectionFlags;
-
-    /**
-     * The restore-connection-flags template.
-     */
-    private String m__strRestoreConnectionFlags;
-
-    /**
-     * The process-statement-flags template.
-     */
-    private String m__strProcessStatementFlags;
-
-    /**
-     * The process-resultset-flags template.
-     */
-    private String m__strProcessResultSetFlags;
-
-    /**
-     * The process-resultset-flag subtemplate.
-     */
-    private String m__strProcessResultSetFlagSubtemplate;
-
-    /**
-     * The find-by-primary-key select fields.
-     */
-    private String m__strFindByPrimaryKeySelectFields;
-
-    /**
-     * The find-by-primary-key pk filter declaration.
-     */
-    private String m__strFindByPrimaryKeyFilterDeclaration;
-
-    /**
-     * The find-by-primary-key filter values.
-     */
-    private String m__strFindByPrimaryKeyFilterValues;
-
-    /**
-     * The build-value-object method.
-     */
-    private String m__strBuildValueObjectMethod;
-
-    /**
-     * The build-value-object value retrieval.
-     */
-    private String m__strBuildValueObjectValueRetrieval;
+    private String m__strPkStatementSetterCall;
 
     /**
      * The insert method.
@@ -446,38 +411,21 @@ public abstract class AbstractDAOTemplate
      * @param projectImports the project imports.
      * @param foreignDAOImports the foreign DAO imports.
      * @param acmslImports the ACM-SL imports.
+     * @param additionalImports the additional imports.
      * @param jdkImports the JDK imports.
      * @param jdkExtensionImports the JDK extension imports.
      * @param loggingImports the commons-logging imports.
      * @param javadoc the class Javadoc.
      * @param classDefinition the class definition.
      * @param classStart the class start.
+     * @param classConstants the class' constants.
      * @param classConstructor the class constructor.
      * @param findByPrimaryKeyMethod the find by primary key method.
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
      * declaration.
-     * @param findByPrimaryKeyPkValues the find by primary key pk
-     * values.
-     * @param processConnectionFlags the <i>process connection flags</i>
-     * template.
-     * @param restoreConnectionFlags the <i>restore connection flags</i>
-     * template.
-     * @param processStatementFlags the <i>process statement flags</i>
-     * template.
-     * @param processResultSetFlags the <i>process resultset flags</i>
-     * template.
-     * @param processResultSetFlagSubtemplate the <i>process resultset flag</i>
-     * subtemplate.
-     * @param findByPrimaryKeySelectFields the find by primary key select
-     * fields.
-     * @param findByPrimaryKeyFilterDeclaration the find by primary key filter
-     * declaration.
-     * @param findByPrimaryKeyFilterValues the find by primary key filter
-     * values.
-     * @param buildValueObjectMethod the build value object method.
-     * @param buildValueObjectValueRetrieval the build value object value
-     * retrieval.
+     * @param pkFilter the PK filter subtemplate.
+     * @param pkStatementSetterCall the PK statement setter call subtemplate.
      * @param insertMethod the insert method.
      * @param insertParametersJavadoc the javadoc of the insert method's
      * parameters.
@@ -537,78 +485,71 @@ public abstract class AbstractDAOTemplate
      * @param classEnd the class end.
      */
     protected AbstractDAOTemplate(
-        final TableTemplate           tableTemplate,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final CustomSqlProvider       customSqlProvider,
-        final String                  header,
-        final String                  packageDeclaration,
-        final String                  packageName,
-        final String                  engineName,
-        final String                  engineVersion,
-        final String                  quote,
-        final String                  basePackageName,
-        final String                  repositoryName,
-        final String                  projectImports,
-        final String                  foreignDAOImports,
-        final String                  acmslImports,
-        final String                  jdkImports,
-        final String                  jdkExtensionImports,
-        final String                  loggingImports,
-        final String                  javadoc,
-        final String                  classDefinition,
-        final String                  classStart,
-        final String                  classConstructor,
-        final String                  findByPrimaryKeyMethod,
-        final String                  findByPrimaryKeyPkJavadoc,
-        final String                  findByPrimaryKeyPkDeclaration,
-        final String                  findByPrimaryKeyPkValues,
-        final String                  processConnectionFlags,
-        final String                  restoreConnectionFlags,
-        final String                  processStatementFlags,
-        final String                  processResultSetFlags,
-        final String                  processResultSetFlagSubtemplate,
-        final String                  findByPrimaryKeySelectFields,
-        final String                  findByPrimaryKeyFilterDeclaration,
-        final String                  findByPrimaryKeyFilterValues,
-        final String                  buildValueObjectMethod,
-        final String                  buildValueObjectValueRetrieval,
-        final String                  insertMethod,
-        final String                  insertParametersJavadoc,
-        final String                  insertParametersDeclaration,
-        final String                  insertParametersSpecification,
-        final String                  insertKeywordParametersSpecification,
-        final String                  updateMethod,
-        final String                  updateParametersJavadoc,
-        final String                  updateParametersDeclaration,
-        final String                  updateParametersSpecification,
-        final String                  updateFilter,
-        final String                  deleteMethod,
-        final String                  deletePkJavadoc,
-        final String                  deletePkDeclaration,
-        final String                  deletePkValues,
-        final String                  deleteFilterDeclaration,
-        final String                  deleteFilterValues,
-        final String                  deleteWithFkMethod,
-        final String                  deleteWithFkPkJavadoc,
-        final String                  deleteWithFkPkDeclaration,
-        final String                  deleteWithFkDAODeleteRequest,
-        final String                  deleteWithFkPkValues,
-        final String                  customSelect,
-        final String                  customSelectParameterJavadoc,
-        final String                  customSelectParameterDeclaration,
-        final String                  customSelectParameterValues,
-        final String                  customSelectResultPropertyValues,
-        final String                  customUpdateOrInsert,
-        final String                  customUpdateOrInsertParameterJavadoc,
-        final String                  customUpdateOrInsertParameterDeclaration,
-        final String                  customUpdateOrInsertParameterValues,
-        final String                  customUpdateOrInsertQueryLine,
-        final String                  customSelectForUpdate,
-        final String                  customSelectForUpdateParameterJavadoc,
-        final String                  customSelectForUpdateParameterDeclaration,
-        final String                  customSelectForUpdateParameterValues,
-        final String                  customSelectForUpdateResultPropertyValues,
-        final String                  classEnd)
+        final CustomSqlProvider customSqlProvider,
+        final String header,
+        final String packageDeclaration,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName,
+        final String projectImports,
+        final String foreignDAOImports,
+        final String additionalImports,
+        final String acmslImports,
+        final String jdkImports,
+        final String jdkExtensionImports,
+        final String loggingImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String classConstants,
+        final String classConstructor,
+        final String findByPrimaryKeyMethod,
+        final String findByPrimaryKeyPkJavadoc,
+        final String findByPrimaryKeyPkDeclaration,
+        final String pkFilter,
+        final String pkStatementSetterCall,
+        final String insertMethod,
+        final String insertParametersJavadoc,
+        final String insertParametersDeclaration,
+        final String insertParametersSpecification,
+        final String insertKeywordParametersSpecification,
+        final String updateMethod,
+        final String updateParametersJavadoc,
+        final String updateParametersDeclaration,
+        final String updateParametersSpecification,
+        final String updateFilter,
+        final String deleteMethod,
+        final String deletePkJavadoc,
+        final String deletePkDeclaration,
+        final String deletePkValues,
+        final String deleteFilterDeclaration,
+        final String deleteFilterValues,
+        final String deleteWithFkMethod,
+        final String deleteWithFkPkJavadoc,
+        final String deleteWithFkPkDeclaration,
+        final String deleteWithFkDAODeleteRequest,
+        final String deleteWithFkPkValues,
+        final String customSelect,
+        final String customSelectParameterJavadoc,
+        final String customSelectParameterDeclaration,
+        final String customSelectParameterValues,
+        final String customSelectResultPropertyValues,
+        final String customUpdateOrInsert,
+        final String customUpdateOrInsertParameterJavadoc,
+        final String customUpdateOrInsertParameterDeclaration,
+        final String customUpdateOrInsertParameterValues,
+        final String customUpdateOrInsertQueryLine,
+        final String customSelectForUpdate,
+        final String customSelectForUpdateParameterJavadoc,
+        final String customSelectForUpdateParameterDeclaration,
+        final String customSelectForUpdateParameterValues,
+        final String customSelectForUpdateResultPropertyValues,
+        final String classEnd)
     {
         immutableSetTableTemplate(
             tableTemplate);
@@ -652,6 +593,9 @@ public abstract class AbstractDAOTemplate
         immutableSetAcmslImports(
             acmslImports);
 
+        immutableSetAdditionalImports(
+            additionalImports);
+
         immutableSetJdkImports(
             jdkImports);
 
@@ -670,6 +614,9 @@ public abstract class AbstractDAOTemplate
         immutableSetClassStart(
             classStart);
 
+        immutableSetClassConstants(
+            classConstants);
+
         immutableSetClassConstructor(
             classConstructor);
 
@@ -682,38 +629,10 @@ public abstract class AbstractDAOTemplate
         immutableSetFindByPrimaryKeyPkDeclaration(
             findByPrimaryKeyPkDeclaration);
 
-        immutableSetFindByPrimaryKeyPkValues(
-            findByPrimaryKeyPkValues);
+        immutableSetPkFilter(pkFilter);
 
-        immutableSetProcessConnectionFlags(
-            processConnectionFlags);
-
-        immutableSetRestoreConnectionFlags(
-            restoreConnectionFlags);
-
-        immutableSetProcessStatementFlags(
-            processStatementFlags);
-
-        immutableSetProcessResultSetFlags(
-            processResultSetFlags);
-
-        immutableSetProcessResultSetFlagSubtemplate(
-            processResultSetFlagSubtemplate);
-
-        immutableSetFindByPrimaryKeySelectFields(
-            findByPrimaryKeySelectFields);
-
-        immutableSetFindByPrimaryKeyFilterDeclaration(
-            findByPrimaryKeyFilterDeclaration);
-
-        immutableSetFindByPrimaryKeyFilterValues(
-            findByPrimaryKeyFilterValues);
-
-        immutableSetBuildValueObjectMethod(
-            buildValueObjectMethod);
-
-        immutableSetBuildValueObjectValueRetrieval(
-            buildValueObjectValueRetrieval);
+        immutableSetPkStatementSetterCall(
+            pkStatementSetterCall);
 
         immutableSetInsertMethod(
             insertMethod);
@@ -1210,6 +1129,33 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
+     * Specifies the additional imports.
+     * @param additionalImports the new additional imports.
+     */
+    private void immutableSetAdditionalImports(final String additionalImports)
+    {
+        m__strAdditionalImports = additionalImports;
+    }
+
+    /**
+     * Specifies the additional imports.
+     * @param additionalImports the new additional imports.
+     */
+    protected void setAdditionalImports(final String additionalImports)
+    {
+        immutableSetAdditionalImports(additionalImports);
+    }
+
+    /**
+     * Retrieves the additional imports.
+     * @return such information.
+     */
+    public String getAdditionalImports() 
+    {
+        return m__strAdditionalImports;
+    }
+
+    /**
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
@@ -1373,6 +1319,33 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
+     * Specifies the class constants.
+     * @param classConstants the new class constants.
+     */
+    private void immutableSetClassConstants(final String classConstants)
+    {
+        m__strClassConstants = classConstants;
+    }
+
+    /**
+     * Specifies the class constants.
+     * @param classConstants the new class constants.
+     */
+    protected void setClassConstants(final String classConstants)
+    {
+        immutableSetClassConstants(classConstants);
+    }
+
+    /**
+     * Retrieves the class constants.
+     * @return such information.
+     */
+    public String getClassConstants() 
+    {
+        return m__strClassConstants;
+    }
+
+    /**
      * Specifies the class constructor
      * @param constructor such source code.
      */
@@ -1404,7 +1377,7 @@ public abstract class AbstractDAOTemplate
      * @param findByPrimaryKeyMethod such method.
      */
     private void immutableSetFindByPrimaryKeyMethod(
-        String findByPrimaryKeyMethod)
+        final String findByPrimaryKeyMethod)
     {
         m__strFindByPrimaryKeyMethod = findByPrimaryKeyMethod;
     }
@@ -1414,7 +1387,7 @@ public abstract class AbstractDAOTemplate
      * @param findByPrimaryKeyMethod such method.
      */
     protected void setFindByPrimaryKeyMethod(
-        String findByPrimaryKeyMethod)
+        final String findByPrimaryKeyMethod)
     {
         immutableSetFindByPrimaryKeyMethod(
             findByPrimaryKeyMethod);
@@ -1434,7 +1407,7 @@ public abstract class AbstractDAOTemplate
      * @param findByPrimaryKeyPkJavadoc such Javadoc.
      */
     private void immutableSetFindByPrimaryKeyPkJavadoc(
-        String findByPrimaryKeyPkJavadoc)
+        final String findByPrimaryKeyPkJavadoc)
     {
         m__strFindByPrimaryKeyPkJavadoc = findByPrimaryKeyPkJavadoc;
     }
@@ -1444,7 +1417,7 @@ public abstract class AbstractDAOTemplate
      * @param findByPrimaryKeyPkJavadoc such Javadoc.
      */
     protected void setFindByPrimaryKeyPkJavadoc(
-        String findByPrimaryKeyPkJavadoc)
+        final String findByPrimaryKeyPkJavadoc)
     {
         immutableSetFindByPrimaryKeyPkJavadoc(
             findByPrimaryKeyPkJavadoc);
@@ -1464,7 +1437,7 @@ public abstract class AbstractDAOTemplate
      * @param findByPrimaryKeyPkDeclaration such declaration.
      */
     private void immutableSetFindByPrimaryKeyPkDeclaration(
-        String findByPrimaryKeyPkDeclaration)
+        final String findByPrimaryKeyPkDeclaration)
     {
         m__strFindByPrimaryKeyPkDeclaration =
             findByPrimaryKeyPkDeclaration;
@@ -1475,7 +1448,7 @@ public abstract class AbstractDAOTemplate
      * @param findByPrimaryKeyPkDeclaration such declaration.
      */
     protected void setFindByPrimaryKeyPkdeclaration(
-        String findByPrimaryKeyPkDeclaration)
+        final String findByPrimaryKeyPkDeclaration)
     {
         immutableSetFindByPrimaryKeyPkDeclaration(
             findByPrimaryKeyPkDeclaration);
@@ -1491,323 +1464,62 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
-     * Specifies the find-by-primary-key pk values.
-     * @param findByPrimaryKeyPkValues such values.
+     * Specifies the pk filter.
+     * @param pkFilter such subtemplate.
      */
-    private void immutableSetFindByPrimaryKeyPkValues(
-        String findByPrimaryKeyPkValues)
+    private void immutableSetPkFilter(
+        final String pkFilter)
     {
-        m__strFindByPrimaryKeyPkValues =
-            findByPrimaryKeyPkValues;
+        m__strPkFilter = pkFilter;
     }
 
     /**
-     * Specifies the find-by-primary-key pk values.
-     * @param findByPrimaryKeyPkValues such values.
+     * Specifies the pk filter.
+     * @param pkFilter such subtemplate.
      */
-    protected void setFindByPrimaryKeyPkvalues(
-        String findByPrimaryKeyPkValues)
+    protected void setPkFilter(final String pkFilter)
     {
-        immutableSetFindByPrimaryKeyPkValues(
-            findByPrimaryKeyPkValues);
+        immutableSetPkFilter(pkFilter);
     }
 
     /**
-     * Retrieves the find-by-primary-key pk values.
-     * @return such values.
+     * Retrieves the pk filter.
+     * @return such subtemplate.
      */
-    public String getFindByPrimaryKeyPkValues()
+    public String getPkFilter()
     {
-        return m__strFindByPrimaryKeyPkValues;
+        return m__strPkFilter;
     }
 
     /**
-     * Specifies the connection flags process template.
-     * @param template such template.
+     * Specifies the pk statement setter call.
+     * @param pkStatementSetterCall such subtemplate.
      */
-    private void immutableSetProcessConnectionFlags(final String template)
+    private void immutableSetPkStatementSetterCall(
+        final String pkStatementSetterCall)
     {
-        m__strProcessConnectionFlags = template;
+        m__strPkStatementSetterCall =
+            pkStatementSetterCall;
     }
 
     /**
-     * Specifies the connection flags process template.
-     * @param template such template.
+     * Specifies the pk statement setter call.
+     * @param pkStatementSetterCall such subtemplate.
      */
-    protected void setProcessConnectionFlags(final String template)
+    protected void setPkStatementSetterCall(
+        final String pkStatementSetterCall)
     {
-        immutableSetProcessConnectionFlags(template);
+        immutableSetPkStatementSetterCall(
+            pkStatementSetterCall);
     }
 
     /**
-     * Retrieves the connection flags process template
-     * @return such information.
+     * Retrieves the pk statement setter call.
+     * @return such subtemplate.
      */
-    public String getProcessConnectionFlags() 
+    public String getPkStatementSetterCall()
     {
-        return m__strProcessConnectionFlags;
-    }
-
-    /**
-     * Specifies the connection flags restore template.
-     * @param template such template.
-     */
-    private void immutableSetRestoreConnectionFlags(final String template)
-    {
-        m__strRestoreConnectionFlags = template;
-    }
-
-    /**
-     * Specifies the connection flags restore template.
-     * @param template such template.
-     */
-    protected void setRestoreConnectionFlags(final String template)
-    {
-        immutableSetRestoreConnectionFlags(template);
-    }
-
-    /**
-     * Retrieves the connection flags restore template
-     * @return such information.
-     */
-    public String getRestoreConnectionFlags() 
-    {
-        return m__strRestoreConnectionFlags;
-    }
-
-    /**
-     * Specifies the statement flags process template.
-     * @param template such template.
-     */
-    private void immutableSetProcessStatementFlags(final String template)
-    {
-        m__strProcessStatementFlags = template;
-    }
-
-    /**
-     * Specifies the statement flags process template.
-     * @param template such template.
-     */
-    protected void setProcessStatementFlags(final String template)
-    {
-        immutableSetProcessStatementFlags(template);
-    }
-
-    /**
-     * Retrieves the statement flags process template
-     * @return such information.
-     */
-    public String getProcessStatementFlags() 
-    {
-        return m__strProcessStatementFlags;
-    }
-
-    /**
-     * Specifies the resultset flags process template.
-     * @param template such template.
-     */
-    private void immutableSetProcessResultSetFlags(final String template)
-    {
-        m__strProcessResultSetFlags = template;
-    }
-
-    /**
-     * Specifies the resultset flags process template.
-     * @param template such template.
-     */
-    protected void setProcessResultSetFlags(final String template)
-    {
-        immutableSetProcessResultSetFlags(template);
-    }
-
-    /**
-     * Retrieves the resultset flags process template
-     * @return such information.
-     */
-    public String getProcessResultSetFlags() 
-    {
-        return m__strProcessResultSetFlags;
-    }
-
-    /**
-     * Specifies the resultset flags process subtemplate.
-     * @param template such template.
-     */
-    private void immutableSetProcessResultSetFlagSubtemplate(
-        final String template)
-    {
-        m__strProcessResultSetFlagSubtemplate = template;
-    }
-
-    /**
-     * Specifies the resultset flags process subtemplate.
-     * @param template such template.
-     */
-    protected void setProcessResultSetFlagSubtemplate(final String template)
-    {
-        immutableSetProcessResultSetFlagSubtemplate(template);
-    }
-
-    /**
-     * Retrieves the resultset flag process subtemplate
-     * @return such information.
-     */
-    public String getProcessResultSetFlagSubtemplate() 
-    {
-        return m__strProcessResultSetFlagSubtemplate;
-    }
-
-    /**
-     * Specifies the find-by-primary-key select fields.
-     * @param findByPrimaryKeySelectFields such fields.
-     */
-    private void immutableSetFindByPrimaryKeySelectFields(
-        String findByPrimaryKeySelectFields)
-    {
-        m__strFindByPrimaryKeySelectFields =
-            findByPrimaryKeySelectFields;
-    }
-
-    /**
-     * Specifies the find-by-primary-key select fields.
-     * @param findByPrimaryKeySelectFields such fields.
-     */
-    protected void setFindByPrimaryKeySelectFields(
-        String findByPrimaryKeySelectFields)
-    {
-        immutableSetFindByPrimaryKeySelectFields(
-            findByPrimaryKeySelectFields);
-    }
-
-    /**
-     * Retrieves the find-by-primary-key select fields.
-     * @return such fields.
-     */
-    public String getFindByPrimaryKeySelectFields()
-    {
-        return m__strFindByPrimaryKeySelectFields;
-    }
-
-    /**
-     * Specifies the find-by-primary-key filter declaration.
-     * @param findByPrimaryKeyPkFilterDeclaration such declaration.
-     */
-    private void immutableSetFindByPrimaryKeyFilterDeclaration(
-        String findByPrimaryKeyFilterDeclaration)
-    {
-        m__strFindByPrimaryKeyFilterDeclaration =
-            findByPrimaryKeyFilterDeclaration;
-    }
-
-    /**
-     * Specifies the find-by-primary-key filter declaration.
-     * @param findByPrimaryKeyFilterDeclaration such declaration.
-     */
-    protected void setFindByPrimaryKeyFilterDeclaration(
-        String findByPrimaryKeyFilterDeclaration)
-    {
-        immutableSetFindByPrimaryKeyFilterDeclaration(
-            findByPrimaryKeyFilterDeclaration);
-    }
-
-    /**
-     * Retrieves the find-by-primary-key filter declaration.
-     * @return such declaration.
-     */
-    public String getFindByPrimaryKeyFilterDeclaration()
-    {
-        return m__strFindByPrimaryKeyFilterDeclaration;
-    }
-
-    /**
-     * Specifies the find-by-primary-key filter values.
-     * @param findByPrimaryKeyFilterValues such values.
-     */
-    private void immutableSetFindByPrimaryKeyFilterValues(
-        String findByPrimaryKeyFilterValues)
-    {
-        m__strFindByPrimaryKeyFilterValues =
-            findByPrimaryKeyFilterValues;
-    }
-
-    /**
-     * Specifies the find-by-primary-key filter values.
-     * @param findByPrimaryKeyFilterValues such values.
-     */
-    protected void setFindByPrimaryKeyFilterValues(
-        String findByPrimaryKeyFilterValues)
-    {
-        immutableSetFindByPrimaryKeyFilterValues(
-            findByPrimaryKeyFilterValues);
-    }
-
-    /**
-     * Retrieves the find-by-primary-key filter values.
-     * @return such values.
-     */
-    public String getFindByPrimaryKeyFilterValues()
-    {
-        return m__strFindByPrimaryKeyFilterValues;
-    }
-    
-    /**
-     * Specifies the build-value-object method.
-     * @param buildValueObjectMethod such method.
-     */
-    private void immutableSetBuildValueObjectMethod(
-        String buildValueObjectMethod)
-    {
-        m__strBuildValueObjectMethod = buildValueObjectMethod;
-    }
-
-    /**
-     * Specifies the build-value-object method.
-     * @param buildValueObjectMethod such method.
-     */
-    protected void setBuildValueObjectMethod(
-        String buildValueObjectMethod)
-    {
-        immutableSetBuildValueObjectMethod(
-            buildValueObjectMethod);
-    }
-
-    /**
-     * Retrieves the build-value-object method.
-     * @return such method.
-     */
-    public String getBuildValueObjectMethod()
-    {
-        return m__strBuildValueObjectMethod;
-    }
-
-    /**
-     * Specifies the build-value-object value retrieval.
-     * @param buildValueObjectValueRetrieval such method.
-     */
-    private void immutableSetBuildValueObjectValueRetrieval(
-        String buildValueObjectValueRetrieval)
-    {
-        m__strBuildValueObjectValueRetrieval = buildValueObjectValueRetrieval;
-    }
-
-    /**
-     * Specifies the build-value-object value retrieval.
-     * @param buildValueObjectValueRetrieval such method.
-     */
-    protected void setBuildValueObjectValueRetrieval(
-        String buildValueObjectValueRetrieval)
-    {
-        immutableSetBuildValueObjectValueRetrieval(
-            buildValueObjectValueRetrieval);
-    }
-
-    /**
-     * Retrieves the build-value-object value retrieval.
-     * @return such method.
-     */
-    public String getBuildValueObjectValueRetrieval()
-    {
-        return m__strBuildValueObjectValueRetrieval;
+        return m__strPkStatementSetterCall;
     }
 
     /**
@@ -1923,7 +1635,7 @@ public abstract class AbstractDAOTemplate
      * @param specification such specification.
      */
     private void immutableSetInsertKeywordParametersSpecification(
-        String specification)
+        final String specification)
     {
         m__strInsertKeywordParametersSpecification = specification;
     }
@@ -2086,7 +1798,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteMethod such method.
      */
     private void immutableSetDeleteMethod(
-        String deleteMethod)
+        final String deleteMethod)
     {
         m__strDeleteMethod = deleteMethod;
     }
@@ -2096,7 +1808,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteMethod such method.
      */
     protected void setDeleteMethod(
-        String deleteMethod)
+        final String deleteMethod)
     {
         immutableSetDeleteMethod(
             deleteMethod);
@@ -2116,7 +1828,7 @@ public abstract class AbstractDAOTemplate
      * @param deletePkJavadoc such Javadoc.
      */
     private void immutableSetDeletePkJavadoc(
-        String deletePkJavadoc)
+        final String deletePkJavadoc)
     {
         m__strDeletePkJavadoc = deletePkJavadoc;
     }
@@ -2126,7 +1838,7 @@ public abstract class AbstractDAOTemplate
      * @param deletePkJavadoc such Javadoc.
      */
     protected void setDeletePkJavadoc(
-        String deletePkJavadoc)
+        final String deletePkJavadoc)
     {
         immutableSetDeletePkJavadoc(
             deletePkJavadoc);
@@ -2146,7 +1858,7 @@ public abstract class AbstractDAOTemplate
      * @param deletePkDeclaration such declaration.
      */
     private void immutableSetDeletePkDeclaration(
-        String deletePkDeclaration)
+        final String deletePkDeclaration)
     {
         m__strDeletePkDeclaration =
             deletePkDeclaration;
@@ -2157,7 +1869,7 @@ public abstract class AbstractDAOTemplate
      * @param deletePkdeclaration such declaration.
      */
     protected void setDeletePkdeclaration(
-        String deletePkDeclaration)
+        final String deletePkDeclaration)
     {
         immutableSetDeletePkDeclaration(
             deletePkDeclaration);
@@ -2177,7 +1889,7 @@ public abstract class AbstractDAOTemplate
      * @param deletePkValues such values.
      */
     private void immutableSetDeletePkValues(
-        String deletePkValues)
+        final String deletePkValues)
     {
         m__strDeletePkValues =
             deletePkValues;
@@ -2188,7 +1900,7 @@ public abstract class AbstractDAOTemplate
      * @param deletePkvalues such values.
      */
     protected void setDeletePkvalues(
-        String deletePkValues)
+        final String deletePkValues)
     {
         immutableSetDeletePkValues(
             deletePkValues);
@@ -2208,7 +1920,7 @@ public abstract class AbstractDAOTemplate
      * @param deletePkFilterDeclaration such declaration.
      */
     private void immutableSetDeleteFilterDeclaration(
-        String deleteFilterDeclaration)
+        final String deleteFilterDeclaration)
     {
         m__strDeleteFilterDeclaration =
             deleteFilterDeclaration;
@@ -2219,7 +1931,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteFilterDeclaration such declaration.
      */
     protected void setDeleteFilterDeclaration(
-        String deleteFilterDeclaration)
+        final String deleteFilterDeclaration)
     {
         immutableSetDeleteFilterDeclaration(
             deleteFilterDeclaration);
@@ -2239,7 +1951,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteFilterValues such values.
      */
     private void immutableSetDeleteFilterValues(
-        String deleteFilterValues)
+        final String deleteFilterValues)
     {
         m__strDeleteFilterValues =
             deleteFilterValues;
@@ -2250,7 +1962,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteFilterValues such values.
      */
     protected void setDeleteFilterValues(
-        String deleteFilterValues)
+        final String deleteFilterValues)
     {
         immutableSetDeleteFilterValues(
             deleteFilterValues);
@@ -2270,7 +1982,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteWithFkMethod such method.
      */
     private void immutableSetDeleteWithFkMethod(
-        String deleteWithFkMethod)
+        final String deleteWithFkMethod)
     {
         m__strDeleteWithFkMethod = deleteWithFkMethod;
     }
@@ -2280,7 +1992,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteWithFkMethod such method.
      */
     protected void setDeleteWithFkMethod(
-        String deleteWithFkMethod)
+        final String deleteWithFkMethod)
     {
         immutableSetDeleteWithFkMethod(
             deleteWithFkMethod);
@@ -2300,7 +2012,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteWithFkPkJavadoc such Javadoc.
      */
     private void immutableSetDeleteWithFkPkJavadoc(
-        String deleteWithFkPkJavadoc)
+        final String deleteWithFkPkJavadoc)
     {
         m__strDeleteWithFkPkJavadoc = deleteWithFkPkJavadoc;
     }
@@ -2310,7 +2022,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteWithFkPkJavadoc such Javadoc.
      */
     protected void setDeleteWithFkPkJavadoc(
-        String deleteWithFkPkJavadoc)
+        final String deleteWithFkPkJavadoc)
     {
         immutableSetDeleteWithFkPkJavadoc(
             deleteWithFkPkJavadoc);
@@ -2330,7 +2042,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteWithFkPkDeclaration such declaration.
      */
     private void immutableSetDeleteWithFkPkDeclaration(
-        String deleteWithFkPkDeclaration)
+        final String deleteWithFkPkDeclaration)
     {
         m__strDeleteWithFkPkDeclaration =
             deleteWithFkPkDeclaration;
@@ -2341,7 +2053,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteWithFkPkdeclaration such declaration.
      */
     protected void setDeleteWithFkPkdeclaration(
-        String deleteWithFkPkDeclaration)
+        final String deleteWithFkPkDeclaration)
     {
         immutableSetDeleteWithFkPkDeclaration(
             deleteWithFkPkDeclaration);
@@ -2361,7 +2073,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteWithFkDAODeleteRequest such request.
      */
     private void immutableSetDeleteWithFkDAODeleteRequest(
-        String deleteWithFkDAODeleteRequest)
+        final String deleteWithFkDAODeleteRequest)
     {
         m__strDeleteWithFkDAODeleteRequest =
             deleteWithFkDAODeleteRequest;
@@ -2372,7 +2084,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteWithFkDAODeleteRequest such request.
      */
     protected void setDeleteWithFkDAODeleteRequest(
-        String deleteWithFkDAODeleteRequest)
+        final String deleteWithFkDAODeleteRequest)
     {
         immutableSetDeleteWithFkDAODeleteRequest(
             deleteWithFkDAODeleteRequest);
@@ -2392,7 +2104,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteWithFkPkValues such values.
      */
     private void immutableSetDeleteWithFkPkValues(
-        String deleteWithFkPkValues)
+        final String deleteWithFkPkValues)
     {
         m__strDeleteWithFkPkValues =
             deleteWithFkPkValues;
@@ -2403,7 +2115,7 @@ public abstract class AbstractDAOTemplate
      * @param deleteWithFkPkValues such values.
      */
     protected void setDeleteWithFkPkValues(
-        String deleteWithFkPkValues)
+        final String deleteWithFkPkValues)
     {
         immutableSetDeleteWithFkPkValues(
             deleteWithFkPkValues);

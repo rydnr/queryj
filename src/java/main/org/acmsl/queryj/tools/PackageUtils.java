@@ -84,9 +84,9 @@ public class PackageUtils
     public static final String VALUE_OBJECT_SUBPACKAGE = "vo";
 
     /**
-     * The subpackage for JdbcDAO.
+     * The subpackage for Relational Database common classes.
      */
-    public static final String JDBC_DAO_SUBPACKAGE = "rdb";
+    public static final String RDB_SUBPACKAGE = "rdb";
 
     /**
      * The subpackage for TableRepository.
@@ -471,15 +471,42 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the package name for base Relational Database common classes.
+     * @param packageName the original package.
+     * @return the package for the associated rdb classes.
+     */
+    public String retrieveRdbPackage(final String packageName)
+    {
+        return
+            retrievePackage(
+                retrieveBaseDAOPackage(packageName), RDB_SUBPACKAGE);
+    }
+
+    /**
+     * Retrieves the folder for base Relational Database common classes.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveRdbFolder(
+        final File parentFolder, final String packageName)
+    {
+        return
+            retrieveFolder(
+                retrieveBaseDAOFolder(
+                    parentFolder, packageName),
+                RDB_SUBPACKAGE);
+    }
+
+    /**
      * Retrieves the package name for Jdbc DAO templates.
      * @param packageName the original package.
      * @return the package for the associated Jdbc DAO class.
      */
     public String retrieveJdbcDAOPackage(final String packageName)
     {
-        return
-            retrievePackage(
-                retrieveBaseDAOPackage(packageName), JDBC_DAO_SUBPACKAGE);
+        return retrieveRdbPackage(packageName);
     }
 
     /**
@@ -492,11 +519,7 @@ public class PackageUtils
     public File retrieveJdbcDAOFolder(
         final File parentFolder, final String packageName)
     {
-        return
-            retrieveFolder(
-                retrieveBaseDAOFolder(
-                    parentFolder, packageName),
-                JDBC_DAO_SUBPACKAGE);
+        return retrieveRdbFolder(parentFolder, packageName);
     }
 
     /**
@@ -508,7 +531,7 @@ public class PackageUtils
     public String retrieveDAOPackage(
         final String packageName, final String engineName)
     {
-        String result = retrieveJdbcDAOPackage(packageName);
+        String result = retrieveRdbPackage(packageName);
 
         if  (engineName != null)
         {
@@ -531,7 +554,7 @@ public class PackageUtils
         final String packageName,
         final String engineName)
     {
-        File result = retrieveJdbcDAOFolder(parentFolder, packageName);
+        File result = retrieveRdbFolder(parentFolder, packageName);
 
         if  (engineName != null)
         {
@@ -983,5 +1006,52 @@ public class PackageUtils
         final File parentFolder, final String packageName)
     {
         return retrieveXMLDAOFolder(parentFolder, packageName);
+    }
+
+    /**
+     * Retrieves the package name for the JDBC operation classes.
+     * @param packageName the original package.
+     * @param engineName the DAO engine.
+     * @param tableName the table name.
+     * @return the package for the associated pointers.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
+     */
+    public String retrieveJdbcOperationsPackage(
+        final String packageName,
+        final String tableName,
+        final String engineName)
+    {
+        return
+            retrievePackage(
+                retrieveDAOPackage(
+                    packageName, engineName),
+                tableName.toLowerCase());
+    }
+
+    /**
+     * Retrieves the folder for the JDBC operation classes.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param engineName the DAO engine.
+     * @param tableName the table name.
+     * @return the folder for the associated pointers.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
+     */
+    public File retrieveJdbcOperationsFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final String tableName)
+    {
+        return
+            retrieveFolder(
+                retrieveDAOFolder(
+                    parentFolder, packageName, engineName),
+                tableName.toLowerCase());
     }
 }

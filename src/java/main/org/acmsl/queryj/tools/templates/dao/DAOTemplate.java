@@ -105,7 +105,7 @@ public class DAOTemplate
     implements  DAOTemplateDefaults
 {
     /**
-     * Builds a DAOTemplate using given information.
+     * Builds a <code>DAOTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metaDataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
@@ -117,22 +117,22 @@ public class DAOTemplate
      * @param repositoryName the repository name.
      */
     public DAOTemplate(
-        final TableTemplate           tableTemplate,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final CustomSqlProvider       customSqlProvider,
-        final String                  packageName,
-        final String                  engineName,
-        final String                  engineVersion,
-        final String                  quote,
-        final String                  basePackageName,
-        final String                  repositoryName)
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName)
     {
         super(
             tableTemplate,
             metaDataManager,
             customSqlProvider,
             DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
+            DEFAULT_PACKAGE_DECLARATION,
             packageName,
             engineName,
             engineVersion,
@@ -141,28 +141,21 @@ public class DAOTemplate
             repositoryName,
             DEFAULT_PROJECT_IMPORTS,
             DEFAULT_FOREIGN_DAO_IMPORTS,
-            ACMSL_IMPORTS,
-            JDK_IMPORTS,
-            JDK_EXTENSION_IMPORTS,
-            LOGGING_IMPORTS,
+            DEFAULT_ACMSL_IMPORTS,
+            DEFAULT_ADDITIONAL_IMPORTS,
+            DEFAULT_JDK_IMPORTS,
+            DEFAULT_JDK_EXTENSION_IMPORTS,
+            DEFAULT_LOGGING_IMPORTS,
             DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
+            DEFAULT_CLASS_DEFINITION,
             DEFAULT_CLASS_START,
-            CLASS_CONSTRUCTOR,
+            DEFAULT_CLASS_CONSTANTS,
+            DEFAULT_CLASS_CONSTRUCTOR,
             DEFAULT_FIND_BY_PRIMARY_KEY_METHOD,
             DEFAULT_FIND_BY_PRIMARY_KEY_PK_JAVADOC,
             DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION,
-            DEFAULT_FIND_BY_PRIMARY_KEY_PK_VALUES,
-            DEFAULT_PROCESS_CONNECTION_FLAGS,
-            DEFAULT_RESTORE_CONNECTION_FLAGS,
-            DEFAULT_PROCESS_STATEMENT_FLAGS,
-            DEFAULT_PROCESS_RESULTSET_FLAGS,
-            DEFAULT_PROCESS_RESULTSET_FLAG_SUBTEMPLATE,
-            DEFAULT_FIND_BY_PRIMARY_KEY_SELECT_FIELDS,
-            DEFAULT_FIND_BY_PRIMARY_KEY_FILTER_DECLARATION,
-            DEFAULT_FIND_BY_PRIMARY_KEY_FILTER_VALUES,
-            BUILD_VALUE_OBJECT_METHOD,
-            BUILD_VALUE_OBJECT_VALUE_RETRIEVAL,
+            DEFAULT_PK_FILTER,
+            DEFAULT_PK_STATEMENT_SETTER_CALL,
             DEFAULT_INSERT_METHOD,
             DEFAULT_INSERT_PARAMETERS_JAVADOC,
             DEFAULT_INSERT_PARAMETERS_DECLARATION,
@@ -257,6 +250,13 @@ public class DAOTemplate
                 getRepositoryName(),
                 '_');
 
+        String t_strValueObjectName =
+            englishGrammarUtils.getSingular(
+                tableTemplate.getTableName().toLowerCase());
+
+        String t_strCapitalizedValueObjectName =
+            stringUtils.capitalize(t_strValueObjectName, '_');
+
         MessageFormat t_HeaderFormatter = new MessageFormat(getHeader());
 
         MessageFormat t_PackageDeclarationFormatter =
@@ -273,6 +273,9 @@ public class DAOTemplate
         MessageFormat t_ClassDefinitionFormatter =
             new MessageFormat(getClassDefinition());
 
+        MessageFormat t_ClassConstantsFormatter =
+            new MessageFormat(getClassConstants());
+
         MessageFormat t_ClassConstructorFormatter =
             new MessageFormat(getClassConstructor());
 
@@ -285,23 +288,11 @@ public class DAOTemplate
         MessageFormat t_FindByPrimaryKeyPkDeclarationFormatter =
             new MessageFormat(getFindByPrimaryKeyPkDeclaration());
 
-        MessageFormat t_FindByPrimaryKeyPkValuesFormatter =
-            new MessageFormat(getFindByPrimaryKeyPkValues());
+        MessageFormat t_PkFilterFormatter =
+            new MessageFormat(getPkFilter());
 
-        MessageFormat t_FindByPrimaryKeySelectFieldsFormatter =
-            new MessageFormat(getFindByPrimaryKeySelectFields());
-
-        MessageFormat t_FindByPrimaryKeyFilterDeclarationFormatter =
-            new MessageFormat(getFindByPrimaryKeyFilterDeclaration());
-
-        MessageFormat t_FindByPrimaryKeyFilterValuesFormatter =
-            new MessageFormat(getFindByPrimaryKeyFilterValues());
-
-        MessageFormat t_BuildValueObjectMethodFormatter =
-            new MessageFormat(getBuildValueObjectMethod());
-
-        MessageFormat t_BuildValueObjectValueRetrievalFormatter =
-            new MessageFormat(getBuildValueObjectValueRetrieval());
+        MessageFormat t_PkStatementSetterCallFormatter =
+            new MessageFormat(getPkStatementSetterCall());
 
         MessageFormat t_InsertMethodFormatter =
             new MessageFormat(getInsertMethod());
@@ -354,12 +345,10 @@ public class DAOTemplate
         StringBuffer t_sbForeignDAOImports = new StringBuffer();
         StringBuffer t_sbPkJavadoc = new StringBuffer();
         StringBuffer t_sbPkDeclaration = new StringBuffer();
-        StringBuffer t_sbPkValues = new StringBuffer();
+        StringBuffer t_sbPkFilter = new StringBuffer();
+        StringBuffer t_sbPkStatementSetterCall = new StringBuffer();
         StringBuffer t_sbUpdateFilter = new StringBuffer();
         StringBuffer t_sbDeleteMethod = new StringBuffer();
-        StringBuffer t_sbSelectFields = new StringBuffer();
-        StringBuffer t_sbFilterDeclaration = new StringBuffer();
-        StringBuffer t_sbFilterValues = new StringBuffer();
         StringBuffer t_sbDeleteWithFkPkValues = new StringBuffer();
         StringBuffer t_sbDeleteWithFkPkValuesDeleteRequest = new StringBuffer();
 
@@ -369,7 +358,6 @@ public class DAOTemplate
         StringBuffer t_sbDeleteWithFkDAODeleteRequest = new StringBuffer();
         StringBuffer t_sbDeleteWithFkDAOFkValues = new StringBuffer();
 
-        StringBuffer t_sbBuildValueObjectRetrieval     = new StringBuffer();
         StringBuffer t_sbInsertParametersJavadoc       = new StringBuffer();
         StringBuffer t_sbInsertParametersDeclaration   = new StringBuffer();
         StringBuffer t_sbInsertParametersSpecification = new StringBuffer();
@@ -381,43 +369,6 @@ public class DAOTemplate
         String t_strDeleteMethodSuffix = "";
 
         CustomSqlProvider t_CustomSqlProvider = getCustomSqlProvider();
-
-        String t_strProcessConnectionFlags = "";
-        String t_strProcessStatementFlags = "";
-        String t_strProcessResultSetFlags = "";
-        String[] t_astrProcessResultSetFlags =
-            new String[] {"", "", ""};
-
-        if  (t_CustomSqlProvider != null)
-        {
-            t_strProcessConnectionFlags =
-                buildProcessConnectionFlagsSubtemplate(
-                    daoTemplateUtils
-                        .retrieveConnectionFlagsForFindByPrimaryKeyOperation(
-                            t_CustomSqlProvider),
-                    getProcessConnectionFlags());
-
-            t_strProcessStatementFlags =
-                buildProcessStatementFlagsSubtemplate(
-                    daoTemplateUtils
-                        .retrieveStatementFlagsForFindByPrimaryKeyOperation(
-                            t_CustomSqlProvider),
-                    getProcessStatementFlags(),
-                    daoTemplateUtils.retrieveStatementFlagsSetters(),
-                    stringValidator);
-
-            t_astrProcessResultSetFlags =
-                daoTemplateUtils
-                    .retrieveResultSetFlagsForFindByPrimaryKeyOperation(
-                        t_CustomSqlProvider);
-        }
-
-        t_strProcessResultSetFlags =
-            buildProcessResultSetFlagsSubtemplate(
-                t_astrProcessResultSetFlags,
-                getProcessResultSetFlags(),
-                getProcessResultSetFlagSubtemplate(),
-                stringValidator);
 
         boolean t_bForeignKeys = false;
 
@@ -476,8 +427,7 @@ public class DAOTemplate
                 {
                     getEngineName(),
                     getEngineVersion(),
-                    englishGrammarUtils.getSingular(
-                        tableTemplate.getTableName())
+                    t_strValueObjectName
                 }));
 
         t_sbResult.append(
@@ -488,29 +438,27 @@ public class DAOTemplate
             t_ProjectImportFormatter.format(
                 new Object[]
                 {
-                    packageUtils.retrieveJdbcDAOPackage(
-                        getBasePackageName()),
+                    packageUtils.retrieveJdbcOperationsPackage(
+                        getBasePackageName(),
+                        getEngineName(),
+                        t_strValueObjectName),
+                    t_strCapitalizedValueObjectName,
                     packageUtils.retrieveValueObjectPackage(
                         getBasePackageName()),
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_'),
                     packageUtils.retrieveBaseDAOPackage(
                         getBasePackageName()),
-                    packageUtils.retrieveBaseDAOFactoryPackage(
+                    packageUtils.retrieveRdbPackage(
                         getBasePackageName()),
                     packageUtils.retrieveTableRepositoryPackage(
                         getBasePackageName()),
                     t_strRepositoryName,
                     packageUtils.retrieveDataAccessManagerPackage(
                         getBasePackageName()),
-                    packageUtils.retrieveKeywordRepositoryPackage(
-                        getBasePackageName()),
                     t_sbForeignDAOImports
                 }));
 
         t_sbResult.append(getAcmslImports());
+        t_sbResult.append(getAdditionalImports());
         t_sbResult.append(getJdkImports());
         t_sbResult.append(getJdkExtensionImports());
         t_sbResult.append(getLoggingImports());
@@ -521,8 +469,7 @@ public class DAOTemplate
                 {
                     getEngineName(),
                     getEngineVersion(),
-                    englishGrammarUtils.getSingular(
-                        tableTemplate.getTableName())
+                    t_strValueObjectName
                 }));
 
         t_sbResult.append(
@@ -530,23 +477,26 @@ public class DAOTemplate
                 new Object[]
                 {
                     getEngineName(),
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_')
+                    t_strCapitalizedValueObjectName
                 }));
 
         t_sbResult.append(getClassStart());
+
+        t_sbResult.append(
+            t_ClassConstantsFormatter.format(
+                new Object[]
+                {
+                    t_strValueObjectName,
+                    t_strValueObjectName.toUpperCase(),
+                    t_strCapitalizedValueObjectName
+                }));
 
         t_sbResult.append(
             t_ClassConstructorFormatter.format(
                 new Object[]
                 {
                     getEngineName(),
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_')
+                    t_strCapitalizedValueObjectName
                 }));
 
         String[] t_astrPrimaryKeys =
@@ -566,6 +516,11 @@ public class DAOTemplate
                             t_astrPrimaryKeys[t_iPkIndex]
                         }));
 
+                if  (t_iPkIndex > 0)
+                {
+                    t_sbPkDeclaration.append(",");
+                }
+
                 t_sbPkDeclaration.append(
                     t_FindByPrimaryKeyPkDeclarationFormatter.format(
                         new Object[]
@@ -577,36 +532,25 @@ public class DAOTemplate
                             t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
                         }));
 
-                t_sbPkValues.append(
-                    t_FindByPrimaryKeyPkValuesFormatter.format(
-                        new Object[]
-                        {
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
-                        }));
-
-                t_sbFilterValues.append(
-                    t_FindByPrimaryKeyFilterValuesFormatter.format(
-                        new Object[]
-                        {
-                            stringUtils.capitalize(
-                                metaDataUtils.getNativeType(
-                                    metaDataManager.getColumnType(
-                                        tableTemplate.getTableName(),
-                                        t_astrPrimaryKeys[t_iPkIndex])),
-                                '_'),
-                            t_strRepositoryName,
-                            tableTemplate.getTableName().toUpperCase(),
-                            t_astrPrimaryKeys[t_iPkIndex].toUpperCase(),
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
-                        }));
-
-                t_sbFilterDeclaration.append(
-                    t_FindByPrimaryKeyFilterDeclarationFormatter.format(
+                t_sbPkFilter.append(
+                    t_PkFilterFormatter.format(
                         new Object[]
                         {
                             t_strRepositoryName,
                             tableTemplate.getTableName().toUpperCase(),
                             t_astrPrimaryKeys[t_iPkIndex].toUpperCase()
+                        }));
+
+                if  (t_iPkIndex > 0)
+                {
+                    t_sbPkStatementSetterCall.append(",");
+                }
+
+                t_sbPkStatementSetterCall.append(
+                    t_PkStatementSetterCallFormatter.format(
+                        new Object[]
+                        {
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
                         }));
 
                 t_sbUpdateFilter.append(
@@ -642,39 +586,6 @@ public class DAOTemplate
                       t_iColumnIndex < t_astrColumnNames.length;
                       t_iColumnIndex++)
             {
-                t_sbSelectFields.append(
-                    t_FindByPrimaryKeySelectFieldsFormatter.format(
-                        new Object[]
-                        {
-                            t_strRepositoryName,
-                            tableTemplate.getTableName().toUpperCase(),
-                            t_astrColumnNames[t_iColumnIndex].toUpperCase()
-                        }));
-
-                t_sbBuildValueObjectRetrieval.append(
-                    t_BuildValueObjectValueRetrievalFormatter.format(
-                        new Object[]
-                        {
-                            /*
-                              t_StringUtils.capitalize(
-                              t_MetaDataUtils.getNativeType(
-                              t_MetaDataManager.getColumnType(
-                              t_TableTemplate.getTableName(),
-                              t_astrColumnNames[t_iColumnIndex])),
-                              '_'),
-                              "Phoenix",
-                              t_TableTemplate.getTableName().toUpperCase(),
-                              t_astrColumnNames[t_iColumnIndex].toUpperCase()
-                            */
-                            metaDataUtils.getGetterMethod(
-                                metaDataManager.getColumnType(
-                                    tableTemplate.getTableName(),
-                                    t_astrColumnNames[t_iColumnIndex]),
-                                  t_strRepositoryName + "."
-                                + tableTemplate.getTableName().toUpperCase() + "."
-                                + t_astrColumnNames[t_iColumnIndex].toUpperCase())
-                        }));
-
                 if  (!metaDataManager.isManagedExternally(
                          tableTemplate.getTableName(),
                          t_astrColumnNames[t_iColumnIndex]))
@@ -775,55 +686,28 @@ public class DAOTemplate
                                 t_astrColumnNames[t_iColumnIndex].toLowerCase()
                             }));
                 }
-
-                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-                {
-                    t_sbBuildValueObjectRetrieval.append(",");
-                }
             }
 
             t_sbResult.append(
                 t_FindByPrimaryKeyFormatter.format(
                     new Object[]
                     {
-                        tableTemplate.getTableName(),
-                        t_sbPkJavadoc,
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                tableTemplate.getTableName().toLowerCase()),
-                            '_'),
-                        t_sbPkDeclaration,
-                        t_sbPkValues,
-                        t_strProcessConnectionFlags,
-                        t_sbSelectFields,
                         t_strRepositoryName,
                         tableTemplate.getTableName().toUpperCase(),
-                        t_sbFilterDeclaration,
-                        t_sbFilterValues,
-                        getRestoreConnectionFlags(),
-                        t_strProcessResultSetFlags,
-                        t_strProcessStatementFlags
-                    }));
-
-            t_sbResult.append(
-                t_BuildValueObjectMethodFormatter.format(
-                    new Object[]
-                    {
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                tableTemplate.getTableName().toLowerCase()),
-                            '_'),
-                        t_sbBuildValueObjectRetrieval
+                        t_sbPkFilter,
+                        t_strValueObjectName,
+                        t_sbPkJavadoc,
+                        t_strCapitalizedValueObjectName,
+                        t_sbPkDeclaration,
+                        t_sbPkStatementSetterCall,
+                        t_strValueObjectName.toUpperCase()
                     }));
 
             t_sbResult.append(
                 t_InsertMethodFormatter.format(
                     new Object[]
                     {
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                tableTemplate.getTableName().toLowerCase()),
-                            '_'),
+                        t_strCapitalizedValueObjectName,
                         t_sbPkJavadoc.toString(),
                         t_sbInsertParametersJavadoc,
                         t_sbInsertParametersDeclaration,
@@ -836,10 +720,7 @@ public class DAOTemplate
                 t_UpdateMethodFormatter.format(
                     new Object[]
                     {
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                tableTemplate.getTableName().toLowerCase()),
-                            '_'),
+                        t_strCapitalizedValueObjectName,
                         t_sbPkJavadoc.toString(),
                         t_sbUpdateParametersJavadoc,
                         t_sbPkDeclaration,
@@ -863,10 +744,7 @@ public class DAOTemplate
                     t_DeleteWithFkMethodFormatter.format(
                         new Object[]
                         {
-                            stringUtils.capitalize(
-                                englishGrammarUtils.getSingular(
-                                    tableTemplate.getTableName()),
-                                '_'),
+                            t_strCapitalizedValueObjectName,
                             t_sbPkJavadoc,
                             t_sbPkDeclaration,
                             t_sbDeleteWithFkPkValues,
@@ -887,11 +765,11 @@ public class DAOTemplate
                         t_sbPkDeclaration,
                         t_strRepositoryName,
                         tableTemplate.getTableName().toUpperCase(),
-                        t_sbFilterDeclaration,
-                        t_sbFilterValues,
+                        //t_sbFilterDeclaration,
+                        //t_sbFilterValues,
                         t_strDeleteMethodModifier,
-                        t_strDeleteMethodSuffix,
-                        t_sbPkValues
+                        t_strDeleteMethodSuffix
+                        //t_sbPkValues
                     }));
 
             t_sbResult.append(t_sbDeleteMethod);

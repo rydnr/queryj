@@ -414,7 +414,7 @@ public class PackageUtilsTest
             t_PackageUtils.retrieveJdbcDAOPackage("com.foo.bar"),
               "com.foo.bar"
             + "." + PackageUtils.BASE_DAO_SUBPACKAGE
-            + "." + PackageUtils.JDBC_DAO_SUBPACKAGE);
+            + "." + PackageUtils.RDB_SUBPACKAGE);
     }
 
     /**
@@ -448,7 +448,7 @@ public class PackageUtilsTest
             + File.separator
             + PackageUtils.BASE_DAO_SUBPACKAGE
             + File.separator
-            + PackageUtils.JDBC_DAO_SUBPACKAGE);
+            + PackageUtils.RDB_SUBPACKAGE);
     }
 
     /**
@@ -465,7 +465,7 @@ public class PackageUtilsTest
             t_PackageUtils.retrieveDAOPackage("com.foo.bar", "mysql"),
               "com.foo.bar"
             + "." + PackageUtils.BASE_DAO_SUBPACKAGE
-            + "." + PackageUtils.JDBC_DAO_SUBPACKAGE
+            + "." + PackageUtils.RDB_SUBPACKAGE
             + ".mysql");
     }
 
@@ -500,7 +500,7 @@ public class PackageUtilsTest
             + File.separator
             + PackageUtils.BASE_DAO_SUBPACKAGE
             + File.separator
-            + PackageUtils.JDBC_DAO_SUBPACKAGE
+            + PackageUtils.RDB_SUBPACKAGE
             + File.separator
             + "mysql");
     }
@@ -519,7 +519,7 @@ public class PackageUtilsTest
             t_PackageUtils.retrieveDAOFactoryPackage("com.foo.bar", "mysql"),
               "com.foo.bar"
             + "." + PackageUtils.BASE_DAO_SUBPACKAGE
-            + "." + PackageUtils.JDBC_DAO_SUBPACKAGE
+            + "." + PackageUtils.RDB_SUBPACKAGE
             + ".mysql");
     }
 
@@ -554,9 +554,66 @@ public class PackageUtilsTest
             + File.separator
             + PackageUtils.BASE_DAO_SUBPACKAGE
             + File.separator
-            + PackageUtils.JDBC_DAO_SUBPACKAGE
+            + PackageUtils.RDB_SUBPACKAGE
             + File.separator
             + "mysql");
     }
-}
 
+
+    /**
+     * Tests the retrieveJdbcOperationsPackage() method
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveJdbcOperationsPackage(String,String,String)
+     */
+    public void testRetrieveJdbcOperationsPackage()
+    {
+        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+
+        assertNotNull(t_PackageUtils);
+
+        assertEquals(
+            t_PackageUtils.retrieveJdbcOperationsPackage("com.foo.bar", "mysql", "user"),
+              "com.foo.bar"
+            + "." + PackageUtils.BASE_DAO_SUBPACKAGE
+            + "." + PackageUtils.RDB_SUBPACKAGE
+            + ".mysql"
+            + ".user");
+    }
+
+    /**
+     * Tests the retrieveJdbcOperationsFolder() method
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveDAOFactoryFolder(File,String,String,String)
+     */
+    public void testRetrieveJdbcOperationsFolder()
+    {
+        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+
+        assertNotNull(t_PackageUtils);
+
+        File t_TestFile = getTestFile();
+
+        assertNotNull(t_TestFile);
+
+        File t_DAOFactoryFolder = 
+            t_PackageUtils.retrieveJdbcOperationsFolder(t_TestFile, "com.foo.bar", "mysql", "user");
+
+        assertNotNull(t_DAOFactoryFolder);
+
+        assertEquals(
+            t_DAOFactoryFolder.getAbsolutePath(),
+              t_TestFile.getAbsolutePath()
+            + File.separator
+            + "com"
+            + File.separator
+            + "foo"
+            + File.separator
+            + "bar"
+            + File.separator
+            + PackageUtils.BASE_DAO_SUBPACKAGE
+            + File.separator
+            + PackageUtils.RDB_SUBPACKAGE
+            + File.separator
+            + "mysql"
+            + File.separator
+            + "user");
+    }
+}

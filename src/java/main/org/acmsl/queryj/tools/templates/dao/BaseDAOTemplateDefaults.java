@@ -33,7 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Contains the default subtemplates for building DAO interfaces.
+ * Description: Contains the default subtemplates for building base DAO
+ *              interfaces.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -46,38 +47,10 @@
  */
 package org.acmsl.queryj.tools.templates.dao;
 
-/*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JDK classes.
- */
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
- * Contains the default subtemplates for building DAO interfaces.
+ * Contains the default subtemplates for building base DAO interfaces.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public interface BaseDAOTemplateDefaults
@@ -151,16 +124,7 @@ public interface BaseDAOTemplateDefaults
     /**
      * The ACM-SL imports.
      */
-    public static final String ACMSL_IMPORTS =
-          "/*\n"
-        + " * Importing QueryJ classes.\n"
-        + " */\n"
-        + "import org.acmsl.queryj.dao.TransactionToken;\n\n"
-        + "/*\n"
-        + " * Importing ACM-SL Commons classes.\n"
-        + " */\n"
-        + "import org.acmsl.commons.patterns.dao.DAO;\n"
-        + "import org.acmsl.commons.patterns.dao.DataAccessException;\n\n";
+    public static final String ACMSL_IMPORTS = "";
 
     /**
      * The JDK imports.
@@ -189,8 +153,7 @@ public interface BaseDAOTemplateDefaults
      * The class definition.
      */
     public static final String CLASS_DEFINITION =
-          "public interface {0}DAO\n"
-        + "    extends  DAO\n";
+        "public interface {0}DAO\n";
         // table name
 
     /**
@@ -209,17 +172,13 @@ public interface BaseDAOTemplateDefaults
         + "     * by its primary keys."
         + "{1}\n"
          // FIND_BY_PRIMARY_KEY_PK_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
         + "     * @return the information extracted from the persistence layer.\n"
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public {2}ValueObject findByPrimaryKey(\n"
+        + "    public {2} findByPrimaryKey("
          // java table name
-        + "{3}"
+        + "{3});\n\n";
          // FIND_BY_PRIMARY_KEY_PK_DECLARATION
-        + "        final TransactionToken transactionToken)\n"
-        + "      throws DataAccessException;\n\n";
 
     /**
      * The find-by-primary-key method's primary keys javadoc.
@@ -232,7 +191,7 @@ public interface BaseDAOTemplateDefaults
      * The find-by-primary-key method's primary keys declaration.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION =
-        "        final {0} {1},\n";
+        "\n        final {0} {1}";
          // pk type - java pk
 
     /**
@@ -246,16 +205,13 @@ public interface BaseDAOTemplateDefaults
          // (optional) pk javadoc
         + "{2}\n"
          // insert parameters javadoc
-        + "     * @param transactionToken the transaction boundary.\n"
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public void insert(\n"
+        + "    public void insert("
         + "{3}"
          // (optional) pk declaration
-        + "{4}"
+        + "{4});\n\n";
          // insert parameters declaration
-        + "        final TransactionToken transactionToken)\n"
-        + "      throws DataAccessException;\n\n";
 
     /**
      * The insert parameters javadoc.
@@ -268,7 +224,7 @@ public interface BaseDAOTemplateDefaults
      * The insert parameters declaration.
      */
     public static final String DEFAULT_INSERT_PARAMETERS_DECLARATION =
-        "        final {0} {1},\n";
+        "\n        final {0} {1}";
     // field type - field name
 
     /**
@@ -283,16 +239,13 @@ public interface BaseDAOTemplateDefaults
          // (optional) pk javadoc
         + "{2}\n"
          // update parameters javadoc
-        + "     * @param transactionToken the transaction boundary.\n"
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public void update(\n"
+        + "    public void update("
         + "{3}"
          // (optional) pk declaration
-        + "{4}\n"
+        + "{4});\n\n";
          // update parameters declaration
-        + "        final TransactionToken transactionToken)\n"
-        + "      throws DataAccessException;\n\n";
 
     /**
      * The update parameters javadoc.
@@ -305,7 +258,7 @@ public interface BaseDAOTemplateDefaults
      * The update parameters declaration.
      */
     public static final String DEFAULT_UPDATE_PARAMETERS_DECLARATION =
-        "        final {0} {1},";
+        ",\n        final {0} {1}";
     // field type - field name
 
     /**
@@ -318,18 +271,12 @@ public interface BaseDAOTemplateDefaults
         + "     * by its primary keys."
         + "{1}\n"
          // DELETE_PK_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @return <code>true</code> if the information has been deleted\n"
-        + "     * successfully.\n"
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public boolean delete(\n"
+        + "    public boolean delete("
          // java table name
-        + "{2}"
+        + "{2});\n";
          // DELETE_PK_DECLARATION
-        + "        final TransactionToken  transactionToken)\n"
-        + "      throws DataAccessException;\n";
 
     /**
      * The delete method's primary keys javadoc.
@@ -342,7 +289,7 @@ public interface BaseDAOTemplateDefaults
      * The delete method's primary keys declaration.
      */
     public static final String DEFAULT_DELETE_PK_DECLARATION =
-        "        final {0} {1},\n";
+        "\n        final {0} {1}";
          // pk type - java pk
 
     /**
