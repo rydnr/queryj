@@ -66,6 +66,7 @@ public interface XMLValueObjectFactoryTemplateFactory
     /**
      * Generates a value object factory template.
      * @param packageName the package name.
+     * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @return a template.
@@ -73,6 +74,7 @@ public interface XMLValueObjectFactoryTemplateFactory
      */
     public XMLValueObjectFactoryTemplate createXMLValueObjectFactoryTemplate(
             final String                  packageName,
+            final String                  valueObjectPackageName,
             final TableTemplate           tableTemplate,
             final DatabaseMetaDataManager metaDataManager)
         throws  QueryJException;

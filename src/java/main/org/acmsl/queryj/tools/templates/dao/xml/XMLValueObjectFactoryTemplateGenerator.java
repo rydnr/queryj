@@ -247,14 +247,16 @@ public class XMLValueObjectFactoryTemplateGenerator
 
     /**
      * Generates a value object factory template.
+     * @param packageName the package name.
+     * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
-     * @param packageName the package name.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
     public XMLValueObjectFactoryTemplate createXMLValueObjectFactoryTemplate(
             final String                  packageName,
+            final String                  valueObjectPackageName,
             final TableTemplate           tableTemplate,
             final DatabaseMetaDataManager metaDataManager)
         throws  QueryJException
@@ -268,6 +270,7 @@ public class XMLValueObjectFactoryTemplateGenerator
             result =
                 new XMLValueObjectFactoryTemplate(
                     packageName,
+                    valueObjectPackageName,
                     tableTemplate,
                     metaDataManager) {};
         }

@@ -165,11 +165,11 @@ public class ValueObjectTemplateBuildHandler
                     }
                 }
             }
-            catch  (SQLException sqlException)
+            catch  (final SQLException sqlException)
             {
                 throw new BuildException(sqlException);
             }
-            catch  (QueryJException queryjException)
+            catch  (final QueryJException queryjException)
             {
                 throw new BuildException(queryjException);
             }
@@ -185,8 +185,8 @@ public class ValueObjectTemplateBuildHandler
      * @throws BuildException if the metadata retrieval process if faulty.
      */
     protected DatabaseMetaData retrieveDatabaseMetaData(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
         DatabaseMetaData result = null;
 
@@ -208,8 +208,8 @@ public class ValueObjectTemplateBuildHandler
      * @throws BuildException if the manager retrieval process if faulty.
      */
     protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
         DatabaseMetaDataManager result = null;
 
@@ -230,7 +230,7 @@ public class ValueObjectTemplateBuildHandler
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      */
-    protected String retrievePackage(Map parameters)
+    protected String retrievePackage(final Map parameters)
         throws  BuildException
     {
         String result = null;
@@ -256,9 +256,9 @@ public class ValueObjectTemplateBuildHandler
      * @throws BuildException if the templates cannot be stored for any reason.
      */
     protected void storeValueObjectTemplates(
-            ValueObjectTemplate[] valueObjectTemplates,
-            Map           parameters)
-        throws  BuildException
+        final ValueObjectTemplate[] valueObjectTemplates,
+        final Map           parameters)
+      throws  BuildException
     {
         if  (   (valueObjectTemplates != null)
              && (parameters           != null))
@@ -276,8 +276,8 @@ public class ValueObjectTemplateBuildHandler
      * @throws BuildException if the templates cannot be stored for any reason.
      */
     protected TableTemplate[] retrieveTableTemplates(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
         TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
 

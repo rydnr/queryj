@@ -150,8 +150,8 @@ public abstract class XMLValueObjectFactoryTemplate
           "/*\n"
         + " * Importing some project classes.\n"
         + " */\n"
-        + "import {0}.{1}ValueObject;\n" // package - Table
-        + "import {0}.{1}ValueObjectFactory;\n\n"; // package - Table
+        + "import {0}.{1}ValueObject;\n" // value object package - Table
+        + "import {0}.{1}ValueObjectFactory;\n\n"; // value object package - Table
 
     /**
      * The ACM-SL imports.
@@ -247,7 +247,15 @@ public abstract class XMLValueObjectFactoryTemplate
         + "     * Retrieves a XML{0}ValueObjectFactory instance.\n"
         + "     * @return such instance.\n"
         + "     */\n"
-        + "    public static XML{0}ValueObjectFactory getInstance()\n"
+        + "    public static {0}ValueObjectFactory getInstance()\n"
+        + "    '{'\n"
+        + "        return getXMLInstance();\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Retrieves a XML{0}ValueObjectFactory instance.\n"
+        + "     * @return such instance.\n"
+        + "     */\n"
+        + "    public static XML{0}ValueObjectFactory getXMLInstance()\n"
         + "    '{'\n"
         + "        XML{0}ValueObjectFactory result = null;\n\n"
         + "        WeakReference reference = getReference();\n\n"
@@ -356,6 +364,11 @@ public abstract class XMLValueObjectFactoryTemplate
     private String m__strPackageName;
 
     /**
+     * The value object package name.
+     */
+    private String m__strValueObjectPackageName;
+
+    /**
      * The table template.
      */
     private TableTemplate m__TableTemplate;
@@ -435,6 +448,7 @@ public abstract class XMLValueObjectFactoryTemplate
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
+     * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @param projectImports the project imports.
@@ -455,6 +469,7 @@ public abstract class XMLValueObjectFactoryTemplate
         final String                  header,
         final String                  packageDeclaration,
         final String                  packageName,
+        final String                  valueObjectPackageName,
         final TableTemplate           tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String                  projectImports,
@@ -474,6 +489,7 @@ public abstract class XMLValueObjectFactoryTemplate
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
+        immutableSetValueObjectPackageName(valueObjectPackageName);
         immutableSetTableTemplate(tableTemplate);
         immutableSetMetaDataManager(metaDataManager);
         immutableSetProjectImports(projectImports);
@@ -494,11 +510,13 @@ public abstract class XMLValueObjectFactoryTemplate
     /**
      * Builds a XMLValueObjectFactoryTemplate using given information.
      * @param packageName the package name.
+     * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      */
     public XMLValueObjectFactoryTemplate(
         final String                  packageName,
+        final String                  valueObjectPackageName,
         final TableTemplate           tableTemplate,
         final DatabaseMetaDataManager metaDataManager)
     {
@@ -506,6 +524,7 @@ public abstract class XMLValueObjectFactoryTemplate
             DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             packageName,
+            valueObjectPackageName,
             tableTemplate,
             metaDataManager,
             DEFAULT_PROJECT_IMPORTS,
@@ -602,6 +621,33 @@ public abstract class XMLValueObjectFactoryTemplate
     public String getPackageName() 
     {
         return m__strPackageName;
+    }
+
+    /**
+     * Specifies the value object package name.
+     * @param packageName the new package name.
+     */
+    private void immutableSetValueObjectPackageName(final String packageName)
+    {
+        m__strValueObjectPackageName = packageName;
+    }
+
+    /**
+     * Specifies the value object package name.
+     * @param packageName the new package name.
+     */
+    protected void setValueObjectPackageName(final String packageName)
+    {
+        immutableSetValueObjectPackageName(packageName);
+    }
+
+    /**
+     * Retrieves the value object package name.
+     * @return such information.
+     */
+    public String getValueObjectPackageName() 
+    {
+        return m__strValueObjectPackageName;
     }
 
     /**
@@ -1058,7 +1104,7 @@ public abstract class XMLValueObjectFactoryTemplate
                 t_Formatter.format(
                     new Object[]
                     {
-                        getPackageName(),
+                        getValueObjectPackageName(),
                         t_StringUtils.capitalize(
                             t_EnglishGrammarUtils.getSingular(
                                 t_TableTemplate.getTableName().toLowerCase()),

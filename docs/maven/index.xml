@@ -70,6 +70,16 @@
             $Date$
           </td>
           <td>
+            Some more work on XML DAO implementations. The Digester instances are now
+            configured depending on the table definitions. The code is pretty close to reach
+            a point in which in can be tested.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/10/07 07:22:25
+          </td>
+          <td>
             Closed <a href="${issue.url}515">515</a>.
           </td>
         </tr>

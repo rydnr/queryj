@@ -149,8 +149,8 @@
 
         <jarDependency
           name="acmsl-commons"
-          version="0.5.5b7"
-          jar="commons-0.5.5b7.jar"/>
+          version="0.5.5b8"
+          jar="commons-0.5.5b8.jar"/>
 
         <jarDependency
           name="commons-logging"

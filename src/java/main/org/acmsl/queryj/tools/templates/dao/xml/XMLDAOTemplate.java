@@ -158,6 +158,8 @@ public abstract class XMLDAOTemplate
           "/*\n"
         + " * Importing project-specific classes.\n"
         + " */\n"
+         // XML DAO package
+        + "import {0}.XML{2}ValueObjectFactory;\n"
          // JDBC DAO package
         + "import {1}.{2}ValueObject;\n"
          // ValueObject DAO package - table name
@@ -441,24 +443,15 @@ public abstract class XMLDAOTemplate
         + "    protected Digester configureDigester()\n"
         + "    '{'\n"
         + "        Digester result = new Digester();\n\n"
-        + "        result.addObjectCreate(\n"
+        + "        result.addFactoryCreate(\n"
         + "            \"{4}-list/{4}\",\n"
     // uncapitalized value object name, in singular
-        + "            \"{5}.{0}\");\n"
+        + "            XML{0}ValueObjectFactory.getXMLInstance());\n"
     // value object package + name
-    /* iterate through all value object properties 
-        + "        result.addCallMethod(\n"
-        + "            \"{4}-list/{4}\",\n"
-        + "            \"setMessageTypeValue\", 1, new Class[] '{' String.class '}');\n"
-        + "        result.addCallParam(\"{4}-list/{4}\", 0, \"value\");\n\n"
-        + "        result.addCallMethod(\n"
-        + "            \"{4}-list/{4}\",\n"
-        + "            \"setMessageTypeDesc\", 0, new Class[] '{' String.class '}');\n\n"
-    */
         + "        result.addSetNext(\n"
         + "            \"{4}-list/{4}\",\n"
         + "            \"add\",\n"
-        + "            \"{5}.{0}\");\n"
+        + "            \"{5}.{0}ValueObject\");\n\n"
         + "        return result;\n"
         + "    '}'\n\n";
 
@@ -2625,8 +2618,7 @@ public abstract class XMLDAOTemplate
                 t_ProjectImportFormatter.format(
                     new Object[]
                     {
-                        t_PackageUtils.retrieveJdbcDAOPackage(
-                            getBasePackageName()),
+                        getPackageName(),
                         t_PackageUtils.retrieveValueObjectPackage(
                             getBasePackageName()),
                         t_StringUtils.capitalize(

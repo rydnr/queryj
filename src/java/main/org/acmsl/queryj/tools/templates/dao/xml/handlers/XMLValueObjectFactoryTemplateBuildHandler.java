@@ -123,6 +123,7 @@ public class XMLValueObjectFactoryTemplateBuildHandler
                     retrieveDatabaseMetaDataManager(attributes);
 
                 String t_strPackage = retrievePackage(attributes);
+                String t_strValueObjectPackage = retrieveValueObjectPackage(attributes);
 
                 XMLValueObjectFactoryTemplateGenerator t_XMLValueObjectFactoryTemplateGenerator =
                     XMLValueObjectFactoryTemplateGenerator.getInstance();
@@ -157,6 +158,7 @@ public class XMLValueObjectFactoryTemplateBuildHandler
                             t_aValueObjectFactoryTemplates[t_iValueObjectFactoryIndex] =
                                 t_XMLValueObjectFactoryTemplateGenerator.createXMLValueObjectFactoryTemplate(
                                     t_strPackage,
+                                    t_strValueObjectPackage,
                                     t_aTableTemplates[t_iValueObjectFactoryIndex],
                                     t_MetaDataManager);
                         }
@@ -242,6 +244,31 @@ public class XMLValueObjectFactoryTemplateBuildHandler
         {
             result =
                 t_PackageUtils.retrieveXMLValueObjectFactoryPackage(
+                    (String)
+                        parameters.get(ParameterValidationHandler.PACKAGE));
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves the value object package name from the attribute map.
+     * @param parameters the parameter map.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     */
+    protected String retrieveValueObjectPackage(final Map parameters)
+        throws  BuildException
+    {
+        String result = null;
+
+        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+
+        if  (   (parameters     != null)
+             && (t_PackageUtils != null))
+        {
+            result =
+                t_PackageUtils.retrieveValueObjectFactoryPackage(
                     (String)
                         parameters.get(ParameterValidationHandler.PACKAGE));
         }
