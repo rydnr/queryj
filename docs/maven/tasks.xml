@@ -66,7 +66,8 @@
             <li>
               Support custom queries in Ant scripts: find out
               if through the driver the query can be validated
-              directly.
+              directly.<br/>
+              Accomplish task <a href="${issue.url}566">566</a>.
             </li>
             <li>
               <b>0.6b2</b><br/>

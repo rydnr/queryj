@@ -92,6 +92,14 @@
     <parameter-ref id="person-last-name-filter"/>
   </sql>
 
+  <sql
+    name="delete-test"
+    dao="customer"
+    implementation="all"
+    type="delete">
+    <value>delete customers where customer_name like '%test'</value>
+  </sql>
+
   <!-- SQL parameter metadata -->
   <parameter-list>
     <parameter

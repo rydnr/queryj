@@ -67,7 +67,10 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.regexpplugin.Helper;
+import org.acmsl.commons.regexpplugin.RegexpEngine;
+import org.acmsl.commons.regexpplugin.RegexpEngineNotFoundException;
 import org.acmsl.commons.regexpplugin.RegexpManager;
+import org.acmsl.commons.regexpplugin.RegexpPluginMisconfiguredException;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
@@ -1148,6 +1151,124 @@ public abstract class DAOTemplate
      */
     public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_QUERY_LINE =
         "            t_sbQuery.append({0}\"{1} \");";
+
+    /**
+     * The custom select for update template, with return.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_RETURN =
+          "    /**\n"
+        + "     * Performs the <i>{0}</i> operation.\n"
+         // sql id
+        + "{1}\n"
+         // CUSTOM_SELECT_PARAMETER_JAVADOC
+        + "     * @param transactionToken needed to use an open connection and\n"
+        + "     * see previously uncommited inserts/updates/deletes.\n"
+        + "     * @return the information extracted from the persistence layer\n"
+        + "     * and/or processed.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     */\n"
+        + "    public {0} {2}("
+         // result class - sql name
+        + "{3}\n"
+         // CUSTOM_SELECT_PARAMETER_DECLARATION
+        + "        final TransactionToken transactionToken)\n"
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
+        + "        return\n"
+        + "            {2}("
+        + "{8},\n"
+         // CUSTOM_SELECT_FOR_UPDATE_PARAMETER_REDIRECTION
+        + "                new {9}({8}),\n"
+        + "                transactionToken);\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Performs the <i>{0}</i> operation.\n"
+         // sql id
+        + "{1}\n"
+         // CUSTOM_SELECT_PARAMETER_JAVADOC
+        + "     * @param transactionToken needed to use an open connection and\n"
+        + "     * see previously uncommited inserts/updates/deletes.\n"
+        + "     * @return the information extracted from the persistence layer.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     */\n"
+        + "    public {0} {2}("
+         // result class - sql name
+        + "{3}\n"
+         // CUSTOM_SELECT_PARAMETER_DECLARATION
+        + "        final TransactionToken transactionToken)\n"
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
+        + "        {0} result = null;\n\n"
+         // java table name
+        + "        Connection        t_Connection        = null;\n"
+        + "        PreparedStatement t_PreparedStatement = null;\n"
+        + "        ResultSet         t_rsResults         = null;\n\n"
+        + "        try\n"
+        + "        '{'\n"
+        + "            t_Connection = getConnection(transactionToken);\n\n"
+        + "            String t_strQuery =\n"
+        + "                \"{4}\";\n\n"
+        + "            t_PreparedStatement = t_Connection.prepareStatement(t_strQuery);\n"
+        + "{5}\n\n"
+         // CUSTOM_SELECT_PARAMETER_VALUES
+        + "            t_rsResults = t_PreparedStatement.executeQuery();\n\n"
+        + "            if  (   (t_rsResults != null)\n"
+        + "                 && (t_rsResults.next()))\n"
+        + "            '{'\n"
+        + "                {0}Factory t_Factory =\n"
+        + "                    {0}Factory.getInstance();\n\n"
+        + "                result =\n"
+        + "                    t_Factory.create{6}("
+        + "{7});\n"
+         // CUSTOM_SELECT_RESULT_PROPERTIES
+        + "            '}'\n"
+        + "        '}'\n"
+        + "        catch  (final SQLException sqlException)\n"
+        + "        '{'\n"
+        + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
+        + "        '}'\n"
+        + "        catch  (final Exception exception)\n"
+        + "        '{'\n"
+        + "            LogFactory.getLog(getClass()).error(exception);\n"
+        + "        '}'\n"
+        + "        finally\n"
+        + "        '{'\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                if  (t_rsResults != null)\n"
+        + "                '{'\n"
+        + "                    t_rsResults.close();\n"
+        + "                '}'\n"
+        + "            '}'\n"
+        + "            catch  (final Exception exception)\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).error(exception);\n"
+        + "            '}'\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                if  (t_PreparedStatement != null)\n"
+        + "                '{'\n"
+        + "                    t_PreparedStatement.close();\n"
+        + "                '}'\n"
+        + "            '}'\n"
+        + "            catch  (final Exception exception)\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).error(exception);\n"
+        + "            '}'\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                if  (t_Connection != null)\n"
+        + "                '{'\n"
+        + "                    closeConnection(t_Connection, transactionToken);\n"
+        + "                '}'\n"
+        + "            '}'\n"
+        + "            catch  (final Exception exception)\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).error(exception);\n"
+        + "            '}'\n"
+        + "        '}'\n\n"
+        + "        return result;\n"
+        + "    '}'\n\n";
 
     /**
      * The default class end.
@@ -4217,6 +4338,7 @@ public abstract class DAOTemplate
             result.append(buildCustomSelects(provider));
             result.append(buildCustomUpdates(provider));
             result.append(buildCustomInserts(provider));
+            result.append(buildCustomDeletes(provider));
         }
 
         return result.toString();
@@ -4617,9 +4739,15 @@ public abstract class DAOTemplate
      * Builds the custom updates.
      * @param provider the CustomSqlProvider instance.
      * @return such generated code.
+     * @throws RegexpEngineNotFoundException if the defined
+     * regexp engine cannot be found.
+     * @throws RegexpPluginMisconfiguredException if
+     * RegexpPlugin cannot be configured properly.
      * @precondition provider != null
      */
     protected String buildCustomUpdates(final CustomSqlProvider provider)
+        throws  RegexpEngineNotFoundException,
+                RegexpPluginMisconfiguredException
     {
         return
             buildCustomUpdatesOrInserts(
@@ -4632,7 +4760,7 @@ public abstract class DAOTemplate
                 getCustomUpdateOrInsertQueryLine(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
-                RegexpManager.createHelper());
+                createHelper(RegexpManager.getInstance()));
     }
 
     /**
@@ -4813,7 +4941,60 @@ public abstract class DAOTemplate
                 getCustomUpdateOrInsertQueryLine(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
-                RegexpManager.createHelper());
+                createHelper(RegexpManager.getInstance()));
     }
 
+    /**
+     * Builds the custom deletes.
+     * @param provider the CustomSqlProvider instance.
+     * @return such generated code.
+     * @precondition provider != null
+     */
+    protected String buildCustomDeletes(final CustomSqlProvider provider)
+    {
+        return
+            buildCustomUpdatesOrInserts(
+                provider,
+                SqlElement.DELETE,
+                getCustomUpdateOrInsert(),
+                getCustomUpdateOrInsertParameterJavadoc(),
+                getCustomUpdateOrInsertParameterDeclaration(),
+                getCustomUpdateOrInsertParameterValues(),
+                getCustomUpdateOrInsertQueryLine(),
+                StringUtils.getInstance(),
+                StringValidator.getInstance(),
+                createHelper(RegexpManager.getInstance()));
+    }
+
+    /**
+     * Requests a regexp helper to given RegexpManager instance.
+     * @param regexpManager the RegexpManager instance.
+     * @return the regexp helper.
+     * @throws RegexpEngineNotFoundException if the defined
+     * regexp engine cannot be found.
+     * @throws RegexpPluginMisconfiguredException if
+     * RegexpPlugin cannot be configured properly.
+     * @precondition regexpManager != null
+     */
+    protected synchronized Helper createHelper(
+        final RegexpManager regexpManager)
+      throws  RegexpEngineNotFoundException,
+              RegexpPluginMisconfiguredException
+    {
+        return createHelper(regexpManager.getEngine());
+    }
+
+    /**
+     * Requests a regexp helper to given RegexpEngine instance.
+     * @param regexpEngine the RegexpEngine instance.
+     * @return the regexp helper.
+     * @precondition regexpEngine != null
+     */
+    protected Helper createHelper(
+        final RegexpEngine regexpEngine)
+      throws  RegexpEngineNotFoundException,
+              RegexpPluginMisconfiguredException
+    {
+        return regexpEngine.createHelper();
+    }
 }
