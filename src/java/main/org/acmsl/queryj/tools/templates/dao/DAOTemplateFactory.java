@@ -55,10 +55,16 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
+/*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
 /**
  * Represents entities able to create DAO templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public interface DAOTemplateFactory
@@ -74,6 +80,8 @@ public interface DAOTemplateFactory
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -86,6 +94,8 @@ public interface DAOTemplateFactory
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final Project project,
+        final Task task)
       throws  QueryJException;
 }

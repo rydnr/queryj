@@ -52,10 +52,16 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
 
+/*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
 /**
  * Represents entities able to create configuration properties.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public interface ConfigurationPropertiesTemplateFactory
@@ -66,14 +72,17 @@ public interface ConfigurationPropertiesTemplateFactory
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
-    public ConfigurationPropertiesTemplate
-        createConfigurationPropertiesTemplate(
-            String repository,
-            String engineName,
-            String engineVersion,
-            String basePackageName)
-        throws  QueryJException;
+    public ConfigurationPropertiesTemplate createConfigurationPropertiesTemplate(
+        final String repository,
+        final String engineName,
+        final String engineVersion,
+        final String basePackageName,
+        final Project project,
+        final Task task)
+      throws  QueryJException;
 }

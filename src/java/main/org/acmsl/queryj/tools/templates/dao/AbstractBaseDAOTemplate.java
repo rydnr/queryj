@@ -50,7 +50,14 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+
+/*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /**
  * Contains the required subtemplates to create DAO interfaces.
@@ -59,6 +66,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  * @version $Revision$
  */
 public abstract class AbstractBaseDAOTemplate
+    extends  AbstractTemplate
 {
     /**
      * The table template.
@@ -191,7 +199,7 @@ public abstract class AbstractBaseDAOTemplate
     private String m__strClassEnd;
 
     /**
-     * Builds a BaseDAOTemplate using given information.
+     * Builds an <code>AbstractBaseDAOTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metaDataManager the database metadata manager.
      * @param header the header.
@@ -216,32 +224,37 @@ public abstract class AbstractBaseDAOTemplate
      * @param deletePkJavadoc the delete PK javadoc.
      * @param deletePkDeclaration the delete PK declaration.
      * @param classEnd the class end.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
-    public AbstractBaseDAOTemplate(
-        final TableTemplate           tableTemplate,
+    protected AbstractBaseDAOTemplate(
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final String                  header,
-        final String                  packageDeclaration,
-        final String                  packageName,
-        final String                  acmslImports,
-        final String                  jdkImports,
-        final String                  javadoc,
-        final String                  classDefinition,
-        final String                  classStart,
-        final String                  findByPrimaryKeyMethod,
-        final String                  findByPrimaryKeyPkJavadoc,
-        final String                  findByPrimaryKeyPkDeclaration,
-        final String                  insertMethod,
-        final String                  insertParametersJavadoc,
-        final String                  insertParametersDeclaration,
-        final String                  updateMethod,
-        final String                  updateParametersJavadoc,
-        final String                  updateParametersDeclaration,
-        final String                  deleteMethod,
-        final String                  deletePkJavadoc,
-        final String                  deletePkDeclaration,
-        final String                  classEnd)
+        final String header,
+        final String packageDeclaration,
+        final String packageName,
+        final String acmslImports,
+        final String jdkImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String findByPrimaryKeyMethod,
+        final String findByPrimaryKeyPkJavadoc,
+        final String findByPrimaryKeyPkDeclaration,
+        final String insertMethod,
+        final String insertParametersJavadoc,
+        final String insertParametersDeclaration,
+        final String updateMethod,
+        final String updateParametersJavadoc,
+        final String updateParametersDeclaration,
+        final String deleteMethod,
+        final String deletePkJavadoc,
+        final String deletePkDeclaration,
+        final String classEnd,
+        final Project project,
+        final Task task)
     {
+        super(project, task);
         immutableSetTableTemplate(tableTemplate);
         immutableSetMetaDataManager(metaDataManager);
         immutableSetHeader(header);

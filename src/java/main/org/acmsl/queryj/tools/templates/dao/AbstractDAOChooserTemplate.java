@@ -48,6 +48,17 @@
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
+ * Importing project-specific classes.
+ */
+import org.acmsl.queryj.tools.templates.AbstractTemplate;
+
+/*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
@@ -61,6 +72,7 @@ import java.util.List;
  * @version $Revision$
  */
 public abstract class AbstractDAOChooserTemplate
+    extends  AbstractTemplate
 {
     /**
      * The header.
@@ -176,6 +188,8 @@ public abstract class AbstractDAOChooserTemplate
      * @param helperMethods the helper methods.
      * @param getDAOFactoryMethods the getDAOFactory methods.
      * @param classEnd the class end.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     public AbstractDAOChooserTemplate(
         final String header,
@@ -193,8 +207,11 @@ public abstract class AbstractDAOChooserTemplate
         final String propertiesAccessors,
         final String helperMethods,
         final String getDAOFactoryMethods,
-        final String classEnd)
+        final String classEnd,
+        final Project project,
+        final Task task)
     {
+        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

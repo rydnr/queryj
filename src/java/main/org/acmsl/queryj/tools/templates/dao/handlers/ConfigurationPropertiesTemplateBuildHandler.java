@@ -184,35 +184,34 @@ public class ConfigurationPropertiesTemplateBuildHandler
      * @param basePackageName the base package name.
      * @throws org.apache.tools.ant.BuildException whenever the template
      * information is not valid.
+     * @precondition repository != null
+     * @precondition engineName != null
+     * @precondition basePackageName != null
      */
-    protected ConfigurationPropertiesTemplate
-        buildConfigurationPropertiesTemplate(
-            String repository,
-            String engineName,
-            String engineVersion,
-            String basePackageName)
-        throws  BuildException
+    protected ConfigurationPropertiesTemplate buildConfigurationPropertiesTemplate(
+        final String repository,
+        final String engineName,
+        final String engineVersion,
+        final String basePackageName)
+      throws  BuildException
     {
         ConfigurationPropertiesTemplate result = null;
 
-        if  (   (repository      != null)
-             && (engineName      != null)
-             && (basePackageName != null))
-        {
-            ConfigurationPropertiesTemplateGenerator
-                t_ConfigurationPropertiesTemplateGenerator =
-                    ConfigurationPropertiesTemplateGenerator.getInstance();
+        ConfigurationPropertiesTemplateGenerator
+            t_ConfigurationPropertiesTemplateGenerator =
+            ConfigurationPropertiesTemplateGenerator.getInstance();
 
-            if  (t_ConfigurationPropertiesTemplateGenerator != null)
-            {
-                result =
-                    t_ConfigurationPropertiesTemplateGenerator
-                        .createConfigurationPropertiesTemplate(
-                            repository,
-                            engineName,
-                            engineVersion,
-                            basePackageName);
-            }
+        if  (t_ConfigurationPropertiesTemplateGenerator != null)
+        {
+            result =
+                t_ConfigurationPropertiesTemplateGenerator
+                    .createConfigurationPropertiesTemplate(
+                        repository,
+                        engineName,
+                        engineVersion,
+                        basePackageName,
+                        project,
+                        task);
         }
 
         return result;

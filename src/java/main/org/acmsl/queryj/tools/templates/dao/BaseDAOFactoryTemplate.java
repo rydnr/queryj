@@ -62,6 +62,12 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -88,12 +94,16 @@ public class BaseDAOFactoryTemplate
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param projectPackageName the project package name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     public BaseDAOFactoryTemplate(
-        final TableTemplate           tableTemplate,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final String                  packageName,
-        final String                  projectPackageName)
+        final String packageName,
+        final String projectPackageName,
+        final Project project,
+        final Task task)
     {
         super(
             DEFAULT_HEADER,
@@ -110,120 +120,170 @@ public class BaseDAOFactoryTemplate
             DEFAULT_CLASS_START,
             DEFAULT_GET_INSTANCE_METHOD,
             DEFAULT_FACTORY_METHOD,
-            DEFAULT_CLASS_END);
+            DEFAULT_CLASS_END,
+            project,
+            task);
     }
 
     /**
      * Retrieves the source code of the generated field tableName.
      * @return such source code.
      */
-    public String toString()
+    protected String generateOutput()
+    {
+        return
+            generateOutput(
+                getHeader(),
+                getPackageDeclaration(),
+                getTableTemplate(),
+                getMetaDataManager(),
+                getPackageName(),
+                getProjectPackageName(),
+                getProjectImports(),
+                getJdkImports(),
+                getCommonsLoggingImports(),
+                getJavadoc(),
+                getClassDefinition(),
+                getClassStart(),
+                getGetInstanceMethod(),
+                getFactoryMethod(),
+                getClassEnd(),
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance(),
+                PackageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the source code of the generated field tableName.
+     * @param header the header.
+     * @param packageDeclaration the package declaration.
+     * @param tableTemplate the table template.
+     * @param metaDataManager the metadata manager.
+     * @param packageName the package name.
+     * @param projectPackageName the project package name.
+     * @param projectImports the project imports.
+     * @param jdkImports the JDK imports.
+     * @param commonsLoggingImports the commons-logging imports.
+     * @param javadoc the class Javadoc.
+     * @param classDefinition the class definition.
+     * @param classStart the class start.
+     * @param getInstanceMethod the getInstance method.
+     * @param factoryMethod the factory method.
+     * @param classEnd the class end.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such source code.
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     * @precondition packageUtils != null
+     */
+    protected String generateOutput(
+        final String header,
+        final String packageDeclaration,
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String packageName,
+        final String projectPackageName,
+        final String projectImports,
+        final String jdkImports,
+        final String commonsLoggingImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String getInstanceMethod,
+        final String factoryMethod,
+        final String classEnd,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final PackageUtils packageUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
+        MessageFormat t_Formatter = new MessageFormat(header);
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    tableTemplate.getTableName()
+                }));
 
-        StringUtils t_StringUtils = StringUtils.getInstance();
+        t_Formatter = new MessageFormat(packageDeclaration);
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    packageName
+                }));
 
-        TableTemplate t_TableTemplate = getTableTemplate();
+        t_Formatter = new MessageFormat(projectImports);
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    packageName,
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_'),
+                    packageUtils.retrieveDAOChooserPackage(
+                        projectPackageName)
+                }));
 
-        DatabaseMetaDataManager t_MetaDataManager = getMetaDataManager();
+        t_sbResult.append(jdkImports);
+        t_sbResult.append(commonsLoggingImports);
 
-        MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
+        t_Formatter = new MessageFormat(javadoc);
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    tableTemplate.getTableName()
+                }));
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        t_Formatter = new MessageFormat(classDefinition);
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_')
+                }));
 
-        if  (   (t_StringUtils     != null)
-             && (t_TableTemplate   != null)
-             && (t_MetaDataUtils   != null)
-             && (t_MetaDataManager != null)
-             && (t_PackageUtils    != null))
-        {
-            MessageFormat t_Formatter = new MessageFormat(getHeader());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        t_TableTemplate.getTableName()
-                    }));
+        t_sbResult.append(classStart);
 
-            t_Formatter = new MessageFormat(getPackageDeclaration());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        getPackageName()
-                    }));
+        MessageFormat t_GetInstanceMethodFormatter =
+            new MessageFormat(getInstanceMethod);
 
-            t_Formatter = new MessageFormat(getProjectImports());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        getPackageName(),
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_'),
-                        t_PackageUtils.retrieveDAOChooserPackage(
-                            getProjectPackageName())
-                    }));
+        t_sbResult.append(
+            t_GetInstanceMethodFormatter.format(
+                new Object[]
+                {
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_')
+                }));
 
-            t_sbResult.append(getJdkImports());
-            t_sbResult.append(getCommonsLoggingImports());
+        List t_lFields = tableTemplate.getFields();
 
-            t_Formatter = new MessageFormat(getJavadoc());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        t_TableTemplate.getTableName()
-                    }));
+        MessageFormat t_FactoryMethodFormatter =
+            new MessageFormat(factoryMethod);
 
-            t_Formatter = new MessageFormat(getClassDefinition());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_')
-                    }));
+        t_sbResult.append(
+            t_FactoryMethodFormatter.format(
+                new Object[]
+                {
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_'),
+                }));
 
-            t_sbResult.append(getClassStart());
-
-            MessageFormat t_GetInstanceMethodFormatter =
-                new MessageFormat(getGetInstanceMethod());
-
-            t_sbResult.append(
-                t_GetInstanceMethodFormatter.format(
-                    new Object[]
-                    {
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_')
-                    }));
-
-            List t_lFields = t_TableTemplate.getFields();
-
-            MessageFormat t_FactoryMethodFormatter =
-                    new MessageFormat(getFactoryMethod());
-
-            t_sbResult.append(
-                t_FactoryMethodFormatter.format(
-                    new Object[]
-                    {
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_'),
-                    }));
-
-            t_sbResult.append(getClassEnd());
-        }
+        t_sbResult.append(classEnd);
 
         return t_sbResult.toString();
     }

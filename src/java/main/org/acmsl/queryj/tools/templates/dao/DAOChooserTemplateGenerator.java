@@ -60,6 +60,12 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -91,7 +97,7 @@ public class DAOChooserTemplateGenerator
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        DAOChooserTemplateGenerator generator)
+        final DAOChooserTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -134,22 +140,20 @@ public class DAOChooserTemplateGenerator
      * Creates a DAOChooser template instance.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return such template.
+     * @precondition packageName != null
+     * @precondition repository != null
      */
     public DAOChooserTemplate createDAOChooserTemplate(
-        String packageName,
-        String repository)
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task)
     {
-        DAOChooserTemplate result = null;
-
-        if  (   (packageName != null)
-             && (repository  != null))
-        {
-
-            result = new DAOChooserTemplate(packageName, repository) {};
-        }
-
-        return result;
+        return
+            new DAOChooserTemplate(packageName, repository, project, task) {};
     }
 
     /**
@@ -157,29 +161,44 @@ public class DAOChooserTemplateGenerator
      * @param daoChooserTemplate the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
+     * @precondition daoChooserTemplate != null
+     * @precondition outputDir != null
      */
     public void write(
-            DAOChooserTemplate daoChooserTemplate,
-            File               outputDir)
-        throws  IOException
+        final DAOChooserTemplate daoChooserTemplate,
+        final File outputDir)
+      throws  IOException
     {
-        if  (   (daoChooserTemplate != null)
-             && (outputDir          != null))
-        {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            daoChooserTemplate,
+            outputDir,
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a DAOChooser to disk.
+     * @param daoChooserTemplate the template to write.
+     * @param outputDir the output folder.
+     * @throws IOException if the file cannot be created.
+     * @precondition daoChooserTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final DAOChooserTemplate daoChooserTemplate,
+        final File outputDir,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + "DAOChooser.java",
-                    daoChooserTemplate.toString());
-            }
-        }
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + "DAOChooser.java",
+            daoChooserTemplate.toString());
     }
 }

@@ -59,13 +59,19 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -86,12 +92,16 @@ public class ConfigurationPropertiesTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     public ConfigurationPropertiesTemplate(
         final String repository,
         final String engineName,
         final String engineVersion,
-        final String basePackageName)
+        final String basePackageName,
+        final Project project,
+        final Task task)
     {
         super(
             DEFAULT_HEADER,
@@ -99,17 +109,26 @@ public class ConfigurationPropertiesTemplate
             engineName,
             engineVersion,
             basePackageName,
-            DEFAULT_DAO_FACTORY_SETTING);
+            DEFAULT_DAO_FACTORY_SETTING,
+            project,
+            task);
     }
 
     /**
      * Retrieves the source code of the generated field tableName.
      * @return such source code.
      */
-    public String toString()
+    protected String generateOutput()
     {
         return
-            toString(
+            generateOutput(
+                getHeader(),
+                getRepository(),
+                getEngineName(),
+                getEngineVersion(),
+                getBasePackageName(),
+                getDAOFactorySetting(),
+                getTables(),
                 PackageUtils.getInstance(),
                 EnglishGrammarUtils.getInstance(),
                 StringUtils.getInstance());
@@ -117,6 +136,13 @@ public class ConfigurationPropertiesTemplate
 
     /**
      * Retrieves the source code of the generated field tableName.
+     * @param header the header.
+     * @param repository the repository.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param basePackageName the base package name.
+     * @param daoFactorySetting the DAO factory setting.
+     * @param tables the tables.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
@@ -126,56 +152,58 @@ public class ConfigurationPropertiesTemplate
      * @precondition englishGrammarUtils != null
      * @precondition stringUtils != null
      */
-    protected String toString(
+    protected String generateOutput(
+        final String header,
+        final String repository,
+        final String engineName,
+        final String engineVersion,
+        final String basePackageName,
+        final String daoFactorySetting,
+        final Collection tables,
         final PackageUtils packageUtils,
         final EnglishGrammarUtils englishGrammarUtils,
         final StringUtils stringUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
-        t_sbResult.append(getHeader());
+        t_sbResult.append(header);
 
-        List t_lTables = getTables();
+        MessageFormat t_DAOFactorySettingFormatter =
+            new MessageFormat(daoFactorySetting);
 
-        if  (t_lTables != null)
+        Iterator t_itTables = tables.iterator();
+
+        while  (   (t_itTables != null)
+                && (t_itTables.hasNext()))
         {
-            MessageFormat t_DAOFactorySettingFormatter =
-                new MessageFormat(getDAOFactorySetting());
+            String t_strTable = (String) t_itTables.next();
 
-            Iterator t_itTables = t_lTables.iterator();
-
-            while  (   (t_itTables != null)
-                    && (t_itTables.hasNext()))
+            if  (t_strTable != null)
             {
-                String t_strTable = (String) t_itTables.next();
+                String t_strCapitalizedTable =
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            t_strTable),
+                        '_');
 
-                if  (t_strTable != null)
-                {
-                    String t_strCapitalizedTable =
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                t_strTable),
-                            '_');
-
-                    t_sbResult.append(
-                        t_DAOFactorySettingFormatter.format(
-                            new Object[]
-                            {
-                                t_strCapitalizedTable,
-                                getRepository(),
-                                t_strCapitalizedTable.toLowerCase(),
-                                packageUtils.retrieveDAOFactoryPackage(
-                                    getBasePackageName(),
-                                    getEngineName()),
-                                stringUtils.capitalize(
-                                    getEngineName(),
-                                    '_'),
-                                packageUtils.retrieveMockDAOFactoryPackage(
-                                    getBasePackageName()),
-                                packageUtils.retrieveXMLDAOFactoryPackage(
-                                    getBasePackageName())
-                            }));
-                }
+                t_sbResult.append(
+                    t_DAOFactorySettingFormatter.format(
+                        new Object[]
+                        {
+                            t_strCapitalizedTable,
+                            repository,
+                            t_strCapitalizedTable.toLowerCase(),
+                            packageUtils.retrieveDAOFactoryPackage(
+                                basePackageName,
+                                engineName),
+                            stringUtils.capitalize(
+                                engineName,
+                                '_'),
+                            packageUtils.retrieveMockDAOFactoryPackage(
+                                basePackageName),
+                            packageUtils.retrieveXMLDAOFactoryPackage(
+                                basePackageName)
+                        }));
             }
         }
 

@@ -54,12 +54,18 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Is able to generate DAOChooser class according to database
@@ -78,7 +84,10 @@ public class DAOChooserTemplate
      * @param repository the repository.
      */
     public DAOChooserTemplate(
-        final String packageName, final String repository)
+        final String packageName,
+        final String repository,
+        final Project project,
+        final Task task)
     {
         super(
             DEFAULT_HEADER,
@@ -96,17 +105,36 @@ public class DAOChooserTemplate
             DEFAULT_PROPERTIES_ACCESSORS,
             DEFAULT_HELPER_METHODS,
             DEFAULT_GETDAOFACTORY_METHOD,
-            DEFAULT_CLASS_END);
+            DEFAULT_CLASS_END,
+            project,
+            task);
     }
 
     /**
      * Retrieves the source code of the generated table repository.
      * @return such source code.
      */
-    public String toString()
+    protected String generateOutput()
     {
         return
-            toString(
+            generateOutput(
+                getHeader(),
+                getPackageDeclaration(),
+                getPackageName(),
+                getRepository(),
+                getJdkImports(),
+                getLoggingImports(),
+                getJavadoc(),
+                getClassDefinition(),
+                getClassStart(),
+                getPropertiesKeys(),
+                getPropertiesReference(),
+                getSingletonBody(),
+                getPropertiesAccessors(),
+                getHelperMethods(),
+                getGetDAOFactoryMethods(),
+                getClassEnd(),
+                getTables(),
                 DAOChooserTemplateUtils.getInstance(),
                 EnglishGrammarUtils.getInstance(),
                 StringUtils.getInstance());
@@ -114,17 +142,52 @@ public class DAOChooserTemplate
 
     /**
      * Retrieves the source code of the generated table repository.
+     * @param header the header.
+     * @param packageDeclaration the package declaration.
+     * @param packageName the package name.
+     * @param repository the repository.
+     * @param jdkImports the JDK imports.
+     * @param loggingImports the logging imports.
+     * @param javadoc the class Javadoc.
+     * @param classDefinition the class definition.
+     * @param classStart the class start.
+     * @param propertiesKeys the properties' keys template.
+     * @param propertiesReference the properties reference template.
+     * @param singletonBody the singleton body.
+     * @param propertiesAccessors the properties accessors template.
+     * @param helperMethods the helper methods.
+     * @param getDAOFactoryMethods the getDAOFactory methods.
+     * @param classEnd the class end.
+     * @param tables the tables.
      * @param daoChooserTemplateUtils the <code>DAOChooserTemplateUtils</code>
      * instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return such source code.
+     * @precondition tables != null
      * @precondition daoChooserTemplateUtils != null
      * @precondition englishGrammarUtils != null
      * @precondition stringUtils != null
      */
-    protected String toString(
+    protected String generateOutput(
+        final String header,
+        final String packageDeclaration,
+        final String packageName,
+        final String repository,
+        final String jdkImports,
+        final String loggingImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String propertiesKeys,
+        final String propertiesReference,
+        final String singletonBody,
+        final String propertiesAccessors,
+        final String helperMethods,
+        final String getDAOFactoryMethods,
+        final String classEnd,
+        final Collection tables,
         final DAOChooserTemplateUtils daoChooserTemplateUtils,
         final EnglishGrammarUtils englishGrammarUtils,
         final StringUtils stringUtils)
@@ -132,105 +195,100 @@ public class DAOChooserTemplate
         StringBuffer t_sbResult = new StringBuffer();
 
         String t_strRepository =
-            stringUtils.normalize(getRepository(), '_');
+            stringUtils.normalize(repository, '_');
 
-        t_sbResult.append(getHeader());
+        t_sbResult.append(header);
 
         MessageFormat t_Formatter =
-            new MessageFormat(getPackageDeclaration());
+            new MessageFormat(packageDeclaration);
 
         t_sbResult.append(
             t_Formatter.format(
                 new Object[]
                 {
-                    getPackageName()
+                    packageName
                 }));
 
-        t_sbResult.append(getJdkImports());
-        t_sbResult.append(getLoggingImports());
-        t_sbResult.append(getJavadoc());
-        t_sbResult.append(getClassDefinition());
+        t_sbResult.append(jdkImports);
+        t_sbResult.append(loggingImports);
+        t_sbResult.append(javadoc);
+        t_sbResult.append(classDefinition);
 
-        t_sbResult.append(getClassStart());
+        t_sbResult.append(classStart);
 
         StringBuffer t_sbPropertiesKeys = new StringBuffer();
         MessageFormat t_PropertiesKeysFormatter =
-            new MessageFormat(getPropertiesKeys());
+            new MessageFormat(propertiesKeys);
 
         StringBuffer t_sbGetDAOFactoryMethods = new StringBuffer();
         MessageFormat t_GetDAOFactoryMethodFormatter =
-            new MessageFormat(getGetDAOFactoryMethods());
+            new MessageFormat(getDAOFactoryMethods);
 
-        List t_lTables = getTables();
+        Iterator t_itTables = tables.iterator();
 
-        if  (t_lTables != null)
+        while  (t_itTables.hasNext()) 
         {
-            Iterator t_itTables = t_lTables.iterator();
+            String t_strTable = (String) t_itTables.next();
 
-            while  (t_itTables.hasNext()) 
+            if  (t_strTable != null)
             {
-                String t_strTable = (String) t_itTables.next();
+                String t_strCapitalizedTable =
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            t_strTable),
+                        '_');
 
-                if  (t_strTable != null)
-                {
-                    String t_strCapitalizedTable =
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                t_strTable),
-                            '_');
+                String t_strUpperCaseTable =
+                    (  ("" + repository).toUpperCase()
+                       + "_" + t_strCapitalizedTable).toUpperCase();
 
-                    String t_strUpperCaseTable =
-                        (  ("" + getRepository()).toUpperCase()
-                         + "_" + t_strCapitalizedTable).toUpperCase();
+                String t_strDottedTable =
+                    (  ("" + repository).toLowerCase()
+                       + "." + t_strCapitalizedTable).toLowerCase();
 
-                    String t_strDottedTable =
-                        (  ("" + getRepository()).toLowerCase()
-                         + "." + t_strCapitalizedTable).toLowerCase();
+                t_sbPropertiesKeys.append(
+                    t_PropertiesKeysFormatter.format(
+                        new Object[]
+                        {
+                            t_strUpperCaseTable,
+                            t_strDottedTable
+                        }));
 
-                    t_sbPropertiesKeys.append(
-                        t_PropertiesKeysFormatter.format(
-                            new Object[]
-                            {
-                                t_strUpperCaseTable,
-                                t_strDottedTable
-                            }));
-
-                    t_sbGetDAOFactoryMethods.append(
-                        t_GetDAOFactoryMethodFormatter.format(
-                            new Object[]
-                            {
-                                t_strCapitalizedTable,
-                                t_strUpperCaseTable,
-                                stringUtils.capitalize(
-                                    englishGrammarUtils.getSingular(
-                                        t_strTable.toLowerCase()),
-                                    '_')
-                            }));
-                }
+                t_sbGetDAOFactoryMethods.append(
+                    t_GetDAOFactoryMethodFormatter.format(
+                        new Object[]
+                        {
+                            t_strCapitalizedTable,
+                            t_strUpperCaseTable,
+                            stringUtils.capitalize(
+                                englishGrammarUtils.getSingular(
+                                    t_strTable.toLowerCase()),
+                                '_')
+                        }));
             }
         }
 
         t_sbResult.append(t_sbPropertiesKeys);
 
-        t_Formatter = new MessageFormat(getPropertiesReference());
+        t_Formatter = new MessageFormat(propertiesReference);
 
         t_sbResult.append(
             t_Formatter.format(
                 new Object[]
                 {
                     daoChooserTemplateUtils.retrievePropertiesFileName(
-                        ("" + getRepository()).toLowerCase())
+                        ("" + repository).toLowerCase())
                 }));
 
-        t_sbResult.append(getSingletonBody());
+        t_sbResult.append(singletonBody);
 
-        t_sbResult.append(getPropertiesAccessors());
+        t_sbResult.append(propertiesAccessors);
 
-        t_sbResult.append(getHelperMethods());
+        t_sbResult.append(helperMethods);
 
         t_sbResult.append(t_sbGetDAOFactoryMethods);
 
-        t_sbResult.append(getClassEnd());
+        t_sbResult.append(classEnd);
 
         return t_sbResult.toString();
     }

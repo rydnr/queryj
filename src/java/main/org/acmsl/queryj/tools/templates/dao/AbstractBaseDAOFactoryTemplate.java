@@ -51,15 +51,14 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
-import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing Ant classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /**
  * Contains the required subtemplates to generate base DAO factories
@@ -69,6 +68,7 @@ import org.acmsl.commons.utils.StringUtils;
  * @version $Revision$
  */
 public abstract class AbstractBaseDAOFactoryTemplate
+    extends  AbstractTemplate
 {
     /**
      * The header.
@@ -161,7 +161,8 @@ public abstract class AbstractBaseDAOFactoryTemplate
     private String m__strClassEnd;
 
     /**
-     * Builds a BaseDAOFactoryTemplate using given information.
+     * Builds an <code>AbstractBaseDAOFactoryTemplate</code> using
+     * given information.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param tableTemplate the table template.
@@ -177,24 +178,29 @@ public abstract class AbstractBaseDAOFactoryTemplate
      * @param getInstanceMethod the getInstance method.
      * @param factoryMethod the factory method.
      * @param classEnd the class end.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
-    public AbstractBaseDAOFactoryTemplate(
-        final String                  header,
-        final String                  packageDeclaration,
-        final TableTemplate           tableTemplate,
+    protected AbstractBaseDAOFactoryTemplate(
+        final String header,
+        final String packageDeclaration,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final String                  packageName,
-        final String                  projectPackageName,
-        final String                  projectImports,
-        final String                  jdkImports,
-        final String                  commonsLoggingImports,
-        final String                  javadoc,
-        final String                  classDefinition,
-        final String                  classStart,
-        final String                  getInstanceMethod,
-        final String                  factoryMethod,
-        final String                  classEnd)
+        final String packageName,
+        final String projectPackageName,
+        final String projectImports,
+        final String jdkImports,
+        final String commonsLoggingImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String getInstanceMethod,
+        final String factoryMethod,
+        final String classEnd,
+        final Project project,
+        final Task task)
     {
+        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetTableTemplate(tableTemplate);

@@ -190,7 +190,9 @@ public class DAOTemplateBuildHandler
                                 t_MetaData.getDatabaseProductVersion(),
                                 t_strQuote,
                                 t_strBasePackage,
-                                t_strRepositoryName);
+                                t_strRepositoryName,
+                                project,
+                                task);
                     }
 
                     storeDAOTemplates(t_aDAOTemplates, attributes);

@@ -50,25 +50,24 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ParameterElement;
-import org.acmsl.queryj.tools.customsql.ParameterRefElement;
-import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.customsql.PropertyRefElement;
-import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
-import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
-import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+
+/*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /**
  * Contains the elements required to create the DAO sources.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class AbstractDAOTemplate
+    extends  AbstractTemplate
 {
     /**
      * The table template.
@@ -356,7 +355,7 @@ public abstract class AbstractDAOTemplate
     private String m__strClassEnd;
 
     /**
-     * Builds a DAOTemplate using given information.
+     * Builds an <code>AbstractDAOTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metaDataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
@@ -435,6 +434,8 @@ public abstract class AbstractDAOTemplate
      * @param customSelectForUpdateParameterSpecification the parameter
      * specification of the custom-select-for-update operations.
      * @param classEnd the class end.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     protected AbstractDAOTemplate(
         final TableTemplate tableTemplate,
@@ -493,8 +494,11 @@ public abstract class AbstractDAOTemplate
         final String customSelectForUpdateReturnJavadoc,
         final String customSelectForUpdateParameterDeclaration,
         final String customSelectForUpdateParameterSpecification,
-        final String classEnd)
+        final String classEnd,
+        final Project project,
+        final Task task)
     {
+        super(project, task);
         immutableSetTableTemplate(
             tableTemplate);
 

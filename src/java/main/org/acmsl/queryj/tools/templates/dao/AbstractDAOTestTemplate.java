@@ -72,7 +72,7 @@ import org.apache.tools.ant.Task;
  * Contains the subtemplates for creating JUnit tests to ensure
  * generated DAOs are working fine and the resources correctly managed.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class AbstractDAOTestTemplate
@@ -312,6 +312,8 @@ public abstract class AbstractDAOTestTemplate
      * @param removeFilterValues the remove filter values
      * subtemplate.
      * @param classEnd the class end.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     protected AbstractDAOTestTemplate(
         final TableTemplate tableTemplate,
