@@ -62,13 +62,15 @@
     <!--attainGoal name="jdiff"/-->
 
     <!--attainGoal name="pdf"/-->
+  </preGoal>
 
+  <postGoal name="xdoc:jelly-transform">
     <ant:replace
       dir="../../../target/docs"
       token="${issue.url}"
       value="http://bugzilla.acm-sl.org/show_bug.cgi?id=">
       <ant:include name="index.html"/>
     </ant:replace>
-  </preGoal>
+  </postGoal>
 
 </project>
