@@ -91,8 +91,8 @@
     <dependency>
       <groupId>acmsl-commons</groupId>
       <artifactId>acmsl-commons</artifactId>
-      <version>0.5.5b5</version>
-      <url>http://www.acm-sl.com</url>
+      <version>0.5.5b9</version>
+      <url>http://maven.acm-sl.com/commons</url>
     </dependency>
 
     <dependency>

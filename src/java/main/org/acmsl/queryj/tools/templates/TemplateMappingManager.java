@@ -291,6 +291,26 @@ public abstract class TemplateMappingManager
     public static final String MOCK_DAO_TEST_TEMPLATES = "mock.DAO.test.templates";
 
     /**
+     * The XML DAO template type.
+     */
+    public static final String XML_DAO_TEMPLATE_PREFIX = "xml.dao.";
+
+    /**
+     * The XML DAO templates attribute name.
+     */
+    public static final String XML_DAO_TEMPLATES = "xml.DAO.templates";
+
+    /**
+     * The XML DAO test template type.
+     */
+    public static final String XML_DAO_TEST_TEMPLATE_PREFIX = "xml.dao.test.";
+
+    /**
+     * The XML DAO test templates attribute name.
+     */
+    public static final String XML_DAO_TEST_TEMPLATES = "xml.DAO.test.templates";
+
+    /**
      * The value object templates attribute name.
      */
     public static final String VALUE_OBJECT_TEMPLATES = "value-object.templates";

@@ -144,13 +144,13 @@
           url="file:///${maven.dependencies.path}"
           type="maven"
           synchronize="true"/>
-        <repository url="http://maven.acm-sl.org/lib" type="maven"/>
+        <repository url="http://maven.acm-sl.org/lib/" type="maven"/>
         <repository url="http://www.ibiblio.org/maven" type="maven"/>
 
         <jarDependency
           name="acmsl-commons"
-          version="0.5.5b5"
-          jar="acmsl-commons-0.5.5b5.jar"/>
+          version="0.5.5b6"
+          jar="commons-0.5.5b6.jar"/>
 
         <jarDependency
           name="commons-logging"
@@ -165,7 +165,7 @@
           url="file:///${maven.dependencies.path}"
           type="maven"
           synchronize="true"/>
-        <repository url="http://maven.acm-sl.org/lib" type="maven"/>
+        <repository url="http://maven.acm-sl.org/lib/" type="maven"/>
         <repository url="http://www.ibiblio.org/maven" type="maven"/>
 
         <jarDependency
@@ -187,7 +187,7 @@
           url="file:///${maven.dependencies.path}"
           type="maven"
           synchronize="true"/>
-        <repository url="http://maven.acm-sl.org/lib" type="maven"/>
+        <repository url="http://maven.acm-sl.org/lib/" type="maven"/>
         <repository url="http://www.ibiblio.org/maven" type="maven"/>
 
         <jarDependency
@@ -201,7 +201,7 @@
           url="file:///${maven.dependencies.path}"
           type="maven"
           synchronize="true"/>
-        <repository url="http://maven.acm-sl.org/lib" type="maven"/>
+        <repository url="http://maven.acm-sl.org/lib/" type="maven"/>
         <repository url="http://www.ibiblio.org/maven" type="maven"/>
 
         <jarDependency
@@ -233,7 +233,7 @@
           url="file:///${maven.dependencies.path}"
           type="maven"
           synchronize="true"/>
-        <repository url="http://maven.acm-sl.org/lib" type="maven"/>
+        <repository url="http://maven.acm-sl.org/lib/" type="maven"/>
         <repository url="http://www.ibiblio.org/maven" type="maven"/>
 
         <jarDependency

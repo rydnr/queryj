@@ -755,4 +755,102 @@ public abstract class PackageUtils
 
         return result;
     }
+//
+    /**
+     * Retrieves the package name for XML DAO templates.
+     * @param packageName the original package.
+     * @return the package for the associated DAO class.
+     */
+    public String retrieveXMLDAOPackage(final String packageName)
+    {
+        return retrieveBaseDAOPackage(packageName) + ".xml";
+    }
+
+    /**
+     * Retrieves the folder for XML DAO templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @return the folder in which  the associated DAO class should be
+     * generated.
+     */
+    public File retrieveXMLDAOFolder(
+        final File parentFolder, final String packageName)
+    {
+        File result = parentFolder;
+
+        if  (result != null)
+        {
+            String t_strPath =
+                retrieveBaseDAOFolder(parentFolder, packageName).getPath();
+
+            t_strPath += File.separator + "mock";
+
+            result = new File(t_strPath);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the package name for XML DAO factory templates.
+     * @param packageName the original package.
+     * @return the package for the associated DAO factory class.
+     */
+    public String retrieveXMLDAOFactoryPackage(final String packageName)
+    {
+        return retrieveXMLDAOPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for XML DAO factory templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @return the folder in which  the associated DAO factory should be
+     * generated.
+     */
+    public File retrieveXMLDAOFactoryFolder(
+        final File parentFolder, final String packageName)
+    {
+        return retrieveXMLDAOFolder(parentFolder, packageName);
+    }
+
+    /**
+     * Retrieves the package name for XML DAO test templates.
+     * @param packageName the original package.
+     * @return the package for the associated XML DAO tests.
+     */
+    public String retrieveXMLDAOTestPackage(final String packageName)
+    {
+        return "unittests." + retrieveXMLDAOPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for XML DAO test templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @return the folder in which the associated test class should be
+     * generated.
+     */
+    public File retrieveXMLDAOTestFolder(
+        final File parentFolder, final String packageName)
+    {
+        File result = parentFolder;
+
+        StringUtils t_StringUtils = StringUtils.getInstance();
+
+        if  (   (result != null)
+             && (t_StringUtils != null))
+        {
+            result =
+                retrieveXMLDAOFolder(
+                    new File(
+                          parentFolder.getPath()
+                        + File.separator
+                        + "unittests"),
+                    packageName);
+        }
+
+        return result;
+    }
+
 }
