@@ -173,8 +173,8 @@ public class DAOTemplate
             DEFAULT_CUSTOM_UPDATE_OR_INSERT,
             DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_JAVADOC,
             DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION,
+            DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_TYPE_SPECIFICATION,
             DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_VALUES,
-            DEFAULT_CUSTOM_UPDATE_OR_INSERT_QUERY_LINE,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_JAVADOC,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_DECLARATION,
@@ -1010,6 +1010,8 @@ public class DAOTemplate
             Iterator t_itParameterRefs =
                 parameterRefs.iterator();
 
+            boolean t_bFirstParameter = true;
+
             while  (t_itParameterRefs.hasNext())
             {
                 ParameterRefElement t_ParameterRef =
@@ -1037,6 +1039,12 @@ public class DAOTemplate
                                     t_Parameter.getId(), '-');
                         }
 
+                        if  (!t_bFirstParameter)
+                        {
+                            t_sbParameterDeclaration.append(",");
+                            t_sbParameterValues.append(",");
+                        }
+
                         t_sbParameterJavadoc.append(
                             t_ParameterJavadocFormatter.format(
                                 new Object[]
@@ -1058,6 +1066,7 @@ public class DAOTemplate
                                         metaDataUtils.getJavaType(
                                             t_Parameter.getType()))
                                 }));
+
                         t_sbParameterValues.append(
                             t_ParameterValuesFormatter.format(
                                 new Object[]
@@ -1069,6 +1078,8 @@ public class DAOTemplate
                                 }));
                     }
                 }
+
+                t_bFirstParameter = false;
             }
         }
 
@@ -1252,7 +1263,9 @@ public class DAOTemplate
                         stringUtils.capitalize(
                             sqlElement.getName(), '-')),
                     parameterDeclaration,
-                    sqlElement.getValue(),
+                    stringUtils.replace(
+                        sqlElement.getValue(),
+                        "\"", "\\\""),
                     parameterTypeSpecification,
                     parameterValues,
                     stringUtils.removeDuplicate(
@@ -1288,10 +1301,8 @@ public class DAOTemplate
                 getCustomUpdateOrInsert(),
                 getCustomUpdateOrInsertParameterJavadoc(),
                 getCustomUpdateOrInsertParameterDeclaration(),
-                // TODO
-                getCustomSelectParameterTypeSpecification(),
+                getCustomUpdateOrInsertParameterTypeSpecification(),
                 getCustomUpdateOrInsertParameterValues(),
-                getCustomUpdateOrInsertQueryLine(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
@@ -1308,7 +1319,6 @@ public class DAOTemplate
      * @param parameterDeclaration the parameter declaration.
      * @param parameterTypeSpecification the parameter type specification.
      * @param parameterValues the parameter values.
-     * @param queryLine the query line.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
@@ -1321,7 +1331,6 @@ public class DAOTemplate
      * @precondition parameterDeclaration != null
      * @precondition parameterTypeSpecification != null
      * @precondition parameterValues != null
-     * @preconcition queryLine != null
      * @precondition metaDataUtils != null
      * @precondition stringUtils != null
      * @precondition stringValidator != null
@@ -1335,7 +1344,6 @@ public class DAOTemplate
         final String parameterDeclaration,
         final String parameterTypeSpecification,
         final String parameterValues,
-        final String queryLine,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final StringValidator stringValidator,
@@ -1381,7 +1389,6 @@ public class DAOTemplate
                                 t_astrParameterTemplates[1],
                                 t_astrParameterTemplates[2],
                                 t_astrParameterTemplates[3],
-                                queryLine,
                                 stringUtils,
                                 helper));
                     }
@@ -1401,7 +1408,6 @@ public class DAOTemplate
      * @param parameterDeclaration the generated parameter declaration.
      * @param parameterTypeSpecification the parameter type specification.
      * @param parameterValues the generared parameter values.
-     * @param queryLine the query line.
      * @param stringUtils the StringUtils isntance.
      * @param helper the Helper instance.
      * @return the generated code.
@@ -1412,7 +1418,6 @@ public class DAOTemplate
      * @precondition parameterDeclaration != null
      * @precondition parameterTypeSpecification != null
      * @precondition parameterValues != null
-     * @precondition queryLine != null
      * @precondition stringUtils != null
      * @precondition helper != null
      */
@@ -1424,7 +1429,6 @@ public class DAOTemplate
         final String parameterDeclaration,
         final String parameterTypeSpecification,
         final String parameterValues,
-        final String queryLine,
         final StringUtils stringUtils,
         final Helper helper)
     {
@@ -1446,24 +1450,18 @@ public class DAOTemplate
             t_CustomUpdateOrInsertFormatter.format(
                 new Object[]
                 {
-                    sqlElement.getName(),
+                    sqlElement.getId(),
+                    sqlElement.getDescription(),
                     parameterJavadoc,
                     stringUtils.unCapitalizeStart(
                         stringUtils.capitalize(
                             sqlElement.getName(), '-')),
                     parameterDeclaration,
-                    stringUtils.applyToEachLine(
-                        stringUtils.removeFirstAndLastBlankLines(
-                            helper.replaceAll(
-                                sqlElement.getValue(),
-                                "\"",
-                                "\\\"")),
-                        queryLine),
-                    parameterValues,
-                    (   (t_Result != null)
-                     ?  stringUtils.extractPackageName(
-                            t_Result.getClassValue())
-                     :  "-no-result-type-defined-")
+                    stringUtils.replace(
+                        sqlElement.getValue(),
+                        "\"", "\\\""),
+                    parameterTypeSpecification,
+                    parameterValues
                 });
 
         return result;
@@ -1484,10 +1482,8 @@ public class DAOTemplate
                 getCustomUpdateOrInsert(),
                 getCustomUpdateOrInsertParameterJavadoc(),
                 getCustomUpdateOrInsertParameterDeclaration(),
-                // TODO
-                getCustomSelectParameterTypeSpecification(),
+                getCustomUpdateOrInsertParameterTypeSpecification(),
                 getCustomUpdateOrInsertParameterValues(),
-                getCustomUpdateOrInsertQueryLine(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
@@ -1509,10 +1505,8 @@ public class DAOTemplate
                 getCustomUpdateOrInsert(),
                 getCustomUpdateOrInsertParameterJavadoc(),
                 getCustomUpdateOrInsertParameterDeclaration(),
-                // TODO
-                getCustomSelectParameterTypeSpecification(),
+                getCustomUpdateOrInsertParameterTypeSpecification(),
                 getCustomUpdateOrInsertParameterValues(),
-                getCustomUpdateOrInsertQueryLine(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
@@ -1691,7 +1685,9 @@ public class DAOTemplate
                         stringUtils.capitalize(
                             sqlElement.getName(), '-')),
                     parameterDeclaration,
-                    sqlElement.getValue(),
+                    stringUtils.replace(
+                        sqlElement.getValue(),
+                        "\"", "\\\""),
                     parameterValues,
                     (   (t_Result != null)
                      ?  stringUtils.extractPackageName(

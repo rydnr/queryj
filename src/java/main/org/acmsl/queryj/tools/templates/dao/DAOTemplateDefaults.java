@@ -656,73 +656,51 @@ public interface DAOTemplateDefaults
 
     /**
      * The custom update or insert template.
+     * @param 0 sql id.
+     * @param 1 sql description.
+     * @param 2 the parameter Javadoc.
+     * @param 3 the sql method name.
+     * @param 4 the parameter declaration.
+     * @param 5 the sql sentence.
+     * @param 6 the parameter type specification.
+     * @param 7 the parameter values.
      */
     public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT =
           "    /**\n"
-        + "     * Performs the <i>{0}</i> operation\n"
-         // query name
-        + "     * in the persistence layer with the provided data."
-        + "{1}\n"
+        + "     * Custom select <i>{0}</i>.\n"
+        + "     * {1}"
+         // sql id - sql description
+        + "{2}\n"
          // CUSTOM_SELECT_PARAMETER_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @return the information extracted from the persistence layer.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     * @throws DataAccessException if operation fails.\n"
         + "     */\n"
-        + "    public void {2}("
+        + "    public void {3}("
          // sql name
-        + "{3}\n"
+        + "{4})\n"
          // CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION
-        + "        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException\n"
         + "    '{'\n"
-         // java table name
-        + "        Connection        t_Connection        = null;\n"
-        + "        PreparedStatement t_PreparedStatement = null;\n\n"
-        + "        try\n"
-        + "        '{'\n"
-        + "            t_Connection = getConnection(transactionToken);\n\n"
-        + "            StringBuffer t_sbQuery = new StringBuffer();\n\n"
-        + "{4}\n"
-        + "            t_PreparedStatement =\n"
-        + "                t_Connection.prepareStatement(t_sbQuery.toString());\n"
-        + "{5}\n\n"
-         // CUSTOM_UPDATE_OR_INSERT_PARAMETER_VALUES
-        + "            t_PreparedStatement.executeUpdate();\n\n"
-        + "        '}'\n"
-        + "        catch  (final SQLException sqlException)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
-        + "        '}'\n"
-        + "        catch  (final Exception exception)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).error(exception);\n"
-        + "        '}'\n"
-        + "        finally\n"
-        + "        '{'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_PreparedStatement != null)\n"
-        + "                '{'\n"
-        + "                    t_PreparedStatement.close();\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_Connection != null)\n"
-        + "                '{'\n"
-        + "                    closeConnection(t_Connection, transactionToken);\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "        '}'\n\n"
+        + "        PreparedStatementCreatorFactory "
+        +              "t_PreparedStatementCreatorFactory =\n"
+        +     "             new PreparedStatementCreatorFactory(\n"
+        +     "                 \"{5}\");\n\n"
+        + "        /*\n"
+        + "        t_PreparedStatementCreatorFactory.setResultSetType(..);\n"
+        + "        t_PreparedStatementCreatorFactory.setUpdatableResults(..);\n"
+        + "        t_PreparedStatementCreatorFactory.setReturnGeneratedKeys(..);\n"
+        + "        t_PreparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);\n"
+        + "        */\n\n"
+        + "{6}\n"
+        + "        Object[] t_aParams =\n"
+        + "            new Object[]\n"
+        + "            '{'"
+        + "{7}\n"
+        + "            '}';\n\n"
+        + "        update(\n"
+        + "            t_PreparedStatementCreatorFactory\n"
+        + "                .newPreparedStatementCreator(t_aParams),\n"
+        + "            t_PreparedStatementCreatorFactory\n"
+        + "                .newPreparedStatementSetter(t_aParams));\n"
         + "    '}'\n\n";
 
     /**
@@ -736,20 +714,20 @@ public interface DAOTemplateDefaults
      * The custom update or insert parameter declaration.
      */
     public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION =
-        "\n        final {0} {1},";
-         // parameter type - parameter name
+        DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION;
+
+    /**
+     * The custom update or insert parameter type specification.
+     * @param 0 the SQL parameter type.
+     */
+    public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_TYPE_SPECIFICATION =
+        DEFAULT_CUSTOM_SELECT_PARAMETER_TYPE_SPECIFICATION;
 
     /**
      * The custom update or insert parameter values.
      */
     public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_VALUES =
-        "\n            t_PreparedStatement.set{0}({1}, {2});";
-
-    /**
-     * The custom update or insert query line.
-     */
-    public static final String DEFAULT_CUSTOM_UPDATE_OR_INSERT_QUERY_LINE =
-        "            t_sbQuery.append({0}\"{1} \");";
+        DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES;
 
     /**
      * The custom select for update template, with return.

@@ -296,14 +296,14 @@ public abstract class AbstractDAOTemplate
     private String m__strCustomUpdateOrInsertParameterDeclaration;
 
     /**
+     * The custom update or insert parameter type specification.
+     */
+    private String m__strCustomUpdateOrInsertParameterTypeSpecification;
+
+    /**
      * The custom update or insert parameter values.
      */
     private String m__strCustomUpdateOrInsertParameterValues;
-
-    /**
-     * The custom update or insert query line.
-     */
-    private String m__strCustomUpdateOrInsertQueryLine;
 
     /**
      * The custom select-for-update.
@@ -393,10 +393,10 @@ public abstract class AbstractDAOTemplate
      * parameters of the custom updates or inserts.
      * @param customUpdateOrInsertParameterDeclaration the parameter
      * declaration of the custom updates or inserts.
+     * @param customUpdateOrInsertParameterTypeSpecification the parameter type
+     * specification subtemplate of the custom updates or inserts.
      * @param customUpdateOrInsertParameterValues the parameter values of
      * the custom updates or inserts.
-     * @param customUpdateOrInsertQueryLine the custom update or insert
-     * query line.
      * @param customSelectForUpdate the custom select-for-update template.
      * @param customSelectForUpdateParameterJavadoc the Javadoc for the
      * parameters of the custom select-for-update operations.
@@ -454,8 +454,8 @@ public abstract class AbstractDAOTemplate
         final String customUpdateOrInsert,
         final String customUpdateOrInsertParameterJavadoc,
         final String customUpdateOrInsertParameterDeclaration,
+        final String customUpdateOrInsertParameterTypeSpecification,
         final String customUpdateOrInsertParameterValues,
-        final String customUpdateOrInsertQueryLine,
         final String customSelectForUpdate,
         final String customSelectForUpdateParameterJavadoc,
         final String customSelectForUpdateParameterDeclaration,
@@ -597,9 +597,6 @@ public abstract class AbstractDAOTemplate
         immutableSetCustomUpdateOrInsertParameterValues(
             customUpdateOrInsertParameterValues);
 
-        immutableSetCustomUpdateOrInsertQueryLine(
-            customUpdateOrInsertQueryLine);
-
         immutableSetCustomSelectForUpdate(
             customSelectForUpdate);
 
@@ -608,6 +605,9 @@ public abstract class AbstractDAOTemplate
 
         immutableSetCustomSelectForUpdateParameterDeclaration(
             customSelectForUpdateParameterDeclaration);
+
+        immutableSetCustomUpdateOrInsertParameterTypeSpecification(
+            customUpdateOrInsertParameterTypeSpecification);
 
         immutableSetCustomSelectForUpdateParameterValues(
             customSelectForUpdateParameterValues);
@@ -1882,6 +1882,38 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
+     * Specifies the subtemplate to specify the types of the 
+     * custom update or insert parameters.
+     * @param template the template.
+     */
+    private void immutableSetCustomUpdateOrInsertParameterTypeSpecification(
+        final String template)
+    {
+        m__strCustomUpdateOrInsertParameterTypeSpecification = template;
+    }
+
+    /**
+     * Specifies the subtemplate to specify the types of the 
+     * custom update or insert parameters.
+     * @param template the template.
+     */
+    protected void setCustomUpdateOrInsertParameterTypeSpecification(
+        final String template)
+    {
+        immutableSetCustomUpdateOrInsertParameterTypeSpecification(template);
+    }
+
+    /**
+     * Retrieves the subtemplate to specify the types of the custom update or insert
+     * parameters.
+     * @return such subtemplate.
+     */
+    public String getCustomUpdateOrInsertParameterTypeSpecification()
+    {
+        return m__strCustomUpdateOrInsertParameterTypeSpecification;
+    }
+
+    /**
      * Specifies the custom update or insert parameter values template.
      * @param update such template.
      */
@@ -1908,35 +1940,6 @@ public abstract class AbstractDAOTemplate
     public String getCustomUpdateOrInsertParameterValues()
     {
         return m__strCustomUpdateOrInsertParameterValues;
-    }
-
-    /**
-     * Specifies the custom update or insert query line template.
-     * @param update such template.
-     */
-    private void immutableSetCustomUpdateOrInsertQueryLine(
-        final String template)
-    {
-        m__strCustomUpdateOrInsertQueryLine = template;
-    }
-
-    /**
-     * Specifies the custom update or insert query line template.
-     * @param update such template.
-     */
-    protected void setCustomUpdateOrInsertQueryLine(
-        final String update)
-    {
-        immutableSetCustomUpdateOrInsertQueryLine(update);
-    }
-
-    /**
-     * Retrieves the custom update or insert query line template.
-     * @return such template.
-     */
-    public String getCustomUpdateOrInsertQueryLine()
-    {
-        return m__strCustomUpdateOrInsertQueryLine;
     }
 
 //
