@@ -106,13 +106,13 @@ public class HandlersSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions.text.handlers");
     
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsBundleTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateWritingHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTemplateBuildHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateWritingHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateHandlerBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTemplateHandlerBundleTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateHandlerBundleTest.class);
     
     
     

@@ -106,8 +106,8 @@ public class OracleSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.handlers.oracle");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.oracle.OracleTableRepositoryBuildHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.oracle.OracleTableRepositoryBuildHandlerTest.class);
     
     
     

@@ -70,7 +70,7 @@ import java.lang.ref.WeakReference;
  * Is able to generate procedure repositories template according to
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class ProcedureRepositoryTemplateGenerator
@@ -91,7 +91,7 @@ public class ProcedureRepositoryTemplateGenerator
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        ProcedureRepositoryTemplateGenerator generator)
+        final ProcedureRepositoryTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -122,7 +122,7 @@ public class ProcedureRepositoryTemplateGenerator
 
         if  (result == null) 
         {
-            result = new ProcedureRepositoryTemplateGenerator() {};
+            result = new ProcedureRepositoryTemplateGenerator();
 
             setReference(result);
         }
@@ -136,21 +136,14 @@ public class ProcedureRepositoryTemplateGenerator
      * @param repository the repository.
      * @return such template.
      * @throws IOException if the file cannot be created.
+     * @precondition packageName != null
+     * @precondition repository != null
      */
     public ProcedureRepositoryTemplate createProcedureRepositoryTemplate(
-        String packageName,
-        String repository)
+        final String packageName, final String repository)
     {
-        ProcedureRepositoryTemplate result = null;
-
-        if  (   (packageName != null)
-             && (repository  != null))
-        {
-            result =
-                new ProcedureRepositoryTemplate(packageName, repository) {};
-        }
-
-        return result;
+        return
+            new ProcedureRepositoryTemplate(packageName, repository);
     }
 
     /**
@@ -160,42 +153,54 @@ public class ProcedureRepositoryTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-            ProcedureRepositoryTemplate procedureRepositoryTemplate,
-            File                        outputDir)
-        throws  IOException
+        final ProcedureRepositoryTemplate procedureRepositoryTemplate,
+        final File outputDir)
+      throws  IOException
     {
-        if  (   (procedureRepositoryTemplate != null)
-             && (outputDir                   != null))
+        write(
+            procedureRepositoryTemplate,
+            outputDir,
+            ProcedureRepositoryUtils.getInstance(),
+            FileUtils.getInstance());
+    }
+
+    /**
+     * Writes a procedure repository template to disk.
+     * @param procedureRepositoryTemplate the procedure repository to write.
+     * @param outputDir the output folder.
+     * @param procedureRepositoryUtils the
+     * <code>ProcedureRepositoryUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition procedureRepositoryTemplate != null
+     * @precondition outputDir != null
+     * @precondition procedureRepositoryUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final ProcedureRepositoryTemplate procedureRepositoryTemplate,
+        final File outputDir,
+        final ProcedureRepositoryUtils procedureRepositoryUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        if  (!procedureRepositoryTemplate.isEmpty())
         {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
-
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                String t_strPackageSubFolder =
-                    t_FileUtils.packageToPath(
-                        procedureRepositoryTemplate.getPackageName());
-
-                File t_FinalOutputDir =
-                    new File(
-                          outputDir.getAbsolutePath()
-                        + File.separator
-                        + t_strPackageSubFolder);
-
-                t_FinalOutputDir.mkdirs();
-
-                String t_strNormalizedRepository =
-                    t_StringUtils.normalize(
-                        procedureRepositoryTemplate.getRepository(), '_');
-
-                t_FileUtils.writeFile(
-                      t_FinalOutputDir.getAbsolutePath()
+            File t_FinalOutputDir =
+                new File(
+                      outputDir.getAbsolutePath()
                     + File.separator
-                    + t_strNormalizedRepository
-                    + "ProcedureRepository.java",
-                    procedureRepositoryTemplate.toString());
-            }
+                    + fileUtils.packageToPath(
+                          procedureRepositoryTemplate.getPackageName()));
+
+            t_FinalOutputDir.mkdirs();
+
+            fileUtils.writeFile(
+                  t_FinalOutputDir.getAbsolutePath()
+                + File.separator
+                + procedureRepositoryUtils.retrieveProcedureRepositoryClassName(
+                      procedureRepositoryTemplate.getRepository()),
+                procedureRepositoryTemplate.toString());
         }
     }
 }

@@ -109,8 +109,8 @@ public class SystemSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions.system");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateGeneratorTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateGeneratorTest.class);
     
     suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.system.handlers.HandlersSuite.suite());
     suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.system.mysql.MysqlSuite.suite());

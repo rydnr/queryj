@@ -106,8 +106,8 @@ public class MysqlSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions.time.mysql");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.mysql.MySQLTimeFunctionsTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.mysql.MySQLTimeFunctionsTestTemplateGeneratorTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.mysql.MySQLTimeFunctionsTemplateGeneratorTest.class);
     
     
     

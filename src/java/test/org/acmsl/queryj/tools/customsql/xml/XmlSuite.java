@@ -106,21 +106,21 @@ public class XmlSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.customsql.xml");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.PropertyRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ParameterElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.PropertyElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.StatementFlagsRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.SqlElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRuleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.StatementFlagsElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.PropertyRefElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.StatementFlagsRefElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.SqlElementFactoryTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsRefElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsRefElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.PropertyElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ParameterElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRuleTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultElementFactoryTest.class);
     
     
     
