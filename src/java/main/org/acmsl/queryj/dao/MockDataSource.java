@@ -139,15 +139,15 @@ public class MockDataSource
      * @param password the password.
      */
     public MockDataSource(
-        String driverClassName,
-        String url,
-        String username,
-        String password)
+        final String driverClassName,
+        final String url,
+        final String username,
+        final String password)
     {
-        inmutableSetDriverClassName(driverClassName);
-        inmutableSetURL(url);
-        inmutableSetUserName(username);
-        inmutableSetPassword(password);
+        immutableSetDriverClassName(driverClassName);
+        immutableSetURL(url);
+        immutableSetUserName(username);
+        immutableSetPassword(password);
         setAutoCommit(false);
     }
 
@@ -155,7 +155,7 @@ public class MockDataSource
      * Sets the driver's class name.
      * @param driverClassName the driver's class name.
      */
-    private void inmutableSetDriverClassName(String driverClassName)
+    private void immutableSetDriverClassName(String driverClassName)
     {
         m__strDriverClassName = driverClassName;
     }
@@ -164,9 +164,9 @@ public class MockDataSource
      * Sets the driver's class name.
      * @param driverClassName the driver's class name.
      */
-    protected void setDriverClassName(String driverClassName)
+    protected void setDriverClassName(final String driverClassName)
     {
-        inmutableSetDriverClassName(driverClassName);
+        immutableSetDriverClassName(driverClassName);
     }
 
     /**
@@ -182,7 +182,7 @@ public class MockDataSource
      * Sets the URL connection.
      * @param url the URL connection.
      */
-    private void inmutableSetURL(String url)
+    private void immutableSetURL(final String url)
     {
         m__strURL = url;
     }
@@ -191,9 +191,9 @@ public class MockDataSource
      * Sets the URL connection.
      * @param url the URL connection.
      */
-    protected void setURL(String url)
+    protected void setURL(final String url)
     {
-        inmutableSetURL(url);
+        immutableSetURL(url);
     }
 
     /**
@@ -209,7 +209,7 @@ public class MockDataSource
      * Sets the user name.
      * @param username the user name.
      */
-    private void inmutableSetUserName(String username)
+    private void immutableSetUserName(final String username)
     {
         m__strUserName = username;
     }
@@ -218,9 +218,9 @@ public class MockDataSource
      * Sets the user name.
      * @param username the user name.
      */
-    protected void setUserName(String username)
+    protected void setUserName(final String username)
     {
-        inmutableSetUserName(username);
+        immutableSetUserName(username);
     }
 
     /**
@@ -236,7 +236,7 @@ public class MockDataSource
      * Sets the password.
      * @param password the password.
      */
-    private void inmutableSetPassword(String password)
+    private void immutableSetPassword(final String password)
     {
         m__strPassword = password;
     }
@@ -245,9 +245,9 @@ public class MockDataSource
      * Sets the password.
      * @param password the password.
      */
-    protected void setPassword(String password)
+    protected void setPassword(final String password)
     {
-        inmutableSetPassword(password);
+        immutableSetPassword(password);
     }
 
     /**
@@ -263,7 +263,7 @@ public class MockDataSource
      * Sets the auto commit.
      * @param autoCommit the flag value.
      */
-    public void setAutoCommit(boolean autoCommit)
+    public void setAutoCommit(final boolean autoCommit)
     {
         m__bAutoCommit = autoCommit;
     }
@@ -281,7 +281,7 @@ public class MockDataSource
      * Specifies the exception collection.
      * @param collection the exceptions.
      */
-    private void inmutableSetExceptionCollection(Collection collection)
+    private void immutableSetExceptionCollection(final Collection collection)
     {
         m__cExceptions = collection;
     }
@@ -290,9 +290,9 @@ public class MockDataSource
      * Specifies the exception collection.
      * @param collection the exceptions.
      */
-    protected void setExceptionCollection(Collection collection)
+    protected void setExceptionCollection(final Collection collection)
     {
-        inmutableSetExceptionCollection(collection);
+        immutableSetExceptionCollection(collection);
     }
 
     /**

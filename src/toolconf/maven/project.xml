@@ -44,9 +44,16 @@
   </repository>
 
   <versions>
-    <id>0.5.6b3</id>
-    <name>0.5.6b3</name>
-    <tag>queryj-0_5_6b3</tag>
+    <version>
+      <id>0.5.6</id>
+      <name>0.5.6</name>
+      <tag>queryj-0_5_6</tag>
+    </version>
+    <version>
+      <id>0.5.6b3</id>
+      <name>0.5.6b3</name>
+      <tag>queryj-0_5_6b3</tag>
+    </version>
   </versions>
 
   <mailingLists>
