@@ -79,6 +79,8 @@ import java.util.Map;
 /**
  * Writes Mock DAO test templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
+ *         >Jose San Leandro</a>
+ * @version $Revision$
  */
 public class MockDAOTestTemplateWritingHandler
     extends    AbstractAntCommandHandler

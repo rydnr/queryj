@@ -37,7 +37,12 @@
  *              database metadata.
  *
  * Last modified by: $Author$ at $Date$
+ *
+ * File version: $Revision$
+ *
  * Project version: $Name$
+ *
+ * $Id$
  *
  */
 package org.acmsl.queryj.tools.templates.dao.mock;

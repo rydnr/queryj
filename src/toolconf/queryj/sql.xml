@@ -9,7 +9,8 @@
     dao CDATA #REQUIRED
     name CDATA #REQUIRED
     type (select | insert | update | delete | select-for-update) #REQUIRED
-    implementation (mysql | oracle | postgres | odbc | all-jdbc | mock | xml | all) #REQUIRED>
+    implementation (mysql | oracle | postgres | odbc | all-jdbc | mock | xml | all) #REQUIRED
+    validate (true | false) #REQUIRED>
   <!ELEMENT description (#PCDATA)>
   <!ELEMENT value (#PCDATA)>
   <!ELEMENT parameter-ref EMPTY>
@@ -33,7 +34,8 @@
     id ID #REQUIRED
     index CDATA #REQUIRED
     type  CDATA #REQUIRED
-    name  CDATA #REQUIRED>
+    name  CDATA #REQUIRED
+    validation-value CDATA #REQUIRED>
   <!ELEMENT result-list (result)*>
   <!ELEMENT result (property-ref)*>
   <!ATTLIST result
@@ -83,116 +85,96 @@
 
 <sql-list>
   <sql
-    id="find-customer-by-customer-id-result"
-    dao="customer"
-    name="find-customer-by-customer-id"
+    id="find-bank-accounts-by-user-id"
+    dao="um_bank_account"
+    name="find-bank-account-by-user-id"
     type="select"
-    implementation="all">
-    <description>Retrieves the customer matching a concrete id</description>
-    <value>select * from customers where customer_id = ?</value>
+    implementation="all"
+    validate="true">
+    <description>Retrieves the bank accounts of a user</description>
+    <value>select * from um_bank_accounts where user_id = ?</value>
     <parameter-ref id="long-parameter-1"/>
-    <result-ref id="find-customer-by-customer-id.result"/>
-  </sql>
-  <sql
-    id="find-customer-by-person-last-name"
-    name="find-customer-by-person-last-name"
-    dao="customer"
-    type="select"
-    implementation="all">
-    <description>Retrieves the customers by last name</description>
-    <value>select c.customer_id, p.name from customers c, people p where p.last_name like ?</value>
-    <parameter-ref id="long-parameter-1"/>
-    <result-ref id="find-customer-by-person-last-name.result"/>
-  </sql>
-  <sql
-    id="insert-test"
-    name="insert-test"
-    dao="customer"
-    type="insert"
-    implementation="all">
-    <description>Inserts a new customer</description>
-    <value>insert into customers (customer_id, name) values (?, "test")</value>
-    <parameter-ref id="long-parameter-1"/>
-  </sql>
-  <sql
-    id="find-customer-for-update"
-    dao="customer"
-    name="find-customer-for-update"
-    type="select-for-update"
-    implementation="all">
-    <description>Selects a customer to update</description>
-    <value>select * from customers where customer_id = ? for update</value>
-    <parameter-ref id="long-parameter-1"/>
-    <result-ref id="find-customer-for-update.result"/>
-    <connection-flags-ref id="connection-flag-transaction-serializable"/>
-    <statement-flags-ref id="find-customer-for-update-statement-flags"/>
-    <resultset-flags-ref id="find-customer-for-update-resultset-flags"/>
+    <result-ref id="find-bank-account-by-user-id.result"/>
   </sql>
 
-  <!-- SQL parameter metadata -->
   <parameter-list>
     <parameter
       id="long-parameter-1"
       index="1"
       type="long"
-      name="id"/>
+      name="id"
+      validation-value="987"/>
   </parameter-list>
 
-  <!-- Result metadata -->
   <result-list>
     <result
-      id="find-customer-by-customer-id.result"
-      class="com.foo.bar.dao.CustomerValueObject"
-      matches="single">
-      <property-ref
-        id="find-customer-by-customer-id.customer_id.property"/>
-      <property-ref
-        id="find-customer-by-customer-id.name.property"/>
-    </result>
-    <result
-      id="find-customer-by-person-last-name.result"
-      class="com.foo.bar.dao.CustomerValueObject"
+      id="find-bank-account-by-user-id.result"
+      class="com.foo.bar.vo.UmBankAccountValueObject"
       matches="multiple">
       <property-ref
-        id="find-customer-by-person.customer_id.property"/>
+        id="find-bank-account-by-user-id.bank-account-id.property"/>
       <property-ref
-        id="find-customer-by-person.personName.property"/>
+        id="find-bank-account-by-user-id.bank-account-type-id.property"/>
+      <property-ref
+        id="find-bank-account-by-user-id.bank-account-user-id.property"/>
+      <property-ref
+        id="find-bank-account-by-user-id.bank-account-payment-method-status-id.property"/>
+      <property-ref
+        id="find-bank-account-by-user-id.bank-account-bank-code.property"/>
+      <property-ref
+        id="find-bank-account-by-user-id.bank-account-branch.property"/>
+      <property-ref
+        id="find-bank-account-by-user-id.bank-account-control-digit.property"/>
+      <property-ref
+        id="find-bank-account-by-user-id.bank-account-account-number.property"/>
+      <property-ref
+        id="find-bank-account-by-user-id.bank-account-lastmodified.property"/>
+      <property-ref
+        id="find-bank-account-by-user-id.bank-account-creationdate.property"/>
     </result>
-    <result
-      id="find-customer-for-update.result"
-      class="com.foo.bar.dao.CustomerValueObject"
-      matches="none"
-      provider="com.foo.bar2.utils.CustomerResultSetUpdater"/>
   </result-list>
 
-  <!-- Result property metadata -->
   <property-list>
     <property
-      id="find-customer-by-customer-id.customer_id.property"
-      column_name="customer_id"
+      id="find-bank-account-by-user-id.bank-account-id.property"
+      column_name="bank_account_id"
       type="long"/>
     <property
-      id="find-customer-by-customer-id.name.property"
-      column_name="name"
-      type="String"/>
-    <property
-      id="find-customer-by-person.customer_id.property"
-      column_name="c.customer_id"
-      name="customerId"
+      id="find-bank-account-by-user-id.bank-account-type-id.property"
+      column_name="bank_account_type_id"
       type="long"/>
     <property
-      id="find-customer-by-person.personName.property"
-      column_name="p.name"
-      name="personName"
-      type="String"/>
-    <property
-      id="find-customer-for-update.customer_id.property"
-      column_name="customer_id"
+      id="find-bank-account-by-user-id.bank-account-user-id.property"
+      column_name="user_id"
       type="long"/>
     <property
-      id="find-customer-for-update.name.property"
-      column_name="name"
+      id="find-bank-account-by-user-id.bank-account-payment-method-status-id.property"
+      column_name="payment_method_status_id"
+      type="long"/>
+    <property
+      id="find-bank-account-by-user-id.bank-account-bank-code.property"
+      column_name="bank_code"
       type="String"/>
+    <property
+      id="find-bank-account-by-user-id.bank-account-branch.property"
+      column_name="branch"
+      type="String"/>
+    <property
+      id="find-bank-account-by-user-id.bank-account-control-digit.property"
+      column_name="control_digit"
+      type="String"/>
+    <property
+      id="find-bank-account-by-user-id.bank-account-account-number.property"
+      column_name="account_number"
+      type="String"/>
+    <property
+      id="find-bank-account-by-user-id.bank-account-lastmodified.property"
+      column_name="lastmodified"
+      type="Date"/>
+    <property
+      id="find-bank-account-by-user-id.bank-account-creationdate.property"
+      column_name="creationdate"
+      type="Date"/>
   </property-list>
 
   <flag-list>

@@ -178,7 +178,7 @@ public interface ValueObjectTemplateDefaults
         + "     * Creates a {0}ValueObject with given information.\n"
         + "{1}" // constructor field javadoc
         + "     */\n"
-        + "    protected {0}ValueObject(" // table
+        + "    public {0}ValueObject(" // table
         + "{2})\n" // constructor field declaration
         + "    '{'"
         + "{3}\n"  // constructor field value setter.

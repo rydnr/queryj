@@ -64,6 +64,7 @@ import org.apache.tools.ant.Task;
  * Is able to create numeric function templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+ * @version $Revision$
  */
 public interface NumericFunctionsTemplateFactory
     extends  TemplateFactory

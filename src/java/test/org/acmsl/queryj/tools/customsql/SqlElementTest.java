@@ -117,7 +117,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.customsql.SqlElement("s1", "dao", "name", "select", "all");
+    return new org.acmsl.queryj.tools.customsql.SqlElement("s1", "dao", "name", "select", "all", false);
     // JUnitDoclet end method testcase.createInstance
   }
   

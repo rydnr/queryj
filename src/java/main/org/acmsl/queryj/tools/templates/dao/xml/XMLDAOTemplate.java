@@ -77,6 +77,8 @@ import java.text.MessageFormat;
  * Is able to create xml DAO implementations for each
  * table in the persistence model.
  * @author <a href="mailto:jsanleandro@yahoo.es"
+ *         >Jose San Leandro</a>
+ * @version $Revision$
  */
 public class XMLDAOTemplate
     extends  AbstractXMLDAOTemplate

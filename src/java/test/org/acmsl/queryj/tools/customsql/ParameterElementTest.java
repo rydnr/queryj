@@ -117,7 +117,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.customsql.ParameterElement("p1", "customer_id", 1, "id", "long");
+    return new org.acmsl.queryj.tools.customsql.ParameterElement("p1", "customer_id", 1, "id", "long", "default");
     // JUnitDoclet end method testcase.createInstance
   }
   

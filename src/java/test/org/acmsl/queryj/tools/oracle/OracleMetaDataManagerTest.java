@@ -36,7 +36,13 @@ Spain
 * Description: Executes all tests defined for package
 *              unittests.org.acmsl.queryj.tools.oracle.
 *
+* Last modified by: $Author$ at $Date$
+*
+* File version: $Revision$
+*
 * Project version: $Name$
+*
+* $Id$
 */
 package unittests.org.acmsl.queryj.tools.oracle;
 
@@ -79,6 +85,7 @@ Boston, MA  02111-1307  USA
 
 /**
 * Tests OracleMetaDataManagerTest class.
+* @version $Revision$
 * @see org.acmsl.queryj.tools.oracle.OracleMetaDataManager
 */
 public class OracleMetaDataManagerTest

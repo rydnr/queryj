@@ -145,318 +145,110 @@ public class TimeFunctionsTestTemplateGenerator
      * @param engineVersion the engine version.
      * @return the template factory class name.
      * @throws QueryJException if the factory class is invalid.
+     * @precondition engineName != null
      */
     protected TimeFunctionsTestTemplateFactory getTemplateFactory(
-            String engineName, String engineVersion)
-        throws  QueryJException
+        final String engineName, final String engineVersion)
+      throws  QueryJException
+    {
+        return
+            getTemplateFactory(
+                engineName,
+                engineVersion,
+                TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Retrieves the template factory instance.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition engineName != null
+     * @precondition templateMappingManager != null
+     */
+    protected TimeFunctionsTestTemplateFactory getTemplateFactory(
+        final String engineName,
+        final String engineVersion,
+        final TemplateMappingManager templateMappingManager)
+      throws  QueryJException
     {
         TimeFunctionsTestTemplateFactory result = null;
 
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
+        Object t_TemplateFactory =
+            templateMappingManager.getTemplateFactory(
+                TemplateMappingManager.TIME_FUNCTIONS_TEST_TEMPLATE,
+                engineName,
+                engineVersion);
 
-        if  (t_MappingManager != null)
+        if  (t_TemplateFactory != null)
         {
-            Object t_TemplateFactory =
-                t_MappingManager.getTemplateFactory(
-                    TemplateMappingManager.TIME_FUNCTIONS_TEST_TEMPLATE,
+            if  (!(t_TemplateFactory instanceof TimeFunctionsTestTemplateFactory))
+            {
+                throw
+                    new QueryJException(
+                        "invalid.time.function.test.template.factory");
+            }
+            else 
+            {
+                result = (TimeFunctionsTestTemplateFactory) t_TemplateFactory;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Generates a time functions test template.
+     * @param packageName the package name.
+     * @param testedPackageName the tested package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return a template.
+     * @throws QueryJException if the template factory is invalid.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition quote != null
+     */
+    public TimeFunctionsTestTemplate createTimeFunctionsTestTemplate(
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final Project project,
+        final Task task)
+      throws  QueryJException
+    {
+        TimeFunctionsTestTemplate result = null;
+
+        TimeFunctionsTestTemplateFactory t_TemplateFactory =
+            getTemplateFactory(engineName, engineVersion);
+
+        if  (t_TemplateFactory != null)
+        {
+            result =
+                t_TemplateFactory.createTimeFunctionsTestTemplate(
+                    packageName,
+                    testedPackageName,
                     engineName,
-                    engineVersion);
-
-            if  (t_TemplateFactory != null)
-            {
-                if  (!(t_TemplateFactory instanceof TimeFunctionsTestTemplateFactory))
-                {
-                    throw
-                        new QueryJException(
-                            "invalid.time.function.test.template.factory");
-                }
-                else 
-                {
-                    result = (TimeFunctionsTestTemplateFactory) t_TemplateFactory;
-                }
-            }
+                    engineVersion,
+                    quote,
+                    project,
+                    task);
         }
-
-        return result;
-    }
-
-    /**
-     * Generates a time functions test template.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param projectImports the JDK imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param junitImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param testFunctionMethod the test function method.
-     * @param classConstructor the class constructor.
-     * @param memberAccessors the member accessors.
-     * @param setUpTearDownMethods the setUp and tearDown methods.
-     * @param mainMethod the main method.
-     * @param getInstanceTest the getInstance test.
-     * @param innerClass the inner class.
-     * @param innerTable the inner table.
-     * @param classEnd the class end.
-     * @return a template.
-     * @throws QueryJException if the template factory is invalid.
-     */
-    public TimeFunctionsTestTemplate createTimeFunctionsTestTemplate(
-        String header,
-        String packageDeclaration,
-        String packageName,
-        String testedPackageName,
-        String engineName,
-        String engineVersion,
-        String quote,
-        String projectImports,
-        String acmslImports,
-        String jdkImports,
-        String junitImports,
-        String javadoc,
-        String classDefinition,
-        String classStart,
-        String classConstructor,
-        String memberAccessors,
-        String setUpTearDownMethods,
-        String mainMethod,
-        String getInstanceTest,
-        String innerClass,
-        String innerTable,
-        String classEnd)
-      throws  QueryJException
-    {
-        TimeFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
+        else 
         {
-            TimeFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (t_TemplateFactory != null)
-            {
-                result =
-                    t_TemplateFactory.createTimeFunctionsTestTemplate(
-                        header,
-                        packageDeclaration,
-                        packageName,
-                        testedPackageName,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        projectImports,
-                        acmslImports,
-                        jdkImports,
-                        junitImports,
-                        javadoc,
-                        classDefinition,
-                        classStart,
-                        classConstructor,
-                        memberAccessors,
-                        setUpTearDownMethods,
-                        mainMethod,
-                        getInstanceTest,
-                        innerClass,
-                        innerTable,
-                        classEnd);
-            }
-            else 
-            {
-                throw
-                    new QueryJException(
-                        "cannot.find.test.template.factory.for." + engineName);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a time functions test template.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param projectImports the JDK imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param junitImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param testFunctionMethod the test function method.
-     * @param classConstructor the class constructor.
-     * @param memberAccessors the member accessors.
-     * @param setUpTearDownMethods the setUp and tearDown methods.
-     * @param mainMethod the main method.
-     * @param getInstanceTest the getInstance test.
-     * @param innerClass the inner class.
-     * @param innerTable the inner table.
-     * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return a template.
-     * @throws QueryJException if the template factory is invalid.
-     */
-    public TimeFunctionsTestTemplate createTimeFunctionsTestTemplate(
-        String  header,
-        String  packageDeclaration,
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        String  projectImports,
-        String  acmslImports,
-        String  jdkImports,
-        String  junitImports,
-        String  javadoc,
-        String  classDefinition,
-        String  classStart,
-        String  classConstructor,
-        String  memberAccessors,
-        String  setUpTearDownMethods,
-        String  mainMethod,
-        String  getInstanceTest,
-        String  innerClass,
-        String  innerTable,
-        String  classEnd,
-        Project project,
-        Task    task)
-      throws  QueryJException
-    {
-        TimeFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            TimeFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (t_TemplateFactory != null)
-            {
-                result =
-                    t_TemplateFactory.createTimeFunctionsTestTemplate(
-                        header,
-                        packageDeclaration,
-                        packageName,
-                        testedPackageName,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        projectImports,
-                        acmslImports,
-                        jdkImports,
-                        junitImports,
-                        javadoc,
-                        classDefinition,
-                        classStart,
-                        classConstructor,
-                        memberAccessors,
-                        setUpTearDownMethods,
-                        mainMethod,
-                        getInstanceTest,
-                        innerClass,
-                        innerTable,
-                        classEnd,
-                        project,
-                        task);
-            }
-            else 
-            {
-                if  (project != null)
-                {
-                    project.log(
-                        task,
-                          "Invalid time functions test template "
-                        + "generator: " + t_TemplateFactory,
-                        Project.MSG_WARN);
-                }
-                
-                throw
-                    new QueryJException(
-                        "cannot.find.test.template.factory.for." + engineName);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a time functions test template.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return a template.
-     * @throws QueryJException if the template factory is invalid.
-     */
-    public TimeFunctionsTestTemplate createTimeFunctionsTestTemplate(
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
-      throws  QueryJException
-    {
-        TimeFunctionsTestTemplate result = null;
-
-        if  (   (packageName   != null)
-             && (engineName    != null)
-             && (engineVersion != null)
-             && (quote         != null))
-        {
-            TimeFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
-
-            if  (t_TemplateFactory != null)
-            {
-                result =
-                    t_TemplateFactory.createTimeFunctionsTestTemplate(
-                        packageName,
-                        testedPackageName,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        project,
-                        task);
-            }
-            else 
-            {
-                if  (project != null)
-                {
-                    project.log(
-                        task,
-                          "Invalid time functions test template "
-                        + "generator: " + t_TemplateFactory,
-                        Project.MSG_WARN);
-                }
-                
-                throw
-                    new QueryJException(
-                        "cannot.find.test.template.factory.for." + engineName);
-            }
+            throw
+                new QueryJException(
+                      "cannot.find.test.template.factory.for."
+                    + engineName);
         }
 
         return result;
@@ -464,32 +256,49 @@ public class TimeFunctionsTestTemplateGenerator
 
     /**
      * Writes a time functions test template to disk.
-     * @param timeFunctionsTestTemplate the time functions template to write.
+     * @param template the time functions template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
+     * @precondition template != null
+     * @precondition outputDir != null
      */
     public void write(
-            TimeFunctionsTestTemplate timeFunctionsTestTemplate,
-            File                      outputDir)
-        throws  IOException
+        final TimeFunctionsTestTemplate template,
+        final File outputDir)
+      throws  IOException
     {
-        if  (   (timeFunctionsTestTemplate != null)
-             && (outputDir                 != null))
-        {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            template,
+            outputDir,
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a time functions test template to disk.
+     * @param timeFunctionsTestTemplate the time functions template to write.
+     * @param outputDir the output folder.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition template != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final TimeFunctionsTestTemplate template,
+        final File outputDir,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + "TimeFunctionsTest.java",
-                    timeFunctionsTestTemplate.generate());
-            }
-        }
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + "TimeFunctionsTest.java",
+            template.generate());
     }
 }

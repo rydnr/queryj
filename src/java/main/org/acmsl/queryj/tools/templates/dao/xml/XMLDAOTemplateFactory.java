@@ -64,6 +64,7 @@ import org.apache.tools.ant.Task;
  * Represents entities able to create XML DAO templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+ * @version $Revision$
  */
 public interface XMLDAOTemplateFactory
 {
