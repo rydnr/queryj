@@ -292,9 +292,11 @@ public abstract class XMLValueObjectFactoryTemplate
         + "     * Creates a {0} value object from given SAX attributes.\n"
         + "     * @param attributes the attributes.\n"
         + "     * @return the {0} information.\n"
+        + "     * @throws SAXException if the attributes are not valid.\n"
         + "     * @precondition attributes != null\n"
         + "     */\n"
         + "    public Object createObject(final Attributes attributes)\n"
+        + "      throws SAXException\n"
         + "    '{'\n"
         + "        return createObject(attributes, ConversionUtils.getInstance());\n"
         + "    '}'\n\n"
@@ -509,7 +511,7 @@ public abstract class XMLValueObjectFactoryTemplate
             DEFAULT_PROJECT_IMPORTS,
             DEFAULT_ACMSL_IMPORTS,
             DEFAULT_JDK_IMPORTS,
-            DEFAULT_PROJECT_IMPORTS,
+            DEFAULT_EXTRA_IMPORTS,
             DEFAULT_JAVADOC,
             CLASS_DEFINITION,
             DEFAULT_CLASS_START,
@@ -1101,6 +1103,8 @@ public abstract class XMLValueObjectFactoryTemplate
                             '_')
                     }));
 
+            t_sbResult.append(getExtraMethods());
+
             List t_lFields = t_TableTemplate.getFields();
 
             MessageFormat t_FactoryMethodFormatter =
@@ -1151,6 +1155,11 @@ public abstract class XMLValueObjectFactoryTemplate
                                     '_'),
                                 t_strField.toLowerCase()
                             }));
+
+                    if  (t_itFields.hasNext())
+                    {
+                        t_sbFactoryMethodValueObjectBuild.append(",");
+                    }
                 }
 
                 t_sbResult.append(
@@ -1166,8 +1175,6 @@ public abstract class XMLValueObjectFactoryTemplate
                             t_sbFactoryMethodValueObjectBuild.toString()
                         }));
             }
-
-            t_sbResult.append(getExtraMethods());
 
             t_sbResult.append(getClassEnd());
         }
