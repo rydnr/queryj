@@ -43,7 +43,11 @@
     </url>
   </repository>
 
-  <versions/>
+  <versions>
+    <id>0.5.6b3</id>
+    <name>0.5.6b3</name>
+    <tag>queryj-0_5_6b3</tag>
+  </versions>
 
   <mailingLists>
     <mailingList>
