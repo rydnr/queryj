@@ -63,8 +63,6 @@ import org.acmsl.queryj.tools.MetaDataUtils;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.version.Version;
-import org.acmsl.commons.version.VersionFactory;
 
 /*
  * Importing some Ant classes.
@@ -770,7 +768,7 @@ public class DatabaseMetaDataRetrievalHandler
      */
     protected Object buildTableKey()
     {
-        return "'¡'¡'table";
+        return "'@'@'table";
     }
 
     /**
@@ -779,7 +777,7 @@ public class DatabaseMetaDataRetrievalHandler
      */
     protected Object buildTableFieldsKey(Object key)
     {
-        return ".98.table'¡'¡'fields`p" + key;
+        return ".98.table'@'@'fields`p" + key;
     }
 
     /**
@@ -822,31 +820,5 @@ public class DatabaseMetaDataRetrievalHandler
     protected Object buildFkKey(Object firstKey, Object secondKey)
     {
         return buildFkKey(firstKey) + ".,.," + secondKey;
-    }
-
-    /**
-     * Concrete version object updated everytime it's checked-in in a
-     * CVS repository.
-     */
-    public static final Version VERSION =
-        VersionFactory.createVersion("$Revision$");
-
-    /**
-     * Retrieves the current version of this object.
-     * @return the version object with such information.
-     */
-    public Version getVersion()
-    {
-        return VERSION;
-    }
-
-    /**
-     * Retrieves the current version of this class. It's defined because
-     * this is a utility class that cannot be instantiated.
-     * @return the object with class version information.
-     */
-    public static Version getClassVersion()
-    {
-        return VERSION;
     }
 }

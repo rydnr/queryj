@@ -63,6 +63,10 @@
 
     <!--attainGoal name="pdf"/-->
 
+    <ant:replace dir="target" value="http://bugzilla.acm-sl.org/show_bug.cgi?id=">
+      <include name="**/*.html"/>
+        <replacetoken><![CDATA[${issue.url}]]></replacetoken>
+    </ant:replace>    
   </preGoal>
 
 </project>
