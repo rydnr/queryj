@@ -8,7 +8,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2 of the License, or any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +22,7 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jsanleandro@yahoo.es
     Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabañas
+                    Urb. Valdecabanas
                     Boadilla del monte
                     28660 Madrid
                     Spain
@@ -103,7 +103,7 @@ public abstract class MockDAOTestTemplate
         + "    This library is free software; you can redistribute it and/or\n"
         + "    modify it under the terms of the GNU General Public\n"
         + "    License as published by the Free Software Foundation; either\n"
-        + "    version 2 of the License, or (at your option) any later "
+        + "    version 2 of the License, or any later "
         + "version.\n"
         + "\n"
         + "    This library is distributed in the hope that it will be "
@@ -124,7 +124,7 @@ public abstract class MockDAOTestTemplate
         + "license.\n"
         + "    Contact info: jsanleandro@yahoo.es\n"
         + "    Postal Address: c/Playa de Lagoa, 1\n"
-        + "                    Urb. Valdecabañas\n"
+        + "                    Urb. Valdecabanas\n"
         + "                    Boadilla del monte\n"
         + "                    28660 Madrid\n"
         + "                    Spain\n"
@@ -211,7 +211,7 @@ public abstract class MockDAOTestTemplate
         + " * Executes JUnit tests to ensure Mock{1}DAO works as\n"
          // table
         + " * expected and connections are correctly managed.\n"
-        + " * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
         + " * @see {0}.{1}DAO\n"
         + " */\n";
@@ -431,7 +431,7 @@ public abstract class MockDAOTestTemplate
     public static final String DEFAULT_STORE_TEST =
           "    /**\n"
         + "     * Tests Mock{1}DAO.insert() method.\n"
-        + "     * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.Mock{1}DAO#insert({2},org.acmsl.queryj.dao.TransactionToken)\n"
          // method parameter type declaration
@@ -474,7 +474,7 @@ public abstract class MockDAOTestTemplate
     public static final String DEFAULT_LOAD_TEST =
           "    /**\n"
         + "     * Tests Mock{1}DAO.findByPrimaryKey()} method.\n"
-        + "     * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.Mock{1}DAO#findByPrimaryKey({2},org.acmsl.queryj.dao.TransactionToken)\n"
         + "     */\n"
@@ -513,7 +513,7 @@ public abstract class MockDAOTestTemplate
     public static final String DEFAULT_UPDATE_TEST =
           "    /**\n"
         + "     * Tests Mock{1}DAO.update() method.\n"
-        + "     * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.Mock{1}DAO#update({2},org.acmsl.queryj.dao.TransactionToken)\n"
          // method parameter type declaration
@@ -565,7 +565,7 @@ public abstract class MockDAOTestTemplate
     public static final String DEFAULT_REMOVE_TEST =
           "    /**\n"
         + "     * Tests Mock{1}DAO.delete() method.\n"
-        + "     * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.Mock{1}DAO#delete({2},org.acmsl.queryj.dao.TransactionToken)\n"
         + "     */\n"

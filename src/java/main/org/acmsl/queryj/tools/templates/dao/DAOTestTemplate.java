@@ -8,7 +8,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2 of the License, or any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +22,7 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jsanleandro@yahoo.es
     Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabañas
+                    Urb. Valdecabanas
                     Boadilla del monte
                     28660 Madrid
                     Spain
@@ -102,7 +102,7 @@ public abstract class DAOTestTemplate
         + "    This library is free software; you can redistribute it and/or\n"
         + "    modify it under the terms of the GNU General Public\n"
         + "    License as published by the Free Software Foundation; either\n"
-        + "    version 2 of the License, or (at your option) any later "
+        + "    version 2 of the License, or any later "
         + "version.\n"
         + "\n"
         + "    This library is distributed in the hope that it will be "
@@ -123,7 +123,7 @@ public abstract class DAOTestTemplate
         + "license.\n"
         + "    Contact info: jsanleandro@yahoo.es\n"
         + "    Postal Address: c/Playa de Lagoa, 1\n"
-        + "                    Urb. Valdecabañas\n"
+        + "                    Urb. Valdecabanas\n"
         + "                    Boadilla del monte\n"
         + "                    28660 Madrid\n"
         + "                    Spain\n"
@@ -208,7 +208,7 @@ public abstract class DAOTestTemplate
         + " * Executes JUnit tests to ensure {1}{2}DAO works as\n"
          // table
         + " * expected and connections are correctly managed.\n"
-        + " * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
         + " * @see {0}.{1}{2}DAO\n"
         + " */\n";
@@ -484,7 +484,7 @@ public abstract class DAOTestTemplate
           "    /**\n"
         + "     * Tests {0}{1}DAO constructor.\n"
          // engine name - DAO name.
-        + "     * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
         + "     */\n"
         + "    public static class ConstructorTest\n"
@@ -519,7 +519,7 @@ public abstract class DAOTestTemplate
     public static final String DEFAULT_CONNECTION_TEST =
           "    /**\n"
         + "     * Tests whether the connection is managed correctly.\n"
-        + "     * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
         + "     */\n"
         + "    public static class ConnectionTest\n"
@@ -569,7 +569,7 @@ public abstract class DAOTestTemplate
     public static final String DEFAULT_STORE_TEST =
           "    /**\n"
         + "     * Tests {1}{2}DAO.insert() method.\n"
-        + "     * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.{1}{2}DAO#insert({3},org.acmsl.queryj.dao.TransactionToken)\n"
          // method parameter type declaration
@@ -611,7 +611,7 @@ public abstract class DAOTestTemplate
     public static final String DEFAULT_LOAD_TEST =
           "    /**\n"
         + "     * Tests {1}{2}DAO.findByPrimaryKey()} method.\n"
-        + "     * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.{1}{2}DAO#findByPrimaryKey({3},org.acmsl.queryj.dao.TransactionToken)\n"
         + "     */\n"
@@ -649,7 +649,7 @@ public abstract class DAOTestTemplate
     public static final String DEFAULT_UPDATE_TEST =
           "    /**\n"
         + "     * Tests {1}{2}DAO.update() method.\n"
-        + "     * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.{1}{2}DAO#update({3},org.acmsl.queryj.dao.TransactionToken)\n"
          // method parameter type declaration
@@ -700,7 +700,7 @@ public abstract class DAOTestTemplate
     public static final String DEFAULT_REMOVE_TEST =
           "    /**\n"
         + "     * Tests {1}{2}DAO.delete() method.\n"
-        + "     * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.{1}{2}DAO#delete({3},org.acmsl.queryj.dao.TransactionToken)\n"
         + "     */\n"

@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendariz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
@@ -22,7 +22,7 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jsanleandro@yahoo.es
     Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabañas
+                    Urb. Valdecabanas
                     Boadilla del monte
                     28660 Madrid
                     Spain
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Bundles a pair of SystemFunctions template build and writing
  *              handlers.

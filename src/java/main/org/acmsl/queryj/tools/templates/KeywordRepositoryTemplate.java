@@ -1,14 +1,14 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendariz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2 of the License, or any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +22,7 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jsanleandro@yahoo.es
     Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabañas
+                    Urb. Valdecabanas
                     Boadilla del monte
                     28660 Madrid
                     Spain
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Is able to generate procedure repositories according to
  *              database metadata.
@@ -86,14 +86,14 @@ public abstract class KeywordRepositoryTemplate
           "/*\n"
         + "                        QueryJ\n"
         + "\n"
-        + "    Copyright (C) 2002  Jose San Leandro Armendáriz\n"
+        + "    Copyright (C) 2002  Jose San Leandro Armendariz\n"
         + "                        jsanleandro@yahoo.es\n"
         + "                        chousz@yahoo.com\n"
         + "\n"
         + "    This library is free software; you can redistribute it and/or\n"
         + "    modify it under the terms of the GNU General Public\n"
         + "    License as published by the Free Software Foundation; either\n"
-        + "    version 2 of the License, or (at your option) any later "
+        + "    version 2 of the License, or any later "
         + "version.\n"
         + "\n"
         + "    This library is distributed in the hope that it will be "
@@ -114,7 +114,7 @@ public abstract class KeywordRepositoryTemplate
         + "license.\n"
         + "    Contact info: jsanleandro@yahoo.es\n"
         + "    Postal Address: c/Playa de Lagoa, 1\n"
-        + "                    Urb. Valdecabañas\n"
+        + "                    Urb. Valdecabanas\n"
         + "                    Boadilla del monte\n"
         + "                    28660 Madrid\n"
         + "                    Spain\n"
@@ -176,7 +176,7 @@ public abstract class KeywordRepositoryTemplate
           "/**\n"
         + " * Contains all defined field creation keywords for\n"
         + " * {0} repository.\n" // repository
-        + " * @author <a href=\"http://queryj.sourceforge.net\">QueryJ</a>\n"
+        + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
         + " */\n";
 

@@ -1,14 +1,14 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendariz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
     License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+    version 2 of the License, or any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +22,7 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jsanleandro@yahoo.es
     Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabañas
+                    Urb. Valdecabanas
                     Boadilla del monte
                     28660 Madrid
                     Spain
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Represents abnormal situations regarding QueryJ processing.
  *
