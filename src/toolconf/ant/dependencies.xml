@@ -1,0 +1,215 @@
+<!--
+                  NLP-WebApp dependencies' Ant  file
+
+   Copyright (C) 2003 Ventura24 S.L.
+
+   Copyright and license details are included in Ventura24 license file.
+
+===============================================================================
+
+   Filename: $RCSfile$
+
+   Author: Ruben de Heras / Jose San Leandro
+
+   Description: Copy the Maven compile and runtime dependencies
+                to the local ${libs.dir}
+
+   Last modified by: $Author$
+
+   Version: $Revision$
+
+   $Id$
+-->
+<project
+  name="Dependency local repository"
+  default="manage.dependencies"
+  basedir=".">
+
+    <description>
+      Maintains a synchronized directory structure according to
+      Maven-managed specific project dependencies.
+    </description>
+
+    <!--
+     Defines the required properties and creates directory structure.
+     @param env.MAVEN_HOME the local Maven repository.
+    -->
+    <target
+      name="init.properties"
+      description="Creates the dependencies directory structure">
+
+      <property environment="env"/>
+
+      <property
+        name="maven.dependencies.path"
+        location="${env.MAVEN_HOME}${file.separator}repository"/>
+
+      <property name="dependencies.dir" value="../../../dependencies"/>
+      <property name="dependencies.lib.dir" value="${dependencies.dir}/lib"/>
+      <property
+        name="dependencies.lib.java.dir" value="${dependencies.lib.dir}/java"/>
+      <property
+        name="dependencies.lib.java.build.dir"
+        value="${dependencies.lib.java.dir}/build"/>
+      <property
+        name="dependencies.lib.java.development.dir"
+        value="${dependencies.lib.java.dir}/development"/>
+      <property
+        name="dependencies.lib.java.runtime.dir"
+        value="${dependencies.lib.java.dir}/runtime"/>
+      <property
+        name="dependencies.lib.java.unittest.dir"
+        value="${dependencies.lib.java.dir}/unittest"/>
+
+    </target>
+
+    <!--
+     Creates the local directory structure for storing the
+     dependencies.
+    -->
+    <target
+      name="create.project.dependency.structure"
+      depends="init.properties"
+      description="Creates the local directory structure for storing the dependencies">
+      <mkdir dir="${dependencies.dir}"/>
+      <mkdir dir="${dependencies.lib.dir}"/>
+      <mkdir dir="${dependencies.lib.java.dir}"/>
+      <mkdir dir="${dependencies.lib.java.build.dir}"/>
+      <mkdir dir="${dependencies.lib.java.development.dir}"/>
+      <mkdir dir="${dependencies.lib.java.runtime.dir}"/>
+      <mkdir dir="${dependencies.lib.java.unittest.dir}"/>
+
+    </target>
+
+    <!--
+     Cleans up the local dependency repository for the project.
+    -->
+    <target
+      name="remove.project.dependency.structure"
+      depends="init.properties">
+      <description>
+        Cleans up the local dependency repository for the project
+      </description>
+
+      <delete dir="${dependencies.lib.dir}"/>
+
+    </target>
+
+    <!--
+     Copies the Maven-dependant dependencies.
+     @depends remove.project.dependency.structure to remove
+     previous cached dependencies.
+     @depends create.project.dependency.structure to create
+     required folders for caching the dependencies.
+    -->
+    <target
+      name="manage.dependencies"
+      depends="remove.project.dependency.structure, create.project.dependency.structure"
+      description="Copies the Maven-dependant dependencies">
+
+      <taskdef
+        name="greebo"
+        classname="oevren.ant.greebo.FetchDependencyTask"/>
+
+      <!-- Common dependencies -->
+      <greebo dir="${dependencies.lib.java.dir}">
+        <repository
+          url="file:///${maven.dependencies.path}"
+          type="maven"
+          synchronize="true"/>
+        <repository url="http://maven.acm-sl.org/lib" type="maven"/>
+        <repository url="http://www.ibiblio.org/maven" type="maven"/>
+
+        <jarDependency
+          name="acmsl-commons"
+          version="0.5.5b5"
+          jar="acmsl-commons-0.5.5b5.jar"/>
+
+        <jarDependency
+          name="commons-logging"
+          version="1.0.3"
+          jar="commons-logging-1.0.3.jar"/>
+
+      </greebo>
+
+      <!-- Build dependencies -->
+      <greebo dir="${dependencies.lib.java.build.dir}">
+        <repository
+          url="file:///${maven.dependencies.path}"
+          type="maven"
+          synchronize="true"/>
+        <repository url="http://maven.acm-sl.org/lib" type="maven"/>
+        <repository url="http://www.ibiblio.org/maven" type="maven"/>
+
+        <jarDependency
+          name="ant"
+          version="1.6.1" jar="ant-1.6.1.jar"/>
+        <jarDependency
+          name="junit" version="3.8.1" jar="junit-3.8.1.jar"/>
+        <jarDependency
+          name="junitdoclet"
+          version="1.0.2"
+          jar="junitdoclet-acmsl-1.0.2.jar"/>
+
+      </greebo>
+
+      <!-- Development dependencies -->
+      <greebo dir="${dependencies.lib.java.development.dir}">
+        <repository
+          url="file:///${maven.dependencies.path}"
+          type="maven"
+          synchronize="true"/>
+        <repository url="http://maven.acm-sl.org/lib" type="maven"/>
+        <repository url="http://www.ibiblio.org/maven" type="maven"/>
+
+        <jarDependency
+          name="junitdoclet" version="1.0.2" jar="junitdoclet-1.0.2.jar"/>
+
+      </greebo>
+
+      <!-- Runtime dependencies -->
+      <greebo dir="${dependencies.lib.java.runtime.dir}">
+        <repository
+          url="file:///${maven.dependencies.path}"
+          type="maven"
+          synchronize="true"/>
+        <repository url="http://maven.acm-sl.org/lib" type="maven"/>
+        <repository url="http://www.ibiblio.org/maven" type="maven"/>
+
+        <jarDependency
+          name="mysql-connector-java"
+          version="2.0.14-bin"
+          jar="mysql-connector-java-2.0.14-bin.jar"/>
+
+        <jarDependency
+          name="rmijdbc"
+          version="3.0.1"
+          jar="rmijdbc-3.0.1.jar"/>
+
+        <!-- Required by ACM-SL Commons -->
+        <jarDependency
+          name="jakarta-oro"
+          version="2.0.7"
+          jar="jakarta-oro-2.0.7.jar"/>
+
+      </greebo>
+
+      <!-- Unit test dependencies -->
+      <greebo dir="${dependencies.lib.java.unittest.dir}">
+        <repository
+          url="file:///${maven.dependencies.path}"
+          type="maven"
+          synchronize="true"/>
+        <repository url="http://maven.acm-sl.org/lib" type="maven"/>
+        <repository url="http://www.ibiblio.org/maven" type="maven"/>
+
+        <jarDependency
+          name="junit"
+          version="3.8.1"
+          jar="junit-3.8.1.jar"/>
+
+      </greebo>
+
+    </target>
+
+</project>
