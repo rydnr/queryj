@@ -2,8 +2,7 @@
                       Project tests
 
 Copyright (C) 2003  Jose San Leandro Armend?riz
-jsanleandro@yahoo.es
-chousz@yahoo.com
+chous@acm-sl.org
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Thanks to ACM S.L. for distributing this library under the GPL license.
-Contact info: jsr000@terra.es
+Contact info: pepe@acm-sl.com
 Postal Address: c/Playa de Lagoa, 1
 Urb. Valdecaba?as
 Boadilla del monte
@@ -58,7 +57,7 @@ This file is part of  JUnitDoclet, a project to generate basic
 test cases  from source code and  helping to keep them in sync
 during refactoring.
 
-Copyright (C) 2002  ObjectFab GmbH  (http://www.objectfab.de/)
+Copyright (C) 2002-2005  ObjectFab GmbH  (http://www.objectfab.de/)
 
 This library is  free software; you can redistribute it and/or
 modify  it under the  terms of  the  GNU Lesser General Public

@@ -1,9 +1,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendariz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsanleandro@yahoo.es
+    Contact info: chous@acm-sl.org
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -56,7 +55,7 @@ import java.util.Date;
 
 /**
  * Has the responsiblity of knowing how to create conditions.
- * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
 public class ConditionFactory
 {
@@ -316,7 +315,7 @@ public class ConditionFactory
 
     /**
      * Envelopes a condition surrounding it with appropiate prefix and suffix.
-     * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
+     * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
      * @version $Revision$
      */
     protected static class _ConditionWrapper
@@ -545,7 +544,7 @@ public class ConditionFactory
 
     /**
      * Envelopes a condition surrounding it with appropiate prefix and suffix.
-     * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
+     * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
      * @version $Revision$
      */
     protected static class _AtomicConditionWrapper
@@ -882,7 +881,7 @@ public class ConditionFactory
     /**
      * Envelopes a variable condition surrounding it with appropiate
      * prefix and suffix.
-     * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
+     * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
      * @version $Revision$
      */
     protected static class _VariableConditionWrapper

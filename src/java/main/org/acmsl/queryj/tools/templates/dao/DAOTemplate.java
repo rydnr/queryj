@@ -1,9 +1,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendariz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsanleandro@yahoo.es
+    Contact info: chous@acm-sl.org
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -36,8 +35,6 @@
  * Description: Is able to create engine-specific DAO interfaces for each
  *              table in the persistence model.
  *
-<<<<<<< DAOTemplate.java
-=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -46,7 +43,6 @@
  *
  * $Id$
  *
->>>>>>> 1.35
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -106,12 +102,9 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Is able to create engine-specific DAO interfaces for each
  * table in the persistence model.
- * @author <a href="mailto:jsanleandro@yahoo.es"
+ * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< DAOTemplate.java
-=======
  * @version $Revision$
->>>>>>> 1.35
  */
 public class DAOTemplate
     extends  AbstractDAOTemplate
@@ -995,7 +988,6 @@ public class DAOTemplate
                       t_iColumnIndex < t_astrColumnNames.length;
                       t_iColumnIndex++)
             {
-<<<<<<< DAOTemplate.java
                 int t_iColumnType =
                     metaDataManager.getColumnType(
                         tableTemplate.getTableName(),
@@ -1067,52 +1059,6 @@ public class DAOTemplate
                     }
                 }
                 else
-=======
-                t_sbUpdateAttributesJavadoc.append(
-                    t_AttributeJavadocFormatter.format(
-                        new Object[]
-                        {
-                            t_astrColumnNames[t_iColumnIndex].toLowerCase(),
-                            t_astrColumnNames[t_iColumnIndex]
-                        }));
-
-                t_sbUpdateAttributesDeclaration.append(
-                    t_AttributeDeclarationFormatter.format(
-                        new Object[]
-                        {
-                            metaDataUtils.getNativeType(
-                                metaDataManager.getColumnType(
-                                    tableTemplate.getTableName(),
-                                    t_astrColumnNames[t_iColumnIndex])),
-                            t_astrColumnNames[t_iColumnIndex].toLowerCase()
-                        }));
-
-                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-                {
-                    t_sbUpdateAttributesDeclaration.append(",");
-                }
-
-                boolean t_bManagedExternally =
-                    metaDataManager.isManagedExternally(
-                        tableTemplate.getTableName(),
-                        t_astrColumnNames[t_iColumnIndex]);
-
-                if  (t_bManagedExternally)
-                {
-                    t_sbExternallyManagedInsertParametersSpecification.append(
-                        t_ExternallyManagedInsertParametersSpecificationFormatter.format(
-                            new Object[]
-                            {
-                                t_strRepositoryName,
-                                tableTemplate.getTableName().toUpperCase(),
-                                t_astrColumnNames[t_iColumnIndex].toUpperCase(),
-                                metaDataManager.getKeyword(
-                                    tableTemplate.getTableName(),
-                                    t_astrColumnNames[t_iColumnIndex])
-                            }));
-                }
-                else
->>>>>>> 1.35
                 {
                     t_sbAttributesJavadoc.append(
                         t_AttributeJavadocFormatter.format(
@@ -1224,13 +1170,8 @@ public class DAOTemplate
                         t_sbInsertParametersSpecification,
                         t_sbAttributesJavadoc,
                         t_sbAttributesDeclaration,
-<<<<<<< DAOTemplate.java
                         t_sbInsertAttributesStatementSetterCall,
                         t_sbExternallyManagedInsertParametersSpecification
-=======
-                        t_sbAttributesStatementSetterCall,
-                        t_sbExternallyManagedInsertParametersSpecification
->>>>>>> 1.35
                     }));
 
             t_sbResult.append(
@@ -1242,15 +1183,9 @@ public class DAOTemplate
                         tableTemplate.getTableName().toUpperCase(),
                         t_sbUpdateParametersSpecification,
                         t_sbPkFilter,
-<<<<<<< DAOTemplate.java
                         t_sbUpdateAttributesJavadoc,
                         t_sbUpdateAttributesDeclaration,
                         t_sbUpdateAttributesStatementSetterCall
-=======
-                        t_sbUpdateAttributesJavadoc,
-                        t_sbUpdateAttributesDeclaration,
-                        t_sbAttributesStatementSetterCall
->>>>>>> 1.35
                     }));
                 
             t_sbDeleteMethod.append(

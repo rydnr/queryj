@@ -1,9 +1,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendariz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsanleandro@yahoo.es
+    Contact info: chous@acm-sl.org
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -35,18 +34,6 @@
  *
  * Description: Is able to create CustomResultSetExtractor implementation for each
  *              custom query requiring so.
- *
-<<<<<<< CustomResultSetExtractorTemplate.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -97,12 +84,8 @@ import java.util.Map;
 /**
  * Is able to create CustomResultSetExtractor implementations for each
  * custom query requiring so.
- * @author <a href="mailto:jsanleandro@yahoo.es"
+ * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< CustomResultSetExtractorTemplate.java
-=======
- * @version $Revision$
->>>>>>> 1.3
  */
 public class CustomResultSetExtractorTemplate
     extends  AbstractCustomResultSetExtractorTemplate
@@ -394,7 +377,6 @@ public class CustomResultSetExtractorTemplate
                       t_iPropertyIndex < t_aProperties.length;
                       t_iPropertyIndex++)
             {
-<<<<<<< CustomResultSetExtractorTemplate.java
                 if  (t_aProperties[t_iPropertyIndex] == null)
                 {
                     throw
@@ -448,20 +430,6 @@ public class CustomResultSetExtractorTemplate
                             t_aParams));
                 }
 
-=======
-                if  (t_aProperties[t_iPropertyIndex] == null)
-                {
-                    throw
-                        new InvalidTemplateException(
-                              "invalid.property",
-                              new Object[]
-                              {
-                                  new Integer(t_iPropertyIndex),
-                                  resultElement.getId()
-                              });
-                }
-
->>>>>>> 1.3
                 t_sbValueObjectPropertiesSpecification.append(
                     t_Formatter.format(t_aParams));
 

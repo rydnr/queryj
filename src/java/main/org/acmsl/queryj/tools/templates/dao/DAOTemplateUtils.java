@@ -1,9 +1,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendariz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsanleandro@yahoo.es
+    Contact info: chous@acm-sl.org
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -35,18 +34,6 @@
  *
  * Description: Provides some useful methods when generating DAO classes
  *              via DAO template instances.
- *
-<<<<<<< DAOTemplateUtils.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.6
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -80,12 +67,8 @@ import java.util.Iterator;
 /**
  * Provides some useful methods when generating DAO classes
  * via DAO template instances.
- * @author <a href="mailto:jsanleandro@yahoo.es"
+ * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< DAOTemplateUtils.java
-=======
- * @version $Revision$
->>>>>>> 1.6
  */
 public class DAOTemplateUtils
 {
@@ -730,31 +713,8 @@ public class DAOTemplateUtils
     {
         boolean result = false;
 
-<<<<<<< DAOTemplateUtils.java
         String t_strTableInLowerCase = tableName.trim().toLowerCase();
 
-        result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
-
-        if  (!result)
-        {
-            String t_strSingularName =
-                englishGrammarUtils.getSingular(t_strTableInLowerCase);
-
-            result = daoId.equalsIgnoreCase(t_strSingularName);
-        }
-=======
-        String t_strTableInLowerCase = tableName.trim().toLowerCase();
->>>>>>> 1.6
-
-<<<<<<< DAOTemplateUtils.java
-        if  (!result)
-        {
-            String t_strPluralName =
-                englishGrammarUtils.getPlural(t_strTableInLowerCase);
-
-            result = daoId.equalsIgnoreCase(t_strPluralName);
-        }
-=======
         result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
 
         if  (!result)
@@ -772,7 +732,6 @@ public class DAOTemplateUtils
 
             result = daoId.equalsIgnoreCase(t_strPluralName);
         }
->>>>>>> 1.6
 
         return result;
     }

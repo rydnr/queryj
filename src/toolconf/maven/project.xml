@@ -37,23 +37,13 @@
    Author: Jose San Leandro Armendariz
 
    Description: Maven project descriptor for QueryJ.
-
-   Last modified by: $Author$ at $Date$
-
-   File version: $Revision$
-
-   Project version: $Name$
-                    ("Name" means no concrete version has been checked out)
-
-   $Id$
-
 -->
 <project>
   <pomVersion>3</pomVersion>
   <name>QueryJ</name>
   <id>queryj</id>
   <groupId>org.acmsl.queryj</groupId>
-  <currentVersion>0.6b6</currentVersion>
+  <currentVersion>0.6b7-SNAPSHOT</currentVersion>
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>

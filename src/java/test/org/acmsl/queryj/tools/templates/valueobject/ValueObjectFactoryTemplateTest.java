@@ -2,8 +2,7 @@
                       Project tests
 
 Copyright (C) 2003  Jose San Leandro Armend?riz
-jsanleandro@yahoo.es
-chousz@yahoo.com
+chous@acm-sl.org
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Thanks to ACM S.L. for distributing this library under the GPL license.
-Contact info: jsr000@terra.es
+Contact info: pepe@acm-sl.com
 Postal Address: c/Playa de Lagoa, 1
 Urb. Valdecaba?as
 Boadilla del monte
@@ -113,7 +112,9 @@ extends TestCase
         new org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate(
             "com.foo.bar", // package name
             null, // table template
-            null); // database metadata manager
+            null, // database metadata manager
+            null, // project
+            null);// task
     // JUnitDoclet end method testcase.createInstance
   }
   

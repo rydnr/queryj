@@ -1,9 +1,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendariz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsanleandro@yahoo.es
+    Contact info: chous@acm-sl.org
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -34,10 +33,6 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Defines the default subtemplates to generate DAO sources.
-<<<<<<< DAOTemplateDefaults.java
- *
-=======
->>>>>>> 1.18
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -48,7 +43,7 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
 
 /**
  * Defines the default subtemplates to generate DAO sources.
- * @author <a href="mailto:jsanleandro@yahoo.es"
+ * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public interface DAOTemplateDefaults
@@ -62,8 +57,7 @@ public interface DAOTemplateDefaults
         + " *****************************************************************"
         + "*************\n"
         + " *\n"
-        + " * Filename: 
-$" + "RCSfile: $\n"
+        + " * Filename: $" + "RCSfile: $\n"
         + " *\n"
         + " * Author: QueryJ\n"
         + " *\n"
@@ -504,17 +498,6 @@ $" + "RCSfile: $\n"
     public static final String
         DEFAULT_EXTERNALLY_MANAGED_INSERT_PARAMETERS_SPECIFICATION =
             "\n        result.value({0}TableRepository.{1}.{2}, \"{3}\", false);";
-
-    /**
-     * The externally-managed  insert fields specification.
-     * @param 0 the repository name.
-     * @param 1 the capitalized table name.
-     * @param 2 the field name.
-     * @param 3 the keyword.
-     */
-    public static final String
-        DEFAULT_EXTERNALLY_MANAGED_INSERT_PARAMETERS_SPECIFICATION =
-            "\n        result.value({0}TableRepository.{1}.{2}, \"{3}\");";
 
     /**
      * The update method.

@@ -1,9 +1,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendariz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsanleandro@yahoo.es
+    Contact info: chous@acm-sl.org
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -42,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /**
  * Defines the default subtemplates used to create xml DAO implementations
  * for each table in the persistence model.
- * @author <a href="mailto:jsanleandro@yahoo.es"
+ * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public interface XMLDAOTemplateDefaults
@@ -54,8 +53,8 @@ public interface XMLDAOTemplateDefaults
           "/*\n"
         + "                        QueryJ\n"
         + "\n"
-        + "    Copyright (C) 2002  Jose San Leandro Armendariz\n"
-        + "                        jsanleandro@yahoo.es\n"
+        + "    Copyright (C) 2002-2005  Jose San Leandro Armendariz\n"
+        + "                        chous@acm-sl.org\n"
         + "                        chousz@yahoo.com\n"
         + "\n"
         + "    This library is free software; you can redistribute it and/or\n"
@@ -80,7 +79,7 @@ public interface XMLDAOTemplateDefaults
         + "\n"
         + "    Thanks to ACM S.L. for distributing this library under the GPL "
         + "license.\n"
-        + "    Contact info: jsanleandro@yahoo.es\n"
+        + "    Contact info: chous@acm-sl.org\n"
         + "    Postal Address: c/Playa de Lagoa, 1\n"
         + "                    Urb. Valdecabanas\n"
         + "                    Boadilla del monte\n"

@@ -1,9 +1,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendariz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsanleandro@yahoo.es
+    Contact info: chous@acm-sl.org
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -100,7 +99,7 @@ import java.util.Map;
 
 /**
  * Validates any custom sql queries.
- * @author <a href="mailto:jsanleandro@yahoo.es"
+ * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
 <<<<<<< CustomSqlValidationHandler.java
 =======
@@ -573,7 +572,6 @@ public class CustomSqlValidationHandler
                 {
                     Method t_ParameterMethod = null;
 
-<<<<<<< CustomSqlValidationHandler.java
                     if  (   (   ("Date".equals(t_strType))
                              || ("Timestamp".equals(t_strType)))
                          && (t_Parameter.getValidationValue() != null))
@@ -581,16 +579,7 @@ public class CustomSqlValidationHandler
                         t_ParameterValue = new Timestamp(new Date().getTime());
                     }
                     else
-=======
-                    if  (   ("Date".equals(t_strType))
-                         && (t_Parameter.getValidationValue() != null))
                     {
-                        t_ParameterValue = new Timestamp(new Date().getTime());
-                    }
-                    else
->>>>>>> 1.3
-                    {
-<<<<<<< CustomSqlValidationHandler.java
                         t_ParameterMethod =
                             conversionUtils.getClass().getMethod(
                                 "to" + t_strType,
@@ -608,23 +597,6 @@ public class CustomSqlValidationHandler
 
                             exceptionToThrow = null;
                         }
-=======
-                        t_ParameterMethod =
-                            conversionUtils.getClass().getMethod(
-                                "to" + t_strType,
-                                CLASS_ARRAY_OF_ONE_STRING);
-
-                        if  (t_ParameterMethod != null)
-                        {
-                            t_ParameterValue =
-                                t_ParameterMethod.invoke(
-                                    conversionUtils,
-                                    new Object[]
-                                    {
-                                        t_Parameter.getValidationValue()
-                                    });
-                        }
->>>>>>> 1.3
                     }
                 }
                 catch  (final NoSuchMethodException noSuchMethod)
@@ -839,7 +811,6 @@ public class CustomSqlValidationHandler
                     JdbcConnectionOpeningHandler.JDBC_CONNECTION);
     }
 
-<<<<<<< CustomSqlValidationHandler.java
     /**
      * Retrieves the setter method name.
      * @param type the data type.
@@ -885,50 +856,4 @@ public class CustomSqlValidationHandler
 
         return result;
     }
-=======
-    /**
-     * Retrieves the setter method name.
-     * @param type the data type.
-     * @return the associated setter method.
-     * @precondition type != null
-     */
-    protected String getSetterMethod(final String type)
-    {
-        return
-            getSetterMethod(
-                type, MetaDataUtils.getInstance(), StringUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the setter method name.
-     * @param type the data type.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @return the associated setter method.
-     * @precondition type != null
-     * @precondition metaDataUtils != null
-     * @precondition stringUtils != null
-     */
-    protected String getSetterMethod(
-        final String type,
-        final MetaDataUtils metaDataUtils,
-        final StringUtils stringUtils)
-    {
-        String result = "set";
-
-        if  ("Date".equals(type))
-        {
-            result += "Timestamp";
-        }
-        else
-        {
-            result +=
-                stringUtils.capitalize(
-                    metaDataUtils.getNativeType(
-                        metaDataUtils.getJavaType(type)), '|');
-        }
-
-        return result;
-    }
->>>>>>> 1.3
 }

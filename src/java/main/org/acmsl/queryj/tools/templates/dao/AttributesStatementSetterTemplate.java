@@ -1,9 +1,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendariz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsanleandro@yahoo.es
+    Contact info: chous@acm-sl.org
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -35,18 +34,6 @@
  *
  * Description: Is able to create AttributesStatementSetter implementation for each
  *              table in the persistence model.
- *
-<<<<<<< AttributesStatementSetterTemplate.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -93,12 +80,8 @@ import java.util.Map;
 /**
  * Is able to create AttributesStatementSetter implementations for each
  * table in the persistence model.
- * @author <a href="mailto:jsanleandro@yahoo.es"
+ * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< AttributesStatementSetterTemplate.java
-=======
- * @version $Revision$
->>>>>>> 1.5
  */
 public class AttributesStatementSetterTemplate
     extends  AbstractAttributesStatementSetterTemplate
@@ -413,7 +396,6 @@ public class AttributesStatementSetterTemplate
                       t_iColumnIndex < t_astrColumnNames.length;
                       t_iColumnIndex++)
             {
-<<<<<<< AttributesStatementSetterTemplate.java
                 int t_iColumnType =
                     metaDataManager.getColumnType(
                         tableTemplate.getTableName(),
@@ -550,101 +532,8 @@ public class AttributesStatementSetterTemplate
                         }));
 
                 if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-=======
-                boolean t_bManagedExternally =
-                    metaDataManager.isManagedExternally(
-                        tableTemplate.getTableName(),
-                        t_astrColumnNames[t_iColumnIndex]);
-
-                if  (!t_bManagedExternally)
->>>>>>> 1.5
                 {
-<<<<<<< AttributesStatementSetterTemplate.java
                     t_sbCompleteParameterDeclarations.append(",");
-=======
-                    t_strParameterType =
-                        metaDataUtils.getFieldType(
-                            metaDataManager.getColumnType(
-                                t_strTableName,
-                                t_astrColumnNames[t_iColumnIndex]),
-                            project,
-                            task);
-
-                    t_strPropertyName =
-                        t_astrColumnNames[t_iColumnIndex].toUpperCase();
-
-                    t_strPropertyType =
-                        metaDataUtils.getObjectType(
-                            metaDataManager.getColumnType(
-                                t_strTableName,
-                                t_astrColumnNames[t_iColumnIndex]));
-
-                    t_strCapitalizedParameterName =
-                        stringUtils.capitalize(
-                            t_astrColumnNames[t_iColumnIndex].toLowerCase(),
-                            '_');
-
-                    t_strParameterName =
-                        stringUtils.unCapitalizeStart(
-                            t_strCapitalizedParameterName);
-
-                    t_sbParameterSetterCalls.append(
-                        t_ParameterSetterCallFormatter.format(
-                            new Object[]
-                            {
-                                t_strCapitalizedParameterName,
-                                t_strParameterName
-                            }));
-
-                    t_sbParameterAccessors.append(
-                        t_ParameterAccessorFormatter.format(
-                            new Object[]
-                            {
-                                t_strPropertyName,
-                                t_strParameterType,
-                                t_strParameterName,
-                                t_strCapitalizedParameterName
-                            }));
-
-                    t_sbParameterGetterCalls.append(
-                        t_ParameterGetterCallFormatter.format(
-                            new Object[]
-                            {
-                                t_strCapitalizedParameterName
-                            }));
-
-                    t_sbParameterJavadocs.append(
-                        t_ParameterJavadocFormatter.format(
-                            new Object[]
-                            {
-                                t_strParameterName,
-                                t_astrColumnNames[t_iColumnIndex].toUpperCase()
-                            }));
-
-                    t_sbParameterDeclarations.append(
-                        t_ParameterDeclarationFormatter.format(
-                            new Object[]
-                            {
-                                t_strParameterType,
-                                t_strParameterName
-                            }));
-
-                    if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-                    {
-                        t_sbParameterDeclarations.append(",");
-                    }
-
-                    t_sbParameterSpecifications.append(
-                        t_ParameterSpecificationFormatter.format(
-                            new Object[]
-                            {
-                                t_strPropertyType,
-                                t_strRepositoryName,
-                                t_strTableName.toUpperCase(),
-                                t_strPropertyName,
-                                t_strParameterName
-                            }));
->>>>>>> 1.5
                 }
             }
         }

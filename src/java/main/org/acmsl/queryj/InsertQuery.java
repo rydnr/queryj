@@ -2,8 +2,7 @@
                         QueryJ
 
     Copyright (C) 2002  Jose San Leandro Armendariz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsanleandro@yahoo.es
+    Contact info: chous@acm-sl.org
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -34,18 +33,6 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Represents standard SQL insert queries.
- *
-<<<<<<< InsertQuery.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.6
  */
 package org.acmsl.queryj;
 
@@ -80,12 +67,8 @@ import java.util.Map;
 
 /**
  * Represents standard SQL insert queries.
- * @author <a href="mailto:jsanleandro@yahoo.es"
+ * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< InsertQuery.java
-=======
- * @version $Revision$
->>>>>>> 1.6
  */
 public abstract class InsertQuery
     extends  WriteQuery
@@ -113,7 +96,6 @@ public abstract class InsertQuery
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
-<<<<<<< InsertQuery.java
      * @param escape to forcing value escaping or not.
      * @precondition field != null
      */
@@ -128,9 +110,6 @@ public abstract class InsertQuery
      * @param field the field.
      * @param value the value.
      * @precondition field != null
-=======
-     * @precondition field != null
->>>>>>> 1.6
      */
     public void value(final IntField field, final int value)
     {
@@ -138,7 +117,6 @@ public abstract class InsertQuery
     }
 
     /**
-<<<<<<< InsertQuery.java
      * Specifies the keyword of a field.
      * @param field the field.
      * @param value the value.
@@ -163,19 +141,6 @@ public abstract class InsertQuery
     }
 
     /**
-=======
-     * Specifies the keyword of a field.
-     * @param field the field.
-     * @param value the value.
-     * @precondition field != null
-     */
-    public void value(final IntField field, final String value)
-    {
-        addValue(field, value);
-    }
-
-    /**
->>>>>>> 1.6
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
@@ -187,7 +152,6 @@ public abstract class InsertQuery
     }
 
     /**
-<<<<<<< InsertQuery.java
      * Specifies the keyword of a field.
      * @param field the field.
      * @param value the value.
@@ -212,19 +176,6 @@ public abstract class InsertQuery
     }
 
     /**
-=======
-     * Specifies the keyword of a field.
-     * @param field the field.
-     * @param value the value.
-     * @precondition field != null
-     */
-    public void value(final LongField field, final String value)
-    {
-        addValue(field, value);
-    }
-
-    /**
->>>>>>> 1.6
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
@@ -236,7 +187,6 @@ public abstract class InsertQuery
     }
 
     /**
-<<<<<<< InsertQuery.java
      * Specifies the keyword of a field.
      * @param field the field.
      * @param value the value.
@@ -261,19 +211,6 @@ public abstract class InsertQuery
     }
 
     /**
-=======
-     * Specifies the keyword of a field.
-     * @param field the field.
-     * @param value the value.
-     * @precondition field != null
-     */
-    public void value(final DoubleField field, final String value)
-    {
-        addValue(field, value);
-    }
-
-    /**
->>>>>>> 1.6
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
@@ -285,7 +222,6 @@ public abstract class InsertQuery
     }
 
     /**
-<<<<<<< InsertQuery.java
      * Specifies the keyword of a field.
      * @param field the field.
      * @param value the value.
@@ -310,19 +246,6 @@ public abstract class InsertQuery
     }
 
     /**
-=======
-     * Specifies the keyword of a field.
-     * @param field the field.
-     * @param value the value.
-     * @precondition field != null
-     */
-    public void value(final CalendarField field, final String value)
-    {
-        addValue(field, value);
-    }
-
-    /**
->>>>>>> 1.6
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
@@ -334,7 +257,6 @@ public abstract class InsertQuery
     }
 
     /**
-<<<<<<< InsertQuery.java
      * Specifies the keyword of a field.
      * @param field the field.
      * @param value the value.
@@ -359,19 +281,6 @@ public abstract class InsertQuery
     }
 
     /**
-=======
-     * Specifies the keyword of a field.
-     * @param field the field.
-     * @param value the value.
-     * @precondition field != null
-     */
-    public void value(final DateField field, final String value)
-    {
-        addValue(field, value);
-    }
-
-    /**
->>>>>>> 1.6
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
@@ -383,7 +292,6 @@ public abstract class InsertQuery
     }
 
     /**
-<<<<<<< InsertQuery.java
      * Specifies the keyword of a field.
      * @param field the field.
      * @param value the value.
@@ -408,19 +316,6 @@ public abstract class InsertQuery
     }
 
     /**
-=======
-     * Specifies the keyword of a field.
-     * @param field the field.
-     * @param value the value.
-     * @precondition field != null
-     */
-    public void value(final BigDecimalField field, final String value)
-    {
-        addValue(field, value);
-    }
-
-    /**
->>>>>>> 1.6
      * Specifies the value of a field.
      * @param field the field.
      * @param value the value.
@@ -434,7 +329,6 @@ public abstract class InsertQuery
     /**
      * Specifies the value of a field.
      * @param field the field.
-<<<<<<< InsertQuery.java
      * @param value the value.
      * @param escape to forcing value escaping or not.
      * @precondition field != null
@@ -449,9 +343,6 @@ public abstract class InsertQuery
      * Specifies the value of a field.
      * @param field the field.
      * @precondition field != null
-=======
-     * @precondition field != null
->>>>>>> 1.6
      */
     public void value(final Field field)
     {
