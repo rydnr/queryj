@@ -64,10 +64,10 @@
     <!--attainGoal name="pdf"/-->
   </preGoal>
 
-  <postGoal name="xdoc:jelly-transform">
+  <!--postGoal name="xdoc:jelly-transform">
     <ant:echo message="Replacing issue.url"/>
     <ant:ant antfile="customvars.xml" target="replace-custom-vars"/>
-  </postGoal>
+  </postGoal-->
 
   <goal name="replace-custom-vars">
     <ant:echo message="Replacing {issue.url}"/>
@@ -97,6 +97,22 @@
         <ant:include name="*.html"/>
       </ant:fileset>
     </ant:replaceregexp>
+
+    <ant:replaceregexp byline="true">
+      <ant:regexp pattern="\$Id$"/>
+      <ant:substitution expression="\1"/>
+      <ant:fileset dir="../../../target/docs">
+        <ant:include name="*.html"/>
+      </ant:fileset>
+    </ant:replaceregexp>
+
+    <!--ant:replaceregexp byline="true">
+      <ant:regexp pattern="\$Name$"/>
+      <ant:substitution expression="\1-\2.\3"/>
+      <ant:fileset dir="../../../target/docs">
+        <ant:include name="*.html"/>
+      </ant:fileset>
+    </ant:replaceregexp-->
 
     <!--
     <ant:ant antfile="customvars.xml"/>
