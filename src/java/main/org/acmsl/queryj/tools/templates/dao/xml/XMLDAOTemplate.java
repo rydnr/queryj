@@ -2423,6 +2423,7 @@ public abstract class XMLDAOTemplate
         StringBuffer t_sbResult = new StringBuffer();
 
         StringUtils t_StringUtils = StringUtils.getInstance();
+
         EnglishGrammarUtils t_EnglishGrammarUtils =
             EnglishGrammarUtils.getInstance();
 
@@ -2574,7 +2575,8 @@ public abstract class XMLDAOTemplate
 
                     String t_strReferredTableName =
                         t_StringUtils.capitalize(
-                            t_astrReferredTables[t_iRefTableIndex],
+                            t_EnglishGrammarUtils.getSingular(
+                                t_astrReferredTables[t_iRefTableIndex]),
                             '_');
 
                     String t_strFkName =
@@ -2628,7 +2630,8 @@ public abstract class XMLDAOTemplate
                         t_PackageUtils.retrieveValueObjectPackage(
                             getBasePackageName()),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_'),
                         t_PackageUtils.retrieveBaseDAOPackage(
                             getBasePackageName()),
@@ -2655,7 +2658,8 @@ public abstract class XMLDAOTemplate
                     new Object[]
                     {
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -2665,7 +2669,8 @@ public abstract class XMLDAOTemplate
                     {
                         t_TableTemplate.getTableName().toLowerCase(),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -2675,7 +2680,8 @@ public abstract class XMLDAOTemplate
                     new Object[]
                     {
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -2851,7 +2857,9 @@ public abstract class XMLDAOTemplate
                         new Object[]
                         {
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc,
                             t_sbBuildKeyPkDeclaration,
@@ -2869,7 +2877,11 @@ public abstract class XMLDAOTemplate
                         {
                             t_TableTemplate.getTableName(),
                             t_sbPkJavadoc,
-                            t_StringUtils.capitalize(t_TableTemplate.getTableName().toLowerCase(), '_'),
+                            t_StringUtils.capitalize(
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
+                                '_'),
                             t_sbPkDeclaration,
                             t_sbPkFilterValues
                         }));
@@ -2880,7 +2892,9 @@ public abstract class XMLDAOTemplate
                         {
                             t_TableTemplate.getTableName().toUpperCase(),
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc,
                             t_sbInsertParametersJavadoc,
@@ -2894,7 +2908,9 @@ public abstract class XMLDAOTemplate
                         {
                             t_TableTemplate.getTableName().toUpperCase(),
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc,
                             t_sbInsertParametersJavadoc,
@@ -2908,7 +2924,9 @@ public abstract class XMLDAOTemplate
                         new Object[]
                         {
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc.toString(),
                             t_sbUpdateParametersJavadoc,
@@ -2932,7 +2950,8 @@ public abstract class XMLDAOTemplate
                             new Object[]
                             {
                                 t_StringUtils.capitalize(
-                                    t_TableTemplate.getTableName(),
+                                    t_EnglishGrammarUtils.getSingular(
+                                        t_TableTemplate.getTableName()),
                                     '_'),
                                 t_sbPkJavadoc,
                                 t_sbPkDeclaration,
@@ -2951,7 +2970,9 @@ public abstract class XMLDAOTemplate
                         {
                             t_TableTemplate.getTableName(),
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc,
                             t_sbPkDeclaration,

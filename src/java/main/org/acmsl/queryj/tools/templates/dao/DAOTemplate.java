@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
 
@@ -2888,6 +2889,8 @@ public abstract class DAOTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
         StringUtils t_StringUtils = StringUtils.getInstance();
 
         StringValidator t_StringValidator = StringValidator.getInstance();
@@ -3046,7 +3049,8 @@ public abstract class DAOTemplate
 
                     String t_strReferredTableName =
                         t_StringUtils.capitalize(
-                            t_astrReferredTables[t_iRefTableIndex],
+                            t_EnglishGrammarUtils.getSingular(
+                                t_astrReferredTables[t_iRefTableIndex]),
                             '_');
 
                     String t_strFkName =
@@ -3086,7 +3090,8 @@ public abstract class DAOTemplate
                     {
                         getEngineName(),
                         getEngineVersion(),
-                        t_TableTemplate.getTableName()
+                        t_EnglishGrammarUtils.getSingular(
+                            t_TableTemplate.getTableName())
                     }));
 
             t_sbResult.append(
@@ -3102,7 +3107,8 @@ public abstract class DAOTemplate
                         t_PackageUtils.retrieveValueObjectPackage(
                             getBasePackageName()),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_'),
                         t_PackageUtils.retrieveBaseDAOPackage(
                             getBasePackageName()),
@@ -3129,7 +3135,8 @@ public abstract class DAOTemplate
                     {
                         getEngineName(),
                         getEngineVersion(),
-                        t_TableTemplate.getTableName()
+                        t_EnglishGrammarUtils.getSingular(
+                            t_TableTemplate.getTableName())
                     }));
 
             t_sbResult.append(
@@ -3138,7 +3145,8 @@ public abstract class DAOTemplate
                     {
                         getEngineName(),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -3150,7 +3158,8 @@ public abstract class DAOTemplate
                     {
                         getEngineName(),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -3386,7 +3395,10 @@ public abstract class DAOTemplate
                         {
                             t_TableTemplate.getTableName(),
                             t_sbPkJavadoc,
-                            t_StringUtils.capitalize(t_TableTemplate.getTableName().toLowerCase(), '_'),
+                            t_StringUtils.capitalize(
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName().toLowerCase()),
+                                '_'),
                             t_sbPkDeclaration,
                             t_sbSelectFields,
                             t_strRepositoryName,
@@ -3400,7 +3412,8 @@ public abstract class DAOTemplate
                         new Object[]
                         {
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                                 '_'),
                             t_sbBuildValueObjectRetrieval
                         }));
@@ -3410,7 +3423,8 @@ public abstract class DAOTemplate
                         new Object[]
                         {
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName().toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc.toString(),
                             t_sbInsertParametersJavadoc,
@@ -3425,7 +3439,8 @@ public abstract class DAOTemplate
                         new Object[]
                         {
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName().toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc.toString(),
                             t_sbUpdateParametersJavadoc,
@@ -3451,7 +3466,8 @@ public abstract class DAOTemplate
                             new Object[]
                             {
                                 t_StringUtils.capitalize(
-                                    t_TableTemplate.getTableName(),
+                                    t_EnglishGrammarUtils.getSingular(
+                                        t_TableTemplate.getTableName()),
                                     '_'),
                                 t_sbPkJavadoc,
                                 t_sbPkDeclaration,

@@ -50,6 +50,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -1021,7 +1022,7 @@ public abstract class DAOChooserTemplate
      * Adds a new table.
      * @param table the new table.
      */
-    public void addTable(String table)
+    public void addTable(final String table)
     {
         List t_lTables = getTables();
 
@@ -1040,6 +1041,9 @@ public abstract class DAOChooserTemplate
         StringBuffer t_sbResult = new StringBuffer();
 
         StringUtils t_StringUtils = StringUtils.getInstance();
+
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
 
         if  (t_StringUtils != null) 
         {
@@ -1088,7 +1092,8 @@ public abstract class DAOChooserTemplate
                     {
                         String t_strCapitalizedTable =
                             t_StringUtils.capitalize(
-                                t_strTable,
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_strTable),
                                 '_');
 
                         String t_strUpperCaseTable =
@@ -1114,7 +1119,8 @@ public abstract class DAOChooserTemplate
                                     t_strCapitalizedTable,
                                     t_strUpperCaseTable,
                                     t_StringUtils.capitalize(
-                                        t_strTable.toLowerCase(),
+                                        t_EnglishGrammarUtils.getSingular(
+                                            t_strTable.toLowerCase()),
                                         '_')
                                 }));
                     }

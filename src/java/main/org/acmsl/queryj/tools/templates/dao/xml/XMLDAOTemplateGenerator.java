@@ -60,6 +60,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -470,6 +471,8 @@ public class XMLDAOTemplateGenerator
       throws  IOException
     {
         StringUtils t_StringUtils = StringUtils.getInstance();
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
         FileUtils t_FileUtils     = FileUtils.getInstance();
 
         if  (   (t_StringUtils != null)
@@ -486,9 +489,10 @@ public class XMLDAOTemplateGenerator
                     + File.separator
                     + "XML"
                     + t_StringUtils.capitalize(
-                        mockDAOTemplate
-                            .getTableTemplate()
-                        .getTableName().toLowerCase(),
+                          t_EnglishGrammarUtils.getSingular(
+                              mockDAOTemplate
+                                  .getTableTemplate()
+                                      .getTableName().toLowerCase()),
                         '_')
                     + "DAO.java",
                     Project.MSG_VERBOSE);
@@ -499,10 +503,11 @@ public class XMLDAOTemplateGenerator
                 + File.separator
                 + "XML"
                 + t_StringUtils.capitalize(
-                    mockDAOTemplate
-                        .getTableTemplate()
-                            .getTableName().toLowerCase(),
-                    '_')
+                      t_EnglishGrammarUtils.getSingular(
+                          mockDAOTemplate
+                              .getTableTemplate()
+                                  .getTableName().toLowerCase()),
+                      '_')
                 + "DAO.java",
                 mockDAOTemplate.toString());
         }

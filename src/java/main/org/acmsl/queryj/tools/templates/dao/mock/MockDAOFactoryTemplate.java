@@ -57,6 +57,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -800,6 +801,9 @@ public abstract class MockDAOFactoryTemplate
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
+
         TableTemplate t_TableTemplate = getTableTemplate();
 
         MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
@@ -815,7 +819,8 @@ public abstract class MockDAOFactoryTemplate
                 new Object[]
                 {
                     t_StringUtils.capitalize(
-                        t_TableTemplate.getTableName().toLowerCase(),
+                        t_EnglishGrammarUtils.getSingular(
+                            t_TableTemplate.getTableName().toLowerCase()),
                         '_'),
                 };
 

@@ -59,6 +59,7 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -1689,13 +1690,30 @@ public abstract class MockDAOTestTemplate
     public String getTestName()
     {
         return
+            getTestName(
+                StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the test name.
+     * @param stringUtils the StringUtils instance.
+     * @param englishGrammarUtils the EnglishGrammarUtils instance.
+     * @return such name.
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     */
+    protected String getTestName(
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils)
+    {
+        return
               "Mock"
-            + StringUtils.getInstance().capitalize(
-                  getTableTemplate().getTableName().toLowerCase(),
+            + stringUtils.capitalize(
+                  englishGrammarUtils.getSingular(
+                      getTableTemplate().getTableName().toLowerCase()),
                   '_')
             + "DAOTest";
     }
-
 
     /**
      * Indicates if the test should be considered a suite or not.
@@ -1717,6 +1735,9 @@ public abstract class MockDAOTestTemplate
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
+
         MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
 
         TableTemplate t_TableTemplate = getTableTemplate();
@@ -1731,7 +1752,8 @@ public abstract class MockDAOTestTemplate
         {
             String t_strCapitalizedTableName =
                 t_StringUtils.capitalize(
-                    t_TableTemplate.getTableName().toLowerCase(),
+                    t_EnglishGrammarUtils.getSingular(
+                        t_TableTemplate.getTableName().toLowerCase()),
                     '_');
             /*
             try 

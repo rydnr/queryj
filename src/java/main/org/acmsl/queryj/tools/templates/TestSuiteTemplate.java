@@ -517,7 +517,7 @@ public abstract class TestSuiteTemplate
      * Adds a new test case.
      * @param testCase the new test template.
      */
-    public void addTestCase(TestTemplate testCase)
+    public void addTestCase(final TestTemplate testCase)
     {
         Collection t_cTestCases = getTestCases();
 

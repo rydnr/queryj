@@ -60,6 +60,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -469,6 +470,8 @@ public class MockDAOTemplateGenerator
         final Task            task)
       throws  IOException
     {
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
         StringUtils t_StringUtils = StringUtils.getInstance();
         FileUtils t_FileUtils     = FileUtils.getInstance();
 
@@ -486,10 +489,11 @@ public class MockDAOTemplateGenerator
                     + File.separator
                     + "Mock"
                     + t_StringUtils.capitalize(
-                        mockDAOTemplate
-                            .getTableTemplate()
-                        .getTableName().toLowerCase(),
-                        '_')
+                          t_EnglishGrammarUtils.getSingular(
+                              mockDAOTemplate
+                                  .getTableTemplate()
+                                      .getTableName().toLowerCase()),
+                          '_')
                     + "DAO.java",
                     Project.MSG_VERBOSE);
             }
@@ -499,9 +503,10 @@ public class MockDAOTemplateGenerator
                 + File.separator
                 + "Mock"
                 + t_StringUtils.capitalize(
-                    mockDAOTemplate
-                        .getTableTemplate()
-                            .getTableName().toLowerCase(),
+                      t_EnglishGrammarUtils.getSingular(
+                          mockDAOTemplate
+                              .getTableTemplate()
+                                  .getTableName().toLowerCase()),
                     '_')
                 + "DAO.java",
                 mockDAOTemplate.toString());

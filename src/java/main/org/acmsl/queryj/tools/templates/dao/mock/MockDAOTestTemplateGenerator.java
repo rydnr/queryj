@@ -60,6 +60,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -286,6 +287,8 @@ public class MockDAOTestTemplateGenerator
       throws  IOException
     {
         StringUtils t_StringUtils = StringUtils.getInstance();
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
         FileUtils t_FileUtils     = FileUtils.getInstance();
 
         if  (   (t_StringUtils != null)
@@ -302,9 +305,10 @@ public class MockDAOTestTemplateGenerator
                     + File.separator
                     + "Mock"
                     + t_StringUtils.capitalize(
-                        mockDAOTestTemplate
-                            .getTableTemplate()
-                        .getTableName().toLowerCase(),
+                          t_EnglishGrammarUtils.getSingular(
+                              mockDAOTestTemplate
+                                  .getTableTemplate()
+                                      .getTableName().toLowerCase()),
                         '_')
                     + "DAOTest.java",
                     Project.MSG_VERBOSE);
@@ -315,10 +319,11 @@ public class MockDAOTestTemplateGenerator
                 + File.separator
                 + "Mock"
                 + t_StringUtils.capitalize(
-                    mockDAOTestTemplate
-                        .getTableTemplate()
-                            .getTableName().toLowerCase(),
-                    '_')
+                      t_EnglishGrammarUtils.getSingular(
+                          mockDAOTestTemplate
+                              .getTableTemplate()
+                                  .getTableName().toLowerCase()),
+                      '_')
                 + "DAOTest.java",
                 mockDAOTestTemplate.toString());
         }

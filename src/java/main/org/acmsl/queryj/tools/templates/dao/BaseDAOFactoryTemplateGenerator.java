@@ -59,6 +59,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -288,6 +289,8 @@ public class BaseDAOFactoryTemplateGenerator
              && (outputDir != null))
         {
             StringUtils t_StringUtils = StringUtils.getInstance();
+            EnglishGrammarUtils t_EnglishGrammarUtils =
+                EnglishGrammarUtils.getInstance();
             FileUtils t_FileUtils = FileUtils.getInstance();
 
             if  (   (t_StringUtils != null)
@@ -299,8 +302,10 @@ public class BaseDAOFactoryTemplateGenerator
                       outputDir.getAbsolutePath()
                     + File.separator
                     + t_StringUtils.capitalize(
-                          template
-			      .getTableTemplate().getTableName().toLowerCase(),
+                          t_EnglishGrammarUtils.getSingular(
+                              template
+                                  .getTableTemplate().getTableName()
+                                      .toLowerCase()),
                           '_')
                     + "DAOFactory.java",
                     template.toString());

@@ -61,6 +61,7 @@ import org.acmsl.queryj.tools.templates.valueobject
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -288,6 +289,8 @@ public class ValueObjectFactoryTemplateGenerator
         if  (   (template  != null)
              && (outputDir != null))
         {
+            EnglishGrammarUtils t_EnglishGrammarUtils =
+                EnglishGrammarUtils.getInstance();
             StringUtils t_StringUtils = StringUtils.getInstance();
             FileUtils t_FileUtils = FileUtils.getInstance();
 
@@ -300,8 +303,10 @@ public class ValueObjectFactoryTemplateGenerator
                       outputDir.getAbsolutePath()
                     + File.separator
                     + t_StringUtils.capitalize(
-                          template
-                              .getTableTemplate().getTableName().toLowerCase(),
+                          t_EnglishGrammarUtils.getSingular(
+                              template
+                                  .getTableTemplate().getTableName()
+                                      .toLowerCase()),
                           '_')
                     + "ValueObjectFactory.java",
                     template.toString());

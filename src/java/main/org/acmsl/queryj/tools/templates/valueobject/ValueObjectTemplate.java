@@ -57,6 +57,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -945,6 +946,9 @@ public abstract class ValueObjectTemplate
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
+
         TableTemplate t_TableTemplate = getTableTemplate();
 
         DatabaseMetaDataManager t_MetaDataManager = getMetaDataManager();
@@ -961,7 +965,8 @@ public abstract class ValueObjectTemplate
                 t_Formatter.format(
                     new Object[]
                     {
-                        t_TableTemplate.getTableName()
+                        t_EnglishGrammarUtils.getSingular(
+                            t_TableTemplate.getTableName())
                     }));
 
             t_Formatter = new MessageFormat(getPackageDeclaration());
@@ -980,7 +985,8 @@ public abstract class ValueObjectTemplate
                 t_Formatter.format(
                     new Object[]
                     {
-                        t_TableTemplate.getTableName()
+                        t_EnglishGrammarUtils.getSingular(
+                            t_TableTemplate.getTableName())
                     }));
 
             t_Formatter = new MessageFormat(getClassDefinition());
@@ -989,7 +995,8 @@ public abstract class ValueObjectTemplate
                     new Object[]
                     {
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -1113,7 +1120,8 @@ public abstract class ValueObjectTemplate
                         new Object[]
                         {
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName().toLowerCase()),
                                     '_'),
                             t_sbConstructorFieldJavadoc.toString(),
                             t_sbConstructorFieldDefinition.toString(),

@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -859,6 +860,9 @@ public abstract class BaseDAOFactoryTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
+
         StringUtils t_StringUtils = StringUtils.getInstance();
 
         TableTemplate t_TableTemplate = getTableTemplate();
@@ -898,7 +902,8 @@ public abstract class BaseDAOFactoryTemplate
                     {
                         getPackageName(),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_'),
                         t_PackageUtils.retrieveDAOChooserPackage(
                             getProjectPackageName())
@@ -921,7 +926,8 @@ public abstract class BaseDAOFactoryTemplate
                     new Object[]
                     {
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -935,7 +941,8 @@ public abstract class BaseDAOFactoryTemplate
                     new Object[]
                     {
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -949,7 +956,8 @@ public abstract class BaseDAOFactoryTemplate
                     new Object[]
                     {
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_'),
                     }));
 

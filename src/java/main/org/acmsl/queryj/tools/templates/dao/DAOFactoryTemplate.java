@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -1112,6 +1113,9 @@ public abstract class DAOFactoryTemplate
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
+
         TableTemplate t_TableTemplate = getTableTemplate();
 
         DatabaseMetaDataManager t_MetaDataManager = getMetaDataManager();
@@ -1150,7 +1154,8 @@ public abstract class DAOFactoryTemplate
                         t_PackageUtils.retrieveBaseDAOPackage(
                             getBasePackageName()),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_'),
                         t_PackageUtils.retrieveBaseDAOFactoryPackage(
                             getBasePackageName()),
@@ -1180,7 +1185,8 @@ public abstract class DAOFactoryTemplate
                     {
                         getEngineName(),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -1202,7 +1208,8 @@ public abstract class DAOFactoryTemplate
                     {
                         getEngineName(),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -1217,7 +1224,8 @@ public abstract class DAOFactoryTemplate
                     {
                         getEngineName(),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_'),
                     }));
 

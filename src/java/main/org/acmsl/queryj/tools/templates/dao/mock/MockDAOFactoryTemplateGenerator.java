@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -261,6 +262,8 @@ public class MockDAOFactoryTemplateGenerator
         if  (   (template  != null)
              && (outputDir != null))
         {
+            EnglishGrammarUtils t_EnglishGrammarUtils =
+                EnglishGrammarUtils.getInstance();
             StringUtils t_StringUtils = StringUtils.getInstance();
             FileUtils t_FileUtils = FileUtils.getInstance();
 
@@ -274,8 +277,10 @@ public class MockDAOFactoryTemplateGenerator
                     + File.separator
                     + "Mock"
                     + t_StringUtils.capitalize(
-                        template
-                            .getTableTemplate().getTableName().toLowerCase(),
+                          t_EnglishGrammarUtils.getSingular(
+                              template
+                                  .getTableTemplate().getTableName()
+                                      .toLowerCase()),
                           '_')
                     + "DAOFactory.java",
                     template.toString());

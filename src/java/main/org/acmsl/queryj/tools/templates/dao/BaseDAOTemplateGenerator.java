@@ -60,6 +60,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -277,6 +278,8 @@ public class BaseDAOTemplateGenerator
         if  (   (baseDAOTemplate != null)
              && (outputDir   != null))
         {
+            EnglishGrammarUtils t_EnglishGrammarUtils =
+                EnglishGrammarUtils.getInstance();
             StringUtils t_StringUtils = StringUtils.getInstance();
             FileUtils t_FileUtils = FileUtils.getInstance();
 
@@ -289,8 +292,10 @@ public class BaseDAOTemplateGenerator
                       outputDir.getAbsolutePath()
                     + File.separator
                     + t_StringUtils.capitalize(
-                          baseDAOTemplate
-                              .getTableTemplate().getTableName().toLowerCase(),
+                        t_EnglishGrammarUtils.getSingular(
+                            baseDAOTemplate
+                                .getTableTemplate().getTableName()
+                                    .toLowerCase()),
                           '_')
                     + "DAO.java",
                     baseDAOTemplate.toString());

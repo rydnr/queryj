@@ -62,6 +62,7 @@ import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateFactory;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -157,7 +158,7 @@ public class ValueObjectTemplateGenerator
         {
             t_MappingManager.addTemplateFactoryClass(
                   TemplateMappingManager.VALUE_OBJECT_TEMPLATE_PREFIX
-		+ valueObjectName,
+                + valueObjectName,
                 engineName,
                 engineVersion,
                 templateFactoryClass);
@@ -279,13 +280,15 @@ public class ValueObjectTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-            ValueObjectTemplate valueObjectTemplate,
-            File                outputDir)
-        throws  IOException
+        final ValueObjectTemplate valueObjectTemplate,
+        final File                outputDir)
+      throws  IOException
     {
         if  (   (valueObjectTemplate != null)
              && (outputDir           != null))
         {
+            EnglishGrammarUtils t_EnglishGrammarUtils =
+                EnglishGrammarUtils.getInstance();
             StringUtils t_StringUtils = StringUtils.getInstance();
             FileUtils t_FileUtils = FileUtils.getInstance();
 
@@ -298,8 +301,11 @@ public class ValueObjectTemplateGenerator
                       outputDir.getAbsolutePath()
                     + File.separator
                     + t_StringUtils.capitalize(
-                          valueObjectTemplate
-                              .getTableTemplate().getTableName().toLowerCase(),
+                        t_EnglishGrammarUtils.getSingular(
+                            valueObjectTemplate
+                                .getTableTemplate()
+                                    .getTableName()
+                                        .toLowerCase()),
                           '_')
                     + "ValueObject.java",
                     valueObjectTemplate.toString());

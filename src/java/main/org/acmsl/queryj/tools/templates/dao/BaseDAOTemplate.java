@@ -57,6 +57,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -1236,6 +1237,8 @@ public abstract class BaseDAOTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
         StringUtils t_StringUtils = StringUtils.getInstance();
 
         MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
@@ -1285,7 +1288,9 @@ public abstract class BaseDAOTemplate
                     new Object[]
                     {
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName()
+                                    .toLowerCase()),
                             '_')
                     }));
 
@@ -1377,7 +1382,11 @@ public abstract class BaseDAOTemplate
                         {
                             t_TableTemplate.getTableName(),
                             t_sbPkJavadoc,
-                            t_StringUtils.capitalize(t_TableTemplate.getTableName().toLowerCase(), '_'),
+                            t_StringUtils.capitalize(
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
+                                '_'),
                             t_sbPkDeclaration
                         }));
 
@@ -1479,7 +1488,9 @@ public abstract class BaseDAOTemplate
                         new Object[]
                         {
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbInsertPkJavadoc.toString(),
                             t_sbInsertParametersJavadoc,
@@ -1492,7 +1503,9 @@ public abstract class BaseDAOTemplate
                         new Object[]
                         {
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc.toString(),
                             t_sbUpdateParametersJavadoc,

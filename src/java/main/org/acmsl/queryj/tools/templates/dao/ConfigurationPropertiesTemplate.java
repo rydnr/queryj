@@ -55,6 +55,7 @@ import org.acmsl.queryj.tools.PackageUtils;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -194,13 +195,13 @@ public abstract class ConfigurationPropertiesTemplate
         String basePackageName,
         String daoFactorySetting)
     {
-        inmutableSetHeader(header);
-        inmutableSetRepository(repository);
-        inmutableSetEngineName(engineName);
-        inmutableSetEngineVersion(engineVersion);
-        inmutableSetBasePackageName(basePackageName);
-        inmutableSetDAOFactorySetting(daoFactorySetting);
-        inmutableSetTables(new ArrayList());
+        immutableSetHeader(header);
+        immutableSetRepository(repository);
+        immutableSetEngineName(engineName);
+        immutableSetEngineVersion(engineVersion);
+        immutableSetBasePackageName(basePackageName);
+        immutableSetDAOFactorySetting(daoFactorySetting);
+        immutableSetTables(new ArrayList());
     }
 
     /**
@@ -229,7 +230,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    private void inmutableSetHeader(String header)
+    private void immutableSetHeader(String header)
     {
         m__strHeader = header;
     }
@@ -240,7 +241,7 @@ public abstract class ConfigurationPropertiesTemplate
      */
     protected void setHeader(String header)
     {
-        inmutableSetHeader(header);
+        immutableSetHeader(header);
     }
 
     /**
@@ -256,7 +257,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the repository.
      * @param repository the new repository.
      */
-    private void inmutableSetRepository(String repository)
+    private void immutableSetRepository(String repository)
     {
         m__strRepository = repository;
     }
@@ -267,7 +268,7 @@ public abstract class ConfigurationPropertiesTemplate
      */
     protected void setRepository(String repository)
     {
-        inmutableSetRepository(repository);
+        immutableSetRepository(repository);
     }
 
     /**
@@ -283,7 +284,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the engine name.
      * @param engineName the new engine name.
      */
-    private void inmutableSetEngineName(String engineName)
+    private void immutableSetEngineName(String engineName)
     {
         m__strEngineName = engineName;
     }
@@ -294,7 +295,7 @@ public abstract class ConfigurationPropertiesTemplate
      */
     protected void setEngineName(String engineName)
     {
-        inmutableSetEngineName(engineName);
+        immutableSetEngineName(engineName);
     }
 
     /**
@@ -310,7 +311,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the engine version.
      * @param engineVersion the new engine version.
      */
-    private void inmutableSetEngineVersion(String engineVersion)
+    private void immutableSetEngineVersion(String engineVersion)
     {
         m__strEngineVersion = engineVersion;
     }
@@ -321,7 +322,7 @@ public abstract class ConfigurationPropertiesTemplate
      */
     protected void setEngineVersion(String engineVersion)
     {
-        inmutableSetEngineVersion(engineVersion);
+        immutableSetEngineVersion(engineVersion);
     }
 
     /**
@@ -337,7 +338,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
-    private void inmutableSetBasePackageName(String basePackageName)
+    private void immutableSetBasePackageName(String basePackageName)
     {
         m__strBasePackageName = basePackageName;
     }
@@ -348,7 +349,7 @@ public abstract class ConfigurationPropertiesTemplate
      */
     protected void setBasePackageName(String basePackageName)
     {
-        inmutableSetBasePackageName(basePackageName);
+        immutableSetBasePackageName(basePackageName);
     }
 
     /**
@@ -364,7 +365,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the DAO factory setting.
      * @param daoFactorySetting such property.
      */
-    private void inmutableSetDAOFactorySetting(String daoFactorySetting)
+    private void immutableSetDAOFactorySetting(final String daoFactorySetting)
     {
         m__strDAOFactorySetting = daoFactorySetting;
     }
@@ -373,9 +374,9 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the DAO factory setting.
      * @param daoFactorySetting such property.
      */
-    protected void setDAOFactorySetting(String daoFactorySetting)
+    protected void setDAOFactorySetting(final String daoFactorySetting)
     {
-        inmutableSetDAOFactorySetting(daoFactorySetting);
+        immutableSetDAOFactorySetting(daoFactorySetting);
     }
 
     /**
@@ -391,7 +392,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the tables.
      * @param tables the tables.
      */
-    private void inmutableSetTables(List tables)
+    private void immutableSetTables(final List tables)
     {
         m__lTables = tables;
     }
@@ -400,9 +401,9 @@ public abstract class ConfigurationPropertiesTemplate
      * Specifies the tables.
      * @param tables the tables.
      */
-    protected void setTables(List tables)
+    protected void setTables(final List tables)
     {
-        inmutableSetTables(tables);
+        immutableSetTables(tables);
     }
 
     /**
@@ -418,7 +419,7 @@ public abstract class ConfigurationPropertiesTemplate
      * Adds a new table.
      * @param table the new table.
      */
-    public void addTable(String table)
+    public void addTable(final String table)
     {
         List t_lTables = getTables();
 
@@ -437,6 +438,9 @@ public abstract class ConfigurationPropertiesTemplate
         StringBuffer t_sbResult = new StringBuffer();
 
         StringUtils t_StringUtils = StringUtils.getInstance();
+
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
 
         PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
@@ -463,7 +467,8 @@ public abstract class ConfigurationPropertiesTemplate
                     {
                         String t_strCapitalizedTable =
                             t_StringUtils.capitalize(
-                                t_strTable,
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_strTable),
                                 '_');
 
                         t_sbResult.append(

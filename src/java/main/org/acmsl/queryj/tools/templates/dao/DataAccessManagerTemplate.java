@@ -50,6 +50,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -865,6 +866,9 @@ public abstract class DataAccessManagerTemplate
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
+
         if  (t_StringUtils != null) 
         {
             Object[] t_aRepository =
@@ -909,7 +913,8 @@ public abstract class DataAccessManagerTemplate
                     {
                         String t_strFormattedTable =
                             t_StringUtils.capitalize(
-                                t_strTable.toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_strTable.toLowerCase()),
                                 '_');
 
                         Object[] t_aTable =

@@ -59,6 +59,7 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -1017,44 +1018,44 @@ public abstract class DAOTestTemplate
         String                  removeFilterValues,
         String                  classEnd)
     {
-        inmutableSetTableTemplate(tableTemplate);
-        inmutableSetMetaDataManager(metaDataManager);
-        inmutableSetHeader(header);
-        inmutableSetPackageDeclaration(packageDeclaration);
-        inmutableSetPackageName(packageName);
-        inmutableSetEngineName(engineName);
-        inmutableSetEngineVersion(engineVersion);
-        inmutableSetQuote(quote);
-        inmutableSetDAOPackageName(daoPackageName);
-        inmutableSetValueObjectPackageName(valueObjectPackageName);
-        inmutableSetJdbcDriver(jdbcDriver);
-        inmutableSetJdbcUrl(jdbcUrl);
-        inmutableSetJdbcUsername(jdbcUsername);
-        inmutableSetJdbcPassword(jdbcPassword);
-        inmutableSetProjectImports(projectImports);
-        inmutableSetAcmslImports(acmslImports);
-        inmutableSetJdkImports(jdkImports);
-        inmutableSetJUnitImports(junitImports);
-        inmutableSetJavadoc(javadoc);
-        inmutableSetClassDefinition(classDefinition);
-        inmutableSetClassStart(classStart);
-        inmutableSetTestValues(testValues);
-        inmutableSetTestUpdatedValues(testUpdatedValues);
-        inmutableSetConstructor(constructor);
-        inmutableSetInnerMethods(innerMethods);
-        inmutableSetInitMethods(initMethods);
-        inmutableSetTestSuite(testSuite);
-        inmutableSetConstructorTest(constructorTest);
-        inmutableSetConnectionTest(connectionTest);
-        inmutableSetStoreTest(storeTest);
-        inmutableSetTestParametersValues(testParametersValues);
-        inmutableSetLoadTest(loadTest);
-        inmutableSetUpdateTest(updateTest);
-        inmutableSetUpdateFilterValues(updateFilterValues);
-        inmutableSetTestParametersUpdatedValues(testParametersUpdatedValues);
-        inmutableSetRemoveTest(removeTest);
-        inmutableSetRemoveFilterValues(removeFilterValues);
-        inmutableSetClassEnd(classEnd);
+        immutableSetTableTemplate(tableTemplate);
+        immutableSetMetaDataManager(metaDataManager);
+        immutableSetHeader(header);
+        immutableSetPackageDeclaration(packageDeclaration);
+        immutableSetPackageName(packageName);
+        immutableSetEngineName(engineName);
+        immutableSetEngineVersion(engineVersion);
+        immutableSetQuote(quote);
+        immutableSetDAOPackageName(daoPackageName);
+        immutableSetValueObjectPackageName(valueObjectPackageName);
+        immutableSetJdbcDriver(jdbcDriver);
+        immutableSetJdbcUrl(jdbcUrl);
+        immutableSetJdbcUsername(jdbcUsername);
+        immutableSetJdbcPassword(jdbcPassword);
+        immutableSetProjectImports(projectImports);
+        immutableSetAcmslImports(acmslImports);
+        immutableSetJdkImports(jdkImports);
+        immutableSetJUnitImports(junitImports);
+        immutableSetJavadoc(javadoc);
+        immutableSetClassDefinition(classDefinition);
+        immutableSetClassStart(classStart);
+        immutableSetTestValues(testValues);
+        immutableSetTestUpdatedValues(testUpdatedValues);
+        immutableSetConstructor(constructor);
+        immutableSetInnerMethods(innerMethods);
+        immutableSetInitMethods(initMethods);
+        immutableSetTestSuite(testSuite);
+        immutableSetConstructorTest(constructorTest);
+        immutableSetConnectionTest(connectionTest);
+        immutableSetStoreTest(storeTest);
+        immutableSetTestParametersValues(testParametersValues);
+        immutableSetLoadTest(loadTest);
+        immutableSetUpdateTest(updateTest);
+        immutableSetUpdateFilterValues(updateFilterValues);
+        immutableSetTestParametersUpdatedValues(testParametersUpdatedValues);
+        immutableSetRemoveTest(removeTest);
+        immutableSetRemoveFilterValues(removeFilterValues);
+        immutableSetClassEnd(classEnd);
     }
 
     /**
@@ -1131,7 +1132,7 @@ public abstract class DAOTestTemplate
      * Specifies the table template.
      * @param tableTemplate the table template.
      */
-    private void inmutableSetTableTemplate(TableTemplate tableTemplate)
+    private void immutableSetTableTemplate(TableTemplate tableTemplate)
     {
         m__TableTemplate = tableTemplate;
     }
@@ -1142,7 +1143,7 @@ public abstract class DAOTestTemplate
      */
     protected void setTableTemplate(TableTemplate tableTemplate)
     {
-        inmutableSetTableTemplate(tableTemplate);
+        immutableSetTableTemplate(tableTemplate);
     }
 
     /**
@@ -1159,7 +1160,7 @@ public abstract class DAOTestTemplate
      * Specifies the metadata manager.
      * @param metaDataManager the metadata manager.
      */
-    private void inmutableSetMetaDataManager(DatabaseMetaDataManager metaDataManager)
+    private void immutableSetMetaDataManager(DatabaseMetaDataManager metaDataManager)
     {
         m__MetaDataManager = metaDataManager;
     }
@@ -1170,7 +1171,7 @@ public abstract class DAOTestTemplate
      */
     protected void setMetaDataManager(DatabaseMetaDataManager metaDataManager)
     {
-        inmutableSetMetaDataManager(metaDataManager);
+        immutableSetMetaDataManager(metaDataManager);
     }
 
     /**
@@ -1186,7 +1187,7 @@ public abstract class DAOTestTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    private void inmutableSetHeader(String header)
+    private void immutableSetHeader(String header)
     {
         m__strHeader = header;
     }
@@ -1197,7 +1198,7 @@ public abstract class DAOTestTemplate
      */
     protected void setHeader(String header)
     {
-        inmutableSetHeader(header);
+        immutableSetHeader(header);
     }
 
     /**
@@ -1213,7 +1214,7 @@ public abstract class DAOTestTemplate
      * Specifies the package declaration.
      * @param packageDeclaration the new package declaration.
      */
-    private void inmutableSetPackageDeclaration(String packageDeclaration)
+    private void immutableSetPackageDeclaration(String packageDeclaration)
     {
         m__strPackageDeclaration = packageDeclaration;
     }
@@ -1224,7 +1225,7 @@ public abstract class DAOTestTemplate
      */
     protected void setPackageDeclaration(String packageDeclaration)
     {
-        inmutableSetPackageDeclaration(packageDeclaration);
+        immutableSetPackageDeclaration(packageDeclaration);
     }
 
     /**
@@ -1240,7 +1241,7 @@ public abstract class DAOTestTemplate
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    private void inmutableSetPackageName(String packageName)
+    private void immutableSetPackageName(String packageName)
     {
         m__strPackageName = packageName;
     }
@@ -1251,7 +1252,7 @@ public abstract class DAOTestTemplate
      */
     protected void setPackageName(String packageName)
     {
-        inmutableSetPackageName(packageName);
+        immutableSetPackageName(packageName);
     }
 
     /**
@@ -1267,7 +1268,7 @@ public abstract class DAOTestTemplate
      * Specifies the engine name.
      * @param engineName the new engine name.
      */
-    private void inmutableSetEngineName(String engineName)
+    private void immutableSetEngineName(String engineName)
     {
         m__strEngineName = engineName;
     }
@@ -1278,7 +1279,7 @@ public abstract class DAOTestTemplate
      */
     protected void setEngineName(String engineName)
     {
-        inmutableSetEngineName(engineName);
+        immutableSetEngineName(engineName);
     }
 
     /**
@@ -1294,7 +1295,7 @@ public abstract class DAOTestTemplate
      * Specifies the engine version.
      * @param engineVersion the new engine version.
      */
-    private void inmutableSetEngineVersion(String engineVersion)
+    private void immutableSetEngineVersion(String engineVersion)
     {
         m__strEngineVersion = engineVersion;
     }
@@ -1305,7 +1306,7 @@ public abstract class DAOTestTemplate
      */
     protected void setEngineVersion(String engineVersion)
     {
-        inmutableSetEngineVersion(engineVersion);
+        immutableSetEngineVersion(engineVersion);
     }
 
     /**
@@ -1321,7 +1322,7 @@ public abstract class DAOTestTemplate
      * Specifies the identifier quote string.
      * @param quote such identifier.
      */
-    private void inmutableSetQuote(String quote)
+    private void immutableSetQuote(String quote)
     {
         m__strQuote = quote;
     }
@@ -1332,7 +1333,7 @@ public abstract class DAOTestTemplate
      */
     protected void setQuote(String quote)
     {
-        inmutableSetQuote(quote);
+        immutableSetQuote(quote);
     }
 
     /**
@@ -1348,7 +1349,7 @@ public abstract class DAOTestTemplate
      * Specifies the DAO package name.
      * @return such package.
      */
-    private void inmutableSetDAOPackageName(String value)
+    private void immutableSetDAOPackageName(String value)
     {
         m__strDAOPackageName = value;
     }
@@ -1359,7 +1360,7 @@ public abstract class DAOTestTemplate
      */
     protected void setDAOPackageName(String value)
     {
-        inmutableSetDAOPackageName(value);
+        immutableSetDAOPackageName(value);
     }
 
     /**
@@ -1375,7 +1376,7 @@ public abstract class DAOTestTemplate
      * Specifies the value object's package name.
      * @return such package.
      */
-    private void inmutableSetValueObjectPackageName(String value)
+    private void immutableSetValueObjectPackageName(String value)
     {
         m__strValueObjectPackageName = value;
     }
@@ -1386,7 +1387,7 @@ public abstract class DAOTestTemplate
      */
     protected void setValueObjectPackageName(String value)
     {
-        inmutableSetValueObjectPackageName(value);
+        immutableSetValueObjectPackageName(value);
     }
 
     /**
@@ -1402,7 +1403,7 @@ public abstract class DAOTestTemplate
      * Specifies the JDBC driver.
      * @param jdbcDriver the new JDBC driver.
      */
-    private void inmutableSetJdbcDriver(String jdbcDriver)
+    private void immutableSetJdbcDriver(String jdbcDriver)
     {
         m__strJdbcDriver = jdbcDriver;
     }
@@ -1413,7 +1414,7 @@ public abstract class DAOTestTemplate
      */
     protected void setJdbcDriver(String jdbcDriver)
     {
-        inmutableSetJdbcDriver(jdbcDriver);
+        immutableSetJdbcDriver(jdbcDriver);
     }
 
     /**
@@ -1429,7 +1430,7 @@ public abstract class DAOTestTemplate
      * Specifies the JDBC url.
      * @param jdbcUrl the new JDBC url.
      */
-    private void inmutableSetJdbcUrl(String jdbcUrl)
+    private void immutableSetJdbcUrl(String jdbcUrl)
     {
         m__strJdbcUrl = jdbcUrl;
     }
@@ -1440,7 +1441,7 @@ public abstract class DAOTestTemplate
      */
     protected void setJdbcUrl(String jdbcUrl)
     {
-        inmutableSetJdbcUrl(jdbcUrl);
+        immutableSetJdbcUrl(jdbcUrl);
     }
 
     /**
@@ -1456,7 +1457,7 @@ public abstract class DAOTestTemplate
      * Specifies the JDBC username.
      * @param jdbcUsername the new JDBC username.
      */
-    private void inmutableSetJdbcUsername(String jdbcUsername)
+    private void immutableSetJdbcUsername(String jdbcUsername)
     {
         m__strJdbcUsername = jdbcUsername;
     }
@@ -1467,7 +1468,7 @@ public abstract class DAOTestTemplate
      */
     protected void setJdbcUsername(String jdbcUsername)
     {
-        inmutableSetJdbcUsername(jdbcUsername);
+        immutableSetJdbcUsername(jdbcUsername);
     }
 
     /**
@@ -1483,7 +1484,7 @@ public abstract class DAOTestTemplate
      * Specifies the JDBC password.
      * @param jdbcPassword the new JDBC password.
      */
-    private void inmutableSetJdbcPassword(String jdbcPassword)
+    private void immutableSetJdbcPassword(String jdbcPassword)
     {
         m__strJdbcPassword = jdbcPassword;
     }
@@ -1494,7 +1495,7 @@ public abstract class DAOTestTemplate
      */
     protected void setJdbcPassword(String jdbcPassword)
     {
-        inmutableSetJdbcPassword(jdbcPassword);
+        immutableSetJdbcPassword(jdbcPassword);
     }
 
     /**
@@ -1510,7 +1511,7 @@ public abstract class DAOTestTemplate
      * Specifies the project imports.
      * @param projectImports the new project imports.
      */
-    private void inmutableSetProjectImports(String projectImports)
+    private void immutableSetProjectImports(String projectImports)
     {
         m__strProjectImports = projectImports;
     }
@@ -1521,7 +1522,7 @@ public abstract class DAOTestTemplate
      */
     protected void setProjectImports(String projectImports)
     {
-        inmutableSetProjectImports(projectImports);
+        immutableSetProjectImports(projectImports);
     }
 
     /**
@@ -1537,7 +1538,7 @@ public abstract class DAOTestTemplate
      * Specifies the ACM-SL imports.
      * @param acmslImports the new ACM-SL imports.
      */
-    private void inmutableSetAcmslImports(String acmslImports)
+    private void immutableSetAcmslImports(String acmslImports)
     {
         m__strAcmslImports = acmslImports;
     }
@@ -1548,7 +1549,7 @@ public abstract class DAOTestTemplate
      */
     protected void setAcmslImports(String acmslImports)
     {
-        inmutableSetAcmslImports(acmslImports);
+        immutableSetAcmslImports(acmslImports);
     }
 
     /**
@@ -1564,7 +1565,7 @@ public abstract class DAOTestTemplate
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
-    private void inmutableSetJdkImports(String jdkImports)
+    private void immutableSetJdkImports(String jdkImports)
     {
         m__strJdkImports = jdkImports;
     }
@@ -1575,7 +1576,7 @@ public abstract class DAOTestTemplate
      */
     protected void setJdkImports(String jdkImports)
     {
-        inmutableSetJdkImports(jdkImports);
+        immutableSetJdkImports(jdkImports);
     }
 
     /**
@@ -1591,7 +1592,7 @@ public abstract class DAOTestTemplate
      * Specifies the JUnit imports.
      * @param junitImports the new JUnit imports.
      */
-    private void inmutableSetJUnitImports(String junitImports)
+    private void immutableSetJUnitImports(String junitImports)
     {
         m__strJUnitImports = junitImports;
     }
@@ -1602,7 +1603,7 @@ public abstract class DAOTestTemplate
      */
     protected void setJUnitImports(String junitImports)
     {
-        inmutableSetJUnitImports(junitImports);
+        immutableSetJUnitImports(junitImports);
     }
 
     /**
@@ -1618,7 +1619,7 @@ public abstract class DAOTestTemplate
      * Specifies the Javadoc.
      * @param javadoc the new Javadoc.
      */
-    private void inmutableSetJavadoc(String javadoc)
+    private void immutableSetJavadoc(String javadoc)
     {
         m__strJavadoc = javadoc;
     }
@@ -1629,7 +1630,7 @@ public abstract class DAOTestTemplate
      */
     protected void setJavadoc(String javadoc)
     {
-        inmutableSetJavadoc(javadoc);
+        immutableSetJavadoc(javadoc);
     }
 
     /**
@@ -1645,7 +1646,7 @@ public abstract class DAOTestTemplate
      * Specifies the class definition.
      * @param classDefinition the new class definition.
      */
-    private void inmutableSetClassDefinition(String classDefinition)
+    private void immutableSetClassDefinition(String classDefinition)
     {
         m__strClassDefinition = classDefinition;
     }
@@ -1656,7 +1657,7 @@ public abstract class DAOTestTemplate
      */
     protected void setClassDefinition(String classDefinition)
     {
-        inmutableSetClassDefinition(classDefinition);
+        immutableSetClassDefinition(classDefinition);
     }
 
     /**
@@ -1672,7 +1673,7 @@ public abstract class DAOTestTemplate
      * Specifies the class start.
      * @param classStart the new class start.
      */
-    private void inmutableSetClassStart(String classStart)
+    private void immutableSetClassStart(String classStart)
     {
         m__strClassStart = classStart;
     }
@@ -1683,7 +1684,7 @@ public abstract class DAOTestTemplate
      */
     protected void setClassStart(String classStart)
     {
-        inmutableSetClassStart(classStart);
+        immutableSetClassStart(classStart);
     }
 
     /**
@@ -1699,7 +1700,7 @@ public abstract class DAOTestTemplate
      * Specifies the test values.
      * @param testValues the new test values.
      */
-    private void inmutableSetTestValues(String testValues)
+    private void immutableSetTestValues(String testValues)
     {
         m__strTestValues = testValues;
     }
@@ -1710,7 +1711,7 @@ public abstract class DAOTestTemplate
      */
     protected void setTestValues(String testValues)
     {
-        inmutableSetTestValues(testValues);
+        immutableSetTestValues(testValues);
     }
 
     /**
@@ -1726,7 +1727,7 @@ public abstract class DAOTestTemplate
      * Specifies the test updated values.
      * @param testUpdatedValues the new test updated values.
      */
-    private void inmutableSetTestUpdatedValues(String testUpdatedValues)
+    private void immutableSetTestUpdatedValues(String testUpdatedValues)
     {
         m__strTestUpdatedValues = testUpdatedValues;
     }
@@ -1737,7 +1738,7 @@ public abstract class DAOTestTemplate
      */
     protected void setTestUpdatedValues(String testUpdatedValues)
     {
-        inmutableSetTestUpdatedValues(testUpdatedValues);
+        immutableSetTestUpdatedValues(testUpdatedValues);
     }
 
     /**
@@ -1753,7 +1754,7 @@ public abstract class DAOTestTemplate
      * Specifies the constructor.
      * @param constructor the new constructor.
      */
-    private void inmutableSetConstructor(String constructor)
+    private void immutableSetConstructor(String constructor)
     {
         m__strConstructor = constructor;
     }
@@ -1764,7 +1765,7 @@ public abstract class DAOTestTemplate
      */
     protected void setConstructor(String constructor)
     {
-        inmutableSetConstructor(constructor);
+        immutableSetConstructor(constructor);
     }
 
     /**
@@ -1780,7 +1781,7 @@ public abstract class DAOTestTemplate
      * Specifies the inner methods.
      * @param innerMethods the new inner methods.
      */
-    private void inmutableSetInnerMethods(String innerMethods)
+    private void immutableSetInnerMethods(String innerMethods)
     {
         m__strInnerMethods = innerMethods;
     }
@@ -1791,7 +1792,7 @@ public abstract class DAOTestTemplate
      */
     protected void setInnerMethods(String innerMethods)
     {
-        inmutableSetInnerMethods(innerMethods);
+        immutableSetInnerMethods(innerMethods);
     }
 
     /**
@@ -1807,7 +1808,7 @@ public abstract class DAOTestTemplate
      * Specifies the init methods.
      * @param initMethods the new init methods.
      */
-    private void inmutableSetInitMethods(String initMethods)
+    private void immutableSetInitMethods(String initMethods)
     {
         m__strInitMethods = initMethods;
     }
@@ -1818,7 +1819,7 @@ public abstract class DAOTestTemplate
      */
     protected void setInitMethods(String initMethods)
     {
-        inmutableSetInitMethods(initMethods);
+        immutableSetInitMethods(initMethods);
     }
 
     /**
@@ -1834,7 +1835,7 @@ public abstract class DAOTestTemplate
      * Specifies the test suite.
      * @param testSuite the new test suite.
      */
-    private void inmutableSetTestSuite(String testSuite)
+    private void immutableSetTestSuite(String testSuite)
     {
         m__strTestSuite = testSuite;
     }
@@ -1845,7 +1846,7 @@ public abstract class DAOTestTemplate
      */
     protected void setTestSuite(String testSuite)
     {
-        inmutableSetTestSuite(testSuite);
+        immutableSetTestSuite(testSuite);
     }
 
     /**
@@ -1861,7 +1862,7 @@ public abstract class DAOTestTemplate
      * Specifies the constructor test.
      * @param constructorTest the new constructor test.
      */
-    private void inmutableSetConstructorTest(String constructorTest)
+    private void immutableSetConstructorTest(String constructorTest)
     {
         m__strConstructorTest = constructorTest;
     }
@@ -1872,7 +1873,7 @@ public abstract class DAOTestTemplate
      */
     protected void setConstructorTest(String constructorTest)
     {
-        inmutableSetConstructorTest(constructorTest);
+        immutableSetConstructorTest(constructorTest);
     }
 
     /**
@@ -1888,7 +1889,7 @@ public abstract class DAOTestTemplate
      * Specifies the connection test.
      * @param connectionTest the new connection test.
      */
-    private void inmutableSetConnectionTest(String connectionTest)
+    private void immutableSetConnectionTest(String connectionTest)
     {
         m__strConnectionTest = connectionTest;
     }
@@ -1899,7 +1900,7 @@ public abstract class DAOTestTemplate
      */
     protected void setConnectionTest(String connectionTest)
     {
-        inmutableSetConnectionTest(connectionTest);
+        immutableSetConnectionTest(connectionTest);
     }
 
     /**
@@ -1915,7 +1916,7 @@ public abstract class DAOTestTemplate
      * Specifies the store test.
      * @param storeTest the new store test.
      */
-    private void inmutableSetStoreTest(String storeTest)
+    private void immutableSetStoreTest(String storeTest)
     {
         m__strStoreTest = storeTest;
     }
@@ -1926,7 +1927,7 @@ public abstract class DAOTestTemplate
      */
     protected void setStoreTest(String storeTest)
     {
-        inmutableSetStoreTest(storeTest);
+        immutableSetStoreTest(storeTest);
     }
 
     /**
@@ -1942,7 +1943,7 @@ public abstract class DAOTestTemplate
      * Specifies the test values subtemplate.
      * @param template the template.
      */
-    private void inmutableSetTestParametersValues(String template)
+    private void immutableSetTestParametersValues(String template)
     {
         m__strTestParametersValues = template;
     }
@@ -1953,7 +1954,7 @@ public abstract class DAOTestTemplate
      */
     protected void setTestParametersValues(String template)
     {
-        inmutableSetTestParametersValues(template);
+        immutableSetTestParametersValues(template);
     }
 
     /**
@@ -1969,7 +1970,7 @@ public abstract class DAOTestTemplate
      * Specifies the load test.
      * @param loadTest the new load test.
      */
-    private void inmutableSetLoadTest(String loadTest)
+    private void immutableSetLoadTest(String loadTest)
     {
         m__strLoadTest = loadTest;
     }
@@ -1980,7 +1981,7 @@ public abstract class DAOTestTemplate
      */
     protected void setLoadTest(String loadTest)
     {
-        inmutableSetLoadTest(loadTest);
+        immutableSetLoadTest(loadTest);
     }
 
     /**
@@ -1996,7 +1997,7 @@ public abstract class DAOTestTemplate
      * Specifies the update test.
      * @param updateTest the new update test.
      */
-    private void inmutableSetUpdateTest(String updateTest)
+    private void immutableSetUpdateTest(String updateTest)
     {
         m__strUpdateTest = updateTest;
     }
@@ -2007,7 +2008,7 @@ public abstract class DAOTestTemplate
      */
     protected void setUpdateTest(String updateTest)
     {
-        inmutableSetUpdateTest(updateTest);
+        immutableSetUpdateTest(updateTest);
     }
 
     /**
@@ -2024,7 +2025,7 @@ public abstract class DAOTestTemplate
      * Specifies the test updated values subtemplate.
      * @param template the template.
      */
-    private void inmutableSetTestParametersUpdatedValues(String template)
+    private void immutableSetTestParametersUpdatedValues(String template)
     {
         m__strTestParametersUpdatedValues = template;
     }
@@ -2035,7 +2036,7 @@ public abstract class DAOTestTemplate
      */
     protected void setTestParametersUpdatedValues(String template)
     {
-        inmutableSetTestParametersUpdatedValues(template);
+        immutableSetTestParametersUpdatedValues(template);
     }
 
     /**
@@ -2051,7 +2052,7 @@ public abstract class DAOTestTemplate
      * Specifies the update filter values.
      * @param updateFilterValues the new update filter values.
      */
-    private void inmutableSetUpdateFilterValues(String updateFilterValues)
+    private void immutableSetUpdateFilterValues(String updateFilterValues)
     {
         m__strUpdateFilterValues = updateFilterValues;
     }
@@ -2062,7 +2063,7 @@ public abstract class DAOTestTemplate
      */
     protected void setUpdateFilterValues(String updateFilterValues)
     {
-        inmutableSetUpdateFilterValues(updateFilterValues);
+        immutableSetUpdateFilterValues(updateFilterValues);
     }
 
     /**
@@ -2078,7 +2079,7 @@ public abstract class DAOTestTemplate
      * Specifies the remove test.
      * @param removeTest the new remove test.
      */
-    private void inmutableSetRemoveTest(String removeTest)
+    private void immutableSetRemoveTest(String removeTest)
     {
         m__strRemoveTest = removeTest;
     }
@@ -2089,7 +2090,7 @@ public abstract class DAOTestTemplate
      */
     protected void setRemoveTest(String removeTest)
     {
-        inmutableSetRemoveTest(removeTest);
+        immutableSetRemoveTest(removeTest);
     }
 
     /**
@@ -2105,7 +2106,7 @@ public abstract class DAOTestTemplate
      * Specifies the remove filter values.
      * @param removeFilterValues the new remove filter values.
      */
-    private void inmutableSetRemoveFilterValues(String removeFilterValues)
+    private void immutableSetRemoveFilterValues(String removeFilterValues)
     {
         m__strRemoveFilterValues = removeFilterValues;
     }
@@ -2116,7 +2117,7 @@ public abstract class DAOTestTemplate
      */
     protected void setRemoveFilterValues(String removeFilterValues)
     {
-        inmutableSetRemoveFilterValues(removeFilterValues);
+        immutableSetRemoveFilterValues(removeFilterValues);
     }
 
     /**
@@ -2132,7 +2133,7 @@ public abstract class DAOTestTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    private void inmutableSetClassEnd(String classEnd)
+    private void immutableSetClassEnd(String classEnd)
     {
         m__strClassEnd = classEnd;
     }
@@ -2143,7 +2144,7 @@ public abstract class DAOTestTemplate
      */
     protected void setClassEnd(String classEnd)
     {
-        inmutableSetClassEnd(classEnd);
+        immutableSetClassEnd(classEnd);
     }
 
     /**
@@ -2162,9 +2163,27 @@ public abstract class DAOTestTemplate
     public String getTestName()
     {
         return
+            getTestName(
+                StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the test name.
+     * @param stringUtils the StringUtils instance.
+     * @param englishGrammarUtils the EnglishGrammarUtils instance.
+     * @return such name.
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     */
+    protected String getTestName(
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils)
+    {
+        return
               getEngineName()
-            + StringUtils.getInstance().capitalize(
-                  getTableTemplate().getTableName().toLowerCase(),
+            + stringUtils.capitalize(
+                  englishGrammarUtils.getSingular(
+                      getTableTemplate().getTableName().toLowerCase()),
                   '_')
             + "DAOTest";
     }
@@ -2190,6 +2209,9 @@ public abstract class DAOTestTemplate
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
+
         MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
 
         TableTemplate t_TableTemplate = getTableTemplate();
@@ -2204,7 +2226,8 @@ public abstract class DAOTestTemplate
         {
             String t_strCapitalizedTableName =
                 t_StringUtils.capitalize(
-                    t_TableTemplate.getTableName().toLowerCase(),
+                    t_EnglishGrammarUtils.getSingular(
+                        t_TableTemplate.getTableName().toLowerCase()),
                     '_');
             /*
             try 

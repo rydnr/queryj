@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
 
@@ -2248,6 +2249,9 @@ public abstract class MockDAOTemplate
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
+
         StringValidator t_StringValidator = StringValidator.getInstance();
 
         MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
@@ -2450,7 +2454,8 @@ public abstract class MockDAOTemplate
                         t_PackageUtils.retrieveValueObjectPackage(
                             getBasePackageName()),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_'),
                         t_PackageUtils.retrieveBaseDAOPackage(
                             getBasePackageName()),
@@ -2477,7 +2482,8 @@ public abstract class MockDAOTemplate
                     new Object[]
                     {
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -2487,7 +2493,8 @@ public abstract class MockDAOTemplate
                     {
                         t_TableTemplate.getTableName().toLowerCase(),
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -2497,7 +2504,8 @@ public abstract class MockDAOTemplate
                     new Object[]
                     {
                         t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName().toLowerCase(),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName().toLowerCase()),
                             '_')
                     }));
 
@@ -2673,7 +2681,9 @@ public abstract class MockDAOTemplate
                         new Object[]
                         {
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc,
                             t_sbBuildKeyPkDeclaration,
@@ -2686,7 +2696,11 @@ public abstract class MockDAOTemplate
                         {
                             t_TableTemplate.getTableName(),
                             t_sbPkJavadoc,
-                            t_StringUtils.capitalize(t_TableTemplate.getTableName().toLowerCase(), '_'),
+                            t_StringUtils.capitalize(
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
+                                '_'),
                             t_sbPkDeclaration,
                             t_sbPkFilterValues
                         }));
@@ -2697,7 +2711,9 @@ public abstract class MockDAOTemplate
                         {
                             t_TableTemplate.getTableName().toUpperCase(),
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc,
                             t_sbInsertParametersJavadoc,
@@ -2711,7 +2727,9 @@ public abstract class MockDAOTemplate
                         {
                             t_TableTemplate.getTableName().toUpperCase(),
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc,
                             t_sbInsertParametersJavadoc,
@@ -2725,7 +2743,8 @@ public abstract class MockDAOTemplate
                         new Object[]
                         {
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName().toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc.toString(),
                             t_sbUpdateParametersJavadoc,
@@ -2749,7 +2768,8 @@ public abstract class MockDAOTemplate
                             new Object[]
                             {
                                 t_StringUtils.capitalize(
-                                    t_TableTemplate.getTableName(),
+                                    t_EnglishGrammarUtils.getSingular(
+                                        t_TableTemplate.getTableName()),
                                     '_'),
                                 t_sbPkJavadoc,
                                 t_sbPkDeclaration,
@@ -2768,7 +2788,9 @@ public abstract class MockDAOTemplate
                         {
                             t_TableTemplate.getTableName(),
                             t_StringUtils.capitalize(
-                                t_TableTemplate.getTableName().toLowerCase(),
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
                                 '_'),
                             t_sbPkJavadoc,
                             t_sbPkDeclaration,
