@@ -75,14 +75,7 @@ import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateHandler
 import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTestTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.FunctionsBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundle;
 
@@ -230,7 +223,7 @@ public class QueryJTask
      * Specifies the driver.
      * @param driver the new driver.
      */
-    public void setDriver(String driver)
+    public void setDriver(final String driver)
     {
         m__strDriver = driver;
     }
@@ -248,7 +241,7 @@ public class QueryJTask
      * Specifies the url.
      * @param url the new url.
      */
-    public void setUrl(String url)
+    public void setUrl(final String url)
     {
         m__strUrl = url;
     }
@@ -266,7 +259,7 @@ public class QueryJTask
      * Specifies the username.
      * @param username the new username.
      */
-    public void setUsername(String username)
+    public void setUsername(final String username)
     {
         m__strUsername = username;
     }
@@ -284,7 +277,7 @@ public class QueryJTask
      * Specifies the password.
      * @param password the new password.
      */
-    public void setPassword(String password)
+    public void setPassword(final String password)
     {
         m__strPassword = password;
     }
@@ -302,7 +295,7 @@ public class QueryJTask
      * Specifies the catalog.
      * @param catalog the new catalog.
      */
-    public void setCatalog(String catalog)
+    public void setCatalog(final String catalog)
     {
         m__strCatalog = catalog;
     }
@@ -320,7 +313,7 @@ public class QueryJTask
      * Specifies the schema.
      * @param schema the new schema.
      */
-    public void setSchema(String schema)
+    public void setSchema(final String schema)
     {
         m__strSchema = schema;
     }
@@ -338,7 +331,7 @@ public class QueryJTask
      * Specifies the repository.
      * @param repository the new repository.
      */
-    public void setRepository(String repository)
+    public void setRepository(final String repository)
     {
         m__strRepository = repository;
     }
@@ -356,7 +349,7 @@ public class QueryJTask
      * Specifies the package.
      * @param packageName the new package.
      */
-    public void setPackage(String packageName)
+    public void setPackage(final String packageName)
     {
         m__strPackage = packageName;
     }
@@ -374,7 +367,7 @@ public class QueryJTask
      * Specifies the classpath.
      * @param classpath the new classpath.
      */
-    public void setClasspath(Path classpath)
+    public void setClasspath(final Path classpath)
     {
         m__Classpath = classpath;
     }
@@ -401,7 +394,7 @@ public class QueryJTask
      * Reference to the classpath.
      * @param classpathReference the reference to the class path.
      */
-    public void setClasspathRef(Reference classpathReference)
+    public void setClasspathRef(final Reference classpathReference)
     {
         Path t_Path = createClasspath();
 
@@ -424,7 +417,7 @@ public class QueryJTask
      * Specifies the outputdir.
      * @param outputdir the new outputdir.
      */
-    public void setOutputdir(File outputdir)
+    public void setOutputdir(final File outputdir)
     {
         m__Outputdir = outputdir;
     }
@@ -442,7 +435,7 @@ public class QueryJTask
      * Specifies whether to extract the tables.
      * @param extractTables the procedure extraction setting.
      */
-    public void setExtractTables(String extractTables)
+    public void setExtractTables(final String extractTables)
     {
         m__strExtractTables = extractTables;
         setExtractTablesFlag(
@@ -464,7 +457,7 @@ public class QueryJTask
      * Specifies the "extract-tables" flag.
      * @param flag such flag.
      */
-    protected void setExtractTablesFlag(boolean flag)
+    protected void setExtractTablesFlag(final boolean flag)
     {
         m__bExtractTables = flag;
     }
@@ -482,7 +475,7 @@ public class QueryJTask
      * Specifies whether to extract the procedures.
      * @param extractProcedures the procedure extraction setting.
      */
-    public void setExtractProcedures(String extractProcedures)
+    public void setExtractProcedures(final String extractProcedures)
     {
         m__strExtractProcedures = extractProcedures;
         setExtractProceduresFlag(
@@ -504,7 +497,7 @@ public class QueryJTask
      * Specifies the "extract-procedures" flag.
      * @param flag such flag.
      */
-    protected void setExtractProceduresFlag(boolean flag)
+    protected void setExtractProceduresFlag(final boolean flag)
     {
         m__bExtractProcedures = flag;
     }
@@ -522,7 +515,7 @@ public class QueryJTask
      * Specifies whether to extract the functions.
      * @param extractFunctions the function extraction setting.
      */
-    public void setExtractFunctions(String extractFunctions)
+    public void setExtractFunctions(final String extractFunctions)
     {
         m__strExtractFunctions = extractFunctions;
         setExtractFunctionsFlag(
@@ -544,7 +537,7 @@ public class QueryJTask
      * Specifies the "extract-functions" flag.
      * @param flag such flag.
      */
-    protected void setExtractFunctionsFlag(boolean flag)
+    protected void setExtractFunctionsFlag(final boolean flag)
     {
         m__bExtractFunctions = flag;
     }
@@ -562,7 +555,7 @@ public class QueryJTask
      * Specifices the JNDI location for the data sources.
      * @param jndiLocation the JNDI location.
      */
-    public void setJndiDataSource(String jndiLocation)
+    public void setJndiDataSource(final String jndiLocation)
     {
         m__strJNDIDataSources = jndiLocation;
     }
@@ -580,7 +573,7 @@ public class QueryJTask
      * Specifies whether to generate Mock DAO implementations.
      * @param generate such setting.
      */
-    public void setGenerateMockDAOImplementation(String generate)
+    public void setGenerateMockDAOImplementation(final String generate)
     {
         m__strGenerateMockDAOImplementation = generate;
 
@@ -603,7 +596,7 @@ public class QueryJTask
      * Specifies the "generate-mock-dao-implementation" flag.
      * @param flag such flag.
      */
-    protected void setGenerateMockDAOImplementationFlag(boolean flag)
+    protected void setGenerateMockDAOImplementationFlag(final boolean flag)
     {
         m__bGenerateMockDAOImplementation = flag;
     }
@@ -641,7 +634,7 @@ public class QueryJTask
      * element.
      */
     protected void setExternallyManagedFields(
-        AntExternallyManagedFieldsElement externallyManagedFields)
+        final AntExternallyManagedFieldsElement externallyManagedFields)
     {
         m__ExternallyManagedFields = externallyManagedFields;
     }
@@ -660,7 +653,7 @@ public class QueryJTask
      * @param chain the chain to be configured.
      * @return the updated chain.
      */
-    protected Chain buildChain(Chain chain)
+    protected Chain buildChain(final Chain chain)
     {
         Chain result = chain;
 
@@ -680,17 +673,7 @@ public class QueryJTask
 
             result.add(new TableRepositoryTemplateHandlerBundle());
 
-            result.add(new TimeFunctionsTemplateHandlerBundle());
-            result.add(new TimeFunctionsTestTemplateHandlerBundle());
-
-            result.add(new NumericFunctionsTemplateHandlerBundle());
-            result.add(new NumericFunctionsTestTemplateHandlerBundle());
-
-            result.add(new TextFunctionsTemplateHandlerBundle());
-            result.add(new TextFunctionsTestTemplateHandlerBundle());
-
-            result.add(new SystemFunctionsTemplateHandlerBundle());
-            result.add(new SystemFunctionsTestTemplateHandlerBundle());
+            result.add(new FunctionsBundle());
 
             result.add(new ProcedureRepositoryTemplateHandlerBundle());
 

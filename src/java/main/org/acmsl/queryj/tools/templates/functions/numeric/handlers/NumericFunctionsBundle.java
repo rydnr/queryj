@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendáriz
  *
- * Description: Bundles a pair of BaseDAOFactory template build and writing
- *              handlers.
+ * Description: Bundles the complete set of handlers related to NumericFunctions
+ *              templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,35 +45,30 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.handlers;
+package org.acmsl.queryj.tools.templates.functions.numeric.handlers;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles a pair of template BaseDAOFactory template build and writing
- * handlers.
+ * Bundles the complete set of handlers related to NumericFunctions templates.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
+ * @version $Revision$ at $Date$
  */
-public class BaseDAOFactoryTemplateHandlerBundle
+public class NumericFunctionsBundle
     extends  TemplateHandlerBundle
 {
     /**
-     * Builds a bundle with given handlers.
-     * @param buildHandler the template build handler.
-     * @param writingHandler the writing handler.
-     * @precondition buildHandler != null
-     * @precondition writingHandler != null
+     * Builds a bundle with TestFunctions-related handlers.
      */
-    public BaseDAOFactoryTemplateHandlerBundle()
+    public NumericFunctionsBundle()
     {
         super(
-            new BaseDAOFactoryTemplateBuildHandler(),
-            new BaseDAOFactoryTemplateWritingHandler());
+            new NumericFunctionsTemplateHandlerBundle(),
+            new NumericFunctionsTestTemplateHandlerBundle());
     }
 }

@@ -50,7 +50,7 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
@@ -80,7 +80,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class ValueObjectFactoryTemplateWritingHandler
-    extends    AntCommandHandler
+    extends    AbstractAntCommandHandler
     implements TemplateWritingHandler
 {
     /**

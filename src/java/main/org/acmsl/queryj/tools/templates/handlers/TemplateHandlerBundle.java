@@ -51,7 +51,9 @@ package org.acmsl.queryj.tools.templates.handlers;
  */
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.CompositeAntCommandHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.handlers.TemplateHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 
 /*
@@ -61,22 +63,13 @@ import org.apache.tools.ant.BuildException;
 
 /**
  * Bundles a pair of template build and writing handlers.
- * @author <a href="mailto:jose.sanleandro@ventura24.es">Jose San Leandro</a>
- * @version $Revision$
+ * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
+ * @version $Revision$ at $Date$
  */
 public class TemplateHandlerBundle
-    extends  AntCommandHandler
+    extends    CompositeAntCommandHandler
+    implements TemplateHandler
 {
-    /**
-     * The template build handler.
-     */
-    private TemplateBuildHandler m__TemplateBuildHandler;
-
-    /**
-     * The template writing handler.
-     */
-    private TemplateWritingHandler m__TemplateWritingHandler;
-
     /**
      * Builds a bundle with given handlers.
      * @param buildHandler the template build handler.
@@ -88,111 +81,44 @@ public class TemplateHandlerBundle
         final TemplateBuildHandler buildHandler,
         final TemplateWritingHandler writingHandler)
     {
-        immutableSetTemplateBuildHandler(buildHandler);
-        immutableSetTemplateWritingHandler(writingHandler);
+        immutableAddHandler(buildHandler);
+        immutableAddHandler(writingHandler);
     }
 
     /**
-     * Specifies the template build handler.
-     * @param buildHandler the template build handler.
+     * Builds a bundle with given ones.
+     * @param bundles the first bundle.
+     * @precondition bundles != null
      */
-    private void immutableSetTemplateBuildHandler(
-        final TemplateBuildHandler buildHandler)
+    public TemplateHandlerBundle(final TemplateHandlerBundle[] bundles)
     {
-        m__TemplateBuildHandler = buildHandler;
-    }
-
-    /**
-     * Specifies the template build handler.
-     * @param buildHandler the template build handler.
-     */
-    protected void setTemplateBuildHandler(
-        final TemplateBuildHandler buildHandler)
-    {
-        immutableSetTemplateBuildHandler(buildHandler);
-    }
-
-    /**
-     * Retrieves the template build handler.
-     * @return such handler.
-     */
-    public TemplateBuildHandler getTemplateBuildHandler()
-    {
-        return m__TemplateBuildHandler;
-    }
-
-    /**
-     * Specifies the template writing handler.
-     * @param writingHandler the template writing handler.
-     */
-    private void immutableSetTemplateWritingHandler(
-        final TemplateWritingHandler writingHandler)
-    {
-        m__TemplateWritingHandler = writingHandler;
-    }
-
-    /**
-     * Specifies the template writing handler.
-     * @param writingHandler the template writing handler.
-     */
-    protected void setTemplateWritingHandler(
-        final TemplateWritingHandler writingHandler)
-    {
-        immutableSetTemplateWritingHandler(writingHandler);
-    }
-
-    /**
-     * Retrieves the template writing handler.
-     * @return such handler.
-     */
-    public TemplateWritingHandler getTemplateWritingHandler()
-    {
-        return m__TemplateWritingHandler;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command.
-     * @return <code>true</code> to avoid further processing of such command
-     * by different handlers.
-     * @throws BuildException if the build process cannot be performed.
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return
-            handle(
-                command,
-                getTemplateBuildHandler(),
-                getTemplateWritingHandler());
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command.
-     * @param buildHandler the template build handler.
-     * @param writingHandler the template writing handler.
-     * @return <code>true</code> to avoid further processing of such command
-     * by different handlers.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition buildHandler != null
-     * @precondition writingHandler != null
-     */
-    protected boolean handle(
-        final AntCommand command,
-        final TemplateBuildHandler buildHandler,
-        final TemplateWritingHandler writingHandler)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        result = buildHandler.handle(command);
-
-        if  (!result)
+        for  (int t_iIndex = 0; t_iIndex < bundles.length; t_iIndex++)
         {
-            result = writingHandler.handle(command);
+            immutableAddHandler(bundles[t_iIndex]);
         }
+    }
 
-        return result;
+    /**
+     * Builds a bundle with given two.
+     * @param firstBundle the first bundle.
+     * @param secondBundle the second bundle, typically
+     * related to test templates associated to the first one's.
+     * @precondition firstBundle != null
+     * @precondition secondBundle != null
+     */
+    public TemplateHandlerBundle(
+        final TemplateHandlerBundle firstBundle,
+        final TemplateHandlerBundle secondBundle)
+    {
+        this(new TemplateHandlerBundle[] { firstBundle, secondBundle });
+    }
+
+    /**
+     * Adds a new handler to the collection.
+     * @param handler the new handler to add.
+     */
+    private void immutableAddHandler(final TemplateHandler handler)
+    {
+        super.addHandler(handler);
     }
 }

@@ -49,17 +49,7 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.CommandHandler;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
+import org.acmsl.queryj.tools.handlers.AntCommandHandler;
 
 /**
  * Marks all template handlers.
@@ -68,14 +58,6 @@ import org.apache.tools.ant.BuildException;
  * @version $Revision$ at $Date$
  */
 public interface TemplateHandler
-    extends CommandHandler
+    extends AntCommandHandler
 {
-    /**
-     * Marks all template handlers.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException;
 }

@@ -51,7 +51,7 @@ package org.acmsl.queryj.tools.templates.handlers;
  */
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
@@ -78,7 +78,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class TableTemplateWritingHandler
-    extends    AntCommandHandler
+    extends    AbstractAntCommandHandler
     implements TemplateWritingHandler
 {
     /**

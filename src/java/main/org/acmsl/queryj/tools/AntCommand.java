@@ -67,8 +67,8 @@ import java.util.Map;
 
 /**
  * Represents workflow commands associated to Ant actions.
- * @author <a href="mailto:jose.sanleandro@ventura24.es">Jose San Leandro</a>
- * @version $Revision$
+ * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
+ * @version $Revision$ at $Date$
  */
 public class AntCommand
     implements  Command

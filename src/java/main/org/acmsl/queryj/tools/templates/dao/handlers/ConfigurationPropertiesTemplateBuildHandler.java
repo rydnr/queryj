@@ -50,7 +50,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
@@ -89,7 +89,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class ConfigurationPropertiesTemplateBuildHandler
-    extends    AntCommandHandler
+    extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
     /**

@@ -52,7 +52,7 @@ package org.acmsl.queryj.tools.templates.functions.system.handlers;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.functions.system
@@ -90,7 +90,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class SystemFunctionsTestTemplateBuildHandler
-    extends    AntCommandHandler
+    extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
     /**

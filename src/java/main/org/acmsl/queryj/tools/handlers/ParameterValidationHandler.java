@@ -50,7 +50,7 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.AntTablesElement;
 
@@ -86,7 +86,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class ParameterValidationHandler
-    extends  AntCommandHandler
+    extends  AbstractAntCommandHandler
 {
     /**
      * The JDBC driver attribute name.

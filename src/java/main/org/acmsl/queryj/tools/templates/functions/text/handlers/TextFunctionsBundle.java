@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendáriz
  *
- * Description: Bundles a pair of BaseDAOFactory template build and writing
- *              handlers.
+ * Description: Bundles the complete set of handlers related to TextFunctions
+ *              templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,35 +45,30 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.handlers;
+package org.acmsl.queryj.tools.templates.functions.text.handlers;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles a pair of template BaseDAOFactory template build and writing
- * handlers.
+ * Bundles the complete set of handlers related to TextFunctions templates.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
+ * @version $Revision$ at $Date$
  */
-public class BaseDAOFactoryTemplateHandlerBundle
+public class TextFunctionsBundle
     extends  TemplateHandlerBundle
 {
     /**
-     * Builds a bundle with given handlers.
-     * @param buildHandler the template build handler.
-     * @param writingHandler the writing handler.
-     * @precondition buildHandler != null
-     * @precondition writingHandler != null
+     * Builds a bundle with TestFunctions-related handlers.
      */
-    public BaseDAOFactoryTemplateHandlerBundle()
+    public TextFunctionsBundle()
     {
         super(
-            new BaseDAOFactoryTemplateBuildHandler(),
-            new BaseDAOFactoryTemplateWritingHandler());
+            new TextFunctionsTemplateHandlerBundle(),
+            new TextFunctionsTestTemplateHandlerBundle());
     }
 }

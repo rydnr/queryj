@@ -51,7 +51,7 @@ package org.acmsl.queryj.tools.templates.functions.numeric.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -85,7 +85,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class NumericFunctionsTemplateBuildHandler
-    extends    AntCommandHandler
+    extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
     /**

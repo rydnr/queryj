@@ -56,7 +56,7 @@ import org.acmsl.queryj.tools.AntFieldElement;
 import org.acmsl.queryj.tools.AntTableElement;
 import org.acmsl.queryj.tools.AntTablesElement;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
@@ -96,7 +96,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class ExternallyManagedFieldsRetrievalHandler
-    extends  AntCommandHandler
+    extends  AbstractAntCommandHandler
 {
     /**
      * Creates an ExternallyManagedFieldsRetrievalHandler.

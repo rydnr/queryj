@@ -55,7 +55,7 @@ import org.acmsl.queryj.tools.AntFieldFkElement;
 import org.acmsl.queryj.tools.AntTableElement;
 import org.acmsl.queryj.tools.AntTablesElement;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
 
@@ -96,7 +96,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class DatabaseMetaDataRetrievalHandler
-    extends  AntCommandHandler
+    extends  AbstractAntCommandHandler
 {
     /**
      * The Database Metadata attribute name.

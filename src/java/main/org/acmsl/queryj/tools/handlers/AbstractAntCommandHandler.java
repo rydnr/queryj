@@ -33,8 +33,9 @@
  *
  * Author: Jose San Leandro Armendáriz
  *
- * Description: Defines which classes take part on the process depending on
- *              the database engine.
+ * Description: Inside a Chain Of Responsibility, these are the chain links.
+ *              This means they perform specific actions when receiving the
+ *              command.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -51,13 +52,13 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.handlers.AntCommandHandler;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
+import org.acmsl.commons.patterns.CommandHandler;
 
 /*
  * Importing some Ant classes.
@@ -65,57 +66,39 @@ import org.acmsl.commons.patterns.Command;
 import org.apache.tools.ant.BuildException;
 
 /*
- * Importing some JDK classes.
- */
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.util.Map;
-
-/*
  * Importing Jakarta Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Defines which classes take part on the process depending on
- * the database engine.
- * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
- * @version $Revision$
+ * Inside a Chain Of Responsibility, these are the chain links.
+ * This means they perform specific actions when receiving the command.
+ * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
+ * @version $Revision$ at $Date$
  */
-public class DatabaseEngineHandler
-    extends  AbstractAntCommandHandler
+public abstract class AbstractAntCommandHandler
+    implements  AntCommandHandler
 {
-    /**
-     * Creates a DatabaseEngineHandler.
-     */
-    public DatabaseEngineHandler() {};
-
     /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    public boolean handle(final Command command)
     {
         boolean result = false;
 
-        if  (command != null) 
+        if  (command instanceof AntCommand) 
         {
-            Map t_mAttributes = command.getAttributeMap();
-
             try 
             {
-                DatabaseMetaData t_MetaData =
-                    retrieveDatabaseMetaData(t_mAttributes);
-
-                throw new SQLException();
+                result = handle((AntCommand) command);
             }
-            catch  (final SQLException sqlException)
+            catch  (final BuildException buildException)
             {
-                throw new BuildException(sqlException);
+                LogFactory.getLog(getClass()).error(
+                    "unhandled.exception",
+                    buildException);
             }
         }
         
@@ -123,25 +106,12 @@ public class DatabaseEngineHandler
     }
 
     /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
+     * Handles given command.
+     * @param command the command.
+     * @return <code>true</code> to avoid further processing of such command
+     * by different handlers.
+     * @throws BuildException if the build process cannot be performed.
      */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
-    }
+    public abstract boolean handle(final AntCommand command)
+        throws  BuildException;
 }

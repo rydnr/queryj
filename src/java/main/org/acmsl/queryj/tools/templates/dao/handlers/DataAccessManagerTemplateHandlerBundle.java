@@ -57,7 +57,7 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 /**
  * Bundles a pair of DataAccessManager template build and writing
  * handlers.
- * @author <a href="mailto:jose.sanleandro@ventura24.es">Jose San Leandro</a>
+ * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
  * @version $Revision$
  */
 public class DataAccessManagerTemplateHandlerBundle

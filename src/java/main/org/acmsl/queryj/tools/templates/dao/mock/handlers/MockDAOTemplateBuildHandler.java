@@ -52,7 +52,7 @@ package org.acmsl.queryj.tools.templates.dao.mock.handlers;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
@@ -96,7 +96,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class MockDAOTemplateBuildHandler
-    extends    AntCommandHandler
+    extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
     /**

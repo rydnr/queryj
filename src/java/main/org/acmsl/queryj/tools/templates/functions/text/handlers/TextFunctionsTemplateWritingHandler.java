@@ -50,7 +50,7 @@ package org.acmsl.queryj.tools.templates.functions.text.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
@@ -76,7 +76,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class TextFunctionsTemplateWritingHandler
-    extends    AntCommandHandler
+    extends    AbstractAntCommandHandler
     implements TemplateWritingHandler
 {
     /**

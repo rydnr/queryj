@@ -50,7 +50,7 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
@@ -83,7 +83,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class DatabaseMetaDataLoggingHandler
-    extends  AntCommandHandler
+    extends  AbstractAntCommandHandler
 {
     /**
      * Creates a DatabaseMetaDataLoggingHandler.

@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendáriz
  *
- * Description: Bundles a pair of BaseDAOFactory template build and writing
- *              handlers.
+ * Description: Bundles the complete set of handlers related to TextFunctions
+ *              templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,35 +45,37 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.handlers;
+package org.acmsl.queryj.tools.templates.functions;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsBundle;
+import org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsBundle;
+import org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsBundle;
+import org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsBundle;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles a pair of template BaseDAOFactory template build and writing
- * handlers.
+ * Bundles the complete set of handlers related to TextFunctions templates.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
+ * @version $Revision$ at $Date$
  */
-public class BaseDAOFactoryTemplateHandlerBundle
+public class FunctionsBundle
     extends  TemplateHandlerBundle
 {
     /**
-     * Builds a bundle with given handlers.
-     * @param buildHandler the template build handler.
-     * @param writingHandler the writing handler.
-     * @precondition buildHandler != null
-     * @precondition writingHandler != null
+     * Builds a bundle with TestFunctions-related handlers.
      */
-    public BaseDAOFactoryTemplateHandlerBundle()
+    public FunctionsBundle()
     {
         super(
-            new BaseDAOFactoryTemplateBuildHandler(),
-            new BaseDAOFactoryTemplateWritingHandler());
+            new TemplateHandlerBundle[]
+            {
+                new TimeFunctionsBundle(),
+                new NumericFunctionsBundle(),
+                new TextFunctionsBundle(),
+                new SystemFunctionsBundle()
+            });
     }
 }

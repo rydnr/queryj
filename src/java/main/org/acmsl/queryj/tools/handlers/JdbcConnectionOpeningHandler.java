@@ -50,7 +50,7 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
@@ -84,7 +84,7 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public class JdbcConnectionOpeningHandler
-    extends  AntCommandHandler
+    extends  AbstractAntCommandHandler
 {
     /**
      * The JDBC connection attribute name.
