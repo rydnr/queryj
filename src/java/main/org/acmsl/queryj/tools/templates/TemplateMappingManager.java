@@ -276,9 +276,19 @@ public abstract class TemplateMappingManager
     public static final String MOCK_DAO_TEMPLATE_PREFIX = "mock.dao.";
 
     /**
-     * The DAO templates attribute name.
+     * The Mock DAO templates attribute name.
      */
     public static final String MOCK_DAO_TEMPLATES = "mock.DAO.templates";
+
+    /**
+     * The Mock DAO test template type.
+     */
+    public static final String MOCK_DAO_TEST_TEMPLATE_PREFIX = "mock.dao.test.";
+
+    /**
+     * The Mock DAO test templates attribute name.
+     */
+    public static final String MOCK_DAO_TEST_TEMPLATES = "mock.DAO.test.templates";
 
     /**
      * The value object templates attribute name.

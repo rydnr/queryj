@@ -68,6 +68,15 @@
             $Date$
           </td>
           <td>
+            Implemented <a href="${issue.url}502">502</a>, and
+            Implemented <a href="${issue.url}505">505</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/09/20 06:23:44
+          </td>
+          <td>
             Working on refactoring described in issue <a href="${issue.url}500">500</a>.
           </td>
         </tr>
@@ -111,11 +120,11 @@
           <td>
             Added package documentation, including UML class diagrams,
             for the new packages, solving issues
-            #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=61">61</a>,
-            #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=62">62</a>,
-            #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=63">63</a>,
+            #<a href="${issue.url}61">61</a>,
+            #<a href="${issue.url}62">62</a>,
+            #<a href="${issue.url}63">63</a>,
             and
-            #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=64">64</a>.
+            #<a href="${issue.url}64">64</a>,
           </td>
         </tr>
         <tr>
@@ -134,9 +143,9 @@
             Added Ant support for externally-managed field
             declaration, such as autonumeric values, sequences,
             automatic timestamps, etc. See functional requirements
-            <a href="http://lite/bugzilla/show_bug.cgi?id=66">#66</a> 
-            and <a
-            href="http://lite/bugzilla/show_bug.cgi?id=67">#67</a>.
+            #<a href="${issue.url}66">66</a>,
+            and
+            #<a href="${issue.url}67">67</a>.
           </td>
         </tr>
         <tr>
@@ -146,10 +155,10 @@
           <td>
             Unit tests are implemented for the basic 4 operations (insert,
             select, update, delete, in that order) of all DAOs. They
-            all pass, but Bug <a
-            href="http://lite/bugzilla/show_bug.cgi?id=54">#54</a> 
-            and <a
-            href="http://lite/bugzilla/show_bug.cgi?id=55">#55</a>
+            all pass, but Bug
+            #<a href="${issue.url}54">54</a>
+            and
+            #<a href="${issue.url}55">55</a>
             have appeared, though. 
           </td>
         </tr>

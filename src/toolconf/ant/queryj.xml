@@ -9,7 +9,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2 of the License, or any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -72,9 +72,8 @@
       description="Displays the build script purpose.">
 
       <echo>
-        This build file is only intended to describe the design of
-        QueryJ, and how it's gonna be used. It's not funtional by
-        any means.
+        This script is provided to show how to configure QueryJ
+        for your particular needs.
       </echo>
     </target>
 
@@ -89,7 +88,7 @@
       <!--
        Libraries base folder.
       -->
-      <property name="lib.dir" value="lib/java"/>
+      <property name="lib.dir" value="dependencies/lib/java"/>
 
       <!--
        Runtime libraries base folder.
