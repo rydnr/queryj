@@ -169,7 +169,7 @@ public class TableRepositoryTemplateGenerator
             project,
             task,
             FileUtils.getInstance(),
-            TableRepositoryUtils.getInstance());
+            TableRepositoryTemplateUtils.getInstance());
     }
             
     /**
@@ -179,12 +179,13 @@ public class TableRepositoryTemplateGenerator
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @param fileUtils the <code>FileUtils</code> instance.
-     * @param tableRepositoryUtils the <code>TableRepositoryUtils</code> instance.
+     * @param tableRepositoryTemplateUtils the
+     * <code>TableRepositoryTemplateUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition tableRepositoryTemplate != null
      * @precondition outputDir != null
      * @precondition fileUtils != null
-     * @precondition tableRepositoryUtils != null
+     * @precondition tableRepositoryTemplateUtils != null
      */
     public void write(
         final TableRepositoryTemplate tableRepositoryTemplate,
@@ -192,13 +193,13 @@ public class TableRepositoryTemplateGenerator
         final Project project,
         final Task task,
         final FileUtils fileUtils,
-        final TableRepositoryUtils tableRepositoryUtils)
+        final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
       throws  IOException
     {
         outputDir.mkdirs();
 
         String t_strTableRepositoryClass =
-            tableRepositoryUtils.retrieveTableRepositoryClassName(
+            tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
                 tableRepositoryTemplate.getRepository());
 
         if  (project != null)

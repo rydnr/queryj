@@ -160,7 +160,7 @@ public class ProcedureRepositoryTemplateGenerator
         write(
             procedureRepositoryTemplate,
             outputDir,
-            ProcedureRepositoryUtils.getInstance(),
+            ProcedureRepositoryTemplateUtils.getInstance(),
             FileUtils.getInstance());
     }
 
@@ -168,19 +168,19 @@ public class ProcedureRepositoryTemplateGenerator
      * Writes a procedure repository template to disk.
      * @param procedureRepositoryTemplate the procedure repository to write.
      * @param outputDir the output folder.
-     * @param procedureRepositoryUtils the
-     * <code>ProcedureRepositoryUtils</code> instance.
+     * @param procedureRepositoryTemplateUtils the
+     * <code>ProcedureRepositoryTemplateUtils</code> instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition procedureRepositoryTemplate != null
      * @precondition outputDir != null
-     * @precondition procedureRepositoryUtils != null
+     * @precondition procedureRepositoryTemplateUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
         final ProcedureRepositoryTemplate procedureRepositoryTemplate,
         final File outputDir,
-        final ProcedureRepositoryUtils procedureRepositoryUtils,
+        final ProcedureRepositoryTemplateUtils procedureRepositoryTemplateUtils,
         final FileUtils fileUtils)
       throws  IOException
     {
@@ -198,8 +198,9 @@ public class ProcedureRepositoryTemplateGenerator
             fileUtils.writeFile(
                   t_FinalOutputDir.getAbsolutePath()
                 + File.separator
-                + procedureRepositoryUtils.retrieveProcedureRepositoryClassName(
-                      procedureRepositoryTemplate.getRepository()),
+                + procedureRepositoryTemplateUtils
+                      .retrieveProcedureRepositoryClassName(
+                          procedureRepositoryTemplate.getRepository()),
                 procedureRepositoryTemplate.toString());
         }
     }

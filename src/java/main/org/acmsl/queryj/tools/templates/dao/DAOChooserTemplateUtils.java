@@ -33,8 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Provides some useful methods when generating DAO classes
- *              via DAO chooser instances.
+ * Description: Provides some useful methods when generating DAOChooser class.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -53,13 +52,12 @@ package org.acmsl.queryj.tools.templates.dao;
 import java.lang.ref.WeakReference;
 
 /**
- * Provides some useful methods when generating DAO classes
- * via DAO chooser instances.
+ * Provides some useful methods when generating DAOChooser class.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public class DAOChooserUtils
+public class DAOChooserTemplateUtils
 {
     /**
      * Singleton implemented as a weak reference.
@@ -69,13 +67,13 @@ public class DAOChooserUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DAOChooserUtils() {};
+    protected DAOChooserTemplateUtils() {};
 
     /**
      * Specifies a new weak reference.
      * @param utils the utils instance to use.
      */
-    protected static void setReference(final DAOChooserUtils utils)
+    protected static void setReference(final DAOChooserTemplateUtils utils)
     {
         singleton = new WeakReference(utils);
     }
@@ -90,23 +88,23 @@ public class DAOChooserUtils
     }
 
     /**
-     * Retrieves a DAOChooserUtils instance.
+     * Retrieves a <code>DAOChooserTemplateUtils</code> instance.
      * @return such instance.
      */
-    public static DAOChooserUtils getInstance()
+    public static DAOChooserTemplateUtils getInstance()
     {
-        DAOChooserUtils result = null;
+        DAOChooserTemplateUtils result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (DAOChooserUtils) reference.get();
+            result = (DAOChooserTemplateUtils) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new DAOChooserUtils();
+            result = new DAOChooserTemplateUtils();
 
             setReference(result);
         }

@@ -116,7 +116,6 @@ public class DaoSuite
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOChooserUtilsTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateGeneratorTest.class);
@@ -124,6 +123,7 @@ public class DaoSuite
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOTemplateTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateGeneratorTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateUtilsTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateTest.class);
     

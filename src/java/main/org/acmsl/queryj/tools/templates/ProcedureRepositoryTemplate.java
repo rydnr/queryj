@@ -122,21 +122,24 @@ public class ProcedureRepositoryTemplate
     {
         return
             toString(
-                ProcedureRepositoryUtils.getInstance(),
+                ProcedureRepositoryTemplateUtils.getInstance(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance());
     }
 
     /**
      * Retrieves the source code of the generated procedure repository.
+     * @param procedureRepositoryTemplateUtils the
+     * <code>ProcedureRepositoryTemplateUtils</code> instance.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return such source code.
+     * @precondition procedureRepositoryTemplateUtils != null
      * @precondition metaDataUtils != null
      * @precondition stringUtils != null
      */
     protected String toString(
-        final ProcedureRepositoryUtils procedureRepositoryUtils,
+        final ProcedureRepositoryTemplateUtils procedureRepositoryTemplateUtils,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils)
     {
@@ -167,7 +170,7 @@ public class ProcedureRepositoryTemplate
             t_Formatter.format(
                 new Object[]
                 {
-                      procedureRepositoryUtils
+                      procedureRepositoryTemplateUtils
                           .retrieveProcedureRepositoryClassName(
                               getRepository())
                 }));

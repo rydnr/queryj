@@ -50,7 +50,7 @@ package unittests.org.acmsl.queryj.tools.templates;
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.templates.ProcedureRepositoryUtils;
+import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtils;
 // JUnitDoclet end import
 
 /*
@@ -84,28 +84,28 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests ProcedureRepositoryUtilsTest class.
+* Tests ProcedureRepositoryTemplateUtilsTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.templates.ProcedureRepositoryUtils
+* @see org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtils
 */
-public class ProcedureRepositoryUtilsTest
+public class ProcedureRepositoryTemplateUtilsTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.templates.ProcedureRepositoryUtils procedurerepositoryutils = null;
+  org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtils procedurerepositorytemplateutils = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a ProcedureRepositoryUtilsTest with given name.
+  * Creates a ProcedureRepositoryTemplateUtilsTest with given name.
   * @param name such name.
   */
-  public ProcedureRepositoryUtilsTest(String name)
+  public ProcedureRepositoryTemplateUtilsTest(String name)
   {
-    // JUnitDoclet begin method ProcedureRepositoryUtilsTest
+    // JUnitDoclet begin method ProcedureRepositoryTemplateUtilsTest
     super(name);
-    // JUnitDoclet end method ProcedureRepositoryUtilsTest
+    // JUnitDoclet end method ProcedureRepositoryTemplateUtilsTest
   }
   
   /**
@@ -113,11 +113,13 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.templates.ProcedureRepositoryUtils createInstance()
+  public org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtils createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.tools.templates.ProcedureRepositoryUtils.getInstance();
+    return
+        org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtils
+            .getInstance();
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -130,7 +132,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    procedurerepositoryutils = createInstance();
+    procedurerepositorytemplateutils = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -142,15 +144,15 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    procedurerepositoryutils = null;
+    procedurerepositorytemplateutils = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
   }
   
   /**
-  * Tests ProcedureRepositoryUtilsTestgetInstance()
+  * Tests ProcedureRepositoryTemplateUtilsTestgetInstance()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.ProcedureRepositoryUtils#getInstance()
+  * @see org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtils#getInstance()
   */
   public void testGetInstance()
   throws Exception
@@ -160,9 +162,9 @@ extends TestCase
   }
   
   /**
-  * Tests ProcedureRepositoryUtilsTestretrieveProcedureRepositoryClassName()
+  * Tests ProcedureRepositoryTemplateUtilsTestretrieveProcedureRepositoryClassName()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.ProcedureRepositoryUtils#retrieveProcedureRepositoryClassName(java.lang.String)
+  * @see org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtils#retrieveProcedureRepositoryClassName(java.lang.String)
   */
   public void testRetrieveProcedureRepositoryClassName()
   throws Exception
@@ -190,7 +192,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(ProcedureRepositoryUtilsTest.class);
+    junit.textui.TestRunner.run(ProcedureRepositoryTemplateUtilsTest.class);
     // JUnitDoclet end method testcase.main
   }
 }

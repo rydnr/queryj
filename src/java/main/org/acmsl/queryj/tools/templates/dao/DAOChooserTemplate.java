@@ -107,24 +107,25 @@ public class DAOChooserTemplate
     {
         return
             toString(
-                DAOChooserUtils.getInstance(),
+                DAOChooserTemplateUtils.getInstance(),
                 EnglishGrammarUtils.getInstance(),
                 StringUtils.getInstance());
     }
 
     /**
      * Retrieves the source code of the generated table repository.
-     * @param daoChooserUtils the <code>DAOChooserUtils</code> instance.
+     * @param daoChooserTemplateUtils the <code>DAOChooserTemplateUtils</code>
+     * instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return such source code.
-     * @precondition daoChooserUtils != null
+     * @precondition daoChooserTemplateUtils != null
      * @precondition englishGrammarUtils != null
      * @precondition stringUtils != null
      */
     protected String toString(
-        final DAOChooserUtils daoChooserUtils,
+        final DAOChooserTemplateUtils daoChooserTemplateUtils,
         final EnglishGrammarUtils englishGrammarUtils,
         final StringUtils stringUtils)
     {
@@ -217,7 +218,7 @@ public class DAOChooserTemplate
             t_Formatter.format(
                 new Object[]
                 {
-                    daoChooserUtils.retrievePropertiesFileName(
+                    daoChooserTemplateUtils.retrievePropertiesFileName(
                         ("" + getRepository()).toLowerCase())
                 }));
 

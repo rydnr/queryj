@@ -171,7 +171,7 @@ public interface TableTemplateDefaults
         + " * the persistence domain.\n" // table
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
-        + " */\n\n";
+        + " */\n";
 
     /**
      * The class definition.

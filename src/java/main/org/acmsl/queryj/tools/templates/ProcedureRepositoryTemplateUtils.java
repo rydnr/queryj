@@ -63,7 +63,7 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public class ProcedureRepositoryUtils
+public class ProcedureRepositoryTemplateUtils
 {
     /**
      * Singleton implemented as a weak reference.
@@ -73,13 +73,14 @@ public class ProcedureRepositoryUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected ProcedureRepositoryUtils() {};
+    protected ProcedureRepositoryTemplateUtils() {};
 
     /**
      * Specifies a new weak reference.
      * @param utils the utils instance to use.
      */
-    protected static void setReference(final ProcedureRepositoryUtils utils)
+    protected static void setReference(
+        final ProcedureRepositoryTemplateUtils utils)
     {
         singleton = new WeakReference(utils);
     }
@@ -94,23 +95,23 @@ public class ProcedureRepositoryUtils
     }
 
     /**
-     * Retrieves a ProcedureRepositoryUtils instance.
+     * Retrieves a <code>ProcedureRepositoryTemplateUtils</ocde> instance.
      * @return such instance.
      */
-    public static ProcedureRepositoryUtils getInstance()
+    public static ProcedureRepositoryTemplateUtils getInstance()
     {
-        ProcedureRepositoryUtils result = null;
+        ProcedureRepositoryTemplateUtils result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (ProcedureRepositoryUtils) reference.get();
+            result = (ProcedureRepositoryTemplateUtils) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new ProcedureRepositoryUtils();
+            result = new ProcedureRepositoryTemplateUtils();
 
             setReference(result);
         }

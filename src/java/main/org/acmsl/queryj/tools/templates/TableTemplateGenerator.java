@@ -135,8 +135,7 @@ public class TableTemplateGenerator
      * @precondition tableName != null
      */
     public TableTemplate createTableTemplate(
-        final String packageName,
-        final String tableName)
+        final String packageName, final String tableName)
     {
         return new TableTemplate(packageName, tableName);
     }
@@ -150,15 +149,14 @@ public class TableTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final TableTemplate tableTemplate,
-        final File          outputDir)
+        final TableTemplate tableTemplate, final File outputDir)
       throws  IOException
     {
         write(
             tableTemplate,
             outputDir,
             FileUtils.getInstance(),
-            TableUtils.getInstance());
+            TableTemplateUtils.getInstance());
     }
 
     /**
@@ -166,7 +164,7 @@ public class TableTemplateGenerator
      * @param tableTemplate the table template to write.
      * @param outputDir the output folder.
      * @param fileUtils the <code>FileUtils</code> instance.
-     * @param tableUtils the <code>TableUtils</code> instance.
+     * @param tableTemplateUtils the <code>TableTemplateUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition tableTemplate != null
      * @precondition outputDir != null
@@ -177,7 +175,7 @@ public class TableTemplateGenerator
         final TableTemplate tableTemplate,
         final File outputDir,
         final FileUtils fileUtils,
-        final TableUtils tableUtils)
+        final TableTemplateUtils tableTemplateUtils)
       throws  IOException
     {
         outputDir.mkdirs();
@@ -185,7 +183,7 @@ public class TableTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + tableUtils.retrieveTableClassName(
+            + tableTemplateUtils.retrieveTableClassName(
                   tableTemplate.getTableName())
             + ".java",
             tableTemplate.toString());

@@ -110,17 +110,17 @@ public class TemplatesSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.templates");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TestSuiteTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableUtilsTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableRepositoryTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.ProcedureRepositoryUtilsTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtilsTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableRepositoryUtilsTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableTemplateGeneratorTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableTemplateTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGeneratorTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TestSuiteTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableRepositoryTemplateGeneratorTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableTemplateUtilsTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtilsTest.class);
     
     suite.addTest(unittests.org.acmsl.queryj.tools.templates.dao.DaoSuite.suite());
     suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.FunctionsSuite.suite());

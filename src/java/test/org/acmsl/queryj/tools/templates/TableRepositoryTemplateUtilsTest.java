@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.dao.
+*              unittests.org.acmsl.queryj.tools.templates.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.tools.templates.dao;
+package unittests.org.acmsl.queryj.tools.templates;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.templates.dao.DAOChooserUtils;
+import org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtils;
 // JUnitDoclet end import
 
 /*
@@ -84,28 +84,28 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests DAOChooserUtilsTest class.
+* Tests TableRepositoryTemplateUtilsTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.templates.dao.DAOChooserUtils
+* @see org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtils
 */
-public class DAOChooserUtilsTest
+public class TableRepositoryTemplateUtilsTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.templates.dao.DAOChooserUtils daochooserutils = null;
+  org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtils tablerepositorytemplateutils = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a DAOChooserUtilsTest with given name.
+  * Creates a TableRepositoryTemplateUtilsTest with given name.
   * @param name such name.
   */
-  public DAOChooserUtilsTest(String name)
+  public TableRepositoryTemplateUtilsTest(String name)
   {
-    // JUnitDoclet begin method DAOChooserUtilsTest
+    // JUnitDoclet begin method TableRepositoryTemplateUtilsTest
     super(name);
-    // JUnitDoclet end method DAOChooserUtilsTest
+    // JUnitDoclet end method TableRepositoryTemplateUtilsTest
   }
   
   /**
@@ -113,11 +113,13 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.templates.dao.DAOChooserUtils createInstance()
+  public org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtils createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.tools.templates.dao.DAOChooserUtils.getInstance();
+    return
+        org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtils
+            .getInstance();
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -130,7 +132,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    daochooserutils = createInstance();
+    tablerepositorytemplateutils = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -142,15 +144,15 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    daochooserutils = null;
+    tablerepositorytemplateutils = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
   }
   
   /**
-  * Tests DAOChooserUtilsTestgetInstance()
+  * Tests TableRepositoryTemplateUtilsTestgetInstance()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.dao.DAOChooserUtils#getInstance()
+  * @see org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtils#getInstance()
   */
   public void testGetInstance()
   throws Exception
@@ -160,15 +162,15 @@ extends TestCase
   }
   
   /**
-  * Tests DAOChooserUtilsTestretrievePropertiesFileName()
+  * Tests TableRepositoryTemplateUtilsTestretrieveTableRepositoryClassName()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.dao.DAOChooserUtils#retrievePropertiesFileName(java.lang.String)
+  * @see org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtils#retrieveTableRepositoryClassName(java.lang.String)
   */
-  public void testRetrievePropertiesFileName()
+  public void testRetrieveTableRepositoryClassName()
   throws Exception
   {
-    // JUnitDoclet begin method retrievePropertiesFileName
-    // JUnitDoclet end method retrievePropertiesFileName
+    // JUnitDoclet begin method retrieveTableRepositoryClassName
+    // JUnitDoclet end method retrieveTableRepositoryClassName
   }
   
   
@@ -190,7 +192,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(DAOChooserUtilsTest.class);
+    junit.textui.TestRunner.run(TableRepositoryTemplateUtilsTest.class);
     // JUnitDoclet end method testcase.main
   }
 }

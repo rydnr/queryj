@@ -50,7 +50,7 @@ package unittests.org.acmsl.queryj.tools.templates;
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.templates.TableUtils;
+import org.acmsl.queryj.tools.templates.TableTemplateUtils;
 // JUnitDoclet end import
 
 /*
@@ -84,28 +84,28 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests TableUtilsTest class.
+* Tests TableTemplateUtilsTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.templates.TableUtils
+* @see org.acmsl.queryj.tools.templates.TableTemplateUtils
 */
-public class TableUtilsTest
+public class TableTemplateUtilsTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.templates.TableUtils tableutils = null;
+  org.acmsl.queryj.tools.templates.TableTemplateUtils tabletemplateutils = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a TableUtilsTest with given name.
+  * Creates a TableTemplateUtilsTest with given name.
   * @param name such name.
   */
-  public TableUtilsTest(String name)
+  public TableTemplateUtilsTest(String name)
   {
-    // JUnitDoclet begin method TableUtilsTest
+    // JUnitDoclet begin method TableTemplateUtilsTest
     super(name);
-    // JUnitDoclet end method TableUtilsTest
+    // JUnitDoclet end method TableTemplateUtilsTest
   }
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.templates.TableUtils createInstance()
+  public org.acmsl.queryj.tools.templates.TableTemplateUtils createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.tools.templates.TableUtils.getInstance();
+    return org.acmsl.queryj.tools.templates.TableTemplateUtils.getInstance();
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -130,7 +130,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    tableutils = createInstance();
+    tabletemplateutils = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -142,15 +142,15 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    tableutils = null;
+    tabletemplateutils = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
   }
   
   /**
-  * Tests TableUtilsTestgetInstance()
+  * Tests TableTemplateUtilsTestgetInstance()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.TableUtils#getInstance()
+  * @see org.acmsl.queryj.tools.templates.TableTemplateUtils#getInstance()
   */
   public void testGetInstance()
   throws Exception
@@ -160,9 +160,9 @@ extends TestCase
   }
   
   /**
-  * Tests TableUtilsTestretrieveTableClassName()
+  * Tests TableTemplateUtilsTestretrieveTableClassName()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.TableUtils#retrieveTableClassName(java.lang.String)
+  * @see org.acmsl.queryj.tools.templates.TableTemplateUtils#retrieveTableClassName(java.lang.String)
   */
   public void testRetrieveTableClassName()
   throws Exception
@@ -190,7 +190,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(TableUtilsTest.class);
+    junit.textui.TestRunner.run(TableTemplateUtilsTest.class);
     // JUnitDoclet end method testcase.main
   }
 }

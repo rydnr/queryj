@@ -171,7 +171,7 @@ public class ConfigurationPropertiesTemplateGenerator
             configurationPropertiesTemplate,
             configurationPropertiesTemplate.getRepository(),
             outputDir,
-            DAOChooserUtils.getInstance(),
+            DAOChooserTemplateUtils.getInstance(),
             FileUtils.getInstance());
     }
 
@@ -180,20 +180,21 @@ public class ConfigurationPropertiesTemplateGenerator
      * @param configurationPropertiesTemplate the template to write.
      * @param repository the template repository.
      * @param outputDir the output folder.
-     * @param daoChooserUtils the <code>DAOChooserUtils</code> instance.
+     * @param daoChooserTemplateUtils the <code>DAOChooserTemplateUtils</code>
+     * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition configurationPropertiesTemplate != null
      * @precondition repository != null
      * @precondition outputDir != null
-     * @precondition daoChooserUtils != null
+     * @precondition daoChooserTemplateUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
         final ConfigurationPropertiesTemplate configurationPropertiesTemplate,
         final String repository,
         final File outputDir,
-        final DAOChooserUtils daoChooserUtils,
+        final DAOChooserTemplateUtils daoChooserTemplateUtils,
         final FileUtils fileUtils)
       throws  IOException
     {
@@ -202,7 +203,7 @@ public class ConfigurationPropertiesTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + daoChooserUtils.retrievePropertiesFileName(
+            + daoChooserTemplateUtils.retrievePropertiesFileName(
                   repository.toLowerCase()),
               configurationPropertiesTemplate.toString());
     }

@@ -74,6 +74,14 @@
             $Date$
           </td>
           <td>
+            Closed <a href="${issue.url}579">579</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/12/17 10:37:31
+          </td>
+          <td>
             More work on JDBC flags, as well as a long-awaited refactoring on <i>DAOTemplate</i> class.
           </td>
         </tr>

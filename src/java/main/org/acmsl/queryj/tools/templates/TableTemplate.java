@@ -108,19 +108,22 @@ public class TableTemplate
      */
     public String toString()
     {
-        return toString(TableUtils.getInstance(), StringUtils.getInstance());
+        return
+            toString(
+                TableTemplateUtils.getInstance(), StringUtils.getInstance());
     }
 
     /**
      * Retrieves the source code of the generated field tableName.
-     * @param tableUtils the <code>TableUtils</code> instance.
+     * @param tableTemplateUtils the <code>TableTemplateUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return such source code.
-     * @precondition tableUtils != null
+     * @precondition tableTemplateUtils != null
      * @precondition stringUtils != null
      */
     protected String toString(
-        final TableUtils tableUtils, final StringUtils stringUtils)
+        final TableTemplateUtils tableTemplateUtils,
+        final StringUtils stringUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
@@ -149,7 +152,7 @@ public class TableTemplate
             t_Formatter.format(
                 new Object[]
                 {
-                    tableUtils.retrieveTableClassName(getTableName())
+                    tableTemplateUtils.retrieveTableClassName(getTableName())
                 }));
 
         t_sbResult.append(getClassStart());

@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.
+*              unittests.org.acmsl.queryj.tools.templates.dao.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.tools.templates;
+package unittests.org.acmsl.queryj.tools.templates.dao;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.templates.TableRepositoryUtils;
+import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
 // JUnitDoclet end import
 
 /*
@@ -84,28 +84,28 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests TableRepositoryUtilsTest class.
+* Tests BaseDAOTemplateTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.templates.TableRepositoryUtils
+* @see org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate
 */
-public class TableRepositoryUtilsTest
+public class BaseDAOTemplateTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.templates.TableRepositoryUtils tablerepositoryutils = null;
+  org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate basedaotemplate = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a TableRepositoryUtilsTest with given name.
+  * Creates a BaseDAOTemplateTest with given name.
   * @param name such name.
   */
-  public TableRepositoryUtilsTest(String name)
+  public BaseDAOTemplateTest(String name)
   {
-    // JUnitDoclet begin method TableRepositoryUtilsTest
+    // JUnitDoclet begin method BaseDAOTemplateTest
     super(name);
-    // JUnitDoclet end method TableRepositoryUtilsTest
+    // JUnitDoclet end method BaseDAOTemplateTest
   }
   
   /**
@@ -113,11 +113,15 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.templates.TableRepositoryUtils createInstance()
+  public org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.tools.templates.TableRepositoryUtils.getInstance();
+    return
+        new org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate(
+            null, // table template
+            null, // database metadata manager
+            "com.foo.bar"); // package name
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -130,7 +134,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    tablerepositoryutils = createInstance();
+    basedaotemplate = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -142,33 +146,21 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    tablerepositoryutils = null;
+    basedaotemplate = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
   }
   
   /**
-  * Tests TableRepositoryUtilsTestgetInstance()
+  * Tests BaseDAOTemplateTesttoString()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.TableRepositoryUtils#getInstance()
+  * @see org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate#toString()
   */
-  public void testGetInstance()
+  public void testToString()
   throws Exception
   {
-    // JUnitDoclet begin method getInstance
-    // JUnitDoclet end method getInstance
-  }
-  
-  /**
-  * Tests TableRepositoryUtilsTestretrieveTableRepositoryClassName()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.TableRepositoryUtils#retrieveTableRepositoryClassName(java.lang.String)
-  */
-  public void testRetrieveTableRepositoryClassName()
-  throws Exception
-  {
-    // JUnitDoclet begin method retrieveTableRepositoryClassName
-    // JUnitDoclet end method retrieveTableRepositoryClassName
+    // JUnitDoclet begin method toString
+    // JUnitDoclet end method toString
   }
   
   
@@ -190,7 +182,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(TableRepositoryUtilsTest.class);
+    junit.textui.TestRunner.run(BaseDAOTemplateTest.class);
     // JUnitDoclet end method testcase.main
   }
 }

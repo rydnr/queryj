@@ -102,20 +102,21 @@ public class TableRepositoryTemplate
     {
         return
             toString(
-                TableRepositoryUtils.getInstance(), StringUtils.getInstance());
+                TableRepositoryTemplateUtils.getInstance(),
+                StringUtils.getInstance());
     }
 
     /**
      * Retrieves the source code of the generated table repository.
-     * @param tableRepositoryUtils the <code>TableRepositoryUtils</code>
-     * instance.
+     * @param tableRepositoryTemplateUtils the
+     * <code>TableRepositoryTemplateUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return such source code.
      * @precondition tableRepositoryUtils != null
      * @precondition stringUtils != null
      */
     protected String toString(
-        final TableRepositoryUtils tableRepositoryUtils,
+        final TableRepositoryTemplateUtils tableRepositoryTemplateUtils,
         final StringUtils stringUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
@@ -173,8 +174,9 @@ public class TableRepositoryTemplate
             t_Formatter.format(
                 new Object[]
                 {
-                    tableRepositoryUtils.retrieveTableRepositoryClassName(
-                        getRepository())
+                    tableRepositoryTemplateUtils
+                        .retrieveTableRepositoryClassName(
+                            getRepository())
                 }));
 
         t_sbResult.append(getClassStart());

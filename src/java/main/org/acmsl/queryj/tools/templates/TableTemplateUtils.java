@@ -63,7 +63,7 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public class TableUtils
+public class TableTemplateUtils
 {
     /**
      * Singleton implemented as a weak reference.
@@ -73,13 +73,13 @@ public class TableUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected TableUtils() {};
+    protected TableTemplateUtils() {};
 
     /**
      * Specifies a new weak reference.
      * @param utils the utils instance to use.
      */
-    protected static void setReference(final TableUtils utils)
+    protected static void setReference(final TableTemplateUtils utils)
     {
         singleton = new WeakReference(utils);
     }
@@ -94,23 +94,23 @@ public class TableUtils
     }
 
     /**
-     * Retrieves a TableUtils instance.
+     * Retrieves a <code>TableTemplateUtils</code> instance.
      * @return such instance.
      */
-    public static TableUtils getInstance()
+    public static TableTemplateUtils getInstance()
     {
-        TableUtils result = null;
+        TableTemplateUtils result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (TableUtils) reference.get();
+            result = (TableTemplateUtils) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new TableUtils();
+            result = new TableTemplateUtils();
 
             setReference(result);
         }
