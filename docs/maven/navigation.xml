@@ -13,7 +13,7 @@
       <item name="Introduction" href="index.html"/>
       <item name="FAQ" href="faq.html"/>
       <item name="Tasks" href="tasks.html"/>
-      <item name="downloads" href="dist/"/>
+      <!--item name="downloads" href="dist/"/-->
       <search/>
     </menu>
   </body>
