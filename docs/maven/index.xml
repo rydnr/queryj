@@ -20,7 +20,8 @@
         <p>
           <strong>QueryJ</strong> 0.6b1 supports:
           <ul>
-            <li>Early-access custom queries support,</li>
+            <li>Custom queries support,</li>
+            <li>JDBC flags support (Connection's, Statement's and ResultSet's),</li>
             <li>Value Object generation from database model,</li>
             <li>DAO interfaces generation from database model,</li>
             <li>Database vendor-specific DAO implementations
@@ -73,7 +74,15 @@
             $Date$
           </td>
           <td>
-            Added support for defining specific JDBC <i>flags</i>
+            More work on JDBC flags, as well as a long-awaited refactoring on <i>DAOTemplate</i> class.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/12/15 08:31:55
+          </td>
+          <td>
+            Added initial support for specific JDBC <i>flags</i>
             (Connection's, Statement's or ResultSet's).
           </td>
         </tr>

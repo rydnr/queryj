@@ -168,6 +168,9 @@ public class StatementFlagsElementFactory
         String t_strMoreResults = 
             attributes.getValue("moreresults");
 
+        String t_strCursorName = 
+            attributes.getValue("cursorname");
+
         result =
             new StatementFlagsElement(
                 t_strId,
@@ -178,7 +181,8 @@ public class StatementFlagsElementFactory
                 t_iQueryTimeout,
                 t_strFetchDirection,
                 t_bEscapeProcessing,
-                t_strMoreResults);
+                t_strMoreResults,
+                t_strCursorName);
 
         return result;
     }

@@ -69,7 +69,8 @@
     querytimeout CDATA #IMPLIED
     fetchdirection (FETCH_FORWARD | FETCH_REVERSE | FETCH_UNKNOWN) #IMPLIED
     escapeprocessing (true | false) #IMPLIED
-    moreresults (CLOSE_CURRENT_RESULT | KEEP_CURRENT_RESULT | CLOSE_ALL_RESULTS) #IMPLIED>
+    moreresults (CLOSE_CURRENT_RESULT | KEEP_CURRENT_RESULT | CLOSE_ALL_RESULTS) #IMPLIED
+    cursorname CDATA #IMPLIED>
   <!ELEMENT resultset-flags EMPTY>
   <!ATTLIST resultset-flags
     id ID #REQUIRED

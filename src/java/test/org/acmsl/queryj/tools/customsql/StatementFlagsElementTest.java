@@ -127,7 +127,8 @@ extends TestCase
             new Integer(30),
             org.acmsl.queryj.tools.customsql.StatementFlagsElement.FETCH_FORWARD,
             Boolean.TRUE,
-            org.acmsl.queryj.tools.customsql.StatementFlagsElement.CLOSE_CURRENT_RESULT);
+            org.acmsl.queryj.tools.customsql.StatementFlagsElement.CLOSE_CURRENT_RESULT,
+            "test");
 
     // JUnitDoclet end method testcase.createInstance
   }

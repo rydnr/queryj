@@ -122,17 +122,17 @@ public abstract class Query
      */
     public Query()
     {
-        inmutableSetFields(new ArrayList());
-        inmutableSetTables(new ArrayList());
-        inmutableSetConditions(new ArrayList());
-        inmutableSetVariableConditions(new ArrayList());
+        immutableSetFields(new ArrayList());
+        immutableSetTables(new ArrayList());
+        immutableSetConditions(new ArrayList());
+        immutableSetVariableConditions(new ArrayList());
     }
 
     /**
      * Specifies the statement.
      * @param statement the prepared statement.
      */
-    protected void setPreparedStatement(PreparedStatement statement)
+    protected void setPreparedStatement(final PreparedStatement statement)
     {
         m__PreparedStatement = statement;
     }
@@ -150,7 +150,7 @@ public abstract class Query
      * Specifies new field collection.
      * @param list the new list.
      */
-    private void inmutableSetFields(List list)
+    private void immutableSetFields(final List list)
     {
         m__lFields = list;
     }
@@ -159,9 +159,9 @@ public abstract class Query
      * Specifies new field collection.
      * @param list the new list.
      */
-    protected void setFields(List list)
+    protected void setFields(final List list)
     {
-        inmutableSetFields(list);
+        immutableSetFields(list);
     }
 
     /**
@@ -177,7 +177,7 @@ public abstract class Query
      * Adds a new field.
      * @param field the field to add.
      */
-    protected void addField(Field field)
+    protected void addField(final Field field)
     {
         if  (field != null) 
         {
@@ -196,7 +196,7 @@ public abstract class Query
      * @return its position, or -1 if such field doesn't belong to
      * this query.
      */
-    protected int getFieldIndex(Field field)
+    protected int getFieldIndex(final Field field)
     {
         return getIndex(getFields(), field);
     }
@@ -205,7 +205,7 @@ public abstract class Query
      * Specifies new table collection.
      * @param list the new list.
      */
-    private void inmutableSetTables(List list)
+    private void immutableSetTables(final List list)
     {
         m__lTables = list;
     }
@@ -216,7 +216,7 @@ public abstract class Query
      */
     protected void setTables(List list)
     {
-        inmutableSetTables(list);
+        immutableSetTables(list);
     }
 
     /**
@@ -232,7 +232,7 @@ public abstract class Query
      * Adds a new table.
      * @param table the table to add.
      */
-    protected void addTable(Table table)
+    protected void addTable(final Table table)
     {
         if  (table != null) 
         {
@@ -249,7 +249,7 @@ public abstract class Query
      * Specifies new condition collection.
      * @param list the new list.
      */
-    private void inmutableSetConditions(List list)
+    private void immutableSetConditions(final List list)
     {
         m__lConditions = list;
     }
@@ -258,9 +258,9 @@ public abstract class Query
      * Specifies new condition collection.
      * @param list the new list.
      */
-    protected void setConditions(List list)
+    protected void setConditions(final List list)
     {
-        inmutableSetConditions(list);
+        immutableSetConditions(list);
     }
 
     /**
@@ -276,7 +276,7 @@ public abstract class Query
      * Adds a new condition.
      * @param condition the condition to add.
      */
-    protected void addCondition(Condition condition)
+    protected void addCondition(final Condition condition)
     {
         if  (condition != null) 
         {
@@ -312,7 +312,7 @@ public abstract class Query
      * Specifies new variable condition collection.
      * @param list the new list.
      */
-    private void inmutableSetVariableConditions(List list)
+    private void immutableSetVariableConditions(final List list)
     {
         m__lVariableConditions = list;
     }
@@ -321,9 +321,9 @@ public abstract class Query
      * Specifies new variable condition collection.
      * @param list the new list.
      */
-    protected void setVariableConditions(List list)
+    protected void setVariableConditions(final List list)
     {
-        inmutableSetVariableConditions(list);
+        immutableSetVariableConditions(list);
     }
 
     /**
@@ -398,19 +398,71 @@ public abstract class Query
      * Prepares a statement.
      * @param connection the JDBC connection.
      * @return the statement.
-     * @exception SQLException if an error occurs.
+     * @throws SQLException if an error occurs.
+     * @precondition connection != null
      */
-    public PreparedStatement prepareStatement(Connection connection)
+    public PreparedStatement prepareStatement(final Connection connection)
         throws  SQLException
     {
-        PreparedStatement result = this;
+        setPreparedStatement(connection.prepareStatement(toString()));
 
-        if  (connection != null)
-        {
-            setPreparedStatement(connection.prepareStatement(toString()));
-        }
+        return this;
+    }
 
-        return result;
+    /**
+     * Prepares a statement using given flags.
+     * @param connection the JDBC connection.
+     * @param resultSetType one of the ResultSet type flags.
+     * @param resultSetConcurrency one of the ResultSet concurrency flags.
+     * @return the statement.
+     * @throws SQLException if an error occurs.
+     * @precondition connection != null
+     * @precondition (resultSetType == ResultSet.TYPE_FORWARD_ONLY) || (resultSetType == ResultSet.TYPE_SCROLL_INSENSITIVE) || (resultSetType == ResultSet.TYPE_SCROLL_SENSITIVE)
+     * @precondition (resultSetConcurrency == ResultSet.CONCUR_READ_ONLY) || (resultSetConcurrency == ResultSet.CONCUR_UPDATABLE)
+     */
+    public PreparedStatement prepareStatement(
+        final Connection connection,
+        final int resultSetType,
+        final int resultSetConcurrency)
+      throws  SQLException
+    {
+        setPreparedStatement(
+            connection.prepareStatement(
+                toString(),
+                resultSetType,
+                resultSetConcurrency));
+
+        return this;
+    }
+
+    /**
+     * Prepares a statement using given flags.
+     * @param connection the JDBC connection.
+     * @param resultSetType one of the ResultSet type flags.
+     * @param resultSetConcurrency one of the ResultSet concurrency flags.
+     * @param resultSetHoldability one of the ResultSet holdability flags.
+     * @return the statement.
+     * @throws SQLException if an error occurs.
+     * @precondition connection != null
+     * @precondition (resultSetType == ResultSet.TYPE_FORWARD_ONLY) || (resultSetType == ResultSet.TYPE_SCROLL_INSENSITIVE) || (resultSetType == ResultSet.TYPE_SCROLL_SENSITIVE)
+     * @precondition (resultSetConcurrency == ResultSet.CONCUR_READ_ONLY) || (resultSetConcurrency == ResultSet.CONCUR_UPDATABLE)
+     * @precondition (resultSetHoldability == ResultSet.HOLD_CURSORS_OVER_COMMIT) || (resultSetHoldability == ResultSet.CLOSE_CURSORS_AT_COMMIT)
+     */
+    public PreparedStatement prepareStatement(
+        final Connection connection,
+        final int resultSetType,
+        final int resultSetConcurrency,
+        final int resultSetHoldability)
+      throws  SQLException
+    {
+        setPreparedStatement(
+            connection.prepareStatement(
+                toString(),
+                resultSetType,
+                resultSetConcurrency,
+                resultSetHoldability));
+
+        return this;
     }
 
     // Implementation of java.sql.Statement //
