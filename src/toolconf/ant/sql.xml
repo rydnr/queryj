@@ -2,8 +2,8 @@
 
 <!DOCTYPE sql-list
 [
-  <!ELEMENT sql-list (sql)+>
-  <!ELEMENT sql (value,parameter-list,result-list)>
+  <!ELEMENT sql-list (sql+,parameter-list,result-list,property-list)>
+  <!ELEMENT sql (value,parameter-ref,result-ref?)>
   <!ATTLIST sql
     id ID #IMPLIED
     dao CDATA #REQUIRED
@@ -21,16 +21,22 @@
   <!ELEMENT parameter-list (parameter)*>
   <!ELEMENT parameter EMPTY>
   <!ATTLIST parameter
+    id ID #REQUIRED
     index CDATA #REQUIRED
     type  CDATA #REQUIRED>
   <!ELEMENT result-list (result)*>
-  <!ELEMENT result (property)+>
+  <!ELEMENT result (property-ref)+>
   <!ATTLIST result
+    id ID #REQUIRED
     class CDATA #IMPLIED
     matches (single | multiple) #REQUIRED>
-  <!ELEMENT property-list (result)*>
+  <!ELEMENT property-ref EMPTY>
+  <!ATTLIST property-ref
+    id IDREF #REQUIRED>
+  <!ELEMENT property-list (property)*>
   <!ELEMENT property EMPTY>
   <!ATTLIST property
+    id ID #REQUIRED
     column_name CDATA #IMPLIED
     index CDATA #IMPLIED
     name CDATA #IMPLIED
@@ -85,7 +91,7 @@
         id="find-customer-by-customer-id.name.property"/>
     </result>
     <result
-      id="find-customer-by-person.result"
+      id="find-customer-by-person-last-name.result"
       class="com.foo.bar.dao.CustomerBean"
       matches="multiple">
       <property-ref
@@ -102,7 +108,8 @@
       column_name="customer_id"
       type="long"/>
     <property
-      id="name.property" column_name="name" type="String"/>
+      id="find-customer-by-customer-id.name.property"
+      column_name="name" type="String"/>
     <property
       id="find-customer-by-person.customer_id.property"
       column_name="c.customer_id"
