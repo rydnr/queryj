@@ -83,4 +83,10 @@ public interface OracleTableRepository
      * The USER_CONSTRAINTS table.
      */
     public static final OracleUserConstraintsTable USER_CONSTRAINTS = OracleUserConstraintsTable.getInstance();
+
+    /**
+     * The USER_TAB_COMMENTS table.
+     */
+    public static final OracleUserTabCommentsTable USER_TAB_COMMENTS = OracleUserTabCommentsTable.getInstance();
+
 }

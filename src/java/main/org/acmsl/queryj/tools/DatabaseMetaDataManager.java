@@ -132,6 +132,11 @@ public class DatabaseMetaDataManager
     private String[] m__astrTableNames;
 
     /**
+     * The table comments.
+     */
+    private String[] m__astrTableComments;
+
+    /**
      * The column names (as list) of each table.
      */
     private Map m__mColumnNames;
@@ -145,6 +150,11 @@ public class DatabaseMetaDataManager
      * The null flags (as list) of each table and column name.
      */
     private Map m__mAllowNulls;
+
+    /**
+     * The comments of each table.
+     */
+    private Map m__mTableComments;
 
     /**
      * The tables' primary keys information.
@@ -232,6 +242,7 @@ public class DatabaseMetaDataManager
         immutableSetPrimaryKeys(t_UniqueMap);
         immutableSetForeignKeys(t_UniqueMap);
         immutableSetExternallyManagedFields(t_UniqueMap);
+        immutableSetTableComments(t_UniqueMap);
     }
 
     /**
@@ -719,6 +730,89 @@ public class DatabaseMetaDataManager
     public String[] getTableNames()
     {
         return m__astrTableNames;
+    }
+
+    /**
+     * Specifies the table comments.
+     * @param comments such comments.
+     */
+    private void immutableSetTableComments(final Map comments)
+    {
+        m__mTableComments = comments;
+    }
+
+    /**
+     * Specifies the table comments.
+     * @param comments such comments.
+     */
+    protected void setTableComments(final Map comments)
+    {
+        immutableSetTableComments(comments);
+    }
+
+    /**
+     * Retrieves the table comments.
+     * @return such comments.
+     */
+    public Map getTableComments()
+    {
+        return m__mTableComments;
+    }
+
+    /**
+     * Adds the comments of given table.
+     * @param tableName the table name.
+     * @param tableComment the table comment.
+     * @precondition tableName != null
+     * @precondition tableComment != null
+     */
+    public void addTableComment(
+        final String tableName,
+        final String tableComment)
+    {
+        addTableComment(tableName, tableComment, getTableComments());
+    }
+
+    /**
+     * Adds the comments of given table.
+     * @param tableName the table name.
+     * @param tableComment the table comment.
+     * @param map the map.
+     * @precondition tableName != null
+     * @precondition tableComment != null
+     * @precondition map != null
+     */
+    protected void addTableComment(
+        final String tableName,
+        final String tableComment,
+        final Map map)
+    {
+        map.put(buildTableCommentKey(tableName), tableComment);
+    }
+
+    /**
+     * Retrieves the table comments.
+     * @param tableName the table name.
+     * @return the table comment.
+     * @precondition tableName != null
+     */
+    public String getTableComment(final String tableName)
+    {
+        return getTableComment(tableName, getTableComments());
+    }
+
+    /**
+     * Retrieves the table comments.
+     * @param tableName the table name.
+     * @param tableComments the table comments.
+     * @return the table comment.
+     * @precondition tableName != null
+     * @precondition tableComments != null
+     */
+    protected String getTableComment(
+        final String tableName, final Map tableComments)
+    {
+        return (String) tableComments.get(buildTableCommentKey(tableName));
     }
 
     /**
@@ -1906,7 +2000,7 @@ public class DatabaseMetaDataManager
      * @param key the object key.
      * @return the map key.
      */
-    protected Object buildKey(Object key)
+    protected Object buildKey(final Object key)
     {
         return ((key == null) ? "null" : key);
     }
@@ -1917,7 +2011,7 @@ public class DatabaseMetaDataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildKey(Object firstKey, Object secondKey)
+    protected Object buildKey(final Object firstKey, final Object secondKey)
     {
         return
             "_|_" + buildKey(firstKey) + "|'|" + buildKey(secondKey) + "|_|";
@@ -1939,7 +2033,8 @@ public class DatabaseMetaDataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildPkKey(Object firstKey, Object secondKey)
+    protected Object buildPkKey(
+        final Object firstKey, final Object secondKey)
     {
         return buildPkKey(firstKey) + ".,.," + secondKey;
     }
@@ -1950,7 +2045,8 @@ public class DatabaseMetaDataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildPkKey(Object firstKey, Object secondKey, Object thirdKey)
+    protected Object buildPkKey(
+        final Object firstKey, final Object secondKey, final Object thirdKey)
     {
         return buildPkKey(firstKey, secondKey) + ";;" + thirdKey;
     }
@@ -1960,7 +2056,7 @@ public class DatabaseMetaDataManager
      * @param firstKey the first object key.
      * @return the map key.
      */
-    protected Object buildFkKey(Object firstKey)
+    protected Object buildFkKey(final Object firstKey)
     {
         return "[fk]!!" + buildKey(firstKey);
     }
@@ -1971,7 +2067,8 @@ public class DatabaseMetaDataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildFkKey(Object firstKey, Object secondKey)
+    protected Object buildFkKey(
+        final Object firstKey, final Object secondKey)
     {
         return buildFkKey(firstKey) + "++" + secondKey;
     }
@@ -1982,7 +2079,8 @@ public class DatabaseMetaDataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildFkKey(Object firstKey, Object secondKey, Object thirdKey)
+    protected Object buildFkKey(
+        final Object firstKey, final Object secondKey, final Object thirdKey)
     {
         return buildFkKey(firstKey, secondKey) + ";:;:" + thirdKey;
     }
@@ -1996,10 +2094,10 @@ public class DatabaseMetaDataManager
      * @return the map key.
      */
     protected Object buildFkKey(
-        Object firstKey,
-        Object secondKey,
-        Object thirdKey,
-        Object fourthKey)
+        final Object firstKey,
+        final Object secondKey,
+        final Object thirdKey,
+        final Object fourthKey)
     {
         return buildFkKey(firstKey, secondKey, thirdKey) + ".;.;" + fourthKey;
     }
@@ -2010,7 +2108,7 @@ public class DatabaseMetaDataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildRefFkKey(Object firstKey, Object secondKey)
+    protected Object buildRefFkKey(final Object firstKey, final Object secondKey)
     {
         return "\\ref//" + buildFkKey(firstKey, secondKey);
     }
@@ -2020,7 +2118,7 @@ public class DatabaseMetaDataManager
      * @param firstKey the first object key.
      * @return the map key.
      */
-    protected Object buildExternallyManagedFieldKey(Object firstKey)
+    protected Object buildExternallyManagedFieldKey(final Object firstKey)
     {
         return "[externally-managed-field]!!" + buildKey(firstKey);
     }
@@ -2032,7 +2130,7 @@ public class DatabaseMetaDataManager
      * @return the map key.
      */
     protected Object buildExternallyManagedFieldKey(
-        Object firstKey, Object secondKey)
+        final Object firstKey, final Object secondKey)
     {
         return buildExternallyManagedFieldKey(firstKey) + ".,.," + secondKey;
     }
@@ -2042,7 +2140,7 @@ public class DatabaseMetaDataManager
      * @param value the object.
      * @return the map value.
      */
-    protected Object buildExternallyManagedFieldValue(Object value)
+    protected Object buildExternallyManagedFieldValue(final Object value)
     {
         Object result = "";
 
@@ -2062,6 +2160,16 @@ public class DatabaseMetaDataManager
     protected Object buildAllowNullKey(final Object first, final Object second)
     {
         return "[allow-nulls]!!" + buildKey(first) + buildKey(second);
+    }
+
+    /**
+     * Builds a table comment key using given object.
+     * @param tableName the table name.
+     * @return the map key.
+     */
+    protected Object buildTableCommentKey(final Object tableName)
+    {
+        return "[table-comment]!!" + buildKey(tableName);
     }
 
     /**
@@ -2094,7 +2202,6 @@ public class DatabaseMetaDataManager
         {
             t_astrTableNames =
                 getTableNames(metaData, catalog, schema, project, task);
-
         }
 
         if  (   (t_astrTableNames != null)
@@ -2115,6 +2222,17 @@ public class DatabaseMetaDataManager
                       t_iIndex < t_astrTableNames.length;
                       t_iIndex++) 
             {
+                String t_strTableComment =
+                    getTableComment(
+                        metaData,
+                        catalog,
+                        schema,
+                        t_astrTableNames[t_iIndex],
+                        project,
+                        task);
+
+                addTableComment(t_astrTableNames[t_iIndex], t_strTableComment);
+
                 String[] t_astrColumnNames =
                     getColumnNames(
                         metaData,
@@ -3083,6 +3201,85 @@ public class DatabaseMetaDataManager
 
             throw sqlException;
         }
+    }
+
+    /**
+     * Retrieves the table comments.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param tableName the table name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return the list of all table names.
+     * @throws SQLException if the database operation fails.
+     * @precondition metaData != null
+     */
+    protected String getTableComment(
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
+    {
+        String result = "";
+
+        ResultSet t_rsTables = null;
+
+        try 
+        {
+            try 
+            {
+                t_rsTables =
+                    metaData.getTables(
+                        catalog,
+                        schema,
+                        tableName,
+                        new String[]{ "TABLE" });
+            }
+            catch  (final SQLException sqlException)
+            {
+                throw
+                    new QueryJException(
+                        "cannot.retrieve.database.table.names",
+                        sqlException);
+            }
+
+            result = extractTableComment(t_rsTables);
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw sqlException;
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw queryjException;
+        }
+        finally 
+        {
+            if  (t_rsTables != null)
+            {
+                t_rsTables.close();
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Extracts the table comment from given result set.
+     * @param resultSet the result set with the table information.
+     * @return the list of column names.
+     * @throws SQLException if the database operation fails.
+     * @precondition resultSet != null
+     */
+    protected String extractTableComment(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getString("REMARKS");
     }
 
     /**

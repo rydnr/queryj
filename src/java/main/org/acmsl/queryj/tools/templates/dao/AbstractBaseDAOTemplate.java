@@ -149,6 +149,11 @@ public abstract class AbstractBaseDAOTemplate
      */
     private String m__strClassStart;
 
+    /*
+     * The constant record.
+     */
+    private String m__strConstantRecord;
+
     /**
      * The find-by-primary-key method.
      */
@@ -304,6 +309,7 @@ public abstract class AbstractBaseDAOTemplate
      * @param javadoc the class Javadoc.
      * @param classDefinition the class definition.
      * @param classStart the class start.
+     * @param constantRecord the constant record subtemplate.
      * @param findByPrimaryKeyMethod the find by primary key method.
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
@@ -359,6 +365,7 @@ public abstract class AbstractBaseDAOTemplate
         final String javadoc,
         final String classDefinition,
         final String classStart,
+        final String constantRecord,
         final String findByPrimaryKeyMethod,
         final String findByPrimaryKeyPkJavadoc,
         final String findByPrimaryKeyPkDeclaration,
@@ -402,6 +409,7 @@ public abstract class AbstractBaseDAOTemplate
         immutableSetJavadoc(javadoc);
         immutableSetClassDefinition(classDefinition);
         immutableSetClassStart(classStart);
+        immutableSetConstantRecord(constantRecord);
         immutableSetFindByPrimaryKeyMethod(findByPrimaryKeyMethod);
         immutableSetFindByPrimaryKeyPkJavadoc(findByPrimaryKeyPkJavadoc);
         immutableSetFindByPrimaryKeyPkDeclaration(findByPrimaryKeyPkDeclaration);
@@ -794,6 +802,33 @@ public abstract class AbstractBaseDAOTemplate
     public String getClassStart() 
     {
         return m__strClassStart;
+    }
+
+    /**
+     * Specifies the constant record.
+     * @param constantRecord the new constant record.
+     */
+    private void immutableSetConstantRecord(final String constantRecord)
+    {
+        m__strConstantRecord = constantRecord;
+    }
+
+    /**
+     * Specifies the constant record.
+     * @param constantRecord the new constant record.
+     */
+    protected void setConstantRecord(final String constantRecord)
+    {
+        immutableSetConstantRecord(constantRecord);
+    }
+
+    /**
+     * Retrieves the constant record.
+     * @return such information.
+     */
+    public String getConstantRecord() 
+    {
+        return m__strConstantRecord;
     }
 
     /**

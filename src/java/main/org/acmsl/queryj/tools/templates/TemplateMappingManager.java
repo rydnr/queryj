@@ -452,6 +452,12 @@ public abstract class TemplateMappingManager
         "xml.dao.factory.";
 
     /**
+     * The dataAccessContextLocal template attribute name.
+     */
+    public static final String DATAACCESSCONTEXTLOCAL_TEMPLATE =
+        "dataAccessContext-local.xml.template";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;

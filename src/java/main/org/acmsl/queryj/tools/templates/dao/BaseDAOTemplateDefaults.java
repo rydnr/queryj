@@ -175,6 +175,19 @@ public interface BaseDAOTemplateDefaults
         "{\n";
 
     /**
+     * The constant records, if the table is static.
+     * @param 0 the description.
+     * @param 1 the capitalized value object name.
+     * @param 2 the constant record properties specification.
+     */
+    public static final String DEFAULT_CONSTANT_RECORD =
+          "    /**\n"
+        + "     * The {0} constant.\n"
+        + "     */\n"
+        + "    public static final {1}ValueObject {0} =\n"
+        + "        new {1}ValueObject({2});\n\n";
+
+    /**
      * The find by primary key method.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_METHOD =

@@ -162,18 +162,20 @@ public class JdbcConnectionClosingHandler
      * @param connection the JDBC connection.
      * @throws org.apache.tools.ant.BuildException whenever the required
      * connection is not present or valid.
-     * @precondition connection != null
      */
     protected void closeConnection(final Connection connection)
         throws  BuildException
     {
-        try
+        if  (connection != null)
         {
-            connection.close();
-        }
-        catch  (final SQLException sqlException)
-        {
-            throw new BuildException(sqlException);
+            try
+            {
+                connection.close();
+            }
+            catch  (final SQLException sqlException)
+            {
+                throw new BuildException(sqlException);
+            }
         }
     }
 
