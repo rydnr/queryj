@@ -175,7 +175,7 @@ public interface ValueObjectTemplateDefaults
      */
     public static final String DEFAULT_CONSTRUCTOR =
           "    /**\n"
-        + "     * Creates a {0]ValueObject with given information.\n"
+        + "     * Creates a {0}ValueObject with given information.\n"
         + "{1}" // constructor field javadoc
         + "     */\n"
         + "    protected {0}ValueObject(" // table
