@@ -1,0 +1,89 @@
+package idbrnedo5k0pazdo5k3eiq;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.AntCommandHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference45 {
+}/**
+@__ref <oiref:design#Class#id2h5xpdo5k0pazdo5kvqzu.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.handlers.oracle:oiref> 
+*/
+class reference46 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.ParameterValidationHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference47 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.DatabaseEngineHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference48 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference49 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.MetaDataBasedTableRepositoryBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference50 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference51 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference52 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference53 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler#org.acmsl.queryj.tools.handlers.AntCommandHandler:oiref>=410,179,1198,119:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler#org.acmsl.queryj.tools.handlers.AntCommandHandler:oiref>=140,179,140,169,1181,119:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.MetaDataBasedTableRepositoryBuildHandler:oiref>=2014,390,360,151,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler:oiref>=678,179,330,164,0:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler#org.acmsl.queryj.tools.handlers.AntCommandHandler:oiref>=1531,179,1257,119:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.ParameterValidationHandler:oiref>=1028,179,220,177,0:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.handlers.DatabaseEngineHandler#org.acmsl.queryj.tools.handlers.AntCommandHandler:oiref>=2174,179,1280,119:oigroup>
+<oigroup:<oiref:design#Class#id2h5xpdo5k0pazdo5kvqzu.diagram:oiref>=1346,10,62,52,1:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler#org.acmsl.queryj.tools.handlers.AntCommandHandler:oiref>=2897,179,1303,119:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler:oiref>=290,179,240,190,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler:oiref>=10,179,260,190,0:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.handlers.ParameterValidationHandler#org.acmsl.queryj.tools.handlers.AntCommandHandler:oiref>=1234,179,1234,119:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.AntCommandHandler:oiref>=1164,10,162,109,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler:oiref>=1346,179,370,372,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler:oiref>=2682,179,430,177,0:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler#org.acmsl.queryj.tools.handlers.AntCommandHandler:oiref>=843,179,1216,119:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.DatabaseEngineHandler:oiref>=2014,179,320,164,0:oigroup> 
+*/
+class __positions {
+}

@@ -1,0 +1,302 @@
+package id10j7wdo5k0pazdo5k3ctp;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:design#Class#id2r2d8do5k0pazdo5k3egn.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools:oiref> 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.DoubleField:oiref><oihard>
+@__modelType reference 
+*/
+class reference3 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.ConditionOperatorRepository:oiref><oihard>
+@__modelType reference 
+*/
+class reference4 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.WriteQuery:oiref><oihard>
+@__modelType reference 
+*/
+class reference5 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.Condition:oiref><oihard>
+@__modelType reference 
+*/
+class reference6 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.IntField:oiref><oihard>
+@__modelType reference 
+*/
+class reference7 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.ForeignKeyField:oiref><oihard>
+@__modelType reference 
+*/
+class reference8 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><oihard>
+@__modelType reference 
+*/
+class reference9 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.AtomicCondition:oiref><oihard>
+@__modelType reference 
+*/
+class reference10 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.TableAlias:oiref><oihard>
+@__modelType reference 
+*/
+class reference11 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.PrimaryKeyField:oiref><oihard>
+@__modelType reference 
+*/
+class reference12 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref><oihard>
+@__modelType reference 
+*/
+class reference13 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.Table:oiref><oihard>
+@__modelType reference 
+*/
+class reference14 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.QueryJException:oiref><oihard>
+@__modelType reference 
+*/
+class reference15 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.Query:oiref><oihard>
+@__modelType reference 
+*/
+class reference16 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.DateField:oiref><oihard>
+@__modelType reference 
+*/
+class reference17 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.Field:oiref><oihard>
+@__modelType reference 
+*/
+class reference18 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.QueryResultSet:oiref><oihard>
+@__modelType reference 
+*/
+class reference19 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.ConditionFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference20 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.VariableCondition:oiref><oihard>
+@__modelType reference 
+*/
+class reference21 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.QueryUtils:oiref><oihard>
+@__modelType reference 
+*/
+class reference22 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.QueryFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference23 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.BigDecimalField:oiref><oihard>
+@__modelType reference 
+*/
+class reference24 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.StringField:oiref><oihard>
+@__modelType reference 
+*/
+class reference25 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.CalendarField:oiref><oihard>
+@__modelType reference 
+*/
+class reference26 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.NestedConditionOperator:oiref><oihard>
+@__modelType reference 
+*/
+class reference27 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.SelectQuery:oiref><oihard>
+@__modelType reference 
+*/
+class reference28 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.DeleteQuery:oiref><oihard>
+@__modelType reference 
+*/
+class reference29 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.ConditionOperator:oiref><oihard>
+@__modelType reference 
+*/
+class reference30 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.LongField:oiref><oihard>
+@__modelType reference 
+*/
+class reference31 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options option.detail = Implementation
+option.formatting = UML 
+*/
+class __options {
+}/**
+@__positions <oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.ForeignKeyField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.PrimaryKeyField:oiref>=4913,58,4993,58:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.QueryUtils:oiref>=6022,10,459,174,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.DoubleField:oiref>=678,1838,260,135,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.Query:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=4272,1614,3700,2076,3700,3148,2579,4519:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.WriteQuery#m__Table:oiref>=1692,2275,2332,4519:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.CalendarField#org.acmsl.queryj.Field:oiref>=3538,1838,3538,301:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Field:oiref>=1005,4519,459,1925,3415,301:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.ForeignKeyField:oiref>=4686,10,227,125,0:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.VariableCondition#org.acmsl.queryj.AtomicCondition:oiref>=5626,4519,4424,2197:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.QueryFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref>=342,2012,1562,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.Field:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.VariableCondition:oiref>=3686,301,3686,1634,5806,1784,5806,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.WriteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.LongField:oiref>=1756,1916,2064,1818,2285,1818,2334,1865:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=1251,4842,1708,4856,1866,4856,2278,4664:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.TableAlias:oiref>=2276,5144,296,164,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Field:oiref>=1584,4519,479,1931,3430,301:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.StringField:oiref>=2992,1838,250,135,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.VariableCondition:oiref>=5599,4519,403,112,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=1876,4638,2278,4638:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.BigDecimalField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=750,5144,10,4690,79,1830,2151,249:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.DeleteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=535,4600,914,4882,1836,4882,2278,4711:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.DeleteQuery:oiref>=204,4519,331,135,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.CalendarField:oiref>=1220,4519,3445,1947:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.IntField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=2788,1838,2368,1641,2368,249:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.TableAlias#m__Table:oiref>=2474,5144,2474,4758:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.AtomicCondition#m__LeftSideField:oiref>=4475,1838,3602,1646,3602,301:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.ConditionFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Field:oiref>=5559,1838,3652,1618,3652,301:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.CalendarField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=3575,1947,2482,4519:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.QueryJException:oiref>=5354,10,337,122,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.ConditionOperatorRepository:oiref>=4212,4519,401,239,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.Field:oiref>=3400,20,320,281,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.QueryFactory:oiref>=119,1838,270,174,0:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.DateField#org.acmsl.queryj.Field:oiref>=2263,1838,2263,1747,3475,301:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.Field#m__Table:oiref>=3570,301,3570,1670,3680,1886,3680,3148,2546,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.QueryResultSet:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Field:oiref>=6222,1838,3703,1589,3703,301:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.LongField#org.acmsl.queryj.Field:oiref>=2442,1838,2442,1766,3490,301:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.QueryResultSet:oiref>=6052,1838,510,2621,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.WriteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.IntField:oiref>=1756,1906,2053,1808,2455,1808,2712,1865:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.Condition:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Field:oiref>=2517,157,3400,157:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.SelectQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.QueryResultSet:oiref>=5066,2115,5253,2293,6052,2293:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.DoubleField:oiref>=1035,4519,782,1973:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.SelectQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=4786,1838,4786,1763,2436,1560,2436,249:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.Query:oiref>=4076,20,590,1594,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.LongField:oiref>=2334,1838,200,135,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.WriteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.CalendarField:oiref>=1756,1886,2031,1788,3088,1788,3380,1859:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.DeleteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.VariableCondition:oiref>=535,4627,916,4902,4405,4902,5599,4609:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.PrimaryKeyField:oiref>=4993,10,126,96,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.Field:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.SelectQuery:oiref>=3635,301,3635,1642,4926,1697,4926,1838:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.LongField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=2386,1973,2386,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.QueryFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.DeleteQuery:oiref>=250,2012,250,4519:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref>=915,4519,336,343,0:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.DoubleField#org.acmsl.queryj.Field:oiref>=851,1838,3445,301:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.StringField:oiref>=1189,4519,3054,1973:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.Table:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Field:oiref>=2514,4519,3660,3148,3660,1822,3554,1672,3554,301:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.StringField#org.acmsl.queryj.Field:oiref>=3158,1838,3522,301:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.LongField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=2351,1838,2351,249:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.IntField:oiref>=1751,4519,2826,1973:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.WriteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.DateField:oiref>=1756,1926,2044,1926:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.Table:oiref>=2278,4519,367,239,0:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.AtomicCondition#m__Operator:oiref>=4221,2197,5040,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.ConditionFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.VariableCondition:oiref>=5682,2171,5682,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.ConditionFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.AtomicCondition:oiref>=5146,2105,5070,2204,4716,2204,4628,2126:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.NestedConditionOperator:oiref>=3798,5144,200,138,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.SelectQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Field:oiref>=4856,1838,4856,1745,3618,1604,3618,301:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.StringField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=3179,1973,2450,4519:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.UpdateQuery#org.acmsl.queryj.WriteQuery:oiref>=1065,4519,1565,2275:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.WriteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.BigDecimalField:oiref>=1502,2275,895,4545,895,5144:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.IntField#org.acmsl.queryj.Field:oiref>=2865,1838,3506,301:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.QueryFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref>=296,2012,945,4519:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.ConditionFactory:oiref>=5146,1838,620,333,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.BigDecimalField:oiref>=678,5144,281,135,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.LongField:oiref>=1127,4519,2351,1973:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.WriteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Field:oiref>=1502,1838,3460,301:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.Condition:oiref>=2129,20,388,229,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.CalendarField:oiref>=3380,1838,260,109,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.ConditionOperator:oiref>=4910,4519,311,151,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.DateField:oiref>=2044,1838,240,109,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.SelectQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=4786,2184,2612,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.BigDecimalField:oiref>=1708,4836,937,5144:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.DateField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=2224,1947,2359,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.BigDecimalField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=948,5144,2327,4758:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.BigDecimalField#org.acmsl.queryj.DoubleField:oiref>=822,5144,730,1973:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.ConditionFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=5352,1838,5352,1796,2454,1573,2454,249:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=975,4519,439,1923,2197,249:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.VariableCondition:oiref>=1251,4852,1708,4892,4394,4892,5599,4587:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.BigDecimalField:oiref>=926,4862,926,5144:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.SelectQuery:oiref>=4716,1838,350,346,0:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.QueryResultSet#m__Query:oiref>=6392,1838,4468,1614:oigroup>
+<oigroup:<oiref:design#Class#id2r2d8do5k0pazdo5k3egn.diagram:oiref>=5139,10,56,52,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.Field:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=3400,111,2517,111:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.DeleteQuery#org.acmsl.queryj.WriteQuery:oiref>=392,4519,1439,2275:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.Condition#m__InnerCondition:oiref>=2472,249,2472,304,2572,304,2572,204,2517,204:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.LongField:oiref>=1710,4519,2368,1973:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.Query:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.VariableCondition:oiref>=4567,1614,6582,1828,6582,4470,5904,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.Query:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=4076,138,3731,10,3389,10,2517,65:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.AtomicCondition#org.acmsl.queryj.Condition:oiref>=4170,1838,2419,1580,2419,249:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.WriteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.DoubleField:oiref>=1376,1905,938,1905:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.DoubleField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=764,1838,764,1803,2220,249:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.SelectQuery#org.acmsl.queryj.Query:oiref>=4996,1838,4996,1693,4370,1614:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.DateField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=2243,1838,2243,249:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.IntField:oiref>=2712,1838,230,135,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.VariableCondition:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Field:oiref>=5786,4519,5786,1828,3669,1598,3669,301:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.DeleteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=227,4519,99,1834,2174,249:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.NestedConditionOperator#org.acmsl.queryj.ConditionOperator:oiref>=3935,5144,5065,4670:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.StringField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=3075,1838,3075,1828,2385,1620,2385,249:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.WriteQuery#org.acmsl.queryj.Query:oiref>=1629,1838,1629,1806,4174,1614:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.SelectQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.VariableCondition:oiref>=4996,2184,5654,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.WriteQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.StringField:oiref>=1756,1896,2042,1798,2921,1798,2992,1865:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.DateField:oiref>=1096,4519,2104,1947:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.NestedConditionOperator#m__Query:oiref>=3873,5144,4856,2184:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.ConditionOperatorRepository:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.SelectQuery:oiref>=4412,4519,4926,2184:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.QueryFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.SelectQuery:oiref>=389,1872,808,1778,4590,1778,4716,1907:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.CalendarField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Condition:oiref>=3459,1838,2402,1600,2402,249:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.VariableCondition:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.ConditionOperator:oiref>=5599,4553,5221,4553:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.UpdateQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.IntField:oiref>=1158,4519,2769,1973:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.WriteQuery:oiref>=1376,1838,380,437,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.CalendarField:oiref>=1834,4519,3510,1947:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.Query:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Field:oiref>=4076,219,3720,219:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref>=1540,4519,336,317,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.DoubleField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=886,1973,2305,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.DoubleField:oiref>=1606,4519,834,1973:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.Table:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.TableAlias:oiref>=2376,4758,2376,5144:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.ConditionOperatorRepository:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.ConditionOperator:oiref>=4613,4594,4910,4594:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.AtomicCondition#m__RightSideField:oiref>=4322,1838,3586,1671,3586,301:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.AtomicCondition:oiref>=4018,1838,610,359,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.DateField:oiref>=1669,4519,2164,1947:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.InsertQuery:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.StringField:oiref>=1792,4519,3116,1973:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.InsertQuery#org.acmsl.queryj.WriteQuery:oiref>=1628,4519,1628,2275:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.ConditionFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.ConditionOperator:oiref>=5171,2171,5171,4519:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.IntField:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.Table:oiref>=2884,1973,2418,4519:oigroup>
+*/
+class __positions {
+}

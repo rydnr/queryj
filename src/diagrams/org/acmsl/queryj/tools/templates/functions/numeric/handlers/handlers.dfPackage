@@ -1,0 +1,45 @@
+package id35c65do5k0pazdo5kvrf0;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference137 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference138 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference139 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateWritingHandler:oiref>=10,10,380,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateWritingHandler:oiref>=410,10,380,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateBuildHandler:oiref>=10,410,380,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateBuildHandler:oiref>=10,210,380,164,0:oigroup> 
+*/
+class __positions {
+}

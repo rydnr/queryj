@@ -1,0 +1,344 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Changes</title>
+    <author email="jsanleandro@yahoo.es">Jose San Leandro</author>
+  </properties>
+  <body>
+    <release version="queryj-0_5_5b2" date="$Date$">
+      <action
+        dev="$Author$"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Mock DAO template development almost done.<br/>
+        Remaining issues for 0.5.5:
+        <ul>
+          <li>Cascading deletions, following foreign keys</li>
+          <li>Adding support for  externally-managed fields,
+          e.g. sequences</li>
+          <li>Mock DAOs' unit tests</li>
+        </ul>
+      </action>
+    </release>
+    <release version="queryj-0_5_5b1" date="2004/02/15 14:07:05">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Added initial logging refactoring.
+        <br/>
+        Mock DAO template development started.
+      </action>
+    </release>
+    <release version="queryj-0_5_4_5" date="2003/12/13 13:03:31">
+      <action
+        dev="$Author$"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Added package documentation, including UML class diagrams, for
+        the new packages, solving issues
+        #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=61">61</a>,
+        #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=62">62</a>,
+        #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=63">63</a>,
+        and
+        #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=64">64</a>.
+      </action>
+    </release>
+    <release version="queryj-0_5_4" date="2003/12/09 23:21:25">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Fixed all compile errors after package refactoring.
+      </action>
+    </release>
+    <release version="queryj-0_5_3" date="2003/12/01">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Implemented a first approach to support any keyword-based
+        field value generation, such us autonumeric (no keyword),
+        sequence (testseq.nextval), timestamps (sysdate), etc.
+      </action>
+    </release>
+    <release version="queryj-0_5_2_3" date="2003/11/30 21:25:44">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Added externally-managed fields support in DAO, BaseDAO and
+        DAOTest templates.
+      </action>
+    </release>
+    <release version="queryj-0_5_2_2" date="2003/11/30 15:36:10">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Added support in QueryJ's Ant task for externally-managed fields.
+      </action>
+    </release>
+    <release version="queryj-0_5_2" date="2003/11/27 23:25:01">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Unit tests are implemented for the basic 4 operations (insert,
+        select, update, delete, in that order) of all DAOs. They all
+        pass, but Bug #54 and #55 have appear, though.
+      </action>
+    </release>
+    <release version="queryj-0_5_1" date="2003/11/23 21:13:09">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Added configuration properties for configuring which DAO
+        implementation to use.
+      </action>
+    </release>
+    <release version="queryj-0_5" date="2003/11/23 14:18:54">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Added DAOChooser to retrieve the concrete DAO implementation
+        from a properties file.
+      </action>
+    </release>
+    <release version="queryj-0_4_9" date="2003/11/22 22:43:13">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        The tests for the database functions also support customizable
+        package layouts.
+      </action>
+    </release>
+    <release version="queryj-0_4_8" date="2003/11/22 16:00:23">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        The interfaces to the database functions (time, numeric, text
+        and system), support
+        customizable package layouts.
+      </action>
+    </release>
+    <release version="queryj-0_4_7" date="2003/11/20 10:00:50">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        The JNDI location of the datasources needed by DAO factories
+        to build DAO instances is now a parameter to QueryJ Ant task.
+        Also, DAO tests takes the database connection information
+        from QueryJ settings.
+      </action>
+    </release>
+    <release version="queryj-0_4_6" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        The DAO tests classes and the base suite now provide more
+        flexibility for package layouts, since they have been changed
+        to use PackageUtils to find out their own packages and
+        folders, as well as the classes they test.
+      </action>
+    </release>
+    <release version="queryj-0_4_5" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Now the classes' location is managed directly by a new class,
+        PackageUtils, so that all classes explicitly import their
+        dependencies. This will allow future package structure layouts.
+      </action>
+    </release>
+    <release version="queryj-0_4_4" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        The delete method requests the deletion of all information
+        referred by the value object via its foreign keys.
+      </action>
+    </release>
+    <release version="queryj-0_4_3" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Added JdbcDAO with common methods to all JDBC-based DAOs.
+        DAOTemplate refactored to remove such methods.
+      </action>
+    </release>
+    <release version="queryj-0_4_2" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        QueryJ now generates a DataAccessManager class to facilitate
+        access to each one of the DAO instances.
+      </action>
+    </release>
+    <release version="queryj-0_4_1" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Implemented top-most DAO factories for all tables.
+      </action>
+    </release>
+    <release version="queryj-0_4" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Implemented top-most DAO interfaces declaring  the 4 basic
+        operations, for each table in the repository.
+      </action>
+    </release>
+    <release version="queryj-0_3_9" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        QueryJ now generates engine-specific DAO factories.
+      </action>
+    </release>
+    <release version="queryj-0_3_8" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Added DateField and integrated this new field type support in
+        all classes, such as queries and conditions.
+      </action>
+    </release>
+    <release version="queryj-0_3_7" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Implemented delete operations in DAO and DAO test templates.
+      </action>
+    </release>
+    <release version="queryj-0_3_6" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Implemented UpdateQuery and DeleteQuery, with their unit tests.
+        DAO and DAOTest supports update methods.
+      </action>
+    </release>
+    <release version="queryj-0_3_5" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Implemented primary key extraction using Jdbc metadata.
+        DAO and DAOTest supports insert and findByPrimaryKey methods.
+      </action>
+    </release>
+    <release version="queryj-0_3_4" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        SQL insert is now supported by QueryJ.
+        DAO partially implemented. Only select and insert so far.
+        DAOTests partially implemented.
+      </action>
+    </release>
+    <release version="queryj-0_3_3" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Functions and associated unit tests created successfully.
+      </action>
+    </release>
+    <release version="queryj-0_3_2" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Tables created successfully from the database.
+      </action>
+    </release>
+    <release version="queryj-0_3_1" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Table repository created successfully from the database tables.
+      </action>
+    </release>
+    <release version="queryj-0_3" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Developed a template-based approach to automatically build
+        code from database metadata.
+        Handling complex Ant operations to retrieve database metadata
+        information, supported functions (time, numeric, text and
+        system).
+      </action>
+    </release>
+    <release version="queryj-0_2" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        The first query is working fine and tested.
+      </action>
+    </release>
+    <release version="queryj-0_1" date="in CVS">
+      <action
+        dev="chous"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Setting up the project development environment: files,
+        folders, cvs, issue tracking, maven...
+      </action>
+    </release>
+  </body>
+</document>

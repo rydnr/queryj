@@ -1,0 +1,133 @@
+package id2r2d8do5k0pazdo5k3egn;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:design#Class#id1d5gndo5k0pazdo5k3ekc.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates:oiref> 
+*/
+class reference {
+}/**
+@__ref <oiref:design#Class#idbrnedo5k0pazdo5k3eiq.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.handlers:oiref> 
+*/
+class reference1 {
+}/**
+@__ref <oiref:design#Class#id1bx7ndo5k0pazdo5k3ejq.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.oracle:oiref> 
+*/
+class reference2 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.QueryJTask:oiref><oihard>
+@__modelType reference 
+*/
+class reference32 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.PackageUtils:oiref><oihard>
+@__modelType reference 
+*/
+class reference33 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.AntTableElement:oiref><oihard>
+@__modelType reference 
+*/
+class reference34 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.MetaDataUtils:oiref><oihard>
+@__modelType reference 
+*/
+class reference35 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.AntTablesElement:oiref><oihard>
+@__modelType reference 
+*/
+class reference36 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.AntCommand:oiref><oihard>
+@__modelType reference 
+*/
+class reference37 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.ProcedureParameterMetaData:oiref><oihard>
+@__modelType reference 
+*/
+class reference38 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.ProcedureMetaData:oiref><oihard>
+@__modelType reference 
+*/
+class reference39 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.AntFieldElement:oiref><oihard>
+@__modelType reference 
+*/
+class reference40 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.AntExternallyManagedFieldsElement:oiref><oihard>
+@__modelType reference 
+*/
+class reference41 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.ChainTask:oiref><oihard>
+@__modelType reference 
+*/
+class reference42 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.DatabaseMetaDataManager:oiref><oihard>
+@__modelType reference 
+*/
+class reference43 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.AntFieldFkElement:oiref><oihard>
+@__modelType reference 
+*/
+class reference44 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.QueryJTask:oiref>=155,296,424,450,0:oigroup>
+<oigroup:<oiref:design#Class#idbrnedo5k0pazdo5k3eiq.diagram:oiref>=54,296,81,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.AntTableElement:oiref>=1346,1424,232,164,0:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.tools.ProcedureParameterMetaData#org.acmsl.queryj.tools.ProcedureMetaData:oiref>=1128,1392,1128,216:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:java#Member#org.acmsl.queryj.tools.DatabaseMetaDataManager#m__aProceduresMetaData:oiref>=1203,61,30,13,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.AntFieldElement:oiref>=1598,1424,239,255,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.AntCommand:oiref>=390,10,240,203,0:oigroup>
+<oigroup:<oiref:java#Extends#org.acmsl.queryj.tools.QueryJTask#org.acmsl.queryj.tools.ChainTask:oiref>=206,296,206,226:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:java#Member#org.acmsl.queryj.tools.DatabaseMetaDataManager#EMPTY_PROCEDURE_METADATA_ARRAY:oiref>=1203,130,30,13,0:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.tools.DatabaseMetaDataManager#m__aProceduresMetaData:oiref>=1396,78,1199,78:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.ProcedureMetaData:oiref>=959,10,240,206,0:oigroup>
+<oigroup:<oiref:design#Class#id1bx7ndo5k0pazdo5k3ejq.diagram:oiref>=1597,1344,62,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.DatabaseMetaDataManager:oiref>=1396,10,471,1295,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.ChainTask:oiref>=10,10,300,216,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.ChainTask:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.AntCommand:oiref>=310,111,390,111:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.AntTablesElement:oiref>=708,296,231,164,0:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.tools.QueryJTask#m__ExternallyManagedFields:oiref>=367,746,367,884:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.tools.QueryJTask#m__Tables:oiref>=579,378,708,378:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.ChainTask:oiref><Autodependency><oiref:design#Class#idbrnedo5k0pazdo5k3eiq.diagram:oiref>=94,226,94,296:oigroup>
+<oigroup:<oiref:design#Class#id1d5gndo5k0pazdo5k3ekc.diagram:oiref>=1487,1344,90,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.PackageUtils:oiref>=10,1718,299,564,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.QueryJTask:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.AntCommand:oiref>=484,296,484,213:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.tools.DatabaseMetaDataManager#EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY:oiref>=1631,1305,1227,1392:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.AntExternallyManagedFieldsElement:oiref>=267,884,200,151,1:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#org.acmsl.queryj.tools.DatabaseMetaDataManager#EMPTY_PROCEDURE_METADATA_ARRAY:oiref>=1396,147,1199,147:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:java#Member#org.acmsl.queryj.tools.DatabaseMetaDataManager#EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY:oiref>=1193,1375,30,13,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.AntFieldFkElement:oiref>=678,1718,229,151,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.ProcedureParameterMetaData:oiref>=1093,1392,233,177,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.MetaDataUtils:oiref>=329,1718,229,369,0:oigroup> 
+*/
+class __positions {
+}

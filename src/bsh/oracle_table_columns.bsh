@@ -1,0 +1,107 @@
+import java.util.*;
+
+import java.sql.*;
+import oracle.jdbc.driver.OracleDriver;
+import org.apache.commons.lang.StringUtils;
+
+Connection t_Connection = null;
+Statement t_Statement = null;
+
+Map t_mTables = new HashMap();
+List t_lTableNames = new ArrayList();
+
+try
+{
+    OracleDriver driver = new OracleDriver();
+
+    DriverManager.registerDriver(driver);
+
+    /*
+      t_Connection =
+      DriverManager.getConnection("jdbc:oracle:thin:@192.168.34.252:1521:TVEN", "jlean", "oracle");
+    */
+    Properties t_Properties = new Properties();
+    t_Properties.put("user", "jlean");
+    t_Properties.put("password", "oracle");
+
+    t_Connection = driver.connect("jdbc:oracle:thin:@192.168.34.252:1521:TVEN", t_Properties);
+
+    if  (t_Connection != null)
+    {
+        t_Statement = t_Connection.createStatement();
+                                
+        String t_strSQL = "SELECT TABLE_NAME FROM ALL_TABLES WHERE OWNER='JLEAN'";
+
+        ResultSet t_rsTables = t_Statement.executeQuery(t_strSQL);
+
+        while  (   (t_rsTables != null)
+                && (t_rsTables.next()))
+        {
+            String t_strTableName = t_rsTables.getString("TABLE_NAME");
+            t_mTables.put(t_strTableName + "-COLUMNS", new ArrayList());
+            t_mTables.put(t_strTableName + "-TYPES", new ArrayList());
+            t_lTableNames.add(t_strTableName);
+        }
+
+        t_rsTables.close();
+
+        t_strSQL = "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM ALL_TAB_COLUMNS WHERE OWNER='JLEAN'";
+
+        ResultSet t_rsColumns = t_Statement.executeQuery(t_strSQL);
+
+        while  (   (t_rsColumns != null)
+                && (t_rsColumns.next()))
+        {
+            ArrayList t_alColumns = (ArrayList) t_mTables.get(t_rsTables.getString("TABLE_NAME") + "-COLUMNS");
+            t_alColumns.add(t_rsTables.getString("COLUMN_NAME"));
+            ArrayList t_alTypes = (ArrayList) t_mTables.get(t_rsTables.getString("TABLE_NAME") + "-TYPES");
+            t_alTypes.add(t_rsTables.getString("DATA_TYPE"));
+        }
+
+        t_rsColumns.close();
+    }
+}
+catch   (SQLException sqlException)
+{
+    print(sqlException);
+}
+finally
+{
+    try
+    {
+        if  (t_Statement != null)
+        {
+            t_Statement.close();
+        }
+        if  (t_Connection != null)
+        {
+            t_Connection.close();
+        }
+    }
+    catch  (Exception exception)
+    {
+        print(exception);
+    }
+}
+
+Iterator t_itTableNames = t_lTableNames.iterator();
+
+while  (t_itTableNames.hasNext())
+{
+    Object t_CurrentTable = t_itTableNames.next();
+
+    // regexp please!
+    print(StringUtils.deleteSpaces(StringUtils.capitaliseAllWords(("" + t_CurrentTable).toLowerCase().replace('_', ' '))));
+
+    Collection t_cTableColumns = (Collection) t_mTables.get(t_CurrentTable + "-COLUMNS");
+    Collection t_cTableTypes = (Collection) t_mTables.get(t_CurrentTable + "-TYPES");
+
+    Iterator t_itTableColumns = t_cTableColumns.iterator();
+    Iterator t_itTableTypes = t_cTableTypes.iterator();
+
+    while  (   (t_itTableColumns.hasNext())
+            && (t_itTableTypes.hasNext()))
+    {
+        print("      " + t_itTableColumns.next() + " (" + t_itTableTypes.next() + ")");
+    }
+}

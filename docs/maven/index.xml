@@ -1,0 +1,305 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Overview</title>
+    <author email="jsanleandro@yahoo.es">Jose San Leandro</author>
+  </properties>
+
+  <body>
+
+    <section name="Overview">
+      <p>
+        <strong>QueryJ</strong>
+          provides a way of ensuring error-free SQL statements,
+          maintaining SQL simplicity, and allowing statement customization
+          independent to the developer.
+      </p>
+      <subsection name="Status">
+        <p>
+          <strong>QueryJ</strong> 0.5.5b2 supports:
+          <ul>
+            <li>Value Object generation from database model,</li>
+            <li>DAO interfaces generation from database model,</li>
+            <li>Database vendor-specific DAO implementations
+            generation, for each table, managing PK/FK issues,</li>
+            <li>DAO implementations factories (with configurable JNDI
+              datasource location) generation,</li>
+            <li>Base DAO class generation, with transaction-aware
+              logic reusable by all DAO implementations,</li>
+            <li>JUnit DAO tests generation,</li>
+            <li>Table model: complete database schema, subset of it or
+              a completely declared one (including column types and
+              relationships),</li>
+            <li>Autonumeric, Sequences or any keyword-based field
+            (such as SYSDATE),</li>
+            <li>Package layout support,</li>
+            <li>Stored procedure API to Java API export,</li>
+            <li>Time functions generation from database's declared SQL
+            extensions,</li>
+            <li>Time functions JUnit tests,</li>
+            <li>Numeric functions generation from database's declared SQL
+            extensions,</li>
+            <li>Numeric functions JUnit tests,</li>
+            <li>Text functions generation from database's declared SQL
+            extensions,</li>
+            <li>Text functions JUnit tests,</li>
+            <li>System functions generation,</li>
+            <li>System functions JUnit tests,</li>
+            <li>Table repository generation,</li>
+            <li>table/field autocompletion,</li>
+            <li>inter-condition operator,</li>
+            <li>prepared statement's parameters management,</li>
+            <li>nested queries,</li>
+            <li>grouping and ordering,</li>
+            <li>several conditions ( =, &gt; &lt; is null, in, not in,
+            etc.).</li>
+          </ul>
+        </p>
+      </subsection>
+    </section>
+
+    <section name="News">
+      
+      <table>
+        <tr>
+          <td>
+            $Date$
+          </td>
+          <td>
+            Mock DAO template development almost done.<br/>
+            Remaining issues for <b>0.5.5</b>:
+            <ul>
+              <li>Cascading deletions, following foreign keys</li>
+              <li>Adding support for  externally-managed fields,
+                  e.g. sequences</li>
+              <li>Mock DAOs' unit tests</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/02/15 14:07:09
+          </td>
+          <td>
+            Added initial logging refactoring.
+            <br/>
+            Mock DAO template development started.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/12/13 13:03:31
+          </td>
+          <td>
+            Added package documentation, including UML class diagrams,
+            for the new packages, solving issues
+            #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=61">61</a>,
+            #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=62">62</a>,
+            #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=63">63</a>,
+            and
+            #<a href="http://192.168.0.2/bugzilla.show_bug.cgi?id=64">64</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/12/09 23:21:25
+          </td>
+          <td>
+           Fixed compile errors appeared after package refactoring.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/12/01 20:12:33
+          </td>
+          <td>
+            Added Ant support for externally-managed field
+            declaration, such as autonumeric values, sequences,
+            automatic timestamps, etc. See functional requirements
+            <a href="http://lite/bugzilla/show_bug.cgi?id=66">#66</a> 
+            and <a
+            href="http://lite/bugzilla/show_bug.cgi?id=67">#67</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/11/27 23:25:01
+          </td>
+          <td>
+            Unit tests are implemented for the basic 4 operations (insert,
+            select, update, delete, in that order) of all DAOs. They
+            all pass, but Bug <a
+            href="http://lite/bugzilla/show_bug.cgi?id=54">#54</a> 
+            and <a
+            href="http://lite/bugzilla/show_bug.cgi?id=55">#55</a>
+            have appeared, though. 
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/11/23 21:13:09
+          </td>
+          <td>
+            Added configuration properties for configuring which DAO
+            implementation to use.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/11/23 14:18:54
+          </td>
+          <td>
+            Added DAOChooser to retrieve the concrete DAO implementation
+            from a properties file.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/11/22 22:43:13
+          </td>
+          <td>
+            Added support for customizable package layout for the
+            database function tests.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/11/22 16:00:23
+          </td>
+          <td>
+            Added support for customizable package layout for the
+            interfaces to the database functions (time, numeric, text
+            and system).
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/11/02
+          </td>
+          <td>
+            First implementation of UpdateQuery and DeleteQuery.<br/>
+            DAO template's update method written.<br/>
+            DAO test template supports the complete
+            set of DAO's working methods, but they're not executed so
+            far.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/11/01
+          </td>
+          <td>
+            First implementation of InsertQuery.<br/>
+            DAO template's insert method written.<br/>
+            DAO test template almost tests the complete
+            set of DAO's working methods.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/10/23
+          </td>
+          <td>
+            DAO template partially implemented.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/10/12
+          </td>
+          <td>
+            Support for Oracle database's dictionary-based
+            queries.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/10/07
+          </td>
+          <td>
+            Function templates refactored.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/10/05
+          </td>
+          <td>
+            Function tests templates implemented and passed.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/09/28
+          </td>
+          <td>
+            Database functions implemented.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/09/25
+          </td>
+          <td>
+           System functions implemented.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/09/22
+          </td>
+          <td>
+            Time functions implemented.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/09/15
+          </td>
+          <td>
+            Numeric functions implemented.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/09/10
+          </td>
+          <td>
+            Ant task refactored to improve extensibility
+            through Chain of responsibility pattern.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/09/06
+          </td>
+          <td>
+            Implemented Ant task to generate QueryJ-based code to
+            access persistent data, through JDBC's metadata retrieval
+            features.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/08/29
+          </td>
+          <td>
+            QueryJ's first unit test is passed.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2003/08/28
+          </td>
+          <td>
+            QueryJ's project management issues are set up.
+          </td>
+        </tr>
+      </table>
+      
+    </section>
+
+  </body>
+</document>

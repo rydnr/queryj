@@ -1,0 +1,84 @@
+package idm2kbdo5k0pazdo5kvs0q;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference180 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference181 {
+}/**
+@__ref <oiref:design#Class#ideme2do5k0pazdo5kvs5j.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.time.oracle:oiref> 
+*/
+class reference182 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference183 {
+}/**
+@__ref <oiref:design#Class#id3q8smdo5k0pazdo5kvs42.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.time.mysql:oiref> 
+*/
+class reference184 {
+}/**
+@__ref <oiref:design#Class#id3lg5zdo5k0pazdo5kvs2g.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.time.handlers:oiref> 
+*/
+class reference185 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference186 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference187 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplateGenerator:oiref>=700,179,440,138,0:oigroup>
+<oigroup:<oiref:design#Class#id3q8smdo5k0pazdo5kvs42.diagram:oiref>=10,350,62,52,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate:oiref>=273,233,193,233:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplateGenerator#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplateFactory:oiref>=990,179,990,119:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateGenerator#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateFactory:oiref>=376,179,376,119:oigroup>
+<oigroup:<oiref:design#Class#ideme2do5k0pazdo5kvs5j.diagram:oiref>=1365,10,62,52,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplate:oiref>=1140,248,1220,248:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplate:oiref>=1220,179,240,138,0:oigroup>
+<oigroup:<oiref:design#Class#id3lg5zdo5k0pazdo5kvs2g.diagram:oiref>=92,350,81,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateGenerator:oiref>=273,179,407,138,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplate:oiref>=1282,119,1282,179:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateFactory:oiref>=97,10,383,109,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplateFactory:oiref>=915,10,430,109,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate:oiref>=10,179,183,109,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate:oiref>=129,119,129,179:oigroup> 
+*/
+class __positions {
+}

@@ -1,0 +1,84 @@
+package id3jidqdo5k0pazdo5kvrr2;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:design#Class#id42kdodo5k0pazdo5kvrus.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.system.oracle:oiref> 
+*/
+class reference {
+}/**
+@__ref <oiref:design#Class#id451l2do5k0pazdo5kvrug.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.system.mysql:oiref> 
+*/
+class reference146 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference147 {
+}/**
+@__ref <oiref:design#Class#id1cm4mdo5k0pazdo5kvrta.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.system.handlers:oiref> 
+*/
+class reference148 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference149 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference150 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference151 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference152 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference153 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateGenerator#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateFactory:oiref>=323,179,323,119:oigroup>
+<oigroup:<oiref:design#Class#id451l2do5k0pazdo5kvrug.diagram:oiref>=10,370,62,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateGenerator:oiref>=10,179,420,151,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplate:oiref>=564,119,564,179:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplate:oiref>=430,233,510,233:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplate:oiref>=1346,119,1346,179:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateGenerator#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateFactory:oiref>=1081,179,1081,119:oigroup>
+<oigroup:<oiref:design#Class#id1cm4mdo5k0pazdo5kvrta.diagram:oiref>=480,350,81,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateFactory:oiref>=217,10,401,109,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplate:oiref>=1280,179,250,138,0:oigroup>
+<oigroup:<oiref:design#Class#id42kdodo5k0pazdo5kvrus.diagram:oiref>=1432,10,62,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateFactory:oiref>=963,10,449,109,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplate:oiref>=1200,240,1280,240:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateGenerator:oiref>=740,179,460,122,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplate:oiref>=510,179,210,109,0:oigroup> 
+*/
+class __positions {
+}

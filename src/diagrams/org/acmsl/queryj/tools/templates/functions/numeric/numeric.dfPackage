@@ -1,0 +1,84 @@
+package id15w2ido5k0pazdo5kvrc4;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:design#Class#id45yo9do5k0pazdo5kvrq5.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.numeric.oracle:oiref> 
+*/
+class reference129 {
+}/**
+@__ref <oiref:design#Class#id35c65do5k0pazdo5kvrf0.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.numeric.handlers:oiref> 
+*/
+class reference130 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference131 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference132 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference133 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference134 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference135 {
+}/**
+@__ref <oiref:design#Class#id1ntpkdo5k0pazdo5kvrgq.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.numeric.mysql:oiref> 
+*/
+class reference136 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGenerator:oiref>=1564,179,430,151,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateFactory:oiref>=190,10,468,109,0:oigroup>
+<oigroup:<oiref:design#Class#id1ntpkdo5k0pazdo5kvrgq.diagram:oiref>=10,370,62,52,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplate:oiref>=494,119,843,179:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate:oiref>=1032,179,250,109,0:oigroup>
+<oigroup:<oiref:design#Class#id45yo9do5k0pazdo5kvrq5.diagram:oiref>=1776,10,62,52,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate:oiref>=1503,119,1157,179:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplate:oiref>=708,179,270,138,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplate:oiref>=470,240,708,240:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGenerator#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateFactory:oiref>=1660,179,1660,119:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateGenerator:oiref>=10,179,460,122,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate:oiref>=1564,233,1282,233:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateFactory:oiref>=1346,10,410,109,0:oigroup>
+<oigroup:<oiref:design#Class#id35c65do5k0pazdo5kvrf0.diagram:oiref>=1858,10,81,52,1:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateGenerator#org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateFactory:oiref>=330,179,330,119:oigroup> 
+*/
+class __positions {
+}

@@ -1,0 +1,81 @@
+package id24fqsdo5k0pazdo5kvs5w;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference197 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference198 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TableTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference199 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference200 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference201 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference202 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference203 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference204 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference205 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateBuildHandler:oiref>=370,610,340,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateWritingHandler:oiref>=10,410,360,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateWritingHandler:oiref>=390,410,370,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateWritingHandler:oiref>=660,10,350,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateBuildHandler:oiref>=370,10,270,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateBuildHandler:oiref>=10,10,340,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandler:oiref>=10,610,340,177,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler:oiref>=580,210,230,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateWritingHandler:oiref>=10,210,270,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.handlers.TableTemplateWritingHandler:oiref>=300,210,260,164,0:oigroup> 
+*/
+class __positions {
+}

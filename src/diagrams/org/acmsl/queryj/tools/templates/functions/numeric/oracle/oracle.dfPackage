@@ -1,0 +1,45 @@
+package id45yo9do5k0pazdo5kvrq5;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTestTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference143 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference144 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTestTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference145 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTemplateGenerator:oiref>=330,10,430,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTestTemplate:oiref>=10,10,300,216,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTemplate:oiref>=10,270,320,203,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTestTemplateGenerator:oiref>=10,510,480,138,0:oigroup> 
+*/
+class __positions {
+}

@@ -1,0 +1,33 @@
+package id2h5xpdo5k0pazdo5kvqzu;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.handlers.oracle.OracleTableRepositoryBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference54 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler:oiref>=10,10,370,96,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.handlers.oracle.OracleTableRepositoryBuildHandler:oiref>=10,150,320,151,0:oigroup> 
+*/
+class __positions {
+}

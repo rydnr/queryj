@@ -1,0 +1,45 @@
+package id1y9mzdo5k0pazdo5kvsbt;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference212 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference213 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference214 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateWritingHandler:oiref>=320,10,350,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateWritingHandler:oiref>=10,210,310,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateBuildHandler:oiref>=10,410,340,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateBuildHandler:oiref>=10,10,290,164,0:oigroup> 
+*/
+class __positions {
+}

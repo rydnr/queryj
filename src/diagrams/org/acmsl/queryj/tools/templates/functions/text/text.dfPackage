@@ -1,0 +1,84 @@
+package id3d9lmdo5k0pazdo5kvrvo;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference163 {
+}/**
+@__ref <oiref:design#Class#ids2lzdo5k0pazdo5kvrxu.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.text.handlers:oiref> 
+*/
+class reference164 {
+}/**
+@__ref <oiref:design#Class#id4058fdo5k0pazdo5kvryx.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.text.mysql:oiref> 
+*/
+class reference165 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference166 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference167 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference168 {
+}/**
+@__ref <oiref:design#Class#idpfahdo5k0pazdo5kvs0d.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions.text.oracle:oiref> 
+*/
+class reference169 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference170 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplate:oiref>=1234,119,1234,179:oigroup>
+<oigroup:<oiref:design#Class#ids2lzdo5k0pazdo5kvrxu.diagram:oiref>=1319,10,81,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateGenerator:oiref>=10,179,380,151,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateFactory:oiref>=196,10,366,109,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateFactory:oiref>=880,10,419,109,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplate:oiref>=1170,179,260,138,0:oigroup>
+<oigroup:<oiref:design#Class#id4058fdo5k0pazdo5kvryx.diagram:oiref>=10,370,62,52,1:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateGenerator#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateFactory:oiref>=293,179,293,119:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate:oiref>=470,179,179,109,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate:oiref>=390,233,470,233:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateGenerator#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateFactory:oiref>=985,179,985,119:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateGenerator:oiref>=669,179,421,122,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplate:oiref>=1090,240,1170,240:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate:oiref>=516,119,516,179:oigroup>
+<oigroup:<oiref:design#Class#idpfahdo5k0pazdo5kvs0d.diagram:oiref>=440,350,62,52,1:oigroup> 
+*/
+class __positions {
+}

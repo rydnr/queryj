@@ -1,0 +1,45 @@
+package ids2lzdo5k0pazdo5kvrxu;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference171 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateWritingHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference172 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTemplateBuildHandler:oiref><oihard>
+@__modelType reference 
+*/
+class reference173 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateBuildHandler:oiref>=10,10,320,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTemplateBuildHandler:oiref>=10,410,340,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTestTemplateWritingHandler:oiref>=350,10,340,164,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.functions.text.handlers.TextFunctionsTemplateWritingHandler:oiref>=10,210,340,164,0:oigroup> 
+*/
+class __positions {
+}

@@ -1,0 +1,70 @@
+package idt379do5k0pazdo5kvs7g;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference206 {
+}/**
+@__ref <oiref:design#Class#id1y9mzdo5k0pazdo5kvsbt.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.valueobject.handlers:oiref> 
+*/
+class reference207 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference208 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference209 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference210 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference211 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateFactory:oiref>=930,10,430,96,0:oigroup>
+<oigroup:<oiref:design#Class#id1y9mzdo5k0pazdo5kvsbt.diagram:oiref>=1380,10,81,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateFactory:oiref>=212,10,330,96,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateGenerator:oiref>=1160,166,420,122,0:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateGenerator#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateFactory:oiref>=1260,166,1260,106:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate:oiref>=481,106,481,166:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate:oiref>=1005,106,1005,166:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGenerator:oiref>=10,166,330,122,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate:oiref>=420,166,320,359,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate:oiref>=760,166,320,333,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate:oiref>=340,227,420,227:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate:oiref>=1160,227,1080,227:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGenerator#org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateFactory:oiref>=276,166,276,106:oigroup> 
+*/
+class __positions {
+}

@@ -1,0 +1,68 @@
+import java.util.*;
+
+import java.sql.*;
+import oracle.jdbc.driver.OracleDriver;
+
+boolean result = false;
+
+Connection t_Connection = null;
+Statement t_Statement = null;
+
+try
+{
+    OracleDriver driver = new OracleDriver();
+
+    DriverManager.registerDriver(driver);
+
+    /*
+      t_Connection =
+      DriverManager.getConnection("jdbc:oracle:thin:@192.168.34.252:1521:TVEN", "jlean", "oracle");
+    */
+    Properties t_Properties = new Properties();
+    t_Properties.put("user", "jlean");
+    t_Properties.put("password", "oracle");
+
+    t_Connection = driver.connect("jdbc:oracle:thin:@192.168.34.252:1521:TVEN", t_Properties);
+
+    if  (t_Connection != null)
+    {
+        t_Statement = t_Connection.createStatement();
+                                
+        String t_strSQL = "SELECT * FROM ALL_TABLES WHERE OWNER='JLEAN'";
+
+        if  (t_strSQL != null)
+        {
+            ResultSet t_rsTables = t_Statement.executeQuery(t_strSQL);
+
+            while  (   (t_rsTables != null)
+                    && (t_rsTables.next()))
+            {
+                print(t_rsTables.getString("TABLE_NAME"));
+            }
+
+            result = true;
+        }
+    }
+}
+catch   (SQLException sqlException)
+{
+    print(sqlException);
+}
+finally
+{
+    try
+    {
+        if  (t_Statement != null)
+        {
+            t_Statement.close();
+        }
+        if  (t_Connection != null)
+        {
+            t_Connection.close();
+        }
+    }
+    catch  (Exception exception)
+    {
+        print(exception);
+    }
+}

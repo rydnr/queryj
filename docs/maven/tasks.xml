@@ -1,0 +1,355 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>Tasks</title>
+    <author email="jsanleandro@yahoo.es">Jose San Leandro</author>
+  </properties>
+
+  <body>
+    <section name="Tasks">
+      <p>
+        Lists of "to-do"s and ideas for future versions.
+      </p>
+
+      <subsection name="0.7.5">
+        <p>
+          <ul>
+            <li>
+              Allow customization of queries via property files.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.7.1">
+        <p>
+          <ul>
+            <li>
+              Add support for COUNT() in SQL queries.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.7">
+        <p>
+          <ul>
+            <li>
+              Separate QueryJ (org.acmsl.queryj) from MagicWand
+              (org.acmsl.queryj.tools), and set up MagicWand's own
+              environment.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.6">
+        <p>
+          <ul>
+            <li>
+              Support custom queries in Ant scripts: find out
+              if through the driver the query can be validated
+              directly; it also needs the DAO and the method name,
+              along with value-object dynamic aggregators.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.5.9">
+        <p>
+          <ul>
+            <li>
+              Generate Javadoc package documentation.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.5.8">
+        <p>
+          <ul>
+            <li>
+              Add optional CVS logic to allow generated
+              code's customization, instead of current behaviour, which
+              always overrides the generated files.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.5.7">
+        <p>
+          <ul>
+            <li>
+              Build dynamic value-object aggregator depending on
+              procedure's return and output parameters.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.5.6">
+        <p>
+          <ul>
+            <li>
+              Add XML (Digester-based) DAO implementations, plus unit
+              tests.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.5.5">
+        <p>
+          <ul>
+            <li>
+              Add Mock DAO implementations, plus unit tests.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.5.4">
+        <p>
+          <ul>
+            <li>
+              Refactor the classes: reorganize the tools package,
+              refactor the engine-factory mapping, add package javadoc
+              and overview.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.5.3">
+        <p>
+          <ul>
+            <li>
+              Implement the autonumeric and sequences for numeric
+              primary keys, defined Ant scripts (since there's no easy
+              way to finding that out dynamically). This means for
+              such kind of primary keys, the DAOs wouldn't need such
+              information in their insert method.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.5.2">
+        <p>
+          <ul>
+            <li>
+              Make DAO tests work with test values.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.5.1">
+        <p>
+          <ul>
+            <li>
+              Create the property file to configure which DAO
+              implementations are used by default.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.5">
+        <p>
+          <ul>
+            <li>
+              Create a configuration layer to allow customization of
+              which DAO (factory) implementations to use.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.4.9">
+        <p>
+          <ul>
+            <li>
+              Refactor the location of the function tests.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.4.8">
+        <p>
+          <ul>
+            <li>
+              Refactor the location of the function classes.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.4.7">
+        <p>
+          <ul>
+            <li>
+              Take the JNDI location for the data sources from Ant
+              script, as well as all needed JDBC properties for the
+              tests.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.4.6">
+        <p>
+          <ul>
+            <li>
+              Refactor the location of the unit tests.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.4.5">
+        <p>
+          <ul>
+            <li>
+              Refactor the package structure of the generated
+              DAO-related code.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.4.4">
+        <p>
+          <ul>
+            <li>
+             Include initial support for DAO delete invokation logic
+             to satisfy constraint cascading requirements.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.4.3">
+        <p>
+          <ul>
+            <li>
+              Implement JdbcDAO template with common methods of
+              DAOTemplate.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.4.2">
+        <p>
+          <ul>
+            <li>
+              Implement DataAccessManager template.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.4.1">
+        <p>
+          <ul>
+            <li>
+              Implement base DAO factories for all tables in the
+              repository.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.4">
+        <p>
+          <ul>
+            <li>
+              Implement base DAO interfaces for all tables in the
+              repository.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.3.9">
+        <p>
+          <ul>
+            <li>
+             Implement engine-specific DAO factory template.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.3.8">
+        <p>
+          <ul>
+            <li>
+             Add DateField to facilitate timestamp logic when
+             retrieving-storing dates in the database.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.3.7">
+        <p>
+          <ul>
+            <li>
+             Support delete operations in DAO and DAO test
+             templates.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.3.6">
+        <p>
+          <ul>
+            <li>
+              Support update operations in DAO and DAO test
+              templates. Implement UpdateQuery and DeleteQuery.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.3.5">
+        <p>
+          <ul>
+            <li>
+              Support insert and findByPrimaryKey operations in DAO
+              test templates.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.3.4">
+        <p>
+          <ul>
+            <li>
+              Implement INSERT statement.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.3">
+        <p>
+          <ul>
+            <li>
+              Allow customization of the table model to extract from
+              the database: full schema, custom tables, or a
+              fully declared structure.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.2.5">
+        <p>
+          <ul>
+            <li>
+              Include database functions (max, count, etc) and their tests.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.2">
+        <p>
+          <ul>
+            <li>
+              Provide support for initial SELECT queries.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.1">
+        <p>
+          <ul>
+            <li>
+              Perform the initial project set-up: cvs, bugzilla,
+              maven, etc.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+    </section>
+
+  </body>
+</document>

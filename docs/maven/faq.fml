@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs title="Frequently Asked Questions">
+
+  <part id="general">
+    <title>General</title>
+   
+    <faq id="whats-queryj">
+      <question>
+        What is QueryJ?
+      </question>
+      <answer>
+        <p>
+          QueryJ is a library to manage SQL queries in a safer way than
+          by just using Strings.
+        </p>
+        <p>
+          QueryJ provides a way of ensuring error-free SQL statements,
+          maintaining SQL simplicity, and keeping statement customization
+          independent to the developer.
+        </p>
+      </answer>
+    </faq>
+
+  </part>
+  
+  <part id="features">
+    <title>Features</title>
+   
+    <faq id="comparing-to-jdbc">
+      <question>
+        Why would I be interested in using QueryJ when JDBC works fine,
+        and it's something everybody already knows?
+      </question>
+      <answer>
+        <p>
+          The purpose behind this library is simple: I've found unacceptable
+          to find out that any application crashes due to a syntax error
+          in a JDBC statement. This is the kind of human errors we can avoid.
+        </p>
+        <p>
+          Since it's a syntax error, it seems straight-forward to use the tools
+          that best manage them: lexers. So the approach was to delegate on the
+          Java compiler the task of ensuring the SQL statement is valid before
+          having to test it directly against the SQL lexer all database engines
+          include.
+        </p>
+        <p>
+          On top of that, my intention is to leverage the benefits of
+          using Java, providing table field auto-completion and to respect the SQL
+          style, so that statements are equally easy to read. Also, the
+          prepared statements get improved by adding support not just for
+          accessing parameters by its position, but by its semantics.
+          Something similar is provided to access the query results.
+        </p>
+        <p>
+          What this library only does is a way to better manage how the SQL
+          statement is built. It doesn't do anything else.
+        </p>
+      </answer>
+    </faq>
+
+    <faq id="comparing-to-declarative-sql">
+      <question>
+        I like frameworks like Hibernate because they allow me to specify
+        the query declaratively, in an external property or XML file. Does QueryJ
+        provide something similar?
+      </question>
+      <answer>
+        <p>
+          The idea of QueryJ is to ensure that SQL statements are syntax
+          error-free. It uses the Java compiler as the validation tool.
+          If the queries are not inside the Java code, and bypass the compiler
+          checks, then they cannot be managed by QueryJ.
+        </p>
+        <p>
+          Future releases plan to provide an ANTLR-based SQL grammar to translate
+          arbitrary queries to QueryJ. Keep in mind, though, that the purpose
+          is *not* to provide runtime checksums or fixes: everything will be done
+          at compile-time.
+        </p>
+        <p>
+          This makes QueryJ unuseful for you if you like runtime customization
+          of queries. However, you should re-think if such approach is acceptable.
+          Maybe their execution plan should be analyzed using the appropiate tools,
+          before bundle them inside a Java application.
+        </p>
+      </answer>
+    </faq>
+
+    <faq id="comparing-to-declarative-bmp">
+      <question>
+        How fine does QueryJ integrate with EJB?
+      </question>
+      <answer>
+        <p>
+          The answer is simple: it works fine with BMP, but it's not compatible
+          with CMP.
+        </p>
+        <p>
+          The idea is to be able to protect yourself against stupid SQL syntax
+          errors, when they appear directly in the code.
+          Usually, J2EE application servers already provide some kind of tools
+          to manage the CMP and to check the database queries it includes are
+          correct, at deployment time. Since you don't
+          deal directly with SQL inside Java code, you cannot migrate anything
+          to use QueryJ.
+        </p>
+      </answer>
+    </faq>
+
+    <faq id="comparing-to-declarative-bmp">
+      <question>
+        Such approach sounds me someway. Is it like SQLJ's?
+      </question>
+      <answer>
+        <p>
+          The approach is quite similar, but there're some differences.
+        </p>
+        <p>
+          As long as I know, SQLJ allows mixing SQL directly in Java code.
+          When compiling, such SQL is validated by a special compiler extension,
+          which translates such queries to Java, or weaves them to finally build
+          the byte-code.
+        </p>
+        <p>
+          I'm neither a SQLJ expert nor fan. It's propietary, it allows no
+          customization, it's vendor-specific, and it's not Java compatible.
+        </p>
+        <p>
+          However, it detects invalid SQL statements early. That is exactly what
+          QueryJ is designed for.
+        </p>
+      </answer>
+    </faq>
+  </part>
+
+  <part id="use">
+    <title>Use</title>
+   
+    <faq id="how-use">
+      <question>
+        How do I use QueryJ?
+      </question>
+      <answer>
+        <p>
+          To use QueryJ, only its jar is required.
+        </p>
+        <p>
+         The unit-test bundled, SelectQueryTest, provides an easy way
+         of checking how gets the code when you use QueryJ instead of
+         standard JDBC:
+        </p>
+        <p>
+          <pre>
+        SelectQuery query = queryFactory.createSelectQuery();
+
+        query.select(USERS.USERID);
+        query.select(USERS.NAME);
+
+        query.from(USERS);
+
+        query.where(
+                USERS.USERID.greaterThan(10)
+            .and(
+                    USERS.NAME.equals()
+                .or(USERS.NAME.isNull())));
+          </pre>
+          This is equivalent, of course, to the following SQL query:
+          <pre>
+        SELECT USERID, NAME
+        FROM USERS 
+        WHERE (USERID > 10) AND ((NAME = ?) OR (NAME is null))
+           </pre>
+        </p>
+      </answer>
+    </faq>
+  </part>  
+
+  <part id="status">
+    <title>Status</title>
+   
+    <faq id="current-status">
+      <question>
+        Which is the current status of QueryJ?
+      </question>
+      <answer>
+        <p>
+          QueryJ is still under development (version 0.5.4.5), and
+          therefore, it doesn't implement all features yet. However,
+          it can be used progressively whereas it supports more
+          queries or functions.
+        </p>
+      </answer>
+    </faq>
+  </part>  
+</faqs>

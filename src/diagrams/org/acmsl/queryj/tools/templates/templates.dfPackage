@@ -1,0 +1,158 @@
+package id1d5gndo5k0pazdo5k3ekc;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:design#Class#id3c3j8do5k0pazdo5kvr6m.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.dao:oiref> 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.TableRepositoryTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference61 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference62 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.TemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference63 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.TestSuiteTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference64 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference65 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.TableRepositoryTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference66 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference67 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference68 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.TableRepositoryTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference69 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference70 {
+}/**
+@__ref <oiref:design#Class#id1yapdo5k0pazdo5kvrb6.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.functions:oiref> 
+*/
+class reference71 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.TableTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference72 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.TemplateMappingManager:oiref><oihard>
+@__modelType reference 
+*/
+class reference73 {
+}/**
+@__ref <oiref:design#Class#id24fqsdo5k0pazdo5kvs5w.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.handlers:oiref> 
+*/
+class reference74 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.TestTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference75 {
+}/**
+@__ref <oiref:design#Class#idt379do5k0pazdo5kvs7g.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#org.acmsl.queryj.tools.templates.valueobject:oiref> 
+*/
+class reference76 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference77 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.TestSuiteTemplateGenerator:oiref><oihard>
+@__modelType reference 
+*/
+class reference78 {
+}/**
+@__ref <oiref:java#Class#org.acmsl.queryj.tools.templates.TableTemplate:oiref><oihard>
+@__modelType reference 
+*/
+class reference79 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.TestTemplate:oiref>=3380,10,162,151,1:oigroup>
+<oigroup:<oiref:design#Class#id3c3j8do5k0pazdo5kvr6m.diagram:oiref>=5041,490,53,52,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.TemplateMappingManager:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.TemplateFactory:oiref>=2712,58,2574,58:oigroup>
+<oigroup:<oiref:design#Class#idt379do5k0pazdo5kvs7g.diagram:oiref>=5354,490,101,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.TableRepositoryTemplate:oiref>=708,166,220,320,0:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGenerator#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateFactory:oiref>=4234,166,4517,106:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.TemplateMappingManager:oiref>=2712,10,265,161,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate:oiref>=1680,106,1680,166:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.TestSuiteTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.TestSuiteTemplate:oiref>=3144,322,3144,252:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate:oiref>=4716,166,305,346,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate:oiref>=2044,220,1806,220:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.TableRepositoryTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.TableRepositoryTemplate:oiref>=485,106,818,166:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateFactory:oiref>=1554,10,440,96,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.TemplateFactory:oiref>=2444,10,130,96,1:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateFactory:oiref>=2234,166,1837,106:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.TableRepositoryTemplateFactory:oiref>=268,10,390,96,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.TableRepositoryTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.TableRepositoryTemplate:oiref>=400,240,708,240:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateFactory:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate:oiref>=4584,106,4868,166:oigroup>
+<oigroup:<oiref:java#Implements#org.acmsl.queryj.tools.templates.TableRepositoryTemplateGenerator#org.acmsl.queryj.tools.templates.TableRepositoryTemplateFactory:oiref>=312,166,312,106:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateFactory:oiref>=4451,10,200,96,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.TableTemplate:oiref>=5384,10,253,437,0:oigroup>
+<oigroup:<oiref:design#Class#id1yapdo5k0pazdo5kvrb6.diagram:oiref>=5114,490,87,52,1:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate:oiref>=1346,166,460,464,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.TestSuiteTemplateGenerator:oiref>=2992,322,305,109,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.TableTemplateGenerator:oiref>=5041,10,253,109,0:oigroup>
+<oigroup:<oiref:design#Class#id24fqsdo5k0pazdo5kvs5w.diagram:oiref>=5221,490,81,52,1:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.TestSuiteTemplate:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.TestTemplate:oiref>=3292,85,3380,85:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.TableRepositoryTemplateGenerator:oiref>=10,166,390,148,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.TableTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.TableTemplate:oiref>=5294,64,5384,64:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGenerator:oiref>=4018,166,433,109,0:oigroup>
+<oigroup:Autodependency<oiref:java#Class#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGenerator:oiref><Autodependency><oiref:java#Class#org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate:oiref>=4451,220,4716,220:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator:oiref>=2044,166,380,109,0:oigroup>
+<oigroup:<oiref:java#Class#org.acmsl.queryj.tools.templates.TestSuiteTemplate:oiref>=2997,10,295,242,0:oigroup> 
+*/
+class __positions {
+}

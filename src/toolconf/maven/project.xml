@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<project>
+  <pomVersion>3</pomVersion>
+  <name>QueryJ</name>
+  <id>queryj</id>
+  <groupId>org.acmlsl.queryj</groupId>
+  <currentVersion>0.5.5b2</currentVersion>
+  <organization>
+    <name>ACM S.L.</name>
+    <url>http://www.acm-sl.org/</url>
+    <logo>http://www.acm-sl.org/images/logo.png</logo>
+  </organization>
+  <inceptionYear>2003</inceptionYear>
+  <package>org.acmsl.queryj</package>
+
+  <shortDescription>
+    Error-free SQL query library.
+  </shortDescription>
+
+  <description>
+    QueryJ provides a way of ensuring error-free SQL statements,
+    maintaining SQL simplicity, and allowing statement customization
+    independent to the developer.
+  </description>
+
+  <url>http://sourceforge.net/projects/queryj/</url>
+  <logo>http://sourceforge.net/projects/images/queryj.png</logo>
+  <issueTrackingUrl>http://sourceforge.net/tracker/?atid=587688&amp;group_id=88721&amp;func=browse</issueTrackingUrl>
+  <siteAddress>liteserver</siteAddress>
+  <siteDirectory>
+    /home/httpd/projects/queryj
+  </siteDirectory>
+  <distributionDirectory>
+    /home/httpd/projects/queryj/builds/
+  </distributionDirectory>
+
+  <repository>
+    <connection>
+      scm:cvs:pserver:anoncvs@sourceforge.net:/usr/local/cvs:queryj
+    </connection>
+    <url>
+      http://sourceforge.net/viewcvs/viewcvs.cgi/queryj
+    </url>
+  </repository>
+
+  <versions/>
+
+  <mailingLists>
+    <mailingList>
+      <name>QueryJ User List</name>
+      <subscribe>
+        queryj-users-subscribe@lists.sourceforge.net
+      </subscribe>
+      <unsubscribe>
+        queryj-users-unsubscribe@lists.sourceforge.net
+      </unsubscribe>
+      <archive>
+        http://sourceforge.net/mailinglists/queryj-users@lists.sourceforge.net/
+      </archive>
+    </mailingList>
+    <mailingList>
+      <name>QueryJ Developer List</name>
+      <subscribe>
+        queryj-cvs-subscribe@lists.sourceforge.net
+      </subscribe>
+      <unsubscribe>
+        queryj-cvs-unsubscribe@lists.sourceforge.net
+      </unsubscribe>
+      <archive>
+        http://sourceforge.net/mailinglists/queryj-cvs@lists.sourceforge.net
+      </archive>
+    </mailingList>
+  </mailingLists>
+
+  <developers>
+
+    <developer>
+      <name>Jose San Leandro</name>
+      <id>chous</id>
+      <email>jsanleandro@yahoo.es</email>
+      <organization>ACMSL</organization>
+    </developer>
+  </developers>
+
+  <dependencies>
+
+    <dependency>
+      <id>commons-logging</id>
+      <version>1.0.3</version>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+
+    <dependency>
+      <id>junit</id>
+      <version>3.8.1</version>
+      <url>http://www.junit.org</url>
+    </dependency>
+
+    <dependency>
+      <id>acmsl-commons</id>
+      <version>0.5.4</version>
+      <url>http://www.acm-sl.com</url>
+    </dependency>
+
+    <dependency>
+      <id>ant</id>
+      <version>1.5.1</version>
+      <url>http://www.acm-sl.com</url>
+    </dependency>
+
+    <dependency>
+      <id>mysql-connector-java</id>
+      <version>2.0.14-bin</version>
+      <url>http://www.mysql.com</url>
+    </dependency>
+
+    <dependency>
+      <id>rmijdbc</id>
+      <version>3.0.1</version>
+      <url>http://www.objectweb.org</url>
+    </dependency>
+
+    <dependency>
+      <id>jta</id>
+      <version>1.0</version>
+      <url>http://java.sun.com</url>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <nagEmailAddress>
+      jsanleandro@yahoo.es
+    </nagEmailAddress>
+
+    <sourceDirectory>../../java/</sourceDirectory>
+
+    <unitTestSourceDirectory>../../java/unittests</unitTestSourceDirectory>
+    <integrationUnitTestSourceDirectory/>
+
+    <aspectSourceDirectory/>
+
+    <!-- Unit test cases -->
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+      <excludes>
+        <exclude>**/RepositoryTest.java</exclude>
+      </excludes>
+    </unitTest>
+              
+    <!-- J A R  R E S O U R C E S -->
+    <!-- Resources that are packaged up inside the JAR file -->
+    <resources>
+      <includes>
+        <include>*.xsd</include>
+        <include>log4j.properties</include>
+      </includes>
+    </resources>
+
+    <!-- Integration unit test cases -->
+    <integrationUnitTest/>
+
+    <jars/>
+
+  </build>
+
+  <reports>
+    <report>maven-changelog-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-checkstyle-plugin</report>
+
+    <!--
+      PMD makes the site generation crash if no errors are
+      found. It's better to do it manually.
+    -->
+    <report>maven-pmd-plugin</report>
+    <report>maven-developer-activity-plugin</report>
+    <report>maven-file-activity-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jdepend-plugin</report>
+    <report>maven-junit-report-plugin</report>
+    <report>maven-jxr-plugin</report>
+    <report>maven-license-plugin</report>
+    <report>maven-linkcheck-plugin</report>
+    <report>maven-tasklist-plugin</report>
+    <!--
+      JellyDoc makes the site generation crash if no errors are
+      found. It's better to do it manually.
+    <report>maven-jellydoc-plugin</report>
+    -->
+  </reports>
+</project>
