@@ -27,7 +27,7 @@
                     28660 Madrid
                     Spain
 
- ******************************************************************************
+ *****************************************************************************
  *
  * Filename: $RCSfile$
  *
@@ -97,7 +97,7 @@ import org.apache.commons.logging.LogFactory;
  * Is able to create engine-specific DAO interfaces for each
  * table in the persistence model.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class DAOTemplate
@@ -151,32 +151,17 @@ public class DAOTemplate
             DEFAULT_CLASS_START,
             DEFAULT_CLASS_CONSTANTS,
             DEFAULT_CLASS_CONSTRUCTOR,
+            DEFAULT_PK_JAVADOC,
+            DEFAULT_ATTRIBUTE_JAVADOC,
+            DEFAULT_ATTRIBUTE_DECLARATION,
+            DEFAULT_ATTRIBUTE_FILTER,
+            DEFAULT_STATEMENT_SETTER_CALL,
             DEFAULT_FIND_BY_PRIMARY_KEY_METHOD,
-            DEFAULT_FIND_BY_PRIMARY_KEY_PK_JAVADOC,
-            DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION,
-            DEFAULT_PK_FILTER,
-            DEFAULT_PK_STATEMENT_SETTER_CALL,
             DEFAULT_INSERT_METHOD,
-            DEFAULT_INSERT_PARAMETERS_JAVADOC,
-            DEFAULT_INSERT_PARAMETERS_DECLARATION,
             DEFAULT_INSERT_PARAMETERS_SPECIFICATION,
-            DEFAULT_ATTRIBUTES_STATEMENT_SETTER_CALL,
             DEFAULT_UPDATE_METHOD,
-            DEFAULT_UPDATE_PARAMETERS_JAVADOC,
-            DEFAULT_UPDATE_PARAMETERS_DECLARATION,
             DEFAULT_UPDATE_PARAMETERS_SPECIFICATION,
-            DEFAULT_UPDATE_FILTER,
             DEFAULT_DELETE_METHOD,
-            DEFAULT_DELETE_PK_JAVADOC,
-            DEFAULT_DELETE_PK_DECLARATION,
-            DEFAULT_DELETE_PK_VALUES,
-            DEFAULT_DELETE_FILTER_DECLARATION,
-            DEFAULT_DELETE_FILTER_VALUES,
-            DEFAULT_DELETE_WITH_FK_METHOD,
-            DEFAULT_DELETE_WITH_FK_PK_JAVADOC,
-            DEFAULT_DELETE_WITH_FK_PK_DECLARATION,
-            DEFAULT_DELETE_WITH_FK_DAO_DELETE_REQUEST,
-            DEFAULT_DELETE_WITH_FK_PK_VALUES,
             DEFAULT_CUSTOM_SELECT,
             DEFAULT_CUSTOM_SELECT_PARAMETER_JAVADOC,
             DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION,
@@ -279,95 +264,54 @@ public class DAOTemplate
         MessageFormat t_ClassConstructorFormatter =
             new MessageFormat(getClassConstructor());
 
+        MessageFormat t_PkJavadocFormatter =
+            new MessageFormat(getPkJavadoc());
+
+        MessageFormat t_AttributeJavadocFormatter =
+            new MessageFormat(getAttributeJavadoc());
+
+        MessageFormat t_AttributeDeclarationFormatter =
+            new MessageFormat(getAttributeDeclaration());
+
+        MessageFormat t_AttributeFilterFormatter =
+            new MessageFormat(getAttributeFilter());
+
+        MessageFormat t_StatementSetterCallFormatter =
+            new MessageFormat(getStatementSetterCall());
+
         MessageFormat t_FindByPrimaryKeyFormatter =
             new MessageFormat(getFindByPrimaryKeyMethod());
-
-        MessageFormat t_FindByPrimaryKeyPkJavadocFormatter =
-            new MessageFormat(getFindByPrimaryKeyPkJavadoc());
-
-        MessageFormat t_FindByPrimaryKeyPkDeclarationFormatter =
-            new MessageFormat(getFindByPrimaryKeyPkDeclaration());
-
-        MessageFormat t_PkFilterFormatter =
-            new MessageFormat(getPkFilter());
-
-        MessageFormat t_PkStatementSetterCallFormatter =
-            new MessageFormat(getPkStatementSetterCall());
 
         MessageFormat t_InsertMethodFormatter =
             new MessageFormat(getInsertMethod());
 
-        MessageFormat t_InsertParametersJavadocFormatter =
-            new MessageFormat(getInsertParametersJavadoc());
-
-        MessageFormat t_InsertParametersDeclarationFormatter =
-            new MessageFormat(getInsertParametersDeclaration());
-
         MessageFormat t_InsertParametersSpecificationFormatter =
             new MessageFormat(getInsertParametersSpecification());
-
-        MessageFormat t_AttributesStatementSetterCallFormatter =
-            new MessageFormat(getAttributesStatementSetterCall());
 
         MessageFormat t_UpdateMethodFormatter =
             new MessageFormat(getUpdateMethod());
 
-        MessageFormat t_UpdateParametersJavadocFormatter =
-            new MessageFormat(getUpdateParametersJavadoc());
-
-        MessageFormat t_UpdateParametersDeclarationFormatter =
-            new MessageFormat(getUpdateParametersDeclaration());
-
         MessageFormat t_UpdateParametersSpecificationFormatter =
             new MessageFormat(getUpdateParametersSpecification());
-
-        MessageFormat t_UpdateFilterFormatter =
-            new MessageFormat(getUpdateFilter());
 
         MessageFormat t_DeleteMethodFormatter =
             new MessageFormat(getDeleteMethod());
 
-        MessageFormat t_DeleteWithFkMethodFormatter =
-            new MessageFormat(getDeleteWithFkMethod());
-
-        MessageFormat t_DeleteWithFkPkJavadocFormatter =
-            new MessageFormat(getDeleteWithFkPkJavadoc());
-
-        MessageFormat t_DeleteWithFkPkDeclarationFormatter =
-            new MessageFormat(getDeleteWithFkPkDeclaration());
-
-        MessageFormat t_DeleteWithFkDAODeleteRequestFormatter =
-            new MessageFormat(getDeleteWithFkDAODeleteRequest());
-
-        MessageFormat t_DeleteWithFkPkValuesFormatter =
-            new MessageFormat(getDeleteWithFkPkValues());
-
         StringBuffer t_sbForeignDAOImports = new StringBuffer();
+        StringBuffer t_sbAttributesJavadoc = new StringBuffer();
         StringBuffer t_sbPkJavadoc = new StringBuffer();
+        StringBuffer t_sbNonPkJavadoc = new StringBuffer();
+        StringBuffer t_sbAttributesDeclaration = new StringBuffer();
         StringBuffer t_sbPkDeclaration = new StringBuffer();
+        StringBuffer t_sbNonPkDeclaration = new StringBuffer();
         StringBuffer t_sbPkFilter = new StringBuffer();
+        StringBuffer t_sbNonPkFilter = new StringBuffer();
         StringBuffer t_sbPkStatementSetterCall = new StringBuffer();
-        StringBuffer t_sbUpdateFilter = new StringBuffer();
-        StringBuffer t_sbDeleteMethod = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkPkValues = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkPkValuesDeleteRequest = new StringBuffer();
-
-        StringBuffer t_sbDeleteWithFkMethod = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkPkJavadoc = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkPkDeclaration = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkDAODeleteRequest = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkDAOFkValues = new StringBuffer();
-
         StringBuffer t_sbAttributesStatementSetterCall = new StringBuffer();
-        StringBuffer t_sbInsertParametersJavadoc       = new StringBuffer();
-        StringBuffer t_sbInsertParametersDeclaration   = new StringBuffer();
-        StringBuffer t_sbInsertParametersSpecification = new StringBuffer();
-        StringBuffer t_sbUpdateParametersJavadoc       = new StringBuffer();
-        StringBuffer t_sbUpdateParametersDeclaration   = new StringBuffer();
-        StringBuffer t_sbUpdateParametersSpecification = new StringBuffer();
+        StringBuffer t_sbDeleteMethod = new StringBuffer();
 
-        String t_strDeleteMethodModifier = "public";
-        String t_strDeleteMethodSuffix = "";
+        StringBuffer t_sbInsertParametersSpecification = new StringBuffer();
+        StringBuffer t_sbUpdateParametersSpecification = new StringBuffer();
 
         CustomSqlProvider t_CustomSqlProvider = getCustomSqlProvider();
 
@@ -395,20 +339,6 @@ public class DAOTemplate
                     metaDataManager.getReferredKey(
                         tableTemplate.getTableName(),
                         t_astrReferredTables[t_iRefTableIndex]);
-
-                t_sbDeleteWithFkDAODeleteRequest.append(
-                    t_DeleteWithFkDAODeleteRequestFormatter.format(
-                        new Object[]
-                        {
-                            t_strReferredTableName,
-                            tableTemplate.getTableName().toLowerCase(),
-                            stringUtils.capitalize(
-                                metaDataManager.getForeignKey(
-                                    tableTemplate.getTableName(),
-                                    t_astrReferredTables[t_iRefTableIndex])
-                                .toLowerCase(),
-                                '_')
-                        }));
 
                 t_sbForeignDAOImports.append(
                     t_ForeignDAOImportsFormatter.format(
@@ -509,8 +439,18 @@ public class DAOTemplate
                       t_iPkIndex < t_astrPrimaryKeys.length;
                       t_iPkIndex++)
             {
+                t_sbPkFilter.append(
+                    t_AttributeFilterFormatter.format(
+                        new Object[]
+                        {
+                            t_strRepositoryName,
+                            tableTemplate.getTableName().toUpperCase(),
+                            t_astrPrimaryKeys[t_iPkIndex].toUpperCase(),
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
+                        }));
+
                 t_sbPkJavadoc.append(
-                    t_FindByPrimaryKeyPkJavadocFormatter.format(
+                    t_PkJavadocFormatter.format(
                         new Object[]
                         {
                             t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
@@ -523,7 +463,7 @@ public class DAOTemplate
                 }
 
                 t_sbPkDeclaration.append(
-                    t_FindByPrimaryKeyPkDeclarationFormatter.format(
+                    t_AttributeDeclarationFormatter.format(
                         new Object[]
                         {
                             metaDataUtils.getNativeType(
@@ -533,48 +473,17 @@ public class DAOTemplate
                             t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
                         }));
 
-                t_sbPkFilter.append(
-                    t_PkFilterFormatter.format(
-                        new Object[]
-                        {
-                            t_strRepositoryName,
-                            tableTemplate.getTableName().toUpperCase(),
-                            t_astrPrimaryKeys[t_iPkIndex].toUpperCase()
-                        }));
-
                 if  (t_iPkIndex > 0)
                 {
                     t_sbPkStatementSetterCall.append(",");
                 }
 
                 t_sbPkStatementSetterCall.append(
-                    t_PkStatementSetterCallFormatter.format(
+                    t_StatementSetterCallFormatter.format(
                         new Object[]
                         {
                             t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
                         }));
-
-                t_sbUpdateFilter.append(
-                    t_UpdateFilterFormatter.format(
-                        new Object[]
-                        {
-                            t_strRepositoryName,
-                            tableTemplate.getTableName().toUpperCase(),
-                            t_astrPrimaryKeys[t_iPkIndex].toUpperCase(),
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
-                        }));
-
-                t_sbDeleteWithFkPkValues.append(
-                    t_DeleteWithFkPkValuesFormatter.format(
-                        new Object[]
-                        {
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
-                        }));
-
-                t_sbDeleteWithFkPkValuesDeleteRequest.append(
-                    stringUtils.capitalize(
-                        t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
-                        '_'));
             }
         }
 
@@ -591,8 +500,16 @@ public class DAOTemplate
                          tableTemplate.getTableName(),
                          t_astrColumnNames[t_iColumnIndex]))
                 {
-                    t_sbInsertParametersDeclaration.append(
-                        t_InsertParametersDeclarationFormatter.format(
+                    t_sbAttributesJavadoc.append(
+                        t_AttributeJavadocFormatter.format(
+                            new Object[]
+                            {
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                                t_astrColumnNames[t_iColumnIndex]
+                            }));
+
+                    t_sbAttributesDeclaration.append(
+                        t_AttributeDeclarationFormatter.format(
                             new Object[]
                             {
                                 metaDataUtils.getNativeType(
@@ -604,7 +521,7 @@ public class DAOTemplate
 
                     if  (t_iColumnIndex < t_astrColumnNames.length - 1)
                     {
-                        t_sbInsertParametersDeclaration.append(",");
+                        t_sbAttributesDeclaration.append(",");
                     }
 
                     t_sbInsertParametersSpecification.append(
@@ -618,7 +535,7 @@ public class DAOTemplate
                             }));
 
                     t_sbAttributesStatementSetterCall.append(
-                        t_AttributesStatementSetterCallFormatter.format(
+                        t_StatementSetterCallFormatter.format(
                             new Object[]
                             {
                                 t_astrColumnNames[t_iColumnIndex].toLowerCase()
@@ -628,40 +545,38 @@ public class DAOTemplate
                     {
                         t_sbAttributesStatementSetterCall.append(",");
                     }
+
+                    t_sbUpdateParametersSpecification.append(
+                        t_UpdateParametersSpecificationFormatter.format(
+                            new Object[]
+                            {
+                                t_strRepositoryName,
+                                tableTemplate.getTableName().toUpperCase(),
+                                t_astrColumnNames[t_iColumnIndex].toUpperCase()
+                            }));
                 }
 
                 if  (!metaDataManager.isPrimaryKey(
                          tableTemplate.getTableName(),
                          t_astrColumnNames[t_iColumnIndex]))
                 {
-                    t_sbInsertParametersJavadoc.append(
-                        t_InsertParametersJavadocFormatter.format(
+                    t_sbNonPkJavadoc.append(
+                        t_AttributeJavadocFormatter.format(
                             new Object[]
                             {
                                 t_astrColumnNames[t_iColumnIndex].toLowerCase(),
                                 t_astrColumnNames[t_iColumnIndex]
                             }));
 
-                    t_sbUpdateParametersJavadoc.append(
-                        t_UpdateParametersJavadocFormatter.format(
+                    t_sbNonPkFilter.append(
+                        t_AttributeFilterFormatter.format(
                             new Object[]
                             {
-                                t_astrColumnNames[t_iColumnIndex].toLowerCase(),
-                                t_astrColumnNames[t_iColumnIndex]
+                                t_strRepositoryName,
+                                tableTemplate.getTableName().toUpperCase(),
+                                t_astrColumnNames[t_iColumnIndex].toUpperCase()
                             }));
 
-                    t_sbUpdateParametersDeclaration.append(
-                        t_UpdateParametersDeclarationFormatter.format(
-                            new Object[]
-                            {
-                                metaDataUtils.getNativeType(
-                                    metaDataManager.getColumnType(
-                                        tableTemplate.getTableName(),
-                                        t_astrColumnNames[t_iColumnIndex])),
-                                t_astrColumnNames[t_iColumnIndex].toLowerCase()
-                            }));
-
-                    t_sbUpdateParametersDeclaration.append(",");
                 }
             }
 
@@ -689,9 +604,8 @@ public class DAOTemplate
                         t_strRepositoryName,
                         tableTemplate.getTableName().toUpperCase(),
                         t_sbInsertParametersSpecification,
-                        t_sbPkJavadoc.toString(),
-                        t_sbInsertParametersJavadoc,
-                        t_sbInsertParametersDeclaration,
+                        t_sbAttributesJavadoc,
+                        t_sbAttributesDeclaration,
                         t_sbAttributesStatementSetterCall
                     }));
 
@@ -700,55 +614,26 @@ public class DAOTemplate
                     new Object[]
                     {
                         t_strCapitalizedValueObjectName,
-                        t_sbPkJavadoc.toString(),
-                        t_sbUpdateParametersJavadoc,
-                        t_sbPkDeclaration,
-                        t_sbUpdateParametersDeclaration,
                         t_strRepositoryName,
                         tableTemplate.getTableName().toUpperCase(),
                         t_sbUpdateParametersSpecification,
-                        t_sbUpdateFilter
+                        t_sbPkFilter,
+                        t_sbAttributesJavadoc,
+                        t_sbAttributesDeclaration,
+                        t_sbAttributesStatementSetterCall
                     }));
-
-
-            if  (t_bForeignKeys)
-            {
-                t_strDeleteMethodModifier = "protected";
-                t_strDeleteMethodSuffix = 
-                    stringUtils.capitalize(
-                        tableTemplate.getTableName(),
-                        '_');
-
-                t_sbDeleteWithFkMethod.append(
-                    t_DeleteWithFkMethodFormatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedValueObjectName,
-                            t_sbPkJavadoc,
-                            t_sbPkDeclaration,
-                            t_sbDeleteWithFkPkValues,
-                            tableTemplate.getTableName().toLowerCase(),
-                            t_sbDeleteWithFkDAODeleteRequest,
-                            t_sbDeleteWithFkPkValuesDeleteRequest
-                        }));
-
-                t_sbResult.append(t_sbDeleteWithFkMethod);
-            }
                 
             t_sbDeleteMethod.append(
                 t_DeleteMethodFormatter.format(
                     new Object[]
                     {
-                        tableTemplate.getTableName(),
-                        t_sbPkJavadoc,
-                        t_sbPkDeclaration,
+                        t_strCapitalizedValueObjectName,
                         t_strRepositoryName,
                         tableTemplate.getTableName().toUpperCase(),
-                        //t_sbFilterDeclaration,
-                        //t_sbFilterValues,
-                        t_strDeleteMethodModifier,
-                        t_strDeleteMethodSuffix
-                        //t_sbPkValues
+                        t_sbPkFilter,
+                        t_sbPkJavadoc,
+                        t_sbPkDeclaration,
+                        t_sbPkStatementSetterCall
                     }));
 
             t_sbResult.append(t_sbDeleteMethod);

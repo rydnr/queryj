@@ -124,7 +124,8 @@ public interface DAOTemplateDefaults
     /**
      * The package declaration.
      */
-    public static final String DEFAULT_PACKAGE_DECLARATION = "package {0};\n\n"; // package
+    public static final String DEFAULT_PACKAGE_DECLARATION =
+        "package {0};\n\n"; // package
 
     /**
      * The project imports.
@@ -224,7 +225,6 @@ public interface DAOTemplateDefaults
         + " * {0} {1} persistence layers.\n"
          // engine name - driver version
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**
@@ -251,7 +251,8 @@ public interface DAOTemplateDefaults
         + "     * The result set extractor for <i>{0}</i>\n"
         + "     * value objects.\n"
         + "     */\n"
-        + "    public static final ResultSetExtractor {1}_RESULT_SET_EXTRACTOR =\n"
+        + "    public static final ResultSetExtractor "
+        + "{1}_RESULT_SET_EXTRACTOR =\n"
         + "        new {2}ResultSetExtractor();\n\n"
         + "    // </constants>\n\n";
 
@@ -260,7 +261,7 @@ public interface DAOTemplateDefaults
      */
     public static final String DEFAULT_CLASS_CONSTRUCTOR =
           "    /**\n"
-        + "     * Builds a {0}{1}DAO\n"
+        + "     * Builds a <code>{0}{1}DAO</code> instance\n"
         // engine name - table name
         + "     * with given data source.\n"
         + "     * @param dataSource the required data source.\n"
@@ -272,89 +273,111 @@ public interface DAOTemplateDefaults
         + "    '}'\n\n";
         // engine name - table name
 
+    // <helper subtemplates>
+
+    /**
+     * The primary keys javadoc.
+     */
+    public static final String DEFAULT_PK_JAVADOC =
+        "\n     * @param {0} the <i>{1}</i> value to filter.";
+         // java pk - pk
+
+    /**
+     * The attribute javadoc.
+     */
+    public static final String DEFAULT_ATTRIBUTE_JAVADOC =
+        "\n     * @param {0} the <i>{1}</i> information.";
+         // java attribute - attribute
+
+    /**
+     * The attribute declaration.
+     */
+    public static final String DEFAULT_ATTRIBUTE_DECLARATION =
+        "\n        final {0} {1}";
+         // attribute type - java attribute
+
+    /**
+     * The attribute filter.
+     */
+    public static final String DEFAULT_ATTRIBUTE_FILTER =
+        "        result.where({0}.{1}.{2}.equals());\n";
+    // table repository name - table name - field name
+
+    /**
+     * The statement setter call.
+     */
+    public static final String DEFAULT_STATEMENT_SETTER_CALL =
+        "\n                        {0}";
+        // java pk
+
+    // </helper subtemplates>
+
     /**
      * The find by primary key method.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_METHOD =
           "     // <find by primary key>\n\n"
         + "    /**\n"
-        + "     * Builds the query for finding the <code>{0}</code> information\n"
-        + "     * searching by its primary key.\n"
+        + "     * Builds the query for finding the <code>{0}</code>\n"
+        + "     * information searching by its primary key.\n"
         + "     * @return the <code>SelectQuery</code> instance.\n"
         + "     */\n"
         + "    protected Query buildFindByPrimaryKeyQuery()\n"
         + "    '{'\n"
-        + "        return buildFindByPrimaryKeyQuery(QueryFactory.getInstance());\n"
+        + "        return buildFindByPrimaryKeyQuery("
+        +              "QueryFactory.getInstance());\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Creates the query for finding the <code>{0}</code> information\n"
-        + "     * searching by its primary key.\n"
-        + "     * @param queryFactory the <code>QueryFactory</code> instance.\n"
+        + "     * Creates the query for finding the <code>{0}</code>\n"
+        + "     * information searching by its primary key.\n"
+        + "     * @param queryFactory the <code>QueryFactory</code> "
+        + "instance.\n"
         + "     * @return the <code>SelectQuery</code> instance.\n"
         + "     * @precondition queryFactory != null\n"
         + "     */\n"
-        + "    protected Query buildFindByPrimaryKeyQuery(final QueryFactory queryFactory)\n"
+        + "    protected Query buildFindByPrimaryKeyQuery("
+        +          "final QueryFactory queryFactory)\n"
         + "    '{'\n"
         + "        SelectQuery result = queryFactory.createSelectQuery();\n\n"
         + "        result.select({1}.{2}.getAll());\n\n"
          // table repository name - table instance name
         + "        result.from({1}.{2});\n\n"
          // table repository name - table instance name
-        + "{3}"
-         // FIND_BY_PRIMARY_KEY_PK_FILTER
+        + "{3}\n"
+         // PK_FILTER
         + "        return result;\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Retrieves <code>{4}</code> information filtering by its primary key."
+        + "     * Retrieves <code>{4}</code> information\n"
+        + "     * filtering by its primary key."
         + "{5}\n"
-         // FIND_BY_PRIMARY_KEY_PK_JAVADOC
+         // PK_JAVADOC
+        + "     * @throws DataAccessException if the operation fails.\n"
         + "     */\n"
         + "    public {6} findByPrimaryKey("
+         // Capitalized Value Object name
         + "{7})\n"
+        + "      throws DataAccessException\n"
+         // PK_DECLARATION
         + "    '{'\n"
         + "        Query t_Query = buildFindByPrimaryKeyQuery();\n\n"
         + "        return\n"
         + "            ({6})\n"
+         // Capitalized Value Object name
         + "                query(\n"
         + "                    new QueryPreparedStatementCreator(t_Query),\n"
         + "                    new {6}PkStatementSetter({8}),\n"
+         // Capitalized Value Object name
         + "                    {9}_RESULT_SET_EXTRACTOR);\n"
-        + "    '}'\n"
+         // Upper case table name
+        + "    '}'\n\n"
         + "    // </find by primary key>\n\n";
 
     /**
-     * The find-by-primary-key method's primary keys javadoc.
-     */
-    public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_JAVADOC =
-        "\n     * @param {0} the <i>{1}</i> value to filter.";
-         // java pk - pk
-
-    /**
-     * The find-by-primary-key method's primary keys declaration.
-     */
-    public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION =
-        "\n        final {0} {1}";
-         // pk type - java pk
-
-    /**
-     * The primary keys filter subtemplate.
-     */
-    public static final String DEFAULT_PK_FILTER =
-        "        result.where({0}.{1}.{2}.equals());\n\n";
-         // table repository name - table instance name - primary key
-
-    /**
-     * The find-by-primary-key statement setter call.
-     */
-    public static final String DEFAULT_PK_STATEMENT_SETTER_CALL =
-        "\n                        {0}";
-        // java pk
-
-    /**
-     * The store method.
+     * The insert method.
      */
     public static final String DEFAULT_INSERT_METHOD =
-          "    // <insert>\n"
+          "    // <insert>\n\n"
         + "    /**\n"
         + "     * Builds the query required to <i>insert</i> a concrete\n"
         + "     * <code>{0}</code> instance.\n"
@@ -367,11 +390,13 @@ public interface DAOTemplateDefaults
         + "    /**\n"
         + "     * Builds the query required to <i>insert</i> a concrete\n"
         + "     * <code>{0}</code> instance.\n"
-        + "     * @param queryFactory the <code>QueryFactory</code> instance.\n"
+        + "     * @param queryFactory the <code>QueryFactory</code> "
+        + "instance.\n"
         + "     * @return the <code>InsertQuery</code> instance.\n"
         + "     * @precondition queryFactory != null\n"
         + "     */\n"
-        + "    protected Query buildInsertQuery(final QueryFactory queryFactory)\n"
+        + "    protected Query buildInsertQuery("
+        +          "final QueryFactory queryFactory)\n"
         + "    '{'\n"
         + "        InsertQuery result = queryFactory.createInsertQuery();\n\n"
         + "        result.insertInto({1}.{2});\n"
@@ -381,37 +406,21 @@ public interface DAOTemplateDefaults
         + "    /**\n"
         + "     * Persists <code>{0}</code> information."
          // table name
-        + "{4}"
-         // (optional) pk javadoc
-        + "{5}\n"
-         // insert parameters javadoc
-        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "{4}\n"
+         // attributes javadoc
+        + "     * @throws DataAccessException if the operation fails.\n"
         + "     */\n"
         + "    public void insert("
-        + "{6})\n"
-         // insert parameters declaration
+        + "{5})\n"
+         // attributes declaration
         + "      throws DataAccessException\n"
         + "    '{'\n"
         + "        Query t_Query = buildInsertQuery();\n\n"
         + "        update(\n"
         + "            new QueryPreparedStatementCreator(t_Query),\n"
-        + "            new {0}AttributesStatementSetter({7}));\n"
-        + "    '}'\n"
+        + "            new {0}AttributesStatementSetter({6}));\n"
+        + "    '}'\n\n"
         + "    // </insert>\n\n";
-
-    /**
-     * The insert parameters javadoc.
-     */
-    public static final String DEFAULT_INSERT_PARAMETERS_JAVADOC =
-        "\n     * @param {0} the <i>{1}</i> information.";
-    // field name - field Name
-
-    /**
-     * The insert parameters declaration.
-     */
-    public static final String DEFAULT_INSERT_PARAMETERS_DECLARATION =
-        "\n        final {0} {1}";
-    // field type - field name
 
     /**
      * The insert parameters specification.
@@ -421,430 +430,113 @@ public interface DAOTemplateDefaults
     // repository - table - field
 
     /**
-     * The attributes statement setter call subtemplate.
-     */
-    public static final String DEFAULT_ATTRIBUTES_STATEMENT_SETTER_CALL =
-        "\n                {0}";
-        // java attribute
-
-    /**
      * The update method.
      */
     public static final String DEFAULT_UPDATE_METHOD =
-          "    /**\n"
-        + "     * Updates {0} information\n"
-        + "     * in the persistence layer."
+          "    // <update>\n\n"
+        + "    /**\n"
+        + "     * Builds the query required to <i>update</i> a concrete\n"
+        + "     * <code>{0}</code> entity, determined by its primary key.\n"
+        + "     * @return the <code>UpdateQuery</code> instance.\n"
+        + "     */\n"
+        + "    protected Query buildUpdateQuery()\n"
+        + "    '{'\n"
+        + "        return buildUpdateQuery(QueryFactory.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Builds the query required to <i>update</i> a concrete\n"
+        + "     * <code>{0}</code> entity, determined by its primary key.\n"
+        + "     * @param queryFactory the <code>QueryFactory</code> "
+        + "instance.\n"
+        + "     * @return the <code>UpdateQuery</code> instance.\n"
+        + "     * @precondition queryFactory != null\n"
+        + "     */\n"
+        + "    protected Query buildUpdateQuery("
+        +          "final QueryFactory queryFactory)\n"
+        + "    '{'\n"
+        + "        UpdateQuery result = queryFactory.createUpdateQuery();\n\n"
+        + "        result.update({1}.{2});\n\n"
+        + "{3}\n"
+         // update parameters specification
+        + "{4}\n"
+         // pk filter
+        + "        return result;\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Updates <code>{0}</code> information."
          // table name
-        + "{1}"
-         // (optional) pk javadoc
-        + "{2}\n"
-         // update parameters javadoc
-        + "     * @param transactionToken the transaction boundary.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "{5}\n"
+         // attributes javadoc
+        + "     * @throws DataAccessException if the operation fails.\n"
         + "     */\n"
         + "    public void update("
-        + "{3}"
-         // (optional) pk declaration
-        + "{4}"
-         // update parameters declaration
-        + "\n        final TransactionToken transactionToken)\n"
+        + "{6})\n"
+         // attributes declaration
         + "      throws DataAccessException\n"
         + "    '{'\n"
-        + "        Connection        t_Connection        = null;\n"
-        + "        PreparedStatement t_PreparedStatement = null;\n\n"
-        + "        try\n"
-        + "        '{'\n"
-        + "            t_Connection = getConnection(transactionToken);\n\n"
-        + "            QueryFactory t_QueryFactory = QueryFactory.getInstance();\n\n"
-        + "            if  (   (t_Connection   != null)\n"
-        + "                 && (t_QueryFactory != null))\n"
-        + "            '{'\n"
-        + "                UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();\n\n"
-        + "                t_Query.update({5}.{6});\n\n"
-         // table repository name - table name
-        + "{7}"
-         // update parameters specification
-        + "{8}"
-         // pk values specificacion
-        + "                t_PreparedStatement = t_Query.prepareStatement(t_Connection);\n"
-        + "                t_PreparedStatement.executeUpdate();\n"
-        + "            '}'\n"
-        + "        '}'\n"
-        + "        catch  (final SQLException sqlException)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
-        + "        '}'\n"
-        + "        catch  (final Exception exception)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).error(exception);\n"
-        + "        '}'\n"
-        + "        finally\n"
-        + "        '{'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_PreparedStatement != null)\n"
-        + "                '{'\n"
-        + "                    t_PreparedStatement.close();\n"
-        + "                '}'\n"
-        + "                if  (t_Connection != null)\n"
-        + "                '{'\n"
-        + "                    closeConnection(t_Connection, transactionToken);\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "        '}'\n"
-        + "    '}'\n";
-
-    /**
-     * The update parameters javadoc.
-     */
-    public static final String DEFAULT_UPDATE_PARAMETERS_JAVADOC =
-        "\n     * @param {0} the {1} information.";
-    // field name - field Name
-
-    /**
-     * The update parameters declaration.
-     */
-    public static final String DEFAULT_UPDATE_PARAMETERS_DECLARATION =
-        "\n        final {0} {1}";
-    // field type - field name
+        + "        Query t_Query = buildUpdateQuery();\n\n"
+        + "        update(\n"
+        + "            new QueryPreparedStatementCreator(t_Query),\n"
+        + "            new {0}AttributesStatementSetter({7}));\n"
+        + "    '}'\n\n"
+        + "    // </update>\n\n";
 
     /**
      * The update parameters specification.
      */
     public static final String DEFAULT_UPDATE_PARAMETERS_SPECIFICATION =
-        "                t_Query.set({0}.{1}.{2}, {3});\n";
-    // table repository name - table name - field name - field value
-
-    /**
-     * The update filter.
-     */
-    public static final String DEFAULT_UPDATE_FILTER =
-        "                t_Query.where({0}.{1}.{2}.equals({3}));\n";
-    // table repository name - table name - field name - field value
+        "        result.set({0}.{1}.{2});\n";
+    // table repository name - table name - field name
 
     /**
      * The delete method.
      */
     public static final String DEFAULT_DELETE_METHOD =
-          "    /**\n"
-        + "     * Deletes {0} information from the persistence layer filtering\n"
-         // table name
-        + "     * by its primary keys."
-        + "{1}\n"
-         // DELETE_PK_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @return <code>true</code> if the information has been deleted\n"
-        + "     * successfully.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
+          "    // <delete>\n\n"
+        + "    /**\n"
+        + "     * Builds the query required to <i>delete</i> a concrete\n"
+        + "     * <code>{0}</code> entity, determined by its primary key.\n"
+        + "     * @return the <code>DeleteQuery</code> instance.\n"
         + "     */\n"
-        + "    {7} boolean delete{8}("
-         // java table name
-        + "{2}"
-         // DELETE_PK_DECLARATION
-        + "\n        final TransactionToken transactionToken)\n"
-        + "      throws DataAccessException\n"
+        + "    protected Query buildDeleteQuery()\n"
         + "    '{'\n"
-        + "        return\n"
-        + "            delete{8}("
-        + "{9}\n"
-         // DELETE_PK_VALUES
-        + "                transactionToken,\n"
-        + "                QueryFactory.getInstance());\n"
+        + "        return buildDeleteQuery(QueryFactory.getInstance());\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Deletes {0} information from the persistence layer filtering\n"
-         // table name
-        + "     * by its primary keys."
-        + "{1}\n"
-         // DELETE_PK_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @param queryFactory the QueryFactory instance.\n"
-        + "     * @return <code>true</code> if the information has been deleted\n"
-        + "     * successfully.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     * Builds the query required to <i>delete</i> a concrete\n"
+        + "     * <code>{0}</code> entity, determined by its primary key.\n"
+        + "     * @param queryFactory the <code>QueryFactory</code> "
+        + "instance.\n"
+        + "     * @return the <code>DeleteQuery</code> instance.\n"
         + "     * @precondition queryFactory != null\n"
         + "     */\n"
-        + "    {7} boolean delete{8}("
-         // java table name
-        + "{2}\n"
-         // DELETE_PK_DECLARATION
-        + "        final TransactionToken transactionToken,\n"
-        + "        final QueryFactory queryFactory)\n"
-        + "      throws DataAccessException\n"
+        + "    protected Query buildDeleteQuery("
+        +          "final QueryFactory queryFactory)\n"
         + "    '{'\n"
-        + "        return\n"
-        + "            delete{8}("
-        + "{9}\n"
-         // DELETE_PK_VALUES
-        + "                transactionToken,\n"
-        + "                queryFactory.createDeleteQuery());\n"
+        + "        DeleteQuery result = queryFactory.createDeleteQuery();\n\n"
+        + "        result.deleteFrom({1}.{2});\n\n"
+        + "{3}\n"
+         // delete filter
+        + "        return result;\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Deletes {0} information from the persistence layer filtering\n"
+        + "     * Deletes <code>{0}</code> information."
          // table name
-        + "     * by its primary keys."
-        + "{1}\n"
-         // DELETE_PK_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @param query the delete query.\n"
-        + "     * @return <code>true</code> if the information has been deleted\n"
-        + "     * successfully.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
-        + "     * @precondition query != null\n"
+        + "{4}\n"
+         // pk javadoc
+        + "     * @throws DataAccessException if the operation fails.\n"
         + "     */\n"
-        + "    {7} boolean delete{8}("
-         // java table name
-        + "{2}\n"
-         // DELETE_PK_DECLARATION
-        + "        final TransactionToken transactionToken,\n"
-        + "        final DeleteQuery query)\n"
+        + "    public void delete("
+        + "{5})\n"
+         // pk declaration
         + "      throws DataAccessException\n"
         + "    '{'\n"
-        + "        boolean result = false;\n\n"
-        + "        Connection        t_Connection        = null;\n"
-        + "        PreparedStatement t_PreparedStatement = null;\n\n"
-        + "        try\n"
-        + "        '{'\n"
-        + "            t_Connection = getConnection(transactionToken);\n\n"
-        + "            if  (t_Connection != null)\n"
-        + "            '{'\n"
-        + "                query.deleteFrom({3}.{4});\n\n"
-         // table repository name - table name
-        + "{5}"
-
-         // DELETE_PK_FILTER_DECLARATION
-        + "                t_PreparedStatement = query.prepareStatement(t_Connection);\n\n"
-        + "{6}"
-         // DELETE_PK_FILTER_VALUES
-        + "                t_PreparedStatement = query.prepareStatement(t_Connection);\n"
-        + "                t_PreparedStatement.executeUpdate();\n\n"
-        + "                result = true;\n"
-        + "            '}'\n"
-        + "        '}'\n"
-        + "        catch   (SQLException sqlException)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
-        + "        '}'\n"
-        + "        catch   (Exception exception)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).error(exception);\n"
-        + "        '}'\n"
-        + "        finally\n"
-        + "        '{'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_PreparedStatement != null)\n"
-        + "                '{'\n"
-        + "                    t_PreparedStatement.close();\n"
-        + "                '}'\n"
-        + "                if  (t_Connection != null)\n"
-        + "                '{'\n"
-        + "                    closeConnection(t_Connection, transactionToken);\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "        '}'\n\n"
-        + "        return result;\n"
-        + "    '}'\n\n";
-
-    /**
-     * The delete method's primary keys javadoc.
-     */
-    public static final String DEFAULT_DELETE_PK_JAVADOC =
-        "\n     * @param {0} the {1} value to filter.";
-         // java pk - pk
-
-    /**
-     * The delete method's primary keys declaration.
-     */
-    public static final String DEFAULT_DELETE_PK_DECLARATION =
-        "        final {0}              {1},\n";
-         // pk type - java pk
-
-    /**
-     * The delete method's primary keys declaration.
-     */
-    public static final String DEFAULT_DELETE_PK_VALUES =
-        "\n                {0},";
-
-    /**
-     * The delete method's filter declaration.
-     */
-    public static final String DEFAULT_DELETE_FILTER_DECLARATION =
-        "                t_Query.where({0}.{1}.{2}.equals());\n\n";
-         // table repository name - table name - pk field name
-
-    /**
-     * The delete method's filter values.
-     */
-    public static final String DEFAULT_DELETE_FILTER_VALUES =
-          "                t_Query.set{0}(\n"
-         // pk field type
-        + "                    {1}.{2}.{3}.equals(),\n"
-         // table repository name - table name - pk field name
-        + "                    {4});\n\n";
-         // java pk
-
-    /**
-     * The delete with fk method.
-     */
-    public static final String DEFAULT_DELETE_WITH_FK_METHOD =
-          "    /**\n"
-        + "     * Deletes {0} information from the persistence layer filtering\n"
-         // table name
-        + "     * by its primary keys."
-        + "{1}\n"
-         // DELETE_PK_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @return <code>true</code> if the information has been deleted\n"
-        + "     * successfully.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
-        + "     */\n"
-        + "    public boolean delete("
-        + "{2}"
-         // DELETE_PK_DECLARATION
-        + "\n        final TransactionToken transactionToken)\n"
-        + "      throws DataAccessException\n"
-        + "    '{'\n"
-        + "        return\n"
-        + "            delete(\n"
-        + "                findByPrimaryKey("
-        + "{3}"
-        + "\n                    transactionToken),\n"
-        + "                transactionToken);\n"
+        + "        Query t_Query = buildDeleteQuery();\n\n"
+        + "        update(\n"
+        + "            new QueryPreparedStatementCreator(t_Query),\n"
+        + "            new {0}PkStatementSetter({6}));\n"
         + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Deletes given {0} information from the persistence layer.\n"
-         // table name
-        + "     * @param {4} the information to delete.\n"
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @return <code>true</code> if the information has been deleted\n"
-        + "     * successfully.\n"
-        + "     * @precondition {4} != null\n"
-        + "     */\n"
-        + "    public boolean delete(\n"
-        + "        final {0}ValueObject {4},\n"
-        + "        final TransactionToken  transactionToken)\n"
-        + "    '{'\n"
-        + "        boolean result = false;\n\n"
-        + "        TransactionToken  t_DeleteTransactionToken = transactionToken;\n"
-        + "        boolean           t_bInnerTransaction      = false;\n\n"
-        + "        if  (t_DeleteTransactionToken == null)\n"
-        + "        '{'\n"
-        + "            t_DeleteTransactionToken = createTransactionToken();\n"
-        + "        '}'\n\n"
-        + "        if  (   (t_DeleteTransactionToken != null)\n"
-        + "             && (!t_DeleteTransactionToken.isTransactionAlive()))\n"
-        + "        '{'\n"
-        + "            t_DeleteTransactionToken.beginTransaction();\n"
-        + "            t_bInnerTransaction = true;\n"
-        + "        '}'\n\n"
-        + "        try\n"
-        + "        '{'\n"
-        + "            DataAccessManager t_DataAccessManager = DataAccessManager.getInstance();\n"
-        + "            if  (t_DataAccessManager != null)\n"
-        + "            '{'\n"
-        + "                result = true;\n\n"
-        + "{5}\n"
-        + "                if  (result)\n"
-        + "                '{'\n"
-        + "                    result =\n"
-        + "                        delete{0}(\n"
-        + "                            {4}.get{6}(),\n"
-        + "                            t_DeleteTransactionToken);\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "        '}'\n"
-        + "        catch  (final Exception exception)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).error(exception);\n"
-        + "            result = false;\n"
-        + "            if  (t_DeleteTransactionToken != null)\n"
-        + "            '{'\n"
-        + "                t_DeleteTransactionToken.setRollbackPending(true);\n"
-        + "            '}'\n"
-        + "        '}'\n"
-        + "        finally\n"
-        + "        '{'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (   (t_bInnerTransaction)\n"
-        + "                     && (t_DeleteTransactionToken != null))\n"
-        + "                '{'\n"
-        + "                    if  (   (t_DeleteTransactionToken.isRollbackPending())\n"
-        + "                         || (!result))\n"
-        + "                    '{'\n"
-        + "                        rollback(t_DeleteTransactionToken);\n"
-        + "                    '}'\n"
-        + "                    else\n"
-        + "                    '{'\n"
-        + "                        commit(t_DeleteTransactionToken);\n"
-        + "                    '}'\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "        '}'\n\n"
-        + "        return result;\n"
-        + "    '}'\n\n";
-
-    /**
-     * The delete with fk method's primary keys javadoc.
-     */
-    public static final String DEFAULT_DELETE_WITH_FK_PK_JAVADOC =
-        "\n     * @param {0} the {1} value to filter.";
-         // java pk - pk
-
-    /**
-     * The delete with fk method's primary keys declaration.
-     */
-    public static final String DEFAULT_DELETE_WITH_FK_PK_DECLARATION =
-        "        final {0}              {1},\n";
-         // pk type - java pk
-
-    /**
-     * The delete with fk methods' FK DAO delete request.
-     */
-    public static final String DEFAULT_DELETE_WITH_FK_DAO_DELETE_REQUEST =
-          "                if  (result)\n"
-        + "                '{'\n"
-        + "                    {0}DAO t_{0}DAO = t_DataAccessManager.get{0}DAO();\n\n"
-        + "                    if  (t_{0}DAO != null)\n"
-        + "                    '{'\n"
-        + "                        result =\n"
-        + "                            t_{0}DAO.delete(\n"
-        + "                                {1}.get{2}(),\n"
-        + "                                t_DeleteTransactionToken);\n"
-        + "                    '}'\n"
-        + "                    else\n"
-        + "                    '{'\n"
-        + "                        result = false;\n"
-        + "                    '}'\n"
-        + "                '}'\n"
-        + "                else\n"
-        + "                '{'\n"
-        + "                    result = false;\n"
-        + "                '}'\n";
-
-    /**
-     * The delete with fk methods' FK values.
-     */
-    public static final String DEFAULT_DELETE_WITH_FK_PK_VALUES =
-        "\n                    {0},";
+        + "    // </delete>\n\n";
 
     /**
      * The custom select template.
@@ -853,7 +545,7 @@ public interface DAOTemplateDefaults
           "    /**\n"
         + "     * Retrieves {0} entities\n"
          // result class
-        + "     * from the persistence layer matching given criteria.\n"
+        + "     * from the persistence layer matching given criteria."
         + "{1}\n"
          // CUSTOM_SELECT_PARAMETER_JAVADOC
         + "     * @param transactionToken needed to use an open connection and\n"

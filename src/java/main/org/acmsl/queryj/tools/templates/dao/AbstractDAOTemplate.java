@@ -186,29 +186,34 @@ public abstract class AbstractDAOTemplate
     private String m__strClassConstructor;
 
     /**
+     * The pk javadoc.
+     */
+    private String m__strPkJavadoc;
+
+    /**
+     * The attribute javadoc.
+     */
+    private String m__strAttributeJavadoc;
+
+    /**
+     * The attribute declaration.
+     */
+    private String m__strAttributeDeclaration;
+
+    /**
+     * The attribute filter.
+     */
+    private String m__strAttributeFilter;
+
+    /**
+     * The statement setter call.
+     */
+    private String m__strStatementSetterCall;
+
+    /**
      * The find-by-primary-key method.
      */
     private String m__strFindByPrimaryKeyMethod;
-
-    /**
-     * The find-by-primary-key pk javadoc.
-     */
-    private String m__strFindByPrimaryKeyPkJavadoc;
-
-    /**
-     * The find-by-primary-key pk declaration.
-     */
-    private String m__strFindByPrimaryKeyPkDeclaration;
-
-    /**
-     * The pk filter subtemplate.
-     */
-    private String m__strPkFilter;
-
-    /**
-     * The pk statement setter call.
-     */
-    private String m__strPkStatementSetterCall;
 
     /**
      * The insert method.
@@ -216,29 +221,9 @@ public abstract class AbstractDAOTemplate
     private String m__strInsertMethod;
 
     /**
-     * The insert parameters Javadoc.
-     */
-    private String m__strInsertParametersJavadoc;
-
-    /**
-     * The insert parameters declaration.
-     */
-    private String m__strInsertParametersDeclaration;
-
-    /**
      * The insert parameters specification.
      */
     private String m__strInsertParametersSpecification;
-
-    /**
-     * The attributes' statement setter call.
-     */
-    private String m__strAttributesStatementSetterCall;
-
-    /**
-     * The insert keyword parameters specification.
-     */
-    private String m__strInsertKeywordParametersSpecification;
 
     /**
      * The update method.
@@ -246,79 +231,14 @@ public abstract class AbstractDAOTemplate
     private String m__strUpdateMethod;
 
     /**
-     * The update parameters Javadoc.
-     */
-    private String m__strUpdateParametersJavadoc;
-
-    /**
-     * The update parameters declaration.
-     */
-    private String m__strUpdateParametersDeclaration;
-
-    /**
      * The update parameters specification.
      */
     private String m__strUpdateParametersSpecification;
 
     /**
-     * The update filter.
-     */
-    private String m__strUpdateFilter;
-
-    /**
      * The delete method.
      */
     private String m__strDeleteMethod;
-
-    /**
-     * The delete PK javadoc.
-     */
-    private String m__strDeletePkJavadoc;
-
-    /**
-     * The delete PK declaration.
-     */
-    private String m__strDeletePkDeclaration;
-
-    /**
-     * The delete PK values.
-     */
-    private String m__strDeletePkValues;
-
-    /**
-     * The delete PK filter declaration.
-     */
-    private String m__strDeleteFilterDeclaration;
-
-    /**
-     * The delete filter values.
-     */
-    private String m__strDeleteFilterValues;
-
-    /**
-     * The delete with FK method.
-     */
-    private String m__strDeleteWithFkMethod;
-
-    /**
-     * The delete with FK PK javadoc.
-     */
-    private String m__strDeleteWithFkPkJavadoc;
-
-    /**
-     * The delete with FK PK declaration.
-     */
-    private String m__strDeleteWithFkPkDeclaration;
-
-    /**
-     * The delete with FK PK DAO delete request..
-     */
-    private String m__strDeleteWithFkDAODeleteRequest;
-
-    /**
-     * The delete with FK DAO FK values.
-     */
-    private String m__strDeleteWithFkPkValues;
 
     /**
      * The custom select.
@@ -425,41 +345,19 @@ public abstract class AbstractDAOTemplate
      * @param classStart the class start.
      * @param classConstants the class' constants.
      * @param classConstructor the class constructor.
+     * @param pkJavadoc the pk javadoc subtemplate.
+     * @param attributeJavadoc the attribute javadoc subtemplate.
+     * @param attributeDeclaration the attribute declaration subtemplate.
+     * @param attributeFilter the attribute filter subtemplate.
+     * @param statementSetterCall the statement setter call subtemplate.
      * @param findByPrimaryKeyMethod the find by primary key method.
-     * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
-     * @param findByPrimaryKeyPkDeclaration the find by primary key pk
-     * declaration.
-     * @param pkFilter the PK filter subtemplate.
-     * @param pkStatementSetterCall the PK statement setter call subtemplate.
      * @param insertMethod the insert method.
-     * @param insertParametersJavadoc the javadoc of the insert method's
-     * parameters.
-     * @param insertParametersDeclaration the declaration of the insert
-     * method's parameters.
      * @param insertParametersSpecification the specification of the insert
      * method's parameters.
-     * @param attributesStatementSetterCall the attributes statement setter
-     * call subtemplate.
      * @param updateMethod the update method.
-     * @param updateParametersJavadoc the javadoc of the update method's
-     * parameters.
-     * @param updateParametersDeclaration the declaration of the update
-     * method's parameters.
      * @param updateParametersSpecification the specification of the update
      * method's parameters.
-     * @param updateFilter the update method's filter.
      * @param deleteMethod the delete method.
-     * @param deletePkJavadoc the delete PK javadoc.
-     * @param deletePkDeclaration the delete PK declaration.
-     * @param deletePkValues the delete PK values.
-     * @param deleteFilterDeclaration the delete filter declaration.
-     * @param deleteFilterValues the delete filter values.
-     * @param deleteWithFkMethod the delete method.
-     * @param deleteWithFkPkJavadoc the delete with FK PK javadoc.
-     * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
-     * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete
-     * request.
-     * @param deleteWithFkPkValues the delete with FK PK values.
      * @param customSelect the custom select template.
      * @param customSelectParameterJavadoc the Javadoc for the parameters of
      * the custom selects.
@@ -513,32 +411,17 @@ public abstract class AbstractDAOTemplate
         final String classStart,
         final String classConstants,
         final String classConstructor,
+        final String pkJavadoc,
+        final String attributeJavadoc,
+        final String attributeDeclaration,
+        final String attributeFilter,
+        final String statementSetterCall,
         final String findByPrimaryKeyMethod,
-        final String findByPrimaryKeyPkJavadoc,
-        final String findByPrimaryKeyPkDeclaration,
-        final String pkFilter,
-        final String pkStatementSetterCall,
         final String insertMethod,
-        final String insertParametersJavadoc,
-        final String insertParametersDeclaration,
         final String insertParametersSpecification,
-        final String attributesStatementSetterCall,
         final String updateMethod,
-        final String updateParametersJavadoc,
-        final String updateParametersDeclaration,
         final String updateParametersSpecification,
-        final String updateFilter,
         final String deleteMethod,
-        final String deletePkJavadoc,
-        final String deletePkDeclaration,
-        final String deletePkValues,
-        final String deleteFilterDeclaration,
-        final String deleteFilterValues,
-        final String deleteWithFkMethod,
-        final String deleteWithFkPkJavadoc,
-        final String deleteWithFkPkDeclaration,
-        final String deleteWithFkDAODeleteRequest,
-        final String deleteWithFkPkValues,
         final String customSelect,
         final String customSelectParameterJavadoc,
         final String customSelectParameterDeclaration,
@@ -625,82 +508,34 @@ public abstract class AbstractDAOTemplate
         immutableSetClassConstructor(
             classConstructor);
 
+        immutableSetPkJavadoc(pkJavadoc);
+
+        immutableSetAttributeJavadoc(attributeJavadoc);
+
+        immutableSetAttributeDeclaration(attributeDeclaration);
+
+        immutableSetAttributeFilter(attributeFilter);
+
+        immutableSetStatementSetterCall(
+            statementSetterCall);
+
         immutableSetFindByPrimaryKeyMethod(
             findByPrimaryKeyMethod);
-
-        immutableSetFindByPrimaryKeyPkJavadoc(
-            findByPrimaryKeyPkJavadoc);
-
-        immutableSetFindByPrimaryKeyPkDeclaration(
-            findByPrimaryKeyPkDeclaration);
-
-        immutableSetPkFilter(pkFilter);
-
-        immutableSetPkStatementSetterCall(
-            pkStatementSetterCall);
 
         immutableSetInsertMethod(
             insertMethod);
 
-        immutableSetInsertParametersJavadoc(
-            insertParametersJavadoc);
-
-        immutableSetInsertParametersDeclaration(
-            insertParametersDeclaration);
-
         immutableSetInsertParametersSpecification(
             insertParametersSpecification);
-
-        immutableSetAttributesStatementSetterCall(
-            attributesStatementSetterCall);
 
         immutableSetUpdateMethod(
             updateMethod);
 
-        immutableSetUpdateParametersJavadoc(
-            updateParametersJavadoc);
-
-        immutableSetUpdateParametersDeclaration(
-            updateParametersDeclaration);
-
         immutableSetUpdateParametersSpecification(
             updateParametersSpecification);
 
-        immutableSetUpdateFilter(
-            updateFilter);
-
         immutableSetDeleteMethod(
             deleteMethod);
-
-        immutableSetDeletePkJavadoc(
-            deletePkJavadoc);
-
-        immutableSetDeletePkDeclaration(
-            deletePkDeclaration);
-
-        immutableSetDeletePkValues(
-            deletePkValues);
-
-        immutableSetDeleteFilterDeclaration(
-            deleteFilterDeclaration);
-
-        immutableSetDeleteFilterValues(
-            deleteFilterValues);
-
-        immutableSetDeleteWithFkMethod(
-            deleteWithFkMethod);
-
-        immutableSetDeleteWithFkPkJavadoc(
-            deleteWithFkPkJavadoc);
-
-        immutableSetDeleteWithFkPkDeclaration(
-            deleteWithFkPkDeclaration);
-
-        immutableSetDeleteWithFkDAODeleteRequest(
-            deleteWithFkDAODeleteRequest);
-
-        immutableSetDeleteWithFkPkValues(
-            deleteWithFkPkValues);
 
         immutableSetCustomSelect(
             customSelect);
@@ -1378,6 +1213,144 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
+     * Specifies the pk Javadoc.
+     * @param pkJavadoc such javadoc.
+     */
+    private void immutableSetPkJavadoc(final String pkJavadoc)
+    {
+        m__strPkJavadoc = pkJavadoc;
+    }
+
+    /**
+     * Specifies the pk Javadoc.
+     * @param pkJavadoc such Javadoc.
+     */
+    protected void setPkJavadoc(final String pkJavadoc)
+    {
+        immutableSetPkJavadoc(pkJavadoc);
+    }
+
+    /**
+     * Retrieves the pk Javadoc.
+     * @return such Javadoc.
+     */
+    public String getPkJavadoc()
+    {
+        return m__strPkJavadoc;
+    }
+    
+    /**
+     * Specifies the attribute Javadoc.
+     * @param attributeJavadoc such javadoc.
+     */
+    private void immutableSetAttributeJavadoc(final String attributeJavadoc)
+    {
+        m__strAttributeJavadoc = attributeJavadoc;
+    }
+
+    /**
+     * Specifies the attribute Javadoc.
+     * @param attributeJavadoc such Javadoc.
+     */
+    protected void setAttributeJavadoc(final String attributeJavadoc)
+    {
+        immutableSetAttributeJavadoc(attributeJavadoc);
+    }
+
+    /**
+     * Retrieves the attribute Javadoc.
+     * @return such Javadoc.
+     */
+    public String getAttributeJavadoc()
+    {
+        return m__strAttributeJavadoc;
+    }
+    
+    
+    /**
+     * Specifies the attribute declaration.
+     * @param attributeDeclaration such declaration.
+     */
+    private void immutableSetAttributeDeclaration(final String attributeDeclaration)
+    {
+        m__strAttributeDeclaration = attributeDeclaration;
+    }
+
+    /**
+     * Specifies the attribute declaration.
+     * @param attributeDeclaration such declaration.
+     */
+    protected void setAttributeDeclaration(final String attributeDeclaration)
+    {
+        immutableSetAttributeDeclaration(attributeDeclaration);
+    }
+
+    /**
+     * Retrieves the attribute declaration.
+     * @return such declaration.
+     */
+    public String getAttributeDeclaration()
+    {
+        return m__strAttributeDeclaration;
+    }
+
+    /**
+     * Specifies the attribute filter.
+     * @param attributeFilter such subtemplate.
+     */
+    private void immutableSetAttributeFilter(
+        final String attributeFilter)
+    {
+        m__strAttributeFilter = attributeFilter;
+    }
+
+    /**
+     * Specifies the attribute filter.
+     * @param attributeFilter such subtemplate.
+     */
+    protected void setAttributeFilter(final String attributeFilter)
+    {
+        immutableSetAttributeFilter(attributeFilter);
+    }
+
+    /**
+     * Retrieves the attribute filter.
+     * @return such subtemplate.
+     */
+    public String getAttributeFilter()
+    {
+        return m__strAttributeFilter;
+    }
+
+    /**
+     * Specifies the statement setter call.
+     * @param statementSetterCall such subtemplate.
+     */
+    private void immutableSetStatementSetterCall(final String statementSetterCall)
+    {
+        m__strStatementSetterCall = statementSetterCall;
+    }
+
+    /**
+     * Specifies the statement setter call.
+     * @param statementSetterCall such subtemplate.
+     */
+    protected void setStatementSetterCall(final String statementSetterCall)
+    {
+        immutableSetStatementSetterCall(
+            statementSetterCall);
+    }
+
+    /**
+     * Retrieves the statement setter call.
+     * @return such subtemplate.
+     */
+    public String getStatementSetterCall()
+    {
+        return m__strStatementSetterCall;
+    }
+
+    /**
      * Specifies the find-by-primary-key method.
      * @param findByPrimaryKeyMethod such method.
      */
@@ -1408,126 +1381,6 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
-     * Specifies the find-by-primary-key pk Javadoc.
-     * @param findByPrimaryKeyPkJavadoc such Javadoc.
-     */
-    private void immutableSetFindByPrimaryKeyPkJavadoc(
-        final String findByPrimaryKeyPkJavadoc)
-    {
-        m__strFindByPrimaryKeyPkJavadoc = findByPrimaryKeyPkJavadoc;
-    }
-
-    /**
-     * Specifies the find-by-primary-key pk Javadoc.
-     * @param findByPrimaryKeyPkJavadoc such Javadoc.
-     */
-    protected void setFindByPrimaryKeyPkJavadoc(
-        final String findByPrimaryKeyPkJavadoc)
-    {
-        immutableSetFindByPrimaryKeyPkJavadoc(
-            findByPrimaryKeyPkJavadoc);
-    }
-
-    /**
-     * Retrieves the find-by-primary-key pk Javadoc.
-     * @return such Javadoc.
-     */
-    public String getFindByPrimaryKeyPkJavadoc()
-    {
-        return m__strFindByPrimaryKeyPkJavadoc;
-    }
-    
-    /**
-     * Specifies the find-by-primary-key pk declaration.
-     * @param findByPrimaryKeyPkDeclaration such declaration.
-     */
-    private void immutableSetFindByPrimaryKeyPkDeclaration(
-        final String findByPrimaryKeyPkDeclaration)
-    {
-        m__strFindByPrimaryKeyPkDeclaration =
-            findByPrimaryKeyPkDeclaration;
-    }
-
-    /**
-     * Specifies the find-by-primary-key pk declaration.
-     * @param findByPrimaryKeyPkDeclaration such declaration.
-     */
-    protected void setFindByPrimaryKeyPkdeclaration(
-        final String findByPrimaryKeyPkDeclaration)
-    {
-        immutableSetFindByPrimaryKeyPkDeclaration(
-            findByPrimaryKeyPkDeclaration);
-    }
-
-    /**
-     * Retrieves the find-by-primary-key pk declaration.
-     * @return such declaration.
-     */
-    public String getFindByPrimaryKeyPkDeclaration()
-    {
-        return m__strFindByPrimaryKeyPkDeclaration;
-    }
-
-    /**
-     * Specifies the pk filter.
-     * @param pkFilter such subtemplate.
-     */
-    private void immutableSetPkFilter(
-        final String pkFilter)
-    {
-        m__strPkFilter = pkFilter;
-    }
-
-    /**
-     * Specifies the pk filter.
-     * @param pkFilter such subtemplate.
-     */
-    protected void setPkFilter(final String pkFilter)
-    {
-        immutableSetPkFilter(pkFilter);
-    }
-
-    /**
-     * Retrieves the pk filter.
-     * @return such subtemplate.
-     */
-    public String getPkFilter()
-    {
-        return m__strPkFilter;
-    }
-
-    /**
-     * Specifies the pk statement setter call.
-     * @param pkStatementSetterCall such subtemplate.
-     */
-    private void immutableSetPkStatementSetterCall(
-        final String pkStatementSetterCall)
-    {
-        m__strPkStatementSetterCall =
-            pkStatementSetterCall;
-    }
-
-    /**
-     * Specifies the pk statement setter call.
-     * @param pkStatementSetterCall such subtemplate.
-     */
-    protected void setPkStatementSetterCall(
-        final String pkStatementSetterCall)
-    {
-        immutableSetPkStatementSetterCall(
-            pkStatementSetterCall);
-    }
-
-    /**
-     * Retrieves the pk statement setter call.
-     * @return such subtemplate.
-     */
-    public String getPkStatementSetterCall()
-    {
-        return m__strPkStatementSetterCall;
-    }
-
-    /**
      * Specifies the insert method.
      * @param insertMethod such method.
      */
@@ -1555,64 +1408,11 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
-     * Specifies the insert parameters Javadoc.
-     * @param javadoc such javadoc.
-     */
-    private void immutableSetInsertParametersJavadoc(final String javadoc)
-    {
-        m__strInsertParametersJavadoc = javadoc;
-    }
-
-    /**
-     * Specifies the insert parameters Javadoc.
-     * @param javadoc such javadoc.
-     */
-    protected void setInsertParametersJavadoc(final String javadoc)
-    {
-        immutableSetInsertParametersJavadoc(javadoc);
-    }
-
-    /**
-     * Retrieves the insert parameters javadoc.
-     * @return such information.
-     */
-    public String getInsertParametersJavadoc()
-    {
-        return m__strInsertParametersJavadoc;
-    }
-
-    /**
-     * Specifies the insert parameters Declaration.
-     * @param declaration such declaration.
-     */
-    private void immutableSetInsertParametersDeclaration(final String declaration)
-    {
-        m__strInsertParametersDeclaration = declaration;
-    }
-
-    /**
-     * Specifies the insert parameters Declaration.
-     * @param declaration such declaration.
-     */
-    protected void setInsertParametersDeclaration(final String declaration)
-    {
-        immutableSetInsertParametersDeclaration(declaration);
-    }
-
-    /**
-     * Retrieves the insert parameters declaration.
-     * @return such information.
-     */
-    public String getInsertParametersDeclaration()
-    {
-        return m__strInsertParametersDeclaration;
-    }
-
-    /**
      * Specifies the insert parameters Specification.
      * @param specification such specification.
      */
-    private void immutableSetInsertParametersSpecification(final String specification)
+    private void immutableSetInsertParametersSpecification(
+        final String specification)
     {
         m__strInsertParametersSpecification = specification;
     }
@@ -1633,37 +1433,6 @@ public abstract class AbstractDAOTemplate
     public String getInsertParametersSpecification()
     {
         return m__strInsertParametersSpecification;
-    }
-
-    /**
-     * Specifies the attributes statement setter call.
-     * @param attributesStatementSetterCall such subtemplate.
-     */
-    private void immutableSetAttributesStatementSetterCall(
-        final String attributesStatementSetterCall)
-    {
-        m__strAttributesStatementSetterCall =
-            attributesStatementSetterCall;
-    }
-
-    /**
-     * Specifies the attributes statement setter call.
-     * @param attributesStatementSetterCall such subtemplate.
-     */
-    protected void setAttributesStatementSetterCall(
-        final String attributesStatementSetterCall)
-    {
-        immutableSetAttributesStatementSetterCall(
-            attributesStatementSetterCall);
-    }
-
-    /**
-     * Retrieves the attributes statement setter call.
-     * @return such subtemplate.
-     */
-    public String getAttributesStatementSetterCall()
-    {
-        return m__strAttributesStatementSetterCall;
     }
 
     /**
@@ -1694,64 +1463,11 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
-     * Specifies the update parameters Javadoc.
-     * @param javadoc such javadoc.
-     */
-    private void immutableSetUpdateParametersJavadoc(final String javadoc)
-    {
-        m__strUpdateParametersJavadoc = javadoc;
-    }
-
-    /**
-     * Specifies the update parameters Javadoc.
-     * @param javadoc such javadoc.
-     */
-    protected void setUpdateParametersJavadoc(final String javadoc)
-    {
-        immutableSetUpdateParametersJavadoc(javadoc);
-    }
-
-    /**
-     * Retrieves the update parameters javadoc.
-     * @return such information.
-     */
-    public String getUpdateParametersJavadoc()
-    {
-        return m__strUpdateParametersJavadoc;
-    }
-
-    /**
-     * Specifies the update parameters Declaration.
-     * @param declaration such declaration.
-     */
-    private void immutableSetUpdateParametersDeclaration(final String declaration)
-    {
-        m__strUpdateParametersDeclaration = declaration;
-    }
-
-    /**
-     * Specifies the update parameters Declaration.
-     * @param declaration such declaration.
-     */
-    protected void setUpdateParametersDeclaration(final String declaration)
-    {
-        immutableSetUpdateParametersDeclaration(declaration);
-    }
-
-    /**
-     * Retrieves the update parameters declaration.
-     * @return such information.
-     */
-    public String getUpdateParametersDeclaration()
-    {
-        return m__strUpdateParametersDeclaration;
-    }
-
-    /**
      * Specifies the update parameters Specification.
      * @param specification such specification.
      */
-    private void immutableSetUpdateParametersSpecification(final String specification)
+    private void immutableSetUpdateParametersSpecification(
+        final String specification)
     {
         m__strUpdateParametersSpecification = specification;
     }
@@ -1772,33 +1488,6 @@ public abstract class AbstractDAOTemplate
     public String getUpdateParametersSpecification()
     {
         return m__strUpdateParametersSpecification;
-    }
-
-    /**
-     * Specifies the update filter.
-     * @param updateFilter such filter.
-     */
-    private void immutableSetUpdateFilter(final String updateFilter)
-    {
-        m__strUpdateFilter = updateFilter;
-    }
-
-    /**
-     * Specifies the update filter.
-     * @param updateFilter such filter.
-     */
-    protected void setUpdateFilter(final String updateFilter)
-    {
-        immutableSetUpdateFilter(updateFilter);
-    }
-
-    /**
-     * Retrieves the update filter.
-     * @return such filter.
-     */
-    public String getUpdateFilter()
-    {
-        return m__strUpdateFilter;
     }
 
     /**
@@ -1829,313 +1518,6 @@ public abstract class AbstractDAOTemplate
     public String getDeleteMethod()
     {
         return m__strDeleteMethod;
-    }
-
-    /**
-     * Specifies the delete pk Javadoc.
-     * @param deletePkJavadoc such Javadoc.
-     */
-    private void immutableSetDeletePkJavadoc(
-        final String deletePkJavadoc)
-    {
-        m__strDeletePkJavadoc = deletePkJavadoc;
-    }
-
-    /**
-     * Specifies the delete pk Javadoc.
-     * @param deletePkJavadoc such Javadoc.
-     */
-    protected void setDeletePkJavadoc(
-        final String deletePkJavadoc)
-    {
-        immutableSetDeletePkJavadoc(
-            deletePkJavadoc);
-    }
-
-    /**
-     * Retrieves the delete pk Javadoc.
-     * @return such Javadoc.
-     */
-    public String getDeletePkJavadoc()
-    {
-        return m__strDeletePkJavadoc;
-    }
-    
-    /**
-     * Specifies the delete pk declaration.
-     * @param deletePkDeclaration such declaration.
-     */
-    private void immutableSetDeletePkDeclaration(
-        final String deletePkDeclaration)
-    {
-        m__strDeletePkDeclaration =
-            deletePkDeclaration;
-    }
-
-    /**
-     * Specifies the delete pk declaration.
-     * @param deletePkdeclaration such declaration.
-     */
-    protected void setDeletePkdeclaration(
-        final String deletePkDeclaration)
-    {
-        immutableSetDeletePkDeclaration(
-            deletePkDeclaration);
-    }
-
-    /**
-     * Retrieves the delete pk declaration.
-     * @return such declaration.
-     */
-    public String getDeletePkDeclaration()
-    {
-        return m__strDeletePkDeclaration;
-    }
-
-    /**
-     * Specifies the delete pk values.
-     * @param deletePkValues such values.
-     */
-    private void immutableSetDeletePkValues(
-        final String deletePkValues)
-    {
-        m__strDeletePkValues =
-            deletePkValues;
-    }
-
-    /**
-     * Specifies the delete pk values.
-     * @param deletePkvalues such values.
-     */
-    protected void setDeletePkvalues(
-        final String deletePkValues)
-    {
-        immutableSetDeletePkValues(
-            deletePkValues);
-    }
-
-    /**
-     * Retrieves the delete pk values.
-     * @return such values.
-     */
-    public String getDeletePkValues()
-    {
-        return m__strDeletePkValues;
-    }
-
-    /**
-     * Specifies the delete filter declaration.
-     * @param deletePkFilterDeclaration such declaration.
-     */
-    private void immutableSetDeleteFilterDeclaration(
-        final String deleteFilterDeclaration)
-    {
-        m__strDeleteFilterDeclaration =
-            deleteFilterDeclaration;
-    }
-
-    /**
-     * Specifies the delete filter declaration.
-     * @param deleteFilterDeclaration such declaration.
-     */
-    protected void setDeleteFilterDeclaration(
-        final String deleteFilterDeclaration)
-    {
-        immutableSetDeleteFilterDeclaration(
-            deleteFilterDeclaration);
-    }
-
-    /**
-     * Retrieves the delete filter declaration.
-     * @return such declaration.
-     */
-    public String getDeleteFilterDeclaration()
-    {
-        return m__strDeleteFilterDeclaration;
-    }
-
-    /**
-     * Specifies the delete filter values.
-     * @param deleteFilterValues such values.
-     */
-    private void immutableSetDeleteFilterValues(
-        final String deleteFilterValues)
-    {
-        m__strDeleteFilterValues =
-            deleteFilterValues;
-    }
-
-    /**
-     * Specifies the delete filter values.
-     * @param deleteFilterValues such values.
-     */
-    protected void setDeleteFilterValues(
-        final String deleteFilterValues)
-    {
-        immutableSetDeleteFilterValues(
-            deleteFilterValues);
-    }
-
-    /**
-     * Retrieves the delete filter values.
-     * @return such values.
-     */
-    public String getDeleteFilterValues()
-    {
-        return m__strDeleteFilterValues;
-    }
-    
-    /**
-     * Specifies the delete with FK method.
-     * @param deleteWithFkMethod such method.
-     */
-    private void immutableSetDeleteWithFkMethod(
-        final String deleteWithFkMethod)
-    {
-        m__strDeleteWithFkMethod = deleteWithFkMethod;
-    }
-
-    /**
-     * Specifies the delete with FK method.
-     * @param deleteWithFkMethod such method.
-     */
-    protected void setDeleteWithFkMethod(
-        final String deleteWithFkMethod)
-    {
-        immutableSetDeleteWithFkMethod(
-            deleteWithFkMethod);
-    }
-
-    /**
-     * Retrieves the delete with FK method.
-     * @return such method.
-     */
-    public String getDeleteWithFkMethod()
-    {
-        return m__strDeleteWithFkMethod;
-    }
-
-    /**
-     * Specifies the delete with FK PK Javadoc.
-     * @param deleteWithFkPkJavadoc such Javadoc.
-     */
-    private void immutableSetDeleteWithFkPkJavadoc(
-        final String deleteWithFkPkJavadoc)
-    {
-        m__strDeleteWithFkPkJavadoc = deleteWithFkPkJavadoc;
-    }
-
-    /**
-     * Specifies the delete with FK PK Javadoc.
-     * @param deleteWithFkPkJavadoc such Javadoc.
-     */
-    protected void setDeleteWithFkPkJavadoc(
-        final String deleteWithFkPkJavadoc)
-    {
-        immutableSetDeleteWithFkPkJavadoc(
-            deleteWithFkPkJavadoc);
-    }
-
-    /**
-     * Retrieves the delete with FK PK Javadoc.
-     * @return such Javadoc.
-     */
-    public String getDeleteWithFkPkJavadoc()
-    {
-        return m__strDeleteWithFkPkJavadoc;
-    }
-    
-    /**
-     * Specifies the delete with FK PK declaration.
-     * @param deleteWithFkPkDeclaration such declaration.
-     */
-    private void immutableSetDeleteWithFkPkDeclaration(
-        final String deleteWithFkPkDeclaration)
-    {
-        m__strDeleteWithFkPkDeclaration =
-            deleteWithFkPkDeclaration;
-    }
-
-    /**
-     * Specifies the delete with FK PK declaration.
-     * @param deleteWithFkPkdeclaration such declaration.
-     */
-    protected void setDeleteWithFkPkdeclaration(
-        final String deleteWithFkPkDeclaration)
-    {
-        immutableSetDeleteWithFkPkDeclaration(
-            deleteWithFkPkDeclaration);
-    }
-
-    /**
-     * Retrieves the delete with FK PK declaration.
-     * @return such declaration.
-     */
-    public String getDeleteWithFkPkDeclaration()
-    {
-        return m__strDeleteWithFkPkDeclaration;
-    }
-
-    /**
-     * Specifies the delete with FK DAO delete request.
-     * @param deleteWithFkDAODeleteRequest such request.
-     */
-    private void immutableSetDeleteWithFkDAODeleteRequest(
-        final String deleteWithFkDAODeleteRequest)
-    {
-        m__strDeleteWithFkDAODeleteRequest =
-            deleteWithFkDAODeleteRequest;
-    }
-
-    /**
-     * Specifies the delete with FK DAO delete request.
-     * @param deleteWithFkDAODeleteRequest such request.
-     */
-    protected void setDeleteWithFkDAODeleteRequest(
-        final String deleteWithFkDAODeleteRequest)
-    {
-        immutableSetDeleteWithFkDAODeleteRequest(
-            deleteWithFkDAODeleteRequest);
-    }
-
-    /**
-     * Retrieves the delete with FK DAO delete request.
-     * @return such request.
-     */
-    public String getDeleteWithFkDAODeleteRequest()
-    {
-        return m__strDeleteWithFkDAODeleteRequest;
-    }
-
-    /**
-     * Specifies the delete with FK PK values.
-     * @param deleteWithFkPkValues such values.
-     */
-    private void immutableSetDeleteWithFkPkValues(
-        final String deleteWithFkPkValues)
-    {
-        m__strDeleteWithFkPkValues =
-            deleteWithFkPkValues;
-    }
-
-    /**
-     * Specifies the delete with FK PK values.
-     * @param deleteWithFkPkValues such values.
-     */
-    protected void setDeleteWithFkPkValues(
-        final String deleteWithFkPkValues)
-    {
-        immutableSetDeleteWithFkPkValues(
-            deleteWithFkPkValues);
-    }
-
-    /**
-     * Retrieves the delete with FK PK values.
-     * @return such values.
-     */
-    public String getDeleteWithFkPkValues()
-    {
-        return m__strDeleteWithFkPkValues;
     }
 
     /**
