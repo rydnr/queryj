@@ -18,7 +18,7 @@
       </p>
       <subsection name="Status">
         <p>
-          <strong>QueryJ</strong> 0.5.5b2 supports:
+          <strong>QueryJ</strong> 0.5.5 supports:
           <ul>
             <li>Value Object generation from database model,</li>
             <li>DAO interfaces generation from database model,</li>
@@ -29,6 +29,8 @@
             <li>Base DAO class generation, with transaction-aware
               logic reusable by all DAO implementations,</li>
             <li>JUnit DAO tests generation,</li>
+            <li>Mock DAO generation,</li>
+            <li>Mock DAO test generation,</li>
             <li>Table model: complete database schema, subset of it or
               a completely declared one (including column types and
               relationships),</li>
@@ -66,6 +68,16 @@
         <tr>
           <td>
             $Date$
+          </td>
+          <td>
+            Implemented <a href="${issue.url}506">506</a>, and
+            Implemented <a href="${issue.url}501">501</a>.<br/>
+            Released <b>0.5.5</b>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/09/23 07:27:13
           </td>
           <td>
             Implemented <a href="${issue.url}502">502</a>, and

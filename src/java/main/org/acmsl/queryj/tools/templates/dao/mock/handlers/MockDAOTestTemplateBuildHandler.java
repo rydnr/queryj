@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendáriz
  *
- * Description: Builds a DAO test template using database metadata.
+ * Description: Builds a Mock DAO test template using database metadata.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,7 +44,7 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.handlers;
+package org.acmsl.queryj.tools.templates.dao.mock.handlers;
 
 /*
  * Importing some project classes.
@@ -57,8 +57,8 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
+import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -80,12 +80,13 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Builds a DAO test template using database metadata.
+ * Handles the building of Mock DAO test templates using database
+ * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
+ * @version $Revision$ at $Date$
  */
-public class DAOTestTemplateBuildHandler
+public class MockDAOTestTemplateBuildHandler
     extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
@@ -96,9 +97,9 @@ public class DAOTestTemplateBuildHandler
         new TableTemplate[0];
 
     /**
-     * Creates a DAOTestTemplateBuildHandler.
+     * Creates a MockDAOTestTemplateBuildHandler.
      */
-    public DAOTestTemplateBuildHandler() {};
+    public MockDAOTestTemplateBuildHandler() {};
 
     /**
      * Handles given command.
@@ -124,67 +125,45 @@ public class DAOTestTemplateBuildHandler
                     retrieveDatabaseMetaDataManager(attributes);
 
                 String t_strPackage =
-                    retrieveDAOTestPackage(
-                        t_MetaData.getDatabaseProductName(),
-                        attributes);
+                    retrieveMockDAOTestPackage(attributes);
 
-                DAOTestTemplateGenerator t_DAOTestTemplateGenerator =
-                    DAOTestTemplateGenerator.getInstance();
+                MockDAOTestTemplateGenerator t_MockDAOTestTemplateGenerator =
+                    MockDAOTestTemplateGenerator.getInstance();
 
-                if  (   (t_MetaData                 != null)
-                     && (t_MetaDataManager          != null)
-                     && (t_DAOTestTemplateGenerator != null))
+                if  (   (t_MetaData                     != null)
+                     && (t_MetaDataManager              != null)
+                     && (t_MockDAOTestTemplateGenerator != null))
                 {
                     TableTemplate[] t_aTableTemplates =
                         retrieveTableTemplates(attributes);
 
                     if  (t_aTableTemplates != null)
                     {
-                        DAOTestTemplate[] t_aDAOTestTemplates =
-                            new DAOTestTemplate[t_aTableTemplates.length];
+                        MockDAOTestTemplate[] t_aMockDAOTestTemplates =
+                            new MockDAOTestTemplate[t_aTableTemplates.length];
 
-                        String t_strQuote =
-                            t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
+                        for  (int t_iMockDAOTestIndex = 0;
+                                  t_iMockDAOTestIndex < t_aMockDAOTestTemplates.length;
+                                  t_iMockDAOTestIndex++) 
                         {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
-                        for  (int t_iDAOTestIndex = 0;
-                                  t_iDAOTestIndex < t_aDAOTestTemplates.length;
-                                  t_iDAOTestIndex++) 
-                        {
-                            t_aDAOTestTemplates[t_iDAOTestIndex] =
-                                t_DAOTestTemplateGenerator
-                                    .createDAOTestTemplate(
-                                        t_aTableTemplates[t_iDAOTestIndex],
+                            t_aMockDAOTestTemplates[t_iMockDAOTestIndex] =
+                                t_MockDAOTestTemplateGenerator
+                                    .createMockDAOTestTemplate(
+                                        t_aTableTemplates[t_iMockDAOTestIndex],
                                         t_MetaDataManager,
                                         t_strPackage,
-                                        t_MetaData.getDatabaseProductName(),
-                                        t_MetaData.getDatabaseProductVersion(),
-                                        t_strQuote,
-                                        retrieveDAOPackage(
+                                        retrieveMockDAOPackage(
                                             t_MetaData
                                                 .getDatabaseProductName(),
                                             attributes),
-                                        retrieveValueObjectPackage(attributes),
-                                        retrieveJdbcDriver(attributes),
-                                        retrieveJdbcUrl(attributes),
-                                        retrieveJdbcUsername(attributes),
-                                        retrieveJdbcPassword(attributes));
+                                        retrieveValueObjectPackage(attributes));
 
                             storeTestTemplate(
-                                t_aDAOTestTemplates[t_iDAOTestIndex],
+                                t_aMockDAOTestTemplates[t_iMockDAOTestIndex],
                                 attributes);
                         }
 
-                        storeDAOTestTemplates(t_aDAOTestTemplates, attributes);
+                        storeMockDAOTestTemplates(t_aMockDAOTestTemplates, attributes);
                     }
                 }
             }
@@ -268,14 +247,13 @@ public class DAOTestTemplateBuildHandler
     }
 
     /**
-     * Retrieves the DAO Test's package name from the attribute map.
-     * @param engineName the engine name.
+     * Retrieves the Mock DAO Test's package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      */
-    protected String retrieveDAOTestPackage(String engineName, Map parameters)
-        throws  BuildException
+    protected String retrieveMockDAOTestPackage(final Map parameters)
+      throws  BuildException
     {
         String result = null;
 
@@ -285,22 +263,22 @@ public class DAOTestTemplateBuildHandler
              && (t_PackageUtils != null))
         {
             result =
-                t_PackageUtils.retrieveDAOTestPackage(
-                    retrieveProjectPackage(parameters),
-                    engineName);
+                t_PackageUtils.retrieveMockDAOTestPackage(
+                    retrieveProjectPackage(parameters));
         }
         
         return result;
     }
 
     /**
-     * Retrieves the DAO's package name from the attribute map.
+     * Retrieves the Mock DAO's package name from the attribute map.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      */
-    protected String retrieveDAOPackage(String engineName, Map parameters)
+    protected String retrieveMockDAOPackage(
+        final String engineName, final Map parameters)
         throws  BuildException
     {
         String result = null;
@@ -311,9 +289,8 @@ public class DAOTestTemplateBuildHandler
              && (t_PackageUtils != null))
         {
             result =
-                t_PackageUtils.retrieveDAOPackage(
-                    retrieveProjectPackage(parameters),
-                    engineName);
+                t_PackageUtils.retrieveMockDAOPackage(
+                    retrieveProjectPackage(parameters));
         }
         
         return result;
@@ -325,7 +302,7 @@ public class DAOTestTemplateBuildHandler
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      */
-    protected String retrieveValueObjectPackage(Map parameters)
+    protected String retrieveValueObjectPackage(final Map parameters)
         throws  BuildException
     {
         String result = null;
@@ -340,86 +317,6 @@ public class DAOTestTemplateBuildHandler
                     retrieveProjectPackage(parameters));
         }
         
-        return result;
-    }
-
-    /**
-     * Retrieves the JDBC driver from the attribute map.
-     * @param parameters the parameter map.
-     * @return the driver name.
-     * @throws BuildException if the driver retrieval process if faulty.
-     */
-    protected String retrieveJdbcDriver(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.JDBC_DRIVER);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the JDBC url from the attribute map.
-     * @param parameters the parameter map.
-     * @return the url name.
-     * @throws BuildException if the url retrieval process if faulty.
-     */
-    protected String retrieveJdbcUrl(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.JDBC_URL);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the JDBC username from the attribute map.
-     * @param parameters the parameter map.
-     * @return the username name.
-     * @throws BuildException if the username retrieval process if faulty.
-     */
-    protected String retrieveJdbcUsername(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.JDBC_USERNAME);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the JDBC password from the attribute map.
-     * @param parameters the parameter map.
-     * @return the password name.
-     * @throws BuildException if the password retrieval process if faulty.
-     */
-    protected String retrieveJdbcPassword(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);
-        }
-
         return result;
     }
 
@@ -444,20 +341,22 @@ public class DAOTestTemplateBuildHandler
     }
 
     /**
-     * Stores the DAO template collection in given attribute map.
-     * @param daoTestTemplates the DAO templates.
+     * Stores the Mock DAO template collection in given attribute map.
+     * @param mockDAOTestTemplates the Mock DAO templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
      */
-    protected void storeDAOTestTemplates(
-            DAOTestTemplate[] daoTestTemplates,
-            Map           parameters)
-        throws  BuildException
+    protected void storeMockDAOTestTemplates(
+        final MockDAOTestTemplate[] mockDAOTestTemplates,
+        final Map parameters)
+      throws  BuildException
     {
-        if  (   (daoTestTemplates != null)
+        if  (   (mockDAOTestTemplates != null)
              && (parameters       != null))
         {
-            parameters.put(TemplateMappingManager.DAO_TEST_TEMPLATES, daoTestTemplates);
+            parameters.put(
+                TemplateMappingManager.MOCK_DAO_TEST_TEMPLATES,
+                mockDAOTestTemplates);
         }
     }
 

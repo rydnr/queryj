@@ -306,7 +306,7 @@ public class MockDAOTestTemplateGenerator
                             .getTableTemplate()
                         .getTableName().toLowerCase(),
                         '_')
-                    + "TestDAO.java",
+                    + "DAOTest.java",
                     Project.MSG_VERBOSE);
             }
             
@@ -319,7 +319,7 @@ public class MockDAOTestTemplateGenerator
                         .getTableTemplate()
                             .getTableName().toLowerCase(),
                     '_')
-                + "DAO.java",
+                + "DAOTest.java",
                 mockDAOTestTemplate.toString());
         }
     }

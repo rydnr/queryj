@@ -716,4 +716,43 @@ public abstract class PackageUtils
     {
         return retrieveMockDAOFolder(parentFolder, packageName);
     }
+
+    /**
+     * Retrieves the package name for Mock DAO test templates.
+     * @param packageName the original package.
+     * @return the package for the associated Mock DAO tests.
+     */
+    public String retrieveMockDAOTestPackage(String packageName)
+    {
+        return "unittests." + retrieveMockDAOPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for Mock DAO test templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @return the folder in which the associated test class should be
+     * generated.
+     */
+    public File retrieveMockDAOTestFolder(
+        final File parentFolder, final String packageName)
+    {
+        File result = parentFolder;
+
+        StringUtils t_StringUtils = StringUtils.getInstance();
+
+        if  (   (result != null)
+             && (t_StringUtils != null))
+        {
+            result =
+                retrieveMockDAOFolder(
+                    new File(
+                          parentFolder.getPath()
+                        + File.separator
+                        + "unittests"),
+                    packageName);
+        }
+
+        return result;
+    }
 }

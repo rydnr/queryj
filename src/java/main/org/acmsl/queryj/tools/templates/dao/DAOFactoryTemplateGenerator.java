@@ -313,7 +313,7 @@ public class DAOFactoryTemplateGenerator
                     + template.getEngineName()
                     + t_StringUtils.capitalize(
                           template
-			      .getTableTemplate().getTableName().toLowerCase(),
+                              .getTableTemplate().getTableName().toLowerCase(),
                           '_')
                     + "DAOFactory.java",
                     template.toString());

@@ -185,10 +185,7 @@
       </question>
       <answer>
         <p>
-          QueryJ is still under development (version 0.5.4.5), and
-          therefore, it doesn't implement all features yet. However,
-          it can be used progressively whereas it supports more
-          queries or functions.
+          QueryJ is not far from reach a fully-featured version.
         </p>
       </answer>
     </faq>

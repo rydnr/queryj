@@ -58,20 +58,10 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
-import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.DAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.ConfigurationPropertiesTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOChooserTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOTestTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundle;
@@ -679,31 +669,11 @@ public class QueryJTask
 
             result.add(new KeywordRepositoryTemplateHandlerBundle());
 
-            result.add(new DAOTemplateHandlerBundle());
-
-            result.add(new DAOFactoryTemplateHandlerBundle());
+            result.add(new DAOBundle());
 
             result.add(new ValueObjectTemplateHandlerBundle());
 
             result.add(new ValueObjectFactoryTemplateHandlerBundle());
-
-            result.add(new BaseDAOTemplateHandlerBundle());
-
-            result.add(new BaseDAOFactoryTemplateHandlerBundle());
-
-            result.add(new DataAccessManagerTemplateHandlerBundle());
-
-            result.add(new DAOChooserTemplateHandlerBundle());
-
-            result.add(new ConfigurationPropertiesTemplateHandlerBundle());
-
-            result.add(new JdbcDAOTemplateHandlerBundle());
-
-            result.add(new DAOTestTemplateHandlerBundle());
-
-            result.add(new MockDAOTemplateHandlerBundle());
-
-            result.add(new MockDAOFactoryTemplateHandlerBundle());
 
             result.add(new TestSuiteTemplateHandlerBundle());
 

@@ -5,7 +5,16 @@
     <author email="jsanleandro@yahoo.es">Jose San Leandro</author>
   </properties>
   <body>
-    <release version="queryj-0_5_5b2" date="$Date$">
+    <release version="queryj-0_5_5" date="$Date$">
+      <action
+        dev="$Author$"
+        type="add"
+        due-to="Jose San Leandro"
+        due-to-email="jsanleandro@yahoo.es">
+        Mock DAO template development completed and tested.
+      </action>
+    </release>
+    <release version="queryj-0_5_5b2" date="2004/09/06 07:07:44">
       <action
         dev="$Author$"
         type="add"
