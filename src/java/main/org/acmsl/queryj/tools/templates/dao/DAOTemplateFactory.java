@@ -90,6 +90,10 @@ public interface DAOTemplateFactory
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
      * declaration.
+     * @param findByPrimaryKeyPkValues the find by primary key pk
+     * values.
+     * @param processConnectionFlags the template to process connection flags.
+     * @param restoreConnectionFlags the template to restore connection flags.
      * @param findByPrimaryKeySelectFields the find by primary key select fields.
      * @param findByPrimaryKeyFilterDeclaration the find by primary key filter
      * declaration.
@@ -112,6 +116,7 @@ public interface DAOTemplateFactory
      * @param deleteMethod the delete method.
      * @param deletePkJavadoc the delete PK javadoc.
      * @param deletePkDeclaration the delete PK declaration.
+     * @param deletePkValues the delete PK values.
      * @param deleteFilterDeclaration the delete filter declaration.
      * @param deleteFilterValues the delete filter values.
      * @param deleteWithFkMethod the delete method.
@@ -173,6 +178,9 @@ public interface DAOTemplateFactory
         final String                  findByPrimaryKeyMethod,
         final String                  findByPrimaryKeyPkJavadoc,
         final String                  findByPrimaryKeyPkDeclaration,
+        final String                  findByPrimaryKeyPkValues,
+        final String                  processConnectionFlags,
+        final String                  restoreConnectionFlags,
         final String                  findByPrimaryKeySelectFields,
         final String                  findByPrimaryKeyFilterDeclaration,
         final String                  findByPrimaryKeyFilterValues,
@@ -191,6 +199,7 @@ public interface DAOTemplateFactory
         final String                  deleteMethod,
         final String                  deletePkJavadoc,
         final String                  deletePkDeclaration,
+        final String                  deletePkValues,
         final String                  deleteFilterDeclaration,
         final String                  deleteFilterValues,
         final String                  deleteWithFkMethod,

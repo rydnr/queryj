@@ -50,12 +50,18 @@ package org.acmsl.queryj.tools.customsql;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.ConnectionFlagsElement;
+import org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
+import org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement;
+import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
+import org.acmsl.queryj.tools.customsql.StatementFlagsRefElement;
 
 /*
  * Importing some JDK classes.
@@ -81,7 +87,6 @@ public interface CustomSqlProvider
      * Resolves the parameter reference.
      * @param reference such reference.
      * @return the referenced parameter.
-     * @precondition reference != null
      */
     public ParameterElement resolveReference(
         final ParameterRefElement reference);
@@ -90,7 +95,6 @@ public interface CustomSqlProvider
      * Resolves the result reference.
      * @param reference such reference.
      * @return the referenced result.
-     * @precondition reference != null
      */
     public ResultElement resolveReference(
         final ResultRefElement reference);
@@ -99,9 +103,32 @@ public interface CustomSqlProvider
      * Resolves the property reference.
      * @param reference such reference.
      * @return the referenced property.
-     * @precondition reference != null
      */
     public PropertyElement resolveReference(
         final PropertyRefElement reference);
+
+    /**
+     * Resolves the connection-flags reference.
+     * @param reference such reference.
+     * @return the referenced property.
+     */
+    public ConnectionFlagsElement resolveReference(
+        final ConnectionFlagsRefElement reference);
+
+    /**
+     * Resolves the connection-flags reference.
+     * @param reference such reference.
+     * @return the referenced property.
+     */
+    public StatementFlagsElement resolveReference(
+        final StatementFlagsRefElement reference);
+
+    /**
+     * Resolves the statement-flags reference.
+     * @param reference such reference.
+     * @return the referenced property.
+     */
+    public ResultSetFlagsElement resolveReference(
+        final ResultSetFlagsRefElement reference);
 }
 

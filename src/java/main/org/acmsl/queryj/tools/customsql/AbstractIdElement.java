@@ -47,6 +47,11 @@
  */
 package org.acmsl.queryj.tools.customsql;
 
+/*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.customsql.IdentifiableElement;
+
 /**
  * Common parent to all <i>custom-sql</i> elements with <i>id</i>
  * attributes.
@@ -55,6 +60,7 @@ package org.acmsl.queryj.tools.customsql;
  * @version $Revision$
  */
 public abstract class AbstractIdElement
+    implements IdentifiableElement
 {
     /**
      * The <i>id</i> attribute.

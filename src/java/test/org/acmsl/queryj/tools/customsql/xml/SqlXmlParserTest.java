@@ -297,6 +297,7 @@ extends TestCase
       Collection t_cContents = t_Parser.getCollection();
       assertNotNull(t_cContents);
       assertEquals(21, t_cContents.size());
+      System.out.println(t_cContents);
     // JUnitDoclet end method parse
   }
   

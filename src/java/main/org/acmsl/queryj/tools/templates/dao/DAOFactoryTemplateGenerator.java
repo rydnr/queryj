@@ -95,7 +95,8 @@ public class DAOFactoryTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(DAOFactoryTemplateGenerator generator)
+    protected static void setReference(
+        final DAOFactoryTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }

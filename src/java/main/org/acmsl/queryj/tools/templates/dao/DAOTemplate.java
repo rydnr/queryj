@@ -98,7 +98,7 @@ import org.apache.commons.logging.LogFactory;
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class DAOTemplate
+public class DAOTemplate
 {
     /**
      * The default header.
@@ -326,6 +326,62 @@ public abstract class DAOTemplate
         + "        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException\n"
         + "    '{'\n"
+        + "        return\n"
+        + "            findByPrimaryKey("
+        + "{4}\n"
+         // FIND_BY_PRIMARY_KEY_PK_VALUES
+        + "                transactionToken,\n"
+        + "                QueryFactory.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Loads {0} information from the persistence layer filtering\n"
+         // table name
+        + "     * by its primary keys."
+        + "{1}\n"
+         // FIND_BY_PRIMARY_KEY_PK_JAVADOC
+        + "     * @param transactionToken needed to use an open connection and\n"
+        + "     * see previously uncommited inserts/updates/deletes.\n"
+        + "     * @param queryFactory the QueryFactory instance.\n"
+        + "     * @return the information extracted from the persistence layer.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     * @precondition queryFactory != null\n"
+        + "     */\n"
+        + "    public {2}ValueObject findByPrimaryKey("
+         // java table name
+        + "{3}\n"
+         // FIND_BY_PRIMARY_KEY_PK_DECLARATION
+        + "        final TransactionToken transactionToken,\n"
+        + "        final QueryFactory queryFactory)\n"
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
+        + "        return\n"
+        + "            findByPrimaryKey("
+        + "{4}\n"
+         // FIND_BY_PRIMARY_KEY_PK_VALUES
+        + "                transactionToken,\n"
+        + "                queryFactory.createSelectQuery());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Loads {0} information from the persistence layer filtering\n"
+         // table name
+        + "     * by its primary keys."
+        + "{1}\n"
+         // FIND_BY_PRIMARY_KEY_PK_JAVADOC
+        + "     * @param transactionToken needed to use an open connection and\n"
+        + "     * see previously uncommited inserts/updates/deletes.\n"
+        + "     * @param query the SelectQuery instance.\n"
+        + "     * @return the information extracted from the persistence layer.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     * @precondition query != null\n"
+        + "     */\n"
+        + "    public {2}ValueObject findByPrimaryKey("
+         // java table name
+        + "{3}\n"
+         // FIND_BY_PRIMARY_KEY_PK_DECLARATION
+        + "        final TransactionToken transactionToken,\n"
+        + "        final SelectQuery query)\n"
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
         + "        {2}ValueObject result = null;\n\n"
          // java table name
         + "        Connection        t_Connection        = null;\n"
@@ -333,27 +389,28 @@ public abstract class DAOTemplate
         + "        try\n"
         + "        '{'\n"
         + "            t_Connection = getConnection(transactionToken);\n\n"
-        + "            QueryFactory t_QueryFactory = QueryFactory.getInstance();\n\n"
-        + "            if  (   (t_Connection   != null)\n"
-        + "                 && (t_QueryFactory != null))\n"
+        + "            if  (t_Connection != null)\n"
         + "            '{'\n"
-        + "                SelectQuery t_Query = t_QueryFactory.createSelectQuery();\n\n"
-        + "{4}"
+        + "{5}\n"
+         // conditionally process connection flags
+        + "{6}"
          // FIND_BY_PRIMARY_KEY_SELECT_FIELDS
-        + "                t_Query.from({5}.{6});\n\n"
+        + "                query.from({7}.{8});\n\n"
          // table repository name - table name
-        + "{7}"
+        + "{9}"
          // FIND_BY_PRIMARY_KEY_PK_FILTER_DECLARATION
-        + "{8}"
+        + "{10}"
          // FIND_BY_PRIMARY_KEY_PK_FILTER_VALUES
-        + "                t_PreparedStatement = t_Query.prepareStatement(t_Connection);\n\n"
-        + "                QueryResultSet t_Results = t_Query.retrieveMatchingResults();\n\n"
+        + "                t_PreparedStatement = query.prepareStatement(t_Connection);\n\n"
+        + "                QueryResultSet t_Results = query.retrieveMatchingResults();\n\n"
         + "                if  (   (t_Results != null)\n"
         + "                     && (t_Results.next()))\n"
         + "                '{'\n"
         + "                    result = build{2}(t_Results);\n\n"
         + "                    t_Results.close();\n"
-        + "                '}'\n"
+        + "                '}'\n\n"
+        + "{11}"
+         // conditionally restore connection flags
         + "            '}'\n"
         + "        '}'\n"
         + "        catch  (final SQLException sqlException)\n"
@@ -400,10 +457,33 @@ public abstract class DAOTemplate
          // pk type - java pk
 
     /**
+     * The find-by-primary-key method's primary keys values.
+     */
+    public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_VALUES =
+        "\n                {0},";
+         // java pk
+
+    /**
+     * The conditionally process of the connection flags.
+     */
+    public static final String DEFAULT_PROCESS_CONNECTION_FLAGS =
+          "                int t_iPreviousTransactionIsolation =\n"
+        + "                    t_Connection.getTransactionIsolation();\n\n"
+        + "                t_Connection.setTransactionIsolation(\n"
+        + "                    Connection.{0});\n";
+
+    /**
+     * The conditionally restore of the connection flags.
+     */
+    public static final String DEFAULT_RESTORE_CONNECTION_FLAGS =
+          "                t_Connection.setTransactionIsolation(\n"
+        + "                    t_iPreviousTransactionIsolation);\n";
+
+    /**
      * The find-by-primary-key method's select fields.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_SELECT_FIELDS =
-        "                t_Query.select({0}.{1}.{2});\n";
+        "                query.select({0}.{1}.{2});\n";
          // table repository name - table name - field name
 
     /**
@@ -431,7 +511,7 @@ public abstract class DAOTemplate
      * The find-by-primary-key method's filter values.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_FILTER_VALUES =
-          "                t_Query.where(\n"
+          "                query.where(\n"
         + "                    {1}.{2}.{3}.equals({4}));\n\n";
          // table repository name - table name - field name - value
 
@@ -699,26 +779,81 @@ public abstract class DAOTemplate
         + "\n        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException\n"
         + "    '{'\n"
+        + "        return\n"
+        + "            delete{8}("
+        + "{9}\n"
+         // DELETE_PK_VALUES
+        + "                transactionToken,\n"
+        + "                QueryFactory.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Deletes {0} information from the persistence layer filtering\n"
+         // table name
+        + "     * by its primary keys."
+        + "{1}\n"
+         // DELETE_PK_JAVADOC
+        + "     * @param transactionToken needed to use an open connection and\n"
+        + "     * see previously uncommited inserts/updates/deletes.\n"
+        + "     * @param queryFactory the QueryFactory instance.\n"
+        + "     * @return <code>true</code> if the information has been deleted\n"
+        + "     * successfully.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     * @precondition queryFactory != null\n"
+        + "     */\n"
+        + "    {7} boolean delete{8}("
+         // java table name
+        + "{2}\n"
+         // DELETE_PK_DECLARATION
+        + "        final TransactionToken transactionToken,\n"
+        + "        final QueryFactory queryFactory)\n"
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
+        + "        return\n"
+        + "            delete{8}("
+        + "{9}\n"
+         // DELETE_PK_VALUES
+        + "                transactionToken,\n"
+        + "                queryFactory.createDeleteQuery());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Deletes {0} information from the persistence layer filtering\n"
+         // table name
+        + "     * by its primary keys."
+        + "{1}\n"
+         // DELETE_PK_JAVADOC
+        + "     * @param transactionToken needed to use an open connection and\n"
+        + "     * see previously uncommited inserts/updates/deletes.\n"
+        + "     * @param query the delete query.\n"
+        + "     * @return <code>true</code> if the information has been deleted\n"
+        + "     * successfully.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     * @precondition query != null\n"
+        + "     */\n"
+        + "    {7} boolean delete{8}("
+         // java table name
+        + "{2}\n"
+         // DELETE_PK_DECLARATION
+        + "        final TransactionToken transactionToken,\n"
+        + "        final DeleteQuery query)\n"
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
         + "        boolean result = false;\n\n"
         + "        Connection        t_Connection        = null;\n"
         + "        PreparedStatement t_PreparedStatement = null;\n\n"
         + "        try\n"
         + "        '{'\n"
         + "            t_Connection = getConnection(transactionToken);\n\n"
-        + "            QueryFactory t_QueryFactory = QueryFactory.getInstance();\n\n"
-        + "            if  (   (t_Connection   != null)\n"
-        + "                 && (t_QueryFactory != null))\n"
+        + "            if  (t_Connection != null)\n"
         + "            '{'\n"
-        + "                DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();\n\n"
-        + "                t_Query.deleteFrom({3}.{4});\n\n"
+        + "                query.deleteFrom({3}.{4});\n\n"
          // table repository name - table name
         + "{5}"
 
          // DELETE_PK_FILTER_DECLARATION
-        + "                t_PreparedStatement = t_Query.prepareStatement(t_Connection);\n\n"
+        + "                t_PreparedStatement = query.prepareStatement(t_Connection);\n\n"
         + "{6}"
          // DELETE_PK_FILTER_VALUES
-        + "                t_PreparedStatement = t_Query.prepareStatement(t_Connection);\n"
+        + "                t_PreparedStatement = query.prepareStatement(t_Connection);\n"
         + "                t_PreparedStatement.executeUpdate();\n\n"
         + "                result = true;\n"
         + "            '}'\n"
@@ -765,6 +900,12 @@ public abstract class DAOTemplate
     public static final String DEFAULT_DELETE_PK_DECLARATION =
         "        final {0}              {1},\n";
          // pk type - java pk
+
+    /**
+     * The delete method's primary keys declaration.
+     */
+    public static final String DEFAULT_DELETE_PK_VALUES =
+        DEFAULT_FIND_BY_PRIMARY_KEY_PK_VALUES;
 
     /**
      * The delete method's filter declaration.
@@ -1174,30 +1315,6 @@ public abstract class DAOTemplate
         + "        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException\n"
         + "    '{'\n"
-        + "        return\n"
-        + "            {2}("
-        + "{8},\n"
-         // CUSTOM_SELECT_FOR_UPDATE_PARAMETER_REDIRECTION
-        + "                new {9}({8}),\n"
-        + "                transactionToken);\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Performs the <i>{0}</i> operation.\n"
-         // sql id
-        + "{1}\n"
-         // CUSTOM_SELECT_PARAMETER_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @return the information extracted from the persistence layer.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
-        + "     */\n"
-        + "    public {0} {2}("
-         // result class - sql name
-        + "{3}\n"
-         // CUSTOM_SELECT_PARAMETER_DECLARATION
-        + "        final TransactionToken transactionToken)\n"
-        + "      throws DataAccessException\n"
-        + "    '{'\n"
         + "        {0} result = null;\n\n"
          // java table name
         + "        Connection        t_Connection        = null;\n"
@@ -1426,6 +1543,21 @@ public abstract class DAOTemplate
     private String m__strFindByPrimaryKeyPkDeclaration;
 
     /**
+     * The find-by-primary-key pk values.
+     */
+    private String m__strFindByPrimaryKeyPkValues;
+
+    /**
+     * The process-connection-flags template.
+     */
+    private String m__strProcessConnectionFlags;
+
+    /**
+     * The restore-connection-flags template.
+     */
+    private String m__strRestoreConnectionFlags;
+
+    /**
      * The find-by-primary-key select fields.
      */
     private String m__strFindByPrimaryKeySelectFields;
@@ -1514,6 +1646,11 @@ public abstract class DAOTemplate
      * The delete PK declaration.
      */
     private String m__strDeletePkDeclaration;
+
+    /**
+     * The delete PK values.
+     */
+    private String m__strDeletePkValues;
 
     /**
      * The delete PK filter declaration.
@@ -1657,6 +1794,12 @@ public abstract class DAOTemplate
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
      * declaration.
+     * @param findByPrimaryKeyPkValues the find by primary key pk
+     * values.
+     * @param processConnectionFlags the <i>process connection flags</i>
+     * template.
+     * @param restoreConnectionFlags the <i>restore connection flags</i>
+     * template.
      * @param findByPrimaryKeySelectFields the find by primary key select
      * fields.
      * @param findByPrimaryKeyFilterDeclaration the find by primary key filter
@@ -1686,6 +1829,7 @@ public abstract class DAOTemplate
      * @param deleteMethod the delete method.
      * @param deletePkJavadoc the delete PK javadoc.
      * @param deletePkDeclaration the delete PK declaration.
+     * @param deletePkValues the delete PK values.
      * @param deleteFilterDeclaration the delete filter declaration.
      * @param deleteFilterValues the delete filter values.
      * @param deleteWithFkMethod the delete method.
@@ -1748,6 +1892,9 @@ public abstract class DAOTemplate
         final String                  findByPrimaryKeyMethod,
         final String                  findByPrimaryKeyPkJavadoc,
         final String                  findByPrimaryKeyPkDeclaration,
+        final String                  findByPrimaryKeyPkValues,
+        final String                  processConnectionFlags,
+        final String                  restoreConnectionFlags,
         final String                  findByPrimaryKeySelectFields,
         final String                  findByPrimaryKeyFilterDeclaration,
         final String                  findByPrimaryKeyFilterValues,
@@ -1766,6 +1913,7 @@ public abstract class DAOTemplate
         final String                  deleteMethod,
         final String                  deletePkJavadoc,
         final String                  deletePkDeclaration,
+        final String                  deletePkValues,
         final String                  deleteFilterDeclaration,
         final String                  deleteFilterValues,
         final String                  deleteWithFkMethod,
@@ -1862,6 +2010,15 @@ public abstract class DAOTemplate
         immutableSetFindByPrimaryKeyPkDeclaration(
             findByPrimaryKeyPkDeclaration);
 
+        immutableSetFindByPrimaryKeyPkValues(
+            findByPrimaryKeyPkValues);
+
+        immutableSetProcessConnectionFlags(
+            processConnectionFlags);
+
+        immutableSetRestoreConnectionFlags(
+            restoreConnectionFlags);
+
         immutableSetFindByPrimaryKeySelectFields(
             findByPrimaryKeySelectFields);
 
@@ -1915,6 +2072,9 @@ public abstract class DAOTemplate
 
         immutableSetDeletePkDeclaration(
             deletePkDeclaration);
+
+        immutableSetDeletePkValues(
+            deletePkValues);
 
         immutableSetDeleteFilterDeclaration(
             deleteFilterDeclaration);
@@ -2034,6 +2194,9 @@ public abstract class DAOTemplate
             DEFAULT_FIND_BY_PRIMARY_KEY_METHOD,
             DEFAULT_FIND_BY_PRIMARY_KEY_PK_JAVADOC,
             DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION,
+            DEFAULT_FIND_BY_PRIMARY_KEY_PK_VALUES,
+            DEFAULT_PROCESS_CONNECTION_FLAGS,
+            DEFAULT_RESTORE_CONNECTION_FLAGS,
             DEFAULT_FIND_BY_PRIMARY_KEY_SELECT_FIELDS,
             DEFAULT_FIND_BY_PRIMARY_KEY_FILTER_DECLARATION,
             DEFAULT_FIND_BY_PRIMARY_KEY_FILTER_VALUES,
@@ -2052,6 +2215,7 @@ public abstract class DAOTemplate
             DEFAULT_DELETE_METHOD,
             DEFAULT_DELETE_PK_JAVADOC,
             DEFAULT_DELETE_PK_DECLARATION,
+            DEFAULT_DELETE_PK_VALUES,
             DEFAULT_DELETE_FILTER_DECLARATION,
             DEFAULT_DELETE_FILTER_VALUES,
             DEFAULT_DELETE_WITH_FK_METHOD,
@@ -2741,6 +2905,91 @@ public abstract class DAOTemplate
     }
 
     /**
+     * Specifies the find-by-primary-key pk values.
+     * @param findByPrimaryKeyPkValues such values.
+     */
+    private void immutableSetFindByPrimaryKeyPkValues(
+        String findByPrimaryKeyPkValues)
+    {
+        m__strFindByPrimaryKeyPkValues =
+            findByPrimaryKeyPkValues;
+    }
+
+    /**
+     * Specifies the find-by-primary-key pk values.
+     * @param findByPrimaryKeyPkValues such values.
+     */
+    protected void setFindByPrimaryKeyPkvalues(
+        String findByPrimaryKeyPkValues)
+    {
+        immutableSetFindByPrimaryKeyPkValues(
+            findByPrimaryKeyPkValues);
+    }
+
+    /**
+     * Retrieves the find-by-primary-key pk values.
+     * @return such values.
+     */
+    public String getFindByPrimaryKeyPkValues()
+    {
+        return m__strFindByPrimaryKeyPkValues;
+    }
+
+    /**
+     * Specifies the connection flags process template.
+     * @param template such template.
+     */
+    private void immutableSetProcessConnectionFlags(final String template)
+    {
+        m__strProcessConnectionFlags = template;
+    }
+
+    /**
+     * Specifies the connection flags process template.
+     * @param template such template.
+     */
+    protected void setProcessConnectionFlags(final String template)
+    {
+        immutableSetProcessConnectionFlags(template);
+    }
+
+    /**
+     * Retrieves the connection flags process template
+     * @return such information.
+     */
+    public String getProcessConnectionFlags() 
+    {
+        return m__strProcessConnectionFlags;
+    }
+
+    /**
+     * Specifies the connection flags restore template.
+     * @param template such template.
+     */
+    private void immutableSetRestoreConnectionFlags(final String template)
+    {
+        m__strRestoreConnectionFlags = template;
+    }
+
+    /**
+     * Specifies the connection flags restore template.
+     * @param template such template.
+     */
+    protected void setRestoreConnectionFlags(final String template)
+    {
+        immutableSetRestoreConnectionFlags(template);
+    }
+
+    /**
+     * Retrieves the connection flags restore template
+     * @return such information.
+     */
+    public String getRestoreConnectionFlags() 
+    {
+        return m__strRestoreConnectionFlags;
+    }
+
+    /**
      * Specifies the find-by-primary-key select fields.
      * @param findByPrimaryKeySelectFields such fields.
      */
@@ -3253,6 +3502,37 @@ public abstract class DAOTemplate
     public String getDeletePkDeclaration()
     {
         return m__strDeletePkDeclaration;
+    }
+
+    /**
+     * Specifies the delete pk values.
+     * @param deletePkValues such values.
+     */
+    private void immutableSetDeletePkValues(
+        String deletePkValues)
+    {
+        m__strDeletePkValues =
+            deletePkValues;
+    }
+
+    /**
+     * Specifies the delete pk values.
+     * @param deletePkvalues such values.
+     */
+    protected void setDeletePkvalues(
+        String deletePkValues)
+    {
+        immutableSetDeletePkValues(
+            deletePkValues);
+    }
+
+    /**
+     * Retrieves the delete pk values.
+     * @return such values.
+     */
+    public String getDeletePkValues()
+    {
+        return m__strDeletePkValues;
     }
 
     /**
@@ -3939,616 +4219,678 @@ public abstract class DAOTemplate
      */
     public String toString()
     {
+        return
+            toString(
+                getTableTemplate(),
+                getMetaDataManager(),
+                MetaDataUtils.getInstance(),
+                StringUtils.getInstance(),
+                PackageUtils.getInstance(),
+                StringValidator.getInstance(),
+                EnglishGrammarUtils.getInstance(),
+                DAOTemplateUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the source code generated by this template.
+     * @param tableTemplate the table template.
+     * @param metaDataManager the MetaDataManager instance.
+     * @param metaDataUtils the MetaDataUtils instance.
+     * @param stringUtils the StringUtils instance.
+     * @param packageUtils the PackageUtils instance.
+     * @param stringValidator the StringValidator instance.
+     * @param englishGrammarUtils the EnglishGrammarUtils instance.
+     * @param daoTemplateUtils the DAOTemplateUtils instance.
+     * @return such code.
+     * @precondition tableTemplate != null
+     * @precondition metaDataManager != null
+     * @precondition metaDataUtils != null
+     * @precondition stringUtils != null
+     * @precondition packageUtils != null
+     * @precondition stringValidator != null
+     * @precondition englishGrammarUtils != null
+     * @precondition daoTemplateUtils != null
+     */
+    protected String toString(
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final MetaDataUtils metaDataUtils,
+        final StringUtils stringUtils,
+        final PackageUtils packageUtils,
+        final StringValidator stringValidator,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final DAOTemplateUtils daoTemplateUtils)
+    {
         StringBuffer t_sbResult = new StringBuffer();
 
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
-        StringUtils t_StringUtils = StringUtils.getInstance();
+        String t_strRepositoryName =
+            stringUtils.capitalize(
+                getRepositoryName(),
+                '_');
 
-        StringValidator t_StringValidator = StringValidator.getInstance();
+        MessageFormat t_HeaderFormatter = new MessageFormat(getHeader());
 
-        MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
+        MessageFormat t_PackageDeclarationFormatter =
+            new MessageFormat(getPackageDeclaration());
 
-        TableTemplate t_TableTemplate = getTableTemplate();
+        MessageFormat t_ProjectImportFormatter =
+            new MessageFormat(getProjectImports());
 
-        DatabaseMetaDataManager t_MetaDataManager = getMetaDataManager();
+        MessageFormat t_ForeignDAOImportsFormatter =
+            new MessageFormat(getForeignDAOImports());
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        MessageFormat t_JavadocFormatter = new MessageFormat(getJavadoc());
 
-        if  (   (t_TableTemplate   != null)
-             && (t_MetaDataManager != null)
-             && (t_MetaDataUtils   != null)
-             && (t_StringUtils     != null)
-             && (t_PackageUtils    != null))
+        MessageFormat t_ClassDefinitionFormatter =
+            new MessageFormat(getClassDefinition());
+
+        MessageFormat t_ClassConstructorFormatter =
+            new MessageFormat(getClassConstructor());
+
+        MessageFormat t_FindByPrimaryKeyFormatter =
+            new MessageFormat(getFindByPrimaryKeyMethod());
+
+        MessageFormat t_FindByPrimaryKeyPkJavadocFormatter =
+            new MessageFormat(getFindByPrimaryKeyPkJavadoc());
+
+        MessageFormat t_FindByPrimaryKeyPkDeclarationFormatter =
+            new MessageFormat(getFindByPrimaryKeyPkDeclaration());
+
+        MessageFormat t_FindByPrimaryKeyPkValuesFormatter =
+            new MessageFormat(getFindByPrimaryKeyPkValues());
+
+        MessageFormat t_FindByPrimaryKeySelectFieldsFormatter =
+            new MessageFormat(getFindByPrimaryKeySelectFields());
+
+        MessageFormat t_FindByPrimaryKeyFilterDeclarationFormatter =
+            new MessageFormat(getFindByPrimaryKeyFilterDeclaration());
+
+        MessageFormat t_FindByPrimaryKeyFilterValuesFormatter =
+            new MessageFormat(getFindByPrimaryKeyFilterValues());
+
+        MessageFormat t_BuildValueObjectMethodFormatter =
+            new MessageFormat(getBuildValueObjectMethod());
+
+        MessageFormat t_BuildValueObjectValueRetrievalFormatter =
+            new MessageFormat(getBuildValueObjectValueRetrieval());
+
+        MessageFormat t_InsertMethodFormatter =
+            new MessageFormat(getInsertMethod());
+
+        MessageFormat t_InsertParametersJavadocFormatter =
+            new MessageFormat(getInsertParametersJavadoc());
+
+        MessageFormat t_InsertParametersDeclarationFormatter =
+            new MessageFormat(getInsertParametersDeclaration());
+
+        MessageFormat t_InsertParametersSpecificationFormatter =
+            new MessageFormat(getInsertParametersSpecification());
+
+        MessageFormat t_InsertKeywordParametersSpecificationFormatter =
+            new MessageFormat(getInsertKeywordParametersSpecification());
+
+        MessageFormat t_UpdateMethodFormatter =
+            new MessageFormat(getUpdateMethod());
+
+        MessageFormat t_UpdateParametersJavadocFormatter =
+            new MessageFormat(getUpdateParametersJavadoc());
+
+        MessageFormat t_UpdateParametersDeclarationFormatter =
+            new MessageFormat(getUpdateParametersDeclaration());
+
+        MessageFormat t_UpdateParametersSpecificationFormatter =
+            new MessageFormat(getUpdateParametersSpecification());
+
+        MessageFormat t_UpdateFilterFormatter =
+            new MessageFormat(getUpdateFilter());
+
+        MessageFormat t_DeleteMethodFormatter =
+            new MessageFormat(getDeleteMethod());
+
+        MessageFormat t_DeleteWithFkMethodFormatter =
+            new MessageFormat(getDeleteWithFkMethod());
+
+        MessageFormat t_DeleteWithFkPkJavadocFormatter =
+            new MessageFormat(getDeleteWithFkPkJavadoc());
+
+        MessageFormat t_DeleteWithFkPkDeclarationFormatter =
+            new MessageFormat(getDeleteWithFkPkDeclaration());
+
+        MessageFormat t_DeleteWithFkDAODeleteRequestFormatter =
+            new MessageFormat(getDeleteWithFkDAODeleteRequest());
+
+        MessageFormat t_DeleteWithFkPkValuesFormatter =
+            new MessageFormat(getDeleteWithFkPkValues());
+
+        StringBuffer t_sbForeignDAOImports = new StringBuffer();
+        StringBuffer t_sbPkJavadoc = new StringBuffer();
+        StringBuffer t_sbPkDeclaration = new StringBuffer();
+        StringBuffer t_sbPkValues = new StringBuffer();
+        StringBuffer t_sbProcessConnectionFlags = new StringBuffer();
+        StringBuffer t_sbUpdateFilter = new StringBuffer();
+        StringBuffer t_sbDeleteMethod = new StringBuffer();
+        StringBuffer t_sbSelectFields = new StringBuffer();
+        StringBuffer t_sbFilterDeclaration = new StringBuffer();
+        StringBuffer t_sbFilterValues = new StringBuffer();
+        StringBuffer t_sbDeleteWithFkPkValues = new StringBuffer();
+        StringBuffer t_sbDeleteWithFkPkValuesDeleteRequest = new StringBuffer();
+
+        StringBuffer t_sbDeleteWithFkMethod = new StringBuffer();
+        StringBuffer t_sbDeleteWithFkPkJavadoc = new StringBuffer();
+        StringBuffer t_sbDeleteWithFkPkDeclaration = new StringBuffer();
+        StringBuffer t_sbDeleteWithFkDAODeleteRequest = new StringBuffer();
+        StringBuffer t_sbDeleteWithFkDAOFkValues = new StringBuffer();
+
+        StringBuffer t_sbBuildValueObjectRetrieval     = new StringBuffer();
+        StringBuffer t_sbInsertParametersJavadoc       = new StringBuffer();
+        StringBuffer t_sbInsertParametersDeclaration   = new StringBuffer();
+        StringBuffer t_sbInsertParametersSpecification = new StringBuffer();
+        StringBuffer t_sbUpdateParametersJavadoc       = new StringBuffer();
+        StringBuffer t_sbUpdateParametersDeclaration   = new StringBuffer();
+        StringBuffer t_sbUpdateParametersSpecification = new StringBuffer();
+
+        String t_strDeleteMethodModifier = "public";
+        String t_strDeleteMethodSuffix = "";
+
+        CustomSqlProvider t_CustomSqlProvider = getCustomSqlProvider();
+
+        if  (t_CustomSqlProvider != null)
         {
-            String t_strRepositoryName =
-                t_StringUtils.capitalize(
-                    getRepositoryName(),
-                    '_');
+            String[] t_astrConnectionFlags =
+                daoTemplateUtils.retrieveConnectionFlagsForFindByPrimaryKeyOperation(
+                    t_CustomSqlProvider);
 
-            MessageFormat t_HeaderFormatter = new MessageFormat(getHeader());
-
-            MessageFormat t_PackageDeclarationFormatter =
-                new MessageFormat(getPackageDeclaration());
-
-            MessageFormat t_ProjectImportFormatter =
-                new MessageFormat(getProjectImports());
-
-            MessageFormat t_ForeignDAOImportsFormatter =
-                new MessageFormat(getForeignDAOImports());
-
-            MessageFormat t_JavadocFormatter = new MessageFormat(getJavadoc());
-
-            MessageFormat t_ClassDefinitionFormatter =
-                new MessageFormat(getClassDefinition());
-
-            MessageFormat t_ClassConstructorFormatter =
-                new MessageFormat(getClassConstructor());
-
-            MessageFormat t_FindByPrimaryKeyFormatter =
-                new MessageFormat(getFindByPrimaryKeyMethod());
-
-            MessageFormat t_FindByPrimaryKeyPkJavadocFormatter =
-                new MessageFormat(getFindByPrimaryKeyPkJavadoc());
-
-            MessageFormat t_FindByPrimaryKeyPkDeclarationFormatter =
-                new MessageFormat(getFindByPrimaryKeyPkDeclaration());
-
-            MessageFormat t_FindByPrimaryKeySelectFieldsFormatter =
-                new MessageFormat(getFindByPrimaryKeySelectFields());
-
-            MessageFormat t_FindByPrimaryKeyFilterDeclarationFormatter =
-                new MessageFormat(getFindByPrimaryKeyFilterDeclaration());
-
-            MessageFormat t_FindByPrimaryKeyFilterValuesFormatter =
-                new MessageFormat(getFindByPrimaryKeyFilterValues());
-
-            MessageFormat t_BuildValueObjectMethodFormatter =
-                new MessageFormat(getBuildValueObjectMethod());
-
-            MessageFormat t_BuildValueObjectValueRetrievalFormatter =
-                new MessageFormat(getBuildValueObjectValueRetrieval());
-
-            MessageFormat t_InsertMethodFormatter =
-                new MessageFormat(getInsertMethod());
-
-            MessageFormat t_InsertParametersJavadocFormatter =
-                new MessageFormat(getInsertParametersJavadoc());
-
-            MessageFormat t_InsertParametersDeclarationFormatter =
-                new MessageFormat(getInsertParametersDeclaration());
-
-            MessageFormat t_InsertParametersSpecificationFormatter =
-                new MessageFormat(getInsertParametersSpecification());
-
-            MessageFormat t_InsertKeywordParametersSpecificationFormatter =
-                new MessageFormat(getInsertKeywordParametersSpecification());
-
-            MessageFormat t_UpdateMethodFormatter =
-                new MessageFormat(getUpdateMethod());
-
-            MessageFormat t_UpdateParametersJavadocFormatter =
-                new MessageFormat(getUpdateParametersJavadoc());
-
-            MessageFormat t_UpdateParametersDeclarationFormatter =
-                new MessageFormat(getUpdateParametersDeclaration());
-
-            MessageFormat t_UpdateParametersSpecificationFormatter =
-                new MessageFormat(getUpdateParametersSpecification());
-
-            MessageFormat t_UpdateFilterFormatter =
-                new MessageFormat(getUpdateFilter());
-
-            MessageFormat t_DeleteMethodFormatter =
-                new MessageFormat(getDeleteMethod());
-
-            MessageFormat t_DeleteWithFkMethodFormatter =
-                new MessageFormat(getDeleteWithFkMethod());
-
-            MessageFormat t_DeleteWithFkPkJavadocFormatter =
-                new MessageFormat(getDeleteWithFkPkJavadoc());
-
-            MessageFormat t_DeleteWithFkPkDeclarationFormatter =
-                new MessageFormat(getDeleteWithFkPkDeclaration());
-
-            MessageFormat t_DeleteWithFkDAODeleteRequestFormatter =
-                new MessageFormat(getDeleteWithFkDAODeleteRequest());
-
-            MessageFormat t_DeleteWithFkPkValuesFormatter =
-                new MessageFormat(getDeleteWithFkPkValues());
-
-            StringBuffer t_sbForeignDAOImports = new StringBuffer();
-            StringBuffer t_sbPkJavadoc = new StringBuffer();
-            StringBuffer t_sbPkDeclaration = new StringBuffer();
-            StringBuffer t_sbUpdateFilter = new StringBuffer();
-            StringBuffer t_sbDeleteMethod = new StringBuffer();
-            StringBuffer t_sbSelectFields = new StringBuffer();
-            StringBuffer t_sbFilterDeclaration = new StringBuffer();
-            StringBuffer t_sbFilterValues = new StringBuffer();
-            StringBuffer t_sbDeleteWithFkPkValues = new StringBuffer();
-            StringBuffer t_sbDeleteWithFkPkValuesDeleteRequest = new StringBuffer();
-
-            StringBuffer t_sbDeleteWithFkMethod = new StringBuffer();
-            StringBuffer t_sbDeleteWithFkPkJavadoc = new StringBuffer();
-            StringBuffer t_sbDeleteWithFkPkDeclaration = new StringBuffer();
-            StringBuffer t_sbDeleteWithFkDAODeleteRequest = new StringBuffer();
-            StringBuffer t_sbDeleteWithFkDAOFkValues = new StringBuffer();
-
-            StringBuffer t_sbBuildValueObjectRetrieval     = new StringBuffer();
-            StringBuffer t_sbInsertParametersJavadoc       = new StringBuffer();
-            StringBuffer t_sbInsertParametersDeclaration   = new StringBuffer();
-            StringBuffer t_sbInsertParametersSpecification = new StringBuffer();
-            StringBuffer t_sbUpdateParametersJavadoc       = new StringBuffer();
-            StringBuffer t_sbUpdateParametersDeclaration   = new StringBuffer();
-            StringBuffer t_sbUpdateParametersSpecification = new StringBuffer();
-
-            String t_strDeleteMethodModifier = "public";
-            String t_strDeleteMethodSuffix = "";
-
-            boolean t_bForeignKeys = false;
-
-            String[] t_astrReferredTables =
-                t_MetaDataManager.getReferredTables(
-                    t_TableTemplate.getTableName());
-
-            if  (t_astrReferredTables != null)
+            if  (   (t_astrConnectionFlags != null)
+                 && (t_astrConnectionFlags.length > 0))
             {
-                for  (int t_iRefTableIndex = 0;
-                          t_iRefTableIndex < t_astrReferredTables.length;
-                          t_iRefTableIndex++)
+                MessageFormat t_ProcessConnectionFlagsFormatter =
+                    new MessageFormat(getProcessConnectionFlags());
+
+                for  (int t_iIndex = 0;
+                          t_iIndex < t_astrConnectionFlags.length;
+                          t_iIndex++)
                 {
-                    t_bForeignKeys = true;
+                    t_sbProcessConnectionFlags.append(
+                        t_ProcessConnectionFlagsFormatter.format(
+                            new Object[]{t_astrConnectionFlags[t_iIndex]}));
+                }
+            }
+        }
 
-                    String t_strReferredTableName =
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_astrReferredTables[t_iRefTableIndex]),
-                            '_');
+        boolean t_bForeignKeys = false;
 
-                    String t_strFkName =
-                        t_MetaDataManager.getReferredKey(
-                            t_TableTemplate.getTableName(),
-                            t_astrReferredTables[t_iRefTableIndex]);
+        String[] t_astrReferredTables =
+            metaDataManager.getReferredTables(
+                tableTemplate.getTableName());
 
-                    t_sbDeleteWithFkDAODeleteRequest.append(
-                        t_DeleteWithFkDAODeleteRequestFormatter.format(
-                            new Object[]
-                            {
-                                t_strReferredTableName,
-                                t_TableTemplate.getTableName().toLowerCase(),
-                                t_StringUtils.capitalize(
-                                    t_MetaDataManager.getForeignKey(
-                                        t_TableTemplate.getTableName(),
-                                        t_astrReferredTables[t_iRefTableIndex])
-                                    .toLowerCase(),
-                                    '_')
-                            }));
+        if  (t_astrReferredTables != null)
+        {
+            for  (int t_iRefTableIndex = 0;
+                      t_iRefTableIndex < t_astrReferredTables.length;
+                      t_iRefTableIndex++)
+            {
+                t_bForeignKeys = true;
 
-                    t_sbForeignDAOImports.append(
-                        t_ForeignDAOImportsFormatter.format(
-                            new Object[]
-                            {
-                                t_PackageUtils.retrieveBaseDAOPackage(
-                                    getBasePackageName()),
-                                t_strReferredTableName
+                String t_strReferredTableName =
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            t_astrReferredTables[t_iRefTableIndex]),
+                        '_');
+
+                String t_strFkName =
+                    metaDataManager.getReferredKey(
+                        tableTemplate.getTableName(),
+                        t_astrReferredTables[t_iRefTableIndex]);
+
+                t_sbDeleteWithFkDAODeleteRequest.append(
+                    t_DeleteWithFkDAODeleteRequestFormatter.format(
+                        new Object[]
+                        {
+                            t_strReferredTableName,
+                            tableTemplate.getTableName().toLowerCase(),
+                            stringUtils.capitalize(
+                                metaDataManager.getForeignKey(
+                                    tableTemplate.getTableName(),
+                                    t_astrReferredTables[t_iRefTableIndex])
+                                .toLowerCase(),
+                                '_')
+                        }));
+
+                t_sbForeignDAOImports.append(
+                    t_ForeignDAOImportsFormatter.format(
+                        new Object[]
+                        {
+                            packageUtils.retrieveBaseDAOPackage(
+                                getBasePackageName()),
+                            t_strReferredTableName
                                 
-                            }));
-                }
+                        }));
             }
+        }
 
-            t_sbResult.append(
-                t_HeaderFormatter.format(
-                    new Object[]
-                    {
-                        getEngineName(),
-                        getEngineVersion(),
-                        t_EnglishGrammarUtils.getSingular(
-                            t_TableTemplate.getTableName())
-                    }));
-
-            t_sbResult.append(
-                t_PackageDeclarationFormatter.format(
-                    new Object[]{getPackageName()}));
-
-            t_sbResult.append(
-                t_ProjectImportFormatter.format(
-                    new Object[]
-                    {
-                        t_PackageUtils.retrieveJdbcDAOPackage(
-                            getBasePackageName()),
-                        t_PackageUtils.retrieveValueObjectPackage(
-                            getBasePackageName()),
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_'),
-                        t_PackageUtils.retrieveBaseDAOPackage(
-                            getBasePackageName()),
-                        t_PackageUtils.retrieveBaseDAOFactoryPackage(
-                            getBasePackageName()),
-                        t_PackageUtils.retrieveTableRepositoryPackage(
-                            getBasePackageName()),
-                        t_strRepositoryName,
-                        t_PackageUtils.retrieveDataAccessManagerPackage(
-                            getBasePackageName()),
-                        t_PackageUtils.retrieveKeywordRepositoryPackage(
-                            getBasePackageName()),
-                        t_sbForeignDAOImports
-                    }));
-
-            t_sbResult.append(getAcmslImports());
-            t_sbResult.append(getJdkImports());
-            t_sbResult.append(getJdkExtensionImports());
-            t_sbResult.append(getLoggingImports());
-
-            t_sbResult.append(
-                t_JavadocFormatter.format(
-                    new Object[]
-                    {
-                        getEngineName(),
-                        getEngineVersion(),
-                        t_EnglishGrammarUtils.getSingular(
-                            t_TableTemplate.getTableName())
-                    }));
-
-            t_sbResult.append(
-                t_ClassDefinitionFormatter.format(
-                    new Object[]
-                    {
-                        getEngineName(),
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_')
-                    }));
-
-            t_sbResult.append(getClassStart());
-
-            t_sbResult.append(
-                t_ClassConstructorFormatter.format(
-                    new Object[]
-                    {
-                        getEngineName(),
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_')
-                    }));
-
-            String[] t_astrPrimaryKeys =
-                t_MetaDataManager.getPrimaryKeys(t_TableTemplate.getTableName());
-
-            if  (t_astrPrimaryKeys != null)
-            {
-                for  (int t_iPkIndex = 0;
-                          t_iPkIndex < t_astrPrimaryKeys.length;
-                          t_iPkIndex++)
+        t_sbResult.append(
+            t_HeaderFormatter.format(
+                new Object[]
                 {
-                    t_sbPkJavadoc.append(
-                        t_FindByPrimaryKeyPkJavadocFormatter.format(
-                            new Object[]
-                            {
-                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
-                                t_astrPrimaryKeys[t_iPkIndex]
-                            }));
+                    getEngineName(),
+                    getEngineVersion(),
+                    englishGrammarUtils.getSingular(
+                        tableTemplate.getTableName())
+                }));
 
-                    t_sbPkDeclaration.append(
-                        t_FindByPrimaryKeyPkDeclarationFormatter.format(
-                            new Object[]
-                            {
-                                t_MetaDataUtils.getNativeType(
-                                    t_MetaDataManager.getColumnType(
-                                        t_TableTemplate.getTableName(),
-                                        t_astrPrimaryKeys[t_iPkIndex])),
-                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
-                            }));
+        t_sbResult.append(
+            t_PackageDeclarationFormatter.format(
+                new Object[]{getPackageName()}));
 
-                    t_sbFilterValues.append(
-                        t_FindByPrimaryKeyFilterValuesFormatter.format(
-                            new Object[]
-                            {
-                                t_StringUtils.capitalize(
-                                    t_MetaDataUtils.getNativeType(
-                                        t_MetaDataManager.getColumnType(
-                                            t_TableTemplate.getTableName(),
-                                            t_astrPrimaryKeys[t_iPkIndex])),
-                                    '_'),
-                                t_strRepositoryName,
-                                t_TableTemplate.getTableName().toUpperCase(),
-                                t_astrPrimaryKeys[t_iPkIndex].toUpperCase(),
-                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
-                            }));
+        t_sbResult.append(
+            t_ProjectImportFormatter.format(
+                new Object[]
+                {
+                    packageUtils.retrieveJdbcDAOPackage(
+                        getBasePackageName()),
+                    packageUtils.retrieveValueObjectPackage(
+                        getBasePackageName()),
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_'),
+                    packageUtils.retrieveBaseDAOPackage(
+                        getBasePackageName()),
+                    packageUtils.retrieveBaseDAOFactoryPackage(
+                        getBasePackageName()),
+                    packageUtils.retrieveTableRepositoryPackage(
+                        getBasePackageName()),
+                    t_strRepositoryName,
+                    packageUtils.retrieveDataAccessManagerPackage(
+                        getBasePackageName()),
+                    packageUtils.retrieveKeywordRepositoryPackage(
+                        getBasePackageName()),
+                    t_sbForeignDAOImports
+                }));
 
-                    t_sbFilterDeclaration.append(
-                        t_FindByPrimaryKeyFilterDeclarationFormatter.format(
-                            new Object[]
-                            {
-                                t_strRepositoryName,
-                                t_TableTemplate.getTableName().toUpperCase(),
-                                t_astrPrimaryKeys[t_iPkIndex].toUpperCase()
-                            }));
+        t_sbResult.append(getAcmslImports());
+        t_sbResult.append(getJdkImports());
+        t_sbResult.append(getJdkExtensionImports());
+        t_sbResult.append(getLoggingImports());
 
-                    t_sbUpdateFilter.append(
-                        t_UpdateFilterFormatter.format(
-                            new Object[]
-                            {
-                                t_strRepositoryName,
-                                t_TableTemplate.getTableName().toUpperCase(),
-                                t_astrPrimaryKeys[t_iPkIndex].toUpperCase(),
-                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
-                            }));
+        t_sbResult.append(
+            t_JavadocFormatter.format(
+                new Object[]
+                {
+                    getEngineName(),
+                    getEngineVersion(),
+                    englishGrammarUtils.getSingular(
+                        tableTemplate.getTableName())
+                }));
 
-                    t_sbDeleteWithFkPkValues.append(
-                        t_DeleteWithFkPkValuesFormatter.format(
-                            new Object[]
-                            {
-                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
-                            }));
+        t_sbResult.append(
+            t_ClassDefinitionFormatter.format(
+                new Object[]
+                {
+                    getEngineName(),
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_')
+                }));
 
-                    t_sbDeleteWithFkPkValuesDeleteRequest.append(
-                        t_StringUtils.capitalize(
+        t_sbResult.append(getClassStart());
+
+        t_sbResult.append(
+            t_ClassConstructorFormatter.format(
+                new Object[]
+                {
+                    getEngineName(),
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_')
+                }));
+
+        String[] t_astrPrimaryKeys =
+            metaDataManager.getPrimaryKeys(tableTemplate.getTableName());
+
+        if  (t_astrPrimaryKeys != null)
+        {
+            for  (int t_iPkIndex = 0;
+                      t_iPkIndex < t_astrPrimaryKeys.length;
+                      t_iPkIndex++)
+            {
+                t_sbPkJavadoc.append(
+                    t_FindByPrimaryKeyPkJavadocFormatter.format(
+                        new Object[]
+                        {
                             t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
-                            '_'));
-                }
+                            t_astrPrimaryKeys[t_iPkIndex]
+                        }));
+
+                t_sbPkDeclaration.append(
+                    t_FindByPrimaryKeyPkDeclarationFormatter.format(
+                        new Object[]
+                        {
+                            metaDataUtils.getNativeType(
+                                metaDataManager.getColumnType(
+                                    tableTemplate.getTableName(),
+                                    t_astrPrimaryKeys[t_iPkIndex])),
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
+                        }));
+
+                t_sbPkValues.append(
+                    t_FindByPrimaryKeyPkValuesFormatter.format(
+                        new Object[]
+                        {
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
+                        }));
+
+                t_sbFilterValues.append(
+                    t_FindByPrimaryKeyFilterValuesFormatter.format(
+                        new Object[]
+                        {
+                            stringUtils.capitalize(
+                                metaDataUtils.getNativeType(
+                                    metaDataManager.getColumnType(
+                                        tableTemplate.getTableName(),
+                                        t_astrPrimaryKeys[t_iPkIndex])),
+                                '_'),
+                            t_strRepositoryName,
+                            tableTemplate.getTableName().toUpperCase(),
+                            t_astrPrimaryKeys[t_iPkIndex].toUpperCase(),
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
+                        }));
+
+                t_sbFilterDeclaration.append(
+                    t_FindByPrimaryKeyFilterDeclarationFormatter.format(
+                        new Object[]
+                        {
+                            t_strRepositoryName,
+                            tableTemplate.getTableName().toUpperCase(),
+                            t_astrPrimaryKeys[t_iPkIndex].toUpperCase()
+                        }));
+
+                t_sbUpdateFilter.append(
+                    t_UpdateFilterFormatter.format(
+                        new Object[]
+                        {
+                            t_strRepositoryName,
+                            tableTemplate.getTableName().toUpperCase(),
+                            t_astrPrimaryKeys[t_iPkIndex].toUpperCase(),
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
+                        }));
+
+                t_sbDeleteWithFkPkValues.append(
+                    t_DeleteWithFkPkValuesFormatter.format(
+                        new Object[]
+                        {
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
+                        }));
+
+                t_sbDeleteWithFkPkValuesDeleteRequest.append(
+                    stringUtils.capitalize(
+                        t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                        '_'));
             }
+        }
 
-            String[] t_astrColumnNames =
-                t_MetaDataManager.getColumnNames(t_TableTemplate.getTableName());
+        String[] t_astrColumnNames =
+            metaDataManager.getColumnNames(tableTemplate.getTableName());
 
-            if  (t_astrColumnNames != null)
+        if  (t_astrColumnNames != null)
+        {
+            for  (int t_iColumnIndex = 0;
+                      t_iColumnIndex < t_astrColumnNames.length;
+                      t_iColumnIndex++)
             {
-                for  (int t_iColumnIndex = 0;
-                          t_iColumnIndex < t_astrColumnNames.length;
-                          t_iColumnIndex++)
+                t_sbSelectFields.append(
+                    t_FindByPrimaryKeySelectFieldsFormatter.format(
+                        new Object[]
+                        {
+                            t_strRepositoryName,
+                            tableTemplate.getTableName().toUpperCase(),
+                            t_astrColumnNames[t_iColumnIndex].toUpperCase()
+                        }));
+
+                t_sbBuildValueObjectRetrieval.append(
+                    t_BuildValueObjectValueRetrievalFormatter.format(
+                        new Object[]
+                        {
+                            /*
+                              t_StringUtils.capitalize(
+                              t_MetaDataUtils.getNativeType(
+                              t_MetaDataManager.getColumnType(
+                              t_TableTemplate.getTableName(),
+                              t_astrColumnNames[t_iColumnIndex])),
+                              '_'),
+                              "Phoenix",
+                              t_TableTemplate.getTableName().toUpperCase(),
+                              t_astrColumnNames[t_iColumnIndex].toUpperCase()
+                            */
+                            metaDataUtils.getGetterMethod(
+                                metaDataManager.getColumnType(
+                                    tableTemplate.getTableName(),
+                                    t_astrColumnNames[t_iColumnIndex]),
+                                  t_strRepositoryName + "."
+                                + tableTemplate.getTableName().toUpperCase() + "."
+                                + t_astrColumnNames[t_iColumnIndex].toUpperCase())
+                        }));
+
+                if  (!metaDataManager.isManagedExternally(
+                         tableTemplate.getTableName(),
+                         t_astrColumnNames[t_iColumnIndex]))
                 {
-                    t_sbSelectFields.append(
-                        t_FindByPrimaryKeySelectFieldsFormatter.format(
+                    t_sbInsertParametersDeclaration.append(
+                        t_InsertParametersDeclarationFormatter.format(
+                            new Object[]
+                            {
+                                metaDataUtils.getNativeType(
+                                    metaDataManager.getColumnType(
+                                        tableTemplate.getTableName(),
+                                        t_astrColumnNames[t_iColumnIndex])),
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                            }));
+
+                    t_sbInsertParametersDeclaration.append(",");
+
+                    t_sbInsertParametersSpecification.append(
+                        t_InsertParametersSpecificationFormatter.format(
                             new Object[]
                             {
                                 t_strRepositoryName,
-                                t_TableTemplate.getTableName().toUpperCase(),
-                                t_astrColumnNames[t_iColumnIndex].toUpperCase()
+                                tableTemplate.getTableName().toUpperCase(),
+                                t_astrColumnNames[t_iColumnIndex].toUpperCase(),
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase()
                             }));
+                }
+                else 
+                {
+                    String t_strValue =
+                        metaDataManager.getKeyword(
+                            tableTemplate.getTableName(),
+                            t_astrColumnNames[t_iColumnIndex]);
 
-                    t_sbBuildValueObjectRetrieval.append(
-                        t_BuildValueObjectValueRetrievalFormatter.format(
-                            new Object[]
-                            {
-                                /*
-                                t_StringUtils.capitalize(
-                                    t_MetaDataUtils.getNativeType(
-                                        t_MetaDataManager.getColumnType(
-                                            t_TableTemplate.getTableName(),
-                                            t_astrColumnNames[t_iColumnIndex])),
-                                    '_'),
-                                "Phoenix",
-                                t_TableTemplate.getTableName().toUpperCase(),
-                                t_astrColumnNames[t_iColumnIndex].toUpperCase()
-                                */
-                                t_MetaDataUtils.getGetterMethod(
-                                    t_MetaDataManager.getColumnType(
-                                        t_TableTemplate.getTableName(),
-                                        t_astrColumnNames[t_iColumnIndex]),
-                                    t_strRepositoryName + "."
-                                    + t_TableTemplate.getTableName().toUpperCase() + "."
-                                    + t_astrColumnNames[t_iColumnIndex].toUpperCase())
-                            }));
-
-                    if  (!t_MetaDataManager.isManagedExternally(
-                             t_TableTemplate.getTableName(),
-                             t_astrColumnNames[t_iColumnIndex]))
+                    if  (stringValidator.isEmpty(t_strValue))
                     {
-                        t_sbInsertParametersDeclaration.append(
-                            t_InsertParametersDeclarationFormatter.format(
-                                new Object[]
-                                {
-                                    t_MetaDataUtils.getNativeType(
-                                        t_MetaDataManager.getColumnType(
-                                            t_TableTemplate.getTableName(),
-                                            t_astrColumnNames[t_iColumnIndex])),
-                                    t_astrColumnNames[t_iColumnIndex].toLowerCase()
-                                }));
-
-                        t_sbInsertParametersDeclaration.append(",");
-
-                        t_sbInsertParametersSpecification.append(
-                            t_InsertParametersSpecificationFormatter.format(
-                                new Object[]
-                                {
-                                    t_strRepositoryName,
-                                    t_TableTemplate.getTableName().toUpperCase(),
-                                    t_astrColumnNames[t_iColumnIndex].toUpperCase(),
-                                    t_astrColumnNames[t_iColumnIndex].toLowerCase()
-                                }));
+                        t_strValue =
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase();
                     }
                     else 
                     {
-                        String t_strValue =
-                            t_MetaDataManager.getKeyword(
-                                t_TableTemplate.getTableName(),
-                                t_astrColumnNames[t_iColumnIndex]);
+                        t_strValue =
+                            stringUtils.normalize(t_strValue, '_');
 
-                        if  (t_StringValidator.isEmpty(t_strValue))
-                        {
-                            t_strValue =
-                                t_astrColumnNames[t_iColumnIndex].toLowerCase();
-                        }
-                        else 
-                        {
-                            t_strValue =
-                                t_StringUtils.normalize(t_strValue, '_');
-
-                        }
-
-                        t_sbInsertParametersSpecification.append(
-                            t_InsertKeywordParametersSpecificationFormatter.format(
-                                new Object[]
-                                {
-                                    t_strRepositoryName,
-                                    t_TableTemplate.getTableName().toUpperCase(),
-                                    t_astrColumnNames[t_iColumnIndex].toUpperCase(),
-                                    t_strValue
-                                }));
                     }
 
-                    if  (!t_MetaDataManager.isPrimaryKey(
-                             t_TableTemplate.getTableName(),
-                             t_astrColumnNames[t_iColumnIndex]))
-                    {
-                        t_sbInsertParametersJavadoc.append(
-                            t_InsertParametersJavadocFormatter.format(
-                                new Object[]
-                                {
-                                    t_astrColumnNames[t_iColumnIndex].toLowerCase(),
-                                    t_astrColumnNames[t_iColumnIndex]
-                                }));
-
-                        t_sbUpdateParametersJavadoc.append(
-                            t_UpdateParametersJavadocFormatter.format(
-                                new Object[]
-                                {
-                                    t_astrColumnNames[t_iColumnIndex].toLowerCase(),
-                                    t_astrColumnNames[t_iColumnIndex]
-                                }));
-
-                        t_sbUpdateParametersDeclaration.append(
-                            t_UpdateParametersDeclarationFormatter.format(
-                                new Object[]
-                                {
-                                    t_MetaDataUtils.getNativeType(
-                                        t_MetaDataManager.getColumnType(
-                                            t_TableTemplate.getTableName(),
-                                            t_astrColumnNames[t_iColumnIndex])),
-                                    t_astrColumnNames[t_iColumnIndex].toLowerCase()
-                                }));
-
-                        t_sbUpdateParametersDeclaration.append(",");
-
-                        t_sbUpdateParametersSpecification.append(
-                            t_UpdateParametersSpecificationFormatter.format(
-                                new Object[]
-                                {
-                                    t_strRepositoryName,
-                                    t_TableTemplate.getTableName().toUpperCase(),
-                                    t_astrColumnNames[t_iColumnIndex].toUpperCase(),
-                                    t_astrColumnNames[t_iColumnIndex].toLowerCase()
-                                }));
-                    }
-
-                    if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-                    {
-                        t_sbBuildValueObjectRetrieval.append(",");
-                    }
-                }
-
-                t_sbResult.append(
-                    t_FindByPrimaryKeyFormatter.format(
-                        new Object[]
-                        {
-                            t_TableTemplate.getTableName(),
-                            t_sbPkJavadoc,
-                            t_StringUtils.capitalize(
-                                t_EnglishGrammarUtils.getSingular(
-                                    t_TableTemplate.getTableName().toLowerCase()),
-                                '_'),
-                            t_sbPkDeclaration,
-                            t_sbSelectFields,
-                            t_strRepositoryName,
-                            t_TableTemplate.getTableName().toUpperCase(),
-                            t_sbFilterDeclaration,
-                            t_sbFilterValues
-                        }));
-
-                t_sbResult.append(
-                    t_BuildValueObjectMethodFormatter.format(
-                        new Object[]
-                        {
-                            t_StringUtils.capitalize(
-                                t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                                '_'),
-                            t_sbBuildValueObjectRetrieval
-                        }));
-
-                t_sbResult.append(
-                    t_InsertMethodFormatter.format(
-                        new Object[]
-                        {
-                            t_StringUtils.capitalize(
-                                t_EnglishGrammarUtils.getSingular(
-                                    t_TableTemplate.getTableName().toLowerCase()),
-                                '_'),
-                            t_sbPkJavadoc.toString(),
-                            t_sbInsertParametersJavadoc,
-                            t_sbInsertParametersDeclaration,
-                            t_strRepositoryName,
-                            t_TableTemplate.getTableName().toUpperCase(),
-                            t_sbInsertParametersSpecification,
-                        }));
-
-                t_sbResult.append(
-                    t_UpdateMethodFormatter.format(
-                        new Object[]
-                        {
-                            t_StringUtils.capitalize(
-                                t_EnglishGrammarUtils.getSingular(
-                                    t_TableTemplate.getTableName().toLowerCase()),
-                                '_'),
-                            t_sbPkJavadoc.toString(),
-                            t_sbUpdateParametersJavadoc,
-                            t_sbPkDeclaration,
-                            t_sbUpdateParametersDeclaration,
-                            t_strRepositoryName,
-                            t_TableTemplate.getTableName().toUpperCase(),
-                            t_sbUpdateParametersSpecification,
-                            t_sbUpdateFilter
-                        }));
-
-
-                if  (t_bForeignKeys)
-                {
-                    t_strDeleteMethodModifier = "protected";
-                    t_strDeleteMethodSuffix = 
-                        t_StringUtils.capitalize(
-                            t_TableTemplate.getTableName(),
-                            '_');
-
-                    t_sbDeleteWithFkMethod.append(
-                        t_DeleteWithFkMethodFormatter.format(
+                    t_sbInsertParametersSpecification.append(
+                        t_InsertKeywordParametersSpecificationFormatter.format(
                             new Object[]
                             {
-                                t_StringUtils.capitalize(
-                                    t_EnglishGrammarUtils.getSingular(
-                                        t_TableTemplate.getTableName()),
-                                    '_'),
-                                t_sbPkJavadoc,
-                                t_sbPkDeclaration,
-                                t_sbDeleteWithFkPkValues,
-                                t_TableTemplate.getTableName().toLowerCase(),
-                                t_sbDeleteWithFkDAODeleteRequest,
-                                t_sbDeleteWithFkPkValuesDeleteRequest
+                                t_strRepositoryName,
+                                tableTemplate.getTableName().toUpperCase(),
+                                t_astrColumnNames[t_iColumnIndex].toUpperCase(),
+                                t_strValue
+                            }));
+                }
+
+                if  (!metaDataManager.isPrimaryKey(
+                         tableTemplate.getTableName(),
+                         t_astrColumnNames[t_iColumnIndex]))
+                {
+                    t_sbInsertParametersJavadoc.append(
+                        t_InsertParametersJavadocFormatter.format(
+                            new Object[]
+                            {
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                                t_astrColumnNames[t_iColumnIndex]
                             }));
 
-                    t_sbResult.append(t_sbDeleteWithFkMethod);
+                    t_sbUpdateParametersJavadoc.append(
+                        t_UpdateParametersJavadocFormatter.format(
+                            new Object[]
+                            {
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                                t_astrColumnNames[t_iColumnIndex]
+                            }));
+
+                    t_sbUpdateParametersDeclaration.append(
+                        t_UpdateParametersDeclarationFormatter.format(
+                            new Object[]
+                            {
+                                metaDataUtils.getNativeType(
+                                    metaDataManager.getColumnType(
+                                        tableTemplate.getTableName(),
+                                        t_astrColumnNames[t_iColumnIndex])),
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                            }));
+
+                    t_sbUpdateParametersDeclaration.append(",");
+
+                    t_sbUpdateParametersSpecification.append(
+                        t_UpdateParametersSpecificationFormatter.format(
+                            new Object[]
+                            {
+                                t_strRepositoryName,
+                                tableTemplate.getTableName().toUpperCase(),
+                                t_astrColumnNames[t_iColumnIndex].toUpperCase(),
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                            }));
                 }
-                
-                t_sbDeleteMethod.append(
-                    t_DeleteMethodFormatter.format(
+
+                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                {
+                    t_sbBuildValueObjectRetrieval.append(",");
+                }
+            }
+
+            t_sbResult.append(
+                t_FindByPrimaryKeyFormatter.format(
+                    new Object[]
+                    {
+                        tableTemplate.getTableName(),
+                        t_sbPkJavadoc,
+                        stringUtils.capitalize(
+                            englishGrammarUtils.getSingular(
+                                tableTemplate.getTableName().toLowerCase()),
+                            '_'),
+                        t_sbPkDeclaration,
+                        t_sbPkValues,
+                        t_sbProcessConnectionFlags,
+                        t_sbSelectFields,
+                        t_strRepositoryName,
+                        tableTemplate.getTableName().toUpperCase(),
+                        t_sbFilterDeclaration,
+                        t_sbFilterValues,
+                        getRestoreConnectionFlags()
+                    }));
+
+            t_sbResult.append(
+                t_BuildValueObjectMethodFormatter.format(
+                    new Object[]
+                    {
+                        stringUtils.capitalize(
+                            englishGrammarUtils.getSingular(
+                                tableTemplate.getTableName().toLowerCase()),
+                            '_'),
+                        t_sbBuildValueObjectRetrieval
+                    }));
+
+            t_sbResult.append(
+                t_InsertMethodFormatter.format(
+                    new Object[]
+                    {
+                        stringUtils.capitalize(
+                            englishGrammarUtils.getSingular(
+                                tableTemplate.getTableName().toLowerCase()),
+                            '_'),
+                        t_sbPkJavadoc.toString(),
+                        t_sbInsertParametersJavadoc,
+                        t_sbInsertParametersDeclaration,
+                        t_strRepositoryName,
+                        tableTemplate.getTableName().toUpperCase(),
+                        t_sbInsertParametersSpecification,
+                    }));
+
+            t_sbResult.append(
+                t_UpdateMethodFormatter.format(
+                    new Object[]
+                    {
+                        stringUtils.capitalize(
+                            englishGrammarUtils.getSingular(
+                                tableTemplate.getTableName().toLowerCase()),
+                            '_'),
+                        t_sbPkJavadoc.toString(),
+                        t_sbUpdateParametersJavadoc,
+                        t_sbPkDeclaration,
+                        t_sbUpdateParametersDeclaration,
+                        t_strRepositoryName,
+                        tableTemplate.getTableName().toUpperCase(),
+                        t_sbUpdateParametersSpecification,
+                        t_sbUpdateFilter
+                    }));
+
+
+            if  (t_bForeignKeys)
+            {
+                t_strDeleteMethodModifier = "protected";
+                t_strDeleteMethodSuffix = 
+                    stringUtils.capitalize(
+                        tableTemplate.getTableName(),
+                        '_');
+
+                t_sbDeleteWithFkMethod.append(
+                    t_DeleteWithFkMethodFormatter.format(
                         new Object[]
                         {
-                            t_TableTemplate.getTableName(),
+                            stringUtils.capitalize(
+                                englishGrammarUtils.getSingular(
+                                    tableTemplate.getTableName()),
+                                '_'),
                             t_sbPkJavadoc,
                             t_sbPkDeclaration,
-                            t_strRepositoryName,
-                            t_TableTemplate.getTableName().toUpperCase(),
-                            t_sbFilterDeclaration,
-                            t_sbFilterValues,
-                            t_strDeleteMethodModifier,
-                            t_strDeleteMethodSuffix
+                            t_sbDeleteWithFkPkValues,
+                            tableTemplate.getTableName().toLowerCase(),
+                            t_sbDeleteWithFkDAODeleteRequest,
+                            t_sbDeleteWithFkPkValuesDeleteRequest
                         }));
 
-                t_sbResult.append(t_sbDeleteMethod);
+                t_sbResult.append(t_sbDeleteWithFkMethod);
             }
+                
+            t_sbDeleteMethod.append(
+                t_DeleteMethodFormatter.format(
+                    new Object[]
+                    {
+                        tableTemplate.getTableName(),
+                        t_sbPkJavadoc,
+                        t_sbPkDeclaration,
+                        t_strRepositoryName,
+                        tableTemplate.getTableName().toUpperCase(),
+                        t_sbFilterDeclaration,
+                        t_sbFilterValues,
+                        t_strDeleteMethodModifier,
+                        t_strDeleteMethodSuffix,
+                        t_sbPkValues
+                    }));
+
+            t_sbResult.append(t_sbDeleteMethod);
         }
 
         t_sbResult.append(buildCustomSql());
