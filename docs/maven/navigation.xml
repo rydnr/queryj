@@ -2,7 +2,7 @@
 
 <project name="QueryJ">
   <title>QueryJ</title>
-  <organizationLogo href="http://192.168.0.2/images/acmsl.png"/>
+  <organizationLogo href="http://www.acm-sl.org/images/logo.jpg"/>
   <body>
     <links>
       <item
@@ -13,11 +13,7 @@
       <item name="Introduction" href="index.html"/>
       <item name="FAQ" href="faq.html"/>
       <item name="Tasks" href="tasks.html"/>
-    </menu>
-    <menu name="Basic reports">
-      <item name="CVS statistics" href="statcvs/index.html"/>
-      <item name="Simple code checks" href="javancss-report.html"/>
-      <!--item name="API differences" href="jdiff/changes.html"/-->
+      <item name="downloads" href="dist/"/>
     </menu>
   </body>
 </project>
