@@ -231,6 +231,11 @@ public abstract class AbstractDAOTemplate
     private String m__strInsertParametersSpecification;
 
     /**
+     * The attributes' statement setter call.
+     */
+    private String m__strAttributesStatementSetterCall;
+
+    /**
      * The insert keyword parameters specification.
      */
     private String m__strInsertKeywordParametersSpecification;
@@ -433,8 +438,8 @@ public abstract class AbstractDAOTemplate
      * method's parameters.
      * @param insertParametersSpecification the specification of the insert
      * method's parameters.
-     * @param insertKeywordParametersSpecification the specification of the
-     * insert method's keyword-based parameters.
+     * @param attributesStatementSetterCall the attributes statement setter
+     * call subtemplate.
      * @param updateMethod the update method.
      * @param updateParametersJavadoc the javadoc of the update method's
      * parameters.
@@ -517,7 +522,7 @@ public abstract class AbstractDAOTemplate
         final String insertParametersJavadoc,
         final String insertParametersDeclaration,
         final String insertParametersSpecification,
-        final String insertKeywordParametersSpecification,
+        final String attributesStatementSetterCall,
         final String updateMethod,
         final String updateParametersJavadoc,
         final String updateParametersDeclaration,
@@ -646,8 +651,8 @@ public abstract class AbstractDAOTemplate
         immutableSetInsertParametersSpecification(
             insertParametersSpecification);
 
-        immutableSetInsertKeywordParametersSpecification(
-            insertKeywordParametersSpecification);
+        immutableSetAttributesStatementSetterCall(
+            attributesStatementSetterCall);
 
         immutableSetUpdateMethod(
             updateMethod);
@@ -1604,7 +1609,7 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
-     * Specifies the insert parameters specification.
+     * Specifies the insert parameters Specification.
      * @param specification such specification.
      */
     private void immutableSetInsertParametersSpecification(final String specification)
@@ -1613,7 +1618,7 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
-     * Specifies the insert parameters specification.
+     * Specifies the insert parameters Specification.
      * @param specification such specification.
      */
     protected void setInsertParametersSpecification(final String specification)
@@ -1631,31 +1636,34 @@ public abstract class AbstractDAOTemplate
     }
 
     /**
-     * Specifies the insert keyword-based parameters specification.
-     * @param specification such specification.
+     * Specifies the attributes statement setter call.
+     * @param attributesStatementSetterCall such subtemplate.
      */
-    private void immutableSetInsertKeywordParametersSpecification(
-        final String specification)
+    private void immutableSetAttributesStatementSetterCall(
+        final String attributesStatementSetterCall)
     {
-        m__strInsertKeywordParametersSpecification = specification;
+        m__strAttributesStatementSetterCall =
+            attributesStatementSetterCall;
     }
 
     /**
-     * Specifies the insert keyword-based parameters specification.
-     * @param specification such specification.
+     * Specifies the attributes statement setter call.
+     * @param attributesStatementSetterCall such subtemplate.
      */
-    protected void setInsertKeywordParametersSpecification(final String specification)
+    protected void setAttributesStatementSetterCall(
+        final String attributesStatementSetterCall)
     {
-        immutableSetInsertKeywordParametersSpecification(specification);
+        immutableSetAttributesStatementSetterCall(
+            attributesStatementSetterCall);
     }
 
     /**
-     * Retrieves the insert keyword-based parameters specification.
-     * @return such information.
+     * Retrieves the attributes statement setter call.
+     * @return such subtemplate.
      */
-    public String getInsertKeywordParametersSpecification()
+    public String getAttributesStatementSetterCall()
     {
-        return m__strInsertKeywordParametersSpecification;
+        return m__strAttributesStatementSetterCall;
     }
 
     /**

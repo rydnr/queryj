@@ -276,9 +276,10 @@ public interface DAOTemplateDefaults
      * The find by primary key method.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_METHOD =
-          "     //<find by primary key>\n\n"
+          "     // <find by primary key>\n\n"
         + "    /**\n"
-        + "     * Builds the query for <i>FindByPrimaryKey</i>.\n"
+        + "     * Builds the query for finding the <code>{0}</code> information\n"
+        + "     * searching by its primary key.\n"
         + "     * @return the <code>SelectQuery</code> instance.\n"
         + "     */\n"
         + "    protected Query buildFindByPrimaryKeyQuery()\n"
@@ -286,7 +287,8 @@ public interface DAOTemplateDefaults
         + "        return buildFindByPrimaryKeyQuery(QueryFactory.getInstance());\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Creates the query for <i>FindByPrimaryKey</i>.\n"
+        + "     * Creates the query for finding the <code>{0}</code> information\n"
+        + "     * searching by its primary key.\n"
         + "     * @param queryFactory the <code>QueryFactory</code> instance.\n"
         + "     * @return the <code>SelectQuery</code> instance.\n"
         + "     * @precondition queryFactory != null\n"
@@ -294,30 +296,31 @@ public interface DAOTemplateDefaults
         + "    protected Query buildFindByPrimaryKeyQuery(final QueryFactory queryFactory)\n"
         + "    '{'\n"
         + "        SelectQuery result = queryFactory.createSelectQuery();\n\n"
-        + "        result.select({0}.{1}.getAll());\n\n"
+        + "        result.select({1}.{2}.getAll());\n\n"
          // table repository name - table instance name
-        + "        result.from({0}.{1});\n\n"
+        + "        result.from({1}.{2});\n\n"
          // table repository name - table instance name
-        + "{2}"
+        + "{3}"
          // FIND_BY_PRIMARY_KEY_PK_FILTER
         + "        return result;\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Retrieves <code>{3}</code> information filtering by its primary key."
-        + "{4}\n"
+        + "     * Retrieves <code>{4}</code> information filtering by its primary key."
+        + "{5}\n"
          // FIND_BY_PRIMARY_KEY_PK_JAVADOC
         + "     */\n"
-        + "    public {5} findByPrimaryKey("
-        + "{6})\n"
+        + "    public {6} findByPrimaryKey("
+        + "{7})\n"
         + "    '{'\n"
         + "        Query t_Query = buildFindByPrimaryKeyQuery();\n\n"
         + "        return\n"
-        + "            (User)\n"
+        + "            ({6})\n"
         + "                query(\n"
         + "                    new QueryPreparedStatementCreator(t_Query),\n"
-        + "                    new UserPkStatementSetter({7}),\n"
-        + "                    {8}_RESULT_SET_EXTRACTOR);\n"
-        + "    '}'\n\n";
+        + "                    new {6}PkStatementSetter({8}),\n"
+        + "                    {9}_RESULT_SET_EXTRACTOR);\n"
+        + "    '}'\n"
+        + "    // </find by primary key>\n\n";
 
     /**
      * The find-by-primary-key method's primary keys javadoc.
@@ -351,76 +354,56 @@ public interface DAOTemplateDefaults
      * The store method.
      */
     public static final String DEFAULT_INSERT_METHOD =
-          "    /**\n"
-        + "     * Persists {0} information."
+          "    // <insert>\n"
+        + "    /**\n"
+        + "     * Builds the query required to <i>insert</i> a concrete\n"
+        + "     * <code>{0}</code> instance.\n"
+        + "     * @return the <code>InsertQuery</code> instance.\n"
+        + "     */\n"
+        + "    protected Query buildInsertQuery()\n"
+        + "    '{'\n"
+        + "        return buildInsertQuery(QueryFactory.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Builds the query required to <i>insert</i> a concrete\n"
+        + "     * <code>{0}</code> instance.\n"
+        + "     * @param queryFactory the <code>QueryFactory</code> instance.\n"
+        + "     * @return the <code>InsertQuery</code> instance.\n"
+        + "     * @precondition queryFactory != null\n"
+        + "     */\n"
+        + "    protected Query buildInsertQuery(final QueryFactory queryFactory)\n"
+        + "    '{'\n"
+        + "        InsertQuery result = queryFactory.createInsertQuery();\n\n"
+        + "        result.insertInto({1}.{2});\n"
+        + "{3}\n\n"
+        + "        return result;\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Persists <code>{0}</code> information."
          // table name
-        + "{1}"
+        + "{4}"
          // (optional) pk javadoc
-        + "{2}\n"
+        + "{5}\n"
          // insert parameters javadoc
-        + "     * @param transactionToken the transaction boundary.\n"
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public void insert("
-        + "{3}\n"
+        + "{6})\n"
          // insert parameters declaration
-        + "        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException\n"
         + "    '{'\n"
-        + "        Connection        t_Connection        = null;\n"
-        + "        PreparedStatement t_PreparedStatement = null;\n\n"
-        + "        try\n"
-        + "        '{'\n"
-        + "            t_Connection = getConnection(transactionToken);\n\n"
-        + "            QueryFactory t_QueryFactory = QueryFactory.getInstance();\n\n"
-        + "            {4}KeywordRepository t_KeywordRepository =\n"
-        + "                {4}KeywordRepository.getInstance();\n\n"
-        + "            if  (   (t_Connection        != null)\n"
-        + "                 && (t_QueryFactory      != null)\n"
-        + "                 && (t_KeywordRepository != null))\n"
-        + "            '{'\n"
-        + "                InsertQuery t_Query = t_QueryFactory.createInsertQuery();\n\n"
-        + "                t_Query.insertInto({4}.{5});\n\n"
-         // table repository name - table name
-        + "{6}\n"
-         // insert parameters specification
-        + "                t_PreparedStatement = t_Query.prepareStatement(t_Connection);\n"
-        + "                t_PreparedStatement.executeUpdate();\n"
-        + "            '}'\n"
-        + "        '}'\n"
-        + "        catch  (final SQLException sqlException)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
-        + "        '}'\n"
-        + "        catch  (final Exception exception)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).error(exception);\n"
-        + "        '}'\n"
-        + "        finally\n"
-        + "        '{'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_PreparedStatement != null)\n"
-        + "                '{'\n"
-        + "                    t_PreparedStatement.close();\n"
-        + "                '}'\n"
-        + "                if  (t_Connection != null)\n"
-        + "                '{'\n"
-        + "                    closeConnection(t_Connection, transactionToken);\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "        '}'\n"
-        + "    '}'\n";
+        + "        Query t_Query = buildInsertQuery();\n\n"
+        + "        update(\n"
+        + "            new QueryPreparedStatementCreator(t_Query),\n"
+        + "            new {0}AttributesStatementSetter({7}));\n"
+        + "    '}'\n"
+        + "    // </insert>\n\n";
 
     /**
      * The insert parameters javadoc.
      */
     public static final String DEFAULT_INSERT_PARAMETERS_JAVADOC =
-        "\n     * @param {0} the {1} information.";
+        "\n     * @param {0} the <i>{1}</i> information.";
     // field name - field Name
 
     /**
@@ -434,17 +417,15 @@ public interface DAOTemplateDefaults
      * The insert parameters specification.
      */
     public static final String DEFAULT_INSERT_PARAMETERS_SPECIFICATION =
-        "                t_Query.value({0}.{1}.{2}, {3});\n";
-    // table repository name - table name - field name - field value
+        "\n        result.value({0}.{1}.{2});";
+    // repository - table - field
 
     /**
-     * The insert keyword-based parameters specification.
+     * The attributes statement setter call subtemplate.
      */
-    public static final String DEFAULT_INSERT_KEYWORD_PARAMETERS_SPECIFICATION =
-          "                t_Query.value(\n"
-        + "                    {0}.{1}.{2},\n"
-        + "                    t_KeywordRepository.{3}());\n";
-    // table repository name - table name - field name - field value
+    public static final String DEFAULT_ATTRIBUTES_STATEMENT_SETTER_CALL =
+        "\n                {0}";
+        // java attribute
 
     /**
      * The update method.
