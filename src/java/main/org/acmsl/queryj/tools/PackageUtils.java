@@ -783,7 +783,7 @@ public abstract class PackageUtils
             String t_strPath =
                 retrieveBaseDAOFolder(parentFolder, packageName).getPath();
 
-            t_strPath += File.separator + "mock";
+            t_strPath += File.separator + "xml";
 
             result = new File(t_strPath);
         }

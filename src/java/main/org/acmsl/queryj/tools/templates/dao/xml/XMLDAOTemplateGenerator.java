@@ -465,9 +465,9 @@ public class XMLDAOTemplateGenerator
      */
     public void write(
         final XMLDAOTemplate mockDAOTemplate,
-        final File            outputDir,
-        final Project         project,
-        final Task            task)
+        final File           outputDir,
+        final Project        project,
+        final Task           task)
       throws  IOException
     {
         StringUtils t_StringUtils = StringUtils.getInstance();

@@ -2485,19 +2485,71 @@
           basedir="${classes.dir}"
           manifest="${classes.dir}/META-INF/MANIFEST.MF"/>
 
+        <condition property="isUnix">
+          <os family="unix"/>
+        </condition>
+
+        <antcall target="_jar.copy"/>
+        <antcall target="_jar.symlink"/>
+
+    </target>
+
+    <!--
+     Copies project's latest jar file to files with no version in their name, so they can
+     be referred without explicit version information.
+     @depends init to define all properties.
+     @calls  copy to copy the file.
+     @return the new files.
+    -->
+    <target
+      name="_jar.copy"
+      depends="init"
+      description="Copies to version-less filenames the project's latest jar file."
+      unless="isUnix">
+
         <!--
          Copies such jar file to one with no build.number information
          in its name.
         -->
         <copy
-          file="${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
-          tofile="${build.dir}/${project.name}-${project.version}${project.status}.jar"/>
+          file="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
+          tofile="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}.jar"/>
 
         <copy
-          file="${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
-          tofile="${build.dir}/${project.name}-latest.jar"/>
+          file="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
+          tofile="${basedir}/${build.dir}/${project.name}-latest.jar"/>
 
     </target>
+
+    <!--
+     Creates sumbolic links for project's latest jar file.
+     @depends init to define all properties.
+     @calls symlink to declare the symbolic links.
+     @return the new links.
+    -->
+    <target
+      name="_jar.symlink"
+      depends="init"
+      description="Creates symbolic links for project's latest jar file."
+      if="isUnix">
+
+        <!--
+         Creates symlinks for latest jar file.
+        -->
+        <symlink
+          action="single"
+          overwrite="true"
+          resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
+          link="${project.name}-${project.version}${project.status}.jar"/>
+
+        <symlink
+          action="single"
+          overwrite="true"
+          resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
+          link="${project.name}.jar"/>
+
+    </target>
+
 <!--         END JAR/WAR/EAR CREATION TASKS SECTION                         -->
 
 <!--         BEGIN API GENERATION TASKS SECTION                             -->

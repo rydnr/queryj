@@ -216,13 +216,13 @@ public abstract class ValueObjectTemplate
      * The default constructor field declaration.
      */
     public static final String DEFAULT_CONSTRUCTOR_FIELD_DECLARATION =
-        "\n        {0} {1}"; // field type - field;
+        "\n        final {0} {1}"; // field type - field;
 
     /**
      * The default constructor field value setter.
      */
     public static final String DEFAULT_CONSTRUCTOR_FIELD_VALUE_SETTER =
-        "\n        inmutableSet{0}({1});"; // Field - field;
+        "\n        immutableSet{0}({1});"; // Field - field;
 
     /**
      * The default field setter method.
@@ -232,7 +232,7 @@ public abstract class ValueObjectTemplate
         + "     * Specifies the {0} information.\n" // field
         + "     * @param {0} the new {0} value.\n"
         + "     */\n"
-        + "    private void inmutableSet{2}({1} {0})\n" // capitalized field - field type
+        + "    private void immutableSet{2}(final {1} {0})\n" // capitalized field - field type
         + "    '{'\n"
         + "        this.{0} = {0};\n" // field
         + "    '}'\n\n"
@@ -242,7 +242,7 @@ public abstract class ValueObjectTemplate
         + "     */\n"
         + "    protected void set{2}({1} {0})\n" // capitalized field - field type
         + "    '{'\n"
-        + "        inmutableSet{2}({0});\n" // field
+        + "        immutableSet{2}({0});\n" // field
         + "    '}'\n\n";
 
     /**
@@ -375,44 +375,44 @@ public abstract class ValueObjectTemplate
      * @param classEnd the class end.
      */
     public ValueObjectTemplate(
-        String                  header,
-        String                  packageDeclaration,
-        String                  packageName,
-        TableTemplate           tableTemplate,
-        DatabaseMetaDataManager metaDataManager,
-        String                  acmslImports,
-        String                  jdkImports,
-        String                  javadoc,
-        String                  classDefinition,
-        String                  classStart,
-        String                  fieldDeclaration,
-        String                  constructor,
-        String                  constructorFieldJavadoc,
-        String                  constructorFieldDefinition,
-        String                  constructorFieldValueSetter,
-        String                  fieldValueSetterMethod,
-        String                  fieldValueGetterMethod,
-        String                  classEnd)
+        final String                  header,
+        final String                  packageDeclaration,
+        final String                  packageName,
+        final TableTemplate           tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String                  acmslImports,
+        final String                  jdkImports,
+        final String                  javadoc,
+        final String                  classDefinition,
+        final String                  classStart,
+        final String                  fieldDeclaration,
+        final String                  constructor,
+        final String                  constructorFieldJavadoc,
+        final String                  constructorFieldDefinition,
+        final String                  constructorFieldValueSetter,
+        final String                  fieldValueSetterMethod,
+        final String                  fieldValueGetterMethod,
+        final String                  classEnd)
     {
-        inmutableSetHeader(header);
-        inmutableSetPackageDeclaration(packageDeclaration);
-        inmutableSetPackageName(packageName);
-        inmutableSetTableTemplate(tableTemplate);
-        inmutableSetMetaDataManager(metaDataManager);
-        inmutableSetMetaDataManager(metaDataManager);
-        inmutableSetAcmslImports(acmslImports);
-        inmutableSetJdkImports(jdkImports);
-        inmutableSetJavadoc(javadoc);
-        inmutableSetClassDefinition(classDefinition);
-        inmutableSetClassStart(classStart);
-        inmutableSetFieldDeclaration(fieldDeclaration);
-        inmutableSetConstructor(constructor);
-        inmutableSetConstructorFieldJavadoc(constructorFieldJavadoc);
-        inmutableSetConstructorFieldDefinition(constructorFieldDefinition);
-        inmutableSetConstructorFieldValueSetter(constructorFieldValueSetter);
-        inmutableSetFieldValueSetterMethod(fieldValueSetterMethod);
-        inmutableSetFieldValueGetterMethod(fieldValueGetterMethod);
-        inmutableSetClassEnd(classEnd);
+        immutableSetHeader(header);
+        immutableSetPackageDeclaration(packageDeclaration);
+        immutableSetPackageName(packageName);
+        immutableSetTableTemplate(tableTemplate);
+        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetaDataManager(metaDataManager);
+        immutableSetAcmslImports(acmslImports);
+        immutableSetJdkImports(jdkImports);
+        immutableSetJavadoc(javadoc);
+        immutableSetClassDefinition(classDefinition);
+        immutableSetClassStart(classStart);
+        immutableSetFieldDeclaration(fieldDeclaration);
+        immutableSetConstructor(constructor);
+        immutableSetConstructorFieldJavadoc(constructorFieldJavadoc);
+        immutableSetConstructorFieldDefinition(constructorFieldDefinition);
+        immutableSetConstructorFieldValueSetter(constructorFieldValueSetter);
+        immutableSetFieldValueSetterMethod(fieldValueSetterMethod);
+        immutableSetFieldValueGetterMethod(fieldValueGetterMethod);
+        immutableSetClassEnd(classEnd);
     }
 
     /**
@@ -422,9 +422,9 @@ public abstract class ValueObjectTemplate
      * @param metaDataManager the metadata manager.
      */
     public ValueObjectTemplate(
-        String                  packageName,
-        TableTemplate           tableTemplate,
-        DatabaseMetaDataManager metaDataManager)
+        final String                  packageName,
+        final TableTemplate           tableTemplate,
+        final DatabaseMetaDataManager metaDataManager)
     {
         this(
             DEFAULT_HEADER,
@@ -451,7 +451,7 @@ public abstract class ValueObjectTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    private void inmutableSetHeader(String header)
+    private void immutableSetHeader(final String header)
     {
         m__strHeader = header;
     }
@@ -460,9 +460,9 @@ public abstract class ValueObjectTemplate
      * Specifies the header.
      * @param header the new header.
      */
-    protected void setHeader(String header)
+    protected void setHeader(final String header)
     {
-        inmutableSetHeader(header);
+        immutableSetHeader(header);
     }
 
     /**
@@ -478,7 +478,7 @@ public abstract class ValueObjectTemplate
      * Specifies the package declaration.
      * @param packageDeclaration the new package declaration.
      */
-    private void inmutableSetPackageDeclaration(String packageDeclaration)
+    private void immutableSetPackageDeclaration(final String packageDeclaration)
     {
         m__strPackageDeclaration = packageDeclaration;
     }
@@ -487,9 +487,9 @@ public abstract class ValueObjectTemplate
      * Specifies the package declaration.
      * @param packageDeclaration the new package declaration.
      */
-    protected void setPackageDeclaration(String packageDeclaration)
+    protected void setPackageDeclaration(final String packageDeclaration)
     {
-        inmutableSetPackageDeclaration(packageDeclaration);
+        immutableSetPackageDeclaration(packageDeclaration);
     }
 
     /**
@@ -505,7 +505,7 @@ public abstract class ValueObjectTemplate
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    private void inmutableSetPackageName(String packageName)
+    private void immutableSetPackageName(final String packageName)
     {
         m__strPackageName = packageName;
     }
@@ -514,9 +514,9 @@ public abstract class ValueObjectTemplate
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    protected void setPackageName(String packageName)
+    protected void setPackageName(final String packageName)
     {
-        inmutableSetPackageName(packageName);
+        immutableSetPackageName(packageName);
     }
 
     /**
@@ -532,7 +532,7 @@ public abstract class ValueObjectTemplate
      * Specifies the table template.
      * @param tableTemplate the new table template.
      */
-    private void inmutableSetTableTemplate(TableTemplate tableTemplate)
+    private void immutableSetTableTemplate(final TableTemplate tableTemplate)
     {
         m__TableTemplate = tableTemplate;
     }
@@ -541,9 +541,9 @@ public abstract class ValueObjectTemplate
      * Specifies the table template.
      * @param tableTemplate the new table template.
      */
-    protected void setTableTemplate(TableTemplate tableTemplate)
+    protected void setTableTemplate(final TableTemplate tableTemplate)
     {
-        inmutableSetTableTemplate(tableTemplate);
+        immutableSetTableTemplate(tableTemplate);
     }
 
     /**
@@ -559,7 +559,7 @@ public abstract class ValueObjectTemplate
      * Specifies the metadata manager.
      * @param metaDataManager the new metadata manager.
      */
-    private void inmutableSetMetaDataManager(
+    private void immutableSetMetaDataManager(
         DatabaseMetaDataManager metaDataManager)
     {
         m__MetaDataManager = metaDataManager;
@@ -572,7 +572,7 @@ public abstract class ValueObjectTemplate
     protected void setMetaDataManager(
         DatabaseMetaDataManager metaDataManager)
     {
-        inmutableSetMetaDataManager(metaDataManager);
+        immutableSetMetaDataManager(metaDataManager);
     }
 
     /**
@@ -588,7 +588,7 @@ public abstract class ValueObjectTemplate
      * Specifies the ACM-SL imports.
      * @param acmslImports the new ACM-SL imports.
      */
-    private void inmutableSetAcmslImports(String acmslImports)
+    private void immutableSetAcmslImports(final String acmslImports)
     {
         m__strAcmslImports = acmslImports;
     }
@@ -597,9 +597,9 @@ public abstract class ValueObjectTemplate
      * Specifies the ACM-SL imports.
      * @param acmslImports the new ACM-SL imports.
      */
-    protected void setAcmslImports(String acmslImports)
+    protected void setAcmslImports(final String acmslImports)
     {
-        inmutableSetAcmslImports(acmslImports);
+        immutableSetAcmslImports(acmslImports);
     }
 
     /**
@@ -615,7 +615,7 @@ public abstract class ValueObjectTemplate
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
-    private void inmutableSetJdkImports(String jdkImports)
+    private void immutableSetJdkImports(final String jdkImports)
     {
         m__strJdkImports = jdkImports;
     }
@@ -624,9 +624,9 @@ public abstract class ValueObjectTemplate
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
-    protected void setJdkImports(String jdkImports)
+    protected void setJdkImports(final String jdkImports)
     {
-        inmutableSetJdkImports(jdkImports);
+        immutableSetJdkImports(jdkImports);
     }
 
     /**
@@ -642,7 +642,7 @@ public abstract class ValueObjectTemplate
      * Specifies the javadoc.
      * @param javadoc the new javadoc.
      */
-    private void inmutableSetJavadoc(String javadoc)
+    private void immutableSetJavadoc(final String javadoc)
     {
         m__strJavadoc = javadoc;
     }
@@ -651,9 +651,9 @@ public abstract class ValueObjectTemplate
      * Specifies the javadoc.
      * @param javadoc the new javadoc.
      */
-    protected void setJavadoc(String javadoc)
+    protected void setJavadoc(final String javadoc)
     {
-        inmutableSetJavadoc(javadoc);
+        immutableSetJavadoc(javadoc);
     }
 
     /**
@@ -669,7 +669,7 @@ public abstract class ValueObjectTemplate
      * Specifies the class definition.
      * @param classDefinition the new class definition.
      */
-    private void inmutableSetClassDefinition(String classDefinition)
+    private void immutableSetClassDefinition(final String classDefinition)
     {
         m__strClassDefinition = classDefinition;
     }
@@ -678,9 +678,9 @@ public abstract class ValueObjectTemplate
      * Specifies the class definition.
      * @param classDefinition the new class definition.
      */
-    protected void setClassDefinition(String classDefinition)
+    protected void setClassDefinition(final String classDefinition)
     {
-        inmutableSetClassDefinition(classDefinition);
+        immutableSetClassDefinition(classDefinition);
     }
 
     /**
@@ -696,7 +696,7 @@ public abstract class ValueObjectTemplate
      * Specifies the class start.
      * @param classStart the new class start.
      */
-    private void inmutableSetClassStart(String classStart)
+    private void immutableSetClassStart(final String classStart)
     {
         m__strClassStart = classStart;
     }
@@ -705,9 +705,9 @@ public abstract class ValueObjectTemplate
      * Specifies the class start.
      * @param classStart the new class start.
      */
-    protected void setClassStart(String classStart)
+    protected void setClassStart(final String classStart)
     {
-        inmutableSetClassStart(classStart);
+        immutableSetClassStart(classStart);
     }
 
     /**
@@ -723,7 +723,7 @@ public abstract class ValueObjectTemplate
      * Specifies the field declaration.
      * @param fieldDeclaration the new field declaration.
      */
-    private void inmutableSetFieldDeclaration(String fieldDeclaration)
+    private void immutableSetFieldDeclaration(final String fieldDeclaration)
     {
         m__strFieldDeclaration = fieldDeclaration;
     }
@@ -732,9 +732,9 @@ public abstract class ValueObjectTemplate
      * Specifies the field declaration.
      * @param fieldDeclaration the new field declaration.
      */
-    protected void setFieldDeclaration(String fieldDeclaration)
+    protected void setFieldDeclaration(final String fieldDeclaration)
     {
-        inmutableSetFieldDeclaration(fieldDeclaration);
+        immutableSetFieldDeclaration(fieldDeclaration);
     }
 
     /**
@@ -751,7 +751,7 @@ public abstract class ValueObjectTemplate
      * Specifies the class constructor.
      * @param constructor such source code.
      */
-    private void inmutableSetConstructor(String constructor)
+    private void immutableSetConstructor(final String constructor)
     {
         m__strConstructor = constructor;
     }
@@ -760,9 +760,9 @@ public abstract class ValueObjectTemplate
      * Specifies the class constructor.
      * @param constructor such source code.
      */
-    protected void setConstructor(String constructor)
+    protected void setConstructor(final String constructor)
     {
-        inmutableSetConstructor(constructor);
+        immutableSetConstructor(constructor);
     }
 
     /**
@@ -778,7 +778,7 @@ public abstract class ValueObjectTemplate
      * Specifies the constructor field Javadoc.
      * @param fieldJavadoc the new constructor field Javadoc.
      */
-    private void inmutableSetConstructorFieldJavadoc(String fieldJavadoc)
+    private void immutableSetConstructorFieldJavadoc(final String fieldJavadoc)
     {
         m__strConstructorFieldJavadoc = fieldJavadoc;
     }
@@ -787,9 +787,9 @@ public abstract class ValueObjectTemplate
      * Specifies the constructor field Javadoc.
      * @param fieldJavadoc the new constructor field Javadoc.
      */
-    protected void setConstructorFieldJavadoc(String fieldJavadoc)
+    protected void setConstructorFieldJavadoc(final String fieldJavadoc)
     {
-        inmutableSetConstructorFieldJavadoc(fieldJavadoc);
+        immutableSetConstructorFieldJavadoc(fieldJavadoc);
     }
 
     /**
@@ -805,7 +805,7 @@ public abstract class ValueObjectTemplate
      * Specifies the constructor field definition.
      * @param fieldDefinition the new constructor field definition.
      */
-    private void inmutableSetConstructorFieldDefinition(String fieldDefinition)
+    private void immutableSetConstructorFieldDefinition(final String fieldDefinition)
     {
         m__strConstructorFieldDefinition = fieldDefinition;
     }
@@ -814,9 +814,9 @@ public abstract class ValueObjectTemplate
      * Specifies the constructor field definition.
      * @param fieldDefinition the new constructor field definition.
      */
-    protected void setConstructorFieldDefinition(String fieldDefinition)
+    protected void setConstructorFieldDefinition(final String fieldDefinition)
     {
-        inmutableSetConstructorFieldDefinition(fieldDefinition);
+        immutableSetConstructorFieldDefinition(fieldDefinition);
     }
 
     /**
@@ -832,7 +832,7 @@ public abstract class ValueObjectTemplate
      * Specifies the constructor field value setter.
      * @param fieldValueSetter the new constructor field value setter.
      */
-    private void inmutableSetConstructorFieldValueSetter(String fieldValueSetter)
+    private void immutableSetConstructorFieldValueSetter(final String fieldValueSetter)
     {
         m__strConstructorFieldValueSetter = fieldValueSetter;
     }
@@ -841,9 +841,9 @@ public abstract class ValueObjectTemplate
      * Specifies the constructor field value setter.
      * @param fieldValueSetter the new constructor field value setter.
      */
-    protected void setConstructorFieldValueSetter(String fieldValueSetter)
+    protected void setConstructorFieldValueSetter(final String fieldValueSetter)
     {
-        inmutableSetConstructorFieldValueSetter(fieldValueSetter);
+        immutableSetConstructorFieldValueSetter(fieldValueSetter);
     }
 
     /**
@@ -859,7 +859,7 @@ public abstract class ValueObjectTemplate
      * Specifies the field value setter method.
      * @param method such method.
      */
-    private void inmutableSetFieldValueSetterMethod(String method)
+    private void immutableSetFieldValueSetterMethod(final String method)
     {
         m__strFieldValueSetterMethod = method;
     }
@@ -868,9 +868,9 @@ public abstract class ValueObjectTemplate
      * Specifies the field value setter method.
      * @param method such method.
      */
-    protected void setFieldValueSetterMethod(String method)
+    protected void setFieldValueSetterMethod(final String method)
     {
-        inmutableSetFieldValueSetterMethod(method);
+        immutableSetFieldValueSetterMethod(method);
     }
 
     /**
@@ -886,7 +886,7 @@ public abstract class ValueObjectTemplate
      * Specifies the field value getter method.
      * @param method such method.
      */
-    private void inmutableSetFieldValueGetterMethod(String method)
+    private void immutableSetFieldValueGetterMethod(final String method)
     {
         m__strFieldValueGetterMethod = method;
     }
@@ -895,9 +895,9 @@ public abstract class ValueObjectTemplate
      * Specifies the field value getter method.
      * @param method such method.
      */
-    protected void setFieldValueGetterMethod(String method)
+    protected void setFieldValueGetterMethod(final String method)
     {
-        inmutableSetFieldValueGetterMethod(method);
+        immutableSetFieldValueGetterMethod(method);
     }
 
     /**
@@ -913,7 +913,7 @@ public abstract class ValueObjectTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    private void inmutableSetClassEnd(String classEnd)
+    private void immutableSetClassEnd(final String classEnd)
     {
         m__strClassEnd = classEnd;
     }
@@ -922,9 +922,9 @@ public abstract class ValueObjectTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    protected void setClassEnd(String classEnd)
+    protected void setClassEnd(final String classEnd)
     {
-        inmutableSetClassEnd(classEnd);
+        immutableSetClassEnd(classEnd);
     }
 
     /**
