@@ -288,6 +288,12 @@ public abstract class SqlXmlParser
             "sql-list/sql",
             new SqlElementFactory());
 
+        //     <description>
+        result.addRule(
+            "sql-list/sql/description",
+            new UntrimmedCallMethodRule("setDescription", 0));
+        //     </description>
+
         //     <value>
         result.addRule(
             "sql-list/sql/value",

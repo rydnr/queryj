@@ -1020,8 +1020,8 @@ public class PackageUtils
      */
     public String retrieveJdbcOperationsPackage(
         final String packageName,
-        final String tableName,
-        final String engineName)
+        final String engineName,
+        final String tableName)
     {
         return
             retrievePackage(

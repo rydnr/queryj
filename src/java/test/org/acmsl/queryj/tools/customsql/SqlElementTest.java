@@ -199,6 +199,26 @@ extends TestCase
   * Tests SqlElementTest accessor methods.
   * @throws Exception if an unexpected situation occurs.
   */
+  public void testSetGetDescription()
+  throws Exception
+  {
+    // JUnitDoclet begin method setDescription getDescription
+    java.lang.String[] t_aTests = {"", " ", "a", "A", "?", "?", "0123456789", "012345678901234567890", "\n", null};
+    
+    for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
+    {
+      sqlelement.setDescription(t_aTests[t_iTestIndex]);
+      assertEquals(
+      t_aTests[t_iTestIndex],
+      sqlelement.getDescription());
+    }
+    // JUnitDoclet end method setDescription getDescription
+  }
+  
+  /**
+  * Tests SqlElementTest accessor methods.
+  * @throws Exception if an unexpected situation occurs.
+  */
   public void testSetGetValue()
   throws Exception
   {

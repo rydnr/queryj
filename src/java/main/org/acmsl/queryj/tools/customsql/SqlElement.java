@@ -143,7 +143,7 @@ public class SqlElement
     /**
      * The <i>dao</i> attribute.
      */
-    public String m__strDAO;
+    private String m__strDAO;
 
     /**
      * The <i>name</i> attribute.
@@ -159,6 +159,11 @@ public class SqlElement
      * The <i>implementation</i> attribute.
      */
     private String m__strImplementation;
+
+    /**
+     * The <i>description</i> attribute.
+     */
+    private String m__strDescription;
 
     /**
      * The <i>value</i> element.
@@ -215,6 +220,15 @@ public class SqlElement
         immutableSetName(name);
         immutableSetType(type);
         immutableSetImplementation(implementation);
+    }
+
+    /**
+     * Retrieves the <i>description</i> attribute.
+     * @return such value.
+     */
+    public String getDescription()
+    {
+        return m__strDescription;
     }
 
     /**
@@ -323,6 +337,24 @@ public class SqlElement
     public String getImplementation()
     {
         return m__strImplementation;
+    }
+
+    /**
+     * Specifies the <i>description</i> attribute.
+     * @param description such value.
+     */
+    protected final void immutableSetDescription(final String description)
+    {
+        m__strDescription = description;
+    }
+
+    /**
+     * Specifies the <i>description</i> attribute.
+     * @param description such value.
+     */
+    public void setDescription(final String description)
+    {
+        immutableSetDescription(description);
     }
 
     /**
@@ -529,6 +561,7 @@ public class SqlElement
         return
             toString(
                 getId(),
+                getDescription(),
                 getDao(),
                 getName(),
                 getType(),
@@ -544,6 +577,7 @@ public class SqlElement
     /**
      * Provides a text information about this instance.
      * @param id the <i>id</i> attribute.
+     * @param description the <i>description</i> attribute.
      * @param dao the <i>dao</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
@@ -558,6 +592,7 @@ public class SqlElement
      */
     protected String toString(
         final String id,
+        final String description,
         final String dao,
         final String name,
         final String type,
@@ -572,6 +607,7 @@ public class SqlElement
         return
               getClass().getName()
             + "[" + "id=" + id + "]"
+            + "[" + "description=" + description + "]"
             + "[" + "dao=" + dao + "]"
             + "[" + "name=" + name + "]"
             + "[" + "type=" + type + "]"

@@ -266,6 +266,11 @@ public abstract class AbstractDAOTemplate
     private String m__strCustomSelectParameterDeclaration;
 
     /**
+     * The custom select parameter type specification.
+     */
+    private String m__strCustomSelectParameterTypeSpecification;
+
+    /**
      * The custom select parameter values.
      */
     private String m__strCustomSelectParameterValues;
@@ -377,6 +382,8 @@ public abstract class AbstractDAOTemplate
      * the custom selects.
      * @param customSelectParameterDeclaration the parameter declaration of the
      * custom selects.
+     * @param customSelectParameterTypeSpecification the parameter type
+     * specification subtemplate of the custom selects.
      * @param customSelectParameterValues the parameter values of the custom
      * selects.
      * @param customSelectResultPropertyValues the properties of the result
@@ -441,6 +448,7 @@ public abstract class AbstractDAOTemplate
         final String customSelect,
         final String customSelectParameterJavadoc,
         final String customSelectParameterDeclaration,
+        final String customSelectParameterTypeSpecification,
         final String customSelectParameterValues,
         final String customSelectResultPropertyValues,
         final String customUpdateOrInsert,
@@ -567,6 +575,9 @@ public abstract class AbstractDAOTemplate
 
         immutableSetCustomSelectParameterDeclaration(
             customSelectParameterDeclaration);
+
+        immutableSetCustomSelectParameterTypeSpecification(
+            customSelectParameterTypeSpecification);
 
         immutableSetCustomSelectParameterValues(
             customSelectParameterValues);
@@ -1691,6 +1702,38 @@ public abstract class AbstractDAOTemplate
     public String getCustomSelectParameterDeclaration()
     {
         return m__strCustomSelectParameterDeclaration;
+    }
+
+    /**
+     * Specifies the subtemplate to specify the types of the 
+     * custom select parameters.
+     * @param template the template.
+     */
+    private void immutableSetCustomSelectParameterTypeSpecification(
+        final String template)
+    {
+        m__strCustomSelectParameterTypeSpecification = template;
+    }
+
+    /**
+     * Specifies the subtemplate to specify the types of the 
+     * custom select parameters.
+     * @param template the template.
+     */
+    protected void setCustomSelectParameterTypeSpecification(
+        final String template)
+    {
+        immutableSetCustomSelectParameterTypeSpecification(template);
+    }
+
+    /**
+     * Retrieves the subtemplate to specify the types of the custom select
+     * parameters.
+     * @return such subtemplate.
+     */
+    public String getCustomSelectParameterTypeSpecification()
+    {
+        return m__strCustomSelectParameterTypeSpecification;
     }
 
     /**

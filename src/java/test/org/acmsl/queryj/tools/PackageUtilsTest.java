@@ -571,12 +571,12 @@ public class PackageUtilsTest
         assertNotNull(t_PackageUtils);
 
         assertEquals(
-            t_PackageUtils.retrieveJdbcOperationsPackage("com.foo.bar", "mysql", "user"),
               "com.foo.bar"
             + "." + PackageUtils.BASE_DAO_SUBPACKAGE
             + "." + PackageUtils.RDB_SUBPACKAGE
             + ".mysql"
-            + ".user");
+            + ".user",
+            t_PackageUtils.retrieveJdbcOperationsPackage("com.foo.bar", "mysql", "user"));
     }
 
     /**

@@ -163,7 +163,7 @@ public class TableTemplateBuildHandler
 
                                 t_aTableTemplates[t_iTableIndex].addFieldType(
                                     t_astrColumnNames[t_iColumnIndex],
-                                    t_MetaDataUtils.getFieldType(t_iColumnType));
+                                    t_MetaDataUtils.getQueryJFieldType(t_iColumnType));
                             }
                         }
                     }

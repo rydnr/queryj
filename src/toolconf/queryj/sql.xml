@@ -3,13 +3,14 @@
 <!DOCTYPE sql-list
 [
   <!ELEMENT sql-list (sql+,parameter-list,result-list,property-list,flag-list)>
-  <!ELEMENT sql (value,parameter-ref,result-ref?,connection-flags-ref?,statement-flags-ref?,resultset-flags-ref?)>
+  <!ELEMENT sql (description,value,parameter-ref,result-ref?,connection-flags-ref?,statement-flags-ref?,resultset-flags-ref?)>
   <!ATTLIST sql
     id ID #REQUIRED
     dao CDATA #REQUIRED
     name CDATA #REQUIRED
     type (select | insert | update | delete | select-for-update) #REQUIRED
     implementation (mysql | oracle | postgres | odbc | all-jdbc | mock | xml | all) #REQUIRED>
+  <!ELEMENT description (#PCDATA)>
   <!ELEMENT value (#PCDATA)>
   <!ELEMENT parameter-ref EMPTY>
   <!ATTLIST parameter-ref
@@ -86,6 +87,7 @@
     name="find-customer-by-customer-id"
     type="select"
     implementation="all">
+    <description>Retrieves the customer matching a concrete id</description>
     <value>select * from customers where customer_id = ?</value>
     <parameter-ref id="long-parameter-1"/>
     <result-ref id="find-customer-by-customer-id.result"/>
@@ -95,6 +97,7 @@
     dao="customer"
     type="select"
     implementation="all">
+    <description>Retrieves the customers by last name</description>
     <value>select c.customer_id, p.name from customers c, people p where p.last_name like ?</value>
     <parameter-ref id="long-parameter-1"/>
     <result-ref id="find-customer-by-person-last-name.result"/>
@@ -104,6 +107,7 @@
     dao="customer"
     type="insert"
     implementation="all">
+    <description>Inserts a new customer</description>
     <value>insert into customers (customer_id, name) values (?, "test")</value>
     <parameter-ref id="long-parameter-1"/>
   </sql>
@@ -113,6 +117,7 @@
     name="find-customer-for-update"
     type="select-for-update"
     implementation="all">
+    <description>Selects a customer to update</description>
     <value>select * from customers where customer_id = ? for update</value>
     <parameter-ref id="long-parameter-1"/>
     <result-ref id="find-customer-for-update.result"/>

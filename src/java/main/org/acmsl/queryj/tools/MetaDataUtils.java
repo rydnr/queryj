@@ -47,6 +47,11 @@
 package org.acmsl.queryj.tools;
 
 /*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.utils.StringUtils;
+
+/*
  * Importing some JDK classes.
  */
 import java.lang.ref.WeakReference;
@@ -129,7 +134,7 @@ public abstract class MetaDataUtils
      * Specifies the native to Java type mapping.
      * @param map such mapping.
      */
-    protected void setNative2JavaTypeMapping(Map map)
+    protected void setNative2JavaTypeMapping(final Map map)
     {
         m__mNative2JavaTypeMapping = map;
     }
@@ -148,7 +153,7 @@ public abstract class MetaDataUtils
      * @param dataType the data type.
      * @return the associated native type.
      */
-    public String getNativeType(int dataType)
+    public String getNativeType(final int dataType)
     {
         String result = null;
 
@@ -206,7 +211,7 @@ public abstract class MetaDataUtils
      * @param dataType the data type.
      * @return the associated native type.
      */
-    public int getJavaType(String dataType)
+    public int getJavaType(final String dataType)
     {
         int result = Types.NULL;
 
@@ -223,7 +228,14 @@ public abstract class MetaDataUtils
             }
         
             Object t_Result = 
-                t_mNative2JavaTypesMap.get(dataType.toUpperCase());
+                t_mNative2JavaTypesMap.get(dataType);
+
+            if  (   (t_Result == null)
+                 || !(t_Result instanceof Integer))
+            {
+                t_Result = 
+                    t_mNative2JavaTypesMap.get(dataType.toUpperCase());
+            }
 
             if  (   (t_Result != null)
                  && (t_Result instanceof Integer))
@@ -251,23 +263,33 @@ public abstract class MetaDataUtils
         Integer t_Text    = new Integer(Types.VARCHAR);
 
         result.put("DECIMAL"    , t_Numeric);
+        result.put("BigDecimal" , t_Numeric);
         result.put("BIT"        , t_Integer);
         result.put("TINYINT"    , t_Integer);
         result.put("SMALLINT"   , t_Integer);
+        result.put("int"        , t_Integer);
+        result.put("Integer"    , t_Integer);
         result.put("INTEGER"    , t_Long);
         result.put("NUMERIC"    , t_Long);
         result.put("BIGINT"     , t_Long   );
+        result.put("Long"       , t_Long);
+        result.put("long"       , t_Long);
         result.put("REAL"       , t_Double );
         result.put("FLOAT"      , t_Double );
         result.put("DOUBLE"     , t_Double );
+        result.put("float"      , t_Double );
+        result.put("double"     , t_Double );
         result.put("TIME"       , t_Time   );
         result.put("DATE"       , t_Time   );
+        result.put("Date"       , t_Time   );
         result.put("TIMESTAMP"  , t_Time   );
+        result.put("Timestamp"  , t_Time   );
         result.put("CHAR"       , t_Text   );
         result.put("VARCHAR"    , t_Text   );
         result.put("LONGVARCHAR", t_Text   );
         result.put("BINARY"     , t_Text   );
         result.put("VARBINARY"  , t_Text   );
+        result.put("String"     , t_Text   );
 
         return result;
     }
@@ -277,39 +299,62 @@ public abstract class MetaDataUtils
      * @param dataType the data type.
      * @return the QueryJ type.
      */
-    public String getFieldType(int dataType)
+    public String getQueryJFieldType(final int dataType)
     {
-        String result = "Field";
+        return getQueryJFieldType(dataType, StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the QueryJ type of given data type.
+     * @param dataType the data type.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the QueryJ type.
+     * @precondition stringUtils != null
+     */
+    protected String getQueryJFieldType(
+        final int dataType, final StringUtils stringUtils)
+    {
+        return stringUtils.capitalize(getFieldType(dataType), '_')  + "Field";
+    }
+
+    /**
+     * Retrieves the type of given data type.
+     * @param dataType the data type.
+     * @return the QueryJ type.
+     */
+    public String getFieldType(final int dataType)
+    {
+        String result = "";
 
         switch (dataType)
         {
             case Types.DECIMAL:
-                result = "BigDecimal" + result;
+                result = "BigDecimal";
                 break;
 
             case Types.BIT:
             case Types.TINYINT:
             case Types.SMALLINT:
-                result = "Int" + result;
+                result = "int";
                 break;
 
             case Types.NUMERIC:
             case Types.INTEGER:
             case Types.BIGINT:
-                result = "Long" + result;
+                result = "long";
                 break;
 
             case Types.REAL:
             case Types.FLOAT:
             case Types.DOUBLE:
-                result = "Double" + result;
+                result = "double";
                 break;
 
             case Types.TIME:
             case Types.DATE:
             case Types.TIMESTAMP:
             case 11:
-                result = "Date" + result;
+                result = "Date";
                 break;
 
             case Types.CHAR:
@@ -318,7 +363,7 @@ public abstract class MetaDataUtils
             case Types.BINARY:
             case Types.VARBINARY:
             case Types.LONGVARBINARY:
-                result = "String" + result;
+                result = "String";
                 break;
 
             default:
@@ -337,7 +382,8 @@ public abstract class MetaDataUtils
      * @param paramName the parameter name.
      * @return the associated setter method name.
      */
-    public String getSetterMethod(int dataType, int paramIndex, String paramName)
+    public String getSetterMethod(
+        final int dataType, final int paramIndex, final String paramName)
     {
         String result = getObjectType(dataType);
 
@@ -348,7 +394,9 @@ public abstract class MetaDataUtils
             case Types.TIMESTAMP:
             case 11:
 
-                result += "(" + paramIndex + ", new Timestamp(" + paramName + ".getTimeInMillis()));";
+                result +=
+                    "(" + paramIndex
+                    + ", new Timestamp(" + paramName + ".getTimeInMillis()));";
                 break;
 
             default:
@@ -367,7 +415,7 @@ public abstract class MetaDataUtils
      * @param paramIndex the parameter index.
      * @return the associated getter method name.
      */
-    public String getGetterMethod(int dataType, int paramIndex)
+    public String getGetterMethod(final int dataType, final int paramIndex)
     {
         return getGetterMethod(dataType, "" + paramIndex);
     }
@@ -378,7 +426,7 @@ public abstract class MetaDataUtils
      * @param param the parameter.
      * @return the associated getter method name.
      */
-    public String getGetterMethod(int dataType, String param)
+    public String getGetterMethod(final int dataType, final String param)
     {
         String result = getObjectType(dataType);
 
@@ -408,7 +456,7 @@ public abstract class MetaDataUtils
      * @param dataType the data type.
      * @return the associated result type.
      */
-    public String getProcedureResultType(int dataType)
+    public String getProcedureResultType(final int dataType)
     {
         String result = getObjectType(dataType);
 
@@ -446,7 +494,7 @@ public abstract class MetaDataUtils
      * @param dataType the data type.
      * @return the associated default value.
      */
-    public String getProcedureDefaultValue(int dataType)
+    public String getProcedureDefaultValue(final int dataType)
     {
         String result = "null";
 
@@ -484,7 +532,7 @@ public abstract class MetaDataUtils
      * @param dataType the data type.
      * @return the associated object type.
      */
-    public String getObjectType(int dataType)
+    public String getObjectType(final int dataType)
     {
         String result = null;
 
@@ -541,7 +589,7 @@ public abstract class MetaDataUtils
      * @param dataType the data type.
      * @return the associated default value.
      */
-    public String getDefaultValue(int dataType)
+    public String getDefaultValue(final int dataType)
     {
         String result = "null";
 
@@ -574,7 +622,7 @@ public abstract class MetaDataUtils
      * @param dataType the data type.
      * @return the associated constant name.
      */
-    public String getConstantName(int dataType)
+    public String getConstantName(final int dataType)
     {
         String result = null;
 
@@ -670,7 +718,7 @@ public abstract class MetaDataUtils
      * @return <code>true</code> if such data type can be managed as a
      * String.
      */
-    public boolean isString(int dataType)
+    public boolean isString(final int dataType)
     {
         boolean result = false;
 
@@ -695,7 +743,7 @@ public abstract class MetaDataUtils
      * @return <code>true</code> if such data type can be managed as an
      * integer.
      */
-    public boolean isInteger(int dataType)
+    public boolean isInteger(final int dataType)
     {
         boolean result = false;
 
@@ -719,7 +767,7 @@ public abstract class MetaDataUtils
      * @return <code>true</code> if such data type can be managed as a
      * timestamp.
      */
-    public boolean isTimestamp(int dataType)
+    public boolean isTimestamp(final int dataType)
     {
         boolean result = false;
 
@@ -764,7 +812,7 @@ public abstract class MetaDataUtils
      * @return <code>true</code> if such data type can be managed as a
      * boolean.
      */
-    public boolean isBoolean(int dataType)
+    public boolean isBoolean(final int dataType)
     {
         boolean result = false;
 

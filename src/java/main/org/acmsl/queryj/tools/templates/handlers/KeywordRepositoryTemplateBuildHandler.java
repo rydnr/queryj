@@ -173,7 +173,7 @@ public class KeywordRepositoryTemplateBuildHandler
                                 {
                                     t_KeywordRepositoryTemplate.addKeyword(
                                         t_Field.getKeyword(),
-                                        t_MetaDataUtils.getFieldType(
+                                        t_MetaDataUtils.getQueryJFieldType(
                                             t_MetaDataManager.getColumnType(
                                                 t_Field.getTableName(),
                                                 t_Field.getName())));

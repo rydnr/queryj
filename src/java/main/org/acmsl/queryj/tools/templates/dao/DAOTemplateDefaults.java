@@ -390,7 +390,7 @@ public interface DAOTemplateDefaults
         + "                    new QueryPreparedStatementCreator(t_Query),\n"
         + "                    new {6}PkStatementSetter({8}),\n"
          // Capitalized Value Object name
-        + "                    {9}_RESULT_SET_EXTRACTOR);\n"
+        + "                    {9}_EXTRACTOR);\n"
          // Upper case table name
         + "    '}'\n\n"
         + "    // </find by primary key>\n\n";
@@ -562,95 +562,59 @@ public interface DAOTemplateDefaults
 
     /**
      * The custom select template.
+     * @param 0 the sql id.
+     * @param 1 the sql description.
+     * @param 2 the parameter Javadoc.
+     * @param 3 the result type.
+     * @param 4 the sql method name.
+     * @param 5 the parameter declaration.
+     * @param 6 the sql sentence.
+     * @param 7 the parameter type specification.
+     * @param 8 the parameter values.
+     * @param 9 the extractor constant.
      */
     public static final String DEFAULT_CUSTOM_SELECT =
           "    /**\n"
-        + "     * Retrieves {0} entities\n"
-         // result class
-        + "     * from the persistence layer matching given criteria."
-        + "{1}\n"
+        + "     * Custom select <i>{0}</i>.\n"
+        + "     * {1}"
+         // sql id - sql description
+        + "{2}\n"
          // CUSTOM_SELECT_PARAMETER_JAVADOC
-        + "     * @param transactionToken needed to use an open connection and\n"
-        + "     * see previously uncommited inserts/updates/deletes.\n"
-        + "     * @return the information extracted from the persistence layer.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     * @return the <i>{3}</i> information retrieved.\n"
+        + "     * @throws DataAccessException if the operation fails.\n"
         + "     */\n"
-        + "    public {0} {2}("
+        + "    public {3} {4}("
          // result class - sql name
-        + "{3}\n"
+        + "{5})\n"
          // CUSTOM_SELECT_PARAMETER_DECLARATION
-        + "        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException\n"
         + "    '{'\n"
-        + "        {0} result = null;\n\n"
+        + "        {3} result = null;\n\n"
          // java table name
-        + "        Connection        t_Connection        = null;\n"
-        + "        PreparedStatement t_PreparedStatement = null;\n"
-        + "        ResultSet         t_rsResults         = null;\n\n"
-        + "        try\n"
-        + "        '{'\n"
-        + "            t_Connection = getConnection(transactionToken);\n\n"
-        + "            String t_strQuery =\n"
-        + "                \"{4}\";\n\n"
-        + "            t_PreparedStatement = t_Connection.prepareStatement(t_strQuery);\n"
-        + "{5}\n\n"
-         // CUSTOM_SELECT_PARAMETER_VALUES
-        + "            t_rsResults = t_PreparedStatement.executeQuery();\n\n"
-        + "            if  (   (t_rsResults != null)\n"
-        + "                 && (t_rsResults.next()))\n"
-        + "            '{'\n"
-        + "                {0}Factory t_Factory =\n"
-        + "                    {0}Factory.getInstance();\n\n"
-        + "                result =\n"
-        + "                    t_Factory.create{6}("
-        + "{7});\n"
-         // CUSTOM_SELECT_RESULT_PROPERTIES
-        + "            '}'\n"
-        + "        '}'\n"
-        + "        catch  (final SQLException sqlException)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
-        + "        '}'\n"
-        + "        catch  (final Exception exception)\n"
-        + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).error(exception);\n"
-        + "        '}'\n"
-        + "        finally\n"
-        + "        '{'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_rsResults != null)\n"
-        + "                '{'\n"
-        + "                    t_rsResults.close();\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_PreparedStatement != null)\n"
-        + "                '{'\n"
-        + "                    t_PreparedStatement.close();\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "            try\n"
-        + "            '{'\n"
-        + "                if  (t_Connection != null)\n"
-        + "                '{'\n"
-        + "                    closeConnection(t_Connection, transactionToken);\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "        '}'\n\n"
+        + "        PreparedStatementCreatorFactory "
+        +              "t_PreparedStatementCreatorFactory =\n"
+        +     "             new PreparedStatementCreatorFactory(\n"
+        +     "                 \"{6}\");\n\n"
+        + "        /*\n"
+        + "        t_PreparedStatementCreatorFactory.setResultSetType(..);\n"
+        + "        t_PreparedStatementCreatorFactory.setUpdatableResults(..);\n"
+        + "        t_PreparedStatementCreatorFactory.setReturnGeneratedKeys(..);\n"
+        + "        t_PreparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);\n"
+        + "        */\n\n"
+        + "{7}\n"
+        + "        Object[] t_aParams =\n"
+        + "            new Object[]\n"
+        + "            '{'"
+        + "{8}\n"
+        + "            '}';\n\n"
+        + "        result =\n"
+        + "            ({3})\n"
+        + "                query(\n"
+        + "                    t_PreparedStatementCreatorFactory\n"
+        + "                        .newPreparedStatementCreator(t_aParams),\n"
+        + "                    t_PreparedStatementCreatorFactory\n"
+        + "                        .newPreparedStatementSetter(t_aParams),\n"
+        + "                    {9}_EXTRACTOR);\n\n"
         + "        return result;\n"
         + "    '}'\n\n";
 
@@ -665,14 +629,24 @@ public interface DAOTemplateDefaults
      * The custom select parameter declaration.
      */
     public static final String DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION =
-        "\n        final {0} {1},";
+        "\n        final {0} {1}";
          // parameter type - parameter name
 
     /**
+     * The custom select parameter type specification.
+     * @param 0 the SQL parameter type.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_PARAMETER_TYPE_SPECIFICATION =
+          "        t_PreparedStatementCreatorFactory.addParameter(\n"
+        + "            new SqlParameter(Types.{0}));\n";
+
+    /**
      * The custom select parameter values.
+     * @param 0 the parameter type.
+     * @param 1 the parameter name.
      */
     public static final String DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES =
-        "\n            t_PreparedStatement.set{0}({1}, {2});";
+        "\n                new {0}({1})";
 
     /**
      * The custom select result properties.

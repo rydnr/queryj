@@ -167,6 +167,7 @@ public class DAOTemplate
             DEFAULT_CUSTOM_SELECT,
             DEFAULT_CUSTOM_SELECT_PARAMETER_JAVADOC,
             DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION,
+            DEFAULT_CUSTOM_SELECT_PARAMETER_TYPE_SPECIFICATION,
             DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES,
             DEFAULT_CUSTOM_SELECT_RESULT_PROPERTIES,
             DEFAULT_CUSTOM_UPDATE_OR_INSERT,
@@ -854,8 +855,10 @@ public class DAOTemplate
                 getCustomSelect(),
                 getCustomSelectParameterJavadoc(),
                 getCustomSelectParameterDeclaration(),
+                getCustomSelectParameterTypeSpecification(),
                 getCustomSelectParameterValues(),
                 getCustomSelectResultPropertyValues(),
+                MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance());
     }
@@ -867,15 +870,18 @@ public class DAOTemplate
      * @param parameterJavadoc the Javadoc template
      * of the parameters.
      * @param parameterDeclaration the parameter declaration.
+     * @param parameterTypeSpecification the parameter type specification.
      * @param parameterValues the parameter values.
      * @param resultPropertyValues the result property values.
-     * @param stringUtils the StringUtils isntance.
-     * @param stringValidator the StringValidator instance.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param stringValidator the <code>StringValidator</code> instance.
      * @return such generated code.
      * @precondition customSqlProvider != null
      * @precondition customSelect != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
+     * @precondition parameterTypeSpecification != null
      * @precondition parameterValues != null
      * @precondition resultPropertyValues != null
      * @precondition stringUtils != null
@@ -886,8 +892,10 @@ public class DAOTemplate
         final String customSelect,
         final String parameterJavadoc,
         final String parameterDeclaration,
+        final String parameterTypeSpecification,
         final String parameterValues,
         final String resultPropertyValues,
+        final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final StringValidator stringValidator)
     {
@@ -916,7 +924,9 @@ public class DAOTemplate
                                 t_SqlElement.getParameterRefs(),
                                 parameterJavadoc,
                                 parameterDeclaration,
+                                parameterTypeSpecification,
                                 parameterValues,
+                                metaDataUtils,
                                 stringUtils,
                                 stringValidator);
 
@@ -934,6 +944,7 @@ public class DAOTemplate
                                 t_astrParameterTemplates[0],
                                 t_astrParameterTemplates[1],
                                 t_astrParameterTemplates[2],
+                                t_astrParameterTemplates[3],
                                 t_strResultPropertyValues,
                                 stringUtils));
                     }
@@ -950,13 +961,16 @@ public class DAOTemplate
      * @param parameterRefs the parameter references.
      * @param parameterJavadoc the template.
      * @param parameterDeclaration the parameter declaration.
+     * @param parameterTypeSpecification the parameter type specification.
      * @param parameterValues the parameter values.
-     * @param stringUtils the StringUtils instance.
-     * @param stringValidator the StringValidator instance.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param stringValidator the <code>StringValidator</code> instance.
      * @return the generated code.
      * @precondition provider != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
+     * @precondition parameterTypeSpecification != null
      * @precondition parameterValues != null
      * @precondition stringUtils != null
      * @precondition stringValidator != null
@@ -966,14 +980,17 @@ public class DAOTemplate
         final Collection parameterRefs,
         final String parameterJavadoc,
         final String parameterDeclaration,
+        final String parameterTypeSpecification,
         final String parameterValues,
+        final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final StringValidator stringValidator)
     {
-        String[] result = new String[3];
+        String[] result = new String[4];
 
         StringBuffer t_sbParameterJavadoc = new StringBuffer();
         StringBuffer t_sbParameterDeclaration = new StringBuffer();
+        StringBuffer t_sbParameterTypeSpecification = new StringBuffer();
         StringBuffer t_sbParameterValues = new StringBuffer();
 
         if  (parameterRefs != null)
@@ -983,6 +1000,9 @@ public class DAOTemplate
 
             MessageFormat t_ParameterDeclarationFormatter =
                 new MessageFormat(parameterDeclaration);
+
+            MessageFormat t_ParameterTypeSpecificationFormatter =
+                new MessageFormat(parameterTypeSpecification);
 
             MessageFormat t_ParameterValuesFormatter =
                 new MessageFormat(parameterValues);
@@ -1030,15 +1050,21 @@ public class DAOTemplate
                                     t_Parameter.getType(),
                                     t_strName
                                 }));
+                        t_sbParameterTypeSpecification.append(
+                            t_ParameterTypeSpecificationFormatter.format(
+                                new Object[]
+                                {
+                                    metaDataUtils.getConstantName(
+                                        metaDataUtils.getJavaType(
+                                            t_Parameter.getType()))
+                                }));
                         t_sbParameterValues.append(
                             t_ParameterValuesFormatter.format(
                                 new Object[]
                                 {
-                                    stringUtils.capitalize(
-                                        t_Parameter.getType(), '_'),
-                                    (   (t_Parameter.getIndex() > 0)
-                                     ?  ("" + t_Parameter.getIndex())
-                                     :  "\"" + t_Parameter.getColumnName() + "\""),
+                                    metaDataUtils.getObjectType(
+                                        metaDataUtils.getJavaType(
+                                            t_Parameter.getType())),
                                     t_strName
                                 }));
                     }
@@ -1048,7 +1074,8 @@ public class DAOTemplate
 
         result[0] = t_sbParameterJavadoc.toString();
         result[1] = t_sbParameterDeclaration.toString();
-        result[2] = t_sbParameterValues.toString();
+        result[2] = t_sbParameterTypeSpecification.toString();
+        result[3] = t_sbParameterValues.toString();
 
         return result;
     }
@@ -1170,6 +1197,8 @@ public class DAOTemplate
      * @param customSelect the custom select template.
      * @param parameterJavadoc the generated parameter Javadoc.
      * @param parameterDeclaration the generated parameter declaration.
+     * @param parameterTypeSpecification the generated parameter type
+     * specification.
      * @param parameterValues the generared parameter values.
      * @param resultPropertyValues the generated result property values.
      * @param stringUtils the StringUtils isntance.
@@ -1179,6 +1208,7 @@ public class DAOTemplate
      * @precondition customSelect != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
+     * @precondition parameterTypeSpecification != null
      * @precondition parameterValues != null
      * @precondition resultPropertyValues != null
      * @precondition stringUtils != null
@@ -1189,6 +1219,7 @@ public class DAOTemplate
         final String customSelect,
         final String parameterJavadoc,
         final String parameterDeclaration,
+        final String parameterTypeSpecification,
         final String parameterValues,
         final String resultPropertyValues,
         final StringUtils stringUtils)
@@ -1211,21 +1242,26 @@ public class DAOTemplate
             t_CustomSelectFormatter.format(
                 new Object[]
                 {
+                    sqlElement.getId(),
+                    sqlElement.getDescription(),
+                    parameterJavadoc,
                     (   (t_Result != null)
                      ?  t_Result.getClassValue()
                      :  "-no-result-type-defined-"),
-                    parameterJavadoc,
                     stringUtils.unCapitalizeStart(
                         stringUtils.capitalize(
                             sqlElement.getName(), '-')),
                     parameterDeclaration,
                     sqlElement.getValue(),
+                    parameterTypeSpecification,
                     parameterValues,
-                    (   (t_Result != null)
-                     ?  stringUtils.extractPackageName(
-                            t_Result.getClassValue())
-                     :  "-no-result-type-defined-"),
-                    resultPropertyValues
+                    stringUtils.removeDuplicate(
+                        stringUtils.replace(
+                            stringUtils.replace(
+                                t_Result.getId(), "-", "_"),
+                            ".",
+                            "_"),
+                        '_').toUpperCase()
                 });
 
         return result;
@@ -1252,8 +1288,11 @@ public class DAOTemplate
                 getCustomUpdateOrInsert(),
                 getCustomUpdateOrInsertParameterJavadoc(),
                 getCustomUpdateOrInsertParameterDeclaration(),
+                // TODO
+                getCustomSelectParameterTypeSpecification(),
                 getCustomUpdateOrInsertParameterValues(),
                 getCustomUpdateOrInsertQueryLine(),
+                MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
                 createHelper(RegexpManager.getInstance()));
@@ -1267,10 +1306,12 @@ public class DAOTemplate
      * @param parameterJavadoc the Javadoc template
      * of the parameters.
      * @param parameterDeclaration the parameter declaration.
+     * @param parameterTypeSpecification the parameter type specification.
      * @param parameterValues the parameter values.
      * @param queryLine the query line.
-     * @param stringUtils the StringUtils instance.
-     * @param stringValidator the StringValidator instance.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param stringValidator the <code>StringValidator</code> instance.
      * @param helper the Helper instance.
      * @return such generated code.
      * @precondition customSqlProvider != null
@@ -1278,8 +1319,10 @@ public class DAOTemplate
      * @precondition customTemplate != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
+     * @precondition parameterTypeSpecification != null
      * @precondition parameterValues != null
-     * @preoncition queryLine != null
+     * @preconcition queryLine != null
+     * @precondition metaDataUtils != null
      * @precondition stringUtils != null
      * @precondition stringValidator != null
      * @precondition helper != null
@@ -1290,8 +1333,10 @@ public class DAOTemplate
         final String customTemplate,
         final String parameterJavadoc,
         final String parameterDeclaration,
+        final String parameterTypeSpecification,
         final String parameterValues,
         final String queryLine,
+        final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final StringValidator stringValidator,
         final Helper helper)
@@ -1321,7 +1366,9 @@ public class DAOTemplate
                                 t_SqlElement.getParameterRefs(),
                                 parameterJavadoc,
                                 parameterDeclaration,
+                                parameterTypeSpecification,
                                 parameterValues,
+                                metaDataUtils,
                                 stringUtils,
                                 stringValidator);
 
@@ -1333,6 +1380,7 @@ public class DAOTemplate
                                 t_astrParameterTemplates[0],
                                 t_astrParameterTemplates[1],
                                 t_astrParameterTemplates[2],
+                                t_astrParameterTemplates[3],
                                 queryLine,
                                 stringUtils,
                                 helper));
@@ -1351,6 +1399,7 @@ public class DAOTemplate
      * @param customTemplate the custom template.
      * @param parameterJavadoc the generated parameter Javadoc.
      * @param parameterDeclaration the generated parameter declaration.
+     * @param parameterTypeSpecification the parameter type specification.
      * @param parameterValues the generared parameter values.
      * @param queryLine the query line.
      * @param stringUtils the StringUtils isntance.
@@ -1361,6 +1410,7 @@ public class DAOTemplate
      * @precondition customTemplate != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
+     * @precondition parameterTypeSpecification != null
      * @precondition parameterValues != null
      * @precondition queryLine != null
      * @precondition stringUtils != null
@@ -1372,6 +1422,7 @@ public class DAOTemplate
         final String customTemplate,
         final String parameterJavadoc,
         final String parameterDeclaration,
+        final String parameterTypeSpecification,
         final String parameterValues,
         final String queryLine,
         final StringUtils stringUtils,
@@ -1433,8 +1484,11 @@ public class DAOTemplate
                 getCustomUpdateOrInsert(),
                 getCustomUpdateOrInsertParameterJavadoc(),
                 getCustomUpdateOrInsertParameterDeclaration(),
+                // TODO
+                getCustomSelectParameterTypeSpecification(),
                 getCustomUpdateOrInsertParameterValues(),
                 getCustomUpdateOrInsertQueryLine(),
+                MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
                 createHelper(RegexpManager.getInstance()));
@@ -1455,8 +1509,11 @@ public class DAOTemplate
                 getCustomUpdateOrInsert(),
                 getCustomUpdateOrInsertParameterJavadoc(),
                 getCustomUpdateOrInsertParameterDeclaration(),
+                // TODO
+                getCustomSelectParameterTypeSpecification(),
                 getCustomUpdateOrInsertParameterValues(),
                 getCustomUpdateOrInsertQueryLine(),
+                MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
                 createHelper(RegexpManager.getInstance()));
@@ -1477,8 +1534,11 @@ public class DAOTemplate
                 getCustomSelectForUpdate(),
                 getCustomSelectForUpdateParameterJavadoc(),
                 getCustomSelectForUpdateParameterDeclaration(),
+                // TODO
+                getCustomSelectParameterTypeSpecification(),
                 getCustomSelectForUpdateParameterValues(),
                 getCustomSelectForUpdateResultPropertyValues(),
+                MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance());
     }
@@ -1490,10 +1550,12 @@ public class DAOTemplate
      * @param parameterJavadoc the Javadoc template
      * of the parameters.
      * @param parameterDeclaration the parameter declaration.
+     * @param parameterTypeSpecification the parameter type specification.
      * @param parameterValues the parameter values.
      * @param resultPropertyValues the result property values.
-     * @param stringUtils the StringUtils isntance.
-     * @param stringValidator the StringValidator instance.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param stringValidator the <code>StringValidator</code> instance.
      * @return such generated code.
      * @precondition customSqlProvider != null
      * @precondition customSelectForUpdate != null
@@ -1501,6 +1563,7 @@ public class DAOTemplate
      * @precondition parameterDeclaration != null
      * @precondition parameterValues != null
      * @precondition resultPropertyValues != null
+     * @precondition metaDataUtils != null
      * @precondition stringUtils != null
      * @precondition stringValidator != null
      */
@@ -1509,8 +1572,10 @@ public class DAOTemplate
         final String customSelectForUpdate,
         final String parameterJavadoc,
         final String parameterDeclaration,
+        final String parameterTypeSpecification,
         final String parameterValues,
         final String resultPropertyValues,
+        final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final StringValidator stringValidator)
     {
@@ -1540,7 +1605,9 @@ public class DAOTemplate
                                 t_SqlElement.getParameterRefs(),
                                 parameterJavadoc,
                                 parameterDeclaration,
+                                parameterTypeSpecification,
                                 parameterValues,
+                                metaDataUtils,
                                 stringUtils,
                                 stringValidator);
 
@@ -1557,7 +1624,7 @@ public class DAOTemplate
                                 customSelectForUpdate,
                                 t_astrParameterTemplates[0],
                                 t_astrParameterTemplates[1],
-                                t_astrParameterTemplates[2],
+                                t_astrParameterTemplates[3],
                                 t_strResultPropertyValues,
                                 stringUtils));
                     }
