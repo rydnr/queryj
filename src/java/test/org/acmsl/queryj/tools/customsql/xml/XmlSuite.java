@@ -114,6 +114,7 @@ public class XmlSuite
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.PropertyElementFactoryTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactoryTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.SqlElementFactoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRuleTest.class);
     
     
     

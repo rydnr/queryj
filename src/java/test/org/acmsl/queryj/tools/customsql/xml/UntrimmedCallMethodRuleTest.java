@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.dao.
+*              unittests.org.acmsl.queryj.tools.customsql.xml.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.tools.templates.dao;
+package unittests.org.acmsl.queryj.tools.customsql.xml;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator;
+import org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRule;
 // JUnitDoclet end import
 
 /*
@@ -84,28 +84,28 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests DAOTemplateGeneratorTest class.
+* Tests UntrimmedCallMethodRuleTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator
+* @see org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRule
 */
-public class DAOTemplateGeneratorTest
+public class UntrimmedCallMethodRuleTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator daotemplategenerator = null;
+  org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRule untrimmedcallmethodrule = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a DAOTemplateGeneratorTest with given name.
+  * Creates a UntrimmedCallMethodRuleTest with given name.
   * @param name such name.
   */
-  public DAOTemplateGeneratorTest(String name)
+  public UntrimmedCallMethodRuleTest(String name)
   {
-    // JUnitDoclet begin method DAOTemplateGeneratorTest
+    // JUnitDoclet begin method UntrimmedCallMethodRuleTest
     super(name);
-    // JUnitDoclet end method DAOTemplateGeneratorTest
+    // JUnitDoclet end method UntrimmedCallMethodRuleTest
   }
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator createInstance()
+  public org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRule createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator.getInstance();
+    return new org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRule("toString");
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -130,7 +130,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    daotemplategenerator = createInstance();
+    untrimmedcallmethodrule = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -142,57 +142,45 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    daotemplategenerator = null;
+    untrimmedcallmethodrule = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
   }
   
   /**
-  * Tests DAOTemplateGeneratorTestgetInstance()
+  * Tests UntrimmedCallMethodRuleTestgetParamCount()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator#getInstance()
+  * @see org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRule#getParamCount()
   */
-  public void testGetInstance()
+  public void testGetParamCount()
   throws Exception
   {
-    // JUnitDoclet begin method getInstance
-    // JUnitDoclet end method getInstance
+    // JUnitDoclet begin method getParamCount
+    // JUnitDoclet end method getParamCount
   }
   
   /**
-  * Tests DAOTemplateGeneratorTestaddTemplateFactoryClass()
+  * Tests UntrimmedCallMethodRuleTestgetBodyText()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator#addTemplateFactoryClass(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+  * @see org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRule#getBodyText()
   */
-  public void testAddTemplateFactoryClass()
+  public void testGetBodyText()
   throws Exception
   {
-    // JUnitDoclet begin method addTemplateFactoryClass
-    // JUnitDoclet end method addTemplateFactoryClass
+    // JUnitDoclet begin method getBodyText
+    // JUnitDoclet end method getBodyText
   }
   
   /**
-  * Tests DAOTemplateGeneratorTestcreateDAOTemplate()
+  * Tests UntrimmedCallMethodRuleTestbody()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator#createDAOTemplate(org.acmsl.queryj.tools.templates.TableTemplate, org.acmsl.queryj.tools.DatabaseMetaDataManager, org.acmsl.queryj.tools.customsql.CustomSqlProvider, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+  * @see org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRule#body(java.lang.String)
   */
-  public void testCreateDAOTemplate()
+  public void testBody()
   throws Exception
   {
-    // JUnitDoclet begin method createDAOTemplate
-    // JUnitDoclet end method createDAOTemplate
-  }
-  
-  /**
-  * Tests DAOTemplateGeneratorTestwrite()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator#write(org.acmsl.queryj.tools.templates.dao.DAOTemplate, java.io.File)
-  */
-  public void testWrite()
-  throws Exception
-  {
-    // JUnitDoclet begin method write
-    // JUnitDoclet end method write
+    // JUnitDoclet begin method body
+    // JUnitDoclet end method body
   }
   
   
@@ -214,7 +202,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(DAOTemplateGeneratorTest.class);
+    junit.textui.TestRunner.run(UntrimmedCallMethodRuleTest.class);
     // JUnitDoclet end method testcase.main
   }
 }
