@@ -186,7 +186,8 @@ public class TableTemplateGenerator
               outputDir.getAbsolutePath()
             + File.separator
             + tableUtils.retrieveTableClassName(
-                  tableTemplate.getTableName()),
+                  tableTemplate.getTableName())
+            + ".java",
             tableTemplate.toString());
     }
 }
