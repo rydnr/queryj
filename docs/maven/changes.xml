@@ -5,7 +5,7 @@
     <author email="jsanleandro@yahoo.es">Jose San Leandro</author>
   </properties>
   <body>
-    <release version="0.5.6b2" date="$Date$">
+    <release version="0.5.6b3" date="$Date$">
       <action
         dev="$Author$"
         type="add">
