@@ -793,6 +793,7 @@ public class MetaDataUtils
             case Types.NUMERIC:
             case Types.DECIMAL:
             case Types.TINYINT:
+            case Types.BIGINT:
             case Types.SMALLINT:
             case Types.INTEGER:
                 result = true;

@@ -3361,7 +3361,7 @@ public class DatabaseMetaDataManager
             Iterator t_itResults = t_cResult.iterator();
 
             while  (   (t_itResults != null)
-                       && (t_itResults.hasNext()))
+                    && (t_itResults.hasNext()))
             {
                 result[t_iCounter++] = ((Integer) t_itResults.next()).intValue();
             }

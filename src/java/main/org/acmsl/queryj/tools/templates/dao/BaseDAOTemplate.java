@@ -461,42 +461,42 @@ public class BaseDAOTemplate
 
                             String t_strValue = "";
 
-                            String t_strName = "";
-
-                            for  (int t_iIndex = 0;
-                                      t_iIndex < t_astrColumnNames.length;
-                                      t_iIndex++)
-                            {
-                                t_iType =
-                                    metaDataManager.getColumnType(
-                                        tableTemplate.getTableName(),
-                                        t_astrColumnNames[t_iIndex]);
-
-                                t_strValue =
-                                    "" + t_mProperties.get(
+                            Collection t_cColumns = 
+                                (Collection)
+                                    t_mProperties.get(
                                         buildColumnKey(t_strColumnName));
 
-                                if  (t_strDescriptionColumn.equalsIgnoreCase(
-                                         t_astrColumnNames[t_iIndex]))
-                                {
-                                    t_strName = t_strValue;
-                                }
+                            int t_iIndex = 0;
 
-                                if  (metaDataUtils.isString(t_iType))
-                                {
-                                    t_strValue = "\"" + t_strValue + "\"";
-                                }
-                                else if  (!metaDataUtils.isInteger(t_iType))
-                                {
-                                    t_strValue = "null";
-                                }
+                            if  (t_cColumns != null)
+                            {
+                                Iterator t_itColumns = t_cColumns.iterator();
 
-                                t_sbRecordPropertiesSpecification.append(
-                                    t_strValue);
-
-                                if  (t_iIndex < t_astrColumnNames.length - 1)
+                                while  (t_itColumns.hasNext())
                                 {
-                                    t_sbRecordPropertiesSpecification.append(", ");
+                                    t_iType =
+                                        metaDataManager.getColumnType(
+                                            tableTemplate.getTableName(),
+                                            t_astrColumnNames[t_iIndex++]);
+
+                                    t_strValue = "" + t_itColumns.next();
+
+                                    if  (metaDataUtils.isString(t_iType))
+                                    {
+                                        t_strValue = "\"" + t_strValue + "\"";
+                                    }
+                                    else if  (!metaDataUtils.isInteger(t_iType))
+                                    {
+                                        t_strValue = "null";
+                                    }
+
+                                    t_sbRecordPropertiesSpecification.append(
+                                        t_strValue);
+
+                                    if  (t_itColumns.hasNext())
+                                    {
+                                        t_sbRecordPropertiesSpecification.append(", ");
+                                    }
                                 }
                             }
 
@@ -504,9 +504,8 @@ public class BaseDAOTemplate
                                 t_ConstantRecordFormatter.format(
                                     new Object[]
                                     {
-                                        t_strName,
+                                        t_strColumnName.toUpperCase(),
                                         t_strCapitalizedValueObjectName,
-                                        t_strName.toUpperCase(),
                                         t_sbRecordPropertiesSpecification
                                     }));
                         }
@@ -1867,10 +1866,8 @@ public class BaseDAOTemplate
                         {
                             t_strRecordName = t_strColumnValue;
                         }
-                        else
-                        {
-                            t_cProperties.add(t_strColumnValue);
-                        }
+
+                        t_cProperties.add(t_strColumnValue);
                     }
 
                     t_cRecordNames.add(t_strRecordName);
