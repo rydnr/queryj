@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create data acccess manager
- *              templates.
+ * Description: Bundles a pair of PkStatementSetter template
+ *              build and writing handlers.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,38 +45,35 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.dao.handlers;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplate;
-
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+import org.acmsl.queryj.tools.templates.dao.handlers.PkStatementSetterTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.handlers.PkStatementSetterTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Represents entities able to create data access manager templates.
- * @author <a href="mailto:jsanleandro@yahoo.es"
- *         >Jose San Leandro</a>
+ * Bundles a pair of PkStatementSetter template build and writing
+ * handlers.
+ * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
  * @version $Revision$
  */
-public interface DataAccessManagerTemplateFactory
+public class PkStatementSetterTemplateHandlerBundle
+    extends  TemplateHandlerBundle
 {
     /**
-     * Creates a data access manager template instance.
-     * @param packageName the package name.
-     * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return such template.
+     * Builds a bundle with given handlers.
+     * @param buildHandler the template build handler.
+     * @param writingHandler the writing handler.
+     * @precondition buildHandler != null
+     * @precondition writingHandler != null
      */
-    public DataAccessManagerTemplate createDataAccessManagerTemplate(
-        final String packageName,
-        final String repository,
-        final Project project,
-        final Task task);
+    public PkStatementSetterTemplateHandlerBundle()
+    {
+        super(
+            new PkStatementSetterTemplateBuildHandler(),
+            new PkStatementSetterTemplateWritingHandler());
+    }
 }

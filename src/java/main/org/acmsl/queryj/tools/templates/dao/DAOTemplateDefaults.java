@@ -200,7 +200,10 @@ public interface DAOTemplateDefaults
         + " */\n"
         + "import org.springframework.dao.DataAccessException;\n"
         + "import org.springframework.jdbc.core.JdbcTemplate;\n"
-        + "import org.springframework.jdbc.core.ResultSetExtractor;\n";
+        + "import org.springframework.jdbc.core.PreparedStatementCreatorFactory;\n"
+        + "import org.springframework.jdbc.core.ResultSetExtractor;\n"
+        + "import org.springframework.jdbc.core.SqlParameter;\n"
+        + "import org.springframework.jdbc.object.SqlQuery;\n";
     
     /**
      * The JDK imports.
@@ -211,6 +214,7 @@ public interface DAOTemplateDefaults
         + " */\n"
         + "import java.math.BigDecimal;\n"
         + "import java.sql.SQLException;\n"
+        + "import java.sql.Types;\n"
         + "import java.util.Calendar;\n"
         + "import java.util.Date;\n\n";
 
@@ -270,10 +274,10 @@ public interface DAOTemplateDefaults
         + "     * value objects.\n"
         + "     */\n"
         + "    public static final ResultSetExtractor "
-        + "{1}_RESULT_SET_EXTRACTOR =\n"
+        + "{1}_EXTRACTOR =\n"
         + "        new {2}ResultSetExtractor();\n\n"
         + "{3}"
-         // custom result set extractor constant
+         // result set extractor constant
         + "    // </constants>\n\n";
 
     /**
@@ -331,7 +335,7 @@ public interface DAOTemplateDefaults
      * The attribute filter.
      */
     public static final String DEFAULT_ATTRIBUTE_FILTER =
-        "        result.where({0}.{1}.{2}.equals());\n";
+        "        result.where({0}TableRepository.{1}.{2}.equals());\n";
     // table repository name - table name - field name
 
     /**
@@ -370,9 +374,9 @@ public interface DAOTemplateDefaults
         +          "final QueryFactory queryFactory)\n"
         + "    '{'\n"
         + "        SelectQuery result = queryFactory.createSelectQuery();\n\n"
-        + "        result.select({1}.{2}.getAll());\n\n"
+        + "        result.select({1}TableRepository.{2}.getAll());\n\n"
          // table repository name - table instance name
-        + "        result.from({1}.{2});\n\n"
+        + "        result.from({1}TableRepository.{2});\n\n"
          // table repository name - table instance name
         + "{3}\n"
          // PK_FILTER
@@ -393,7 +397,7 @@ public interface DAOTemplateDefaults
         + "    '{'\n"
         + "        Query t_Query = buildFindByPrimaryKeyQuery();\n\n"
         + "        return\n"
-        + "            ({6})\n"
+        + "            ({6}ValueObject)\n"
          // Capitalized Value Object name
         + "                query(\n"
         + "                    new QueryPreparedStatementCreator(t_Query),\n"
@@ -430,7 +434,7 @@ public interface DAOTemplateDefaults
         +          "final QueryFactory queryFactory)\n"
         + "    '{'\n"
         + "        InsertQuery result = queryFactory.createInsertQuery();\n\n"
-        + "        result.insertInto({1}.{2});\n"
+        + "        result.insertInto({1}TableRepository.{2});\n"
         + "{3}\n\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -457,7 +461,7 @@ public interface DAOTemplateDefaults
      * The insert parameters specification.
      */
     public static final String DEFAULT_INSERT_PARAMETERS_SPECIFICATION =
-        "\n        result.value({0}.{1}.{2});";
+        "\n        result.value({0}TableRepository.{1}.{2});";
     // repository - table - field
 
     /**
@@ -486,7 +490,7 @@ public interface DAOTemplateDefaults
         +          "final QueryFactory queryFactory)\n"
         + "    '{'\n"
         + "        UpdateQuery result = queryFactory.createUpdateQuery();\n\n"
-        + "        result.update({1}.{2});\n\n"
+        + "        result.update({1}TableRepository.{2});\n\n"
         + "{3}\n"
          // update parameters specification
         + "{4}\n"
@@ -516,7 +520,7 @@ public interface DAOTemplateDefaults
      * The update parameters specification.
      */
     public static final String DEFAULT_UPDATE_PARAMETERS_SPECIFICATION =
-        "        result.set({0}.{1}.{2});\n";
+        "        result.set({0}TableRepository.{1}.{2});\n";
     // table repository name - table name - field name
 
     /**
@@ -545,7 +549,7 @@ public interface DAOTemplateDefaults
         +          "final QueryFactory queryFactory)\n"
         + "    '{'\n"
         + "        DeleteQuery result = queryFactory.createDeleteQuery();\n\n"
-        + "        result.deleteFrom({1}.{2});\n\n"
+        + "        result.deleteFrom({1}TableRepository.{2});\n\n"
         + "{3}\n"
          // delete filter
         + "        return result;\n"
@@ -749,6 +753,7 @@ public interface DAOTemplateDefaults
      * @param 6 the parameter declaration.
      * @param 7 the parameter specification,
      * @param 8 the custom select for update subtemplate.
+     * @param 9 the conditional return.
      */
     public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE =
           "    /**\n"
@@ -768,8 +773,8 @@ public interface DAOTemplateDefaults
          // parameter declaration
         + "      throws DataAccessException\n"
         + "    '{'\n"
-        + "        return\n"
-        + "            {5}(\n"
+        + "        {9}"
+        + "        {5}(\n"
          // method name
         + "{7},\n"
          // parameter specification
@@ -805,7 +810,7 @@ public interface DAOTemplateDefaults
      */
     public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_NO_RETURN =
           "        SqlQuery t_Query =\n"
-        + "            new {0}Query(\n"
+        + "            new SqlQuery(\n"
         + "                dataSource,\n"
         + "                \"{1}\");\n\n"
         + "        t_Query.execute();\n";
@@ -821,7 +826,7 @@ public interface DAOTemplateDefaults
           "        {2} result = null;\n\n"
          // result type
         + "        SqlQuery t_Query =\n"
-        + "            new {0}Query(\n"
+        + "            new SqlQuery(\n"
         + "                dataSource,\n"
         + "                \"{1}\");\n\n"
         + "        List t_lResult = t_Query.execute();\n\n"
@@ -870,6 +875,12 @@ public interface DAOTemplateDefaults
     public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_SPECIFICATION =
         "                {0}";
 
+    /**
+     * The conditional return.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_CONDITIONAL_RETURN =
+          "        return\n"
+        + "    ";
 
     /**
      * The default class end.

@@ -54,6 +54,7 @@ import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.AntTablesElement;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
+import org.acmsl.queryj.tools.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
@@ -94,7 +95,7 @@ import org.apache.tools.ant.types.Reference;
 /**
  * Generates QueryJ classes using Ant.
  * @author <a href="mailto:jsanleandro@yahoo.es"
- *         >Jose San Leandro</a>
+           >Jose San Leandro</a>
  * @version $Revision$ at $Date$
  */
 public class QueryJTask
@@ -775,6 +776,7 @@ public class QueryJTask
             result.add(new OracleMetaDataRetrievalHandler());
 
             result.add(new CustomSqlProviderRetrievalHandler());
+            result.add(new CustomSqlValidationHandler());
 
             result.add(new DatabaseMetaDataLoggingHandler());
 

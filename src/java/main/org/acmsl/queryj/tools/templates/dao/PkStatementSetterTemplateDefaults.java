@@ -34,7 +34,7 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Defines the default subtemplates to generate
- +              AttributesStatementSetter templates.
+ +              PkStatementSetter templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -52,13 +52,13 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 
 /**
- * Defines the default subtemplates to generate AttributesStatementSetter
+ * Defines the default subtemplates to generate PkStatementSetter
  * templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface AttributesStatementSetterTemplateDefaults
+public interface PkStatementSetterTemplateDefaults
 {
     /**
      * The default header.
@@ -110,7 +110,7 @@ public interface AttributesStatementSetterTemplateDefaults
         + " *\n"
         + " * Description: Specifies the PreparedStatement values required\n"
         + " *              to perform any {0} operation expecting the\n"
-        + " *              complete attribute set.\n"
+        + " *              complete pk set.\n"
         + " *\n"
         + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
         + " *\n"
@@ -205,7 +205,7 @@ public interface AttributesStatementSetterTemplateDefaults
           "/**\n"
         + " * Specifies the <code>PreparedStatement</code> values required\n"
         + " * to perform any <i>{0}</i> operation expecting the complete\n"
-        + " * attribute set.\n"
+        + " * pk set.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " */\n";
 
@@ -214,7 +214,7 @@ public interface AttributesStatementSetterTemplateDefaults
      * @param 0 the value object name.
      */
     public static final String DEFAULT_CLASS_DEFINITION =
-          "public class {0}AttributesStatementSetter\n"
+          "public class {0}PkStatementSetter\n"
         + "    implements  PreparedStatementSetter\n";
 
     /**
@@ -234,10 +234,10 @@ public interface AttributesStatementSetterTemplateDefaults
      */
     public static final String DEFAULT_CLASS_CONSTRUCTOR =
           "    /**\n"
-        + "     * Creates a <code>{0}AttributesStatementSetter</code> instance.\n"
+        + "     * Creates a <code>{0}PkStatementSetter</code> instance.\n"
         + "{1}"
         + "     */\n"
-        + "    public {0}AttributesStatementSetter({2})\n"
+        + "    public {0}PkStatementSetter({2})\n"
         + "    '{'\n"
         + "{3}"
         + "    '}'\n\n";

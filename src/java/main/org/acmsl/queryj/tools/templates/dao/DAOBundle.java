@@ -54,12 +54,14 @@ import org.acmsl.queryj.tools.templates.dao.handlers.AttributesStatementSetterTe
 import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.ConfigurationPropertiesTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.CustomResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOChooserTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOTestTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.PkStatementSetterTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.ResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOBundle;
@@ -88,12 +90,14 @@ public class DAOBundle
                 new BaseDAOFactoryTemplateHandlerBundle(),
                 new BaseDAOTemplateHandlerBundle(),
                 new ConfigurationPropertiesTemplateHandlerBundle(),
+                new CustomResultSetExtractorTemplateHandlerBundle(),
                 new DAOChooserTemplateHandlerBundle(),
                 new DAOFactoryTemplateHandlerBundle(),
                 new DAOTemplateHandlerBundle(),
                 new DAOTestTemplateHandlerBundle(),
                 new DataAccessManagerTemplateHandlerBundle(),
                 new JdbcDAOTemplateHandlerBundle(),
+                new PkStatementSetterTemplateHandlerBundle(),
                 new QueryPreparedStatementCreatorTemplateHandlerBundle(),
                 new ResultSetExtractorTemplateHandlerBundle(),
                 (includeMock ? new MockDAOBundle() : null),

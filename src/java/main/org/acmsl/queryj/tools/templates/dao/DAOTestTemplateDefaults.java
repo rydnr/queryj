@@ -562,9 +562,8 @@ public interface DAOTestTemplateDefaults
         + "            assertNotNull(getTestedInstance());\n\n"
         + "            getTestedInstance()\n"
         + "                .insert("
-        + "{4}"
+        + "{4});\n"
          // store invokaton with test parameters
-        + "\n                        null); // transactionless\n"
         + "        '}'\n\n"
         + "    '}'\n\n";
 
@@ -572,7 +571,7 @@ public interface DAOTestTemplateDefaults
      * Test parameters' values.
      */
     public static final String DEFAULT_TEST_PARAMETERS_VALUES =
-        "\n                        {0}_VALUE,";
+        "\n                        {0}_VALUE";
 
     /**
      * Load test.
@@ -604,9 +603,8 @@ public interface DAOTestTemplateDefaults
         + "            {2}ValueObject t_ValueObject =\n"
         + "                getTestedInstance()\n"
         + "                    .findByPrimaryKey("
-        + "{4}"
+        + "{4});\n"
          // load invokaton with test parameters
-        + "\n                        null); // transactionless\n"
         + "            assertNotNull(t_ValueObject);\n"
         + "            set{2}(t_ValueObject);\n"
         + "        '}'\n\n"
@@ -645,9 +643,8 @@ public interface DAOTestTemplateDefaults
         + "                .update("
         + "{4}"
          // primary key values.
-        + "{5}"
+        + "{5});\n"
          // update test parameters.
-        + "\n                    null);  // no transactions\n"
         + "        '}'\n\n"
         + "    '}'\n\n";
 
@@ -655,13 +652,13 @@ public interface DAOTestTemplateDefaults
      * Update filter values.
      */
     public static final String DEFAULT_UPDATE_FILTER_VALUES =
-        "\n                    get{0}().get{1}(),";
+        "\n                    get{0}().get{1}()";
         
     /**
      * Test parameters' updated values.
      */
     public static final String DEFAULT_TEST_PARAMETERS_UPDATED_VALUES =
-        "\n                    UPDATED_{0}_VALUE,";
+        "\n                    UPDATED_{0}_VALUE";
 
     /**
      * Remove test.
@@ -689,13 +686,18 @@ public interface DAOTestTemplateDefaults
         + "         */\n"
         + "        public void testDelete()\n"
         + "        '{'\n"
-        + "            assertNotNull(getTestedInstance());\n\n"
-        + "            assertNotNull(get{2}());\n\n"
-        + "            assertTrue(\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                assertNotNull(getTestedInstance());\n\n"
+        + "                assertNotNull(get{2}());\n\n"
         + "                getTestedInstance()\n"
         + "                    .delete("
-        + "{4}"
-        + "\n                        null));  // no transactions\n"
+        + "{4});\n"
+        + "            '}'\n"
+        + "            catch  (final Throwable throwable)\n"
+        + "            '{'\n"
+        + "                fail(throwable.getMessage());\n"
+        + "            '}'\n"
          // remove invokaton with test pks.
         + "        '}'\n\n"
         + "    '}'\n";
@@ -704,7 +706,7 @@ public interface DAOTestTemplateDefaults
      * Remove filter values.
      */
     public static final String DEFAULT_REMOVE_FILTER_VALUES =
-        "\n                        get{0}().get{1}(),";
+        "\n                        get{0}().get{1}()";
         
     /**
      * The default class end.

@@ -350,6 +350,11 @@ public abstract class AbstractDAOTemplate
     private String m__strCustomSelectForUpdateParameterSpecification;
 
     /**
+     * The custom select-for-update conditional return.
+     */
+    private String m__strCustomSelectForUpdateConditionalReturn;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
@@ -433,6 +438,8 @@ public abstract class AbstractDAOTemplate
      * declaration of the custom-select-for-update operations.
      * @param customSelectForUpdateParameterSpecification the parameter
      * specification of the custom-select-for-update operations.
+     * @param customSelectForUpdateConditionalReturn the subtemplate
+     * to conditionally provide return statement in select-for-update operations.
      * @param classEnd the class end.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
@@ -494,6 +501,7 @@ public abstract class AbstractDAOTemplate
         final String customSelectForUpdateReturnJavadoc,
         final String customSelectForUpdateParameterDeclaration,
         final String customSelectForUpdateParameterSpecification,
+        final String customSelectForUpdateConditionalReturn,
         final String classEnd,
         final Project project,
         final Task task)
@@ -662,6 +670,9 @@ public abstract class AbstractDAOTemplate
 
         immutableSetCustomSelectForUpdateParameterSpecification(
             customSelectForUpdateParameterSpecification);
+
+        immutableSetCustomSelectForUpdateConditionalReturn(
+            customSelectForUpdateConditionalReturn);
 
         immutableSetClassEnd(
             classEnd);
@@ -2250,6 +2261,35 @@ public abstract class AbstractDAOTemplate
     public String getCustomSelectForUpdateParameterSpecification()
     {
         return m__strCustomSelectForUpdateParameterSpecification;
+    }
+
+    /**
+     * Specifies the custom select-for-update conditional return template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateConditionalReturn(
+        final String template)
+    {
+        m__strCustomSelectForUpdateConditionalReturn = template;
+    }
+
+    /**
+     * Specifies the custom select-for-update conditional return template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateConditionalReturn(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateConditionalReturn(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update conditional return template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateConditionalReturn()
+    {
+        return m__strCustomSelectForUpdateConditionalReturn;
     }
 
     /**

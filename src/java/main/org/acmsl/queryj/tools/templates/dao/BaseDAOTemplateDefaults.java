@@ -285,7 +285,7 @@ public interface BaseDAOTemplateDefaults
          // DELETE_PK_JAVADOC
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public boolean delete("
+        + "    public void delete("
          // java table name
         + "{2});\n";
          // DELETE_PK_DECLARATION

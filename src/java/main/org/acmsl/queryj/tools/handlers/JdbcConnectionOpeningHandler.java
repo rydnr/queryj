@@ -220,16 +220,14 @@ public class JdbcConnectionOpeningHandler
      * @param connection the connection to store.
      * @param parameters the parameter map.
      * @throws BuildException if the connection cannot be stored for any reason.
+     * @precondition connection != null
+     * @precondition parameters != null
      */
     protected void storeConnection(
         final Connection connection,
-        final Map        parameters)
+        final Map parameters)
       throws  BuildException
     {
-        if  (   (connection != null)
-             && (parameters != null))
-        {
-            parameters.put(JDBC_CONNECTION, connection);
-        }
+        parameters.put(JDBC_CONNECTION, connection);
     }
 }

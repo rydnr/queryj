@@ -33,7 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create DAO factory templates.
+ * Description: Represents entities able to create CustomResultSetExtractor
+ *              templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -51,7 +52,9 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplate;
+import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -61,37 +64,35 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 /**
- * Represents entities able to create DAO factory templates.
+ * Represents entities able to create CustomResultSetExtractor templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface DAOFactoryTemplateFactory
+public interface CustomResultSetExtractorTemplateFactory
 {
     /**
-     * Generates a DAO factory template.
+     * Generates a CustomResultSetExtractor template.
+     * @param resultElement the result element.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param jndiDataSource the JNDI location of the data source.
+     * @param repositoryName the name of the repository.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
-    public DAOFactoryTemplate createDAOFactoryTemplate(
+    public CustomResultSetExtractorTemplate createCustomResultSetExtractorTemplate(
+        final ResultElement resultElement,
+        final CustomSqlProvider customSqlProvider,
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
         final String basePackageName,
-        final String jndiDataSource,
+        final String repositoryName,
         final Project project,
         final Task task)
       throws  QueryJException;

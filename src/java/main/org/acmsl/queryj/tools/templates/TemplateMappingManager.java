@@ -283,10 +283,22 @@ public abstract class TemplateMappingManager
         "resultset.extractor.templates";
 
     /**
+     * The CustomResultSetExtractor template type.
+     */
+    public static final String CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES =
+        "custom.resultset.extractor.templates";
+
+    /**
      * The AttributesStatementSetter template type.
      */
     public static final String ATTRIBUTES_STATEMENT_SETTER_TEMPLATES =
         "attributes.statement.setter.templates";
+
+    /**
+     * The PkStatementSetter template type.
+     */
+    public static final String PK_STATEMENT_SETTER_TEMPLATES =
+        "pk.statement.setter.templates";
 
     /**
      * The Mock DAO template prefix.

@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Defines the default subtemplates to generate
- +              AttributesStatementSetter templates.
+ * Description: Defines the default subtemplates to generate custom
+ *              resultset extractors.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -52,13 +52,12 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 
 /**
- * Defines the default subtemplates to generate AttributesStatementSetter
- * templates.
+ * Defines the default subtemplates to generate custom result set extractors.
  * @author <a href="mailto:jsanleandro@yahoo.es"
- *         >Jose San Leandro</a>
+           >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface AttributesStatementSetterTemplateDefaults
+public interface CustomResultSetExtractorTemplateDefaults
 {
     /**
      * The default header.
@@ -108,9 +107,7 @@ public interface AttributesStatementSetterTemplateDefaults
         + " *\n"
         + " * Author: QueryJ\n"
         + " *\n"
-        + " * Description: Specifies the PreparedStatement values required\n"
-        + " *              to perform any {0} operation expecting the\n"
-        + " *              complete attribute set.\n"
+        + " * Description: Extracts {0} objects from result sets.\n"
         + " *\n"
         + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
         + " *\n"
@@ -140,7 +137,7 @@ public interface AttributesStatementSetterTemplateDefaults
           "/*\n"
         + " * Importing project-specific classes.\n"
         + " */\n"
-         // Custom resultset setters' imports
+         // Custom resultset extractors' imports
         + "import {0}.{1}ValueObject;\n"
          // ValueObject package - Value object name
         + "import {0}.{1}ValueObjectFactory;\n"
@@ -154,7 +151,7 @@ public interface AttributesStatementSetterTemplateDefaults
           "\n/*\n"
         + " * Importing some ACM-SL classes.\n"
         + " */\n"
-        + "import org.acmsl.queryj.Query;\n\n";
+        + "import org.acmsl.queryj.QueryResultSet;\n\n";
 
     /**
      * Additional imports.
@@ -164,7 +161,7 @@ public interface AttributesStatementSetterTemplateDefaults
         + " * Importing Spring classes.\n"
         + " */\n"
         + "import org.springframework.dao.DataAccessException;\n"
-        + "import org.springframework.jdbc.core.PreparedStatementSetter;\n";
+        + "import org.springframework.jdbc.core.ResultSetExtractor;\n";
     
     /**
      * The JDK imports.
@@ -174,9 +171,11 @@ public interface AttributesStatementSetterTemplateDefaults
         + " * Importing some JDK classes.\n"
         + " */\n"
         + "import java.math.BigDecimal;\n"
-        + "import java.sql.PreparedStatement;\n"
+        + "import java.sql.ResultSet;\n"
         + "import java.sql.SQLException;\n"
+        + "import java.util.ArrayList;\n"
         + "import java.util.Calendar;\n"
+        + "import java.util.Collection;\n"
         + "import java.util.Date;\n\n";
 
     /**
@@ -203,9 +202,8 @@ public interface AttributesStatementSetterTemplateDefaults
      */
     public static final String DEFAULT_JAVADOC =
           "/**\n"
-        + " * Specifies the <code>PreparedStatement</code> values required\n"
-        + " * to perform any <i>{0}</i> operation expecting the complete\n"
-        + " * attribute set.\n"
+        + " * Extracts <i>{0}</i> value objects from result sets.\n"
+         // value object name
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " */\n";
 
@@ -214,152 +212,84 @@ public interface AttributesStatementSetterTemplateDefaults
      * @param 0 the value object name.
      */
     public static final String DEFAULT_CLASS_DEFINITION =
-          "public class {0}AttributesStatementSetter\n"
-        + "    implements  PreparedStatementSetter\n";
+          "public class {0}Extractor\n"
+        + "    implements  ResultSetExtractor\n";
 
     /**
      * The class start.
-     * @param 0 the parameter accessors.
      */
     public static final String DEFAULT_CLASS_START =
-          "'{'\n"
-        + "{0}";
+        "{\n";
 
     /**
-     * The class constructor.
+     * The <code>extractData</code> method, for single result.
      * @param 0 the value object name.
-     * @param 1 the parameters javadoc.
-     * @param 2 the parameters declaration.
-     * @param 3 the parameter setter call.
+     * @param 1 the value object properties specification.
      */
-    public static final String DEFAULT_CLASS_CONSTRUCTOR =
-          "    /**\n"
-        + "     * Creates a <code>{0}AttributesStatementSetter</code> instance.\n"
-        + "{1}"
-        + "     */\n"
-        + "    public {0}AttributesStatementSetter({2})\n"
-        + "    '{'\n"
-        + "{3}"
-        + "    '}'\n\n";
-
-    /**
-     * The parameter declaration.
-     * @param 0 the parameter type.
-     * @param 1 the parameter name.
-     */
-    public static final String DEFAULT_PARAMETER_SETTER_CALL =
-        "        immutableSet{0}({1});\n";
-
-    /**
-     * The parameter accessors.
-     * @param 0 the property name.
-     * @param 1 the parameter type.
-     * @param 2 the parameter name.
-     * @param 3 the capitalized parameter name.
-     */
-    public static final String DEFAULT_PARAMETER_ACCESSOR =
-          "    /**\n"
-        + "     * The <i>{0}</i> information.\n"
-        + "     */\n"
-        + "    private {1} {2};\n\n"
+    public static final String DEFAULT_EXTRACT_DATA_METHOD_WITH_SINGLE_RESULT =
+          "     // <extract data>\n\n"
         + "    /**\n"
-        + "     * Specifies the <i>{0}</i> value.\n"
-        + "     * @param {2} such value.\n"
-        + "     */\n"
-        + "    protected final void immutableSet{3}(final {1} {2})\n"
-        + "    '{'\n"
-        + "        this.{2} = {2};\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Specifies the <i>{0}</i> value.\n"
-        + "     * @param {2} such value.\n"
-        + "     */\n"
-        + "    protected void set{3}(final {1} {2})\n"
-        + "    '{'\n"
-        + "        immutableSet{3}({2});\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Retrieves the <i>{0}</i> value.\n"
-        + "     * @return such value.\n"
-        + "     */\n"
-        + "    protected {1} get{3}()\n"
-        + "    '{'\n"
-        + "        return {2};\n"
-        + "    '}'\n\n";
-       
-    /**
-     * The <code>setValues</code> methods.
-     * @param 0 the parameter getters call.
-     * @param 1 the parameter javadoc.
-     * @param 2 the parameter declaration.
-     * @param 3 the parameter specification.
-     */
-    public static final String DEFAULT_SET_VALUES_METHOD =
-          "     // <set values>\n\n"
-        + "    /**\n"
-        + "     * Specifies the values on given <code>PreparedStatement</code>\n"
-        + "     * @param preparedStatement the prepared statement.\n"
+        + "     * Extracts <i>{0}</i> information from given result set.\n"
+        + "     * @param resultSet the result set.\n"
+        + "     * @return the <code>{0}ValueObject</code> or <code>null</code>\n"
+        + "     * if the operation returned no data.\n"
         + "     * @throws SQLException intercepted by <i>Spring</i>.\n"
-        + "     * @precondition preparedStatement != null\n"
-        + "     * @precondition preparedStatement instanceof Query\n"
+        + "     * @throws DataAccessException with information about any\n"
+        + "     * custom exception.\n"
+        + "     * @precondition resultSet != null\n"
         + "     */\n"
-        + "    public void setValues(final PreparedStatement preparedStatement)\n"
-        + "        throws  SQLException\n"
+        + "    public Object extractData(final ResultSet resultSet)\n"
+        + "        throws  SQLException,\n"
+        + "                DataAccessException\n"
         + "    '{'\n"
-        + "        setValues(\n"
-        + "            (Query) preparedStatement"
-        + "{0});\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Specifies the values on given <code>PreparedStatement</code>\n"
-        + "     * @param preparedStatement the prepared statement.\n"
-        + "{1}"
-        + "     * @throws SQLException intercepted by <i>Spring</i>.\n"
-        + "     * @precondition query != null\n"
-        + "     */\n"
-        + "    protected void setValues(\n"
-        + "        final Query query,"
-        + "{2})\n"
-        + "      throws  SQLException\n"
-        + "    '{'\n"
-        + "{3}"
+        + "        {0} result = null;\n\n"
+        + "        if  (resultSet.next())\n"
+        + "        '{'\n"
+        + "            result =\n"
+        + "                new {0}("
+        + "{1});\n"
+        + "        '}'\n\n"
+        + "        return result;\n"
         + "    '}'\n";
 
     /**
-     * The parameter declaration.
-     * @param 1 the capitalized parameter name.
+     * The <code>extractData</code> methods, for multiple results
+     * @param 0 the value object name.
+     * @param 1 the value object properties specification.
      */
-    public static final String DEFAULT_PARAMETER_GETTER_CALL =
-        ",\n            get{0}()";
+    public static final String DEFAULT_EXTRACT_DATA_METHOD_WITH_MULTIPLE_RESULTS =
+          "     // <extract data>\n\n"
+        + "    /**\n"
+        + "     * Extracts <i>{0}</i> information from given result set.\n"
+        + "     * @param resultSet the result set.\n"
+        + "     * @return the list of retrieved <code>{0}</code> instances.\n"
+        + "     * @throws SQLException intercepted by <i>Spring</i>.\n"
+        + "     * @throws DataAccessException with information about any\n"
+        + "     * custom exception.\n"
+        + "     * @precondition resultSet != null\n"
+        + "     */\n"
+        + "    public Object extractData(final ResultSet resultSet)\n"
+        + "        throws  SQLException,\n"
+        + "                DataAccessException\n"
+        + "    '{'\n"
+        + "        Collection result = new ArrayList();\n\n"
+        + "        while  (resultSet.next())\n"
+        + "        '{'\n"
+        + "            result.add(\n"
+        + "                new {0}("
+        + "{1}));\n"
+        + "        '}'\n\n"
+        + "        return result;\n"
+        + "    '}'\n";
 
     /**
-     * The parameter javadoc.
-     * @param 0 the parameter name.
+     * The value object properties specification.
+     * @param 0 the property type.
      * @param 1 the property name.
      */
-    public static final String DEFAULT_PARAMETER_JAVADOC =
-        "     * @param {0} the <i>{1}</i> value.\n";
-
-    /**
-     * The parameter declaration.
-     * @param 0 the parameter type.
-     * @param 1 the parameter name.
-     */
-    public static final String DEFAULT_PARAMETER_DECLARATION =
-        "\n        final {0} {1}";
-
-    /**
-     * The parameter specification.
-     * @param 0 the parameter type.
-     * @param 1 the table repository name.
-     * @param 2 the table name.
-     * @param 3 the property name.
-     * @param 4 the parameter name.
-     */
-    public static final String DEFAULT_PARAMETER_SPECIFICATION =
-          "        query.set{0}(\n"
-        + "            {1}TableRepository.{2}.{3}.equals(),\n"
-        + "            {4});\n\n";
+    public static final String DEFAULT_VALUE_OBJECT_PROPERTIES_SPECIFICATION =
+          "\n                    resultSet.get{0}(\n"
+        + "                        \"{1}\")";
 
     /**
      * The default class end.

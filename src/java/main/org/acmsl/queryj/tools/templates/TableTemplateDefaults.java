@@ -177,7 +177,7 @@ public interface TableTemplateDefaults
      * The class definition.
      */
     public static final String DEFAULT_CLASS_DEFINITION =
-           "public abstract class {0}\n" // table
+           "public class {0}\n" // table
          + "    extends  Table\n";
 
     /**

@@ -183,7 +183,7 @@ public class ConfigurationPropertiesTemplate
                 String t_strCapitalizedTable =
                     stringUtils.capitalize(
                         englishGrammarUtils.getSingular(
-                            t_strTable),
+                            t_strTable.toLowerCase()),
                         '_');
 
                 t_sbResult.append(

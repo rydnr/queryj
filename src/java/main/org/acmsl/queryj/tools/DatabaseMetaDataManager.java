@@ -1820,7 +1820,9 @@ public class DatabaseMetaDataManager
                         metaData,
                         catalog,
                         schema,
-                        t_astrTableNames[t_iIndex]);
+                        t_astrTableNames[t_iIndex],
+                        project,
+                        task);
 
                 addColumnNames(t_astrTableNames[t_iIndex], t_astrColumnNames);
 
@@ -1832,7 +1834,9 @@ public class DatabaseMetaDataManager
                             catalog,
                             schema,
                             t_astrTableNames[t_iIndex],
-                            t_astrColumnNames.length);
+                            t_astrColumnNames.length,
+                            project,
+                            task);
 
                     if  (t_aiColumnTypes != null)
                     {
@@ -1994,17 +1998,21 @@ public class DatabaseMetaDataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
      */
     protected String[] getColumnNames(
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema,
-            String           tableName)
-        throws  SQLException,
-                QueryJException
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         String[] result = EMPTY_STRING_ARRAY;
 
@@ -2095,18 +2103,22 @@ public class DatabaseMetaDataManager
      * @param schema the schema.
      * @param tableName the table name.
      * @param size the number of fields to extract.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
      */
     protected int[] getColumnTypes(
-            DatabaseMetaData metaData,
-            String           catalog,
-            String           schema,
-            String           tableName,
-            int              size)
-        throws  SQLException,
-                QueryJException
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final int size,
+        final Project project,
+        final Task task)
+      throws  SQLException,
+              QueryJException
     {
         int[] result = EMPTY_INT_ARRAY;
 

@@ -109,13 +109,23 @@ public class SqlElementFactory
 
         String t_strImplementation = attributes.getValue("implementation");
 
+        boolean t_bValidate = false;
+
+        String t_strValidate = attributes.getValue("validate");
+
+        if  (t_strValidate != null)
+        {
+            t_bValidate = conversionUtils.toBoolean(t_strValidate);
+        }
+
         result =
             new SqlElement(
                 t_strId,
                 t_strDAO,
                 t_strName,
                 t_strType,
-                t_strImplementation);
+                t_strImplementation,
+                t_bValidate);
 
         return result;
     }

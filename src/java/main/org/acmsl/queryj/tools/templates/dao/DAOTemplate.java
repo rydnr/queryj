@@ -36,7 +36,13 @@
  * Description: Is able to create engine-specific DAO interfaces for each
  *              table in the persistence model.
  *
+ * Last modified by: $Author$ at $Date$
+ *
+ * File version: $Revision$
+ *
  * Project version: $Name$
+ *
+ * $Id$
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
@@ -57,6 +63,7 @@ import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.AbstractDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateDefaults;
+import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -188,6 +195,7 @@ public class DAOTemplate
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RETURN_JAVADOC,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_DECLARATION,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_SPECIFICATION,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_CONDITIONAL_RETURN,
             DEFAULT_CLASS_END,
             project,
             task);
@@ -257,6 +265,7 @@ public class DAOTemplate
                 getCustomSelectForUpdateReturnJavadoc(),
                 getCustomSelectForUpdateParameterDeclaration(),
                 getCustomSelectForUpdateParameterSpecification(),
+                getCustomSelectForUpdateConditionalReturn(),
                 getClassEnd(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
@@ -345,6 +354,8 @@ public class DAOTemplate
      * declaration of the custom-select-for-update operations.
      * @param customSelectForUpdateParameterSpecification the parameter
      * specification of the custom-select-for-update operations.
+     * @param customSelectForUpdateConditionalReturn the subtemplate
+     * to conditionally provide return statement in select-for-update operations.
      * @param classEnd the class end.
      * @param metaDataUtils the MetaDataUtils instance.
      * @param stringUtils the StringUtils instance.
@@ -419,6 +430,7 @@ public class DAOTemplate
         final String customSelectForUpdateReturnJavadoc,
         final String customSelectForUpdateParameterDeclaration,
         final String customSelectForUpdateParameterSpecification,
+        final String customSelectForUpdateConditionalReturn,
         final String classEnd,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
@@ -512,8 +524,6 @@ public class DAOTemplate
         StringBuffer t_sbInsertParametersSpecification = new StringBuffer();
         StringBuffer t_sbUpdateParametersSpecification = new StringBuffer();
 
-        CustomSqlProvider t_CustomSqlProvider = customSqlProvider;
-
         boolean t_bForeignKeys = false;
 
         String[] t_astrReferredTables =
@@ -578,8 +588,11 @@ public class DAOTemplate
                     t_strJdbcOperationsPackage,
                     t_strCapitalizedValueObjectName,
                     buildCustomResultSetExtractorImports(
+                        tableTemplate.getTableName(),
                         t_strJdbcOperationsPackage,
                         customResultSetExtractorImport,
+                        customSqlProvider,
+                        daoTemplateUtils,
                         stringUtils),
                     packageUtils.retrieveValueObjectPackage(
                         basePackageName),
@@ -628,7 +641,10 @@ public class DAOTemplate
                     t_strValueObjectName.toUpperCase(),
                     t_strCapitalizedValueObjectName,
                     buildCustomResultSetExtractorConstants(
+                        tableTemplate.getTableName(),
                         customResultSetExtractorConstant,
+                        customSqlProvider,
+                        daoTemplateUtils,
                         stringUtils),
                 }));
 
@@ -858,44 +874,27 @@ public class DAOTemplate
 
     /**
      * Builds the custom result set extractor imports.
+     * @param tableName the table name.
      * @param jdbcOperationsPackage such package.
      * @param customResultSetExtractorImport the import template.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @return such generated code.
-     * @precondition jdbcOperationsPackage != null
-     * @precondition customResultSetExtractorImport != null
-     * @precondition stringUtils != null
-     */
-    protected String buildCustomResultSetExtractorImports(
-        final String jdbcOperationsPackage,
-        final String customResultSetExtractorImport,
-        final StringUtils stringUtils)
-    {
-        return
-            buildCustomResultSetExtractorImports(
-                jdbcOperationsPackage,
-                customResultSetExtractorImport,
-                stringUtils,
-                getCustomSqlProvider());
-    }
-
-    /**
-     * Builds the custom result set extractor imports.
-     * @param jdbcOperationsPackage such package.
-     * @param customResultSetExtractorImport the import template.
-     * @param stringUtils the <code>StringUtils</code> instance.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
      * @return such generated code.
+     * @precondition tableName != null
      * @precondition jdbcOperationsPackage != null
      * @precondition customResultSetExtractorImport != null
-     * @precondition stringUtils != null
      * @precondition customSqlProvider != null
+     * @precondition daoTemplateUtils != null
+     * @precondition stringUtils != null
      */
     protected String buildCustomResultSetExtractorImports(
+        final String tableName,
         final String jdbcOperationsPackage,
         final String customResultSetExtractorImport,
-        final StringUtils stringUtils,
-        final CustomSqlProvider customSqlProvider)
+        final CustomSqlProvider customSqlProvider,
+        final DAOTemplateUtils daoTemplateUtils,
+        final StringUtils stringUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
@@ -917,18 +916,22 @@ public class DAOTemplate
                     ResultElement t_ResultElement =
                         (ResultElement) t_Content;
 
-                    t_sbResult.append(
-                        t_CustomResultSetExtractorImportFormatter.format(
-                            new Object[]
-                            {
-                                jdbcOperationsPackage,
-                                stringUtils.capitalize(
+                    if  (daoTemplateUtils.matches(
+                             t_ResultElement, tableName, customSqlProvider))
+                    {
+                        t_sbResult.append(
+                            t_CustomResultSetExtractorImportFormatter.format(
+                                new Object[]
+                                {
+                                    jdbcOperationsPackage,
                                     stringUtils.capitalize(
                                         stringUtils.capitalize(
-                                            t_ResultElement.getId(), '_'),
-                                        '-'),
-                                    '.')
-                            }));
+                                            stringUtils.capitalize(
+                                                t_ResultElement.getId(), '_'),
+                                            '-'),
+                                        '.')
+                                }));
+                    }
                 }
             }
         }
@@ -938,37 +941,23 @@ public class DAOTemplate
 
     /**
      * Builds the custom result set extractor constants.
+     * @param tableName the table name.
      * @param customResultSetExtractorConstant the constant template.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @return such generated code.
-     * @precondition customResultSetExtractorConstant != null
-     * @precondition stringUtils != null
-     */
-    protected String buildCustomResultSetExtractorConstants(
-        final String customResultSetExtractorConstant,
-        final StringUtils stringUtils)
-    {
-        return
-            buildCustomResultSetExtractorConstants(
-                customResultSetExtractorConstant,
-                stringUtils,
-                getCustomSqlProvider());
-    }
-
-    /**
-     * Builds the custom result set extractor constants.
-     * @param customResultSetExtractorConstant the constant template.
-     * @param stringUtils the <code>StringUtils</code> instance.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
      * @return such generated code.
      * @precondition customResultSetExtractorConstant != null
-     * @precondition stringUtils != null
      * @precondition customSqlProvider != null
+     * @precondition daoTemplateUtils != null
+     * @precondition stringUtils != null
      */
     protected String buildCustomResultSetExtractorConstants(
+        final String tableName,
         final String customResultSetExtractorConstant,
-        final StringUtils stringUtils,
-        final CustomSqlProvider customSqlProvider)
+        final CustomSqlProvider customSqlProvider,
+        final DAOTemplateUtils daoTemplateUtils,
+        final StringUtils stringUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
@@ -990,25 +979,29 @@ public class DAOTemplate
                     ResultElement t_ResultElement =
                         (ResultElement) t_Content;
 
-                    t_sbResult.append(
-                        t_CustomResultSetExtractorConstantFormatter.format(
-                            new Object[]
-                            {
-                                t_ResultElement.getId(),
-                                stringUtils.removeDuplicate(
-                                    stringUtils.replace(
+                    if  (daoTemplateUtils.matches(
+                             t_ResultElement, tableName, customSqlProvider))
+                    {
+                        t_sbResult.append(
+                            t_CustomResultSetExtractorConstantFormatter.format(
+                                new Object[]
+                                {
+                                    t_ResultElement.getId(),
+                                    stringUtils.removeDuplicate(
                                         stringUtils.replace(
-                                            t_ResultElement.getId(), "-", "_"),
-                                        ".",
-                                        "_"),
-                                    '_').toUpperCase(),
-                                stringUtils.capitalize(
+                                            stringUtils.replace(
+                                                t_ResultElement.getId(), "-", "_"),
+                                            ".",
+                                            "_"),
+                                        '_').toUpperCase(),
                                     stringUtils.capitalize(
                                         stringUtils.capitalize(
-                                            t_ResultElement.getId(), '_'),
-                                        '-'),
-                                    '.')
-                            }));
+                                            stringUtils.capitalize(
+                                                t_ResultElement.getId(), '_'),
+                                            '-'),
+                                        '.')
+                                }));
+                    }
                 }
             }
         }
@@ -1028,11 +1021,13 @@ public class DAOTemplate
 
         if  (provider != null)
         {
-            result.append(buildCustomSelects(provider));
-            result.append(buildCustomUpdates(provider));
-            result.append(buildCustomInserts(provider));
-            result.append(buildCustomDeletes(provider));
-            result.append(buildCustomSelectForUpdates(provider));
+            result.append(buildCustomSelects(provider, getTableTemplate()));
+            result.append(buildCustomUpdates(provider, getTableTemplate()));
+            result.append(buildCustomInserts(provider, getTableTemplate()));
+            result.append(buildCustomDeletes(provider, getTableTemplate()));
+            result.append(
+                buildCustomSelectForUpdates(
+                    provider, getTableTemplate()));
         }
 
         return result.toString();
@@ -1040,21 +1035,27 @@ public class DAOTemplate
 
     /**
      * Builds the custom selects.
-     * @param provider the CustomSqlProvider instance.
+     * @param provider the <code>CustomSqlProvider</code> instance.
+     * @param tableTemplate the table template.
      * @return such generated code.
      * @precondition provider != null
+     * @precondition tableTemplate != null
      */
-    protected String buildCustomSelects(final CustomSqlProvider provider)
+    protected String buildCustomSelects(
+        final CustomSqlProvider provider,
+        final TableTemplate tableTemplate)
     {
         return
             buildCustomSelects(
                 provider,
+                tableTemplate.getTableName(),
                 getCustomSelect(),
                 getCustomSelectParameterJavadoc(),
                 getCustomSelectParameterDeclaration(),
                 getCustomSelectParameterTypeSpecification(),
                 getCustomSelectParameterValues(),
                 getCustomSelectResultPropertyValues(),
+                DAOTemplateUtils.getInstance(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance());
@@ -1063,6 +1064,7 @@ public class DAOTemplate
     /**
      * Builds the custom selects.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param tableName the table name.
      * @param customSelect the custom select.
      * @param parameterJavadoc the Javadoc template
      * of the parameters.
@@ -1070,28 +1072,33 @@ public class DAOTemplate
      * @param parameterTypeSpecification the parameter type specification.
      * @param parameterValues the parameter values.
      * @param resultPropertyValues the result property values.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
      * @return such generated code.
      * @precondition customSqlProvider != null
+     * @precondition tableName != null
      * @precondition customSelect != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
      * @precondition parameterTypeSpecification != null
      * @precondition parameterValues != null
      * @precondition resultPropertyValues != null
+     * @precondition daoTemplateUtils != null
      * @precondition stringUtils != null
      * @precondition stringValidator != null
      */
     protected String buildCustomSelects(
         final CustomSqlProvider customSqlProvider,
+        final String tableName,
         final String customSelect,
         final String parameterJavadoc,
         final String parameterDeclaration,
         final String parameterTypeSpecification,
         final String parameterValues,
         final String resultPropertyValues,
+        final DAOTemplateUtils daoTemplateUtils,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final StringValidator stringValidator)
@@ -1113,7 +1120,9 @@ public class DAOTemplate
                     SqlElement t_SqlElement =
                         (SqlElement) t_Content;
 
-                    if  (t_SqlElement.SELECT.equals(t_SqlElement.getType()))
+                    if  (   (t_SqlElement.SELECT.equals(t_SqlElement.getType()))
+                         && (daoTemplateUtils.matches(
+                                 tableName, t_SqlElement.getDao())))
                     {
                         String[] t_astrParameterTemplates =
                             buildParameterTemplates(
@@ -1495,26 +1504,32 @@ public class DAOTemplate
     /**
      * Builds the custom updates.
      * @param provider the CustomSqlProvider instance.
+     * @param tableTemplate the table template.
      * @return such generated code.
      * @throws RegexpEngineNotFoundException if the defined
      * regexp engine cannot be found.
      * @throws RegexpPluginMisconfiguredException if
      * RegexpPlugin cannot be configured properly.
      * @precondition provider != null
+     * @precondition tableTemplate != null
      */
-    protected String buildCustomUpdates(final CustomSqlProvider provider)
-        throws  RegexpEngineNotFoundException,
-                RegexpPluginMisconfiguredException
+    protected String buildCustomUpdates(
+        final CustomSqlProvider provider,
+        final TableTemplate tableTemplate)
+      throws  RegexpEngineNotFoundException,
+              RegexpPluginMisconfiguredException
     {
         return
             buildCustomUpdatesOrInserts(
                 provider,
+                tableTemplate.getTableName(),
                 SqlElement.UPDATE,
                 getCustomUpdateOrInsert(),
                 getCustomUpdateOrInsertParameterJavadoc(),
                 getCustomUpdateOrInsertParameterDeclaration(),
                 getCustomUpdateOrInsertParameterTypeSpecification(),
                 getCustomUpdateOrInsertParameterValues(),
+                DAOTemplateUtils.getInstance(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
@@ -1524,6 +1539,7 @@ public class DAOTemplate
     /**
      * Builds the custom update or insert.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param tableName the table name.
      * @param type the type of operation.
      * @param customTemplate the custom template.
      * @param parameterJavadoc the Javadoc template
@@ -1531,18 +1547,21 @@ public class DAOTemplate
      * @param parameterDeclaration the parameter declaration.
      * @param parameterTypeSpecification the parameter type specification.
      * @param parameterValues the parameter values.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
      * @param helper the Helper instance.
      * @return such generated code.
      * @precondition customSqlProvider != null
+     * @precondition tableName != null
      * @precondition type != null
      * @precondition customTemplate != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
      * @precondition parameterTypeSpecification != null
      * @precondition parameterValues != null
+     * @precondition daoTemplateUtils != null
      * @precondition metaDataUtils != null
      * @precondition stringUtils != null
      * @precondition stringValidator != null
@@ -1550,12 +1569,14 @@ public class DAOTemplate
      */
     protected String buildCustomUpdatesOrInserts(
         final CustomSqlProvider customSqlProvider,
+        final String tableName,
         final String type,
         final String customTemplate,
         final String parameterJavadoc,
         final String parameterDeclaration,
         final String parameterTypeSpecification,
         final String parameterValues,
+        final DAOTemplateUtils daoTemplateUtils,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final StringValidator stringValidator,
@@ -1578,7 +1599,9 @@ public class DAOTemplate
                     SqlElement t_SqlElement =
                         (SqlElement) t_Content;
 
-                    if  (type.equals(t_SqlElement.getType()))
+                    if  (   (type.equals(t_SqlElement.getType()))
+                         && (daoTemplateUtils.matches(
+                                 tableName, t_SqlElement.getDao())))
                     {
                         String[] t_astrParameterTemplates =
                             buildParameterTemplates(
@@ -1625,6 +1648,7 @@ public class DAOTemplate
      * @param helper the Helper instance.
      * @return the generated code.
      * @precondition provider != null
+     * @param tableName != null
      * @precondition sqlElement != null
      * @precondition customTemplate != null
      * @precondition parameterJavadoc != null
@@ -1683,20 +1707,26 @@ public class DAOTemplate
     /**
      * Builds the custom inserts.
      * @param provider the CustomSqlProvider instance.
+     * @param tableTemplate the table template.
      * @return such generated code.
      * @precondition provider != null
+     * @precondition tableTemplate != null
      */
-    protected String buildCustomInserts(final CustomSqlProvider provider)
+    protected String buildCustomInserts(
+        final CustomSqlProvider provider,
+        final TableTemplate tableTemplate)
     {
         return
             buildCustomUpdatesOrInserts(
                 provider,
+                tableTemplate.getTableName(),
                 SqlElement.INSERT,
                 getCustomUpdateOrInsert(),
                 getCustomUpdateOrInsertParameterJavadoc(),
                 getCustomUpdateOrInsertParameterDeclaration(),
                 getCustomUpdateOrInsertParameterTypeSpecification(),
                 getCustomUpdateOrInsertParameterValues(),
+                DAOTemplateUtils.getInstance(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
@@ -1706,20 +1736,26 @@ public class DAOTemplate
     /**
      * Builds the custom deletes.
      * @param provider the CustomSqlProvider instance.
+     * @param tableTemplate the table template.
      * @return such generated code.
      * @precondition provider != null
+     * @precondition tableTemplate != null
      */
-    protected String buildCustomDeletes(final CustomSqlProvider provider)
+    protected String buildCustomDeletes(
+        final CustomSqlProvider provider,
+        final TableTemplate tableTemplate)
     {
         return
             buildCustomUpdatesOrInserts(
                 provider,
+                tableTemplate.getTableName(),
                 SqlElement.DELETE,
                 getCustomUpdateOrInsert(),
                 getCustomUpdateOrInsertParameterJavadoc(),
                 getCustomUpdateOrInsertParameterDeclaration(),
                 getCustomUpdateOrInsertParameterTypeSpecification(),
                 getCustomUpdateOrInsertParameterValues(),
+                DAOTemplateUtils.getInstance(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
@@ -1729,15 +1765,19 @@ public class DAOTemplate
     /**
      * Builds the custom select-for-update operationss.
      * @param provider the CustomSqlProvider instance.
+     * @param tableTemplate the table template.
      * @return such generated code.
      * @precondition provider != null
+     * @precondition tableTemplate != null
      */
     protected String buildCustomSelectForUpdates(
-        final CustomSqlProvider provider)
+        final CustomSqlProvider provider,
+        final TableTemplate tableTemplate)
     {
         return
             buildCustomSelectForUpdates(
                 provider,
+                tableTemplate.getTableName(),
                 getCustomSelectForUpdate(),
                 getCustomSelectForUpdateWithNoReturn(),
                 getCustomSelectForUpdateWithReturn(),
@@ -1747,6 +1787,8 @@ public class DAOTemplate
                 getCustomSelectForUpdateReturnJavadoc(),
                 getCustomSelectForUpdateParameterDeclaration(),
                 getCustomSelectForUpdateParameterSpecification(),
+                getCustomSelectForUpdateConditionalReturn(),
+                DAOTemplateUtils.getInstance(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance());
@@ -1755,6 +1797,7 @@ public class DAOTemplate
     /**
      * Builds the custom select-for-update operations.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param tableName the table name.
      * @param customSelectForUpdate the custom-select-for-update template.
      * @param customSelectForUpdateWithNoReturn the
      * custom-select-for-update-with-no-return subtemplate.
@@ -1770,11 +1813,15 @@ public class DAOTemplate
      * of the return.
      * @param parameterDeclaration the parameter declaration.
      * @param parameterSpecification the parameter specification.
+     * @param customSelectForUpdateConditionalReturn the subtemplate
+     * to conditionally provide return statement in select-for-update operations.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
      * @return such generated code.
      * @precondition customSqlProvider != null
+     * @precondition tableName != null
      * @precondition customSelectForUpdate != null
      * @precondition customSelectForUpdateWithNoReturn != null
      * @precondition customSelectForUpdateWithReturn != null
@@ -1782,12 +1829,14 @@ public class DAOTemplate
      * @precondition customSelectForUpdateWithMultipleReturn != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
+     * @precondition daoTemplateUtils != null
      * @precondition metaDataUtils != null
      * @precondition stringUtils != null
      * @precondition stringValidator != null
      */
     protected String buildCustomSelectForUpdates(
         final CustomSqlProvider customSqlProvider,
+        final String tableName,
         final String customSelectForUpdate,
         final String customSelectForUpdateWithNoReturn,
         final String customSelectForUpdateWithReturn,
@@ -1797,6 +1846,8 @@ public class DAOTemplate
         final String customSelectForUpdateReturnJavadoc,
         final String parameterDeclaration,
         final String parameterSpecification,
+        final String customSelectForUpdateConditionalReturn,
+        final DAOTemplateUtils daoTemplateUtils,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final StringValidator stringValidator)
@@ -1818,8 +1869,10 @@ public class DAOTemplate
                     SqlElement t_SqlElement =
                         (SqlElement) t_Content;
 
-                    if  (t_SqlElement.SELECT_FOR_UPDATE.equals(
-                             t_SqlElement.getType()))
+                    if  (   (t_SqlElement.SELECT_FOR_UPDATE.equals(
+                                 t_SqlElement.getType()))
+                         && (daoTemplateUtils.matches(
+                                 tableName, t_SqlElement.getDao())))
                     {
                         String[] t_astrParameterTemplates =
                             buildParameterTemplates(
@@ -1847,6 +1900,7 @@ public class DAOTemplate
                                 customSelectForUpdateReturnJavadoc,
                                 t_astrParameterTemplates[1],
                                 t_astrParameterTemplates[4],
+                                customSelectForUpdateConditionalReturn,
                                 stringUtils));
                     }
                 }
@@ -1873,6 +1927,7 @@ public class DAOTemplate
      * @param returnJavadoc the generated return Javadoc.
      * @param parameterDeclaration the generated parameter declaration.
      * @param parameterSpecification the generated parameter specification.
+     * @param conditionalReturn the conditional return.
      * @param stringUtils the StringUtils isntance.
      * @return the generated code.
      * @precondition provider != null
@@ -1886,6 +1941,7 @@ public class DAOTemplate
      * @precondition returnJavadoc != null
      * @precondition parameterDeclaration != null
      * @precondition parameterSpecification != null
+     * @precondition conditionalReturn != null
      * @precondition stringUtils != null
      */
     protected String buildCustomSelectForUpdate(
@@ -1900,6 +1956,7 @@ public class DAOTemplate
         final String returnJavadoc,
         final String parameterDeclaration,
         final String parameterSpecification,
+        final String conditionalReturn,
         final StringUtils stringUtils)
     {
         String result = "";
@@ -1923,6 +1980,8 @@ public class DAOTemplate
 
         String t_strReturn = "void";
 
+        String t_strConditionalReturn = "";
+
         String t_strReturnJavadoc = "";
 
         if (   (t_Result != null)
@@ -1935,6 +1994,8 @@ public class DAOTemplate
             t_strReturn = t_Result.getClassValue();
 
             t_strReturnJavadoc = returnJavadoc;
+
+            t_strConditionalReturn = conditionalReturn;
         }
         else if  (   (t_Result != null)
                   && (ResultElement.MULTIPLE.equalsIgnoreCase(
@@ -1946,6 +2007,8 @@ public class DAOTemplate
             t_strReturn = "List";
 
             t_strReturnJavadoc = returnJavadoc;
+
+            t_strConditionalReturn = conditionalReturn;
         }
         else
         {
@@ -1979,7 +2042,8 @@ public class DAOTemplate
                         stringUtils.replace(
                             sqlElement.getValue(),
                             "\"", "\\\""),
-                        t_strReturn)
+                        t_strReturn),
+                    t_strConditionalReturn
                 });
 
         return result;

@@ -1367,6 +1367,21 @@ public abstract class Query
     }
 
     /**
+     * Specifies the value of a time parameter, associated with a
+     * previously specified variable condition.
+     * @param condition the variable condition.
+     * @param value the time value.
+     * @see java.sql.PreparedStatement#setTime(int,java.sql.Time)
+     * @throws SQLException if an error occurs.
+     * @precondition variableCondition != null
+     */
+    public void setDate(final VariableCondition condition, final Date value)
+        throws  SQLException
+    {
+        setDate(retrieveIndex(getVariableConditions(), condition), value);
+    }
+
+    /**
      * See java.sql.PreparedStatement#setDate(int,Date,Calendar).
      * @see java.sql.PreparedStatement#setDate(int,java.sql.Date,java.util.Calendar)
      * @param index (Taken from Sun's Javadoc) the first parameter
@@ -1381,6 +1396,36 @@ public abstract class Query
       throws  SQLException
     {
         retrievePreparedStatement().setDate(index, value, calendar);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setDate(int,Date).
+     * @see java.sql.PreparedStatement#setDate(int,java.util.Date)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     * @precondition value != null
+     */
+    public void setDate(final int index, final java.util.Date value)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setDate(index, new Date(value.getTime()));
+    }
+
+    /**
+     * Specifies the value of a time parameter, associated with a
+     * previously specified variable condition.
+     * @param condition the variable condition.
+     * @param value the time value.
+     * @see java.sql.PreparedStatement#setTime(int,java.sql.Time)
+     * @throws SQLException if an error occurs.
+     * @precondition variableCondition != null
+     */
+    public void setDate(final VariableCondition condition, final java.util.Date value)
+        throws  SQLException
+    {
+        setDate(retrieveIndex(getVariableConditions(), condition), value);
     }
 
     /**
@@ -2216,21 +2261,6 @@ public abstract class Query
         throws  SQLException
     {
         setDate(field.equals(), value);
-    }
-
-    /**
-     * Specifies the value of a date parameter, associated with a
-     * previously specified variable condition.
-     * @param condition the variable condition.
-     * @param value the date value.
-     * @see java.sql.PreparedStatement#setDate(int,java.sql.Date)
-     * @throws SQLException if an error occurs.
-     * @precondition variableCondition != null
-     */
-    public void setDate(final VariableCondition condition, final Date value)
-        throws  SQLException
-    {
-        setDate(retrieveIndex(getVariableConditions(), condition), value);
     }
 
     /**

@@ -456,6 +456,10 @@ public abstract class DAOTestTemplate
             metaDataManager.getPrimaryKeys(
                 tableTemplate.getTableName());
 
+        String[] t_astrColumnNames =
+            metaDataManager.getColumnNames(
+                tableTemplate.getTableName());
+
         StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
             new StringBuffer();
 
@@ -471,6 +475,11 @@ public abstract class DAOTestTemplate
         StringBuffer t_sbRemoveFilterValues =
             new StringBuffer();
 
+        boolean t_bNotLastPk = false;
+
+        boolean t_bHasNotOnlyPk =
+            (t_astrPrimaryKeys.length < t_astrColumnNames.length);
+
         if  (t_astrPrimaryKeys != null)
         {
 
@@ -478,6 +487,8 @@ public abstract class DAOTestTemplate
                   t_iPkIndex < t_astrPrimaryKeys.length;
                   t_iPkIndex++) 
             {
+                t_bNotLastPk = false;
+
                 t_sbFindByPrimaryKeyTestParametersValues.append(
                     t_Formatter.format(
                         new Object[]
@@ -518,6 +529,14 @@ public abstract class DAOTestTemplate
                 if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
                 {
                     t_sbFindByPrimaryKeyParametersTypes.append(",");
+                    t_sbRemoveFilterValues.append(",");
+                    t_bNotLastPk = true;
+                }
+
+                if  (   (t_bNotLastPk)
+                     || (t_bHasNotOnlyPk))
+                {
+                    t_sbUpdateFilterValues.append(",");
                 }
 
                 t_sbUpdateParametersTypes.append(
@@ -529,10 +548,6 @@ public abstract class DAOTestTemplate
                 t_sbUpdateParametersTypes.append(",");
             }
         }
-
-        String[] t_astrColumnNames =
-            metaDataManager.getColumnNames(
-                tableTemplate.getTableName());
 
         StringBuffer t_sbInsertTestParametersValues =
             new StringBuffer();
@@ -599,6 +614,7 @@ public abstract class DAOTestTemplate
 
                         if  (t_iColumnIndex < t_astrColumnNames.length - 1)
                         {
+                            t_sbTestParametersUpdatedValues.append(",");
                             t_sbUpdateParametersTypes.append(",");
                         }
                     }
@@ -607,6 +623,10 @@ public abstract class DAOTestTemplate
                     {
                         t_sbInsertParametersTypes.append(",");
                     }
+                }
+                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                {
+                    t_sbInsertTestParametersValues.append(",");
                 }
             }
         }

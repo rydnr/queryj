@@ -110,9 +110,17 @@ public class ParameterElementFactory
 
         String t_strType = attributes.getValue("type");
 
+        String t_strValidationValue =
+            attributes.getValue("validation-value");
+
         result =
             new ParameterElement(
-                t_strId, t_strColumnName, t_iIndex, t_strName, t_strType);
+                t_strId,
+                t_strColumnName,
+                t_iIndex,
+                t_strName,
+                t_strType,
+                t_strValidationValue);
 
         return result;
     }

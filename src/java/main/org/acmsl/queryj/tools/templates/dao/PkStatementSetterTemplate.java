@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create AttributesStatementSetter implementation for each
+ * Description: Is able to create PkStatementSetter implementation for each
  *              table in the persistence model.
  *
  * Last modified by: $Author$ at $Date$
@@ -53,8 +53,8 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.AbstractAttributesStatementSetterTemplate;
-import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplateDefaults;
+import org.acmsl.queryj.tools.templates.dao.AbstractPkStatementSetterTemplate;
+import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplateDefaults;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -88,18 +88,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Is able to create AttributesStatementSetter implementations for each
+ * Is able to create PkStatementSetter implementations for each
  * table in the persistence model.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public class AttributesStatementSetterTemplate
-    extends  AbstractAttributesStatementSetterTemplate
-    implements  AttributesStatementSetterTemplateDefaults
+public class PkStatementSetterTemplate
+    extends  AbstractPkStatementSetterTemplate
+    implements  PkStatementSetterTemplateDefaults
 {
     /**
-     * Builds a <code>AttributesStatementSetterTemplate</code> using given information.
+     * Builds a <code>PkStatementSetterTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metaDataManager the database metadata manager.
      * @param packageName the package name.
@@ -108,7 +108,7 @@ public class AttributesStatementSetterTemplate
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      */
-    public AttributesStatementSetterTemplate(
+    public PkStatementSetterTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
@@ -378,15 +378,15 @@ public class AttributesStatementSetterTemplate
         StringBuffer t_sbParameterDeclarations = new StringBuffer();
         StringBuffer t_sbParameterSpecifications = new StringBuffer();
 
-        String[] t_astrColumnNames =
-            metaDataManager.getColumnNames(t_strTableName);
+        String[] t_astrPrimaryKeys =
+            metaDataManager.getPrimaryKeys(t_strTableName);
 
-        if  (   (t_astrColumnNames == null)
-             || (t_astrColumnNames.length == 0))
+        if  (   (t_astrPrimaryKeys == null)
+             || (t_astrPrimaryKeys.length == 0))
         {
             throw
                 new InvalidTemplateException(
-                    "cannot.generate.attributes.statement.setter.template.no.columns",
+                    "cannot.generate.pk.statement.setter.template.no.pk",
                       new Object[] { t_strTableName });
         }
         else
@@ -398,12 +398,12 @@ public class AttributesStatementSetterTemplate
             String t_strPropertyType = "";
 
             for  (int t_iColumnIndex = 0;
-                      t_iColumnIndex < t_astrColumnNames.length;
+                      t_iColumnIndex < t_astrPrimaryKeys.length;
                       t_iColumnIndex++)
             {
                 t_strCapitalizedParameterName =
                     stringUtils.capitalize(
-                        t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                        t_astrPrimaryKeys[t_iColumnIndex].toLowerCase(),
                         '_');
 
                 t_strParameterName =
@@ -414,18 +414,18 @@ public class AttributesStatementSetterTemplate
                     metaDataUtils.getFieldType(
                         metaDataManager.getColumnType(
                             t_strTableName,
-                            t_astrColumnNames[t_iColumnIndex]),
+                            t_astrPrimaryKeys[t_iColumnIndex]),
                         project,
                         task);
 
                 t_strPropertyName =
-                    t_astrColumnNames[t_iColumnIndex].toUpperCase();
+                    t_astrPrimaryKeys[t_iColumnIndex].toUpperCase();
 
                 t_strPropertyType =
                     metaDataUtils.getObjectType(
                         metaDataManager.getColumnType(
                             t_strTableName,
-                            t_astrColumnNames[t_iColumnIndex]));
+                            t_astrPrimaryKeys[t_iColumnIndex]));
 
                 t_sbParameterSetterCalls.append(
                     t_ParameterSetterCallFormatter.format(
@@ -457,7 +457,7 @@ public class AttributesStatementSetterTemplate
                         new Object[]
                         {
                             t_strParameterName,
-                            t_astrColumnNames[t_iColumnIndex].toUpperCase()
+                            t_astrPrimaryKeys[t_iColumnIndex].toUpperCase()
                         }));
 
                 t_sbParameterDeclarations.append(
@@ -479,7 +479,7 @@ public class AttributesStatementSetterTemplate
                             t_strParameterName
                         }));
 
-                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                if  (t_iColumnIndex < t_astrPrimaryKeys.length - 1)
                 {
                     t_sbParameterDeclarations.append(",");
                 }

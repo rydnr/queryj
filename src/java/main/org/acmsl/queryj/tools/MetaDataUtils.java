@@ -263,10 +263,11 @@ public class MetaDataUtils
 
         Integer t_Numeric = new Integer(Types.NUMERIC);
         Integer t_Integer = new Integer(Types.INTEGER);
-        Integer t_Long    = new Integer(Types.BIGINT );
-        Integer t_Double  = new Integer(Types.REAL   );
-        Integer t_Time    = new Integer(Types.TIME   );
-        Integer t_Text    = new Integer(Types.VARCHAR);
+        Integer t_Long = new Integer(Types.BIGINT);
+        Integer t_Double = new Integer(Types.REAL);
+        Integer t_Time = new Integer(Types.TIME);
+        Integer t_TimeStamp = new Integer(Types.TIMESTAMP);
+        Integer t_Text = new Integer(Types.VARCHAR);
 
         result.put("DECIMAL"    , t_Numeric);
         result.put("BigDecimal" , t_Numeric);
@@ -283,23 +284,23 @@ public class MetaDataUtils
         result.put("BIGINT"     , t_Long);
         result.put("Long"       , t_Long);
         result.put("long"       , t_Long);
-        result.put("REAL"       , t_Double );
-        result.put("FLOAT"      , t_Double );
-        result.put("DOUBLE"     , t_Double );
-        result.put("float"      , t_Double );
-        result.put("double"     , t_Double );
-        result.put("TIME"       , t_Time   );
-        result.put("DATE"       , t_Time   );
-        result.put("Date"       , t_Time   );
-        result.put("TIMESTAMP"  , t_Time   );
-        result.put("Timestamp"  , t_Time   );
-        result.put("CHAR"       , t_Text   );
-        result.put("VARCHAR"    , t_Text   );
-        result.put("VARCHAR2"   , t_Text   );
-        result.put("LONGVARCHAR", t_Text   );
-        result.put("BINARY"     , t_Text   );
-        result.put("VARBINARY"  , t_Text   );
-        result.put("String"     , t_Text   );
+        result.put("REAL"       , t_Double);
+        result.put("FLOAT"      , t_Double);
+        result.put("DOUBLE"     , t_Double);
+        result.put("float"      , t_Double);
+        result.put("double"     , t_Double);
+        result.put("TIME"       , t_Time);
+        result.put("DATE"       , t_Time);
+        result.put("Date"       , t_Time);
+        result.put("TIMESTAMP"  , t_TimeStamp);
+        result.put("Timestamp"  , t_TimeStamp);
+        result.put("CHAR"       , t_Text);
+        result.put("VARCHAR"    , t_Text);
+        result.put("VARCHAR2"   , t_Text);
+        result.put("LONGVARCHAR", t_Text);
+        result.put("BINARY"     , t_Text);
+        result.put("VARBINARY"  , t_Text);
+        result.put("String"     , t_Text);
 
         return result;
     }
@@ -381,9 +382,12 @@ public class MetaDataUtils
 
             case Types.TIME:
             case Types.DATE:
-            case Types.TIMESTAMP:
             case 11:
                 result = "Date";
+                break;
+
+            case Types.TIMESTAMP:
+                result = "Timestamp";
                 break;
 
             case Types.CHAR:
@@ -599,8 +603,11 @@ public class MetaDataUtils
 
             case Types.TIME:
             case Types.DATE:
-            case Types.TIMESTAMP:
             case 11:
+                result = "Date";
+                break;
+
+            case Types.TIMESTAMP:
                 result = "Timestamp";
                 break;
 

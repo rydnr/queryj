@@ -68,22 +68,61 @@ public class ParameterElement
     extends  AbstractParameterElement
 {
     /**
+     * The validation value.
+     */
+    private String m__strValidationValue;
+
+    /**
      * Creates a ParameterElement with given information.
      * @param id the <i>id</i> attribute.
      * @param columnName the <i>columnName</i> attribute.
      * @param index the <i>index</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
+     * @param validationValue the <i>validation-value</i> attribute.
      * @precondition id != null
      * @precondition type != null
+     * @precondition validationValue != null
      */
     public ParameterElement(
         final String id,
         final String columnName,
         final int index,
         final String name,
-        final String type)
+        final String type,
+        final String validationValue)
     {
         super(id, columnName, index, name, type);
+
+        immutableSetValidationValue(validationValue);
+    }
+
+    /**
+     * Specifies the validation value.
+     * @param validationValue the validation value.
+     */
+    protected final void immutableSetValidationValue(
+        final String validationValue)
+    {
+        m__strValidationValue = validationValue;
+    }
+
+    /**
+     * Specifies the validation value.
+     * @param validationValue the validation value.
+     */
+    protected void setValidationValue(
+        final String validationValue)
+    {
+        immutableSetValidationValue(validationValue);
+    }
+
+    /**
+     * Retrieves the validation value.
+     * @return such value.
+     */
+    public String getValidationValue()
+    {
+        return m__strValidationValue;
     }
 }

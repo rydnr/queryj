@@ -161,6 +161,11 @@ public class SqlElement
     private String m__strImplementation;
 
     /**
+     * The <i>validate</i> attribute.
+     */
+    private boolean m__bValidate = true;
+
+    /**
      * The <i>description</i> attribute.
      */
     private String m__strDescription;
@@ -202,6 +207,7 @@ public class SqlElement
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
      * @param implementation the <i>implementation</i> attribute.
+     * @param validate the <i>validate</i> attribute.
      * @precondition id != null
      * @precondition dao != null
      * @precondition name != null
@@ -213,13 +219,15 @@ public class SqlElement
         final String dao,
         final String name,
         final String type,
-        final String implementation)
+        final String implementation,
+        final boolean validate)
     {
         super(id);
         immutableSetDAO(dao);
         immutableSetName(name);
         immutableSetType(type);
         immutableSetImplementation(implementation);
+        immutableSetValidate(validate);
     }
 
     /**
@@ -337,6 +345,51 @@ public class SqlElement
     public String getImplementation()
     {
         return m__strImplementation;
+    }
+
+    /**
+     * Specifies the <i>validate</i> attribute.
+     * @param validate such flag.
+     */
+    protected final void immutableSetValidate(final boolean validate)
+    {
+        m__bValidate = validate;
+    }
+
+    /**
+     * Specifies the <i>validate</i> attribute.
+     * @param validate such flag.
+     */
+    protected void setValidate(final boolean validate)
+    {
+        immutableSetValidate(validate);
+    }
+
+    /**
+     * Specifies the <i>validate</i> attribute.
+     * @param validate such flag.
+     */
+    protected void isValidate(final boolean validate)
+    {
+        immutableSetValidate(validate);
+    }
+
+    /**
+     * Retrieves the <i>validate</i> attribute.
+     * @return such information.
+     */
+    public boolean getValidate()
+    {
+        return m__bValidate;
+    }
+
+    /**
+     * Retrieves the <i>validate</i> attribute.
+     * @return such information.
+     */
+    public boolean isValidate()
+    {
+        return getValidate();
     }
 
     /**
