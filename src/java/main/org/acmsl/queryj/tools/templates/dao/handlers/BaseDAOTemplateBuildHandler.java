@@ -56,14 +56,13 @@ import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
+import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
 
 /*
  * Importing some ACM-SL classes.
@@ -74,30 +73,25 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.sql.DatabaseMetaData;
 import java.util.Map;
 
 /**
  * Builds a base DAO template using database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class BaseDAOTemplateBuildHandler
     extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
-    /**
-     * A cached empty table template array.
-     */
-    public static final TableTemplate[] EMPTY_TABLE_TEMPLATE_ARRAY =
-        new TableTemplate[0];
-
     /**
      * Creates a BaseDAOTemplateBuildHandler.
      */
@@ -108,82 +102,97 @@ public class BaseDAOTemplateBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            try
-            {
-                Map attributes = command.getAttributeMap();
-
-                DatabaseMetaData t_MetaData =
-                    retrieveDatabaseMetaData(attributes);
-
-                DatabaseMetaDataManager t_MetaDataManager =
-                    retrieveDatabaseMetaDataManager(attributes);
-
-                String t_strPackage = retrievePackage(attributes);
-
-                BaseDAOTemplateGenerator t_BaseDAOTemplateGenerator =
-                    BaseDAOTemplateGenerator.getInstance();
-
-                if  (   (t_MetaData             != null)
-                     && (t_MetaDataManager      != null)
-                     && (t_BaseDAOTemplateGenerator != null))
-                {
-                    TableTemplate[] t_aTableTemplates = retrieveTableTemplates(attributes);
-
-                    if  (t_aTableTemplates != null)
-                    {
-                        BaseDAOTemplate[] t_aBaseDAOTemplates =
-                            new BaseDAOTemplate[t_aTableTemplates.length];
-
-                        for  (int t_iBaseDAOIndex = 0;
-                                  t_iBaseDAOIndex < t_aBaseDAOTemplates.length;
-                                  t_iBaseDAOIndex++) 
-                        {
-                            t_aBaseDAOTemplates[t_iBaseDAOIndex] =
-                                t_BaseDAOTemplateGenerator.createBaseDAOTemplate(
-                                    t_aTableTemplates[t_iBaseDAOIndex],
-                                    t_MetaDataManager,
-                                    t_strPackage);
-                        }
-
-                        storeBaseDAOTemplates(t_aBaseDAOTemplates, attributes);
-                    }
-                }
-            }
-            catch  (QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
-        }
-        
-        return result;
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask());
     }
 
     /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-            Map parameters)
-        throws  BuildException
+    protected boolean handle(
+        final Map parameters,
+        final Project project,
+        final Task task)
+      throws  BuildException
     {
-        DatabaseMetaData result = null;
+        return
+            handle(
+                parameters,
+                retrieveDatabaseMetaDataManager(parameters),
+                retrievePackage(parameters),
+                retrieveTableTemplates(parameters),
+                BaseDAOTemplateGenerator.getInstance(),
+                project,
+                task);
+    }
 
-        if  (parameters != null)
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param databaseMetaDataManager the manager instance
+     * of the database metadata.
+     * @param packageName the package name.
+     * @param tableTemplates the table templates.
+     * @param templateFactory the template factory.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition databaseMetaDataManager != null
+     * @precondition packageName != null
+     * @precondition tableTemplates != null
+     * @precondition templateFactory != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaDataManager databaseMetaDataManager,
+        final String packageName,
+        final TableTemplate[] tableTemplates,
+        final BaseDAOTemplateFactory templateFactory,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
+        boolean result = false;
+
+        BaseDAOTemplate[] t_aBaseDAOTemplates =
+            new BaseDAOTemplate[tableTemplates.length];
+
+        try
         {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
+            for  (int t_iBaseDAOIndex = 0;
+                      t_iBaseDAOIndex < t_aBaseDAOTemplates.length;
+                      t_iBaseDAOIndex++) 
+            {
+                t_aBaseDAOTemplates[t_iBaseDAOIndex] =
+                    templateFactory.createBaseDAOTemplate(
+                        tableTemplates[t_iBaseDAOIndex],
+                        databaseMetaDataManager,
+                        packageName,
+                        project,
+                        task);
+            }
+
+            storeBaseDAOTemplates(t_aBaseDAOTemplates, parameters);
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw new BuildException(queryjException);
         }
         
         return result;
@@ -194,22 +203,16 @@ public class BaseDAOTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the manager.
      * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
-        DatabaseMetaDataManager result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-        }
-        
-        return result;
+        return
+            (DatabaseMetaDataManager)
+                parameters.get(
+                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**
@@ -217,24 +220,30 @@ public class BaseDAOTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrievePackage(Map parameters)
+    protected String retrievePackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
+        return retrievePackage(parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveBaseDAOPackage(
-                    (String)
-                        parameters.get(ParameterValidationHandler.PACKAGE));
-        }
-        
-        return result;
+    /**
+     * Retrieves the package name from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected String retrievePackage(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveBaseDAOPackage(
+                (String) parameters.get(ParameterValidationHandler.PACKAGE));
     }
 
     /**
@@ -242,18 +251,15 @@ public class BaseDAOTemplateBuildHandler
      * @param baseDAOTemplates the base DAO templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition baseDAOTemplates != null
+     * @precondition parameters != null
      */
     protected void storeBaseDAOTemplates(
-            BaseDAOTemplate[] baseDAOTemplates,
-            Map               parameters)
-        throws  BuildException
+        final BaseDAOTemplate[] baseDAOTemplates, final Map parameters)
+      throws  BuildException
     {
-        if  (   (baseDAOTemplates != null)
-             && (parameters       != null))
-        {
-            parameters.put(
-                TemplateMappingManager.BASE_DAO_TEMPLATES, baseDAOTemplates);
-        }
+        parameters.put(
+            TemplateMappingManager.BASE_DAO_TEMPLATES, baseDAOTemplates);
     }
 
     /**
@@ -261,20 +267,13 @@ public class BaseDAOTemplateBuildHandler
      * @param parameters the parameter map.
      * @return such templates.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(
-            Map parameters)
+    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
         throws  BuildException
     {
-        TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (TableTemplate[])
-                    parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-        }
-
-        return result;
+        return
+            (TableTemplate[])
+                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
     }
 }

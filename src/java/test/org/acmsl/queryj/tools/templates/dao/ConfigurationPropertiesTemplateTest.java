@@ -122,7 +122,9 @@ extends TestCase
             "queryj", // repository
             "mysql", // engine name
             "4.1.1", // engine version
-            "com.foo.bar"); // base package name
+            "com.foo.bar", // base package name
+            null,
+            null);
     // JUnitDoclet end method testcase.createInstance
   }
   

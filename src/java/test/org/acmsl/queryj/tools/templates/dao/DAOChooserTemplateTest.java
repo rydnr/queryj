@@ -120,7 +120,9 @@ extends TestCase
     return
         new org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate(
             "com.foo.bar", // package name
-            "queryj"); // repository
+            "queryj", // repository
+            null,
+            null);
     // JUnitDoclet end method testcase.createInstance
   }
   

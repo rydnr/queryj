@@ -127,7 +127,9 @@ extends TestCase
             "4.0.1", // engine version
             "'", // quote
             "com.foo.bar", // base package name
-            "bar"); // repository name
+            "bar", // repository name
+            null,
+            null);
     // JUnitDoclet end method testcase.createInstance
   }
   

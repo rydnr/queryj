@@ -122,7 +122,9 @@ extends TestCase
             null, // table template
             null, // database metadata manager
             "com.foo.bar.dao", // package name
-            "com.foo.bar"); // project package name
+            "com.foo.bar", // project package name
+            null,
+            null);
     // JUnitDoclet end method testcase.createInstance
   }
   

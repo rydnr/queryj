@@ -89,12 +89,6 @@ public class BaseDAOFactoryTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
-     * A cached empty table template array.
-     */
-    public static final TableTemplate[] EMPTY_TABLE_TEMPLATE_ARRAY =
-        new TableTemplate[0];
-
-    /**
      * Creates a BaseDAOFactoryTemplateBuildHandler.
      */
     public BaseDAOFactoryTemplateBuildHandler() {};

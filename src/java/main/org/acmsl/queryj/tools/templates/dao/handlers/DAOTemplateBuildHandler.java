@@ -60,6 +60,7 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
+import org.acmsl.queryj.tools.templates.dao.DAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
@@ -86,16 +87,10 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Map;
 
-
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Builds a DAO template using database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class DAOTemplateBuildHandler
@@ -122,116 +117,210 @@ public class DAOTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(
+        final Map parameters, final Project project, final Task task)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveDatabaseMetaData(parameters),
+                project,
+                task);
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param metaData the database metadata.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaData metaData,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
         boolean result = false;
 
         try
         {
-            Map attributes = command.getAttributeMap();
-
-            DatabaseMetaData t_MetaData =
-                retrieveDatabaseMetaData(attributes);
-
-            DatabaseMetaDataManager t_MetaDataManager =
-                retrieveDatabaseMetaDataManager(attributes);
-
-            CustomSqlProvider t_CustomSqlProvider =
-                retrieveCustomSqlProvider(attributes);
-
-            DAOTemplateGenerator t_DAOTemplateGenerator =
-                DAOTemplateGenerator.getInstance();
-
-            if  (   (t_MetaData             != null)
-                 && (t_MetaDataManager      != null)
-                 && (t_DAOTemplateGenerator != null))
-            {
-                String t_strBasePackage =
-                    retrieveProjectPackage(attributes);
-
-                String t_strPackage =
-                    retrievePackage(
-                        t_MetaData.getDatabaseProductName(),
-                        attributes);
-
-                String t_strRepositoryName =
-                    retrieveTableRepositoryName(attributes);
-
-                TableTemplate[] t_aTableTemplates =
-                    retrieveTableTemplates(attributes);
-
-                if  (t_aTableTemplates != null)
-                {
-                    DAOTemplate[] t_aDAOTemplates =
-                        new DAOTemplate[t_aTableTemplates.length];
-
-                    for  (int t_iDAOIndex = 0;
-                              t_iDAOIndex < t_aDAOTemplates.length;
-                              t_iDAOIndex++) 
-                    {
-                        String t_strQuote =
-                            t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
-                        {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
-                        t_aDAOTemplates[t_iDAOIndex] =
-                            t_DAOTemplateGenerator.createDAOTemplate(
-                                t_aTableTemplates[t_iDAOIndex],
-                                t_MetaDataManager,
-                                t_CustomSqlProvider,
-                                t_strPackage,
-                                t_MetaData.getDatabaseProductName(),
-                                t_MetaData.getDatabaseProductVersion(),
-                                t_strQuote,
-                                t_strBasePackage,
-                                t_strRepositoryName,
-                                project,
-                                task);
-                    }
-
-                    storeDAOTemplates(t_aDAOTemplates, attributes);
-                }
-            }
+            result =
+                handle(
+                    parameters,
+                    metaData.getDatabaseProductName(),
+                    metaData.getDatabaseProductVersion(),
+                    fixQuote(metaData.getIdentifierQuoteString()),
+                    project,
+                    task);
         }
-        catch  (SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
-            Project t_Project = command.getProject();
-
-            if  (t_Project != null)
-            {
-                t_Project.log(
-                    command.getTask(),
-                      "Error building DAO ("
-                    + sqlException.getMessage()
-                    + ")",
-                    Project.MSG_WARN);
-            }
-            
             throw new BuildException(sqlException);
         }
-        catch  (QueryJException queryjException)
-        {
-            Project t_Project = command.getProject();
 
-            if  (t_Project != null)
+        return result;
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition engineName != null
+     * @precondition quote != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                engineName,
+                engineVersion,
+                quote,
+                retrieveDatabaseMetaDataManager(parameters),
+                retrieveCustomSqlProvider(parameters),
+                DAOTemplateGenerator.getInstance(),
+                retrieveProjectPackage(parameters),
+                retrievePackage(engineName, parameters),
+                retrieveTableRepositoryName(parameters),
+                retrieveTableTemplates(parameters),
+                project,
+                task);
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
+     * @param metaDataManager the database metadata manager.
+     * @param customSqlProvider the custom sql provider.
+     * @param templateFactory the template factory.
+     * @param projectPackage the project package.
+     * @param packageName the package name.
+     * @param repository the repository.
+     * @param tableTemplates the table templates.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition engineName != null
+     * @precondition metaDataManager != null
+     * @precondition customSqlProvider != null
+     * @precondition templateFactory != null
+     * @precondition projectPackage != null
+     * @precondition packageName != null
+     * @precondition repository != null
+     * @precondition tableTemplates != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final DatabaseMetaDataManager metaDataManager,
+        final CustomSqlProvider customSqlProvider,
+        final DAOTemplateFactory templateFactory,
+        final String projectPackage,
+        final String packageName,
+        final String repository,
+        final TableTemplate[] tableTemplates,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
+        boolean result = false;
+
+        DAOTemplate[] t_aDAOTemplates = new DAOTemplate[tableTemplates.length];
+
+        try
+        {
+            for  (int t_iDAOIndex = 0;
+                      t_iDAOIndex < t_aDAOTemplates.length;
+                      t_iDAOIndex++) 
             {
-                t_Project.log(
-                    command.getTask(),
-                      "Error building Mock DAO ("
-                    + queryjException.getMessage()
-                    + ")",
-                    Project.MSG_WARN);
+                t_aDAOTemplates[t_iDAOIndex] =
+                    templateFactory.createDAOTemplate(
+                        tableTemplates[t_iDAOIndex],
+                        metaDataManager,
+                        customSqlProvider,
+                        packageName,
+                        engineName,
+                        engineVersion,
+                        quote,
+                        projectPackage,
+                        repository,
+                        project,
+                        task);
             }
 
+            storeDAOTemplates(t_aDAOTemplates, parameters);
+        }
+        catch  (final QueryJException queryjException)
+        {
             throw new BuildException(queryjException);
         }
         
+        return result;
+    }
+
+    /**
+     * Fixes given quote character.
+     * @param quote the quote.
+     * @return the correct one.
+     */
+    protected String fixQuote(final String quote)
+    {
+        String result = quote;
+
+        if  (result == null)
+        {
+            result = "\"";
+        }
+
+        if  (result.equals("\""))
+        {
+            result = "\\\"";
+        }
+
         return result;
     }
 
@@ -318,19 +407,33 @@ public class DAOTemplateBuildHandler
         final String engineName, final Map parameters)
       throws  BuildException
     {
-        String result = null;
+        return
+            retrievePackage(
+                engineName,
+                parameters,
+                PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (t_PackageUtils != null)
-        {
-            result =
-                t_PackageUtils.retrieveDAOPackage(
-                    retrieveProjectPackage(parameters),
-                    engineName);
-        }
-        
-        return result;
+    /**
+     * Retrieves the package name from the attribute map.
+     * @param engineName the engine name.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected String retrievePackage(
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveDAOPackage(
+                retrieveProjectPackage(parameters),
+                engineName);
     }
 
     /**
@@ -351,18 +454,14 @@ public class DAOTemplateBuildHandler
      * Stores the DAO template collection in given attribute map.
      * @param daoTemplates the DAO templates.
      * @param parameters the parameter map.
-     * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition daoTemplates != null
      * @precondition parameters != null
      */
     protected void storeDAOTemplates(
         final DAOTemplate[] daoTemplates,
-        final Map           parameters)
-      throws  BuildException
+        final Map parameters)
     {
-        if  (daoTemplates != null)
-        {
-            parameters.put(TemplateMappingManager.DAO_TEMPLATES, daoTemplates);
-        }
+        parameters.put(TemplateMappingManager.DAO_TEMPLATES, daoTemplates);
     }
 
     /**
