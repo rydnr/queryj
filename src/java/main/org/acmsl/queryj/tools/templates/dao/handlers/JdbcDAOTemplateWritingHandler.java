@@ -91,38 +91,57 @@ public class JdbcDAOTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
+    {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+      throws  BuildException
+    {
+        return
+            handle(
+                retrieveJdbcDAOTemplate(parameters),
+                retrieveOutputDir(parameters),
+                JdbcDAOTemplateGenerator.getInstance());
+    }
+                
+    /**
+     * Handles given information.
+     * @param jdbcDAOTemplate the JDBC DAO template.
+     * @param outputDir the output dir.
+     * @param jdbcDAOTemplateGenerator the
+     * <code>JdbcDAOTemplateGenerator</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition jdbcDAOTemplate != null
+     * @precondition outputDir != null
+     * @precondition jdbcDAOTemplateGenerator != null
+     */
+    protected boolean handle(
+        final JdbcDAOTemplate jdbcDAOTemplate,
+        final File outputDir,
+        final JdbcDAOTemplateGenerator jdbcDAOTemplateGenerator)
+      throws  BuildException
     {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
-            {
-                Map attributes = command.getAttributeMap();
-
-                JdbcDAOTemplateGenerator t_JdbcDAOTemplateGenerator =
-                    JdbcDAOTemplateGenerator.getInstance();
-
-                JdbcDAOTemplate t_JdbcDAOTemplate =
-                    retrieveJdbcDAOTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                != null) 
-                     && (t_JdbcDAOTemplate          != null)
-                     && (t_JdbcDAOTemplateGenerator != null))
-                {
-                    t_JdbcDAOTemplateGenerator.write(
-                        t_JdbcDAOTemplate, t_OutputDir);
-                }
-            }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+            jdbcDAOTemplateGenerator.write(jdbcDAOTemplate, outputDir);
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -133,21 +152,14 @@ public class JdbcDAOTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected JdbcDAOTemplate retrieveJdbcDAOTemplate(Map parameters)
+    protected JdbcDAOTemplate retrieveJdbcDAOTemplate(final Map parameters)
         throws  BuildException
     {
-        JdbcDAOTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (JdbcDAOTemplate)
-                    parameters.get(
-                        TemplateMappingManager.JDBC_DAO_TEMPLATE);
-        }
-        
-        return result;
+        return
+            (JdbcDAOTemplate)
+                parameters.get(TemplateMappingManager.JDBC_DAO_TEMPLATE);
     }
 
     /**
@@ -155,24 +167,31 @@ public class JdbcDAOTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
+    protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveJdbcDAOFolder(
-                    (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters));
-        }
-
-        return result;
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveJdbcDAOFolder(
+                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
+                retrieveProjectPackage(parameters));
     }
 
     /**
@@ -180,18 +199,12 @@ public class JdbcDAOTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected String retrieveProjectPackage(Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 }

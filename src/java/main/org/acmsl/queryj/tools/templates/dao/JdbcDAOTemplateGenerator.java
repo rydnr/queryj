@@ -61,6 +61,12 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -90,7 +96,8 @@ public class JdbcDAOTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(JdbcDAOTemplateGenerator generator)
+    protected static void setReference(
+        final JdbcDAOTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -132,44 +139,54 @@ public class JdbcDAOTemplateGenerator
     /**
      * Adds a new template factory class.
      * @param templateFactoryClass the template factory.
+     * @precondition templateFactoryClass != null
      */
     public void addTemplateFactoryClass(
-        String templateFactoryClass)
+        final String templateFactoryClass)
     {
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
+        addTemplateFactoryClass(
+            templateFactoryClass, TemplateMappingManager.getInstance());
+    }
 
-        if  (   (t_MappingManager     != null)
-             && (templateFactoryClass != null))
-        {
-            t_MappingManager.addDefaultTemplateFactoryClass(
-                TemplateMappingManager.JDBC_DAO_TEMPLATE_FACTORY,
-                templateFactoryClass);
-        }
+    /**
+     * Adds a new template factory class.
+     * @param templateFactoryClass the template factory.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @precondition templateFactoryClass != null
+     * @precondition templateMappingManager != null
+     */
+    public void addTemplateFactoryClass(
+        final String templateFactoryClass,
+        final TemplateMappingManager templateMappingManager)
+    {
+        templateMappingManager.addDefaultTemplateFactoryClass(
+            TemplateMappingManager.JDBC_DAO_TEMPLATE_FACTORY,
+            templateFactoryClass);
     }
 
     /**
      * Retrieves the template factory class.
-     * @param jdbcDAOName the JDBC DAO name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @return the template factory class name.
      */
     protected String getTemplateFactoryClass()
     {
-        String result = null;
+        return getTemplateFactoryClass(TemplateMappingManager.getInstance());
+    }
 
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (t_MappingManager != null)
-        {
-            result =
-                t_MappingManager.getDefaultTemplateFactoryClass(
-                    TemplateMappingManager.JDBC_DAO_TEMPLATE_FACTORY);
-        }
-
-        return result;
+    /**
+     * Retrieves the template factory class.
+     * @param templateMappingManager the
+     * <code>TemplateMappingManager</code> instance.
+     * @return the template factory class name.
+     * @precondition templateMappingManager != null
+     */
+    protected String getTemplateFactoryClass(
+        final TemplateMappingManager templateMappingManager)
+    {
+        return
+            templateMappingManager.getDefaultTemplateFactoryClass(
+                TemplateMappingManager.JDBC_DAO_TEMPLATE_FACTORY);
     }
 
     /**
@@ -180,30 +197,45 @@ public class JdbcDAOTemplateGenerator
     protected JdbcDAOTemplateFactory getTemplateFactory()
         throws  QueryJException
     {
+        return getTemplateFactory(TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Retrieves the template factory instance.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition templateMappingManager != null
+     */
+    protected JdbcDAOTemplateFactory getTemplateFactory(
+        final TemplateMappingManager templateMappingManager)
+      throws  QueryJException
+    {
         JdbcDAOTemplateFactory result = null;
 
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (t_MappingManager != null)
-        {
-            Object t_TemplateFactory =
-                t_MappingManager.getDefaultTemplateFactoryClass(
-                    TemplateMappingManager.JDBC_DAO_TEMPLATE_FACTORY);
+        Object t_TemplateFactory =
+            templateMappingManager.getDefaultTemplateFactoryClass(
+                TemplateMappingManager.JDBC_DAO_TEMPLATE_FACTORY);
     
-            if  (t_TemplateFactory != null)
+        if  (t_TemplateFactory != null)
+        {
+            if  (!(t_TemplateFactory instanceof JdbcDAOTemplateFactory))
             {
-                if  (!(t_TemplateFactory instanceof JdbcDAOTemplateFactory))
-                {
-                    throw
-                        new QueryJException(
-                            "invalid.jdbc.dao.template.factory");
-                }
-                else 
-                {
-                    result = (JdbcDAOTemplateFactory) t_TemplateFactory;
-                }
+                throw
+                    new QueryJException(
+                        "invalid.jdbc.dao.template.factory");
             }
+            else 
+            {
+                result = (JdbcDAOTemplateFactory) t_TemplateFactory;
+            }
+        }
+        else
+        {
+            throw
+                new QueryJException(
+                    "jdbc.dao.template.factory.not.found");
         }
 
         return result;
@@ -212,31 +244,50 @@ public class JdbcDAOTemplateGenerator
     /**
      * Generates a JDBC DAO template.
      * @param packageName the package name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
+     * @precondition packageName != null
      */
     public JdbcDAOTemplate createJdbcDAOTemplate(
-            String packageName)
-        throws  QueryJException
+        final String packageName, final Project project, final Task task)
+      throws  QueryJException
+    {
+        return
+            createJdbcDAOTemplate(
+                packageName, getTemplateFactory(), project, task);
+    }
+
+    /**
+     * Generates a JDBC DAO template.
+     * @param packageName the package name.
+     * @param templateFactory the template factory.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return a template.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition packageName != null
+     */
+    public JdbcDAOTemplate createJdbcDAOTemplate(
+        final String packageName,
+        final JdbcDAOTemplateFactory templateFactory,
+        final Project project,
+        final Task task)
+      throws  QueryJException
     {
         JdbcDAOTemplate result = null;
 
-        if  (packageName != null)
+        if  (templateFactory != null)
         {
-            JdbcDAOTemplateFactory t_TemplateFactory =
-                getTemplateFactory();
-
-            if  (t_TemplateFactory != null)
-            {
-                result =
-                    t_TemplateFactory.createJdbcDAOTemplate(
-                        packageName);
-            }
-            else 
-            {
-                result =
-                    new JdbcDAOTemplate(packageName) {};
-            }
+            result =
+                templateFactory.createJdbcDAOTemplate(
+                    packageName, project, task);
+        }
+        else 
+        {
+            result =
+                new JdbcDAOTemplate(packageName, project, task) {};
         }
 
         return result;
@@ -247,29 +298,46 @@ public class JdbcDAOTemplateGenerator
      * @param jdbcDAOTemplate the JDBC DAO template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
+     * @precondition jdbcDAOTemplate != null
+     * @precondition outputDir != null
      */
     public void write(
-            JdbcDAOTemplate jdbcDAOTemplate,
-            File            outputDir)
-        throws  IOException
+        final JdbcDAOTemplate jdbcDAOTemplate,
+        final File outputDir)
+      throws  IOException
     {
-        if  (   (jdbcDAOTemplate != null)
-             && (outputDir       != null))
-        {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            jdbcDAOTemplate,
+            outputDir,
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a JDBC DAO template to disk.
+     * @param jdbcDAOTemplate the JDBC DAO template to write.
+     * @param outputDir the output folder.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition jdbcDAOTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final JdbcDAOTemplate jdbcDAOTemplate,
+        final File outputDir,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + "JdbcDAO.java",
-                    jdbcDAOTemplate.toString());
-            }
-        }
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + "JdbcDAO.java",
+            jdbcDAOTemplate.generate());
     }
 }
