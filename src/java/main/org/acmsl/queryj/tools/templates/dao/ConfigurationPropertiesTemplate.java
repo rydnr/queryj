@@ -139,7 +139,8 @@ public abstract class ConfigurationPropertiesTemplate
      */
     public static final String DEFAULT_DAO_FACTORY_SETTING =
           "\n\n# {0} DAO implementation.\n"
-        + "{1}.{2}.dao={3}.{4}{0}DAOFactory";
+        + "{1}.{2}.dao={3}.{4}{0}DAOFactory\n"
+        + "#{1}.{2}.dao={5}.Mock{0}DAOFactory";
 
     /**
      * The header.
@@ -477,8 +478,9 @@ public abstract class ConfigurationPropertiesTemplate
                                         getEngineName()),
                                     t_StringUtils.capitalize(
                                         getEngineName(),
-                                        '_')
-                                    
+                                        '_'),
+                                    t_PackageUtils.retrieveMockDAOFactoryPackage(
+                                        getBasePackageName())
                                 }));
                     }
                 }

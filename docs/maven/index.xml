@@ -70,8 +70,16 @@
             $Date$
           </td>
           <td>
+            Finished <a href="${issue.url}507">507</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/09/23 21:36:06
+          </td>
+          <td>
             Implemented <a href="${issue.url}506">506</a>, and
-            Implemented <a href="${issue.url}501">501</a>.<br/>
+            <a href="${issue.url}501">501</a>.<br/>
             Released <b>0.5.5</b>.
           </td>
         </tr>
@@ -81,7 +89,7 @@
           </td>
           <td>
             Implemented <a href="${issue.url}502">502</a>, and
-            Implemented <a href="${issue.url}505">505</a>.
+            <a href="${issue.url}505">505</a>.
           </td>
         </tr>
         <tr>

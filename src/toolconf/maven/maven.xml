@@ -67,7 +67,7 @@
       dir="../../../target/docs"
       token="${issue.url}"
       value="http://bugzilla.acm-sl.org/show_bug.cgi?id=">
-      <ant:include name="**/*.html"/>
+      <ant:include name="index.html"/>
     </ant:replace>
   </preGoal>
 
