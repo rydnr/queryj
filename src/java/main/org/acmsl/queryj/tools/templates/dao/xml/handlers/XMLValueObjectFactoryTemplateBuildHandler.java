@@ -33,7 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a value object factory template using database metadata.
+ * Description: Builds a XML value object factory template using database
+ *              metadata.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,7 +45,7 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.valueobject.handlers;
+package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 
 /*
  * Importing some project classes.
@@ -61,9 +62,8 @@ import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate;
-import org.acmsl.queryj.tools.templates.valueobject
-    .ValueObjectFactoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplateGenerator;
 
 /*
  * Importing some Ant classes.
@@ -79,12 +79,12 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Builds a value object template using database metadata.
+ * Builds a XML value object template using database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public class ValueObjectFactoryTemplateBuildHandler
+public class XMLValueObjectFactoryTemplateBuildHandler
     extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
@@ -95,9 +95,9 @@ public class ValueObjectFactoryTemplateBuildHandler
         new TableTemplate[0];
 
     /**
-     * Creates a ValueObjectFactoryTemplateBuildHandler.
+     * Creates a XMLValueObjectFactoryTemplateBuildHandler.
      */
-    public ValueObjectFactoryTemplateBuildHandler() {};
+    public XMLValueObjectFactoryTemplateBuildHandler() {};
 
     /**
      * Handles given command.
@@ -124,19 +124,19 @@ public class ValueObjectFactoryTemplateBuildHandler
 
                 String t_strPackage = retrievePackage(attributes);
 
-                ValueObjectFactoryTemplateGenerator t_ValueObjectFactoryTemplateGenerator =
-                    ValueObjectFactoryTemplateGenerator.getInstance();
+                XMLValueObjectFactoryTemplateGenerator t_XMLValueObjectFactoryTemplateGenerator =
+                    XMLValueObjectFactoryTemplateGenerator.getInstance();
 
-                if  (   (t_MetaData                            != null)
-                     && (t_MetaDataManager                     != null)
-                     && (t_ValueObjectFactoryTemplateGenerator != null))
+                if  (   (t_MetaData                               != null)
+                     && (t_MetaDataManager                        != null)
+                     && (t_XMLValueObjectFactoryTemplateGenerator != null))
                 {
                     TableTemplate[] t_aTableTemplates = retrieveTableTemplates(attributes);
 
                     if  (t_aTableTemplates != null)
                     {
-                        ValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
-                            new ValueObjectFactoryTemplate[t_aTableTemplates.length];
+                        XMLValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
+                            new XMLValueObjectFactoryTemplate[t_aTableTemplates.length];
 
                         for  (int t_iValueObjectFactoryIndex = 0;
                                   t_iValueObjectFactoryIndex < t_aValueObjectFactoryTemplates.length;
@@ -155,13 +155,13 @@ public class ValueObjectFactoryTemplateBuildHandler
                             }
 
                             t_aValueObjectFactoryTemplates[t_iValueObjectFactoryIndex] =
-                                t_ValueObjectFactoryTemplateGenerator.createValueObjectFactoryTemplate(
+                                t_XMLValueObjectFactoryTemplateGenerator.createXMLValueObjectFactoryTemplate(
                                     t_strPackage,
                                     t_aTableTemplates[t_iValueObjectFactoryIndex],
                                     t_MetaDataManager);
                         }
 
-                        storeValueObjectFactoryTemplates(t_aValueObjectFactoryTemplates, attributes);
+                        storeXMLValueObjectFactoryTemplates(t_aValueObjectFactoryTemplates, attributes);
                     }
                 }
             }
@@ -172,6 +172,10 @@ public class ValueObjectFactoryTemplateBuildHandler
             catch  (final QueryJException queryjException)
             {
                 throw new BuildException(queryjException);
+            }
+            catch  (final Throwable throwable)
+            {
+                throwable.printStackTrace(System.out);
             }
         }
         
@@ -241,7 +245,7 @@ public class ValueObjectFactoryTemplateBuildHandler
              && (t_PackageUtils != null))
         {
             result =
-                t_PackageUtils.retrieveValueObjectFactoryPackage(
+                t_PackageUtils.retrieveXMLValueObjectFactoryPackage(
                     (String)
                         parameters.get(ParameterValidationHandler.PACKAGE));
         }
@@ -255,16 +259,16 @@ public class ValueObjectFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
      */
-    protected void storeValueObjectFactoryTemplates(
-        final ValueObjectFactoryTemplate[] valueObjectFactoryTemplates,
-        final Map                          parameters)
+    protected void storeXMLValueObjectFactoryTemplates(
+        final XMLValueObjectFactoryTemplate[] valueObjectFactoryTemplates,
+        final Map                             parameters)
       throws  BuildException
     {
         if  (   (valueObjectFactoryTemplates != null)
              && (parameters                  != null))
         {
             parameters.put(
-                TemplateMappingManager.VALUE_OBJECT_FACTORY_TEMPLATES,
+                TemplateMappingManager.XML_VALUE_OBJECT_FACTORY_TEMPLATES,
                 valueObjectFactoryTemplates);
         }
     }

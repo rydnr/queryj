@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles the complete set of handlers related to XML DAO
- *              templates.
+ * Description: Bundles a pair of XMLValueObjectFactory template build and
+ *              writing handlers.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,37 +45,35 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.xml;
+package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateHandlerBundle;
-//import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateHandlerBundle;
-//import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles the complete set of handlers related to XML DAO templates.
+ * Bundles a pair of XMLValueObjectFactory template build and writing
+ * handlers.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
+ * @version $Revision$
  */
-public class XMLDAOBundle
+public class XMLValueObjectFactoryTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {
     /**
-     * Builds a bundle with XMLDAO-related handlers.
+     * Builds a bundle with given handlers.
+     * @param buildHandler the template build handler.
+     * @param writingHandler the writing handler.
+     * @precondition buildHandler != null
+     * @precondition writingHandler != null
      */
-    public XMLDAOBundle()
+    public XMLValueObjectFactoryTemplateHandlerBundle()
     {
         super(
-            new TemplateHandlerBundle[]
-            {
-                new XMLDAOTemplateHandlerBundle(),
-                new XMLValueObjectFactoryTemplateHandlerBundle()
-//                new XMLDAOFactoryTemplateHandlerBundle(),
-//                new XMLDAOTestTemplateHandlerBundle()
-            });
+            new XMLValueObjectFactoryTemplateBuildHandler(),
+            new XMLValueObjectFactoryTemplateWritingHandler());
     }
 }

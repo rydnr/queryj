@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes value object factory templates.
+ * Description: Writes XML value object factory templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,7 +44,7 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.valueobject.handlers;
+package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 
 /*
  * Importing some project classes.
@@ -55,11 +55,9 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.handlers
-    .ValueObjectFactoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate;
-import org.acmsl.queryj.tools.templates.valueobject
-    .ValueObjectFactoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplateGenerator;
 
 /*
  * Importing some Ant classes.
@@ -74,26 +72,26 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Writes value object factory templates.
+ * Writes XML value object factory templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public class ValueObjectFactoryTemplateWritingHandler
+public class XMLValueObjectFactoryTemplateWritingHandler
     extends    AbstractAntCommandHandler
     implements TemplateWritingHandler
 {
     /**
      * A cached empty value object template array.
      */
-    public static final ValueObjectFactoryTemplate[]
-        EMPTY_VALUE_OBJECT_FACTORY_TEMPLATE_ARRAY =
-            new ValueObjectFactoryTemplate[0];
+    public static final XMLValueObjectFactoryTemplate[]
+        EMPTY_XML_VALUE_OBJECT_FACTORY_TEMPLATE_ARRAY =
+            new XMLValueObjectFactoryTemplate[0];
 
     /**
-     * Creates a ValueObjectFactoryTemplateWritingHandler.
+     * Creates a XMLValueObjectFactoryTemplateWritingHandler.
      */
-    public ValueObjectFactoryTemplateWritingHandler() {};
+    public XMLValueObjectFactoryTemplateWritingHandler() {};
 
     /**
      * Handles given command.
@@ -112,11 +110,11 @@ public class ValueObjectFactoryTemplateWritingHandler
             {
                 Map attributes = command.getAttributeMap();
 
-                ValueObjectFactoryTemplateGenerator t_ValueObjectFactoryTemplateGenerator =
-                    ValueObjectFactoryTemplateGenerator.getInstance();
+                XMLValueObjectFactoryTemplateGenerator t_ValueObjectFactoryTemplateGenerator =
+                    XMLValueObjectFactoryTemplateGenerator.getInstance();
 
-                ValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
-                    retrieveValueObjectFactoryTemplates(attributes);
+                XMLValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
+                    retrieveXMLValueObjectFactoryTemplates(attributes);
 
                 File t_OutputDir = retrieveOutputDir(attributes);
 
@@ -137,6 +135,10 @@ public class ValueObjectFactoryTemplateWritingHandler
             {
                 throw new BuildException(ioException);
             }
+            catch  (final Throwable throwable)
+            {
+                throwable.printStackTrace(System.out);
+            }
         }
         
         return result;
@@ -148,20 +150,20 @@ public class ValueObjectFactoryTemplateWritingHandler
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
      */
-    protected ValueObjectFactoryTemplate[] retrieveValueObjectFactoryTemplates(
+    protected XMLValueObjectFactoryTemplate[] retrieveXMLValueObjectFactoryTemplates(
         final Map parameters)
       throws  BuildException
     {
-        ValueObjectFactoryTemplate[] result =
-            EMPTY_VALUE_OBJECT_FACTORY_TEMPLATE_ARRAY;
+        XMLValueObjectFactoryTemplate[] result =
+            EMPTY_XML_VALUE_OBJECT_FACTORY_TEMPLATE_ARRAY;
 
         if  (parameters != null)
         {
             result =
-                (ValueObjectFactoryTemplate[])
+                (XMLValueObjectFactoryTemplate[])
                     parameters.get(
                         TemplateMappingManager
-                            .VALUE_OBJECT_FACTORY_TEMPLATES);
+                            .XML_VALUE_OBJECT_FACTORY_TEMPLATES);
         }
         
         return result;
@@ -184,7 +186,7 @@ public class ValueObjectFactoryTemplateWritingHandler
              && (t_PackageUtils != null))
         {
             result =
-                t_PackageUtils.retrieveValueObjectFolder(
+                t_PackageUtils.retrieveXMLValueObjectFactoryFolder(
                     (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
                     retrieveProjectPackage(parameters));
         }

@@ -853,4 +853,27 @@ public abstract class PackageUtils
         return result;
     }
 
+    /**
+     * Retrieves the package name for XMLValueObjectFactory templates.
+     * @param packageName the original package.
+     * @return the package for the associated factory class.
+     */
+    public String retrieveXMLValueObjectFactoryPackage(final String packageName)
+    {
+        return retrieveXMLDAOPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for XMLValueObjectFactory templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @return the folder in which the associated factory class should be
+     * generated.
+     */
+    public File retrieveXMLValueObjectFactoryFolder(
+        final File parentFolder, final String packageName)
+    {
+        return retrieveXMLDAOFolder(parentFolder, packageName);
+    }
+
 }

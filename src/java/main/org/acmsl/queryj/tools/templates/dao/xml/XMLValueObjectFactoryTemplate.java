@@ -33,8 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate value object factories according to
- *              database metadata.
+ * Description: Is able to generate XML-specific value object factories.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,7 +44,7 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.valueobject;
+package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
  * Importing project-specific classes.
@@ -77,7 +76,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class ValueObjectFactoryTemplate
+public abstract class XMLValueObjectFactoryTemplate
 {
     /**
      * The default header.
@@ -151,7 +150,17 @@ public abstract class ValueObjectFactoryTemplate
           "/*\n"
         + " * Importing some project classes.\n"
         + " */\n"
-        + "import {0}.{1}ValueObject;\n\n"; // package - Table
+        + "import {0}.{1}ValueObject;\n" // package - Table
+        + "import {0}.{1}ValueObjectFactory;\n\n"; // package - Table
+
+    /**
+     * The ACM-SL imports.
+     */
+    public static final String DEFAULT_ACMSL_IMPORTS =
+          "/*\n"
+        + " * Importing some ACM-SL classes.\n"
+        + " */\n"
+        + "import org.acmsl.commons.utils.ConversionUtils;\n\n";
 
     /**
      * The JDK imports.
@@ -166,12 +175,24 @@ public abstract class ValueObjectFactoryTemplate
         + "import java.util.Date;\n\n";
 
     /**
+     * The extra imports.
+     */
+    public static final String DEFAULT_EXTRA_IMPORTS =
+          "/*\n"
+        + " * Importing some additional classes.\n"
+        + " */\n"
+        + "import org.apache.commons.digester.Digester;\n"
+        + "import org.apache.commons.digester.ObjectCreationFactory;\n"
+        + "import org.xml.sax.Attributes;\n"
+        + "import org.xml.sax.SAXException;\n\n";
+
+    /**
      * The default class Javadoc.
      */
     public static final String DEFAULT_JAVADOC =
           "/**\n"
-        + " * Is able to create {0} value objects according to\n"
-        + " * information in the persistence domain.\n" // table
+        + " * Adds support for creating {0} value objects from\n" // table
+        + " * SAX attributes (as required by Digester-based parsing).\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
         + " */\n";
@@ -180,7 +201,9 @@ public abstract class ValueObjectFactoryTemplate
      * The class definition.
      */
     public static final String CLASS_DEFINITION =
-           "public class {0}ValueObjectFactory\n"; // table
+          "public class XML{0}ValueObjectFactory\n"
+        + "    extends {0}ValueObjectFactory\n"
+        + "    implements ObjectCreationFactory;\n"; // table
 
     /**
      * The class start.
@@ -190,7 +213,11 @@ public abstract class ValueObjectFactoryTemplate
         + "    /**\n"
         + "     * Singleton implemented as a weak reference.\n"
         + "     */\n"
-        + "    private static WeakReference singleton;\n\n";
+        + "    private static WeakReference singleton;\n\n"
+        + "    /**\n"
+        + "     * Temporary Digester reference.\n"
+        + "     */\n"
+        + "    private Digester m__Digester;\n\n";
 
     /**
      * The class singleton logic.
@@ -199,12 +226,12 @@ public abstract class ValueObjectFactoryTemplate
           "    /**\n"
         + "     * Protected constructor to avoid accidental instantiation.\n"
         + "     */\n"
-        + "    public {0}ValueObjectFactory() '{' '}';\n\n" // table
+        + "    protected XML{0}ValueObjectFactory() '{' '}';\n\n" // table
         + "    /**\n"
         + "     * Specifies a new weak reference.\n"
         + "     * @param factory the factory instance to use.\n"
         + "     */\n"
-        + "    protected static void setReference(final {0}ValueObjectFactory factory)\n" // table
+        + "    protected static void setReference(final XML{0}ValueObjectFactory factory)\n" // table
         + "    '{'\n"
         + "        singleton = new WeakReference(factory);\n"
         + "    '}'\n\n"
@@ -217,54 +244,84 @@ public abstract class ValueObjectFactoryTemplate
         + "        return singleton;\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Retrieves a {0}ValueObjectFactory instance.\n"
+        + "     * Retrieves a XML{0}ValueObjectFactory instance.\n"
         + "     * @return such instance.\n"
         + "     */\n"
-        + "    public static {0}ValueObjectFactory getInstance()\n"
+        + "    public static XML{0}ValueObjectFactory getInstance()\n"
         + "    '{'\n"
-        + "        {0}ValueObjectFactory result = null;\n\n"
+        + "        XML{0}ValueObjectFactory result = null;\n\n"
         + "        WeakReference reference = getReference();\n\n"
         + "        if  (reference != null) \n"
         + "        '{'\n"
-        + "            result = ({0}ValueObjectFactory) reference.get();\n"
+        + "            result = (XML{0}ValueObjectFactory) reference.get();\n"
         + "        '}'\n\n"
         + "        if  (result == null) \n"
         + "        '{'\n"
-        + "            result = new {0}ValueObjectFactory();\n\n"
+        + "            result = new XML{0}ValueObjectFactory();\n\n"
         + "            setReference(result);\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n\n";
 
     /**
+     * The extra methods.
+     */
+    public static final String DEFAULT_EXTRA_METHODS =
+          "    /**\n"
+        + "     * Specifies a new Digester instance.\n"
+        + "     * @param digester such instance.\n"
+        + "     */\n"
+        + "    public void setDigester(final Digester digester)\n"
+        + "    {\n"
+        + "        m__Digester = digester;\n"
+        + "    }\n\n"
+        + "    /**\n"
+        + "     * Retrieves the Digester instance.\n"
+        + "     * @return such instance.\n"
+        + "     */\n"
+        + "    public Digester getDigester()\n"
+        + "    {\n"
+        + "        return m__Digester;\n"
+        + "    }\n\n";
+
+    /**
      * The factory method.
      */
     public static final String DEFAULT_FACTORY_METHOD =
           "    /**\n"
-        + "     * Creates a {0} value object.\n"
-        + "{1}" // constructor field javadoc
+        + "     * Creates a {0} value object from given SAX attributes.\n"
+        + "     * @param attributes the attributes.\n"
+        + "     * @return the {0} information.\n"
+        + "     * @precondition attributes != null\n"
         + "     */\n"
-        + "    public {0}ValueObject create{0}(" // table
-        + "{2})\n" // factory method field declaration
+        + "    public Object createObject(final Attributes attributes)\n"
+        + "    '{'\n"
+        + "        return createObject(attributes, ConversionUtils.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Creates a {0} value object from given SAX attributes.\n"
+        + "     * @param attributes the attributes.\n"
+        + "     * @param conversionUtils the ConversionUtils instance.\n"
+        + "     * @return the {0} information.\n"
+        + "     * @precondition attributes != null\n"
+        + "     * @precondition conversionUtils != null\n"
+        + "     */\n"
+        + "    public Object createObject(final Attributes attributes)\n"
         + "    '{'\n"
         + "        {0}ValueObject result = null;\n\n"
-        + "        result =\n"
-        + "            new {0}ValueObject("
-        + "{3}) '{' '}';\n\n"  // factory method value object build.
+        + "{1}" // attribute build
+        + "        result = create{0}(\n"
+        + "{2}) '{' '}';\n\n"  // factory method value object build.
         + "        return result;\n"
         + "    '}'\n\n";
 
     /**
-     * The default factory method field Javadoc.
+     * The default attribute build.
      */
-    public static final String DEFAULT_FACTORY_METHOD_FIELD_JAVADOC =
-        "     * @param {0} the {1} information.\n"; // field - FIELD;
-
-    /**
-     * The default factory method field declaration.
-     */
-    public static final String DEFAULT_FACTORY_METHOD_FIELD_DECLARATION =
-        "\n        final {0} {1}"; // field type - field;
+    public static final String DEFAULT_FACTORY_METHOD_ATTRIBUTE_BUILD =
+          "\n    {0} {1} =\n" // field type, field name
+        + "        conversionUtils.to{0}(attributes.getValue(\"{2}\"));";
+        // field type, uncapitalized field name
 
     /**
      * The default factory method value object build.
@@ -308,9 +365,19 @@ public abstract class ValueObjectFactoryTemplate
     private String m__strProjectImports;
 
     /**
+     * The ACM-SL import statements.
+     */
+    private String m__strAcmSlImports;
+
+    /**
      * The JDK import statements.
      */
     private String m__strJdkImports;
+
+    /**
+     * The extra import statements.
+     */
+    private String m__strExtraImports;
 
     /**
      * The class Javadoc.
@@ -338,14 +405,9 @@ public abstract class ValueObjectFactoryTemplate
     private String m__strFactoryMethod;
 
     /**
-     * The factory method field javadoc.
+     * The factory method attribute build.
      */
-    private String m__strFactoryMethodFieldJavadoc;
-
-    /**
-     * The factory method field definition.
-     */
-    private String m__strFactoryMethodFieldDefinition;
+    private String m__strFactoryMethodAttributeBuild;
 
     /**
      * The factory method value object build.
@@ -353,76 +415,86 @@ public abstract class ValueObjectFactoryTemplate
     private String m__strFactoryMethodValueObjectBuild;
 
     /**
+     * The extra methods.
+     */
+    private String m__strExtraMethods;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
 
     /**
-     * Builds a ValueObjectFactoryTemplate using given information.
+     * Builds a XMLValueObjectFactoryTemplate using given information.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @param projectImports the project imports.
+     * @param acmSlImports the ACM-SL imports.
      * @param jdkImports the JDK imports.
+     * @param extraImports the extra imports.
      * @param javadoc the class Javadoc.
      * @param classDefinition the class definition.
      * @param classStart the class start.
      * @param singletonBody the singleton body.
      * @param factoryMethod the factory method.
-     * @param factoryMethodFieldJavadoc the factory method field Javadoc.
-     * @param factoryMethodFieldDefinition the constructor field definition.
+     * @param factoryMethodAttributeBuild the factory method attribute build.
      * @param factoryMethodValueObjectBuild the factory method value object build.
+     * @param extraMethods the extra methods.
      * @param classEnd the class end.
      */
-    public ValueObjectFactoryTemplate(
-        String                  header,
-        String                  packageDeclaration,
-        String                  packageName,
-        TableTemplate           tableTemplate,
-        DatabaseMetaDataManager metaDataManager,
-        String                  projectImports,
-        String                  jdkImports,
-        String                  javadoc,
-        String                  classDefinition,
-        String                  classStart,
-        String                  singletonBody,
-        String                  factoryMethod,
-        String                  factoryMethodFieldJavadoc,
-        String                  factoryMethodFieldDefinition,
-        String                  factoryMethodValueObjectBuild,
-        String                  classEnd)
+    public XMLValueObjectFactoryTemplate(
+        final String                  header,
+        final String                  packageDeclaration,
+        final String                  packageName,
+        final TableTemplate           tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String                  projectImports,
+        final String                  acmSlImports,
+        final String                  jdkImports,
+        final String                  extraImports,
+        final String                  javadoc,
+        final String                  classDefinition,
+        final String                  classStart,
+        final String                  singletonBody,
+        final String                  factoryMethod,
+        final String                  factoryMethodAttributeBuild,
+        final String                  factoryMethodValueObjectBuild,
+        final String                  extraMethods,
+        final String                  classEnd)
     {
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetTableTemplate(tableTemplate);
         immutableSetMetaDataManager(metaDataManager);
-        immutableSetMetaDataManager(metaDataManager);
         immutableSetProjectImports(projectImports);
+        immutableSetAcmSlImports(acmSlImports);
         immutableSetJdkImports(jdkImports);
+        immutableSetExtraImports(extraImports);
         immutableSetJavadoc(javadoc);
         immutableSetClassDefinition(classDefinition);
         immutableSetClassStart(classStart);
         immutableSetSingletonBody(singletonBody);
         immutableSetFactoryMethod(factoryMethod);
-        immutableSetFactoryMethodFieldJavadoc(factoryMethodFieldJavadoc);
-        immutableSetFactoryMethodFieldDefinition(factoryMethodFieldDefinition);
         immutableSetFactoryMethodValueObjectBuild(factoryMethodValueObjectBuild);
+        immutableSetFactoryMethodValueObjectBuild(factoryMethodAttributeBuild);
+        immutableSetExtraMethods(extraMethods);
         immutableSetClassEnd(classEnd);
     }
 
     /**
-     * Builds a ValueObjectFactoryTemplate using given information.
+     * Builds a XMLValueObjectFactoryTemplate using given information.
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      */
-    public ValueObjectFactoryTemplate(
-        String                  packageName,
-        TableTemplate           tableTemplate,
-        DatabaseMetaDataManager metaDataManager)
+    public XMLValueObjectFactoryTemplate(
+        final String                  packageName,
+        final TableTemplate           tableTemplate,
+        final DatabaseMetaDataManager metaDataManager)
     {
         this(
             DEFAULT_HEADER,
@@ -431,15 +503,17 @@ public abstract class ValueObjectFactoryTemplate
             tableTemplate,
             metaDataManager,
             DEFAULT_PROJECT_IMPORTS,
+            DEFAULT_ACMSL_IMPORTS,
             DEFAULT_JDK_IMPORTS,
+            DEFAULT_PROJECT_IMPORTS,
             DEFAULT_JAVADOC,
             CLASS_DEFINITION,
             DEFAULT_CLASS_START,
             DEFAULT_SINGLETON_BODY,
             DEFAULT_FACTORY_METHOD,
-            DEFAULT_FACTORY_METHOD_FIELD_JAVADOC,
-            DEFAULT_FACTORY_METHOD_FIELD_DECLARATION,
+            DEFAULT_FACTORY_METHOD_ATTRIBUTE_BUILD,
             DEFAULT_FACTORY_METHOD_VALUE_OBJECT_BUILD,
+            DEFAULT_EXTRA_METHODS,
             DEFAULT_CLASS_END);
     }
 
@@ -581,30 +655,57 @@ public abstract class ValueObjectFactoryTemplate
     }
 
     /**
-     * Specifies the ACM-SL imports.
-     * @param acmslImports the new ACM-SL imports.
+     * Specifies the project imports.
+     * @param projectImports the new project imports.
      */
-    private void immutableSetProjectImports(final String acmslImports)
+    private void immutableSetProjectImports(final String projectImports)
     {
-        m__strProjectImports = acmslImports;
+        m__strProjectImports = projectImports;
+    }
+
+    /**
+     * Specifies the project imports.
+     * @param acmslImports the new project imports.
+     */
+    protected void setProjectImports(final String projectImports)
+    {
+        immutableSetProjectImports(projectImports);
+    }
+
+    /**
+     * Retrieves the project imports.
+     * @return such information.
+     */
+    public String getProjectImports() 
+    {
+        return m__strProjectImports;
     }
 
     /**
      * Specifies the ACM-SL imports.
      * @param acmslImports the new ACM-SL imports.
      */
-    protected void setProjectImports(final String acmslImports)
+    private void immutableSetAcmSlImports(final String acmslImports)
     {
-        immutableSetProjectImports(acmslImports);
+        m__strAcmSlImports = acmslImports;
+    }
+
+    /**
+     * Specifies the ACM-SL imports.
+     * @param acmslImports the new ACM-SL imports.
+     */
+    protected void setAcmSlImports(final String acmslImports)
+    {
+        immutableSetAcmSlImports(acmslImports);
     }
 
     /**
      * Retrieves the ACM-SL imports.
      * @return such information.
      */
-    public String getProjectImports() 
+    public String getAcmSlImports() 
     {
-        return m__strProjectImports;
+        return m__strAcmSlImports;
     }
 
     /**
@@ -632,6 +733,33 @@ public abstract class ValueObjectFactoryTemplate
     public String getJdkImports() 
     {
         return m__strJdkImports;
+    }
+
+    /**
+     * Specifies the extra imports.
+     * @param extraImports the new extra imports.
+     */
+    private void immutableSetExtraImports(final String extraImports)
+    {
+        m__strExtraImports = extraImports;
+    }
+
+    /**
+     * Specifies the extra imports.
+     * @param acmslImports the new extra imports.
+     */
+    protected void setExtraImports(final String extraImports)
+    {
+        immutableSetExtraImports(extraImports);
+    }
+
+    /**
+     * Retrieves the extra imports.
+     * @return such information.
+     */
+    public String getExtraImports() 
+    {
+        return m__strExtraImports;
     }
 
     /**
@@ -770,57 +898,31 @@ public abstract class ValueObjectFactoryTemplate
     }
 
     /**
-     * Specifies the factory method field Javadoc.
-     * @param fieldJavadoc the new factory method field Javadoc.
+     * Specifies the factory method attribute build.
+     * @param attributeBuild the new factory method attribute build.
      */
-    private void immutableSetFactoryMethodFieldJavadoc(final String fieldJavadoc)
+    private void immutableSetFactoryMethodAttributeBuild(
+        String attributeBuild)
     {
-        m__strFactoryMethodFieldJavadoc = fieldJavadoc;
+        m__strFactoryMethodAttributeBuild = attributeBuild;
     }
 
     /**
-     * Specifies the factory method field Javadoc.
-     * @param fieldJavadoc the new factory method field Javadoc.
+     * Specifies the factory method attribute build.
+     * @param attributeBuild the new factory method attribute build.
      */
-    protected void setFactoryMethodFieldJavadoc(final String fieldJavadoc)
+    protected void setFactoryMethodAttributeBuild(final String attributeBuild)
     {
-        immutableSetFactoryMethodFieldJavadoc(fieldJavadoc);
+        immutableSetFactoryMethodAttributeBuild(attributeBuild);
     }
 
     /**
-     * Retrieves the factory method field Javadoc.
+     * Retrieves the factory method attribute build.
      * @return such information.
      */
-    public String getFactoryMethodFieldJavadoc() 
+    public String getFactoryMethodAttributeBuild() 
     {
-        return m__strFactoryMethodFieldJavadoc;
-    }
-
-    /**
-     * Specifies the factory method field definition.
-     * @param fieldDefinition the new factory method field definition.
-     */
-    private void immutableSetFactoryMethodFieldDefinition(final String fieldDefinition)
-    {
-        m__strFactoryMethodFieldDefinition = fieldDefinition;
-    }
-
-    /**
-     * Specifies the factory method field definition.
-     * @param fieldDefinition the new factory method field definition.
-     */
-    protected void setFactoryMethodFieldDefinition(final String fieldDefinition)
-    {
-        immutableSetFactoryMethodFieldDefinition(fieldDefinition);
-    }
-
-    /**
-     * Retrieves the factory method field definition.
-     * @return such information.
-     */
-    public String getFactoryMethodFieldDefinition() 
-    {
-        return m__strFactoryMethodFieldDefinition;
+        return m__strFactoryMethodAttributeBuild;
     }
 
     /**
@@ -849,6 +951,33 @@ public abstract class ValueObjectFactoryTemplate
     public String getFactoryMethodValueObjectBuild() 
     {
         return m__strFactoryMethodValueObjectBuild;
+    }
+
+    /**
+     * Specifies the extra methods.
+     * @param extraMethods the new extra methods.
+     */
+    private void immutableSetExtraMethods(final String extraMethods)
+    {
+        m__strExtraMethods = extraMethods;
+    }
+
+    /**
+     * Specifies the extra methods.
+     * @param acmslMethods the new extra methods.
+     */
+    protected void setExtraMethods(final String extraMethods)
+    {
+        immutableSetExtraMethods(extraMethods);
+    }
+
+    /**
+     * Retrieves the extra methods.
+     * @return such information.
+     */
+    public String getExtraMethods() 
+    {
+        return m__strExtraMethods;
     }
 
     /**
@@ -975,15 +1104,10 @@ public abstract class ValueObjectFactoryTemplate
             {
                 Iterator t_itFields = t_lFields.iterator();
 
-                StringBuffer t_sbFactoryMethodFieldJavadoc = new StringBuffer();
+                StringBuffer t_sbFactoryMethodAttributeBuild = new StringBuffer();
 
-                MessageFormat t_FactoryMethodFieldJavadocFormatter =
-                    new MessageFormat(getFactoryMethodFieldJavadoc());
-
-                StringBuffer t_sbFactoryMethodFieldDefinition = new StringBuffer();
-
-                MessageFormat t_FactoryMethodFieldDefinitionFormatter =
-                    new MessageFormat(getFactoryMethodFieldDefinition());
+                MessageFormat t_FactoryMethodAttributeBuildFormatter =
+                    new MessageFormat(getFactoryMethodAttributeBuild());
 
                 StringBuffer t_sbFactoryMethodValueObjectBuild = new StringBuffer();
 
@@ -1000,20 +1124,14 @@ public abstract class ValueObjectFactoryTemplate
                                 t_TableTemplate.getTableName(),
                                 t_strField));
 
-                    t_sbFactoryMethodFieldJavadoc.append(
-                        t_FactoryMethodFieldJavadocFormatter.format(
-                            new Object[]
-                            {
-                                t_strField.toLowerCase(),
-                                t_strField
-                            }));
-
-                    t_sbFactoryMethodFieldDefinition.append(
-                        t_FactoryMethodFieldDefinitionFormatter.format(
+                    t_sbFactoryMethodAttributeBuild.append(
+                        t_FactoryMethodAttributeBuildFormatter.format(
                             new Object[]
                             {
                                 t_strFieldType,
-                                t_strField.toLowerCase()
+                                t_strField.toLowerCase(),
+                                t_StringUtils.unCapitalize(
+                                    t_strField.toLowerCase(), "-")
                             }));
 
                     t_sbFactoryMethodValueObjectBuild.append(
@@ -1025,12 +1143,6 @@ public abstract class ValueObjectFactoryTemplate
                                     '_'),
                                 t_strField.toLowerCase()
                             }));
-
-                    if  (t_itFields.hasNext())
-                    {
-                        t_sbFactoryMethodFieldDefinition.append(",");
-                        t_sbFactoryMethodValueObjectBuild.append(",");
-                    }
                 }
 
                 t_sbResult.append(
@@ -1042,11 +1154,12 @@ public abstract class ValueObjectFactoryTemplate
                                     t_TableTemplate.getTableName()
                                         .toLowerCase()),
                                 '_'),
-                            t_sbFactoryMethodFieldJavadoc.toString(),
-                            t_sbFactoryMethodFieldDefinition.toString(),
+                            t_sbFactoryMethodAttributeBuild.toString(),
                             t_sbFactoryMethodValueObjectBuild.toString()
                         }));
             }
+
+            t_sbResult.append(getExtraMethods());
 
             t_sbResult.append(getClassEnd());
         }

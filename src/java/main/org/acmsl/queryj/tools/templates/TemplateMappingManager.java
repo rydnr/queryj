@@ -271,7 +271,7 @@ public abstract class TemplateMappingManager
     public static final String JDBC_DAO_TEMPLATE_FACTORY = "jdbc.dao.template.factory";
 
     /**
-     * The Mock DAO template type.
+     * The Mock DAO template prefix.
      */
     public static final String MOCK_DAO_TEMPLATE_PREFIX = "mock.dao.";
 
@@ -281,7 +281,7 @@ public abstract class TemplateMappingManager
     public static final String MOCK_DAO_TEMPLATES = "mock.DAO.templates";
 
     /**
-     * The Mock DAO test template type.
+     * The Mock DAO test template prefix.
      */
     public static final String MOCK_DAO_TEST_TEMPLATE_PREFIX = "mock.dao.test.";
 
@@ -291,7 +291,7 @@ public abstract class TemplateMappingManager
     public static final String MOCK_DAO_TEST_TEMPLATES = "mock.DAO.test.templates";
 
     /**
-     * The XML DAO template type.
+     * The XML DAO template prefix.
      */
     public static final String XML_DAO_TEMPLATE_PREFIX = "xml.dao.";
 
@@ -301,7 +301,7 @@ public abstract class TemplateMappingManager
     public static final String XML_DAO_TEMPLATES = "xml.DAO.templates";
 
     /**
-     * The XML DAO test template type.
+     * The XML DAO test template prefix.
      */
     public static final String XML_DAO_TEST_TEMPLATE_PREFIX = "xml.dao.test.";
 
@@ -331,18 +331,18 @@ public abstract class TemplateMappingManager
     public static final String VALUE_OBJECT_FACTORY_NAMES = "value-object.factory.names";
 
     /**
-     * The value object template type.
+     * The value object template prefix.
      */
     public static final String VALUE_OBJECT_TEMPLATE_PREFIX = "value-object.";
 
     /**
-     * The value object factory template type.
+     * The value object factory template prefix.
      */
     public static final String VALUE_OBJECT_FACTORY_TEMPLATE_PREFIX =
         "value-object.factory.";
 
     /**
-     * The DAO test template type.
+     * The DAO test template prefix.
      */
     public static final String DAO_TEST_TEMPLATE_PREFIX = "dao.test.";
 
@@ -380,10 +380,28 @@ public abstract class TemplateMappingManager
         "mock.DAO.factory.templates";
 
     /**
-     * The Mock DAO factory template type.
+     * The Mock DAO factory template prefix.
      */
     public static final String MOCK_DAO_FACTORY_TEMPLATE_PREFIX =
         "mock.dao.factory.";
+
+    /**
+     * The XML value object template prefix.
+     */
+    public static final String XML_VALUE_OBJECT_TEMPLATE_PREFIX =
+        "xml.value-object.";
+
+    /**
+     * The XML value object factory template prefix.
+     */
+    public static final String XML_VALUE_OBJECT_FACTORY_TEMPLATE_PREFIX =
+        "xml.value-object.factory.";
+
+    /**
+     * The XML value object factory templates attribute name.
+     */
+    public static final String XML_VALUE_OBJECT_FACTORY_TEMPLATES =
+        "xml.value-object.factory.templates";
 
     /**
      * The engine-template mapping.

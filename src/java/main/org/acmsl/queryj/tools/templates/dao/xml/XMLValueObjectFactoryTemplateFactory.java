@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles the complete set of handlers related to XML DAO
+ * Description: Represents entities able to create XML value object factory
  *              templates.
  *
  * Last modified by: $Author$ at $Date$
@@ -48,34 +48,32 @@
 package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
- * Importing some project classes.
+ * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateHandlerBundle;
-//import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateHandlerBundle;
-//import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
 
 /**
- * Bundles the complete set of handlers related to XML DAO templates.
- * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
+ * Represents entities able to create XML value object templates.
+ * @author <a href="mailto:jsanleandro@yahoo.es"
+           >Jose San Leandro</a>
+ * @version $Revision$
  */
-public class XMLDAOBundle
-    extends  TemplateHandlerBundle
+public interface XMLValueObjectFactoryTemplateFactory
 {
     /**
-     * Builds a bundle with XMLDAO-related handlers.
+     * Generates a value object factory template.
+     * @param packageName the package name.
+     * @param tableTemplate the table template.
+     * @param metaDataManager the metadata manager.
+     * @return a template.
+     * @throws QueryJException if the factory class is invalid.
      */
-    public XMLDAOBundle()
-    {
-        super(
-            new TemplateHandlerBundle[]
-            {
-                new XMLDAOTemplateHandlerBundle(),
-                new XMLValueObjectFactoryTemplateHandlerBundle()
-//                new XMLDAOFactoryTemplateHandlerBundle(),
-//                new XMLDAOTestTemplateHandlerBundle()
-            });
-    }
+    public XMLValueObjectFactoryTemplate createXMLValueObjectFactoryTemplate(
+            final String                  packageName,
+            final TableTemplate           tableTemplate,
+            final DatabaseMetaDataManager metaDataManager)
+        throws  QueryJException;
 }
