@@ -117,7 +117,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.customsql.ParameterElement("p1", 1, "long");
+    return new org.acmsl.queryj.tools.customsql.ParameterElement("p1", 1, "long", "id");
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -169,6 +169,18 @@ extends TestCase
   {
     // JUnitDoclet begin method getType
     // JUnitDoclet end method getType
+  }
+  
+  /**
+  * Tests ParameterElementTestgetName()
+  * @throws Exception if an unexpected situation occurs.
+  * @see org.acmsl.queryj.tools.customsql.ParameterElement#getName()
+  */
+  public void testGetName()
+  throws Exception
+  {
+    // JUnitDoclet begin method getName
+    // JUnitDoclet end method getName
   }
   
   /**

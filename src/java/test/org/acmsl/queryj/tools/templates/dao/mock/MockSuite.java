@@ -108,8 +108,8 @@ public class MockSuite
     new TestSuite("unittests.org.acmsl.queryj.tools.templates.dao.mock");
     
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.MockDAOBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplateGeneratorTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.MockDAOBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateGeneratorTest.class);
     
     suite.addTest(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.HandlersSuite.suite());

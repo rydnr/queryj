@@ -51,6 +51,13 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.ParameterElement;
+import org.acmsl.queryj.tools.customsql.ParameterRefElement;
+import org.acmsl.queryj.tools.customsql.PropertyElement;
+import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -68,6 +75,7 @@ import org.acmsl.commons.utils.StringValidator;
  */
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -923,6 +931,124 @@ public abstract class DAOTemplate
         "\n                    {0},";
 
     /**
+     * The custom select template.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT =
+          "    /**\n"
+        + "     * Retrieves {0} entities from the persistence layer matching\n"
+         // result class
+        + "     * given criteria."
+        + "{1}\n"
+         // CUSTOM_SELECT_PARAMETER_JAVADOC
+        + "     * @param transactionToken needed to use an open connection and\n"
+        + "     * see previously uncommited inserts/updates/deletes.\n"
+        + "     * @return the information extracted from the persistence layer.\n"
+        + "     * @throws DataAccessException if the access to the information fails.\n"
+        + "     */\n"
+        + "    public {0} {2}("
+         // result class - sql name
+        + "{3}\n"
+         // CUSTOM_SELECT_PARAMETER_DECLARATION
+        + "        final TransactionToken transactionToken)\n"
+        + "      throws DataAccessException\n"
+        + "    '{'\n"
+        + "        {0} result = null;\n\n"
+         // java table name
+        + "        Connection        t_Connection        = null;\n"
+        + "        PreparedStatement t_PreparedStatement = null;\n"
+        + "        ResultSet         t_rsResults         = null;\n\n"
+        + "        try\n"
+        + "        '{'\n"
+        + "            t_Connection = getConnection(transactionToken);\n\n"
+        + "            String t_strQuery =\n"
+        + "                \"{4}\";\n"
+        + "            t_PreparedStatement = t_Connection.prepareStatement(t_strQuery);\n\n"
+        + "{5}"
+         // CUSTOM_SELECT_PARAMETER_VALUES
+        + "            t_rsResults = t_PreparedStatement.executeQuery();\n\n"
+        + "            if  (   (t_rsResults != null)\n"
+        + "                 && (t_rsResults.next()))\n"
+        + "            '{'\n"
+        + "                result =\n"
+        + "                    new {0}(\n"
+        + "{6});\n"
+         // CUSTOM_SELECT_RESULT_PROPERTIES
+        + "            '}'\n"
+        + "        '}'\n"
+        + "        catch  (final SQLException sqlException)\n"
+        + "        '{'\n"
+        + "            LogFactory.getLog(getClass()).fatal(sqlException);\n"
+        + "        '}'\n"
+        + "        catch  (final Exception exception)\n"
+        + "        '{'\n"
+        + "            LogFactory.getLog(getClass()).error(exception);\n"
+        + "        '}'\n"
+        + "        finally\n"
+        + "        '{'\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                if  (t_rsResults != null)\n"
+        + "                '{'\n"
+        + "                    t_rsResults.close();\n"
+        + "                '}'\n"
+        + "            '}'\n"
+        + "            catch  (final Exception exception)\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).error(exception);\n"
+        + "            '}'\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                if  (t_PreparedStatement != null)\n"
+        + "                '{'\n"
+        + "                    t_PreparedStatement.close();\n"
+        + "                '}'\n"
+        + "            '}'\n"
+        + "            catch  (final Exception exception)\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).error(exception);\n"
+        + "            '}'\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                if  (t_Connection != null)\n"
+        + "                '{'\n"
+        + "                    closeConnection(t_Connection, transactionToken);\n"
+        + "                '}'\n"
+        + "            '}'\n"
+        + "            catch  (final Exception exception)\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).error(exception);\n"
+        + "            '}'\n"
+        + "        '}'\n\n"
+        + "        return result;\n"
+        + "    '}'\n\n";
+
+    /**
+     * The custom select parameter javadoc.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_PARAMETER_JAVADOC =
+        "\n     * @param {0} the value to filter.";
+         // parameter name
+
+    /**
+     * The custom select parameter declaration.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION =
+        "\n        {0} {1},";
+         // parameter type - parameter name
+
+    /**
+     * The custom select parameter values.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES =
+        "\n        t_PreparedStatement.set{0}({1}, {2});";
+
+    /**
+     * The custom select result properties.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_RESULT_PROPERTIES =
+        "\n                        t_rsResults.get{0}({1})";
+
+    /**
      * The default class end.
      */
     public static final String DEFAULT_CLASS_END = "}\n";
@@ -1173,6 +1299,31 @@ public abstract class DAOTemplate
     private String m__strDeleteWithFkPkValues;
 
     /**
+     * The custom select.
+     */
+    private String m__strCustomSelect;
+
+    /**
+     * The custom select parameter javadoc.
+     */
+    private String m__strCustomSelectParameterJavadoc;
+
+    /**
+     * The custom select parameter declaration.
+     */
+    private String m__strCustomSelectParameterDeclaration;
+
+    /**
+     * The custom select parameter values.
+     */
+    private String m__strCustomSelectParameterValues;
+
+    /**
+     * The custom select result properties.
+     */
+    private String m__strCustomSelectResultPropertyValues;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
@@ -1203,10 +1354,10 @@ public abstract class DAOTemplate
      * @param findByPrimaryKeyMethod the find by primary key method.
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
-     *        declaration.
+     * declaration.
      * @param findByPrimaryKeySelectFields the find by primary key select fields.
      * @param findByPrimaryKeyFilterDeclaration the find by primary key filter
-     *        declaration.
+     * declaration.
      * @param findByPrimaryKeyFilterValues the find by primary key filter values.
      * @param buildValueObjectMethod the build value object method.
      * @param buildValueObjectValueRetrieval the build value object value retrieval.
@@ -1214,14 +1365,14 @@ public abstract class DAOTemplate
      * @param insertParametersJavadoc the javadoc of the insert method's parameters.
      * @param insertParametersDeclaration the declaration of the insert method's parameters.
      * @param insertParametersSpecification the specification of the insert
-              method's parameters.
+     * method's parameters.
      * @param insertKeywordParametersSpecification the specification of the insert
-              method's keyword-based parameters.
+     * method's keyword-based parameters.
      * @param updateMethod the update method.
      * @param updateParametersJavadoc the javadoc of the update method's parameters.
      * @param updateParametersDeclaration the declaration of the update method's parameters.
      * @param updateParametersSpecification the specification of the update
-              method's parameters.
+     * method's parameters.
      * @param updateFilter the update method's filter.
      * @param deleteMethod the delete method.
      * @param deletePkJavadoc the delete PK javadoc.
@@ -1233,6 +1384,15 @@ public abstract class DAOTemplate
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
      * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete request.
      * @param deleteWithFkPkValues the delete with FK PK values.
+     * @param customSelect the custom select template.
+     * @param customSelectParameterJavadoc the Javadoc for the parameters of the
+     * custom selects.
+     * @param customSelectParameterDeclaration the parameter declaration of the
+     * custom selects.
+     * @param customSelectParameterValues the parameter values of the custom
+     * selects.
+     * @param customSelectResultPropertyValues the properties of the result set for
+     * custom selects.
      * @param classEnd the class end.
      */
     public DAOTemplate(
@@ -1285,6 +1445,11 @@ public abstract class DAOTemplate
         final String                  deleteWithFkPkDeclaration,
         final String                  deleteWithFkDAODeleteRequest,
         final String                  deleteWithFkPkValues,
+        final String                  customSelect,
+        final String                  customSelectParameterJavadoc,
+        final String                  customSelectParameterDeclaration,
+        final String                  customSelectParameterValues,
+        final String                  customSelectResultPropertyValues,
         final String                  classEnd)
     {
         immutableSetTableTemplate(
@@ -1434,6 +1599,21 @@ public abstract class DAOTemplate
         immutableSetDeleteWithFkPkValues(
             deleteWithFkPkValues);
 
+        immutableSetCustomSelect(
+            customSelect);
+
+        immutableSetCustomSelectParameterJavadoc(
+            customSelectParameterJavadoc);
+
+        immutableSetCustomSelectParameterDeclaration(
+            customSelectParameterDeclaration);
+
+        immutableSetCustomSelectParameterValues(
+            customSelectParameterValues);
+
+        immutableSetCustomSelectResultPropertyValues(
+            customSelectResultPropertyValues);
+
         immutableSetClassEnd(
             classEnd);
     }
@@ -1511,6 +1691,11 @@ public abstract class DAOTemplate
             DEFAULT_DELETE_WITH_FK_PK_DECLARATION,
             DEFAULT_DELETE_WITH_FK_DAO_DELETE_REQUEST,
             DEFAULT_DELETE_WITH_FK_PK_VALUES,
+            DEFAULT_CUSTOM_SELECT,
+            DEFAULT_CUSTOM_SELECT_PARAMETER_JAVADOC,
+            DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION,
+            DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES,
+            DEFAULT_CUSTOM_SELECT_RESULT_PROPERTIES,
             DEFAULT_CLASS_END);
     }
 
@@ -2908,6 +3093,151 @@ public abstract class DAOTemplate
     }
 
     /**
+     * Specifies the custom select template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelect(
+        final String select)
+    {
+        m__strCustomSelect = select;
+    }
+
+    /**
+     * Specifies the custom select template.
+     * @param select such template.
+     */
+    protected void setCustomSelect(
+        final String select)
+    {
+        immutableSetCustomSelect(select);
+    }
+
+    /**
+     * Retrieves the custom select template.
+     * @return such template.
+     */
+    public String getCustomSelect()
+    {
+        return m__strCustomSelect;
+    }
+
+    /**
+     * Specifies the custom select parameter Javadoc template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectParameterJavadoc(
+        final String template)
+    {
+        m__strCustomSelectParameterJavadoc = template;
+    }
+
+    /**
+     * Specifies the custom select parameter Javadoc template.
+     * @param select such template.
+     */
+    protected void setCustomSelectParameterJavadoc(
+        final String select)
+    {
+        immutableSetCustomSelectParameterJavadoc(select);
+    }
+
+    /**
+     * Retrieves the custom select parameter Javadoc template.
+     * @return such template.
+     */
+    public String getCustomSelectParameterJavadoc()
+    {
+        return m__strCustomSelectParameterJavadoc;
+    }
+
+    /**
+     * Specifies the custom select parameter declaration template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectParameterDeclaration(
+        final String template)
+    {
+        m__strCustomSelectParameterDeclaration = template;
+    }
+
+    /**
+     * Specifies the custom select parameter declaration template.
+     * @param select such template.
+     */
+    protected void setCustomSelectParameterDeclaration(
+        final String select)
+    {
+        immutableSetCustomSelectParameterDeclaration(select);
+    }
+
+    /**
+     * Retrieves the custom select parameter declaration template.
+     * @return such template.
+     */
+    public String getCustomSelectParameterDeclaration()
+    {
+        return m__strCustomSelectParameterDeclaration;
+    }
+
+    /**
+     * Specifies the custom select parameter values template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectParameterValues(
+        final String template)
+    {
+        m__strCustomSelectParameterValues = template;
+    }
+
+    /**
+     * Specifies the custom select parameter values template.
+     * @param select such template.
+     */
+    protected void setCustomSelectParameterValues(
+        final String select)
+    {
+        immutableSetCustomSelectParameterValues(select);
+    }
+
+    /**
+     * Retrieves the custom select parameter values template.
+     * @return such template.
+     */
+    public String getCustomSelectParameterValues()
+    {
+        return m__strCustomSelectParameterValues;
+    }
+
+
+    /**
+     * Specifies the custom select result properties' values template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectResultPropertyValues(
+        final String template)
+    {
+        m__strCustomSelectResultPropertyValues = template;
+    }
+
+    /**
+     * Specifies the custom select result properties' values template.
+     * @param select such template.
+     */
+    protected void setCustomSelectResultPropertyValues(
+        final String select)
+    {
+        immutableSetCustomSelectResultPropertyValues(select);
+    }
+
+    /**
+     * Retrieves the custom select result properties' values template.
+     * @return such template.
+     */
+    public String getCustomSelectResultPropertyValues()
+    {
+        return m__strCustomSelectResultPropertyValues;
+    }
+    /**
      * Specifies the class end.
      * @param classEnd the new class end.
      */
@@ -3552,8 +3882,369 @@ public abstract class DAOTemplate
             }
         }
 
+        t_sbResult.append(buildCustomSql());
+
         t_sbResult.append(getClassEnd());
 
         return t_sbResult.toString();
+    }
+
+    /**
+     * Builds the custom templates.
+     * @return such generated code.
+     */
+    protected String buildCustomSql()
+    {
+        StringBuffer result = new StringBuffer();
+
+        result.append(buildCustomSelects());
+
+        return result.toString();
+    }
+
+    /**
+     * Builds the custom selects.
+     * @return such generated code.
+     */
+    protected String buildCustomSelects()
+    {
+        return
+            buildCustomSelects(
+                getCustomSqlProvider(),
+                getCustomSelect(),
+                getCustomSelectParameterJavadoc(),
+                getCustomSelectParameterDeclaration(),
+                getCustomSelectParameterValues(),
+                getCustomSelectResultPropertyValues());
+    }
+
+    /**
+     * Builds the custom selects.
+     * @param customSqlProvider the CustomSqlProvider instance.
+     * @param customSelect the custom select.
+     * @param parameterJavadoc the Javadoc template
+     * of the parameters.
+     * @param parameterDeclaration the parameter declaration.
+     * @param parameterValues the parameter values.
+     * @param resultPropertyValues the result property values.
+     * @return such generated code.
+     * @precondition customSqlProvider != null
+     * @precondition customSelect != null
+     * @precondition parameterJavadoc != null
+     * @precondition parameterDeclaration != null
+     * @precondition parameterValues != null
+     * @precondition resultPropertyValues != null
+     */
+    protected String buildCustomSelects(
+        final CustomSqlProvider customSqlProvider,
+        final String customSelect,
+        final String parameterJavadoc,
+        final String parameterDeclaration,
+        final String parameterValues,
+        final String resultPropertyValues)
+    {
+        String result = "";
+
+        Collection t_cContents = customSqlProvider.getCollection();
+
+        if  (t_cContents != null)
+        {
+            Iterator t_itContentIterator = t_cContents.iterator();
+
+            while  (t_itContentIterator.hasNext())
+            {
+                Object t_Content = t_itContentIterator.next();
+
+                if  (t_Content instanceof SqlElement)
+                {
+                    SqlElement t_SqlElement =
+                        (SqlElement) t_Content;
+
+                    if  (t_SqlElement.SELECT.equals(t_SqlElement.getType()))
+                    {
+                        String[] t_astrParameterTemplates =
+                            buildParameterTemplates(
+                                customSqlProvider,
+                                t_SqlElement.getParameterRefs(),
+                                parameterJavadoc,
+                                parameterDeclaration,
+                                parameterValues);
+
+                        String t_strResultPropertyValues =
+                            buildResultPropertyValues(
+                                customSqlProvider,
+                                t_SqlElement.getResultRef(),
+                                resultPropertyValues);
+
+                        result =
+                            buildCustomSelect(
+                                customSqlProvider,
+                                t_SqlElement,
+                                customSelect,
+                                t_astrParameterTemplates[0],
+                                t_astrParameterTemplates[1],
+                                t_astrParameterTemplates[2],
+                                t_strResultPropertyValues,
+                                StringUtils.getInstance());
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Builds the parameter templates with given parameters.
+     * @param provider the CustomSqlProvider instance.
+     * @param parameterRefs the parameter references.
+     * @param parameterJavadoc the template.
+     * @param parameterDeclaration the parameter declaration.
+     * @param parameterValues the parameter values.
+     * @return the generated code.
+     * @precondition provider != null
+     * @precondition parameterJavadoc != null
+     * @precondition parameterDeclaration != null
+     * @precondition parameterValues != null
+     */
+    protected String[] buildParameterTemplates(
+        final CustomSqlProvider provider,
+        final Collection parameterRefs,
+        final String parameterJavadoc,
+        final String parameterDeclaration,
+        final String parameterValues)
+    {
+        String[] result = new String[3];
+
+        StringBuffer t_sbParameterJavadoc = new StringBuffer();
+        StringBuffer t_sbParameterDeclaration = new StringBuffer();
+        StringBuffer t_sbParameterValues = new StringBuffer();
+
+        if  (parameterRefs != null)
+        {
+            MessageFormat t_ParameterJavadocFormatter =
+                new MessageFormat(parameterJavadoc);
+
+            MessageFormat t_ParameterDeclarationFormatter =
+                new MessageFormat(parameterDeclaration);
+
+            MessageFormat t_ParameterValuesFormatter =
+                new MessageFormat(parameterValues);
+
+            Iterator t_itParameterRefs =
+                parameterRefs.iterator();
+
+            while  (t_itParameterRefs.hasNext())
+            {
+                ParameterRefElement t_ParameterRef =
+                    (ParameterRefElement) t_itParameterRefs.next();
+
+                if  (t_ParameterRef != null)
+                {
+                    ParameterElement t_Parameter =
+                        provider.resolveReference(t_ParameterRef);
+
+                    if  (t_Parameter == null)
+                    {
+                        LogFactory.getLog("custom-sql").warn(
+                              "Referenced parameter not found:"
+                            + t_ParameterRef.getId());
+                    }
+                    else
+                    {
+                        t_sbParameterJavadoc.append(
+                            t_ParameterJavadocFormatter.format(
+                                new Object[]
+                                {
+                                    t_Parameter.getName()
+                                }));
+                        t_sbParameterDeclaration.append(
+                            t_ParameterDeclarationFormatter.format(
+                                new Object[]
+                                {
+                                    t_Parameter.getType(),
+                                    t_Parameter.getName()
+                                }));
+                        t_sbParameterValues.append(
+                            t_ParameterValuesFormatter.format(
+                                new Object[]
+                                {
+                                    t_Parameter.getType(),
+                                    (   (t_Parameter.getIndex() < 1)
+                                     ?  ("" + t_Parameter.getIndex())
+                                     :  t_Parameter.getName()),
+                                    t_Parameter.getName()
+                                }));
+                    }
+                }
+            }
+        }
+
+        result[0] = t_sbParameterJavadoc.toString();
+        result[1] = t_sbParameterDeclaration.toString();
+        result[2] = t_sbParameterValues.toString();
+
+        return result;
+    }
+
+    /**
+     * Builds the result property values with given input.
+     * @param provider the CustomSqlProvider instance.
+     * @param resultRef the result reference.
+     * @param resultPropertyValues the template.
+     * @return such generated code.
+     * @precondition provider != null
+     * @precondition resultPropertyValues != null
+     */
+    protected String buildResultPropertyValues(
+        final CustomSqlProvider provider,
+        final ResultRefElement resultRef,
+        final String resultPropertyValues)
+    {
+        String result = "";
+
+        if  (resultRef != null)
+        {
+            ResultElement t_Result = provider.resolveReference(resultRef);
+
+            if  (t_Result == null)
+            {
+                LogFactory.getLog("custom-sql").warn(
+                    "Referenced result not found:"
+                    + resultRef.getId());
+            }
+            else
+            {
+                result =
+                    buildResultPropertyValues(
+                        provider,
+                        t_Result.getPropertyRefs(),
+                        resultPropertyValues);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Builds the result property values with given input.
+     * @param provider the CustomSqlProvider instance.
+     * @param propertyRefs the property references.
+     * @param resultPropertyValues the template.
+     * @return such generated code.
+     * @precondition provider != null
+     * @precondition resultPropertyValues != null
+     */
+    protected String buildResultPropertyValues(
+        final CustomSqlProvider provider,
+        final Collection propertyRefs,
+        final String resultPropertyValues)
+    {
+        StringBuffer result = new StringBuffer();
+
+        if  (propertyRefs != null)
+        {
+            MessageFormat t_ResultPropertyValuesFormatter =
+                new MessageFormat(resultPropertyValues);
+
+            Iterator t_itPropertyRefs = propertyRefs.iterator();
+
+            while  (t_itPropertyRefs.hasNext())
+            {
+                PropertyRefElement t_PropertyRef =
+                    (PropertyRefElement) t_itPropertyRefs.next();
+
+                if  (t_PropertyRef != null)
+                {
+                    PropertyElement t_Property =
+                        provider.resolveReference(t_PropertyRef);
+
+                    if  (t_Property == null)
+                    {
+                        LogFactory.getLog("custom-sql").warn(
+                              "Referenced property not found:"
+                            + t_PropertyRef.getId());
+                    }
+                    else
+                    {
+                        result.append(
+                            t_ResultPropertyValuesFormatter.format(
+                                new Object[]
+                                {
+                                    t_Property.getType(),
+                                    (   (t_Property.getIndex() < 1)
+                                     ?  ("" + t_Property.getIndex())
+                                     :  t_Property.getName()),
+                                    t_Property.getName()
+                                }));
+                    }
+                }
+            }
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * Builds the complete custom select.
+     * @param provider the CustomSqlProvider instance.
+     * @param sqlElement the SqlElement instance.
+     * @param customSelect the custom select template.
+     * @param parameterJavadoc the generated parameter Javadoc.
+     * @param parameterDeclaration the generated parameter declaration.
+     * @param parameterValues the generared parameter values.
+     * @param resultPropertyValues the generated result property values.
+     * @param stringUtils the StringUtils isntance.
+     * @return the generated code.
+     * @precondition provider != null
+     * @precondition sqlElement != null
+     * @precondition customSelect != null
+     * @precondition parameterJavadoc != null
+     * @precondition parameterDeclaration != null
+     * @precondition parameterValues != null
+     * @precondition resultPropertyValues != null
+     * @precondition stringUtils != null
+     */
+    protected String buildCustomSelect(
+        final CustomSqlProvider provider,
+        final SqlElement sqlElement,
+        final String customSelect,
+        final String parameterJavadoc,
+        final String parameterDeclaration,
+        final String parameterValues,
+        final String resultPropertyValues,
+        final StringUtils stringUtils)
+    {
+        String result = "";
+
+        MessageFormat t_CustomSelectFormatter =
+            new MessageFormat(customSelect);
+
+        ResultElement t_Result = null;
+
+        ResultRefElement t_ResultRef = sqlElement.getResultRef();
+
+        if  (t_ResultRef != null)
+        {
+            t_Result = provider.resolveReference(t_ResultRef);
+        }
+
+        result =
+            t_CustomSelectFormatter.format(
+                new Object[]
+                {
+                    (   (t_Result != null)
+                     ?  t_Result.getClassValue()
+                     :  "-no-result-type-defined-"),
+                    parameterJavadoc,
+                    stringUtils.capitalize(
+                        sqlElement.getName(), '_'),
+                    parameterDeclaration,
+                    sqlElement.getValue(),
+                    parameterValues,
+                    resultPropertyValues
+                });
+
+        return result;
     }
 }

@@ -89,10 +89,10 @@ public interface DAOTemplateFactory
      * @param findByPrimaryKeyMethod the find by primary key method.
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
-     *        declaration.
+     * declaration.
      * @param findByPrimaryKeySelectFields the find by primary key select fields.
      * @param findByPrimaryKeyFilterDeclaration the find by primary key filter
-     *        declaration.
+     * declaration.
      * @param findByPrimaryKeyFilterValues the find by primary key filter values.
      * @param buildValueObjectMethod the build value object method.
      * @param buildValueObjectValueRetrieval the build value object value retrieval.
@@ -100,14 +100,14 @@ public interface DAOTemplateFactory
      * @param insertParametersJavadoc the javadoc of the insert method's parameters.
      * @param insertParametersDeclaration the declaration of the insert method's parameters.
      * @param insertParametersSpecification the specification of the insert
-              method's parameters.
+     * method's parameters.
      * @param insertKeywordParametersSpecification the specification of the insert
-              method's keyword-based parameters.
+     * method's keyword-based parameters.
      * @param updateMethod the update method.
      * @param updateParametersJavadoc the javadoc of the update method's parameters.
      * @param updateParametersDeclaration the declaration of the update method's parameters.
      * @param updateParametersSpecification the specification of the update
-              method's parameters.
+     * method's parameters.
      * @param updateFilter the update method's filter.
      * @param deleteMethod the delete method.
      * @param deletePkJavadoc the delete PK javadoc.
@@ -119,6 +119,15 @@ public interface DAOTemplateFactory
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
      * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete request.
      * @param deleteWithFkPkValues the delete with FK PK values.
+     * @param customSelect the custom select template.
+     * @param customSelectParameterJavadoc the Javadoc for the parameters of the
+     * custom selects.
+     * @param customSelectParameterDeclaration the parameter declaration of the
+     * custom selects.
+     * @param customSelectParameterValues the parameter values of the custom
+     * selects.
+     * @param customSelectResultPropertyValues the properties of the result set for
+     * custom selects.
      * @param classEnd the class end.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
@@ -173,6 +182,11 @@ public interface DAOTemplateFactory
         final String                  deleteWithFkPkDeclaration,
         final String                  deleteWithFkDAODeleteRequest,
         final String                  deleteWithFkPkValues,
+        final String                  customSelect,
+        final String                  customSelectParameterJavadoc,
+        final String                  customSelectParameterDeclaration,
+        final String                  customSelectParameterValues,
+        final String                  customSelectResultPropertyValues,
         final String                  classEnd)
       throws  QueryJException;
 

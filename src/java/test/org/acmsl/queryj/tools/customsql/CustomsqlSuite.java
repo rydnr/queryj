@@ -108,10 +108,10 @@ public class CustomsqlSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.customsql");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.SqlElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultRefElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ResultElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ParameterElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.SqlElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.ParameterRefElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.PropertyRefElementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.PropertyElementTest.class);

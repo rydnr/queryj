@@ -23,7 +23,8 @@
   <!ATTLIST parameter
     id ID #REQUIRED
     index CDATA #REQUIRED
-    type  CDATA #REQUIRED>
+    type  CDATA #REQUIRED
+    name  CDATA #REQUIRED>
   <!ELEMENT result-list (result)*>
   <!ELEMENT result (property-ref)+>
   <!ATTLIST result
@@ -77,7 +78,8 @@
     <parameter
       id="long-parameter-1"
       index="1"
-      type="long"/>
+      type="long"
+      name="id"/>
   </parameter-list>
 
   <!-- Result metadata -->

@@ -106,7 +106,9 @@ public class ParameterElementFactory
 
         String t_strType = attributes.getValue("type");
 
-        result = new ParameterElement(t_strId, t_iIndex, t_strType);
+        String t_strName = attributes.getValue("name");
+
+        result = new ParameterElement(t_strId, t_iIndex, t_strType, t_strName);
 
         return result;
     }

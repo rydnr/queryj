@@ -295,6 +295,15 @@ public class DAOTemplateGenerator
      * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete request.
      * @param deleteWithFkPkValues the delete with FK PK values.
      * @param classEnd the class end.
+     * @param customSelect the custom select template.
+     * @param customSelectParameterJavadoc the Javadoc for the parameters of the
+     * custom selects.
+     * @param customSelectParameterDeclaration the parameter declaration of the
+     * custom selects.
+     * @param customSelectParameterValues the parameter values of the custom
+     * selects.
+     * @param customSelectResultPropertyValues the properties of the result set for
+     * custom selects.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -348,6 +357,11 @@ public class DAOTemplateGenerator
         final String                  deleteWithFkPkDeclaration,
         final String                  deleteWithFkDAODeleteRequest,
         final String                  deleteWithFkPkValues,
+        final String                  customSelect,
+        final String                  customSelectParameterJavadoc,
+        final String                  customSelectParameterDeclaration,
+        final String                  customSelectParameterValues,
+        final String                  customSelectResultPropertyValues,
         final String                  classEnd)
       throws  QueryJException
     {
@@ -417,6 +431,11 @@ public class DAOTemplateGenerator
                         deleteWithFkPkDeclaration,
                         deleteWithFkDAODeleteRequest,
                         deleteWithFkPkValues,
+                        customSelect,
+                        customSelectParameterJavadoc,
+                        customSelectParameterDeclaration,
+                        customSelectParameterValues,
+                        customSelectResultPropertyValues,
                         classEnd);
             }
             else 
@@ -472,6 +491,11 @@ public class DAOTemplateGenerator
                         deleteWithFkPkDeclaration,
                         deleteWithFkDAODeleteRequest,
                         deleteWithFkPkValues,
+                        customSelect,
+                        customSelectParameterJavadoc,
+                        customSelectParameterDeclaration,
+                        customSelectParameterValues,
+                        customSelectResultPropertyValues,
                         classEnd) {};
             }
         }

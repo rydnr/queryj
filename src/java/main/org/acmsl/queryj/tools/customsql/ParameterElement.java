@@ -78,19 +78,27 @@ public class ParameterElement
     private String m__strType;
 
     /**
+     * The <i>name</i> attribute.
+     */
+    private String m__strName;
+
+    /**
      * Creates a ParameterElement with given information.
      * @param id the <i>id</i> attribute.
-     * @param index the <i>index> attribute.
+     * @param index the <i>index</i> attribute.
      * @param type the <i>type</i> attribute.
+     * @param name the <i>name</i> attribute.
      */
     public ParameterElement(
         final String id,
         final int index,
-        final String type)
+        final String type,
+        final String name)
     {
         super(id);
         immutableSetIndex(index);
         immutableSetType(type);
+        immutableSetName(name);
     }
 
     /**
@@ -148,6 +156,33 @@ public class ParameterElement
     }
 
     /**
+     * Specifies the <i>name</i> attribute.
+     * @param name such value.
+     */
+    protected final void immutableSetName(final String name)
+    {
+        m__strName = name;
+    }
+
+    /**
+     * Specifies the <i>name</i> attribute.
+     * @param name such value.
+     */
+    protected void setName(final String name)
+    {
+        m__strName = name;
+    }
+
+    /**
+     * Retrieves the <i>name</i> attribute.
+     * @return such value.
+     */
+    public String getName()
+    {
+        return m__strName;
+    }
+
+    /**
      * Provides a text information about this instance.
      * @return such information.
      */
@@ -157,7 +192,8 @@ public class ParameterElement
             toString(
                 getId(),
                 getIndex(),
-                getType());
+                getType(),
+                getName());
     }
 
     /**
@@ -165,17 +201,20 @@ public class ParameterElement
      * @param id the <i>id</i> attribute.
      * @param index the <i>index</i> attribute.
      * @param type the <i>type</i> attribute.
+     * @param name the <i>name</i> attribute.
      * @return such information.
      */
     protected String toString(
         final String id,
         final int index,
-        final String type)
+        final String type,
+        final String name)
     {
         return
               getClass().getName()
             + "[" + "id=" + id + "]"
             + "[" + "index=" + index + "]"
-            + "[" + "type=" + type + "]";
+            + "[" + "type=" + type + "]"
+            + "[" + "name=" + name + "]";
     }
 }

@@ -107,12 +107,12 @@ public class XmlSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.templates.dao.xml");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.TestStatementTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLDAOBundleTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.TestStatementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateGeneratorTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.TestResultSetTest.class);
     
     suite.addTest(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.HandlersSuite.suite());
