@@ -286,14 +286,14 @@ public abstract class SqlXmlParser
         //     <result>
         result.addFactoryCreate(
             "sql-list/result-list/result",
-            new ParameterElementFactory());
+            new ResultElementFactory());
         result.addSetRoot("sql-list/result-list/result", "add");
 
         //       <property-ref>
         result.addFactoryCreate(
             "sql-list/result-list/result/property-ref",
             new PropertyRefElementFactory());
-        result.addSetRoot(
+        result.addSetNext(
             "sql-list/result-list/result/property-ref", "add");
         //       </property-ref>
         //     </result>
@@ -334,11 +334,7 @@ public abstract class SqlXmlParser
 
                 if  (t_Object != null)
                 {
-                    if  (t_Object instanceof Collection)
-                    {
-                        processSqlXml((Collection) t_Object, map);
-                    }
-                    else if  (t_Object instanceof SqlElement)
+                    if  (t_Object instanceof SqlElement)
                     {
                         map.put(
                             buildSqlKey(t_Object), t_Object);
@@ -346,17 +342,23 @@ public abstract class SqlXmlParser
                     else if  (t_Object instanceof ParameterElement)
                     {
                         map.put(
-                            buildParameterKey(t_Object), t_Object);
+                            buildParameterKey(
+                                (AbstractIdElement) t_Object),
+                            t_Object);
                     }
                     else if  (t_Object instanceof ResultElement)
                     {
                         map.put(
-                            buildResultKey(t_Object), t_Object);
+                            buildResultKey(
+                                (AbstractIdElement) t_Object),
+                            t_Object);
                     }
                     else if  (t_Object instanceof PropertyElement)
                     {
                         map.put(
-                            buildPropertyKey(t_Object), t_Object);
+                            buildPropertyKey(
+                                (AbstractIdElement) t_Object),
+                            t_Object);
                     }
                 }
             }
@@ -391,9 +393,19 @@ public abstract class SqlXmlParser
      * @param parameterElement such element.
      * @return the key.
      */
-    protected Object buildParameterKey(final Object parameterElement)
+    protected Object buildParameterKey(final AbstractIdElement parameterElement)
     {
-        return "\\/parameter\\::" + parameterElement;
+        return buildParameterKey(parameterElement.getId());
+    }
+
+    /**
+     * Builds a key for &lt;parameter&gt; elements, via their id.
+     * @param parameterElementId such element id.
+     * @return the key.
+     */
+    protected Object buildParameterKey(final String parameterElementId)
+    {
+        return "\\/parameter\\::" + parameterElementId;
     }
 
     /**
@@ -401,9 +413,19 @@ public abstract class SqlXmlParser
      * @param resultElement such element.
      * @return the key.
      */
-    protected Object buildResultKey(final Object resultElement)
+    protected Object buildResultKey(final AbstractIdElement resultElement)
     {
-        return "\\/result\\::" + resultElement;
+        return buildResultKey(resultElement.getId());
+    }
+
+    /**
+     * Builds a key for &lt;result&gt; elements, via their id.
+     * @param resultElementId such element id.
+     * @return the key.
+     */
+    protected Object buildResultKey(final String resultElementId)
+    {
+        return "\\/result\\::" + resultElementId;
     }
 
     /**
@@ -411,9 +433,124 @@ public abstract class SqlXmlParser
      * @param propertyElement such element.
      * @return the key.
      */
-    protected Object buildPropertyKey(final Object propertyElement)
+    protected Object buildPropertyKey(final AbstractIdElement propertyElement)
     {
-        return "\\/property\\::" + propertyElement;
+        return buildPropertyKey(propertyElement.getId());
+    }
+
+    /**
+     * Builds a key for &lt;property&gt; elements, via their id.
+     * @param propertyElementId such element id.
+     * @return the key.
+     */
+    protected Object buildPropertyKey(final String propertyElementId)
+    {
+        return "\\/property\\::" + propertyElementId;
+    }
+
+    /**
+     * Resolves the parameter reference.
+     * @param reference such reference.
+     * @return the referenced parameter.
+     * @precondition reference != null
+     */
+    public ParameterElement resolveReference(
+        final ParameterRefElement reference)
+    {
+        return resolveReference(reference, getMap());
+    }
+
+    /**
+     * Resolves the parameter reference.
+     * @param reference such reference.
+     * @param map the map.
+     * @return the referenced parameter.
+     * @precondition reference != null
+     */
+    protected ParameterElement resolveReference(
+        final ParameterRefElement reference,
+        final Map map)
+    {
+        ParameterElement result = null;
+
+        if  (map != null)
+        {
+            result =
+                (ParameterElement)
+                    map.get(buildParameterKey(reference.getId()));
+        }
+
+        return result;
+    }
+
+    /**
+     * Resolves the result reference.
+     * @param reference such reference.
+     * @return the referenced result.
+     * @precondition reference != null
+     */
+    public ResultElement resolveReference(
+        final ResultRefElement reference)
+    {
+        return resolveReference(reference, getMap());
+    }
+
+    /**
+     * Resolves the result reference.
+     * @param reference such reference.
+     * @param map the map.
+     * @return the referenced result.
+     * @precondition reference != null
+     */
+    protected ResultElement resolveReference(
+        final ResultRefElement reference,
+        final Map map)
+    {
+        ResultElement result = null;
+
+        if  (map != null)
+        {
+            result =
+                (ResultElement)
+                    map.get(buildResultKey(reference.getId()));
+        }
+
+        return result;
+    }
+
+    /**
+     * Resolves the property reference.
+     * @param reference such reference.
+     * @return the referenced property.
+     * @precondition reference != null
+     */
+    public PropertyElement resolveReference(
+        final PropertyRefElement reference)
+    {
+        return resolveReference(reference, getMap());
+    }
+
+    /**
+     * Resolves the property reference.
+     * @param reference such reference.
+     * @param map the map.
+     * @return the referenced property.
+     * @precondition reference != null
+     */
+    protected PropertyElement resolveReference(
+        final PropertyRefElement reference,
+        final Map map)
+    {
+        PropertyElement result = null;
+
+        if  (map != null)
+        {
+            result =
+                (PropertyElement)
+                    map.get(buildPropertyKey(reference.getId()));
+        }
+
+        return result;
     }
 }
 
