@@ -65,12 +65,59 @@
   </preGoal>
 
   <postGoal name="xdoc:jelly-transform">
+    <ant:echo message="Replacing issue.url"/>
+    <ant:ant antfile="customvars.xml" target="replace-custom-vars"/>
+  </postGoal>
+
+  <goal name="replace-custom-vars">
+    <ant:echo message="Replacing {issue.url}"/>
+
+    <ant:replaceregexp byline="true">
+      <ant:regexp pattern="\$(.*?)?\{issue.url\}"/>
+      <ant:substitution expression="${issue.url}"/>
+      <ant:fileset dir="../../../target/docs">
+        <ant:include name="*.html"/>
+      </ant:fileset>
+    </ant:replaceregexp>
+
+    <ant:echo message="Replacing CVS keywords"/>
+
+    <ant:replaceregexp byline="true">
+      <ant:regexp pattern="\$Date$"/>
+      <ant:substitution expression="\1"/>
+      <ant:fileset dir="../../../target/docs">
+        <ant:include name="*.html"/>
+      </ant:fileset>
+    </ant:replaceregexp>
+
+    <ant:replaceregexp byline="true">
+      <ant:regexp pattern="\$Author$"/>
+      <ant:substitution expression="\1"/>
+      <ant:fileset dir="../../../target/docs">
+        <ant:include name="*.html"/>
+      </ant:fileset>
+    </ant:replaceregexp>
+
+    <!--
+    <ant:ant antfile="customvars.xml"/>
     <ant:replace
       dir="../../../target/docs"
-      token="${issue.url}"
-      value="http://bugzilla.acm-sl.org/show_bug.cgi?id=">
-      <ant:include name="index.html"/>
+      propertyfile="build.properties">
+      <ant:replacefilter 
+        token="${issue.url}" 
+        property="issue.url"/>
+      <ant:replacefilter 
+        token="$Author: " 
+        value=""/>
+      <ant:replacefilter 
+        token="$Date: " 
+        value=""/>
+      <ant:replacefilter 
+        token=" $" 
+        value=""/>
+      <ant:include name="*.html"/>
     </ant:replace>
-  </postGoal>
+    -->
+  </goal>
 
 </project>
