@@ -3,7 +3,7 @@
 <!DOCTYPE sql-list
 [
   <!ELEMENT sql-list (sql)+>
-  <!ELEMENT sql (value,(parameter)*,(result)?)>
+  <!ELEMENT sql (value,parameter-list,result-list)>
   <!ATTLIST sql
     id ID #IMPLIED
     dao CDATA #REQUIRED
@@ -12,14 +12,23 @@
     implementation (mysql | oracle | postgres | odbc | mock | xml | all) #REQUIRED>
 
   <!ELEMENT value (#PCDATA)>
+  <!ELEMENT parameter-ref EMPTY>
+  <!ATTLIST parameter-ref
+    id IDREF #REQUIRED>
+  <!ELEMENT result-ref EMPTY>
+  <!ATTLIST result-ref
+    id IDREF #REQUIRED>
+  <!ELEMENT parameter-list (parameter)*>
   <!ELEMENT parameter EMPTY>
   <!ATTLIST parameter
     index CDATA #REQUIRED
     type  CDATA #REQUIRED>
+  <!ELEMENT result-list (result)*>
   <!ELEMENT result (property)+>
   <!ATTLIST result
     class CDATA #IMPLIED
     matches (single | multiple) #REQUIRED>
+  <!ELEMENT property-list (result)*>
   <!ELEMENT property EMPTY>
   <!ATTLIST property
     column_name CDATA #IMPLIED
@@ -30,17 +39,14 @@
 
 <sql-list>
   <sql
-    id="customer1"
+    id="find-customer-by-customer-id-result"
     dao="customer"
     name="find-customer-by-customer-id"
     type="select"
     implementation="all">
     <value>select * from customers where customer_id = ?</value>
-    <parameter index="1" type="long"/>
-    <result matches="single">
-      <property column_name="customer_id" type="long"/>
-      <property column_name="name" type="String"/>
-    </result>
+    <parameter-ref id="long-parameter-1"/>
+    <result-ref id="find-customer-by-customer-id.result"/>
   </sql>
   <sql
     name="find-customer-by-person-last-name"
@@ -48,11 +54,8 @@
     implementation="all"
     type="select">
     <value>select c.customer_id, p.name from customers c, people p where p.last_name like ?</value>
-    <parameter index="1" type="String"/>
-    <result class="com.foo.bar.dao.CustomerBean" matches="multiple">
-      <property column_name="c.customer_id" name="customerId" type="long"/>
-      <property column_name="p.name" name="personName" type="String"/>
-    </result>
+    <parameter-ref id="long-parameter-1"/>
+    <result-ref id="find-customer-by-person-last-name.result"/>
   </sql>
   <sql
     name="insert-test"
@@ -60,6 +63,56 @@
     implementation="all"
     type="insert">
     <value>insert into customers (customer_id, name) values (?, "test")</value>
-    <parameter index="1" type="long"/>
+    <parameter-ref id="long-parameter-1"/>
   </sql>
+
+  <!-- SQL parameter metadata -->
+  <parameter-list>
+    <parameter
+      id="long-parameter-1"
+      index="1"
+      type="long"/>
+  </parameter-list>
+
+  <!-- Result metadata -->
+  <result-list>
+    <result
+      id="find-customer-by-customer-id.result"
+      matches="single">
+      <property-ref
+        id="find-customer-by-customer-id.customer_id.property"/>
+      <property-ref
+        id="find-customer-by-customer-id.name.property"/>
+    </result>
+    <result
+      id="find-customer-by-person.result"
+      class="com.foo.bar.dao.CustomerBean"
+      matches="multiple">
+      <property-ref
+        id="find-customer-by-person.customer_id.property"/>
+      <property-ref
+        id="find-customer-by-person.personName.property"/>
+    </result>
+  </result-list>
+
+  <!-- Result property metadata -->
+  <property-list>
+    <property
+      id="find-customer-by-customer-id.customer_id.property"
+      column_name="customer_id"
+      type="long"/>
+    <property
+      id="name.property" column_name="name" type="String"/>
+    <property
+      id="find-customer-by-person.customer_id.property"
+      column_name="c.customer_id"
+      name="customerId"
+      type="long"/>
+    <property
+      id="find-customer-by-person.personName.property"
+      column_name="p.name"
+      name="personName"
+      type="String"/>
+  </property-list>
+
 </sql-list>
