@@ -26,7 +26,7 @@
   <url>http://maven.acm-sl.org/queryj/</url>
   <logo>http://www.acm-sl.org/images/queryj.png</logo>
   <issueTrackingUrl>http://bugzilla.acm-sl.org</issueTrackingUrl>
-  <siteAddress>liteserver</siteAddress>
+  <siteAddress>bugzilla.acm-sl.org</siteAddress>
   <siteDirectory>
     /home/anoncvs/queryj
   </siteDirectory>
