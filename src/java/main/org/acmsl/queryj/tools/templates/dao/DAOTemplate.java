@@ -1057,9 +1057,9 @@ public abstract class DAOTemplate
      */
     public static final String DEFAULT_CUSTOM_UPDATE =
           "    /**\n"
-        + "     * Updates {0} entities\n"
-         // result class
-        + "     * from the persistence layer with the provided data.\n"
+        + "     * Performs the <i>{0}</i> operation\n"
+         // query name
+        + "     * in the persistence layer with the provided data."
         + "{1}\n"
          // CUSTOM_SELECT_PARAMETER_JAVADOC
         + "     * @param transactionToken needed to use an open connection and\n"
@@ -1080,9 +1080,10 @@ public abstract class DAOTemplate
         + "        try\n"
         + "        '{'\n"
         + "            t_Connection = getConnection(transactionToken);\n\n"
-        + "            StringBuffer t_sbQuery = new StringBuffer();\n"
-        + "{4}\n\n"
-        + "            t_PreparedStatement = t_Connection.prepareStatement(t_sbQuery.toString());\n"
+        + "            StringBuffer t_sbQuery = new StringBuffer();\n\n"
+        + "{4}\n"
+        + "            t_PreparedStatement =\n"
+        + "                t_Connection.prepareStatement(t_sbQuery.toString());\n"
         + "{5}\n\n"
          // CUSTOM_UPDATE_PARAMETER_VALUES
         + "            t_PreparedStatement.executeUpdate();\n\n"
@@ -1158,7 +1159,7 @@ public abstract class DAOTemplate
      * The custom update query line.
      */
     public static final String DEFAULT_CUSTOM_UPDATE_QUERY_LINE =
-        "\n            t_sbQuery.append({0}\"{1} \");";
+        "            t_sbQuery.append({0}\"{1} \");";
 
     /**
      * The default class end.
@@ -4239,7 +4240,8 @@ public abstract class DAOTemplate
                 getCustomSelectParameterDeclaration(),
                 getCustomSelectParameterValues(),
                 getCustomSelectResultPropertyValues(),
-                StringUtils.getInstance());
+                StringUtils.getInstance(),
+                StringValidator.getInstance());
     }
 
     /**
@@ -4252,6 +4254,7 @@ public abstract class DAOTemplate
      * @param parameterValues the parameter values.
      * @param resultPropertyValues the result property values.
      * @param stringUtils the StringUtils isntance.
+     * @param stringValidator the StringValidator instance.
      * @return such generated code.
      * @precondition customSqlProvider != null
      * @precondition customSelect != null
@@ -4260,6 +4263,7 @@ public abstract class DAOTemplate
      * @precondition parameterValues != null
      * @precondition resultPropertyValues != null
      * @precondition stringUtils != null
+     * @precondition stringValidator != null
      */
     protected String buildCustomSelects(
         final CustomSqlProvider customSqlProvider,
@@ -4268,7 +4272,8 @@ public abstract class DAOTemplate
         final String parameterDeclaration,
         final String parameterValues,
         final String resultPropertyValues,
-        final StringUtils stringUtils)
+        final StringUtils stringUtils,
+        final StringValidator stringValidator)
     {
         StringBuffer result = new StringBuffer();
 
@@ -4296,7 +4301,8 @@ public abstract class DAOTemplate
                                 parameterJavadoc,
                                 parameterDeclaration,
                                 parameterValues,
-                                stringUtils);
+                                stringUtils,
+                                stringValidator);
 
                         String t_strResultPropertyValues =
                             buildResultPropertyValues(
@@ -4330,12 +4336,14 @@ public abstract class DAOTemplate
      * @param parameterDeclaration the parameter declaration.
      * @param parameterValues the parameter values.
      * @param stringUtils the StringUtils instance.
+     * @param stringValidator the StringValidator instance.
      * @return the generated code.
      * @precondition provider != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
      * @precondition parameterValues != null
      * @precondition stringUtils != null
+     * @precondition stringValidator != null
      */
     protected String[] buildParameterTemplates(
         final CustomSqlProvider provider,
@@ -4343,7 +4351,8 @@ public abstract class DAOTemplate
         final String parameterJavadoc,
         final String parameterDeclaration,
         final String parameterValues,
-        final StringUtils stringUtils)
+        final StringUtils stringUtils,
+        final StringValidator stringValidator)
     {
         String[] result = new String[3];
 
@@ -4383,18 +4392,27 @@ public abstract class DAOTemplate
                     }
                     else
                     {
+                        String t_strName = t_Parameter.getName();
+
+                        if  (stringValidator.isEmpty(t_strName))
+                        {
+                            t_strName =
+                                stringUtils.toJavaMethod(
+                                    t_Parameter.getId(), '-');
+                        }
+
                         t_sbParameterJavadoc.append(
                             t_ParameterJavadocFormatter.format(
                                 new Object[]
                                 {
-                                    t_Parameter.getName()
+                                    t_strName
                                 }));
                         t_sbParameterDeclaration.append(
                             t_ParameterDeclarationFormatter.format(
                                 new Object[]
                                 {
                                     t_Parameter.getType(),
-                                    t_Parameter.getName()
+                                    t_strName
                                 }));
                         t_sbParameterValues.append(
                             t_ParameterValuesFormatter.format(
@@ -4405,7 +4423,7 @@ public abstract class DAOTemplate
                                     (   (t_Parameter.getIndex() > 0)
                                      ?  ("" + t_Parameter.getIndex())
                                      :  "\"" + t_Parameter.getColumnName() + "\""),
-                                    t_Parameter.getName()
+                                    t_strName
                                 }));
                     }
                 }
@@ -4614,6 +4632,7 @@ public abstract class DAOTemplate
                 getCustomUpdateParameterValues(),
                 getCustomUpdateQueryLine(),
                 StringUtils.getInstance(),
+                StringValidator.getInstance(),
                 RegexpManager.createHelper());
     }
 
@@ -4627,6 +4646,7 @@ public abstract class DAOTemplate
      * @param parameterValues the parameter values.
      * @param queryLine the query line.
      * @param stringUtils the StringUtils instance.
+     * @param stringValidator the StringValidator instance.
      * @param helper the Helper instance.
      * @return such generated code.
      * @precondition customSqlProvider != null
@@ -4636,6 +4656,7 @@ public abstract class DAOTemplate
      * @precondition parameterValues != null
      * @preoncition queryLine != null
      * @precondition stringUtils != null
+     * @precondition stringValidator != null
      * @precondition helper != null
      */
     protected String buildCustomUpdates(
@@ -4646,6 +4667,7 @@ public abstract class DAOTemplate
         final String parameterValues,
         final String queryLine,
         final StringUtils stringUtils,
+        final StringValidator stringValidator,
         final Helper helper)
     {
         StringBuffer result = new StringBuffer();
@@ -4674,7 +4696,8 @@ public abstract class DAOTemplate
                                 parameterJavadoc,
                                 parameterDeclaration,
                                 parameterValues,
-                                stringUtils);
+                                stringUtils,
+                                stringValidator);
 
                         result.append(
                             buildCustomUpdate(
@@ -4746,9 +4769,7 @@ public abstract class DAOTemplate
             t_CustomUpdateFormatter.format(
                 new Object[]
                 {
-                    (   (t_Result != null)
-                     ?  t_Result.getClassValue()
-                     :  "-no-result-type-defined-"),
+                    sqlElement.getName(),
                     parameterJavadoc,
                     stringUtils.unCapitalizeStart(
                         stringUtils.capitalize(
