@@ -90,7 +90,7 @@
 
     <dependency>
       <groupId>acmsl-commons</groupId>
-      <artifactId>acmsl-commons</artifactId>
+      <artifactId>commons</artifactId>
       <version>0.5.5b7</version>
       <url>http://maven.acm-sl.com/commons</url>
     </dependency>
