@@ -73,6 +73,7 @@
           </td>
           <td>
             Added <a href="${issue.url}521">persistence support</a> to XML-based DAO implementations.<br/>
+            Added JUnitDoclet unit tests, and <a href="${issue.url}532">improved Ant-based build process</a>.<br/>
             Released <b>0.5.7</b>,
           </td>
         </tr>
