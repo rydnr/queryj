@@ -273,6 +273,21 @@ public abstract class ValueObjectFactoryTemplate
         "\n                {1}"; // Field - field;
 
     /**
+     * The factory alias method.
+     */
+    public static final String DEFAULT_FACTORY_ALIAS_METHOD =
+          "    /**\n"
+        + "     * Creates a {0} value object.\n"
+        + "{1}" // constructor field javadoc
+        + "     */\n"
+        + "    public {0}ValueObject create{0}ValueObject(" // table
+        + "{2})\n" // factory method field declaration
+        + "    '{'\n"
+        + "        return create{0}("
+        + "{3});\n\n"  // factory method value object build.
+        + "    '}'\n\n";
+
+    /**
      * The default class end.
      */
     public static final String DEFAULT_CLASS_END = "}\n";
@@ -353,6 +368,11 @@ public abstract class ValueObjectFactoryTemplate
     private String m__strFactoryMethodValueObjectBuild;
 
     /**
+     * The factory alias method.
+     */
+    private String m__strFactoryAliasMethod;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
@@ -374,25 +394,27 @@ public abstract class ValueObjectFactoryTemplate
      * @param factoryMethodFieldJavadoc the factory method field Javadoc.
      * @param factoryMethodFieldDefinition the constructor field definition.
      * @param factoryMethodValueObjectBuild the factory method value object build.
+     * @param factoryAliasMethod the factory alias method.
      * @param classEnd the class end.
      */
     public ValueObjectFactoryTemplate(
-        String                  header,
-        String                  packageDeclaration,
-        String                  packageName,
-        TableTemplate           tableTemplate,
-        DatabaseMetaDataManager metaDataManager,
-        String                  projectImports,
-        String                  jdkImports,
-        String                  javadoc,
-        String                  classDefinition,
-        String                  classStart,
-        String                  singletonBody,
-        String                  factoryMethod,
-        String                  factoryMethodFieldJavadoc,
-        String                  factoryMethodFieldDefinition,
-        String                  factoryMethodValueObjectBuild,
-        String                  classEnd)
+        final String                  header,
+        final String                  packageDeclaration,
+        final String                  packageName,
+        final TableTemplate           tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String                  projectImports,
+        final String                  jdkImports,
+        final String                  javadoc,
+        final String                  classDefinition,
+        final String                  classStart,
+        final String                  singletonBody,
+        final String                  factoryMethod,
+        final String                  factoryMethodFieldJavadoc,
+        final String                  factoryMethodFieldDefinition,
+        final String                  factoryMethodValueObjectBuild,
+        final String                  factoryAliasMethod,
+        final String                  classEnd)
     {
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
@@ -410,6 +432,7 @@ public abstract class ValueObjectFactoryTemplate
         immutableSetFactoryMethodFieldJavadoc(factoryMethodFieldJavadoc);
         immutableSetFactoryMethodFieldDefinition(factoryMethodFieldDefinition);
         immutableSetFactoryMethodValueObjectBuild(factoryMethodValueObjectBuild);
+        immutableSetFactoryAliasMethod(factoryAliasMethod);
         immutableSetClassEnd(classEnd);
     }
 
@@ -440,6 +463,7 @@ public abstract class ValueObjectFactoryTemplate
             DEFAULT_FACTORY_METHOD_FIELD_JAVADOC,
             DEFAULT_FACTORY_METHOD_FIELD_DECLARATION,
             DEFAULT_FACTORY_METHOD_VALUE_OBJECT_BUILD,
+            DEFAULT_FACTORY_ALIAS_METHOD,
             DEFAULT_CLASS_END);
     }
 
@@ -852,6 +876,33 @@ public abstract class ValueObjectFactoryTemplate
     }
 
     /**
+     * Specifies the factory alias method.
+     * @param factoryAliasMethod such source code.
+     */
+    private void immutableSetFactoryAliasMethod(final String factoryAliasMethod)
+    {
+        m__strFactoryAliasMethod = factoryAliasMethod;
+    }
+
+    /**
+     * Specifies the factory alias method.
+     * @param factoryAliasMethod such source code.
+     */
+    protected void setFactoryAliasMethod(final String factoryAliasMethod)
+    {
+        immutableSetFactoryAliasMethod(factoryAliasMethod);
+    }
+
+    /**
+     * Retrieves the factory alias method.
+     * @return such source code.
+     */
+    public String getFactoryAliasMethod()
+    {
+        return m__strFactoryAliasMethod;
+    }
+
+    /**
      * Specifies the class end.
      * @param classEnd the new class end.
      */
@@ -971,6 +1022,9 @@ public abstract class ValueObjectFactoryTemplate
             MessageFormat t_FactoryMethodFormatter =
                     new MessageFormat(getFactoryMethod());
 
+            MessageFormat t_FactoryAliasMethodFormatter =
+                    new MessageFormat(getFactoryAliasMethod());
+
             if  (t_lFields != null)
             {
                 Iterator t_itFields = t_lFields.iterator();
@@ -1035,6 +1089,20 @@ public abstract class ValueObjectFactoryTemplate
 
                 t_sbResult.append(
                     t_FactoryMethodFormatter.format(
+                        new Object[]
+                        {
+                            t_StringUtils.capitalize(
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
+                                '_'),
+                            t_sbFactoryMethodFieldJavadoc.toString(),
+                            t_sbFactoryMethodFieldDefinition.toString(),
+                            t_sbFactoryMethodValueObjectBuild.toString()
+                        }));
+
+                t_sbResult.append(
+                    t_FactoryAliasMethodFormatter.format(
                         new Object[]
                         {
                             t_StringUtils.capitalize(

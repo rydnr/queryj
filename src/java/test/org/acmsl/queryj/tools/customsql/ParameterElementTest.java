@@ -117,7 +117,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.customsql.ParameterElement("p1", 1, "long", "id");
+    return new org.acmsl.queryj.tools.customsql.ParameterElement("p1", "customer_id", 1, "id", "long");
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -145,54 +145,6 @@ extends TestCase
     parameterelement = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
-  }
-  
-  /**
-  * Tests ParameterElementTestgetIndex()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.ParameterElement#getIndex()
-  */
-  public void testGetIndex()
-  throws Exception
-  {
-    // JUnitDoclet begin method getIndex
-    // JUnitDoclet end method getIndex
-  }
-  
-  /**
-  * Tests ParameterElementTestgetType()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.ParameterElement#getType()
-  */
-  public void testGetType()
-  throws Exception
-  {
-    // JUnitDoclet begin method getType
-    // JUnitDoclet end method getType
-  }
-  
-  /**
-  * Tests ParameterElementTestgetName()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.ParameterElement#getName()
-  */
-  public void testGetName()
-  throws Exception
-  {
-    // JUnitDoclet begin method getName
-    // JUnitDoclet end method getName
-  }
-  
-  /**
-  * Tests ParameterElementTesttoString()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.ParameterElement#toString()
-  */
-  public void testToString()
-  throws Exception
-  {
-    // JUnitDoclet begin method toString
-    // JUnitDoclet end method toString
   }
   
   

@@ -777,6 +777,9 @@ public class QueryJTask
             boolean t_bGenerateMockDAOImplementation =
                 getGenerateMockDAOImplementationFlag();
 
+            String t_strCustomSqlModel = getCustomSqlModel();
+            File t_SqlXmlFile = getSqlXmlFile();
+
             AntTablesElement t_Tables = getTables();
 
             AntExternallyManagedFieldsElement t_ExternallyManagedFields =
@@ -897,6 +900,20 @@ public class QueryJTask
                     t_mAttributes.put(
                         ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS,
                         t_ExternallyManagedFields);
+                }
+
+                if  (t_strCustomSqlModel != null)
+                {
+                    t_mAttributes.put(
+                        ParameterValidationHandler.CUSTOM_SQL_MODEL,
+                        t_strCustomSqlModel);
+                }
+
+                if  (t_SqlXmlFile != null)
+                {
+                    t_mAttributes.put(
+                        ParameterValidationHandler.SQL_XML_FILE,
+                        t_SqlXmlFile);
                 }
             }
         }

@@ -61,7 +61,7 @@
  @version $Revision$
  @default description
 -->
-<project name="${project.name}" default="description" basedir="../../..">
+<project name="queryj" default="description" basedir="../../..">
 
     <!--
      Displays the build script purpose, and the folder structure required.
@@ -192,6 +192,10 @@
 
       <description>Declares QueryJ task</description>
 
+      <property name="qj.cp" refid="queryj.classpath"/>
+
+      <echo>Using classpath:</echo>
+      <echo>${qj.cp}</echo>
       <!--
        Defines the <i>QueryJ</i> task.
       -->
@@ -218,7 +222,7 @@
     -->
     <target
       name="queryj"
-      depends="init.properties, declare.queryj.task, clean"
+      depends="init.properties, clean, declare.queryj.task"
       description="Executes QueryJ">
 
       <!--
@@ -240,7 +244,7 @@
         extractProcedures="${queryj.extractprocedures}"
         jndiDataSource="java:comp/env/jdbc/queryj"
         customSqlModel="xml"
-        sqlXmlFile="sql.xml">
+        sqlXmlFile="src/toolconf/queryj/sql.xml">
 
         <externally-managed-fields>
 

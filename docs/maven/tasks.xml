@@ -66,8 +66,11 @@
             <li>
               Support custom queries in Ant scripts: find out
               if through the driver the query can be validated
-              directly; it also needs the DAO and the method name,
-              along with value-object dynamic aggregators.
+              directly.
+            </li>
+            <li>
+              <b>0.6b1</b><br/>
+              Accomplish task <a href="${issue.url}534">534</a>.
             </li>
           </ul>
         </p>

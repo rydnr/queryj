@@ -65,156 +65,23 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  * @version $Revision$
  */
 public class ParameterElement
-    extends  AbstractIdElement
+    extends  AbstractParameterElement
 {
-    /**
-     * The <i>index</i> attribute.
-     */
-    private int m__iIndex;
-
-    /**
-     * The <i>type</i> attribute.
-     */
-    private String m__strType;
-
-    /**
-     * The <i>name</i> attribute.
-     */
-    private String m__strName;
-
     /**
      * Creates a ParameterElement with given information.
      * @param id the <i>id</i> attribute.
+     * @param columnName the <i>columnName</i> attribute.
      * @param index the <i>index</i> attribute.
-     * @param type the <i>type</i> attribute.
      * @param name the <i>name</i> attribute.
+     * @param type the <i>type</i> attribute.
      */
     public ParameterElement(
         final String id,
+        final String columnName,
         final int index,
-        final String type,
-        final String name)
+        final String name,
+        final String type)
     {
-        super(id);
-        immutableSetIndex(index);
-        immutableSetType(type);
-        immutableSetName(name);
-    }
-
-    /**
-     * Specifies the <i>index</i> attribute.
-     * @param index such value.
-     */
-    protected final void immutableSetIndex(final int index)
-    {
-        m__iIndex = index;
-    }
-
-    /**
-     * Specifies the <i>index</i> attribute.
-     * @param index such value.
-     */
-    protected void setIndex(final int index)
-    {
-        m__iIndex = index;
-    }
-
-    /**
-     * Retrieves the <i>index</i> attribute.
-     * @return such value.
-     */
-    public int getIndex()
-    {
-        return m__iIndex;
-    }
-
-    /**
-     * Specifies the <i>type</i> attribute.
-     * @param type such value.
-     */
-    protected final void immutableSetType(final String type)
-    {
-        m__strType = type;
-    }
-
-    /**
-     * Specifies the <i>type</i> attribute.
-     * @param type such value.
-     */
-    protected void setType(final String type)
-    {
-        m__strType = type;
-    }
-
-    /**
-     * Retrieves the <i>type</i> attribute.
-     * @return such value.
-     */
-    public String getType()
-    {
-        return m__strType;
-    }
-
-    /**
-     * Specifies the <i>name</i> attribute.
-     * @param name such value.
-     */
-    protected final void immutableSetName(final String name)
-    {
-        m__strName = name;
-    }
-
-    /**
-     * Specifies the <i>name</i> attribute.
-     * @param name such value.
-     */
-    protected void setName(final String name)
-    {
-        m__strName = name;
-    }
-
-    /**
-     * Retrieves the <i>name</i> attribute.
-     * @return such value.
-     */
-    public String getName()
-    {
-        return m__strName;
-    }
-
-    /**
-     * Provides a text information about this instance.
-     * @return such information.
-     */
-    public String toString()
-    {
-        return
-            toString(
-                getId(),
-                getIndex(),
-                getType(),
-                getName());
-    }
-
-    /**
-     * Provides a text information about this instance.
-     * @param id the <i>id</i> attribute.
-     * @param index the <i>index</i> attribute.
-     * @param type the <i>type</i> attribute.
-     * @param name the <i>name</i> attribute.
-     * @return such information.
-     */
-    protected String toString(
-        final String id,
-        final int index,
-        final String type,
-        final String name)
-    {
-        return
-              getClass().getName()
-            + "[" + "id=" + id + "]"
-            + "[" + "index=" + index + "]"
-            + "[" + "type=" + type + "]"
-            + "[" + "name=" + name + "]";
+        super(id, columnName, index, name, type);
     }
 }

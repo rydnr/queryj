@@ -147,66 +147,6 @@ extends TestCase
     // JUnitDoclet end method testcase.tearDown
   }
   
-  /**
-  * Tests PropertyElementTestgetColumnName()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.PropertyElement#getColumnName()
-  */
-  public void testGetColumnName()
-  throws Exception
-  {
-    // JUnitDoclet begin method getColumnName
-    // JUnitDoclet end method getColumnName
-  }
-  
-  /**
-  * Tests PropertyElementTestgetIndex()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.PropertyElement#getIndex()
-  */
-  public void testGetIndex()
-  throws Exception
-  {
-    // JUnitDoclet begin method getIndex
-    // JUnitDoclet end method getIndex
-  }
-  
-  /**
-  * Tests PropertyElementTestgetName()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.PropertyElement#getName()
-  */
-  public void testGetName()
-  throws Exception
-  {
-    // JUnitDoclet begin method getName
-    // JUnitDoclet end method getName
-  }
-  
-  /**
-  * Tests PropertyElementTestgetType()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.PropertyElement#getType()
-  */
-  public void testGetType()
-  throws Exception
-  {
-    // JUnitDoclet begin method getType
-    // JUnitDoclet end method getType
-  }
-  
-  /**
-  * Tests PropertyElementTesttoString()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.customsql.PropertyElement#toString()
-  */
-  public void testToString()
-  throws Exception
-  {
-    // JUnitDoclet begin method toString
-    // JUnitDoclet end method toString
-  }
-  
   
   
   /**

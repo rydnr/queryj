@@ -169,7 +169,7 @@ public class SqlXmlParserFactory
             catch  (final FileNotFoundException fileNotFoundException)
             {
                 LogFactory.getLog(getClass()).error(
-                    "no sql.xml information found at " + inputFilePath,
+                    "Specified sql.xml file does not exist " + inputFilePath,
                     fileNotFoundException);
             }
         }
@@ -182,6 +182,30 @@ public class SqlXmlParserFactory
         else
         {
             result = new SqlXmlParser(t_isInput) { };
+        }
+
+        return result;
+    }
+
+    /**
+     * Creates a <b>sql.xml</b> parser.
+     * @param file the file.
+     * @return such parser.
+     * @precondition file != null
+     */
+    public SqlXmlParser createSqlXmlParser(final File file)
+    {
+        SqlXmlParser result = null;
+
+        try
+        {
+            result = new SqlXmlParser(new FileInputStream(file)) {};
+        }
+        catch  (final FileNotFoundException fileNotFoundException)
+        {
+            LogFactory.getLog(getClass()).error(
+                "no sql.xml information found at " + file,
+                fileNotFoundException);
         }
 
         return result;

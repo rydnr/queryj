@@ -67,10 +67,12 @@ import org.acmsl.commons.patterns.Command;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.util.ClasspathUtils;
 
 /*
  * Importing some JDK classes.
  */
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -140,7 +142,7 @@ public class CustomSqlProviderRetrievalHandler
         if  (command != null) 
         {
             storeCustomSqlProvider(
-                buildCustomSqlProvider(command.getAttributeMap()),
+                buildCustomSqlProvider(command, command.getAttributeMap()),
                 command.getAttributeMap());
         }
         
@@ -150,11 +152,14 @@ public class CustomSqlProviderRetrievalHandler
     /**
      * Opens the JDBC connection using the information stored in the
      * attribute map.
+     * @param command the command.
      * @param parameters the parameter map.
      * @return the JDBC connection.
      * @throws BuildException if the connection cannot be opened.
+     * @precondition command != null
      */
-    protected CustomSqlProvider buildCustomSqlProvider(final Map parameters)
+    protected CustomSqlProvider buildCustomSqlProvider(
+        final AntCommand command, final Map parameters)
         throws  BuildException
     {
         CustomSqlProvider result = null;
@@ -165,6 +170,7 @@ public class CustomSqlProviderRetrievalHandler
                 (String)
                     parameters.get(
                         ParameterValidationHandler.CUSTOM_SQL_MODEL);
+
             if  (t_strType != null)
             {
                 if  (!ParameterValidationHandler.CUSTOM_SQL_MODEL_XML.equals(
@@ -173,20 +179,35 @@ public class CustomSqlProviderRetrievalHandler
                     throw new BuildException(
                         "Custom queries can only be provided via sql.xml so far.");
                 }
-                else
-                {
-                    SqlXmlParserFactory t_Factory =
-                        SqlXmlParserFactory.getInstance();
-                    SqlXmlParser t_Parser =
-                        t_Factory.createSqlXmlParser(
-                            (String)
-                                parameters.get(
-                                    ParameterValidationHandler.SQL_XML_FILE));
-                    t_Parser.parse();
-
-                    result = t_Parser;
-                }
             }
+
+            SqlXmlParserFactory t_Factory =
+                SqlXmlParserFactory.getInstance();
+
+            SqlXmlParser t_Parser =
+                t_Factory.createSqlXmlParser(
+                    (File)
+                        parameters.get(
+                            ParameterValidationHandler.SQL_XML_FILE));
+
+            /*
+              t_Parser.setClassLoader(
+                ClasspathUtils.getDelegate(command.getTask()).getClassLoader());
+            */
+
+            t_Parser.parse();
+
+            Project t_Project = command.getProject();
+
+            if  (t_Project != null)
+            {
+                t_Project.log(
+                    command.getTask(),
+                    "Parser result:" + t_Parser.getMap(),
+                    Project.MSG_ERR);
+            }
+
+            result = t_Parser;
         }
 
         return result;
@@ -200,7 +221,7 @@ public class CustomSqlProviderRetrievalHandler
      */
     protected void storeCustomSqlProvider(
         final CustomSqlProvider provider,
-        final Map        parameters)
+        final Map parameters)
       throws  BuildException
     {
         if  (   (provider   != null)

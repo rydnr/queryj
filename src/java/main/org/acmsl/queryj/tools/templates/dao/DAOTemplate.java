@@ -391,7 +391,7 @@ public abstract class DAOTemplate
      * The find-by-primary-key method's primary keys declaration.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION =
-        "\n        {0} {1},";
+        "\n        final {0} {1},";
          // pk type - java pk
 
     /**
@@ -444,7 +444,7 @@ public abstract class DAOTemplate
         + "     * @exception SQLException if any invalid operation is performed\n"
         + "     * on the result set.\n"
         + "     */\n"
-        + "    protected {0}ValueObject build{0}(QueryResultSet queryResultSet)\n"
+        + "    protected {0}ValueObject build{0}(final QueryResultSet queryResultSet)\n"
         + "        throws  SQLException\n"
         + "    '{'\n"
         + "        {0}ValueObject result = null;\n\n"
@@ -553,7 +553,7 @@ public abstract class DAOTemplate
      * The insert parameters declaration.
      */
     public static final String DEFAULT_INSERT_PARAMETERS_DECLARATION =
-        "\n        {0} {1}";
+        "\n        final {0} {1}";
     // field type - field name
 
     /**
@@ -587,12 +587,12 @@ public abstract class DAOTemplate
         + "     * @param transactionToken the transaction boundary.\n"
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public void update(\n"
+        + "    public void update("
         + "{3}"
          // (optional) pk declaration
         + "{4}"
          // update parameters declaration
-        + "        final TransactionToken transactionToken)\n"
+        + "\n        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException\n"
         + "    '{'\n"
         + "        Connection        t_Connection        = null;\n"
@@ -654,7 +654,7 @@ public abstract class DAOTemplate
      * The update parameters declaration.
      */
     public static final String DEFAULT_UPDATE_PARAMETERS_DECLARATION =
-        "\n        {0} {1}";
+        "\n        final {0} {1}";
     // field type - field name
 
     /**
@@ -687,11 +687,11 @@ public abstract class DAOTemplate
         + "     * successfully.\n"
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    {7} boolean delete{8}(\n"
+        + "    {7} boolean delete{8}("
          // java table name
         + "{2}"
          // DELETE_PK_DECLARATION
-        + "        final TransactionToken  transactionToken)\n"
+        + "\n        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException\n"
         + "    '{'\n"
         + "        boolean result = false;\n\n"
@@ -758,7 +758,7 @@ public abstract class DAOTemplate
      * The delete method's primary keys declaration.
      */
     public static final String DEFAULT_DELETE_PK_DECLARATION =
-        "        {0}              {1},\n";
+        "        final {0}              {1},\n";
          // pk type - java pk
 
     /**
@@ -795,10 +795,10 @@ public abstract class DAOTemplate
         + "     * successfully.\n"
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public boolean delete(\n"
+        + "    public boolean delete("
         + "{2}"
          // DELETE_PK_DECLARATION
-        + "        final TransactionToken  transactionToken)\n"
+        + "\n        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException\n"
         + "    '{'\n"
         + "        return\n"
@@ -897,7 +897,7 @@ public abstract class DAOTemplate
      * The delete with fk method's primary keys declaration.
      */
     public static final String DEFAULT_DELETE_WITH_FK_PK_DECLARATION =
-        "        {0}              {1},\n";
+        "        final {0}              {1},\n";
          // pk type - java pk
 
     /**
@@ -935,9 +935,9 @@ public abstract class DAOTemplate
      */
     public static final String DEFAULT_CUSTOM_SELECT =
           "    /**\n"
-        + "     * Retrieves {0} entities from the persistence layer matching\n"
+        + "     * Retrieves {0} entities\n"
          // result class
-        + "     * given criteria."
+        + " from the persistence layer matching given criteria."
         + "{1}\n"
          // CUSTOM_SELECT_PARAMETER_JAVADOC
         + "     * @param transactionToken needed to use an open connection and\n"
@@ -962,16 +962,18 @@ public abstract class DAOTemplate
         + "            t_Connection = getConnection(transactionToken);\n\n"
         + "            String t_strQuery =\n"
         + "                \"{4}\";\n"
-        + "            t_PreparedStatement = t_Connection.prepareStatement(t_strQuery);\n\n"
-        + "{5}"
+        + "            t_PreparedStatement = t_Connection.prepareStatement(t_strQuery);\n"
+        + "{5}\n\n"
          // CUSTOM_SELECT_PARAMETER_VALUES
         + "            t_rsResults = t_PreparedStatement.executeQuery();\n\n"
         + "            if  (   (t_rsResults != null)\n"
         + "                 && (t_rsResults.next()))\n"
         + "            '{'\n"
+        + "                {0}Factory t_Factory =\n"
+        + "                    {0}Factory.getInstance();\n\n"
         + "                result =\n"
-        + "                    new {0}(\n"
-        + "{6});\n"
+        + "                    t_Factory.create{6}("
+        + "{7});\n"
          // CUSTOM_SELECT_RESULT_PROPERTIES
         + "            '}'\n"
         + "        '}'\n"
@@ -1033,14 +1035,14 @@ public abstract class DAOTemplate
      * The custom select parameter declaration.
      */
     public static final String DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION =
-        "\n        {0} {1},";
+        "\n        final {0} {1},";
          // parameter type - parameter name
 
     /**
      * The custom select parameter values.
      */
     public static final String DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES =
-        "\n        t_PreparedStatement.set{0}({1}, {2});";
+        "\n            t_PreparedStatement.set{0}({1}, {2});";
 
     /**
      * The custom select result properties.
@@ -3897,20 +3899,27 @@ public abstract class DAOTemplate
     {
         StringBuffer result = new StringBuffer();
 
-        result.append(buildCustomSelects());
+        CustomSqlProvider provider = getCustomSqlProvider();
+
+        if  (provider != null)
+        {
+            result.append(buildCustomSelects(provider));
+        }
 
         return result.toString();
     }
 
     /**
      * Builds the custom selects.
+     * @param provider the CustomSqlProvider instance.
      * @return such generated code.
+     * @precondition provider != null
      */
-    protected String buildCustomSelects()
+    protected String buildCustomSelects(final CustomSqlProvider provider)
     {
         return
             buildCustomSelects(
-                getCustomSqlProvider(),
+                provider,
                 getCustomSelect(),
                 getCustomSelectParameterJavadoc(),
                 getCustomSelectParameterDeclaration(),
@@ -3943,7 +3952,7 @@ public abstract class DAOTemplate
         final String parameterValues,
         final String resultPropertyValues)
     {
-        String result = "";
+        StringBuffer result = new StringBuffer();
 
         Collection t_cContents = customSqlProvider.getCollection();
 
@@ -3960,6 +3969,7 @@ public abstract class DAOTemplate
                     SqlElement t_SqlElement =
                         (SqlElement) t_Content;
 
+                    StringUtils t_StringUtils = StringUtils.getInstance();
                     if  (t_SqlElement.SELECT.equals(t_SqlElement.getType()))
                     {
                         String[] t_astrParameterTemplates =
@@ -3968,7 +3978,8 @@ public abstract class DAOTemplate
                                 t_SqlElement.getParameterRefs(),
                                 parameterJavadoc,
                                 parameterDeclaration,
-                                parameterValues);
+                                parameterValues,
+                                t_StringUtils);
 
                         String t_strResultPropertyValues =
                             buildResultPropertyValues(
@@ -3976,7 +3987,7 @@ public abstract class DAOTemplate
                                 t_SqlElement.getResultRef(),
                                 resultPropertyValues);
 
-                        result =
+                        result.append(
                             buildCustomSelect(
                                 customSqlProvider,
                                 t_SqlElement,
@@ -3985,13 +3996,13 @@ public abstract class DAOTemplate
                                 t_astrParameterTemplates[1],
                                 t_astrParameterTemplates[2],
                                 t_strResultPropertyValues,
-                                StringUtils.getInstance());
+                                t_StringUtils));
                     }
                 }
             }
         }
 
-        return result;
+        return result.toString();
     }
 
     /**
@@ -4001,18 +4012,21 @@ public abstract class DAOTemplate
      * @param parameterJavadoc the template.
      * @param parameterDeclaration the parameter declaration.
      * @param parameterValues the parameter values.
+     * @param stringUtils the StringUtils instance.
      * @return the generated code.
      * @precondition provider != null
      * @precondition parameterJavadoc != null
      * @precondition parameterDeclaration != null
      * @precondition parameterValues != null
+     * @precondition stringUtils != null
      */
     protected String[] buildParameterTemplates(
         final CustomSqlProvider provider,
         final Collection parameterRefs,
         final String parameterJavadoc,
         final String parameterDeclaration,
-        final String parameterValues)
+        final String parameterValues,
+        final StringUtils stringUtils)
     {
         String[] result = new String[3];
 
@@ -4069,10 +4083,11 @@ public abstract class DAOTemplate
                             t_ParameterValuesFormatter.format(
                                 new Object[]
                                 {
-                                    t_Parameter.getType(),
-                                    (   (t_Parameter.getIndex() < 1)
+                                    stringUtils.capitalize(
+                                        t_Parameter.getType(), '_'),
+                                    (   (t_Parameter.getIndex() > 0)
                                      ?  ("" + t_Parameter.getIndex())
-                                     :  t_Parameter.getName()),
+                                     :  "\"" + t_Parameter.getColumnName() + "\""),
                                     t_Parameter.getName()
                                 }));
                     }
@@ -4119,7 +4134,8 @@ public abstract class DAOTemplate
                     buildResultPropertyValues(
                         provider,
                         t_Result.getPropertyRefs(),
-                        resultPropertyValues);
+                        resultPropertyValues,
+                        StringUtils.getInstance());
             }
         }
 
@@ -4131,14 +4147,17 @@ public abstract class DAOTemplate
      * @param provider the CustomSqlProvider instance.
      * @param propertyRefs the property references.
      * @param resultPropertyValues the template.
+     * @param stringUtils the StringUtils instance.
      * @return such generated code.
      * @precondition provider != null
      * @precondition resultPropertyValues != null
+     * @precondition stringUtils != null
      */
     protected String buildResultPropertyValues(
         final CustomSqlProvider provider,
         final Collection propertyRefs,
-        final String resultPropertyValues)
+        final String resultPropertyValues,
+        final StringUtils stringUtils)
     {
         StringBuffer result = new StringBuffer();
 
@@ -4148,6 +4167,8 @@ public abstract class DAOTemplate
                 new MessageFormat(resultPropertyValues);
 
             Iterator t_itPropertyRefs = propertyRefs.iterator();
+
+            boolean t_bPreviousWasTheFirst = true;
 
             while  (t_itPropertyRefs.hasNext())
             {
@@ -4171,12 +4192,18 @@ public abstract class DAOTemplate
                             t_ResultPropertyValuesFormatter.format(
                                 new Object[]
                                 {
-                                    t_Property.getType(),
-                                    (   (t_Property.getIndex() < 1)
+                                    stringUtils.capitalize(
+                                        t_Property.getType(), '_'),
+                                    (   (t_Property.getIndex() > 0)
                                      ?  ("" + t_Property.getIndex())
-                                     :  t_Property.getName()),
+                                     :  "\"" + t_Property.getColumnName() + "\""),
                                     t_Property.getName()
                                 }));
+
+                        if  (t_itPropertyRefs.hasNext())
+                        {
+                            result.append(",");
+                        }
                     }
                 }
             }
@@ -4237,11 +4264,16 @@ public abstract class DAOTemplate
                      ?  t_Result.getClassValue()
                      :  "-no-result-type-defined-"),
                     parameterJavadoc,
-                    stringUtils.capitalize(
-                        sqlElement.getName(), '_'),
+                    stringUtils.unCapitalizeStart(
+                        stringUtils.capitalize(
+                            sqlElement.getName(), '-')),
                     parameterDeclaration,
                     sqlElement.getValue(),
                     parameterValues,
+                    (   (t_Result != null)
+                     ?  stringUtils.extractPackageName(
+                            t_Result.getClassValue())
+                     :  "-no-result-type-defined-"),
                     resultPropertyValues
                 });
 

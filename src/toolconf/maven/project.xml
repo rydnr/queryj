@@ -251,27 +251,13 @@
     <dependency>
       <groupId>commons-digester</groupId>
       <artifactId>commons-digester</artifactId>
-      <version>1.4.1</version>
+      <version>1.6</version>
       <url>http://jakarta.apache.org/commons/digester</url>
       <properties>
         <required.to.compile>true</required.to.compile>
         <required.to.run>true</required.to.run>
         <required.to.test>true</required.to.test>
         <required.to.build>false</required.to.build>
-      </properties>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <version>2.1</version>
-      <url>http://jakarta.apache.org/commons/</url>
-      <properties>
-        <required.to.compile>false</required.to.compile>
-        <required.to.run>true</required.to.run>
-        <required.to.test>true</required.to.test>
-        <required.to.build>false</required.to.build>
-        <injected.by>commons-digester</injected.by>
       </properties>
     </dependency>
 
@@ -286,8 +272,24 @@
         <required.to.test>true</required.to.test>
         <required.to.build>false</required.to.build>
         <injected.by>commons-digester</injected.by>
+        <injected.by>acmsl-commons</injected.by>
       </properties>
     </dependency>
+
+    <!--dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+      <url>http://jakarta.apache.org/commons/collections/</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>true</required.to.build>
+        <injected.by>commons-beanutils</injected.by>
+        <injected.by>commons-digester</injected.by>
+      </properties>
+    </dependency-->
 
     <dependency>
       <groupId>jta</groupId>

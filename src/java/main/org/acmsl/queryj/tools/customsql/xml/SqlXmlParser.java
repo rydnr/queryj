@@ -112,6 +112,11 @@ public abstract class SqlXmlParser
     private InputStream m__isInput;
 
     /**
+     * The class loader.
+     */
+    private ClassLoader m__ClassLoader;
+
+    /**
      * Creates a SqlXmlParser with given input stream.
      * @param input the input stream.
      * @precondition input != null
@@ -158,6 +163,24 @@ public abstract class SqlXmlParser
     }
 
     /**
+     * Specifies the class loader (to give it to Digester).
+     * @param classLoader the class loader.
+     */
+    public void setClassLoader(final ClassLoader classLoader)
+    {
+        m__ClassLoader = classLoader;
+    }
+
+    /**
+     * Retrieves the class loader.
+     * @return such instance.
+     */
+    public ClassLoader getClassLoader()
+    {
+        return m__ClassLoader;
+    }
+
+    /**
      * Specifies the input stream.
      * @param input the input stream.
      */
@@ -190,7 +213,7 @@ public abstract class SqlXmlParser
      */
     protected Map load()
     {
-        return load(configureDigester(), getInput());
+        return load(configureDigester(getClassLoader()), getInput());
     }
 
     /**
@@ -237,11 +260,17 @@ public abstract class SqlXmlParser
 
     /**
      * Creates and configures a digester instance.
+     * @param classLoader <i>optional</i> the class loader.
      * @return a configured digester instance.
      */
-    protected Digester configureDigester()
+    protected Digester configureDigester(final ClassLoader classLoader)
     {
         Digester result = new Digester();
+
+        if  (classLoader != null)
+        {
+            result.setClassLoader(classLoader);
+        }
 
         // <sql-list>
 
@@ -266,9 +295,7 @@ public abstract class SqlXmlParser
             "sql-list/sql/result-ref",
             new ResultRefElementFactory());
         result.addSetNext(
-            "sql-list/sql/result-ref",
-            "setResultRef",
-            "org.acmsl.queryj.sqlxml.ResultRefElement");
+            "sql-list/sql/result-ref", "setResultRef");
         //     </result-ref>
 
         result.addSetNext("sql-list/sql", "add");

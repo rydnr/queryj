@@ -269,7 +269,7 @@ public class ParameterValidationHandler
      * The missing tables error message.
      */
     public static final String SQL_XML_FILE_MISSING =
-         "No sql.xml file specified.";
+         "No sql.xml file specified or it cannot be read.";
 
     /**
      * The custom-sql XML model.
@@ -286,7 +286,7 @@ public class ParameterValidationHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      */
-    public boolean handle(Command command)
+    public boolean handle(final Command command)
     {
         boolean result = false;
 
@@ -357,7 +357,7 @@ public class ParameterValidationHandler
                 (AntExternallyManagedFieldsElement)
                 parameters.get(EXTERNALLY_MANAGED_FIELDS),
                 (String)           parameters.get(CUSTOM_SQL_MODEL),
-                (String)           parameters.get(SQL_XML_FILE));
+                (File)             parameters.get(SQL_XML_FILE));
         }
     }
 
@@ -403,7 +403,7 @@ public class ParameterValidationHandler
         final AntTablesElement                  tables,
         final AntExternallyManagedFieldsElement externallyManagedFields,
         final String                            customSqlModel,
-        final String                            sqlXmlFile)
+        final File                              sqlXmlFile)
       throws  BuildException
     {
         if  (driver == null) 
@@ -497,7 +497,9 @@ public class ParameterValidationHandler
         }
         */
         if  (   (CUSTOM_SQL_MODEL_XML.equals(customSqlModel))
-             && (sqlXmlFile == null))
+             && (   (sqlXmlFile == null)
+                 || (!sqlXmlFile.exists())
+                 || (!sqlXmlFile.canRead())))
         {
             throw new BuildException(SQL_XML_FILE_MISSING);
         }
