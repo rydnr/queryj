@@ -37,14 +37,6 @@
  *              ensure generated DAOs
  *              are working fine and the resources correctly managed.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -73,7 +65,6 @@ import org.apache.tools.ant.Task;
  * generated DAOs are working fine and the resources correctly managed.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractDAOTestTemplate
     extends  AbstractTestTemplate
@@ -234,6 +225,11 @@ public abstract class AbstractDAOTestTemplate
     private String m__strTestParametersValues;
 
     /**
+     * The test nullable values subtemplate.
+     */
+    private String m__strTestNullableParametersValues;
+
+    /**
      * The load test.
      */
     private String m__strLoadTest;
@@ -302,6 +298,8 @@ public abstract class AbstractDAOTestTemplate
      * @param storeTest the store test.
      * @param testParametersValues the test values
      * subtemplate.
+     * @param testNullableParametersValues the test values
+     * subtemplate.
      * @param loadTest the load test.
      * @param updateTest the update test.
      * @param updateFilterValues the update filter values
@@ -347,6 +345,7 @@ public abstract class AbstractDAOTestTemplate
         final String connectionTest,
         final String storeTest,
         final String testParametersValues,
+        final String testNullableParametersValues,
         final String loadTest,
         final String updateTest,
         final String updateFilterValues,
@@ -389,6 +388,7 @@ public abstract class AbstractDAOTestTemplate
         immutableSetConnectionTest(connectionTest);
         immutableSetStoreTest(storeTest);
         immutableSetTestParametersValues(testParametersValues);
+        immutableSetTestNullableParametersValues(testNullableParametersValues);
         immutableSetLoadTest(loadTest);
         immutableSetUpdateTest(updateTest);
         immutableSetUpdateFilterValues(updateFilterValues);
@@ -1235,6 +1235,33 @@ public abstract class AbstractDAOTestTemplate
     public String getTestParametersValues()
     {
         return m__strTestParametersValues;
+    }
+
+    /**
+     * Specifies the test nullable values subtemplate.
+     * @param template the template.
+     */
+    private void immutableSetTestNullableParametersValues(final String template)
+    {
+        m__strTestNullableParametersValues = template;
+    }
+
+    /**
+     * Specifies the test nullable values subtemplate.
+     * @param template the template.
+     */
+    protected void setTestNullableParametersValues(final String template)
+    {
+        immutableSetTestNullableParametersValues(template);
+    }
+
+    /**
+     * Retrieves the test nullable values subtemplate.
+     * @return such source code template.
+     */
+    public String getTestNullableParametersValues()
+    {
+        return m__strTestNullableParametersValues;
     }
 
     /**

@@ -35,6 +35,8 @@
  *
  * Description: Contains the basic pieces to build functions test templates.
  *
+<<<<<<< FunctionsTestTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -43,6 +45,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates.functions;
 
@@ -56,7 +59,10 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
  * Contains the basic pieces to build functions test templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
+<<<<<<< FunctionsTestTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.3
  */
 public interface FunctionsTestTemplateDefaults
     extends  TestTemplate,

@@ -35,14 +35,6 @@
  *
  * Description: JDBC-related Transaction Token using DataSource class.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.dao;
 
@@ -72,7 +64,6 @@ import org.apache.commons.logging.LogFactory;
  * JDBC-related Transaction Token using DataSource class.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro Armendariz</a>
- * @version $Revision$
  */
 public abstract class DataSourceTransactionToken
     implements  TransactionToken

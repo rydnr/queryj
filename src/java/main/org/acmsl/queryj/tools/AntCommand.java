@@ -35,14 +35,6 @@
  *
  * Description: Represents workflow commands associated to Ant actions.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools;
 
@@ -66,7 +58,6 @@ import java.util.Map;
 /**
  * Represents workflow commands associated to Ant actions.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
  */
 public class AntCommand
     implements  Command

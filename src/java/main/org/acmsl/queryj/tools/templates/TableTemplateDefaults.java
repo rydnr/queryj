@@ -36,6 +36,8 @@
  * Description: Is able to generate tables according to database
  *              metadata.
  *
+<<<<<<< TableTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.6
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -67,7 +70,10 @@ import java.util.Map;
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< TableTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.6
  */
 public interface TableTemplateDefaults
     extends  JavaTemplateDefaults

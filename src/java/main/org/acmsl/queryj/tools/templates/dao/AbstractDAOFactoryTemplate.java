@@ -36,14 +36,6 @@
  * Description: Contains the subtemplates used to generate DAO factories
  *              according to database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -65,7 +57,6 @@ import org.apache.tools.ant.Task;
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractDAOFactoryTemplate
     extends  AbstractTemplate

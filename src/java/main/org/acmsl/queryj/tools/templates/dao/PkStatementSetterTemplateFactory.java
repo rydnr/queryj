@@ -36,14 +36,6 @@
  * Description: Represents entities able to create PkStatementSetter
  *              templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -65,7 +57,6 @@ import org.apache.tools.ant.Task;
  * Represents entities able to create PkStatementSetter templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface PkStatementSetterTemplateFactory
 {

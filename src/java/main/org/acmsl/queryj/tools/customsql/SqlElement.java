@@ -35,14 +35,6 @@
  *
  * Description: Models <sql> elements in custom-sql models.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.customsql;
 
@@ -70,7 +62,6 @@ import java.util.Collection;
  *    matches (single | multiple) #REQUIRED>
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class SqlElement
     extends  AbstractIdElement

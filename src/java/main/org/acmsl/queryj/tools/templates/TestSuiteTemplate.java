@@ -36,14 +36,6 @@
  * Description: Is able to generate a JUnit suite for the generated
  *              test cases.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -71,7 +63,6 @@ import java.util.Collection;
  * Is able to generate a JUnit suite for the generated test cases.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class TestSuiteTemplate
     extends  AbstractTestSuiteTemplate

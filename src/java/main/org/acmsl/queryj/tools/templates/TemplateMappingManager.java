@@ -36,6 +36,8 @@
  * Description: Manages the association between database engines and template
  *              factory classes.
  *
+<<<<<<< TemplateMappingManager.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.14
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -142,7 +145,10 @@ import org.apache.commons.logging.LogFactory;
  * factory classes.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
+<<<<<<< TemplateMappingManager.java
+=======
  * @version $Revision$
+>>>>>>> 1.14
  */
 public abstract class TemplateMappingManager
 {

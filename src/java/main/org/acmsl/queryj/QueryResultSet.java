@@ -35,14 +35,6 @@
  *
  * Description: Standard SQL query.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj;
 
@@ -77,7 +69,6 @@ import java.util.Map;
  * Represents standard SQL queries.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class QueryResultSet
     implements  ResultSet

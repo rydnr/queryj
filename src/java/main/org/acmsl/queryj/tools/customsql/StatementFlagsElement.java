@@ -35,14 +35,6 @@
  *
  * Description: Models <statement-flags> elements in custom-sql models.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.customsql;
 
@@ -74,7 +66,6 @@ import java.util.Collection;
  *   moreresults (CLOSE_CURRENT_RESULT | KEEP_CURRENT_RESULT | CLOSE_ALL_RESULTS) #IMPLIED>
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class StatementFlagsElement
     extends  AbstractIdElement

@@ -35,6 +35,10 @@
  *
  * Description: Defines the default subtemplates to generate resultset
  *              extractors.
+<<<<<<< ResultSetExtractorTemplateDefaults.java
+ *
+=======
+>>>>>>> 1.7
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -180,7 +184,8 @@ public interface ResultSetExtractorTemplateDefaults
      * The <code>extractData</code> methods.
      * @param 0 the value object name.
      * @param 1 the uncapitalized value object name.
-     * @param 2 the value object properties specification.
+     * @param 2 the value object nullable properties check.
+     * @param 3 the value object properties specification.
      */
     public static final String DEFAULT_EXTRACT_DATA_METHOD =
           "     // <extract data>\n\n"
@@ -225,8 +230,12 @@ public interface ResultSetExtractorTemplateDefaults
         + "        {0}ValueObject result = null;\n\n"
         + "        if  (resultSet.next())\n"
         + "        '{'\n"
+        + "            Long t_LongAux = null;\n"
+        + "            Integer t_IntAux = null;\n"
+        + "            Double t_DoubleAux = null;\n"
+        + "{2}"
         + "            result =\n"
-        + "                {1}Factory.create{0}ValueObject({2});\n"
+        + "                {1}Factory.create{0}ValueObject({3});\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n";
@@ -241,6 +250,32 @@ public interface ResultSetExtractorTemplateDefaults
     public static final String DEFAULT_VALUE_OBJECT_PROPERTIES_SPECIFICATION =
           "\n                    resultSet.get{0}(\n"
         + "                        {1}TableRepository.{2}.{3})";
+
+    /**
+     * The value object nullable properties check.
+     * @param 0 the property type.
+     * @param 1 the table repository name.
+     * @param 2 the table name.
+     * @param 3 the property name.
+     */
+    public static final String DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_CHECK =
+          "            t_{0}Aux =\n"
+        + "                new {0}(\n"
+        + "                    resultSet.get{0}(\n"
+        + "                        {1}TableRepository.{2}.{3}));\n\n"
+        + "            if  (resultSet.wasNull())\n"
+        + "            '{'\n"
+        + "                t_{0}Aux = null;\n"
+        + "            '}'\n\n";
+
+
+    /**
+     * The value object nullable properties specification.
+     * @param 0 the property type.
+     * @param 4 the primitive type.
+     */
+    public static final String DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_SPECIFICATION =
+          "\n                    t_{0}Aux";
 
     /**
      * The default class end.

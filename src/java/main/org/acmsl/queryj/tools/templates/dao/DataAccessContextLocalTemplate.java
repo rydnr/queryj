@@ -36,14 +36,6 @@
  * Description: Is able to generate the configuration file for declaring
  *              the transactional behaviour of the DAO layer.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -79,7 +71,6 @@ import java.util.Map;
  * behaviour of the DAO layer.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DataAccessContextLocalTemplate
     extends  AbstractDataAccessContextLocalTemplate

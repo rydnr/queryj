@@ -35,14 +35,6 @@
  *
  * Description: Builds a test suite template.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.handlers;
 
@@ -85,7 +77,6 @@ import java.util.Map;
  * Builds a test suite template.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class TestSuiteTemplateBuildHandler
     extends    AbstractAntCommandHandler

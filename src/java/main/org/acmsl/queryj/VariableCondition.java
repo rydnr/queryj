@@ -35,14 +35,6 @@
  *
  * Description: Represents conditions in SQL statements.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj;
 
@@ -63,7 +55,6 @@ import java.util.Collection;
  * Represents conditions in SQL statements.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class VariableCondition
     extends  AtomicCondition

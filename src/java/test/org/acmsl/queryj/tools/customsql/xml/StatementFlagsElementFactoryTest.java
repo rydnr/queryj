@@ -36,13 +36,6 @@ Spain
 * Description: Executes all tests defined for package
 *              unittests.org.acmsl.queryj.tools.customsql.xml.
 *
-* Last modified by: $Author$ at $Date$
-*
-* File version: $Revision$
-*
-* Project version: $Name$
-*
-* $Id$
 */
 package unittests.org.acmsl.queryj.tools.customsql.xml;
 
@@ -85,7 +78,6 @@ Boston, MA  02111-1307  USA
 
 /**
 * Tests StatementFlagsElementFactoryTest class.
-* @version $Revision$
 * @see org.acmsl.queryj.tools.customsql.xml.StatementFlagsElementFactory
 */
 public class StatementFlagsElementFactoryTest

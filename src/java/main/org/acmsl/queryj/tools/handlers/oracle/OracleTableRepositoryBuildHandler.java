@@ -35,14 +35,6 @@
  *
  * Description: Builds an Oracle-specific table repository.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.handlers.oracle;
 
@@ -62,7 +54,6 @@ import org.apache.tools.ant.BuildException;
  * Builds an Oracle-specific table repository.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class OracleTableRepositoryBuildHandler
     extends  TableRepositoryTemplateBuildHandler

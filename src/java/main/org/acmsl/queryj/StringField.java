@@ -35,14 +35,6 @@
  *
  * Description: Represents text fields.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj;
 
@@ -55,7 +47,6 @@ import org.acmsl.queryj.Field;
  * Represents text fields.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class StringField
     extends  Field

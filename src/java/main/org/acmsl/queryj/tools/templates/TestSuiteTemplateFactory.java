@@ -35,14 +35,6 @@
  *
  * Description: Represents entities able to generate TestSuite templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -61,7 +53,6 @@ import org.apache.tools.ant.Task;
  * Represents entities able to generate TestSuite templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface TestSuiteTemplateFactory
 {

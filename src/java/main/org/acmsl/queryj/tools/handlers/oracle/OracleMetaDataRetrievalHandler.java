@@ -35,14 +35,6 @@
  *
  * Description: Retrieves the Oracle metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.handlers.oracle;
 
@@ -80,7 +72,6 @@ import java.util.Map;
  * Retrieves the Oracle metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class OracleMetaDataRetrievalHandler
     extends  DatabaseMetaDataRetrievalHandler

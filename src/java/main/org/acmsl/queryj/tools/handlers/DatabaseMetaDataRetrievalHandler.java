@@ -35,14 +35,6 @@
  *
  * Description: Retrieves the database metadata instance.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.handlers;
 
@@ -91,7 +83,6 @@ import org.apache.commons.logging.LogFactory;
  * Retrieves the database metadata instance.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DatabaseMetaDataRetrievalHandler
     extends  AbstractAntCommandHandler

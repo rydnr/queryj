@@ -35,14 +35,6 @@
  *
  * Description: Writes Mock DAO templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao.mock.handlers;
 
@@ -76,7 +68,6 @@ import java.util.Map;
  * Writes Mock DAO templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class MockDAOTemplateWritingHandler
     extends    AbstractAntCommandHandler

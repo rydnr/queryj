@@ -36,14 +36,6 @@
  * Description: Bundles a pair of NumericFunctions template build and writing
  *              handlers.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.numeric.handlers;
 
@@ -58,7 +50,6 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
  * Bundles a pair of NumericFunctions template build and writing
  * handlers.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
  */
 public class NumericFunctionsTemplateHandlerBundle
     extends  TemplateHandlerBundle

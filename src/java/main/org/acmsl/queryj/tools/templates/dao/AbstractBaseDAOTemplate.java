@@ -35,6 +35,8 @@
  *
  * Description: Contains the required subtemplates to create DAO interfaces.
  *
+<<<<<<< AbstractBaseDAOTemplate.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -43,6 +45,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.8
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -64,7 +67,10 @@ import org.apache.tools.ant.Task;
  * Contains the required subtemplates to create DAO interfaces.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< AbstractBaseDAOTemplate.java
+=======
  * @version $Revision$
+>>>>>>> 1.8
  */
 public abstract class AbstractBaseDAOTemplate
     extends  AbstractTemplate

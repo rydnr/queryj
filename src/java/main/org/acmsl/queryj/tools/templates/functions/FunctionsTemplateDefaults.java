@@ -34,6 +34,10 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Defines the basic pieces to build function templates.
+<<<<<<< FunctionsTemplateDefaults.java
+ *
+=======
+>>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.functions;
 

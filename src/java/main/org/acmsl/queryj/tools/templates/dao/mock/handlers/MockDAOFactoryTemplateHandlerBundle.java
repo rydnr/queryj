@@ -36,14 +36,6 @@
  * Description: Bundles a pair of MockDAOFactory template build and writing
  *              handlers.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao.mock.handlers;
 
@@ -58,7 +50,6 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
  * Bundles a pair of template MockDAOFactory template build and writing
  * handlers.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
  */
 public class MockDAOFactoryTemplateHandlerBundle
     extends  TemplateHandlerBundle

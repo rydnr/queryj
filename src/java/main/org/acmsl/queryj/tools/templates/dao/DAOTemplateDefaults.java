@@ -34,6 +34,10 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Defines the default subtemplates to generate DAO sources.
+<<<<<<< DAOTemplateDefaults.java
+ *
+=======
+>>>>>>> 1.18
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -58,7 +62,8 @@ public interface DAOTemplateDefaults
         + " *****************************************************************"
         + "*************\n"
         + " *\n"
-        + " * Filename: $" + "RCSfile: $\n"
+        + " * Filename: 
+$" + "RCSfile: $\n"
         + " *\n"
         + " * Author: QueryJ\n"
         + " *\n"
@@ -320,6 +325,55 @@ public interface DAOTemplateDefaults
     // </helper subtemplates>
 
     /**
+     * The find by static field method.
+     * @param 0 the table name.
+     * @param 1 the static field.
+     * @param 2 the static field javadoc.
+     * @param 3 the capitalized table name.
+     * @param 4 the capitalized static column.
+     * @param 5 the static field declaration.
+     */
+    public static final String DEFAULT_FIND_BY_STATIC_FIELD_METHOD =
+          "    /**\n"
+        + "     * Loads <i>{0}</i> information from the persistence layer filtering\n"
+        + "     * by {1}."
+        + "{2}\n"
+        + "     * @return the information extracted from the persistence layer.\n"
+        + "     * @precondition {1} != null\n"
+        + "     */\n"
+        + "    public {3}ValueObject findConstantBy{4}("
+        + "{5})\n\n"
+        + "    '{'\n"
+        + "        {3}ValueObject result = null;\n\n"
+        + "        for  (int t_iIndex = 0; t_iIndex < _ALL_QUERYJ_CONSTANTS_.length; t_iIndex++)\n"
+        + "        '{'\n"
+        + "            {3}ValueObject t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];\n\n"
+        + "            if  (   (t_CurrentItem != null)\n"
+        + "                 && ({1}.equals(t_CurrentItem.get{4}())))\n"
+        + "            '{'\n"
+        + "                result = t_CurrentItem;\n"
+        + "            '}'\n"
+        + "        '}'\n\n"
+        + "        return result;\n"
+        + "    '}'\n\n";
+
+    /**
+     * The find-by-static-field method's field javadoc.
+     * @param 0 the field name (Java valid).
+     * @param 1 the field name.
+     */
+    public static final String DEFAULT_FIND_BY_STATIC_FIELD_JAVADOC =
+        "\n     * @param {0} the <i>{1}</i> value to filter.";
+
+    /**
+     * The find-by-primary-key method's primary keys declaration.
+     * @param 0 the field type.
+     * @param 1 the field name (Java valid).
+     */
+    public static final String DEFAULT_FIND_BY_STATIC_FIELD_DECLARATION =
+        "\n        final {0} {1}";
+
+    /**
      * The find by primary key method.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_METHOD =
@@ -426,16 +480,30 @@ public interface DAOTemplateDefaults
         + "        Query t_Query = buildInsertQuery();\n\n"
         + "        update(\n"
         + "            new QueryPreparedStatementCreator(t_Query),\n"
-        + "            new {0}AttributesStatementSetter({6}));\n"
+        + "            new {0}AttributesStatementSetter({6},\n"
+        + "            false));\n"
         + "    '}'\n\n"
         + "    // </insert>\n\n";
 
     /**
      * The insert parameters specification.
+     * @param 0 the repository name.
+     * @param 1 the table name.
+     * @param 2 the field name.
      */
     public static final String DEFAULT_INSERT_PARAMETERS_SPECIFICATION =
         "\n        result.value({0}TableRepository.{1}.{2});";
-    // repository - table - field
+
+    /**
+     * The externally-managed  insert fields specification.
+     * @param 0 the repository name.
+     * @param 1 the capitalized table name.
+     * @param 2 the field name.
+     * @param 3 the keyword.
+     */
+    public static final String
+        DEFAULT_EXTERNALLY_MANAGED_INSERT_PARAMETERS_SPECIFICATION =
+            "\n        result.value({0}TableRepository.{1}.{2}, \"{3}\", false);";
 
     /**
      * The externally-managed  insert fields specification.
@@ -496,7 +564,8 @@ public interface DAOTemplateDefaults
         + "        Query t_Query = buildUpdateQuery();\n\n"
         + "        update(\n"
         + "            new QueryPreparedStatementCreator(t_Query),\n"
-        + "            new {0}AttributesStatementSetter({7}));\n"
+        + "            new {0}AttributesStatementSetter({7},\n"
+        + "            true));\n"
         + "    '}'\n\n"
         + "    // </update>\n\n";
 
@@ -763,8 +832,10 @@ public interface DAOTemplateDefaults
         + "                query(\n"
         + "                    t_PreparedStatementCreatorFactory\n"
         + "                        .newPreparedStatementCreator(t_aParams),\n"
-        + "                    t_PreparedStatementCreatorFactory\n"
-        + "                        .newPreparedStatementSetter(t_aParams),\n"
+        + "                    null,\n"
+        + "                    // calls setXXX twice\n"
+        + "                    // t_PreparedStatementCreatorFactory\n"
+        + "                    //    .newPreparedStatementSetter(t_aParams),\n"
         + "                    {9}_EXTRACTOR);\n\n"
         + "        return result;\n"
         + "    '}'\n\n";

@@ -35,14 +35,6 @@
  *
  * Description: Models <resultSet-flags> elements in custom-sql models.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.customsql;
 
@@ -69,7 +61,6 @@ import java.util.Collection;
  *   holdability (HOLD_CURSORS_OVER_COMMIT | CLOSE_CURSORS_AT_COMMIT) #IMPLIED><br/>
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class ResultSetFlagsElement
     extends  AbstractIdElement

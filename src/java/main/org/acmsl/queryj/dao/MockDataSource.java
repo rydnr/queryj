@@ -37,14 +37,6 @@
  *              just returns connections using
  *              DriverManager.getConnection().
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.dao;
 
@@ -75,7 +67,6 @@ import org.apache.commons.logging.LogFactory;
  * connections using DriverManager.getConnection()
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro Armendariz</a>
- * @version $Revision$
  */
 public class MockDataSource
     implements  DataSource

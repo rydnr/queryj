@@ -35,14 +35,6 @@
  *
  * Description: Contains references to declared operators.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj;
 
@@ -60,7 +52,6 @@ import java.lang.ref.WeakReference;
 /**
  * Contains references to declared operators.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
  */
 public class ConditionOperatorRepository
 {

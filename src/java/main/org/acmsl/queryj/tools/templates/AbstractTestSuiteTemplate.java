@@ -36,14 +36,6 @@
  * Description: Contains the subtemplates required to generate a JUnit suite
  *              for a set of test cases.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -70,7 +62,6 @@ import java.util.Collection;
  * for a set of test cases.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractTestSuiteTemplate
     extends  AbstractTemplate

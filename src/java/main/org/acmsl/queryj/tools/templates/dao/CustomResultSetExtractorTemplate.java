@@ -36,6 +36,8 @@
  * Description: Is able to create CustomResultSetExtractor implementation for each
  *              custom query requiring so.
  *
+<<<<<<< CustomResultSetExtractorTemplate.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -96,7 +99,10 @@ import java.util.Map;
  * custom query requiring so.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< CustomResultSetExtractorTemplate.java
+=======
  * @version $Revision$
+>>>>>>> 1.3
  */
 public class CustomResultSetExtractorTemplate
     extends  AbstractCustomResultSetExtractorTemplate
@@ -148,6 +154,8 @@ public class CustomResultSetExtractorTemplate
             DEFAULT_EXTRACT_DATA_METHOD_WITH_SINGLE_RESULT,
             DEFAULT_EXTRACT_DATA_METHOD_WITH_MULTIPLE_RESULTS,
             DEFAULT_VALUE_OBJECT_PROPERTIES_SPECIFICATION,
+            DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_SPECIFICATION,
+            DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_CHECK,
             DEFAULT_CLASS_END,
             project,
             task);
@@ -184,6 +192,8 @@ public class CustomResultSetExtractorTemplate
                 getExtractDataMethodWithSingleResult(),
                 getExtractDataMethodWithMultipleResult(),
                 getValueObjectPropertiesSpecification(),
+                getValueObjectNullablePropertiesSpecification(),
+                getValueObjectNullablePropertiesCheck(),
                 getClassEnd(),
                 DAOTemplateUtils.getInstance(),
                 MetaDataUtils.getInstance(),
@@ -219,6 +229,10 @@ public class CustomResultSetExtractorTemplate
      * with multiple result.
      * @param valueObjectPropertiesSpecification the value object
      * properties specification.
+     * @param valueObjectNullablePropertiesSpecification the value object
+     * nullable properties specification.
+     * @param valueObjectNullablePropertiesCheck the value object
+     * nullable properties check.
      * @param classEnd the class end.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param metaDataUtils the MetaDataUtils instance.
@@ -260,6 +274,8 @@ public class CustomResultSetExtractorTemplate
         final String extractDataMethodWithSingleResult,
         final String extractDataMethodWithMultipleResult,
         final String valueObjectPropertiesSpecification,
+        final String valueObjectNullablePropertiesSpecification,
+        final String valueObjectNullablePropertiesCheck,
         final String classEnd,
         final DAOTemplateUtils daoTemplateUtils,
         final MetaDataUtils metaDataUtils,
@@ -310,6 +326,13 @@ public class CustomResultSetExtractorTemplate
         MessageFormat t_ValueObjectPropertiesSpecificationFormatter =
             new MessageFormat(valueObjectPropertiesSpecification);
 
+        MessageFormat t_ValueObjectNullablePropertiesSpecificationFormatter =
+            new MessageFormat(valueObjectNullablePropertiesSpecification);
+
+        MessageFormat t_ValueObjectNullablePropertiesCheckFormatter =
+            new MessageFormat(valueObjectNullablePropertiesCheck);
+
+        StringBuffer t_sbValueObjectNullablePropertiesCheck = new StringBuffer();
         StringBuffer t_sbValueObjectPropertiesSpecification = new StringBuffer();
 
         t_sbResult.append(
@@ -327,9 +350,7 @@ public class CustomResultSetExtractorTemplate
             t_ProjectImportFormatter.format(
                 new Object[]
                 {
-                    packageUtils.retrieveValueObjectPackage(
-                        basePackageName),
-                    t_strCapitalizedValueObjectName,
+                    resultElement.getClassValue(),
                     packageUtils.retrieveTableRepositoryPackage(
                         basePackageName),
                     t_strRepositoryName
@@ -373,6 +394,7 @@ public class CustomResultSetExtractorTemplate
                       t_iPropertyIndex < t_aProperties.length;
                       t_iPropertyIndex++)
             {
+<<<<<<< CustomResultSetExtractorTemplate.java
                 if  (t_aProperties[t_iPropertyIndex] == null)
                 {
                     throw
@@ -385,15 +407,63 @@ public class CustomResultSetExtractorTemplate
                               });
                 }
 
+                int t_iColumnType =
+                    metaDataUtils.getJavaType(
+                        t_aProperties[t_iPropertyIndex].getType());
+
+                boolean t_bIsPrimitiveWrapper =
+                    metaDataUtils.isPrimitiveWrapper(
+                        t_aProperties[t_iPropertyIndex].getType());
+
+                String t_strObjectType =
+                    metaDataUtils.getObjectType(t_iColumnType);
+
+                String t_strFieldType =
+                    metaDataUtils.getFieldType(
+                        t_iColumnType,
+                        null,
+                        null);
+
+                Object[] t_aParams =
+                    new Object[]
+                    {
+                        t_strObjectType,
+                        t_strRepositoryName,
+                        t_strTableName.toUpperCase(),
+                        t_aProperties[t_iPropertyIndex].getColumnName().toUpperCase(),
+                        t_strFieldType
+                    };
+
+                MessageFormat t_Formatter =
+                    t_ValueObjectPropertiesSpecificationFormatter;
+
+                if  (   (metaDataUtils.isPrimitive(t_iColumnType))
+                     && (t_bIsPrimitiveWrapper))
+                {
+                    t_Formatter =
+                        t_ValueObjectNullablePropertiesSpecificationFormatter;
+
+                    t_sbValueObjectNullablePropertiesCheck.append(
+                        t_ValueObjectNullablePropertiesCheckFormatter.format(
+                            t_aParams));
+                }
+
+=======
+                if  (t_aProperties[t_iPropertyIndex] == null)
+                {
+                    throw
+                        new InvalidTemplateException(
+                              "invalid.property",
+                              new Object[]
+                              {
+                                  new Integer(t_iPropertyIndex),
+                                  resultElement.getId()
+                              });
+                }
+
+>>>>>>> 1.3
                 t_sbValueObjectPropertiesSpecification.append(
-                    t_ValueObjectPropertiesSpecificationFormatter.format(
-                        new Object[]
-                        {
-                            metaDataUtils.getObjectType(
-                                metaDataUtils.getJavaType(
-                                    t_aProperties[t_iPropertyIndex].getType())),
-                            t_aProperties[t_iPropertyIndex].getColumnName()
-                        }));
+                    t_Formatter.format(t_aParams));
 
                 if  (t_iPropertyIndex < t_aProperties.length - 1)
                 {
@@ -405,7 +475,8 @@ public class CustomResultSetExtractorTemplate
                 t_ExtractDataMethodFormatter.format(
                     new Object[]
                     {
-                        resultElement.getClassValue(),
+                        retrieveClassName(resultElement.getClassValue()),
+                        t_sbValueObjectNullablePropertiesCheck,
                         t_sbValueObjectPropertiesSpecification
                     }));
         }
@@ -431,5 +502,25 @@ public class CustomResultSetExtractorTemplate
         return
             daoTemplateUtils.retrievePropertyElementsByResultId(
                 customSqlProvider, resultElement);
+    }
+
+    /**
+     * Retrieves the class name.
+     * @param resultClass the result class.
+     * @return the class name.
+     * @precondition resultClass != null
+     */
+    protected String retrieveClassName(final String resultClass)
+    {
+        String result = resultClass;
+
+        int t_iLastDot = resultClass.lastIndexOf(".");
+
+        if  (t_iLastDot > -1)
+        {
+            result = resultClass.substring(t_iLastDot + 1);
+        }
+
+        return result;
     }
 }

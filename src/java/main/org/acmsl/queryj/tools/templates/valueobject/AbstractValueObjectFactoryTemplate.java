@@ -36,14 +36,6 @@
  * Description: Contains the required subtemplates used to generate value
  *              object factories according to database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -51,16 +43,23 @@ package org.acmsl.queryj.tools.templates.valueobject;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+
+/*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /**
  * Contains the required subtemplates used to generate value object factories
  * according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractValueObjectFactoryTemplate
+    extends  AbstractTemplate
 {
     /**
      * The header.
@@ -166,26 +165,31 @@ public abstract class AbstractValueObjectFactoryTemplate
      * @param factoryMethodValueObjectBuild the factory method value object build.
      * @param factoryAliasMethod the factory alias method.
      * @param classEnd the class end.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
     public AbstractValueObjectFactoryTemplate(
-        final String                  header,
-        final String                  packageDeclaration,
-        final String                  packageName,
-        final TableTemplate           tableTemplate,
+        final String header,
+        final String packageDeclaration,
+        final String packageName,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final String                  projectImports,
-        final String                  jdkImports,
-        final String                  javadoc,
-        final String                  classDefinition,
-        final String                  classStart,
-        final String                  singletonBody,
-        final String                  factoryMethod,
-        final String                  factoryMethodFieldJavadoc,
-        final String                  factoryMethodFieldDefinition,
-        final String                  factoryMethodValueObjectBuild,
-        final String                  factoryAliasMethod,
-        final String                  classEnd)
+        final String projectImports,
+        final String jdkImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String singletonBody,
+        final String factoryMethod,
+        final String factoryMethodFieldJavadoc,
+        final String factoryMethodFieldDefinition,
+        final String factoryMethodValueObjectBuild,
+        final String factoryAliasMethod,
+        final String classEnd,
+        final Project project,
+        final Task task)
     {
+        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
@@ -666,5 +670,27 @@ public abstract class AbstractValueObjectFactoryTemplate
     public String getClassEnd() 
     {
         return m__strClassEnd;
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return buildHeader(getTableTemplate());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param tableTemplate the table template.
+     * @return such header.
+     * @precondition tableTemplate != null
+     */
+    protected String buildHeader(final TableTemplate tableTemplate)
+    {
+        return
+              "Generating ValueObjectFactory for "
+            + tableTemplate.getTableName() + ".";
     }
 }

@@ -35,15 +35,6 @@
  *
  * Description: Is able to generate value object factories according to
  *              database metadata.
- *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -66,6 +57,12 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -77,7 +74,6 @@ import java.lang.ref.WeakReference;
  * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class ValueObjectFactoryTemplateGenerator
     implements  ValueObjectFactoryTemplateFactory
@@ -97,7 +93,7 @@ public class ValueObjectFactoryTemplateGenerator
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        ValueObjectFactoryTemplateGenerator generator)
+        final ValueObjectFactoryTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -128,7 +124,7 @@ public class ValueObjectFactoryTemplateGenerator
 
         if  (result == null) 
         {
-            result = new ValueObjectFactoryTemplateGenerator() {};
+            result = new ValueObjectFactoryTemplateGenerator();
 
             setReference(result);
         }
@@ -142,27 +138,50 @@ public class ValueObjectFactoryTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param templateFactoryClass the template factory.
+     * @precondition valueObjectName != null
+     * @precondition engineName != null
+     * @precondition templateFactoryClass != null
      */
     public void addTemplateFactoryClass(
-        String valueObjectName,
-        String engineName,
-        String engineVersion,
-        String templateFactoryClass)
+        final String valueObjectName,
+        final String engineName,
+        final String engineVersion,
+        final String templateFactoryClass)
     {
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
+        addTemplateFactoryClass(
+            valueObjectName,
+            engineName,
+            engineVersion,
+            templateFactoryClass,
+            TemplateMappingManager.getInstance());
+    }
 
-        if  (   (t_MappingManager     != null)
-             && (engineName           != null)
-             && (templateFactoryClass != null))
-        {
-            t_MappingManager.addTemplateFactoryClass(
-                  TemplateMappingManager.VALUE_OBJECT_FACTORY_TEMPLATE_PREFIX
-                + valueObjectName,
-                engineName,
-                engineVersion,
-                templateFactoryClass);
-        }
+    /**
+     * Adds a new template factory class.
+     * @param valueObjectName the value object name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param templateFactoryClass the template factory.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @precondition valueObjectName != null
+     * @precondition engineName != null
+     * @precondition templateFactoryClass != null
+     * @precondition templateMappingManager != null
+     */
+    protected void addTemplateFactoryClass(
+        final String valueObjectName,
+        final String engineName,
+        final String engineVersion,
+        final String templateFactoryClass,
+        final TemplateMappingManager templateMappingManager)
+    {
+        templateMappingManager.addTemplateFactoryClass(
+              TemplateMappingManager.VALUE_OBJECT_FACTORY_TEMPLATE_PREFIX
+            + valueObjectName,
+            engineName,
+            engineVersion,
+            templateFactoryClass);
     }
 
     /**
@@ -171,29 +190,46 @@ public class ValueObjectFactoryTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
+     * @precondition valueObjectName != null
+     * @precondition engineName != null
      */
     protected String getTemplateFactoryClass(
-        String valueObjectName,
-        String engineName,
-        String engineVersion)
+        final String valueObjectName,
+        final String engineName,
+        final String engineVersion)
     {
-        String result = null;
+        return
+            getTemplateFactoryClass(
+                valueObjectName,
+                engineName,
+                engineVersion,
+                TemplateMappingManager.getInstance());
+    }
 
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (   (t_MappingManager != null)
-             && (engineName       != null))
-        {
-            result =
-                t_MappingManager.getTemplateFactoryClass(
-                      TemplateMappingManager.VALUE_OBJECT_TEMPLATE_PREFIX
-                    + valueObjectName,
-                    engineName,
-                    engineVersion);
-        }
-
-        return result;
+    /**
+     * Retrieves the template factory class.
+     * @param valueObjectName the value object name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @precondition valueObjectName != null
+     * @precondition engineName != null
+     * @precondition templateMappingManager != null
+     */
+    protected String getTemplateFactoryClass(
+        final String valueObjectName,
+        final String engineName,
+        final String engineVersion,
+        final TemplateMappingManager templateMappingManager)
+    {
+        return
+            templateMappingManager.getTemplateFactoryClass(
+                  TemplateMappingManager.VALUE_OBJECT_TEMPLATE_PREFIX
+                + valueObjectName,
+                engineName,
+                engineVersion);
     }
 
     /**
@@ -205,40 +241,58 @@ public class ValueObjectFactoryTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      */
     protected ValueObjectFactoryTemplateFactory getTemplateFactory(
-            String valueObjectName,
-            String engineName,
-            String engineVersion)
-        throws  QueryJException
+        final String valueObjectName,
+        final String engineName,
+        final String engineVersion)
+      throws  QueryJException
+    {
+        return
+            getTemplateFactory(
+                valueObjectName,
+                engineName,
+                engineVersion,
+                TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Retrieves the template factory instance.
+     * @param valueObjectName the value object name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param templateMappingManager the <code>TemplateMappingManager</code> instance.
+     * @return the template factory class name.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition templateMappingManager != null
+     */
+    protected ValueObjectFactoryTemplateFactory getTemplateFactory(
+        final String valueObjectName,
+        final String engineName,
+        final String engineVersion,
+        final TemplateMappingManager templateMappingManager)
+      throws  QueryJException
     {
         ValueObjectFactoryTemplateFactory result = null;
 
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
+        Object t_TemplateFactory =
+            templateMappingManager.getTemplateFactoryClass(
+                  TemplateMappingManager.VALUE_OBJECT_FACTORY_TEMPLATE_PREFIX
+                + valueObjectName,
+                engineName,
+                engineVersion);
 
-        if  (t_MappingManager != null)
+        if  (t_TemplateFactory != null)
         {
-            Object t_TemplateFactory =
-                t_MappingManager.getTemplateFactoryClass(
-                      TemplateMappingManager
-                          .VALUE_OBJECT_FACTORY_TEMPLATE_PREFIX
-                    + valueObjectName,
-                    engineName,
-                    engineVersion);
-
-            if  (t_TemplateFactory != null)
+            if  (!(  t_TemplateFactory
+                     instanceof ValueObjectFactoryTemplateFactory))
             {
-                if  (!(  t_TemplateFactory
-                       instanceof ValueObjectFactoryTemplateFactory))
-                {
-                    throw
-                        new QueryJException(
-                            "invalid.value.object.factory.template.factory");
-                }
-                else 
-                {
-                    result =
-                        (ValueObjectFactoryTemplateFactory) t_TemplateFactory;
-                }
+                throw
+                    new QueryJException(
+                        "invalid.value.object.factory.template.factory");
+            }
+            else 
+            {
+                result =
+                    (ValueObjectFactoryTemplateFactory) t_TemplateFactory;
             }
         }
 
@@ -250,29 +304,29 @@ public class ValueObjectFactoryTemplateGenerator
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
+     * @precondition packageName != null
+     * @precondition tableTemplate != null
+     * @precondition metaDataManager != null
      */
     public ValueObjectFactoryTemplate createValueObjectFactoryTemplate(
-            String                  packageName,
-            TableTemplate           tableTemplate,
-            DatabaseMetaDataManager metaDataManager)
-        throws  QueryJException
+        final String packageName,
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final Project project,
+        final Task task)
+      throws  QueryJException
     {
-        ValueObjectFactoryTemplate result = null;
-
-        if  (   (tableTemplate   != null)
-             && (metaDataManager != null)
-             && (packageName     != null))
-        {
-            result =
-                new ValueObjectFactoryTemplate(
-                    packageName,
-                    tableTemplate,
-                    metaDataManager) {};
-        }
-
-        return result;
+        return
+            new ValueObjectFactoryTemplate(
+                packageName,
+                tableTemplate,
+                metaDataManager,
+                project,
+                task);
     }
 
     /**
@@ -280,37 +334,55 @@ public class ValueObjectFactoryTemplateGenerator
      * @param template the value object factory template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
+     * @precondition template != null
+     * @precondition outputDir != null
      */
     public void write(
-            ValueObjectFactoryTemplate template,
-            File                       outputDir)
-        throws  IOException
+        final ValueObjectFactoryTemplate template,
+        final File outputDir)
+      throws  IOException
     {
-        if  (   (template  != null)
-             && (outputDir != null))
-        {
-            EnglishGrammarUtils t_EnglishGrammarUtils =
-                EnglishGrammarUtils.getInstance();
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            template,
+            outputDir,
+            EnglishGrammarUtils.getInstance(),
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a value object factory template to disk.
+     * @param template the value object factory template to write.
+     * @param outputDir the output folder.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition template != null
+     * @precondition outputDir != null
+     * @precondition englishGrammarUtils != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final ValueObjectFactoryTemplate template,
+        final File outputDir,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + t_StringUtils.capitalize(
-                          t_EnglishGrammarUtils.getSingular(
-                              template
-                                  .getTableTemplate().getTableName()
-                                      .toLowerCase()),
-                          '_')
-                    + "ValueObjectFactory.java",
-                    template.toString());
-            }
-        }
+        fileUtils.writeFile(
+            outputDir.getAbsolutePath()
+            + File.separator
+            + stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    template.getTableTemplate().getTableName().toLowerCase()),
+                '_')
+            + "ValueObjectFactory.java",
+            template.generate());
     }
 }

@@ -36,14 +36,6 @@
  * Description: Is able to generate numeric function repositories according to
  *              database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.numeric;
 
@@ -78,7 +70,6 @@ import java.util.Map;
  * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class NumericFunctionsTemplate
     extends  FunctionsTemplate

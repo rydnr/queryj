@@ -35,14 +35,6 @@
  *
  * Description: Represents queries to access persistent data.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj;
 
@@ -73,6 +65,7 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Calendar;
@@ -87,7 +80,6 @@ import org.apache.commons.logging.LogFactory;
  * Represents queries to access persistent data.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class Query
     implements  PreparedStatement
@@ -1531,6 +1523,38 @@ public abstract class Query
     }
 
     /**
+     * See java.sql.PreparedStatement#setTimestamp(int,Timestamp).
+     * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setTimestamp(final int index, final java.util.Date value)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setTimestamp(index, new Timestamp(value.getTime()));
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setTimestamp(int,Timestamp,Calendar).
+     * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp,java.util.Calendar)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param calendar (Taken from Sun's Javadoc) the Calendar object
+     * the driver will use to construct the time.
+     * @throws SQLException if an error occurs.
+     */
+    public void setTimestamp(
+        final int index, final java.util.Date value, final Calendar calendar)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setTimestamp(
+            index, new Timestamp(value.getTime()), calendar);
+    }
+
+    /**
      * See java.sql.PreparedStatement#setUnicodeStream(int,InputStream,int).
      * @see java.sql.PreparedStatement#setUnicodeStream(int,java.io.InputStream,int)
      * @param index (Taken from Sun's Javadoc) the first parameter
@@ -1720,6 +1744,28 @@ public abstract class Query
     }
 
     /**
+     * Specifies an integer value, or <code>null</code>, depending
+     * on given value.
+     * @see java.sql.PreparedStatement#setInt(int,int)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setInt(final int index, final Integer value)
+        throws  SQLException
+    {
+        if  (value == null)
+        {
+            retrievePreparedStatement().setNull(index, Types.INTEGER);
+        }
+        else
+        {
+            retrievePreparedStatement().setInt(index, value.intValue());
+        }
+    }
+
+    /**
      * Specifies the value of an int parameter, associated with a
      * previously specified variable condition for given field.
      * @param field the field.
@@ -1729,6 +1775,21 @@ public abstract class Query
      * @precondition field != null
      */
     public void setInt(final Field field, final int value)
+        throws  SQLException
+    {
+        setInt(field.equals(), value);
+    }
+
+    /**
+     * Specifies the value of an integer parameter, associated with a
+     * previously specified variable condition for given field.
+     * @param field the field.
+     * @param value the int value.
+     * @see java.sql.PreparedStatement#setInt(int,int)
+     * @throws SQLException if an error occurs.
+     * @precondition field != null
+     */
+    public void setInt(final Field field, final Integer value)
         throws  SQLException
     {
         setInt(field.equals(), value);
@@ -1750,6 +1811,43 @@ public abstract class Query
     }
 
     /**
+     * Specifies the value of an Integer parameter, associated with a
+     * previously specified variable condition.
+     * @param condition the variable condition.
+     * @param value the int value.
+     * @see java.sql.PreparedStatement#setInt(int,int)
+     * @throws SQLException if an error occurs.
+     * @precondition variableCondition != null
+     */
+    public void setInt(final VariableCondition condition, final Integer value)
+        throws  SQLException
+    {
+        setInt(retrieveIndex(getVariableConditions(), condition), value);
+    }
+
+    /**
+     * Specifies a long value, or <code>null</code>, depending
+     * on given value.
+     * @see java.sql.PreparedStatement#setLong(int,long)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setLong(final int index, final Long value)
+        throws  SQLException
+    {
+        if  (value == null)
+        {
+            retrievePreparedStatement().setNull(index, Types.BIGINT);
+        }
+        else
+        {
+            retrievePreparedStatement().setLong(index, value.longValue());
+        }
+    }
+
+    /**
      * Specifies the value of a long parameter, associated with a
      * previously specified variable condition for given field.
      * @param field the field.
@@ -1766,6 +1864,21 @@ public abstract class Query
 
     /**
      * Specifies the value of a long parameter, associated with a
+     * previously specified variable condition for given field.
+     * @param field the field.
+     * @param value the long value.
+     * @see java.sql.PreparedStatement#setLong(int,long)
+     * @throws SQLException if an error occurs.
+     * @precondition field != null
+     */
+    public void setLong(final Field field, final Long value)
+        throws  SQLException
+    {
+        setLong(field.equals(), value);
+    }
+
+    /**
+     * Specifies the value of a long parameter, associated with a
      * previously specified variable condition.
      * @param condition the variable condition.
      * @param value the long value.
@@ -1774,6 +1887,22 @@ public abstract class Query
      * @precondition variableCondition != null
      */
     public void setLong(final VariableCondition condition, final long value)
+        throws  SQLException
+    {
+        setLong(retrieveIndex(getVariableConditions(), condition), value);
+    }
+
+    /**
+     * Specifies the value of a long parameter, associated with a
+     * previously specified variable condition.
+     * @param condition the variable condition.
+     * @param value the long value.
+     * @see java.sql.PreparedStatement#setLong(int,long)
+     * @throws SQLException if an error occurs.
+     * @precondition variableCondition != null
+     */
+    public void setLong(
+        final VariableCondition condition, final Long value)
         throws  SQLException
     {
         setLong(retrieveIndex(getVariableConditions(), condition), value);
@@ -1810,6 +1939,28 @@ public abstract class Query
     }
 
     /**
+     * Specifies a double value, or <code>null</code>, depending
+     * on given value.
+     * @see java.sql.PreparedStatement#setDouble(int,double)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setDouble(final int index, final Double value)
+        throws  SQLException
+    {
+        if  (value == null)
+        {
+            retrievePreparedStatement().setNull(index, Types.REAL);
+        }
+        else
+        {
+            retrievePreparedStatement().setDouble(index, value.doubleValue());
+        }
+    }
+
+    /**
      * Specifies the value of a double parameter, associated with a
      * previously specified variable condition for given field.
      * @param field the field.
@@ -1826,6 +1977,21 @@ public abstract class Query
 
     /**
      * Specifies the value of a double parameter, associated with a
+     * previously specified variable condition for given field.
+     * @param field the field.
+     * @param value the double value.
+     * @see java.sql.PreparedStatement#setDouble(int,double)
+     * @throws SQLException if an error occurs.
+     * @precondition field != null
+     */
+    public void setDouble(final Field field, final Double value)
+      throws  SQLException
+    {
+        setDouble(field.equals(), value);
+    }
+
+    /**
+     * Specifies the value of a double parameter, associated with a
      * previously specified variable condition.
      * @param condition the variable condition.
      * @param value the double value.
@@ -1835,6 +2001,22 @@ public abstract class Query
      */
     public void setDouble(
         final VariableCondition condition, final double value)
+      throws  SQLException
+    {
+        setDouble(retrieveIndex(getVariableConditions(), condition), value);
+    }
+
+    /**
+     * Specifies the value of a double parameter, associated with a
+     * previously specified variable condition.
+     * @param condition the variable condition.
+     * @param value the double value.
+     * @see java.sql.PreparedStatement#setDouble(int,double)
+     * @throws SQLException if an error occurs.
+     * @precondition variableCondition != null
+     */
+    public void setDouble(
+        final VariableCondition condition, final Double value)
       throws  SQLException
     {
         setDouble(retrieveIndex(getVariableConditions(), condition), value);
@@ -2542,6 +2724,85 @@ public abstract class Query
             value,
             calendar);
     }
+
+    /**
+     * Specifies the value of a timestamp parameter, associated with a
+     * previously specified variable condition for given field.
+     * @param field the field.
+     * @param value the date value.
+     * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
+     * @throws SQLException if an error occurs.
+     * @precondition field != null
+     */
+    public void setTimestamp(
+        final Field field, final java.util.Date value)
+      throws  SQLException
+    {
+        setTimestamp(field.equals(), new Timestamp(value.getTime()));
+    }
+
+    /**
+     * Specifies the value of a timestamp parameter, associated with a
+     * previously specified variable condition.
+     * @param condition the variable condition.
+     * @param value the date value.
+     * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
+     * @throws SQLException if an error occurs.
+     * @precondition variableCondition != null
+     */
+    public void setTimestamp(
+        final VariableCondition condition, final java.util.Date value)
+      throws  SQLException
+    {
+        setTimestamp(
+            retrieveIndex(
+                getVariableConditions(), condition),
+            new java.util.Date(value.getTime()));
+    }
+
+    /**
+     * Specifies the value of a timestamp parameter, associated with a
+     * previously specified variable condition for given field.
+     * @param field the field.
+     * @param value the timestamp value.
+     * @param calendar (Taken from Sun's Javadoc) the Calendar object
+     * the driver will use to construct the timestamp.
+     * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
+     * @throws SQLException if an error occurs.
+     * @precondition field != null
+     */
+    public void setTimestamp(
+        final Field field,
+        final java.util.Date value,
+        final Calendar calendar)
+      throws  SQLException
+    {
+        setTimestamp(field.equals(), new Timestamp(value.getTime()), calendar);
+    }
+
+    /**
+     * Specifies the value of a timestamp parameter, associated with a
+     * previously specified variable condition.
+     * @param condition the variable condition.
+     * @param value the timestamp value.
+     * @param calendar (Taken from Sun's Javadoc) the Calendar object
+     * the driver will use to construct the timestamp.
+     * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
+     * @throws SQLException if an error occurs.
+     * @precondition variableCondition != null
+     */
+    public void setTimestamp(
+        final VariableCondition condition,
+        final java.util.Date value,
+        final Calendar calendar)
+      throws  SQLException
+    {
+        setTimestamp(
+            retrieveIndex(getVariableConditions(), condition),
+            new Timestamp(value.getTime()),
+            calendar);
+    }
+
     /**
      * Specifies the value of a parameter formatted as an Unicode stream,
      * associated with a previously specified variable condition for given

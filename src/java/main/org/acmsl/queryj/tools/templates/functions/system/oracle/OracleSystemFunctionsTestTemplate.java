@@ -35,14 +35,6 @@
  *
  * Description: Is able to generate tests on Oracle's system functions.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.system.oracle;
 
@@ -70,7 +62,6 @@ import java.util.Map;
  * Is able to generate tests on Oracle database's system functions.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class OracleSystemFunctionsTestTemplate
     extends  SystemFunctionsTestTemplate

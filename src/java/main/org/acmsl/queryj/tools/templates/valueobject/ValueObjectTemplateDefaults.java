@@ -36,6 +36,8 @@
  * Description: Defines the default subtemplates used to generate value
  *              objects according to database metadata.
  *
+<<<<<<< ValueObjectTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.8
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -57,7 +60,10 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< ValueObjectTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.8
  */
 public interface ValueObjectTemplateDefaults
     extends  JavaTemplateDefaults

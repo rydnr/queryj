@@ -35,14 +35,6 @@
  *
  * Description: Represents generic templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -62,7 +54,6 @@ import org.apache.tools.ant.Task;
  * Represents generic templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractTestTemplate
     extends  AbstractTemplate

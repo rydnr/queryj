@@ -35,14 +35,6 @@
  *
  * Description: Indicates JUnit how to test PackageUtils class.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package unittests.org.acmsl.queryj.tools;
 
@@ -71,7 +63,6 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Indicates JUnit how to test PackageUtils class.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
  */
 public class PackageUtilsTest
     extends  TestCase

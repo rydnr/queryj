@@ -36,14 +36,6 @@
  * Description: Represents entities able to create XML value object factory
  *              templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao.xml;
 
@@ -59,7 +51,6 @@ import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
  * Represents entities able to create XML value object templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface XMLValueObjectFactoryTemplateFactory
 {

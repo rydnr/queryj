@@ -35,14 +35,6 @@
  *
  * Description: Marks all template build handlers.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.handlers;
 
@@ -55,7 +47,6 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateHandler;
  * Marks all template build handlers.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$ at $Date$
  */
 public interface TemplateBuildHandler
     extends TemplateHandler

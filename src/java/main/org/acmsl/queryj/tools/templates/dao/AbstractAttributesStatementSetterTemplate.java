@@ -36,14 +36,6 @@
  * Description: Contains the elements required to create the
  *              AttributesStatementSetter sources.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -64,7 +56,6 @@ import org.apache.tools.ant.Task;
  * Contains the elements required to create the AttributesStatementSetter sources.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractAttributesStatementSetterTemplate
     extends  AbstractTemplate

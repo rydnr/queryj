@@ -35,15 +35,6 @@
  *
  * Description: Contains the elements required to create the
  *              ResultSetExtractor sources.
- *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -66,7 +57,6 @@ import org.apache.tools.ant.Task;
  * Contains the elements required to create the CustomResultSetExtractor sources.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractCustomResultSetExtractorTemplate
     extends  AbstractTemplate
@@ -177,6 +167,16 @@ public abstract class AbstractCustomResultSetExtractorTemplate
     private String m__strValueObjectPropertiesSpecification;
 
     /**
+     * The value object nullable properties specification.
+     */
+    private String m__strValueObjectNullablePropertiesSpecification;
+
+    /**
+     * The value object nullable properties check.
+     */
+    private String m__strValueObjectNullablePropertiesCheck;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
@@ -208,6 +208,10 @@ public abstract class AbstractCustomResultSetExtractorTemplate
      * multiple result.
      * @param valueObjectPropertiesSpecification the value object
      * properties specification.
+     * @param valueObjectNullablePropertiesSpecification the value object
+     * nullable properties specification.
+     * @param valueObjectNullablePropertiesCheck the value object
+     * nullable properties check.
      * @param classEnd the class end.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
@@ -234,6 +238,8 @@ public abstract class AbstractCustomResultSetExtractorTemplate
         final String extractDataMethodWithSingleResult,
         final String extractDataMethodWithMultipleResult,
         final String valueObjectPropertiesSpecification,
+        final String valueObjectNullablePropertiesSpecification,
+        final String valueObjectNullablePropertiesCheck,
         final String classEnd,
         final Project project,
         final Task task)
@@ -301,6 +307,12 @@ public abstract class AbstractCustomResultSetExtractorTemplate
 
         immutableSetValueObjectPropertiesSpecification(
             valueObjectPropertiesSpecification);
+
+        immutableSetValueObjectNullablePropertiesSpecification(
+            valueObjectNullablePropertiesSpecification);
+
+        immutableSetValueObjectNullablePropertiesCheck(
+            valueObjectNullablePropertiesCheck);
 
         immutableSetClassEnd(
             classEnd);
@@ -885,6 +897,66 @@ public abstract class AbstractCustomResultSetExtractorTemplate
     }
 
     /**
+     * Specifies the value object nullable properties specification.
+     * @param template such template.
+     */
+    private void immutableSetValueObjectNullablePropertiesSpecification(
+        final String template)
+    {
+        m__strValueObjectNullablePropertiesSpecification = template;
+    }
+
+    /**
+     * Specifies the value object nullable properties specification.
+     * @param template such template.
+     */
+    protected void setValueObjectNullablePropertiesSpecification(
+        final String template)
+    {
+        immutableSetValueObjectNullablePropertiesSpecification(
+            template);
+    }
+
+    /**
+     * Retrieves the value object nullable properties specification.
+     * @return such template.
+     */
+    public String getValueObjectNullablePropertiesSpecification()
+    {
+        return m__strValueObjectNullablePropertiesSpecification;
+    }
+
+    /**
+     * Specifies the value object nullable properties check.
+     * @param template such template.
+     */
+    private void immutableSetValueObjectNullablePropertiesCheck(
+        final String template)
+    {
+        m__strValueObjectNullablePropertiesCheck = template;
+    }
+
+    /**
+     * Specifies the value object nullable properties check.
+     * @param template such template.
+     */
+    protected void setValueObjectNullablePropertiesCheck(
+        final String template)
+    {
+        immutableSetValueObjectNullablePropertiesCheck(
+            template);
+    }
+
+    /**
+     * Retrieves the value object nullable properties check.
+     * @return such template.
+     */
+    public String getValueObjectNullablePropertiesCheck()
+    {
+        return m__strValueObjectNullablePropertiesCheck;
+    }
+
+    /**
      * Specifies the class end.
      * @param classEnd the new class end.
      */
@@ -929,7 +1001,7 @@ public abstract class AbstractCustomResultSetExtractorTemplate
     protected String buildHeader(final TableTemplate tableTemplate)
     {
         return
-              "Generating ResultSetExtractor for "
+              "Generating CustomResultSetExtractor for "
             + tableTemplate.getTableName() + ".";
     }
 }

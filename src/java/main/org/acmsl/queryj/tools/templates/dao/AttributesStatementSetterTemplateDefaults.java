@@ -36,6 +36,8 @@
  * Description: Defines the default subtemplates to generate
  +              AttributesStatementSetter templates.
  *
+<<<<<<< AttributesStatementSetterTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -57,7 +60,10 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< AttributesStatementSetterTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.5
  */
 public interface AttributesStatementSetterTemplateDefaults
     extends  JavaTemplateDefaults
@@ -190,7 +196,35 @@ public interface AttributesStatementSetterTemplateDefaults
      */
     public static final String DEFAULT_CLASS_START =
           "'{'\n"
-        + "{0}";
+        + "{0}\n"
+        + "    /**\n"
+        + "     * The update operation.\n"
+        + "     */\n"
+        + "    private boolean m__bUpdateOperation;\n\n"
+        + "    /**\n"
+        + "     * Specifies whether the operation is an update or not.\n"
+        + "     * @param updateOperation such information.\n" 
+        + "     */\n"
+        + "    private void immutableSetUpdateOperation(final boolean updateOperation)\n"
+        + "    '{'\n"
+        + "        m__bUpdateOperation = updateOperation;\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Specifies whether the operation is an update or not.\n"
+        + "     * @param updateOperation such information.\n" 
+        + "     */\n"
+        + "    protected void setUpdateOperation(final boolean updateOperation)\n"
+        + "    '{'\n"
+        + "        immutableSetUpdateOperation(updateOperation);\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Retrieves whether the operation is an update or not.\n"
+        + "     * @return such information.\n" 
+        + "     */\n"
+        + "    public boolean isUpdateOperation()\n"
+        + "    '{'\n"
+        + "        return m__bUpdateOperation;\n"
+        + "    '}'\n\n";
 
     /**
      * The class constructor.
@@ -203,10 +237,14 @@ public interface AttributesStatementSetterTemplateDefaults
           "    /**\n"
         + "     * Creates a <code>{0}AttributesStatementSetter</code> instance.\n"
         + "{1}"
+        + "     * @param updateOperation whether the operation is an update.\n"
         + "     */\n"
-        + "    public {0}AttributesStatementSetter({2})\n"
+        + "    public {0}AttributesStatementSetter("
+        + "{2},\n"
+        + "        final boolean updateOperation)\n"
         + "    '{'\n"
         + "{3}"
+        + "        immutableSetUpdateOperation(updateOperation);\n"
         + "    '}'\n\n";
 
     /**
@@ -259,7 +297,8 @@ public interface AttributesStatementSetterTemplateDefaults
      * @param 0 the parameter getters call.
      * @param 1 the parameter javadoc.
      * @param 2 the parameter declaration.
-     * @param 3 the parameter specification.
+     * @param 3 the unmanaged parameter specification.
+     * @param 4 the managed parameter specification.
      */
     public static final String DEFAULT_SET_VALUES_METHOD =
           "     // <set values>\n\n"
@@ -275,21 +314,28 @@ public interface AttributesStatementSetterTemplateDefaults
         + "    '{'\n"
         + "        setValues(\n"
         + "            (Query) preparedStatement"
-        + "{0});\n"
+        + "{0},\n"
+        + "            isUpdateOperation());\n"
         + "    '}'\n\n"
         + "    /**\n"
         + "     * Specifies the values on given <code>PreparedStatement</code>\n"
         + "     * @param preparedStatement the prepared statement.\n"
         + "{1}"
+        + "     * @param updateOperation whether the operation is an update.\n"
         + "     * @throws SQLException intercepted by <i>Spring</i>.\n"
         + "     * @precondition query != null\n"
         + "     */\n"
         + "    protected void setValues(\n"
         + "        final Query query,"
-        + "{2})\n"
+        + "{2},\n"
+        + "        final boolean updateOperation)\n"
         + "      throws  SQLException\n"
         + "    '{'\n"
+        + "        if  (updateOperation)\n"
+        + "        '{'\n"
         + "{3}"
+        + "        '}'\n\n"
+        + "{4}"
         + "    '}'\n";
 
     /**

@@ -36,6 +36,8 @@
  * Description: Defines the default subtemplates to generate
  *              QueryPreparedStatementCreator sources.
  *
+<<<<<<< QueryPreparedStatementCreatorTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -57,7 +60,10 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * sources.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< QueryPreparedStatementCreatorTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.5
  */
 public interface QueryPreparedStatementCreatorTemplateDefaults
     extends  JavaTemplateDefaults

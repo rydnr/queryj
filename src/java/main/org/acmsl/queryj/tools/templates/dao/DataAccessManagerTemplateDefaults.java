@@ -36,6 +36,8 @@
  * Description: Defines the default subtemplates used to generate
  *              DataAccessManager facade class according to database metadata.
  *
+<<<<<<< DataAccessManagerTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -57,7 +60,10 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * facade class according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< DataAccessManagerTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.5
  */
 public interface DataAccessManagerTemplateDefaults
     extends  JavaTemplateDefaults

@@ -35,14 +35,6 @@
  *
  * Description: Writes XML DAO test templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 
@@ -80,7 +72,6 @@ import java.util.Map;
  * Writes XML DAO test templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class XMLDAOTestTemplateWritingHandler
     extends    AbstractAntCommandHandler

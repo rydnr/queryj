@@ -36,14 +36,6 @@
  * Description: Retrieves the externally-managed fields declaration and
  *              configures DatabaseMetaDataManager accordingly.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.handlers;
 
@@ -87,7 +79,6 @@ import java.util.Map;
  * configures DatabaseMetaDataManager accordingly.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class ExternallyManagedFieldsRetrievalHandler
     extends  AbstractAntCommandHandler

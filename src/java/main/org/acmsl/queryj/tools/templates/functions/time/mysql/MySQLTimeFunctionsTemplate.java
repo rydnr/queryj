@@ -36,14 +36,6 @@
  * Description: Is able to generate time function repositories according to
  *              MySQL database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.time.mysql;
 
@@ -78,7 +70,6 @@ import java.util.Map;
  * Is able to generate time function repositories according to MYSQL database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class MySQLTimeFunctionsTemplate
     extends  TimeFunctionsTemplate

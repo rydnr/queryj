@@ -35,14 +35,6 @@
  *
  * Description: Is able to generate tests on database's system functions.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.system;
 
@@ -63,7 +55,6 @@ import org.apache.tools.ant.Task;
  * Is able to generate tests on database's system functions.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class SystemFunctionsTestTemplate
     extends  FunctionsTestTemplate

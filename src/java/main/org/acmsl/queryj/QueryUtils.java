@@ -35,14 +35,6 @@
  *
  * Description: Provides some useful methods when working with queries.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj;
 
@@ -63,7 +55,6 @@ import java.util.Iterator;
  * Provides some useful methods when working with queries.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro Armend&aacute;riz</a>
- * @version $Revision$
  */
 public abstract class QueryUtils
 {
@@ -205,7 +196,7 @@ public abstract class QueryUtils
      * @param object the element.
      * @return <code>true</code> if such object should be escaped.
      */
-    public boolean shouldBeEscaped(Object object)
+    public boolean shouldBeEscaped(final Object object)
     {
         boolean result = false;
 

@@ -36,6 +36,8 @@
  * Description: Defines the default subtemplates to generate
  +              FkStatementSetter templates.
  *
+<<<<<<< FkStatementSetterTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -57,7 +60,10 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< FkStatementSetterTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.3
  */
 public interface FkStatementSetterTemplateDefaults
     extends  JavaTemplateDefaults

@@ -34,15 +34,6 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Represents undivisible conditions.
- *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj;
 
@@ -65,7 +56,6 @@ import java.util.Date;
  * Represents indivisible conditions in statements.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AtomicCondition
     extends  Condition

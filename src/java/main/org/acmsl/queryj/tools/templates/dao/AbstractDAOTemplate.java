@@ -35,6 +35,8 @@
  *
  * Description: Contains the elements required to create the DAO sources.
  *
+<<<<<<< AbstractDAOTemplate.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -43,6 +45,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.16
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -64,7 +67,10 @@ import org.apache.tools.ant.Task;
  * Contains the elements required to create the DAO sources.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< AbstractDAOTemplate.java
+=======
  * @version $Revision$
+>>>>>>> 1.16
  */
 public abstract class AbstractDAOTemplate
     extends  AbstractTemplate
@@ -198,6 +204,21 @@ public abstract class AbstractDAOTemplate
      * The class constructor.
      */
     private String m__strClassConstructor;
+
+    /**
+     * The find-by-static-field method.
+     */
+    private String m__strFindByStaticFieldMethod;
+
+    /**
+     * The find-by-static-field  javadoc.
+     */
+    private String m__strFindByStaticFieldJavadoc;
+
+    /**
+     * The find-by-static-field  declaration.
+     */
+    private String m__strFindByStaticFieldDeclaration;
 
     /**
      * The pk javadoc.
@@ -430,6 +451,11 @@ public abstract class AbstractDAOTemplate
      * @param customResultSetExtractorConstant the custom result set extractor
      * constant subtemplate.
      * @param classConstructor the class constructor.
+     * @param findByStaticFieldMethod the find-by-static-field method.
+     * @param findByStaticFieldJavadoc the field javadoc for
+     * find-by-static-field method.
+     * @param findByStaticFieldDeclaration the field declaration for
+     * find-by-static-field method.
      * @param pkJavadoc the pk javadoc subtemplate.
      * @param attributeJavadoc the attribute javadoc subtemplate.
      * @param attributeDeclaration the attribute declaration subtemplate.
@@ -521,6 +547,9 @@ public abstract class AbstractDAOTemplate
         final String classConstants,
         final String customResultSetExtractorConstant,
         final String classConstructor,
+        final String findByStaticFieldMethod,
+        final String findByStaticFieldJavadoc,
+        final String findByStaticFieldDeclaration,
         final String pkJavadoc,
         final String attributeJavadoc,
         final String attributeDeclaration,
@@ -642,6 +671,10 @@ public abstract class AbstractDAOTemplate
 
         immutableSetClassConstructor(
             classConstructor);
+
+        immutableSetFindByStaticFieldMethod(findByStaticFieldMethod);
+        immutableSetFindByStaticFieldJavadoc(findByStaticFieldJavadoc);
+        immutableSetFindByStaticFieldDeclaration(findByStaticFieldDeclaration);
 
         immutableSetPkJavadoc(pkJavadoc);
 
@@ -1472,6 +1505,97 @@ public abstract class AbstractDAOTemplate
     public String getClassConstructor()
     {
         return m__strClassConstructor;
+    }
+
+    /**
+     * Specifies the find-by-static-field method.
+     * @param findByStaticFieldMethod such method.
+     */
+    private void immutableSetFindByStaticFieldMethod(
+        final String findByStaticFieldMethod)
+    {
+        m__strFindByStaticFieldMethod = findByStaticFieldMethod;
+    }
+
+    /**
+     * Specifies the find-by-static-field method.
+     * @param findByStaticFieldMethod such method.
+     */
+    protected void setFindByStaticFieldMethod(
+        final String findByStaticFieldMethod)
+    {
+        immutableSetFindByStaticFieldMethod(
+            findByStaticFieldMethod);
+    }
+
+    /**
+     * Retrieves the find-by-static-field method.
+     * @return such method.
+     */
+    public String getFindByStaticFieldMethod()
+    {
+        return m__strFindByStaticFieldMethod;
+    }
+
+    /**
+     * Specifies the find-by-static-field  Javadoc.
+     * @param findByStaticFieldJavadoc such Javadoc.
+     */
+    private void immutableSetFindByStaticFieldJavadoc(
+        final String findByStaticFieldJavadoc)
+    {
+        m__strFindByStaticFieldJavadoc = findByStaticFieldJavadoc;
+    }
+
+    /**
+     * Specifies the find-by-static-field  Javadoc.
+     * @param findByStaticFieldJavadoc such Javadoc.
+     */
+    protected void setFindByStaticFieldJavadoc(
+        final String findByStaticFieldJavadoc)
+    {
+        immutableSetFindByStaticFieldJavadoc(
+            findByStaticFieldJavadoc);
+    }
+
+    /**
+     * Retrieves the find-by-static-field  Javadoc.
+     * @return such Javadoc.
+     */
+    public String getFindByStaticFieldJavadoc()
+    {
+        return m__strFindByStaticFieldJavadoc;
+    }
+    
+    /**
+     * Specifies the find-by-static-field  declaration.
+     * @param findByStaticFieldDeclaration such declaration.
+     */
+    private void immutableSetFindByStaticFieldDeclaration(
+        final String findByStaticFieldDeclaration)
+    {
+        m__strFindByStaticFieldDeclaration =
+            findByStaticFieldDeclaration;
+    }
+
+    /**
+     * Specifies the find-by-static-field  declaration.
+     * @param findByStaticFieldDeclaration such declaration.
+     */
+    protected void setFindByStaticFielddeclaration(
+        final String findByStaticFieldDeclaration)
+    {
+        immutableSetFindByStaticFieldDeclaration(
+            findByStaticFieldDeclaration);
+    }
+
+    /**
+     * Retrieves the find-by-static-field  declaration.
+     * @return such declaration.
+     */
+    public String getFindByStaticFieldDeclaration()
+    {
+        return m__strFindByStaticFieldDeclaration;
     }
 
     /**

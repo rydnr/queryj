@@ -36,14 +36,6 @@
  * Description: Is able to generate JUnit templates test the Database's
  *              system functions.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.system;
 
@@ -66,7 +58,6 @@ import org.apache.tools.ant.Task;
  * system functions.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface SystemFunctionsTestTemplateFactory
     extends  TemplateFactory

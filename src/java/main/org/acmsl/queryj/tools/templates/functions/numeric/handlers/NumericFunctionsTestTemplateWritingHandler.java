@@ -35,14 +35,6 @@
  *
  * Description: Writes the numeric functions test template.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.numeric.handlers;
 
@@ -76,7 +68,6 @@ import java.util.Map;
  * Writes the numeric functions test template.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class NumericFunctionsTestTemplateWritingHandler
     extends    AbstractAntCommandHandler

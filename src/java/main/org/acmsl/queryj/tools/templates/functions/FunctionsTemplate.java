@@ -35,14 +35,6 @@
  *
  * Description: Contains all common behaviour of function templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions;
 
@@ -81,7 +73,6 @@ import org.apache.commons.logging.LogFactory;
  * Contains all common behaviour of function templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class FunctionsTemplate
     extends  AbstractTemplate

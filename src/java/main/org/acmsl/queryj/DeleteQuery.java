@@ -35,14 +35,6 @@
  *
  * Description: Represents standard SQL delete queries.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj;
 
@@ -78,7 +70,6 @@ import java.util.Map;
  * Represents standard SQL delete queries.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class DeleteQuery
     extends  WriteQuery

@@ -36,14 +36,6 @@
  * Description: Bundles the complete set of handlers related to SystemFunctions
  *              templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.system.handlers;
 
@@ -57,7 +49,6 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 /**
  * Bundles the complete set of handlers related to SystemFunctions templates.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
  */
 public class SystemFunctionsBundle
     extends  TemplateHandlerBundle

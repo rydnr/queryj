@@ -35,14 +35,6 @@
  *
  * Description: Is able to create abstract base JDBC DAO.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -77,7 +69,6 @@ import java.util.Map;
  * Is able to create abstract base JDBC DAO.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class JdbcDAOTemplate
     extends  AbstractJdbcDAOTemplate

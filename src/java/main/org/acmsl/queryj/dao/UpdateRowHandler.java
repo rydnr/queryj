@@ -36,14 +36,6 @@
  * Description: Represents entities designed to process any desired update
  *              on a specific result set.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.dao;
 
@@ -58,7 +50,6 @@ import java.sql.SQLException;
  * on a specific result set.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro Armendariz</a>
- * @version $Revision$
  */
 public interface UpdateRowHandler
 {

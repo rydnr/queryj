@@ -37,14 +37,6 @@
  *              number of handlers, to which the logic is delegated to,
  *              following GoF's Composite pattern.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.handlers;
 
@@ -71,7 +63,6 @@ import java.util.Iterator;
  * of handlers, to which the logic is delegated to, following GoF's
  * <b>Composite pattern</b>.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
  */
 public class CompositeAntCommandHandler
     extends  AbstractAntCommandHandler

@@ -37,14 +37,6 @@
  *              the configuration file for configuring
  *              DAOChooser.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -53,7 +45,6 @@ package org.acmsl.queryj.tools.templates.dao;
  * for configuring <code>DAOChooser</code> singleton.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface ConfigurationPropertiesTemplateDefaults
 {

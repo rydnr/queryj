@@ -36,13 +36,6 @@ Spain
 * Description: Executes all tests defined for package
 *              unittests.org.acmsl.queryj.tools.customsql.handlers.
 *
-* Last modified by: $Author$ at $Date$
-*
-* File version: $Revision$
-*
-* Project version: $Name$
-*
-* $Id$
 */
 package unittests.org.acmsl.queryj.tools.customsql.handlers;
 
@@ -85,7 +78,6 @@ Boston, MA  02111-1307  USA
 
 /**
 * Tests CustomSqlProviderRetrievalHandlerTest class.
-* @version $Revision$
 * @see org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler
 */
 public class CustomSqlProviderRetrievalHandlerTest

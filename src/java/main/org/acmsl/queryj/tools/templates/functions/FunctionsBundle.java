@@ -36,14 +36,6 @@
  * Description: Bundles the complete set of handlers related to TextFunctions
  *              templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions;
 
@@ -59,7 +51,6 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 /**
  * Bundles the complete set of handlers related to TextFunctions templates.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
  */
 public class FunctionsBundle
     extends  TemplateHandlerBundle

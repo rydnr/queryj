@@ -35,13 +35,6 @@
  *
  * Description: Contains all tables belonging to Oracle dictionary.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
  */
 package org.acmsl.queryj.tools.oracle;
 
@@ -55,7 +48,6 @@ import org.acmsl.queryj.tools.oracle.OracleUserTablesTable;
 /**
  * Contains all tables belonging to Oracle dictionary.
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
- * @version $Revision$
  */
 public interface OracleTableRepository
 {

@@ -36,14 +36,6 @@
  * Description: Is able to generate the JUnit classes to test Oracle's
  *              time functions.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.time.oracle;
 
@@ -83,7 +75,6 @@ import java.lang.ref.WeakReference;
  * Is able to generate the JUnit classes to test the Database's time functions.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class OracleTimeFunctionsTestTemplateGenerator
     extends  TimeFunctionsTestTemplateGenerator

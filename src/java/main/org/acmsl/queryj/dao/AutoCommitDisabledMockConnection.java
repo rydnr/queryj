@@ -35,14 +35,6 @@
  *
  * Description: Mock connections with auto commit disabled.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.dao;
 
@@ -62,7 +54,6 @@ import java.sql.SQLException;
  * A Mock connection with auto commit disabled.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro Armendariz</a>
- * @version $Revision$
  */
 public class AutoCommitDisabledMockConnection
     extends MockConnection

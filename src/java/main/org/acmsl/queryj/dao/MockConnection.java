@@ -36,14 +36,6 @@
  * Description: Wraps Connection objects and provides useful
  *              insight in unit testing.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.dao;
 
@@ -74,7 +66,6 @@ import org.apache.commons.logging.LogFactory;
  * Wraps Connection objects and provides useful insight in unit testing.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro Armendariz</a>
- * @version $Revision$
  */
 public class MockConnection
     implements  Connection

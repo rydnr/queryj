@@ -36,14 +36,6 @@
  * Description: Defines which classes take part on the process depending on
  *              the database engine.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.handlers;
 
@@ -81,7 +73,6 @@ import org.apache.commons.logging.LogFactory;
  * the database engine.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DatabaseEngineHandler
     extends  AbstractAntCommandHandler

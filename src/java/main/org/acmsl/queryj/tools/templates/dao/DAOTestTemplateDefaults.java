@@ -36,6 +36,10 @@
  * Description: Defines the default subTemplates for creating JUnit tests to
  *              ensure generated DAOs are working fine and the connection
  *              correctly managed.
+<<<<<<< DAOTestTemplateDefaults.java
+ *
+=======
+>>>>>>> 1.6
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -533,6 +537,12 @@ public interface DAOTestTemplateDefaults
      */
     public static final String DEFAULT_TEST_PARAMETERS_VALUES =
         "\n                        {0}_VALUE";
+
+    /**
+     * Test nullable parameters' values.
+     */
+    public static final String DEFAULT_TEST_NULLABLE_PARAMETERS_VALUES =
+        "\n                        new {1}({0}_VALUE)";
 
     /**
      * Load test.

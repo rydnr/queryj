@@ -36,14 +36,6 @@
  * Description: Is able to create mock DAO implementations for each
  *              table in the persistence model.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao.mock;
 
@@ -67,7 +59,6 @@ import org.apache.tools.ant.Task;
  * table in the persistence model.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractMockDAOTemplate
     extends  AbstractTemplate

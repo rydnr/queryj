@@ -37,14 +37,6 @@
  *              This means they perform specific actions when receiving the
  *              command.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.handlers;
 
@@ -67,7 +59,6 @@ import org.apache.tools.ant.BuildException;
  * Inside a Chain Of Responsibility, these are the chain links.
  * This means they perform specific actions when receiving the command.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
  */
 public interface AntCommandHandler
     extends  CommandHandler

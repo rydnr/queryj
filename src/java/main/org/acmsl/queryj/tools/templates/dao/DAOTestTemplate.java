@@ -36,6 +36,8 @@
  * Description: Template for creating JUnit tests to ensure generated DAOs
  *              are working fine and the connection correctly managed.
  *
+<<<<<<< DAOTestTemplate.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.9
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -84,8 +87,12 @@ import java.util.Map;
  * Template for creating JUnit tests to ensure generated DAOs
  * are working fine and the connection correctly managed.
  * @author <a href="mailto:jsanleandro@yahoo.es"
+<<<<<<< DAOTestTemplate.java
+ *         >Jose San Leandro</a>
+=======
            >Jose San Leandro</a>
  * @version $Revision$
+>>>>>>> 1.9
  */
 public abstract class DAOTestTemplate
     extends  AbstractDAOTestTemplate
@@ -156,6 +163,7 @@ public abstract class DAOTestTemplate
             DEFAULT_CONNECTION_TEST,
             DEFAULT_STORE_TEST,
             DEFAULT_TEST_PARAMETERS_VALUES,
+            DEFAULT_TEST_NULLABLE_PARAMETERS_VALUES,
             DEFAULT_LOAD_TEST,
             DEFAULT_UPDATE_TEST,
             DEFAULT_UPDATE_FILTER_VALUES,
@@ -207,6 +215,7 @@ public abstract class DAOTestTemplate
                 getConnectionTest(),
                 getStoreTest(),
                 getTestParametersValues(),
+                getTestNullableParametersValues(),
                 getLoadTest(),
                 getUpdateTest(),
                 getUpdateFilterValues(),
@@ -253,6 +262,8 @@ public abstract class DAOTestTemplate
      * @param connectionTest the connection test.
      * @param storeTest the store test.
      * @param testParametersValues the test values
+     * subtemplate.
+     * @param testNullableParametersValues the test nullable values
      * subtemplate.
      * @param loadTest the load test.
      * @param updateTest the update test.
@@ -307,6 +318,7 @@ public abstract class DAOTestTemplate
         final String connectionTest,
         final String storeTest,
         final String testParametersValues,
+        final String testNullableParametersValues,
         final String loadTest,
         final String updateTest,
         final String updateFilterValues,
@@ -488,7 +500,6 @@ public abstract class DAOTestTemplate
 
         if  (t_astrPrimaryKeys != null)
         {
-
             for  (int t_iPkIndex = 0;
                   t_iPkIndex < t_astrPrimaryKeys.length;
                   t_iPkIndex++) 
@@ -556,8 +567,19 @@ public abstract class DAOTestTemplate
             }
         }
 
+<<<<<<< DAOTestTemplate.java
         MessageFormat t_TestParametersUpdatedValuesFormatter =
             new MessageFormat(testParametersUpdatedValues);
+
+        MessageFormat t_TestNullableParametersValuesFormatter =
+            new MessageFormat(testNullableParametersValues);
+
+        MessageFormat t_TestNonNullableParametersValuesFormatter =
+            new MessageFormat(testParametersValues);
+=======
+        MessageFormat t_TestParametersUpdatedValuesFormatter =
+            new MessageFormat(testParametersUpdatedValues);
+>>>>>>> 1.9
 
         StringBuffer t_sbTestParametersUpdatedValues =
             new StringBuffer();
@@ -570,30 +592,58 @@ public abstract class DAOTestTemplate
                   t_iColumnIndex < t_astrColumnNames.length;
                   t_iColumnIndex++)
             {
+<<<<<<< DAOTestTemplate.java
+                t_Formatter =
+                    t_TestNonNullableParametersValuesFormatter;
+
+                int t_iColumnType =
+                    metaDataManager.getColumnType(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                String t_strType =
+                    metaDataUtils.getNativeType(t_iColumnType);
+
+                boolean t_bAllowsNull =
+                    metaDataManager.allowsNull(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                if  (   (t_bAllowsNull)
+                     && (metaDataUtils.isPrimitive(t_iColumnType)))
+                {
+                    t_strType = metaDataUtils.getObjectType(t_iColumnType);
+
+                    t_Formatter =
+                        t_TestNullableParametersValuesFormatter;
+                }
+
                 t_bManagedExternally = 
                     metaDataManager.isManagedExternally(
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
                 if  (!t_bManagedExternally)
+=======
+                t_bManagedExternally = 
+                    metaDataManager.isManagedExternally(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                if  (!t_bManagedExternally)
+>>>>>>> 1.9
                 {
                     t_sbInsertTestParametersValues.append(
                         t_Formatter.format(
                             new Object[]
                             {
-                                metaDataUtils.getNativeType(
-                                    metaDataManager.getColumnType(
-                                        tableTemplate.getTableName(),
-                                        t_astrColumnNames[
-                                            t_iColumnIndex]))
-                                .toUpperCase()
+                                metaDataUtils.getNativeType(t_iColumnType)
+                                    .toUpperCase(),
+                                    t_strType
                             }));
 
                     t_sbInsertParametersTypes.append(
-                        metaDataUtils.getNativeType(
-                            metaDataManager.getColumnType(
-                                tableTemplate.getTableName(),
-                                t_astrColumnNames[t_iColumnIndex])));
+                        metaDataUtils.getNativeType(t_iColumnType));
 
                     if  (!metaDataManager.isPrimaryKey(
                              tableTemplate.getTableName(),
@@ -603,12 +653,9 @@ public abstract class DAOTestTemplate
                             t_TestParametersUpdatedValuesFormatter.format(
                                 new Object[]
                                 {
-                                    metaDataUtils.getNativeType(
-                                        metaDataManager.getColumnType(
-                                            tableTemplate.getTableName(),
-                                            t_astrColumnNames[
-                                                t_iColumnIndex]))
-                                    .toUpperCase()
+                                    metaDataUtils.getNativeType(t_iColumnType)
+                                        .toUpperCase(),
+                                    t_strType
                                 }));
 
                         t_sbUpdateParametersTypes.append(

@@ -35,6 +35,10 @@
  *
  * Description: Defines the default subtemplates used to generate DAO
  *              factories according to database metadata.
+<<<<<<< DAOFactoryTemplateDefaults.java
+ *
+=======
+>>>>>>> 1.6
  */
 package org.acmsl.queryj.tools.templates.dao;
 

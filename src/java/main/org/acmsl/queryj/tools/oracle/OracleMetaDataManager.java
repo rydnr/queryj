@@ -36,14 +36,6 @@
  *
  * Description: Manages the information metadata stored in an Oracle database.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.oracle;
 
@@ -91,7 +83,6 @@ import java.util.Map;
  * Manages the information metadata stored in an Oracle database.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class OracleMetaDataManager
     extends  DatabaseMetaDataManager

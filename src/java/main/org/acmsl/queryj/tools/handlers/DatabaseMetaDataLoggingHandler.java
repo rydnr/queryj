@@ -35,14 +35,6 @@
  *
  * Description: Prints trace messages with some database metadata information.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.handlers;
 
@@ -78,7 +70,6 @@ import java.util.Map;
  * Prints trace messages with some database metadata information.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DatabaseMetaDataLoggingHandler
     extends  AbstractAntCommandHandler

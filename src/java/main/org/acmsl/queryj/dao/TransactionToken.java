@@ -36,14 +36,6 @@
  * Description: Represents a transaction runtime environment. The one that
  *              created it manages the transaction.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.dao;
 
@@ -52,7 +44,6 @@ package org.acmsl.queryj.dao;
  * manages the transaction.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro Armendariz</a>
- * @version $Revision$
  */
 public interface TransactionToken
 {

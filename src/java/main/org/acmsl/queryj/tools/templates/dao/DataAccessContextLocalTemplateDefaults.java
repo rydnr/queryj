@@ -37,14 +37,6 @@
  *              the dataAccesContext-local file for declaring
  *              the transactional behaviour.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -53,7 +45,6 @@ package org.acmsl.queryj.tools.templates.dao;
  * for declaring the transactional behaviour.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface DataAccessContextLocalTemplateDefaults
 {

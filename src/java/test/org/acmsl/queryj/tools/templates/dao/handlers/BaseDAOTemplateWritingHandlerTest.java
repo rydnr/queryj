@@ -36,13 +36,6 @@ Spain
 * Description: Executes all tests defined for package
 *              unittests.org.acmsl.queryj.tools.templates.dao.handlers.
 *
-* Last modified by: $Author$ at $Date$
-*
-* File version: $Revision$
-*
-* Project version: $Name$
-*
-* $Id$
 */
 package unittests.org.acmsl.queryj.tools.templates.dao.handlers;
 
@@ -85,7 +78,6 @@ Boston, MA  02111-1307  USA
 
 /**
 * Tests BaseDAOTemplateWritingHandlerTest class.
-* @version $Revision$
 * @see org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateWritingHandler
 */
 public class BaseDAOTemplateWritingHandlerTest

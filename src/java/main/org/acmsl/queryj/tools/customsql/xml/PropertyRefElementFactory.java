@@ -36,14 +36,6 @@
  * Description: Is able to create sql.xml <property-ref> element instances
  *              from their attributes, while being parsed by Digester.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.customsql.xml;
 
@@ -70,7 +62,6 @@ import org.xml.sax.SAXException;
  * attributes, while being parsed by Digester.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class PropertyRefElementFactory
     extends  ElementFactory

@@ -36,6 +36,8 @@
  * Description: Defines the default subtemplates used to generate DAOChooser
  *              class according to database metadata.
  *
+<<<<<<< DAOChooserTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.4
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -57,7 +60,10 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * class according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< DAOChooserTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.4
  */
 public interface DAOChooserTemplateDefaults
     extends  JavaTemplateDefaults

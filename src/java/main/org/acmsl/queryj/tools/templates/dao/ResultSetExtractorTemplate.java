@@ -36,14 +36,6 @@
  * Description: Is able to create ResultSetExtractor implementation for each
  *              table in the persistence model.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -91,7 +83,6 @@ import java.util.Map;
  * table in the persistence model.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class ResultSetExtractorTemplate
     extends  AbstractResultSetExtractorTemplate
@@ -135,6 +126,8 @@ public class ResultSetExtractorTemplate
             DEFAULT_CLASS_START,
             DEFAULT_EXTRACT_DATA_METHOD,
             DEFAULT_VALUE_OBJECT_PROPERTIES_SPECIFICATION,
+            DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_SPECIFICATION,
+            DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_CHECK,
             DEFAULT_CLASS_END,
             project,
             task);
@@ -166,6 +159,8 @@ public class ResultSetExtractorTemplate
                 getClassStart(),
                 getExtractDataMethod(),
                 getValueObjectPropertiesSpecification(),
+                getValueObjectNullablePropertiesSpecification(),
+                getValueObjectNullablePropertiesCheck(),
                 getClassEnd(),
                 MetaDataUtils.getInstance(),
                 StringUtils.getInstance(),
@@ -195,6 +190,10 @@ public class ResultSetExtractorTemplate
      * @param extractDataMethod the extractData method.
      * @param valueObjectPropertiesSpecification the value object
      * properties specification.
+     * @param valueObjectNullablePropertiesSpecification the value object
+     * nullable properties specification.
+     * @param valueObjectNullablePropertiesCheck the value object
+     * nullable properties check.
      * @param classEnd the class end.
      * @param metaDataUtils the MetaDataUtils instance.
      * @param stringUtils the StringUtils instance.
@@ -229,6 +228,8 @@ public class ResultSetExtractorTemplate
         final String classStart,
         final String extractDataMethod,
         final String valueObjectPropertiesSpecification,
+        final String valueObjectNullablePropertiesSpecification,
+        final String valueObjectNullablePropertiesCheck,
         final String classEnd,
         final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
@@ -271,6 +272,13 @@ public class ResultSetExtractorTemplate
         MessageFormat t_ValueObjectPropertiesSpecificationFormatter =
             new MessageFormat(valueObjectPropertiesSpecification);
 
+        MessageFormat t_ValueObjectNullablePropertiesSpecificationFormatter =
+            new MessageFormat(valueObjectNullablePropertiesSpecification);
+
+        MessageFormat t_ValueObjectNullablePropertiesCheckFormatter =
+            new MessageFormat(valueObjectNullablePropertiesCheck);
+
+        StringBuffer t_sbValueObjectNullablePropertiesCheck = new StringBuffer();
         StringBuffer t_sbValueObjectPropertiesSpecification = new StringBuffer();
 
         t_sbResult.append(
@@ -327,18 +335,48 @@ public class ResultSetExtractorTemplate
                       t_iColumnIndex < t_astrColumnNames.length;
                       t_iColumnIndex++)
             {
+                int t_iColumnType =
+                    metaDataManager.getColumnType(
+                        t_strTableName,
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                String t_strObjectType =
+                    metaDataUtils.getObjectType(t_iColumnType);
+
+                String t_strFieldType =
+                    metaDataUtils.getFieldType(
+                        t_iColumnType,
+                        null,
+                        null);
+
+                Object[] t_aParams =
+                    new Object[]
+                    {
+                        t_strObjectType,
+                        t_strRepositoryName,
+                        t_strTableName.toUpperCase(),
+                        t_astrColumnNames[t_iColumnIndex].toUpperCase(),
+                        t_strFieldType
+                    };
+
+                MessageFormat t_Formatter =
+                    t_ValueObjectPropertiesSpecificationFormatter;
+
+                if  (   (metaDataUtils.isPrimitive(t_iColumnType))
+                     && (metaDataManager.allowsNull(
+                             t_strTableName,
+                             t_astrColumnNames[t_iColumnIndex])))
+                {
+                    t_Formatter =
+                        t_ValueObjectNullablePropertiesSpecificationFormatter;
+
+                    t_sbValueObjectNullablePropertiesCheck.append(
+                        t_ValueObjectNullablePropertiesCheckFormatter.format(
+                            t_aParams));
+                }
+
                 t_sbValueObjectPropertiesSpecification.append(
-                    t_ValueObjectPropertiesSpecificationFormatter.format(
-                        new Object[]
-                        {
-                            metaDataUtils.getObjectType(
-                                metaDataManager.getColumnType(
-                                    t_strTableName,
-                                    t_astrColumnNames[t_iColumnIndex])),
-                            t_strRepositoryName,
-                            t_strTableName.toUpperCase(),
-                            t_astrColumnNames[t_iColumnIndex].toUpperCase()
-                            }));
+                    t_Formatter.format(t_aParams));
 
                 if  (t_iColumnIndex < t_astrColumnNames.length - 1)
                 {
@@ -353,6 +391,7 @@ public class ResultSetExtractorTemplate
                         t_strCapitalizedValueObjectName,
                         stringUtils.unCapitalizeStart(
                             t_strCapitalizedValueObjectName),
+                        t_sbValueObjectNullablePropertiesCheck,
                         t_sbValueObjectPropertiesSpecification
                     }));
         }

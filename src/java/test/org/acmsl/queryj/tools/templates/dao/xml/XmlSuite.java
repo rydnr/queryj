@@ -36,13 +36,6 @@ Spain
 * Description: Executes all tests defined for package
 *              unittests.org.acmsl.queryj.tools.templates.dao.xml.
 *
-* Last modified by: $Author$ at $Date$
-*
-* File version: $Revision$
-*
-* Project version: $Name$
-*
-* $Id$
 */
 package unittests.org.acmsl.queryj.tools.templates.dao.xml;
 
@@ -90,7 +83,6 @@ Boston, MA  02111-1307  USA
 /**
 * Executes all tests defined for package
 * org.acmsl.queryj.tools.templates.dao.xml
-* @version $Revision$
 * @see org.acmsl.queryj.tools.templates.dao.xml
 */
 public class XmlSuite

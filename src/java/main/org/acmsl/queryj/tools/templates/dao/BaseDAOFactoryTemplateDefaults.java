@@ -36,6 +36,8 @@
  * Description: Defines the default subtemplates used to generate base DAO
  *              factories according to database metadata.
  *
+<<<<<<< BaseDAOFactoryTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.4
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -57,7 +60,10 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< BaseDAOFactoryTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.4
  */
 public interface BaseDAOFactoryTemplateDefaults
     extends  JavaTemplateDefaults

@@ -35,14 +35,6 @@
  *
  * Description: Indicates JUnit how to test UpdateQuery classes.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package unittests.org.acmsl.queryj;
 
@@ -65,7 +57,6 @@ import junit.framework.TestCase;
 /**
  * Indicates JUnit how to test UpdateQuery classes.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
  */
 public class UpdateQueryTest
     extends  TestCase

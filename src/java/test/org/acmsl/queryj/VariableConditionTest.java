@@ -35,14 +35,6 @@
  *
  * Description: Indicates JUnit how to test Condition classes.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package unittests.org.acmsl.queryj;
 
@@ -69,7 +61,6 @@ import junit.framework.TestCase;
 /**
  * Indicates JUnit how to test VariableCondition classes.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
  */
 public class VariableConditionTest
     extends  TestCase

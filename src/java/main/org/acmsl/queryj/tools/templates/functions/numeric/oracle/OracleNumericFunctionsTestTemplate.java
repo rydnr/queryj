@@ -36,14 +36,6 @@
  * Description: Is able to generate tests on Database's numeric functions.
  *              database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.numeric.oracle;
 
@@ -72,7 +64,6 @@ import java.util.Map;
  * Is able to generate tests on Database's numeric functions.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class OracleNumericFunctionsTestTemplate
     extends  NumericFunctionsTestTemplate

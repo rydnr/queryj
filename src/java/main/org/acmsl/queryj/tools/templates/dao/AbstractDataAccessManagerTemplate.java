@@ -36,14 +36,6 @@
  * Description: Contains the subtemplates used to generate DataAccessManager
  *              facade class according to database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -69,7 +61,6 @@ import java.util.List;
  * facade class according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractDataAccessManagerTemplate
     extends  AbstractTemplate

@@ -36,14 +36,6 @@
  * Description: Bundles the complete set of handlers related to NumericFunctions
  *              templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.numeric.handlers;
 
@@ -57,7 +49,6 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 /**
  * Bundles the complete set of handlers related to NumericFunctions templates.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
  */
 public class NumericFunctionsBundle
     extends  TemplateHandlerBundle

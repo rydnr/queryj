@@ -36,13 +36,6 @@ Spain
 * Description: Executes all tests defined for package
 *              unittests.org.acmsl.queryj.tools.customsql.
 *
-* Last modified by: $Author$ at $Date$
-*
-* File version: $Revision$
-*
-* Project version: $Name$
-*
-* $Id$
 */
 package unittests.org.acmsl.queryj.tools.customsql;
 
@@ -91,7 +84,6 @@ Boston, MA  02111-1307  USA
 /**
 * Executes all tests defined for package
 * org.acmsl.queryj.tools.customsql
-* @version $Revision$
 * @see org.acmsl.queryj.tools.customsql
 */
 public class CustomsqlSuite

@@ -36,6 +36,8 @@
  * Description: Defines the default subtemplates used to generate value object
  *              factories according to database metadata.
  *
+<<<<<<< ValueObjectFactoryTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.4
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -57,7 +60,10 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * factories according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< ValueObjectFactoryTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.4
  */
 public interface ValueObjectFactoryTemplateDefaults
     extends  JavaTemplateDefaults

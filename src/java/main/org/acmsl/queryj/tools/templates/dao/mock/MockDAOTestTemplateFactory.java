@@ -35,14 +35,6 @@
  *
  * Description: Is able to create Mock DAO test templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao.mock;
 
@@ -64,7 +56,6 @@ import org.apache.tools.ant.Task;
  * Is able to create Mock DAO test templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface MockDAOTestTemplateFactory
 {

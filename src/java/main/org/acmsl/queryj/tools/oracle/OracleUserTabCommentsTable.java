@@ -35,14 +35,6 @@
  *
  * Description: Represents the USER_TAB_COMMENTS table in the persistence domain.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.oracle;
 
@@ -66,7 +58,6 @@ import java.lang.ref.WeakReference;
 /**
  * Represents the USER_TAB_TABUMNS table in the persistence domain.
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
- * @version $Revision$
  */
 public class OracleUserTabCommentsTable
     extends  Table

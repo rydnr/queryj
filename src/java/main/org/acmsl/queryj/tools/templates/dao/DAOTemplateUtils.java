@@ -36,6 +36,8 @@
  * Description: Provides some useful methods when generating DAO classes
  *              via DAO template instances.
  *
+<<<<<<< DAOTemplateUtils.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.6
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -79,7 +82,10 @@ import java.util.Iterator;
  * via DAO template instances.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< DAOTemplateUtils.java
+=======
  * @version $Revision$
+>>>>>>> 1.6
  */
 public class DAOTemplateUtils
 {
@@ -724,8 +730,31 @@ public class DAOTemplateUtils
     {
         boolean result = false;
 
+<<<<<<< DAOTemplateUtils.java
         String t_strTableInLowerCase = tableName.trim().toLowerCase();
 
+        result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
+
+        if  (!result)
+        {
+            String t_strSingularName =
+                englishGrammarUtils.getSingular(t_strTableInLowerCase);
+
+            result = daoId.equalsIgnoreCase(t_strSingularName);
+        }
+=======
+        String t_strTableInLowerCase = tableName.trim().toLowerCase();
+>>>>>>> 1.6
+
+<<<<<<< DAOTemplateUtils.java
+        if  (!result)
+        {
+            String t_strPluralName =
+                englishGrammarUtils.getPlural(t_strTableInLowerCase);
+
+            result = daoId.equalsIgnoreCase(t_strPluralName);
+        }
+=======
         result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
 
         if  (!result)
@@ -743,6 +772,7 @@ public class DAOTemplateUtils
 
             result = daoId.equalsIgnoreCase(t_strPluralName);
         }
+>>>>>>> 1.6
 
         return result;
     }

@@ -35,14 +35,6 @@
  *
  * Description: Builds a procedure repository using database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.handlers;
 
@@ -78,7 +70,6 @@ import java.util.Map;
  * Builds a procedure repository using database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class ProcedureRepositoryTemplateBuildHandler
     extends    AbstractAntCommandHandler

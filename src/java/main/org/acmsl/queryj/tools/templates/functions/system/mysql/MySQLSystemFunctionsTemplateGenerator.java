@@ -35,14 +35,6 @@
  *
  * Description: Is able to generate MySQL's system function repositories.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.system.mysql;
 
@@ -82,7 +74,6 @@ import java.lang.ref.WeakReference;
  * Is able to generate MySQL's system function repositories.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class MySQLSystemFunctionsTemplateGenerator
     extends  SystemFunctionsTemplateGenerator

@@ -36,14 +36,6 @@
  * Description: Contains the subtemplates required to create abstract base
  *              JDBC DAO.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -64,7 +56,6 @@ import org.apache.tools.ant.Task;
  * Contains the subtemplates required to create abstract base JDBC DAO.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractJdbcDAOTemplate
     extends  AbstractTemplate

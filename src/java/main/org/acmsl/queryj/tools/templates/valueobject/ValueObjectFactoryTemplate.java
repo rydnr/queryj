@@ -35,15 +35,6 @@
  *
  * Description: Is able to generate value object factories according to
  *              database metadata.
- *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -61,6 +52,12 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -75,7 +72,6 @@ import java.util.Map;
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class ValueObjectFactoryTemplate
     extends  AbstractValueObjectFactoryTemplate
@@ -88,9 +84,11 @@ public class ValueObjectFactoryTemplate
      * @param metaDataManager the metadata manager.
      */
     public ValueObjectFactoryTemplate(
-        final String                  packageName,
-        final TableTemplate           tableTemplate,
-        final DatabaseMetaDataManager metaDataManager)
+        final String packageName,
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final Project project,
+        final Task task)
     {
         super(
             DEFAULT_HEADER,
@@ -109,198 +107,277 @@ public class ValueObjectFactoryTemplate
             DEFAULT_FACTORY_METHOD_FIELD_DECLARATION,
             DEFAULT_FACTORY_METHOD_VALUE_OBJECT_BUILD,
             DEFAULT_FACTORY_ALIAS_METHOD,
-            DEFAULT_CLASS_END);
+            DEFAULT_CLASS_END,
+            project,
+            task);
     }
 
     /**
      * Retrieves the source code of the generated value object factory.
      * @return such source code.
      */
-    public String toString()
+    protected String generateOutput()
+    {
+        return
+            generateOutput(
+                getTableTemplate(),
+                getMetaDataManager(),
+                getPackageName(),
+                getHeader(),
+                getPackageDeclaration(),
+                getProjectImports(),
+                getJdkImports(),
+                getJavadoc(),
+                getClassDefinition(),
+                getClassStart(),
+                getSingletonBody(),
+                getFactoryMethod(),
+                getFactoryAliasMethod(),
+                getFactoryMethodFieldJavadoc(),
+                getFactoryMethodFieldDefinition(),
+                getFactoryMethodValueObjectBuild(),
+                getClassEnd(),
+                MetaDataUtils.getInstance(),
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the source code of the generated value object factory.
+     * @param tableTemplate the table template.
+     * @param metaDataManager the <code>DatabaseMetaDataManager</code> instance.
+     * @param packageName the package name.
+     * @param header the header.
+     * @param packageDeclaration the package declaration.
+     * @param projectImports the project imports.
+     * @param jdkImports the JDK imports.
+     * @param javadoc the Javadoc.
+     * @param classDefinition the class definition.
+     * @param classStart the class start.
+     * @param singletonBody the singleton body.
+     * @param factoryMethod the factory method.
+     * @param factoryAliasMethod the factory alias method.
+     * @param factoryMethodFieldJavadoc the field Javadoc for the factory method.
+     * @param factoryMethodFieldDefinition the field definition for the factory
+     * method.
+     * @param factoryMethodValueObjectBuild the factory method value object build.
+     * @param classEnd the class end.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code> instance.
+     * @return such source code.
+     * @precondition tableTemplate != null
+     * @precondition metaDataManager != null
+     * @precondition packageName != null
+     * @precondition header != null
+     * @precondition packageDeclaration != null
+     * @precondition projectImports != null
+     * @precondition jdkImports != null
+     * @precondition javadoc != null
+     * @precondition classDefinition != null
+     * @precondition classStart != null
+     * @precondition singletonBody != null
+     * @precondition factoryMethod != null
+     * @precondition factoryAliasMethod != null
+     * @precondition factoryMethodFieldJavadoc != null
+     * @precondition factoryMethodFieldDefinition != null
+     * @precondition factoryMethodValueObjectBuild != null
+     * @precondition classEnd != null
+     * @precondition metaDataUtils != null
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     */
+    protected String generateOutput(
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String packageName,
+        final String header,
+        final String packageDeclaration,
+        final String projectImports,
+        final String jdkImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String singletonBody,
+        final String factoryMethod,
+        final String factoryAliasMethod,
+        final String factoryMethodFieldJavadoc,
+        final String factoryMethodFieldDefinition,
+        final String factoryMethodValueObjectBuild,
+        final String classEnd,
+        final MetaDataUtils metaDataUtils,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
-        StringUtils t_StringUtils = StringUtils.getInstance();
-
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
-
-        TableTemplate t_TableTemplate = getTableTemplate();
-
-        DatabaseMetaDataManager t_MetaDataManager = getMetaDataManager();
-
-        MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
-
-        if  (   (t_StringUtils     != null)
-             && (t_TableTemplate   != null)
-             && (t_MetaDataUtils   != null)
-             && (t_MetaDataManager != null))
-        {
-            MessageFormat t_Formatter = new MessageFormat(getHeader());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        t_TableTemplate.getTableName()
-                    }));
-
-            t_Formatter = new MessageFormat(getPackageDeclaration());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        getPackageName()
-                    }));
-
-            t_Formatter = new MessageFormat(getProjectImports());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        getPackageName(),
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_')
-                    }));
-
-            t_sbResult.append(getJdkImports());
-
-            t_Formatter = new MessageFormat(getJavadoc());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        t_TableTemplate.getTableName()
-                    }));
-
-            t_Formatter = new MessageFormat(getClassDefinition());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                            t_TableTemplate.getTableName().toLowerCase()),
-                            '_')
-                    }));
-
-            t_sbResult.append(getClassStart());
-
-            MessageFormat t_SingletonBodyFormatter =
-                new MessageFormat(getSingletonBody());
-
-            t_sbResult.append(
-                t_SingletonBodyFormatter.format(
-                    new Object[]
-                    {
-                        t_StringUtils.capitalize(
-                            t_EnglishGrammarUtils.getSingular(
-                                t_TableTemplate.getTableName().toLowerCase()),
-                            '_')
-                    }));
-
-            List t_lFields = t_TableTemplate.getFields();
-
-            MessageFormat t_FactoryMethodFormatter =
-                    new MessageFormat(getFactoryMethod());
-
-            MessageFormat t_FactoryAliasMethodFormatter =
-                    new MessageFormat(getFactoryAliasMethod());
-
-            if  (t_lFields != null)
-            {
-                Iterator t_itFields = t_lFields.iterator();
-
-                StringBuffer t_sbFactoryMethodFieldJavadoc = new StringBuffer();
-
-                MessageFormat t_FactoryMethodFieldJavadocFormatter =
-                    new MessageFormat(getFactoryMethodFieldJavadoc());
-
-                StringBuffer t_sbFactoryMethodFieldDefinition = new StringBuffer();
-
-                MessageFormat t_FactoryMethodFieldDefinitionFormatter =
-                    new MessageFormat(getFactoryMethodFieldDefinition());
-
-                StringBuffer t_sbFactoryMethodValueObjectBuild = new StringBuffer();
-
-                MessageFormat t_FactoryMethodValueObjectBuildFormatter =
-                    new MessageFormat(getFactoryMethodValueObjectBuild());
-
-                while  (t_itFields.hasNext()) 
+        MessageFormat t_Formatter = new MessageFormat(header);
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
                 {
-                    String t_strField = (String) t_itFields.next();
+                    tableTemplate.getTableName()
+                }));
 
-                    String t_strFieldType =
-                        t_MetaDataUtils.getNativeType(
-                            t_MetaDataManager.getColumnType(
-                                t_TableTemplate.getTableName(),
-                                t_strField));
+        t_Formatter = new MessageFormat(packageDeclaration);
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    packageName
+                }));
 
-                    t_sbFactoryMethodFieldJavadoc.append(
-                        t_FactoryMethodFieldJavadocFormatter.format(
-                            new Object[]
-                            {
+        t_Formatter = new MessageFormat(projectImports);
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    packageName,
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_')
+                }));
+
+        t_sbResult.append(jdkImports);
+
+        t_Formatter = new MessageFormat(javadoc);
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    tableTemplate.getTableName()
+                }));
+
+        t_Formatter = new MessageFormat(classDefinition);
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_')
+                }));
+
+        t_sbResult.append(classStart);
+
+        MessageFormat t_SingletonBodyFormatter =
+            new MessageFormat(singletonBody);
+
+        t_sbResult.append(
+            t_SingletonBodyFormatter.format(
+                new Object[]
+                {
+                    stringUtils.capitalize(
+                        englishGrammarUtils.getSingular(
+                            tableTemplate.getTableName().toLowerCase()),
+                        '_')
+                }));
+
+        List t_lFields = tableTemplate.getFields();
+
+        MessageFormat t_FactoryMethodFormatter =
+            new MessageFormat(factoryMethod);
+
+        MessageFormat t_FactoryAliasMethodFormatter =
+            new MessageFormat(factoryAliasMethod);
+
+        if  (t_lFields != null)
+        {
+            Iterator t_itFields = t_lFields.iterator();
+
+            StringBuffer t_sbFactoryMethodFieldJavadoc = new StringBuffer();
+
+            MessageFormat t_FactoryMethodFieldJavadocFormatter =
+                new MessageFormat(factoryMethodFieldJavadoc);
+
+            StringBuffer t_sbFactoryMethodFieldDefinition = new StringBuffer();
+
+            MessageFormat t_FactoryMethodFieldDefinitionFormatter =
+                new MessageFormat(factoryMethodFieldDefinition);
+
+            StringBuffer t_sbFactoryMethodValueObjectBuild = new StringBuffer();
+
+            MessageFormat t_FactoryMethodValueObjectBuildFormatter =
+                new MessageFormat(factoryMethodValueObjectBuild);
+
+            while  (t_itFields.hasNext()) 
+            {
+                String t_strField = (String) t_itFields.next();
+
+                String t_strFieldType =
+                    metaDataUtils.getNativeType(
+                        metaDataManager.getColumnType(
+                            tableTemplate.getTableName(),
+                            t_strField),
+                        metaDataManager.allowsNull(
+                            tableTemplate.getTableName(),
+                            t_strField));
+
+                t_sbFactoryMethodFieldJavadoc.append(
+                    t_FactoryMethodFieldJavadocFormatter.format(
+                        new Object[]
+                        {
+                            t_strField.toLowerCase(),
+                            t_strField
+                        }));
+
+                t_sbFactoryMethodFieldDefinition.append(
+                    t_FactoryMethodFieldDefinitionFormatter.format(
+                        new Object[]
+                        {
+                            t_strFieldType,
+                            t_strField.toLowerCase()
+                        }));
+
+                t_sbFactoryMethodValueObjectBuild.append(
+                    t_FactoryMethodValueObjectBuildFormatter.format(
+                        new Object[]
+                        {
+                            stringUtils.capitalize(
                                 t_strField.toLowerCase(),
-                                t_strField
-                            }));
+                                '_'),
+                            t_strField.toLowerCase()
+                        }));
 
-                    t_sbFactoryMethodFieldDefinition.append(
-                        t_FactoryMethodFieldDefinitionFormatter.format(
-                            new Object[]
-                            {
-                                t_strFieldType,
-                                t_strField.toLowerCase()
-                            }));
-
-                    t_sbFactoryMethodValueObjectBuild.append(
-                        t_FactoryMethodValueObjectBuildFormatter.format(
-                            new Object[]
-                            {
-                                t_StringUtils.capitalize(
-                                    t_strField.toLowerCase(),
-                                    '_'),
-                                t_strField.toLowerCase()
-                            }));
-
-                    if  (t_itFields.hasNext())
-                    {
-                        t_sbFactoryMethodFieldDefinition.append(",");
-                        t_sbFactoryMethodValueObjectBuild.append(",");
-                    }
+                if  (t_itFields.hasNext())
+                {
+                    t_sbFactoryMethodFieldDefinition.append(",");
+                    t_sbFactoryMethodValueObjectBuild.append(",");
                 }
-
-                t_sbResult.append(
-                    t_FactoryMethodFormatter.format(
-                        new Object[]
-                        {
-                            t_StringUtils.capitalize(
-                                t_EnglishGrammarUtils.getSingular(
-                                    t_TableTemplate.getTableName()
-                                        .toLowerCase()),
-                                '_'),
-                            t_sbFactoryMethodFieldJavadoc.toString(),
-                            t_sbFactoryMethodFieldDefinition.toString(),
-                            t_sbFactoryMethodValueObjectBuild.toString()
-                        }));
-
-                t_sbResult.append(
-                    t_FactoryAliasMethodFormatter.format(
-                        new Object[]
-                        {
-                            t_StringUtils.capitalize(
-                                t_EnglishGrammarUtils.getSingular(
-                                    t_TableTemplate.getTableName()
-                                        .toLowerCase()),
-                                '_'),
-                            t_sbFactoryMethodFieldJavadoc.toString(),
-                            t_sbFactoryMethodFieldDefinition.toString(),
-                            t_sbFactoryMethodValueObjectBuild.toString()
-                        }));
             }
 
-            t_sbResult.append(getClassEnd());
+            t_sbResult.append(
+                t_FactoryMethodFormatter.format(
+                    new Object[]
+                    {
+                        stringUtils.capitalize(
+                            englishGrammarUtils.getSingular(
+                                tableTemplate.getTableName()
+                                .toLowerCase()),
+                            '_'),
+                        t_sbFactoryMethodFieldJavadoc.toString(),
+                        t_sbFactoryMethodFieldDefinition.toString(),
+                        t_sbFactoryMethodValueObjectBuild.toString()
+                    }));
+
+            t_sbResult.append(
+                t_FactoryAliasMethodFormatter.format(
+                    new Object[]
+                    {
+                        stringUtils.capitalize(
+                            englishGrammarUtils.getSingular(
+                                tableTemplate.getTableName()
+                                .toLowerCase()),
+                            '_'),
+                        t_sbFactoryMethodFieldJavadoc.toString(),
+                        t_sbFactoryMethodFieldDefinition.toString(),
+                        t_sbFactoryMethodValueObjectBuild.toString()
+                    }));
         }
+
+        t_sbResult.append(classEnd);
 
         return t_sbResult.toString();
     }

@@ -35,14 +35,6 @@
  *
  * Description: Provides some useful methods when working with database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools;
 
@@ -74,7 +66,6 @@ import org.apache.commons.logging.LogFactory;
  * Provides some useful methods when working with database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class MetaDataUtils
 {
@@ -161,6 +152,18 @@ public class MetaDataUtils
      */
     public String getNativeType(final int dataType)
     {
+        return getNativeType(dataType, false);
+    }
+
+    /**
+     * Retrieves the native type of given data type.
+     * @param dataType the data type.
+     * @param allowsNull whether to allow null or not.
+     * @return the associated native type.
+     */
+    public String getNativeType(
+        final int dataType, final boolean allowsNull)
+    {
         String result = null;
 
         switch (dataType)
@@ -172,19 +175,19 @@ public class MetaDataUtils
             case Types.BIT:
             case Types.TINYINT:
             case Types.SMALLINT:
-                result = "int";
+                result = (allowsNull) ? "Integer" : "int";
                 break;
 
             case Types.INTEGER:
             case Types.BIGINT:
             case Types.NUMERIC:
-                result = "long";
+                result = (allowsNull) ? "Long" : "long";
                 break;
 
             case Types.REAL:
             case Types.FLOAT:
             case Types.DOUBLE:
-                result = "double";
+                result = (allowsNull) ? "Double" : "double";
                 break;
 
             case Types.TIME:
@@ -290,8 +293,8 @@ public class MetaDataUtils
         result.put("float"      , t_Double);
         result.put("double"     , t_Double);
         result.put("TIME"       , t_Time);
-        result.put("DATE"       , t_Time);
-        result.put("Date"       , t_Time);
+        result.put("DATE"       , t_TimeStamp);
+        result.put("Date"       , t_TimeStamp);
         result.put("TIMESTAMP"  , t_TimeStamp);
         result.put("Timestamp"  , t_TimeStamp);
         result.put("CHAR"       , t_Text);
@@ -349,8 +352,56 @@ public class MetaDataUtils
      * @param task the task, for logging purposes.
      * @return the QueryJ type.
      */
+    public String getStatementSetterFieldType(
+        final int dataType,
+        final Project project,
+        final Task task)
+    {
+        String result = null;
+
+        switch (dataType)
+        {
+            case Types.TIME:
+            case Types.DATE:
+            case Types.TIMESTAMP:
+            case 11:
+                result = "Timestamp";
+                break;
+
+            default:
+                result = getFieldType(dataType, project, task);
+                break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the type of given data type.
+     * @param dataType the data type.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return the QueryJ type.
+     */
     public String getFieldType(
         final int dataType,
+        final Project project,
+        final Task task)
+    {
+        return getFieldType(dataType, false, project, task);
+    }
+
+    /**
+     * Retrieves the type of given data type.
+     * @param dataType the data type.
+     * @param allowsNull whether the field allows null or not.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return the QueryJ type.
+     */
+    public String getFieldType(
+        final int dataType,
+        final boolean allowsNull,
         final Project project,
         final Task task)
     {
@@ -365,29 +416,27 @@ public class MetaDataUtils
             case Types.BIT:
             case Types.TINYINT:
             case Types.SMALLINT:
-                result = "int";
+                result = (allowsNull) ? "Integer": "int";
+
                 break;
 
             case Types.NUMERIC:
             case Types.INTEGER:
             case Types.BIGINT:
-                result = "long";
+                result = (allowsNull) ? "Long" : "long";
                 break;
 
             case Types.REAL:
             case Types.FLOAT:
             case Types.DOUBLE:
-                result = "double";
+                result = (allowsNull) ? "Double" : "double";
                 break;
 
             case Types.TIME:
             case Types.DATE:
+            case Types.TIMESTAMP:
             case 11:
                 result = "Date";
-                break;
-
-            case Types.TIMESTAMP:
-                result = "Timestamp";
                 break;
 
             case Types.CHAR:
@@ -863,6 +912,53 @@ public class MetaDataUtils
             case Types.BIT:
                 result = true;
                 break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if given data type represents integers.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as an
+     * integer.
+     */
+    public boolean isPrimitive(final int dataType)
+    {
+        boolean result = false;
+
+        switch (dataType)
+        {
+            case Types.BIT:
+            case Types.TINYINT:
+            case Types.SMALLINT:
+            case Types.INTEGER:
+            case Types.BIGINT:
+            case Types.REAL:
+            case Types.FLOAT:
+            case Types.DOUBLE:
+                result = true;
+                break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if given data type represents integers.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as an
+     * integer.
+     */
+    public boolean isPrimitiveWrapper(final String dataType)
+    {
+        boolean result = false;
+
+        if  (   ("Integer".equals(dataType))
+             || ("Long".equals(dataType))
+             || ("Double".equals(dataType)))
+        {
+            result = true;
         }
 
         return result;

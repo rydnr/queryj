@@ -36,14 +36,6 @@
  * Description: Contains all information regarding the tables to be managed by
  *              QueryJ task.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools;
 
@@ -69,7 +61,6 @@ import org.apache.tools.ant.DynamicConfigurator;
  * QueryJ task.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class AntTablesElement
     implements  DynamicConfigurator

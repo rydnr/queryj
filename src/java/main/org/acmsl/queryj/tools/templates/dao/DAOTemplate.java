@@ -36,6 +36,8 @@
  * Description: Is able to create engine-specific DAO interfaces for each
  *              table in the persistence model.
  *
+<<<<<<< DAOTemplate.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.35
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -105,7 +108,10 @@ import org.apache.commons.logging.LogFactory;
  * table in the persistence model.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< DAOTemplate.java
+=======
  * @version $Revision$
+>>>>>>> 1.35
  */
 public class DAOTemplate
     extends  AbstractDAOTemplate
@@ -165,6 +171,9 @@ public class DAOTemplate
             DEFAULT_CLASS_CONSTANTS,
             DEFAULT_CUSTOM_RESULT_SET_EXTRACTOR_CONSTANT,
             DEFAULT_CLASS_CONSTRUCTOR,
+            DEFAULT_FIND_BY_STATIC_FIELD_METHOD,
+            DEFAULT_FIND_BY_STATIC_FIELD_JAVADOC,
+            DEFAULT_FIND_BY_STATIC_FIELD_DECLARATION,
             DEFAULT_PK_JAVADOC,
             DEFAULT_ATTRIBUTE_JAVADOC,
             DEFAULT_ATTRIBUTE_DECLARATION,
@@ -243,6 +252,9 @@ public class DAOTemplate
                 getClassConstants(),
                 getCustomResultSetExtractorConstant(),
                 getClassConstructor(),
+                getFindByStaticFieldMethod(),
+                getFindByStaticFieldJavadoc(),
+                getFindByStaticFieldDeclaration(),
                 getPkJavadoc(),
                 getAttributeJavadoc(),
                 getAttributeDeclaration(),
@@ -322,6 +334,11 @@ public class DAOTemplate
      * @param customResultSetExtractorConstant the custom result set extractor
      * constant subtemplate.
      * @param classConstructor the class constructor.
+     * @param findByStaticFieldMethod the find-by-static-field method.
+     * @param findByStaticFieldJavadoc the field javadoc for
+     * find-by-static-field method.
+     * @param findByStaticFieldDeclaration the field declaration for
+     * find-by-static-field method.
      * @param pkJavadoc the pk javadoc subtemplate.
      * @param attributeJavadoc the attribute javadoc subtemplate.
      * @param attributeDeclaration the attribute declaration subtemplate.
@@ -426,6 +443,9 @@ public class DAOTemplate
         final String classConstants,
         final String customResultSetExtractorConstant,
         final String classConstructor,
+        final String findByStaticFieldMethod,
+        final String findByStaticFieldJavadoc,
+        final String findByStaticFieldDeclaration,
         final String pkJavadoc,
         final String attributeJavadoc,
         final String attributeDeclaration,
@@ -575,7 +595,8 @@ public class DAOTemplate
         StringBuffer t_sbFkFilter = new StringBuffer();
         StringBuffer t_sbPkStatementSetterCall = new StringBuffer();
         String t_strFkStatementSetterCall = "";
-        StringBuffer t_sbAttributesStatementSetterCall = new StringBuffer();
+        StringBuffer t_sbInsertAttributesStatementSetterCall = new StringBuffer();
+        StringBuffer t_sbUpdateAttributesStatementSetterCall = new StringBuffer();
         StringBuffer t_sbDeleteMethod = new StringBuffer();
         StringBuffer t_sbForeignDAODeleteCall = new StringBuffer();
         StringBuffer t_sbForeignDAOUpdateCall = new StringBuffer();
@@ -912,12 +933,141 @@ public class DAOTemplate
         String[] t_astrColumnNames =
             metaDataManager.getColumnNames(tableTemplate.getTableName());
 
+        String t_strTableComment =
+            metaDataManager.getTableComment(
+                tableTemplate.getTableName());
+
+        if  (t_strTableComment != null)
+        {
+            int t_iKeyIndex = t_strTableComment.lastIndexOf("@static");
+
+            if  (t_iKeyIndex >= 0)
+            {
+                MessageFormat t_FindByStaticFieldMethodFormatter =
+                    new MessageFormat(findByStaticFieldMethod);
+
+                MessageFormat t_FindByStaticFieldJavadocFormatter =
+                    new MessageFormat(findByStaticFieldJavadoc);
+
+                MessageFormat t_FindByStaticFieldDeclarationFormatter =
+                    new MessageFormat(findByStaticFieldDeclaration);
+
+                String t_strDescriptionColumn =
+                    t_strTableComment.substring(
+                        t_iKeyIndex + "@static".length()).trim();
+
+                String t_strFindByStaticFieldJavadoc =
+                    t_FindByStaticFieldJavadocFormatter.format(
+                        new Object[]
+                        {
+                            t_strDescriptionColumn.toLowerCase(),
+                            t_strDescriptionColumn
+                        });
+
+                String t_strFindByStaticFieldDeclaration =
+                    t_FindByStaticFieldDeclarationFormatter.format(
+                        new Object[]
+                        {
+                            metaDataUtils.getNativeType(
+                                metaDataManager.getColumnType(
+                                    tableTemplate.getTableName(),
+                                    t_strDescriptionColumn)),
+                            t_strDescriptionColumn.toLowerCase()
+                        });
+
+                t_sbResult.append(
+                    t_FindByStaticFieldMethodFormatter.format(
+                        new Object[]
+                        {
+                            tableTemplate.getTableName(),
+                            t_strDescriptionColumn,
+                            t_strFindByStaticFieldJavadoc,
+                            t_strCapitalizedValueObjectName,
+                            stringUtils.capitalize(
+                                t_strDescriptionColumn, '_'),
+                            t_strFindByStaticFieldDeclaration
+                        }));
+            }
+        }
         if  (t_astrColumnNames != null)
         {
             for  (int t_iColumnIndex = 0;
                       t_iColumnIndex < t_astrColumnNames.length;
                       t_iColumnIndex++)
             {
+<<<<<<< DAOTemplate.java
+                int t_iColumnType =
+                    metaDataManager.getColumnType(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                String t_strType =
+                    metaDataUtils.getNativeType(t_iColumnType);
+
+                boolean t_bAllowsNull =
+                    metaDataManager.allowsNull(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                if  (t_bAllowsNull)
+                {
+                    t_strType = metaDataUtils.getObjectType(t_iColumnType);
+                }
+
+                t_sbUpdateAttributesJavadoc.append(
+                    t_AttributeJavadocFormatter.format(
+                        new Object[]
+                        {
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                            t_astrColumnNames[t_iColumnIndex]
+                        }));
+
+                t_sbUpdateAttributesDeclaration.append(
+                    t_AttributeDeclarationFormatter.format(
+                        new Object[]
+                        {
+                            t_strType,
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                        }));
+
+                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                {
+                    t_sbUpdateAttributesDeclaration.append(",");
+                }
+
+                boolean t_bManagedExternally =
+                    metaDataManager.isManagedExternally(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                if  (t_bManagedExternally)
+                {
+                    t_sbExternallyManagedInsertParametersSpecification.append(
+                        t_ExternallyManagedInsertParametersSpecificationFormatter.format(
+                            new Object[]
+                            {
+                                t_strRepositoryName,
+                                tableTemplate.getTableName().toUpperCase(),
+                                t_astrColumnNames[t_iColumnIndex].toUpperCase(),
+                                metaDataManager.getKeyword(
+                                    tableTemplate.getTableName(),
+                                    t_astrColumnNames[t_iColumnIndex])
+                            }));
+
+                    t_sbUpdateAttributesStatementSetterCall.append(
+                        t_StatementSetterCallFormatter.format(
+                            new Object[]
+                            {
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                            }));
+
+                    if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                    {
+                        t_sbUpdateAttributesStatementSetterCall.append(",");
+                    }
+                }
+                else
+=======
                 t_sbUpdateAttributesJavadoc.append(
                     t_AttributeJavadocFormatter.format(
                         new Object[]
@@ -962,6 +1112,7 @@ public class DAOTemplate
                             }));
                 }
                 else
+>>>>>>> 1.35
                 {
                     t_sbAttributesJavadoc.append(
                         t_AttributeJavadocFormatter.format(
@@ -975,10 +1126,7 @@ public class DAOTemplate
                         t_AttributeDeclarationFormatter.format(
                             new Object[]
                             {
-                                metaDataUtils.getNativeType(
-                                    metaDataManager.getColumnType(
-                                        tableTemplate.getTableName(),
-                                        t_astrColumnNames[t_iColumnIndex])),
+                                t_strType,
                                 t_astrColumnNames[t_iColumnIndex].toLowerCase()
                             }));
 
@@ -997,7 +1145,14 @@ public class DAOTemplate
                                 t_astrColumnNames[t_iColumnIndex].toLowerCase()
                             }));
 
-                    t_sbAttributesStatementSetterCall.append(
+                    t_sbUpdateAttributesStatementSetterCall.append(
+                        t_StatementSetterCallFormatter.format(
+                            new Object[]
+                            {
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                            }));
+
+                    t_sbInsertAttributesStatementSetterCall.append(
                         t_StatementSetterCallFormatter.format(
                             new Object[]
                             {
@@ -1006,7 +1161,8 @@ public class DAOTemplate
 
                     if  (t_iColumnIndex < t_astrColumnNames.length - 1)
                     {
-                        t_sbAttributesStatementSetterCall.append(",");
+                        t_sbUpdateAttributesStatementSetterCall.append(",");
+                        t_sbInsertAttributesStatementSetterCall.append(",");
                     }
 
                     if  (!metaDataManager.isPrimaryKey(
@@ -1068,8 +1224,13 @@ public class DAOTemplate
                         t_sbInsertParametersSpecification,
                         t_sbAttributesJavadoc,
                         t_sbAttributesDeclaration,
+<<<<<<< DAOTemplate.java
+                        t_sbInsertAttributesStatementSetterCall,
+                        t_sbExternallyManagedInsertParametersSpecification
+=======
                         t_sbAttributesStatementSetterCall,
                         t_sbExternallyManagedInsertParametersSpecification
+>>>>>>> 1.35
                     }));
 
             t_sbResult.append(
@@ -1081,9 +1242,15 @@ public class DAOTemplate
                         tableTemplate.getTableName().toUpperCase(),
                         t_sbUpdateParametersSpecification,
                         t_sbPkFilter,
+<<<<<<< DAOTemplate.java
+                        t_sbUpdateAttributesJavadoc,
+                        t_sbUpdateAttributesDeclaration,
+                        t_sbUpdateAttributesStatementSetterCall
+=======
                         t_sbUpdateAttributesJavadoc,
                         t_sbUpdateAttributesDeclaration,
                         t_sbAttributesStatementSetterCall
+>>>>>>> 1.35
                     }));
                 
             t_sbDeleteMethod.append(

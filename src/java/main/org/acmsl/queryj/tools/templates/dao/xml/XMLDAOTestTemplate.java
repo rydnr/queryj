@@ -36,14 +36,6 @@
  * Description: Template for creating JUnit tests to ensure generated XML
  *              DAOs are working correctly.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao.xml;
 
@@ -86,7 +78,6 @@ import java.util.Map;
  * See <a href="bugzilla.acm-sl.org/show_bug.cgi?id=502">502</a>.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class XMLDAOTestTemplate
     extends  AbstractXMLDAOTestTemplate

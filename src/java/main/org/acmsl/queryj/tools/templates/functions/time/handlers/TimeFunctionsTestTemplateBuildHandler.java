@@ -35,14 +35,6 @@
  *
  * Description: Builds a time functions test template using database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.time.handlers;
 
@@ -87,7 +79,6 @@ import java.util.Map;
  * Builds a time functions test template using database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class TimeFunctionsTestTemplateBuildHandler
     extends    AbstractAntCommandHandler

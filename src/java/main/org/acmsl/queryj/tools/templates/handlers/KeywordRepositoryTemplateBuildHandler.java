@@ -35,14 +35,6 @@
  *
  * Description: Builds a keyword repository from declared keyword definition.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.handlers;
 
@@ -91,7 +83,6 @@ import java.util.Map;
  * Builds a keyword repository from declared keyword definition.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class KeywordRepositoryTemplateBuildHandler
     extends    AbstractAntCommandHandler

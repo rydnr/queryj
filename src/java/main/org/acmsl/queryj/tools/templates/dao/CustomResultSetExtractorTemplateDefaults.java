@@ -35,6 +35,10 @@
  *
  * Description: Defines the default subtemplates to generate custom
  *              resultset extractors.
+<<<<<<< CustomResultSetExtractorTemplateDefaults.java
+ *
+=======
+>>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -95,11 +99,11 @@ public interface CustomResultSetExtractorTemplateDefaults
         + " * Importing project-specific classes.\n"
         + " */\n"
          // Custom resultset extractors' imports
-        + "import {0}.{1}ValueObject;\n"
+        + "import {0};\n"
          // ValueObject package - Value object name
-        + "import {0}.{1}ValueObjectFactory;\n"
+        + "import {0}Factory;\n"
          // ValueObject package - Value object name
-        + "import {2}.{3}TableRepository;\n";
+        + "import {1}.{2}TableRepository;\n";
 
     /**
      * The ACM-SL imports.
@@ -199,12 +203,37 @@ public interface CustomResultSetExtractorTemplateDefaults
         + "        throws  SQLException,\n"
         + "                DataAccessException\n"
         + "    '{'\n"
+        + "        return\n"
+        + "            extractData(\n"
+        + "                resultSet, {0}Factory.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Extracts <i>{0}</i> information from given result set.\n"
+        + "     * @param resultSet the result set.\n"
+        + "     * @param factory the value object factory.\n"
+        + "     * @return the <code>{0}ValueObject</code> or <code>null</code>\n"
+        + "     * if the operation returned no data.\n"
+        + "     * @throws SQLException intercepted by <i>Spring</i>.\n"
+        + "     * @throws DataAccessException with information about any\n"
+        + "     * custom exception.\n"
+        + "     * @precondition resultSet != null\n"
+        + "     */\n"
+        + "    protected Object extractData(\n"
+        + "        final ResultSet resultSet,\n"
+        + "        final {0}Factory factory)\n"
+        + "        throws  SQLException,\n"
+        + "                DataAccessException\n"
+        + "    '{'\n"
         + "        {0} result = null;\n\n"
+        + "        Long t_LongAux = null;\n"
+        + "        Integer t_IntAux = null;\n"
+        + "        Double t_DoubleAux = null;\n\n"
         + "        if  (resultSet.next())\n"
         + "        '{'\n"
+        + "{1}"
         + "            result =\n"
-        + "                new {0}("
-        + "{1});\n"
+        + "                factory.create{0}("
+        + "{2});\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n";
@@ -212,7 +241,8 @@ public interface CustomResultSetExtractorTemplateDefaults
     /**
      * The <code>extractData</code> methods, for multiple results
      * @param 0 the value object name.
-     * @param 1 the value object properties specification.
+     * @param 1 the value object nullable properties check.
+     * @param 2 the value object properties specification.
      */
     public static final String DEFAULT_EXTRACT_DATA_METHOD_WITH_MULTIPLE_RESULTS =
           "     // <extract data>\n\n"
@@ -229,12 +259,38 @@ public interface CustomResultSetExtractorTemplateDefaults
         + "        throws  SQLException,\n"
         + "                DataAccessException\n"
         + "    '{'\n"
+        + "        return\n"
+        + "            extractData(\n"
+        + "                resultSet,\n"
+        + "                {0}Factory.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Extracts <i>{0}</i> information from given result set.\n"
+        + "     * @param resultSet the result set.\n"
+        + "     * @param factory the value object factory.\n"
+        + "     * @return the list of retrieved <code>{0}</code> instances.\n"
+        + "     * @throws SQLException intercepted by <i>Spring</i>.\n"
+        + "     * @throws DataAccessException with information about any\n"
+        + "     * custom exception.\n"
+        + "     * @precondition resultSet != null\n"
+        + "     * @precondition factory != null\n"
+        + "     */\n"
+        + "    protected Object extractData(\n"
+        + "        final ResultSet resultSet,\n"
+        + "        final {0}Factory factory)\n"
+        + "        throws  SQLException,\n"
+        + "                DataAccessException\n"
+        + "    '{'\n"
         + "        Collection result = new ArrayList();\n\n"
         + "        while  (resultSet.next())\n"
         + "        '{'\n"
+        + "            Long t_LongAux = null;\n"
+        + "            Integer t_IntAux = null;\n"
+        + "            Double t_DoubleAux = null;\n"
+        + "{1}"
         + "            result.add(\n"
-        + "                new {0}("
-        + "{1}));\n"
+        + "                factory.create{0}("
+        + "{2}));\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n";
@@ -242,11 +298,37 @@ public interface CustomResultSetExtractorTemplateDefaults
     /**
      * The value object properties specification.
      * @param 0 the property type.
-     * @param 1 the property name.
+     * @param 3 the property name.
      */
     public static final String DEFAULT_VALUE_OBJECT_PROPERTIES_SPECIFICATION =
           "\n                    resultSet.get{0}(\n"
-        + "                        \"{1}\")";
+        + "                        \"{3}\")";
+
+    /**
+     * The value object nullable properties check.
+     * @param 0 the property type.
+     * @param 1 the table repository name.
+     * @param 2 the table name.
+     * @param 3 the property name.
+     */
+    public static final String DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_CHECK =
+          "            t_{0}Aux =\n"
+        + "                new {0}(\n"
+        + "                    resultSet.get{0}(\n"
+        + "                        \"{3}\"));\n\n"
+        + "            if  (resultSet.wasNull())\n"
+        + "            '{'\n"
+        + "                t_{0}Aux = null;\n"
+        + "            '}'\n\n";
+
+
+    /**
+     * The value object nullable properties specification.
+     * @param 0 the property type.
+     * @param 4 the primitive type.
+     */
+    public static final String DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_SPECIFICATION =
+        "\n                    t_{0}Aux";
 
     /**
      * The default class end.

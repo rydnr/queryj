@@ -35,14 +35,6 @@
  *
  * Description: Builds a value object factory template using database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.valueobject.handlers;
 
@@ -62,6 +54,7 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.valueobject
     .ValueObjectFactoryTemplateGenerator;
 
@@ -69,6 +62,8 @@ import org.acmsl.queryj.tools.templates.valueobject
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -82,7 +77,6 @@ import java.util.Map;
  * Builds a value object template using database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class ValueObjectFactoryTemplateBuildHandler
     extends    AbstractAntCommandHandler
@@ -104,75 +98,114 @@ public class ValueObjectFactoryTemplateBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask());
+    }
+
+    /**
+     * Handles given command.
+     * @param attributes the attributes.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
+     */
+    protected boolean handle(
+        final Map attributes, final Project project, final Task task)
+        throws  BuildException
+    {
+        return
+            handle(
+                attributes,
+                retrieveDatabaseMetaData(attributes),
+                retrieveDatabaseMetaDataManager(attributes),
+                retrievePackage(attributes),
+                retrieveTableTemplates(attributes),
+                ValueObjectFactoryTemplateGenerator.getInstance(),
+                project,
+                task);
+    }
+
+    /**
+     * Handles given command.
+     * @param attributes the attributes.
+     * @param databaseMetaData the database metadata.
+     * @param metaDataManager the database metadata manager.
+     * @param packageName the package name.
+     * @param tableTemplates the table templates.
+     * @param factory the template factory.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition attributes != null
+     * @precondition databaseMetaData != null
+     * @precondition metaDataManager != null
+     * @precondition packageName != null
+     * @precondition tableTemplates != null
+     * @precondition factory != null
+     */
+    protected boolean handle(
+        final Map attributes,
+        final DatabaseMetaData metaData,
+        final DatabaseMetaDataManager metaDataManager,
+        final String packageName,
+        final TableTemplate[] tableTemplates,
+        final ValueObjectFactoryTemplateFactory factory,
+        final Project project,
+        final Task task)
+        throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try
         {
-            try
+            ValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
+                new ValueObjectFactoryTemplate[tableTemplates.length];
+
+            for  (int t_iValueObjectFactoryIndex = 0;
+                  t_iValueObjectFactoryIndex < t_aValueObjectFactoryTemplates.length;
+                  t_iValueObjectFactoryIndex++) 
             {
-                Map attributes = command.getAttributeMap();
+                String t_strQuote = metaData.getIdentifierQuoteString();
 
-                DatabaseMetaData t_MetaData =
-                    retrieveDatabaseMetaData(attributes);
-
-                DatabaseMetaDataManager t_MetaDataManager =
-                    retrieveDatabaseMetaDataManager(attributes);
-
-                String t_strPackage = retrievePackage(attributes);
-
-                ValueObjectFactoryTemplateGenerator t_ValueObjectFactoryTemplateGenerator =
-                    ValueObjectFactoryTemplateGenerator.getInstance();
-
-                if  (   (t_MetaData                            != null)
-                     && (t_MetaDataManager                     != null)
-                     && (t_ValueObjectFactoryTemplateGenerator != null))
+                if  (t_strQuote == null)
                 {
-                    TableTemplate[] t_aTableTemplates = retrieveTableTemplates(attributes);
-
-                    if  (t_aTableTemplates != null)
-                    {
-                        ValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
-                            new ValueObjectFactoryTemplate[t_aTableTemplates.length];
-
-                        for  (int t_iValueObjectFactoryIndex = 0;
-                                  t_iValueObjectFactoryIndex < t_aValueObjectFactoryTemplates.length;
-                                  t_iValueObjectFactoryIndex++) 
-                        {
-                            String t_strQuote = t_MetaData.getIdentifierQuoteString();
-
-                            if  (t_strQuote == null)
-                            {
-                                t_strQuote = "\"";
-                            }
-
-                            if  (t_strQuote.equals("\""))
-                            {
-                                t_strQuote = "\\\"";
-                            }
-
-                            t_aValueObjectFactoryTemplates[t_iValueObjectFactoryIndex] =
-                                t_ValueObjectFactoryTemplateGenerator.createValueObjectFactoryTemplate(
-                                    t_strPackage,
-                                    t_aTableTemplates[t_iValueObjectFactoryIndex],
-                                    t_MetaDataManager);
-                        }
-
-                        storeValueObjectFactoryTemplates(t_aValueObjectFactoryTemplates, attributes);
-                    }
+                    t_strQuote = "\"";
                 }
+
+                if  (t_strQuote.equals("\""))
+                {
+                    t_strQuote = "\\\"";
+                }
+
+                t_aValueObjectFactoryTemplates[t_iValueObjectFactoryIndex] =
+                    factory.createValueObjectFactoryTemplate(
+                        packageName,
+                        tableTemplates[t_iValueObjectFactoryIndex],
+                        metaDataManager,
+                        project,
+                        task);
             }
-            catch  (final SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-            catch  (final QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
+
+            storeValueObjectFactoryTemplates(t_aValueObjectFactoryTemplates, attributes);
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw new BuildException(sqlException);
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw new BuildException(queryjException);
         }
         
         return result;
@@ -183,22 +216,16 @@ public class ValueObjectFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the metadata.
      * @throws BuildException if the metadata retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected DatabaseMetaData retrieveDatabaseMetaData(
         final Map parameters)
       throws  BuildException
     {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
+        return
+            (DatabaseMetaData)
+                parameters.get(
+                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
     }
 
     /**
@@ -206,22 +233,16 @@ public class ValueObjectFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the manager.
      * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
         final Map parameters)
       throws  BuildException
     {
-        DatabaseMetaDataManager result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-        }
-        
-        return result;
+        return
+            (DatabaseMetaDataManager)
+                parameters.get(
+                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**
@@ -233,20 +254,26 @@ public class ValueObjectFactoryTemplateBuildHandler
     protected String retrievePackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
+        return
+            retrievePackage(parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveValueObjectFactoryPackage(
-                    (String)
-                        parameters.get(ParameterValidationHandler.PACKAGE));
-        }
-        
-        return result;
+    /**
+     * Retrieves the package name from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected String retrievePackage(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveValueObjectFactoryPackage(
+                (String) parameters.get(ParameterValidationHandler.PACKAGE));
     }
 
     /**
@@ -254,19 +281,17 @@ public class ValueObjectFactoryTemplateBuildHandler
      * @param valueObjectFactoryTemplates the value object factory templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition valueObjectFactoryTemplates != null
+     * @precondition parameters != null
      */
     protected void storeValueObjectFactoryTemplates(
         final ValueObjectFactoryTemplate[] valueObjectFactoryTemplates,
-        final Map                          parameters)
+        final Map parameters)
       throws  BuildException
     {
-        if  (   (valueObjectFactoryTemplates != null)
-             && (parameters                  != null))
-        {
-            parameters.put(
-                TemplateMappingManager.VALUE_OBJECT_FACTORY_TEMPLATES,
-                valueObjectFactoryTemplates);
-        }
+        parameters.put(
+            TemplateMappingManager.VALUE_OBJECT_FACTORY_TEMPLATES,
+            valueObjectFactoryTemplates);
     }
 
     /**
@@ -274,20 +299,14 @@ public class ValueObjectFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return such templates.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition parameters != null
      */
     protected TableTemplate[] retrieveTableTemplates(
         final Map parameters)
       throws  BuildException
     {
-        TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (TableTemplate[])
-                    parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-        }
-
-        return result;
+        return
+            (TableTemplate[])
+                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
     }
 }

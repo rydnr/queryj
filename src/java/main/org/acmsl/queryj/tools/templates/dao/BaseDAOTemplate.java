@@ -36,6 +36,8 @@
  * Description: Is able to create DAO interfaces for each table in the
  *              persistence model.
  *
+<<<<<<< BaseDAOTemplate.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.20
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -108,7 +111,10 @@ import org.apache.commons.logging.LogFactory;
  * persistence model.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< BaseDAOTemplate.java
+=======
  * @version $Revision$
+>>>>>>> 1.20
  */
 public class BaseDAOTemplate
     extends     AbstractBaseDAOTemplate
@@ -549,6 +555,7 @@ public class BaseDAOTemplate
                                         t_strCapitalizedValueObjectName,
                                         t_sbRecordPropertiesSpecification
                                     }));
+<<<<<<< BaseDAOTemplate.java
 
                             t_sbConstantArrayEntries.append(
                                 t_ConstantArrayEntryFormatter.format(
@@ -556,7 +563,63 @@ public class BaseDAOTemplate
                                     {
                                         toJavaConstant(t_strColumnName)
                                     }));
+
+                            if  (t_itEntries.hasNext())
+                            {
+                                t_sbConstantArrayEntries.append(", ");
+                            }
+=======
+
+                            t_sbConstantArrayEntries.append(
+                                t_ConstantArrayEntryFormatter.format(
+                                    new Object[]
+                                    {
+                                        toJavaConstant(t_strColumnName)
+                                    }));
+>>>>>>> 1.20
                         }
+<<<<<<< BaseDAOTemplate.java
+
+                        t_sbResult.append(
+                            t_ConstantArrayFormatter.format(
+                                new Object[]
+                                {
+                                    t_strCapitalizedValueObjectName,
+                                    t_sbConstantArrayEntries
+                                }));
+
+                        String t_strFindByStaticFieldJavadoc =
+                            t_FindByStaticFieldJavadocFormatter.format(
+                                new Object[]
+                                {
+                                    t_strDescriptionColumn.toLowerCase(),
+                                    t_strDescriptionColumn
+                                });
+
+                        String t_strFindByStaticFieldDeclaration =
+                            t_FindByStaticFieldDeclarationFormatter.format(
+                                new Object[]
+                                {
+                                    metaDataUtils.getNativeType(
+                                        metaDataManager.getColumnType(
+                                            tableTemplate.getTableName(),
+                                            t_strDescriptionColumn)),
+                                    t_strDescriptionColumn.toLowerCase()
+                                });
+
+                        t_sbResult.append(
+                            t_FindByStaticFieldMethodFormatter.format(
+                                new Object[]
+                                {
+                                    tableTemplate.getTableName(),
+                                    t_strDescriptionColumn,
+                                    t_strFindByStaticFieldJavadoc,
+                                    t_strCapitalizedValueObjectName,
+                                    stringUtils.capitalize(
+                                        t_strDescriptionColumn, '_'),
+                                    t_strFindByStaticFieldDeclaration
+                                }));
+=======
 
                         t_sbResult.append(
                             t_ConstantArrayFormatter.format(
@@ -595,6 +658,7 @@ public class BaseDAOTemplate
                                     t_strDescriptionColumn,
                                     t_strFindByStaticFieldDeclaration
                                 }));
+>>>>>>> 1.20
                     }
                 }
             }
@@ -748,6 +812,24 @@ public class BaseDAOTemplate
                       t_iColumnIndex < t_astrColumnNames.length;
                       t_iColumnIndex++)
             {
+                int t_iColumnType =
+                    metaDataManager.getColumnType(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                String t_strType =
+                    metaDataUtils.getNativeType(t_iColumnType);
+
+                boolean t_bAllowsNull =
+                    metaDataManager.allowsNull(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                if  (t_bAllowsNull)
+                {
+                    t_strType = metaDataUtils.getObjectType(t_iColumnType);
+                }
+
                 if  (!metaDataManager.isManagedExternally(
                          tableTemplate.getTableName(),
                          t_astrColumnNames[t_iColumnIndex]))
@@ -779,11 +861,7 @@ public class BaseDAOTemplate
                             t_InsertParametersDeclarationFormatter.format(
                                 new Object[]
                                 {
-                                    metaDataUtils.getNativeType(
-                                        metaDataManager.getColumnType(
-                                            tableTemplate.getTableName(),
-                                            t_astrColumnNames[
-                                                t_iColumnIndex])),
+                                    t_strType,
                                     t_astrColumnNames[t_iColumnIndex]
                                         .toLowerCase()
                                 }));
@@ -792,11 +870,7 @@ public class BaseDAOTemplate
                             t_UpdateParametersDeclarationFormatter.format(
                                 new Object[]
                                 {
-                                    metaDataUtils.getNativeType(
-                                        metaDataManager.getColumnType(
-                                            tableTemplate.getTableName(),
-                                            t_astrColumnNames[
-                                                t_iColumnIndex])),
+                                    t_strType,
                                     t_astrColumnNames[t_iColumnIndex]
                                         .toLowerCase()
                                 }));

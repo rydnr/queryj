@@ -35,14 +35,6 @@
  *
  * Description: Opens a JDBC connection.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.handlers;
 
@@ -80,7 +72,6 @@ import org.apache.commons.logging.LogFactory;
  * Opens a JDBC connection.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class JdbcConnectionOpeningHandler
     extends  AbstractAntCommandHandler

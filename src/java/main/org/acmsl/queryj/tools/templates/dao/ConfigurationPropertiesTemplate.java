@@ -36,14 +36,6 @@
  * Description: Is able to generate the configuration file for configuring
  *              DAOChooser.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -79,7 +71,6 @@ import java.util.Map;
  * DAOChooser.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class ConfigurationPropertiesTemplate
     extends  AbstractConfigurationPropertiesTemplate

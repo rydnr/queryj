@@ -35,14 +35,6 @@
  *
  * Description: Is able to read the contents contained in QueryJ's sql.xml files.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.customsql.xml;
 
@@ -100,7 +92,6 @@ import org.apache.commons.logging.LogFactory;
  * Is able to read the contents contained in QueryJ's sql.xml files.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class SqlXmlParser
     implements  CustomSqlProvider

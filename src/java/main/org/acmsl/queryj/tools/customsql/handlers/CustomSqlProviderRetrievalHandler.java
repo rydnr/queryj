@@ -35,14 +35,6 @@
  *
  * Description: Retrieves the CustomSqlProvider instance.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.customsql.handlers;
 
@@ -79,7 +71,6 @@ import java.util.Map;
  * Retrieves the CustomSqlProvider instance.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class CustomSqlProviderRetrievalHandler
     extends  AbstractAntCommandHandler

@@ -36,14 +36,6 @@
  * Description: Is able to generate QueryPreparedStatementCreator
  *              templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -79,7 +71,6 @@ import java.lang.ref.WeakReference;
  * Is able to generate QueryPreparedStatementCreator templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class QueryPreparedStatementCreatorTemplateGenerator
     implements  QueryPreparedStatementCreatorTemplateFactory

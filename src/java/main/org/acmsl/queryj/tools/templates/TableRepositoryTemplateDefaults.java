@@ -36,6 +36,8 @@
  * Description: Defines the default subtemplates used to generate table
  *              repositories according to database metadata.
  *
+<<<<<<< TableRepositoryTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -52,7 +55,10 @@ package org.acmsl.queryj.tools.templates;
  * according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< TableRepositoryTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.3
  */
 public interface TableRepositoryTemplateDefaults
     extends  JavaTemplateDefaults

@@ -35,14 +35,6 @@
  *
  * Description: Writes the system functions template.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.system.handlers;
 
@@ -75,7 +67,6 @@ import java.util.Map;
  * Writes the system functions template.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class SystemFunctionsTemplateWritingHandler
     extends    AbstractAntCommandHandler

@@ -35,14 +35,6 @@
  *
  * Description: Is able to create base DAO templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -65,7 +57,6 @@ import org.apache.tools.ant.Task;
  * Is able to create base DAO templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface BaseDAOTemplateFactory
 {

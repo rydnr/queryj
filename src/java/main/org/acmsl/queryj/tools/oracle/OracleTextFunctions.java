@@ -64,7 +64,6 @@ import java.util.Calendar;
  * Contains the text functions supported by Oracle Oracle8i Enterprise Edition
  * Release 8.1.7.0.1 - Production JServer Release 8.1.7.0.1 - Production.
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
- * @version $Revision$
  */
 public abstract class OracleTextFunctions
 {

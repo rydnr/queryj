@@ -36,6 +36,8 @@
  * Description: Contains the default subtemplates to generate procedure
  *              repositories according to database metadata.
  *
+<<<<<<< KeywordRepositoryTemplateDefaults.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -52,7 +55,10 @@ package org.acmsl.queryj.tools.templates;
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
+<<<<<<< KeywordRepositoryTemplateDefaults.java
+=======
  * @version $Revision$
+>>>>>>> 1.3
  */
 public interface KeywordRepositoryTemplateDefaults
     extends  JavaTemplateDefaults

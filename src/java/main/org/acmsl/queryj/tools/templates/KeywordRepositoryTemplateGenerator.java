@@ -36,14 +36,6 @@
  * Description: Is able to generate keyword repository templates according to
  *              keyword definition.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -77,7 +69,6 @@ import java.lang.ref.WeakReference;
  * keyword definition.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class KeywordRepositoryTemplateGenerator
     implements  KeywordRepositoryTemplateFactory

@@ -35,6 +35,10 @@
  *
  * Description: Defines the default subtemplates for creating JUnit tests
  *              to ensure generated XML DAOs are working correctly.
+<<<<<<< XMLDAOTestTemplateDefaults.java
+ *
+=======
+>>>>>>> 1.4
  */
 package org.acmsl.queryj.tools.templates.dao.xml;
 
@@ -48,8 +52,12 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * ensure generated XML DAOs are working correctly.
  * See <a href="bugzilla.acm-sl.org/show_bug.cgi?id=502">502</a>.
  * @author <a href="mailto:jsanleandro@yahoo.es"
+<<<<<<< XMLDAOTestTemplateDefaults.java
+ *         >Jose San Leandro</a>
+=======
  *         >Jose San Leandro</a>
  * @version $Revision$
+>>>>>>> 1.4
  */
 public interface XMLDAOTestTemplateDefaults
     extends  JavaTemplateDefaults

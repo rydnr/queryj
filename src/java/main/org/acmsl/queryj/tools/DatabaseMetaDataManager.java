@@ -36,6 +36,8 @@
  *
  * Description: Manages the information provided by database metadata.
  *
+<<<<<<< DatabaseMetaDataManager.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.11
  */
 package org.acmsl.queryj.tools;
 
@@ -79,7 +82,10 @@ import org.apache.tools.ant.Task;
  * Manages the information provided by database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
+<<<<<<< DatabaseMetaDataManager.java
+=======
  * @version $Revision$
+>>>>>>> 1.11
  */
 public class DatabaseMetaDataManager
 {

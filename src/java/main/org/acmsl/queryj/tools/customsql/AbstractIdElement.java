@@ -36,14 +36,6 @@
  * Description: Common parent to all <b>sql.xml</b> elements with <i>id</i>
  *              attributes.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.customsql;
 
@@ -57,7 +49,6 @@ import org.acmsl.queryj.tools.customsql.IdentifiableElement;
  * attributes.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractIdElement
     implements IdentifiableElement

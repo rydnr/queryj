@@ -35,14 +35,6 @@
  *
  * Description: Bundles a pair of template build and writing handlers.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.handlers;
 
@@ -64,7 +56,6 @@ import org.apache.tools.ant.BuildException;
 /**
  * Bundles a pair of template build and writing handlers.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$ at $Date$
  */
 public class TemplateHandlerBundle
     extends    CompositeAntCommandHandler

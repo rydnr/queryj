@@ -35,14 +35,6 @@
  *
  * Description: Provides some useful methods when generating DAOChooser class.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -55,7 +47,6 @@ import java.lang.ref.WeakReference;
  * Provides some useful methods when generating DAOChooser class.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DAOChooserTemplateUtils
 {

@@ -36,14 +36,6 @@
  * Description: Custom implementation of Digester's CallMethodRule, so that
  *              inner text body is not trimmed.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.customsql.xml;
 
@@ -57,7 +49,6 @@ import org.apache.commons.digester.CallMethodRule;
  * inner text body is not trimmed.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class UntrimmedCallMethodRule
     extends  CallMethodRule

@@ -36,6 +36,8 @@
  * Description: Is able to generate ValueObject implementations according to
  *              database metadata.
  *
+<<<<<<< ValueObjectTemplateGenerator.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -44,6 +46,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -84,7 +87,10 @@ import java.lang.ref.WeakReference;
  * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
+<<<<<<< ValueObjectTemplateGenerator.java
+=======
  * @version $Revision$
+>>>>>>> 1.5
  */
 public class ValueObjectTemplateGenerator
     implements  ValueObjectTemplateFactory

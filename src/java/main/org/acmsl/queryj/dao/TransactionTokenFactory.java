@@ -38,14 +38,6 @@
  *              refactored as an abstract factory as new technologies are
  *              supported.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.dao;
 
@@ -65,7 +57,6 @@ import javax.sql.DataSource;
  * factory as new technologies are supported.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro Armendariz</a>
- * @version $Revision$
  */
 public class TransactionTokenFactory
 {

@@ -35,14 +35,6 @@
  *
  * Description: Is able to generate Oracle's text function repositories.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions.text.oracle;
 
@@ -80,7 +72,6 @@ import java.lang.ref.WeakReference;
  * Is able to generate Oracle's text function repositories.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class OracleTextFunctionsTemplateGenerator
     extends  TextFunctionsTemplateGenerator

@@ -35,14 +35,6 @@
  *
  * Description: Represents conditions in SQL statements.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj;
 
@@ -56,7 +48,6 @@ import org.acmsl.queryj.Field;
  * Represents operators used inside conditions.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class ConditionOperator
 {

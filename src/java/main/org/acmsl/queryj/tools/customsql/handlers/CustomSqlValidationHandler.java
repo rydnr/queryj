@@ -35,6 +35,8 @@
  *
  * Description: Validates any custom sql queries.
  *
+<<<<<<< CustomSqlValidationHandler.java
+=======
  * Last modified by: $Author$ at $Date$
  *
  * File version: $Revision$
@@ -43,6 +45,7 @@
  *
  * $Id$
  *
+>>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.customsql.handlers;
 
@@ -99,7 +102,10 @@ import java.util.Map;
  * Validates any custom sql queries.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
+<<<<<<< CustomSqlValidationHandler.java
+=======
  * @version $Revision$
+>>>>>>> 1.3
  */
 public class CustomSqlValidationHandler
     extends  AbstractAntCommandHandler
@@ -452,6 +458,8 @@ public class CustomSqlValidationHandler
      throws  SQLException,
              BuildException
     {
+        BuildException exceptionToThrow = null;
+
         ParameterElement[] t_aParameters =
             retrieveParameterElements(sqlElement, customSqlProvider);
 
@@ -496,14 +504,22 @@ public class CustomSqlValidationHandler
                     // third try
                     try
                     {
-                        t_Type = Class.forName(t_strType);
+                        t_Type = Class.forName("java.sql." + t_strType);
                     }
-                    catch  (final ClassNotFoundException thirdClassNotFoundException)
+                    catch  (final ClassNotFoundException thirddClassNotFoundException)
                     {
-                        project.log(
-                            task,
-                            "Cannot find parameter class: " + t_strType,
-                            Project.MSG_WARN);
+                        // fourth try
+                        try
+                        {
+                            t_Type = Class.forName(t_strType);
+                        }
+                        catch  (final ClassNotFoundException fourthClassNotFoundException)
+                        {
+                            project.log(
+                                task,
+                                "Cannot find parameter class: " + t_strType,
+                                Project.MSG_WARN);
+                        }
                     }
                 }
             }
@@ -546,21 +562,53 @@ public class CustomSqlValidationHandler
                 }
                 catch  (final NoSuchMethodException noSuchMethodException)
                 {
-                    throw new BuildException(
-                        "Cannot bind parameter whose type is " + t_strType);
+                    exceptionToThrow =
+                        new BuildException(
+                            "Cannot bind parameter whose type is "
+                            + t_strType,
+                            noSuchMethodException);
                 }
 
                 try
                 {
                     Method t_ParameterMethod = null;
 
+<<<<<<< CustomSqlValidationHandler.java
+                    if  (   (   ("Date".equals(t_strType))
+                             || ("Timestamp".equals(t_strType)))
+                         && (t_Parameter.getValidationValue() != null))
+                    {
+                        t_ParameterValue = new Timestamp(new Date().getTime());
+                    }
+                    else
+=======
                     if  (   ("Date".equals(t_strType))
                          && (t_Parameter.getValidationValue() != null))
                     {
                         t_ParameterValue = new Timestamp(new Date().getTime());
                     }
                     else
+>>>>>>> 1.3
                     {
+<<<<<<< CustomSqlValidationHandler.java
+                        t_ParameterMethod =
+                            conversionUtils.getClass().getMethod(
+                                "to" + t_strType,
+                                CLASS_ARRAY_OF_ONE_STRING);
+
+                        if  (t_ParameterMethod != null)
+                        {
+                            t_ParameterValue =
+                                t_ParameterMethod.invoke(
+                                    conversionUtils,
+                                    new Object[]
+                                    {
+                                        t_Parameter.getValidationValue()
+                                    });
+
+                            exceptionToThrow = null;
+                        }
+=======
                         t_ParameterMethod =
                             conversionUtils.getClass().getMethod(
                                 "to" + t_strType,
@@ -576,6 +624,7 @@ public class CustomSqlValidationHandler
                                         t_Parameter.getValidationValue()
                                     });
                         }
+>>>>>>> 1.3
                     }
                 }
                 catch  (final NoSuchMethodException noSuchMethod)
@@ -624,55 +673,99 @@ public class CustomSqlValidationHandler
                         }
                         catch  (final NoSuchMethodException noSuchMethod)
                         {
-                            // no way
+                            exceptionToThrow =
+                                new BuildException(
+                                      "Cannot bind parameter whose type is "
+                                    + t_strType,
+                                    noSuchMethod);
                         }
-                        catch  (final SecurityException securityMethod)
+                        catch  (final SecurityException securityException)
                         {
-                            // no way
+                            exceptionToThrow =
+                                new BuildException(
+                                      "Cannot bind parameter whose type is "
+                                    + t_strType,
+                                    securityException);
                         }
                         catch  (final IllegalAccessException illegalAccessException)
                         {
-                            // no way
+                            exceptionToThrow =
+                                new BuildException(
+                                      "Cannot bind parameter whose type is "
+                                    + t_strType,
+                                    illegalAccessException);
                         }
                         catch  (final InstantiationException instantiationException)
                         {
-                            // no way
+                            exceptionToThrow =
+                                new BuildException(
+                                      "Cannot bind parameter whose type is "
+                                    + t_strType,
+                                    instantiationException);
                         }
                         catch  (final InvocationTargetException invocationTargetException)
                         {
-                            // no way
+                            exceptionToThrow =
+                                new BuildException(
+                                      "Cannot bind parameter whose type is "
+                                    + t_strType,
+                                    invocationTargetException);
                         }
                     }
                 }
 
-                try
+                if  (exceptionToThrow == null)
                 {
-                    t_Method.invoke(
-                        statement,
-                        new Object[]
-                        {
-                            new Integer(t_iParameterIndex + 1),
-                            t_ParameterValue
-                        });
-                            
+                    try
+                    {
+                        t_Method.invoke(
+                            statement,
+                            new Object[]
+                            {
+                                new Integer(t_iParameterIndex + 1),
+                                t_ParameterValue
+                            });
+                        
+                    }
+                    catch  (final IllegalAccessException illegalAccessException)
+                    {
+                        project.log(
+                            task,
+                            "Could not bind parameter via PreparedStatement.set"
+                            + t_strType + "(int, " + t_Type.getName() + ")",
+                            Project.MSG_WARN);
+
+                        exceptionToThrow =
+                            new BuildException(
+                                "Cannot bind parameter whose type is "
+                                + t_strType,
+                                illegalAccessException);
+                    }
+                    catch  (final InvocationTargetException invocationTargetException)
+                    {
+                        project.log(
+                            task,
+                            "Could not bind parameter via PreparedStatement.set"
+                            + t_strType + "(int, " + t_Type.getName() + ")",
+                            Project.MSG_WARN);
+
+                        exceptionToThrow =
+                            new BuildException(
+                                "Cannot bind parameter whose type is "
+                                + t_strType,
+                                invocationTargetException);
+                    }
                 }
-                catch  (final IllegalAccessException illegalAccessException)
+                else
                 {
-                    project.log(
-                        task,
-                          "Could not bind parameter via PreparedStatement.set"
-                        + t_strType + "(int, " + t_Type.getName() + ")",
-                        Project.MSG_WARN);
-                }
-                catch  (final InvocationTargetException invocationTargetException)
-                {
-                    project.log(
-                        task,
-                          "Could not bind parameter via PreparedStatement.set"
-                        + t_strType + "(int, " + t_Type.getName() + ")",
-                        Project.MSG_WARN);
+                    break;
                 }
             }
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw exceptionToThrow;
         }
     }
 
@@ -746,6 +839,53 @@ public class CustomSqlValidationHandler
                     JdbcConnectionOpeningHandler.JDBC_CONNECTION);
     }
 
+<<<<<<< CustomSqlValidationHandler.java
+    /**
+     * Retrieves the setter method name.
+     * @param type the data type.
+     * @return the associated setter method.
+     * @precondition type != null
+     */
+    protected String getSetterMethod(final String type)
+    {
+        return
+            getSetterMethod(
+                type, MetaDataUtils.getInstance(), StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the setter method name.
+     * @param type the data type.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the associated setter method.
+     * @precondition type != null
+     * @precondition metaDataUtils != null
+     * @precondition stringUtils != null
+     */
+    protected String getSetterMethod(
+        final String type,
+        final MetaDataUtils metaDataUtils,
+        final StringUtils stringUtils)
+    {
+        String result = "set";
+
+        if  (   ("Date".equals(type))
+             || ("Timestamp".equals(type)))
+        {
+            result += "Timestamp";
+        }
+        else
+        {
+            result +=
+                stringUtils.capitalize(
+                    metaDataUtils.getNativeType(
+                        metaDataUtils.getJavaType(type)), '|');
+        }
+
+        return result;
+    }
+=======
     /**
      * Retrieves the setter method name.
      * @param type the data type.
@@ -790,4 +930,5 @@ public class CustomSqlValidationHandler
 
         return result;
     }
+>>>>>>> 1.3
 }
