@@ -50,6 +50,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.templates.dao.handlers.AttributesStatementSetterTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.ConfigurationPropertiesTemplateHandlerBundle;
@@ -60,6 +61,7 @@ import org.acmsl.queryj.tools.templates.dao.handlers.DAOTestTemplateHandlerBundl
 import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.ResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOBundle;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
@@ -82,6 +84,7 @@ public class DAOBundle
         super(
             new TemplateHandlerBundle[]
             {
+                new AttributesStatementSetterTemplateHandlerBundle(),
                 new BaseDAOFactoryTemplateHandlerBundle(),
                 new BaseDAOTemplateHandlerBundle(),
                 new ConfigurationPropertiesTemplateHandlerBundle(),
@@ -92,6 +95,7 @@ public class DAOBundle
                 new DataAccessManagerTemplateHandlerBundle(),
                 new JdbcDAOTemplateHandlerBundle(),
                 new QueryPreparedStatementCreatorTemplateHandlerBundle(),
+                new ResultSetExtractorTemplateHandlerBundle(),
                 (includeMock ? new MockDAOBundle() : null),
                 (includeXML ? new XMLDAOBundle() : null)
             });

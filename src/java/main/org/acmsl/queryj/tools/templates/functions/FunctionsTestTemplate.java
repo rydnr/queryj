@@ -538,10 +538,30 @@ public abstract class FunctionsTestTemplate
     }
 
     /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return buildHeader(getClassDescription());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param type the type.
+     * @return such header.
+     * @precondition type != null
+     */
+    protected String buildHeader(final String type)
+    {
+        return "Generating " + type + " test functions template.";
+    }
+
+    /**
      * Retrieves the source code of the generated numeric functions test.
      * @return such source code.
      */
-    public String toString()
+    protected String generateOutput()
     {
         StringBuffer t_sbResult = new StringBuffer();
 

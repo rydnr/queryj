@@ -64,7 +64,6 @@ import org.apache.tools.ant.Task;
  * Represents entities able to create DAO factory templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface DAOFactoryTemplateFactory
 {

@@ -334,7 +334,7 @@ public class TextFunctionsTestTemplateGenerator
                       outputDir.getAbsolutePath()
                     + File.separator
                     + "TextFunctionsTest.java",
-                    textFunctionsTestTemplate.toString());
+                    textFunctionsTestTemplate.generate());
             }
         }
     }

@@ -1119,6 +1119,26 @@ public abstract class FunctionsTemplate
     }
 
     /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    protected String buildHeader()
+    {
+        return buildHeader(getClassDescription());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param type the type.
+     * @return such header.
+     * @precondition type != null
+     */
+    protected String buildHeader(final String type)
+    {
+        return "Generating " + type + " functions template.";
+    }
+
+    /**
      * Retrieves the source code of the generated field tableName.
      * @return such source code.
      */

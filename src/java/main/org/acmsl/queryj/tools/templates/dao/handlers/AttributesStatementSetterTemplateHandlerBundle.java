@@ -33,54 +33,47 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create base DAO templates.
+ * Description: Bundles a pair of AttributesStatementSetter template
+ *              build and writing handlers.
  *
+ * Last modified by: $Author$ at $Date$
  *
+ * File version: $Revision$
  *
  * Project version: $Name$
  *
+ * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.dao.handlers;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+import org.acmsl.queryj.tools.templates.dao.handlers.AttributesStatementSetterTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.handlers.AttributesStatementSetterTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Is able to create base DAO templates.
- * @author <a href="mailto:jsanleandro@yahoo.es"
- *         >Jose San Leandro</a>
+ * Bundles a pair of AttributesStatementSetter template build and writing
+ * handlers.
+ * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
+ * @version $Revision$
  */
-public interface BaseDAOTemplateFactory
+public class AttributesStatementSetterTemplateHandlerBundle
+    extends  TemplateHandlerBundle
 {
     /**
-     * Generates a BaseDAO template.
-     * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
-     * @param packageName the package name.
-     * @param valueObjectPackageName the value object package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
+     * Builds a bundle with given handlers.
+     * @param buildHandler the template build handler.
+     * @param writingHandler the writing handler.
+     * @precondition buildHandler != null
+     * @precondition writingHandler != null
      */
-    public BaseDAOTemplate createBaseDAOTemplate(
-        final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
-        final String packageName,
-        final String valueObjectPackageName,
-        final Project project,
-        final Task task)
-      throws  QueryJException;
+    public AttributesStatementSetterTemplateHandlerBundle()
+    {
+        super(
+            new AttributesStatementSetterTemplateBuildHandler(),
+            new AttributesStatementSetterTemplateWritingHandler());
+    }
 }

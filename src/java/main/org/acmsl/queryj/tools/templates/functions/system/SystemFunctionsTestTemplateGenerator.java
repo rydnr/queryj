@@ -331,7 +331,7 @@ public class SystemFunctionsTestTemplateGenerator
                       outputDir.getAbsolutePath()
                     + File.separator
                     + "SystemFunctionsTest.java",
-                    systemFunctionsTestTemplate.toString());
+                    systemFunctionsTestTemplate.generate());
             }
         }
     }

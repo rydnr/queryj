@@ -58,12 +58,15 @@ import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.TableTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -100,84 +103,124 @@ public class TableTemplateBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        boolean result = false;
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask());
+    }
 
-        if  (command != null) 
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     */
+    protected boolean handle(
+        final Map parameters,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
+        handle(
+            parameters,
+            retrieveDatabaseMetaDataManager(parameters),
+            retrieveTablePackage(parameters),
+            TableTemplateGenerator.getInstance(),
+            MetaDataUtils.getInstance(),
+            project,
+            task);
+
+        return false;
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param databaseMetaDataManager the database metadata manager.
+     * @param tablePackage the table package.
+     * @param templateFactory the template factory.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition databaseMetaDataManager != null
+     * @precondition tablePackage != null
+     * @precondition templateFactory != null
+     * @precondition metaDataUtils != null
+     */
+    protected void handle(
+        final Map parameters,
+        final DatabaseMetaDataManager metaDataManager,
+        final String packageName,
+        final TableTemplateFactory templateFactory,
+        final MetaDataUtils metaDataUtils,
+        final Project project,
+        final Task task)
+      throws  BuildException
+    {
+        String[] t_astrTableNames = metaDataManager.getTableNames();
+
+        String[] t_astrColumnNames = null;
+
+        int t_iColumnType = -1;
+
+        if  (t_astrTableNames != null) 
         {
-            Map attributes = command.getAttributeMap();
+            TableTemplate[] t_aTableTemplates =
+                new TableTemplate[t_astrTableNames.length];
 
-            DatabaseMetaDataManager t_MetaDataManager =
-                retrieveDatabaseMetaDataManager(attributes);
-
-            String t_strPackage = retrieveTablePackage(attributes);
-
-            TableTemplateGenerator t_TableTemplateGenerator =
-                TableTemplateGenerator.getInstance();
-
-            MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
-
-            if  (   (t_MetaDataManager        != null)
-                 && (t_TableTemplateGenerator != null)
-                 && (t_MetaDataUtils          != null))
+            for  (int t_iTableIndex = 0;
+                      t_iTableIndex < t_astrTableNames.length;
+                      t_iTableIndex++) 
             {
-                String[] t_astrTableNames = t_MetaDataManager.getTableNames();
+                t_aTableTemplates[t_iTableIndex] =
+                    templateFactory.createTableTemplate(
+                        packageName,
+                        t_astrTableNames[t_iTableIndex],
+                        project,
+                        task);
 
-                String[] t_astrColumnNames = null;
+                t_astrColumnNames =
+                    metaDataManager.getColumnNames(
+                        t_astrTableNames[t_iTableIndex]);
 
-                int t_iColumnType = -1;
-
-                if  (t_astrTableNames != null) 
+                if  (t_astrColumnNames != null) 
                 {
-                    TableTemplate[] t_aTableTemplates =
-                        new TableTemplate[t_astrTableNames.length];
-
-                    for  (int t_iTableIndex = 0;
-                              t_iTableIndex < t_astrTableNames.length;
-                              t_iTableIndex++) 
+                    for  (int t_iColumnIndex = 0;
+                              t_iColumnIndex < t_astrColumnNames.length;
+                              t_iColumnIndex++) 
                     {
-                        t_aTableTemplates[t_iTableIndex] =
-                            t_TableTemplateGenerator.createTableTemplate(
-                                t_strPackage,
+                        t_aTableTemplates[t_iTableIndex].addField(
+                            t_astrColumnNames[t_iColumnIndex]);
+
+                        t_iColumnType =
+                            metaDataManager.getColumnType(
                                 t_astrTableNames[t_iTableIndex],
-                                command.getProject(),
-                                command.getTask());
+                                t_astrColumnNames[t_iColumnIndex]);
 
-                        t_astrColumnNames =
-                            t_MetaDataManager.getColumnNames(
-                                t_astrTableNames[t_iTableIndex]);
-
-                        if  (t_astrColumnNames != null) 
-                        {
-                            for  (int t_iColumnIndex = 0;
-                                      t_iColumnIndex < t_astrColumnNames.length;
-                                      t_iColumnIndex++) 
-                            {
-                                t_aTableTemplates[t_iTableIndex].addField(
-                                    t_astrColumnNames[t_iColumnIndex]);
-
-                                t_iColumnType =
-                                    t_MetaDataManager.getColumnType(
-                                        t_astrTableNames[t_iTableIndex],
-                                        t_astrColumnNames[t_iColumnIndex]);
-
-                                t_aTableTemplates[t_iTableIndex].addFieldType(
-                                    t_astrColumnNames[t_iColumnIndex],
-                                    t_MetaDataUtils.getQueryJFieldType(t_iColumnType));
-                            }
-                        }
+                        t_aTableTemplates[t_iTableIndex].addFieldType(
+                            t_astrColumnNames[t_iColumnIndex],
+                            metaDataUtils.getQueryJFieldType(
+                                t_iColumnType,
+                                project,
+                                task));
                     }
-
-                    storeTableNames(t_astrTableNames, attributes);
-                    storeTableTemplates(t_aTableTemplates, attributes);
                 }
             }
+
+            storeTableNames(t_astrTableNames, parameters);
+            storeTableTemplates(t_aTableTemplates, parameters);
         }
-        
-        return result;
     }
 
     /**
@@ -185,10 +228,11 @@ public class TableTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the manager instance.
      * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
         DatabaseMetaDataManager result = null;
 
@@ -208,19 +252,12 @@ public class TableTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveProjectPackage(Map parameters)
+    protected String retrieveProjectPackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**
@@ -228,23 +265,30 @@ public class TableTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveTablePackage(Map parameters)
+    protected String retrieveTablePackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
+        return retrieveTablePackage(parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveTablePackage(
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+    /**
+     * Retrieves the table package name from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected String retrieveTablePackage(
+        final Map parameters, final PackageUtils packageUtils)
+        throws  BuildException
+    {
+        return
+            packageUtils.retrieveTablePackage(
+                retrieveProjectPackage(parameters));
     }
 
     /**
@@ -252,17 +296,15 @@ public class TableTemplateBuildHandler
      * @param tableNames the table names.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition tableNames != null
+     * @precondition parameters != null
      */
     protected void storeTableNames(
-            String[] tableNames,
-            Map      parameters)
-        throws  BuildException
+        final String[] tableNames,
+        final Map parameters)
+      throws  BuildException
     {
-        if  (   (tableNames != null)
-             && (parameters != null))
-        {
-            parameters.put(TABLE_NAMES, tableNames);
-        }
+        parameters.put(TABLE_NAMES, tableNames);
     }
 
     /**
@@ -270,16 +312,14 @@ public class TableTemplateBuildHandler
      * @param tableTemplates the table templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition tableTemplates != null
+     * @precondition parameters != null
      */
     protected void storeTableTemplates(
-            TableTemplate[] tableTemplates,
-            Map             parameters)
+        final TableTemplate[] tableTemplates,
+        final Map parameters)
         throws  BuildException
     {
-        if  (   (tableTemplates != null)
-             && (parameters     != null))
-        {
-            parameters.put(TABLE_TEMPLATES, tableTemplates);
-        }
+        parameters.put(TABLE_TEMPLATES, tableTemplates);
     }
 }

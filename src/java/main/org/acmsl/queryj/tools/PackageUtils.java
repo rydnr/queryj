@@ -50,6 +50,7 @@ package org.acmsl.queryj.tools;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
 
@@ -527,18 +528,15 @@ public class PackageUtils
      * @param packageName the original package.
      * @param engineName the DAO engine.
      * @return the package for the associated DAO class.
+     * @precondition packageName != null
+     * @precondition engineName != null
      */
     public String retrieveDAOPackage(
         final String packageName, final String engineName)
     {
-        String result = retrieveRdbPackage(packageName);
-
-        if  (engineName != null)
-        {
-            result = retrievePackage(result, engineName.toLowerCase());
-        }
-
-        return result;
+        return
+            retrievePackage(
+                retrieveRdbPackage(packageName), engineName.toLowerCase());
     }
 
     /**
@@ -548,22 +546,19 @@ public class PackageUtils
      * @param engineName the DAO engine.
      * @return the folder in which  the associated DAO class should be
      * generated.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     * @precondition engineName != null
      */
     public File retrieveDAOFolder(
         final File parentFolder,
         final String packageName,
         final String engineName)
     {
-        File result = retrieveRdbFolder(parentFolder, packageName);
-
-        if  (engineName != null)
-        {
-            result =
-                retrieveFolder(
-                    result, engineName.toLowerCase());
-        }
-
-        return result;
+        return
+            retrieveFolder(
+                retrieveRdbFolder(parentFolder, packageName),
+                engineName.toLowerCase());
     }
 
     /**
@@ -1010,7 +1005,7 @@ public class PackageUtils
     /**
      * Retrieves the package name for the JDBC operation classes.
      * @param packageName the original package.
-     * @param engineName the DAO engine.
+     * @param engineName the engine.
      * @param tableName the table name.
      * @return the package for the associated pointers.
      * @precondition packageName != null
@@ -1023,17 +1018,51 @@ public class PackageUtils
         final String tableName)
     {
         return
+            retrieveJdbcOperationsPackage(
+                packageName,
+                engineName,
+                tableName,
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the package name for the JDBC operation classes.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param tableName the table name.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @return the package for the associated pointers.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     */
+    public String retrieveJdbcOperationsPackage(
+        final String packageName,
+        final String engineName,
+        final String tableName,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils)
+    {
+        return
             retrievePackage(
                 retrieveDAOPackage(
                     packageName, engineName),
-                tableName.toLowerCase());
+                englishGrammarUtils.getSingular(
+                    stringUtils.capitalize(
+                        tableName.toLowerCase(),
+                        '_').toLowerCase()));
     }
 
     /**
      * Retrieves the folder for the JDBC operation classes.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param engineName the DAO engine.
+     * @param engineName the engine.
      * @param tableName the table name.
      * @return the folder for the associated pointers.
      * @precondition parentFolder != null
@@ -1048,10 +1077,157 @@ public class PackageUtils
         final String tableName)
     {
         return
+            retrieveJdbcOperationsFolder(
+                parentFolder,
+                packageName,
+                engineName,
+                tableName,
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the folder for the JDBC operation classes.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param tableName the table name.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @return the folder for the associated pointers.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     */
+    public File retrieveJdbcOperationsFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final String tableName,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils)
+    {
+        return
             retrieveFolder(
                 retrieveDAOFolder(
                     parentFolder, packageName, engineName),
-                tableName.toLowerCase());
+                englishGrammarUtils.getSingular(
+                    stringUtils.capitalize(
+                        tableName.toLowerCase(),
+                        '_')).toLowerCase());
+    }
+
+    /**
+     * Retrieves the package name for QueryPreparedStatementCreator class.
+     * @param packageName the original package.
+     * @return the package for such class.
+     */
+    public String retrieveQueryPreparedStatementCreatorPackage(final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for QueryPreparedStatementCreator class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveQueryPreparedStatementCreatorFolder(
+        final File parentFolder, final String packageName)
+    {
+        return retrieveRdbFolder(parentFolder, packageName);
+    }
+
+    /**
+     * Retrieves the package name for the ResultSetExtractor classes.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param tableName the table name.
+     * @return the package for the associated classes.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
+     */
+    public String retrieveResultSetExtractorPackage(
+        final String packageName,
+        final String engineName,
+        final String tableName)
+    {
+        return
+            retrieveJdbcOperationsPackage(
+                packageName, engineName, tableName);
+    }
+
+    /**
+     * Retrieves the folder for the ResultSetExtractor classes.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param tableName the table name.
+     * @return the folder for the associated pointers.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
+     */
+    public File retrieveResultSetExtractorFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final String tableName)
+    {
+        return
+            retrieveJdbcOperationsFolder(
+                parentFolder, packageName, engineName, tableName);
+    }
+
+    /**
+     * Retrieves the package name for the AttributesStatementSetter classes.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param tableName the table name.
+     * @return the package for the associated classes.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
+     */
+    public String retrieveAttributesStatementSetterPackage(
+        final String packageName,
+        final String engineName,
+        final String tableName)
+    {
+        return
+            retrieveJdbcOperationsPackage(
+                packageName, engineName, tableName);
+    }
+
+    /**
+     * Retrieves the folder for the AttributesStatementSetter classes.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param tableName the table name.
+     * @return the folder for the associated pointers.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition tableName != null
+     */
+    public File retrieveAttributesStatementSetterFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final String tableName)
+    {
+        return
+            retrieveJdbcOperationsFolder(
+                parentFolder, packageName, engineName, tableName);
     }
 
     /**

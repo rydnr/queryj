@@ -277,6 +277,18 @@ public abstract class TemplateMappingManager
         "query.prepared.statement.creator.template";
 
     /**
+     * The ResultSetExtractor template type.
+     */
+    public static final String RESULTSET_EXTRACTOR_TEMPLATES =
+        "resultset.extractor.templates";
+
+    /**
+     * The AttributesStatementSetter template type.
+     */
+    public static final String ATTRIBUTES_STATEMENT_SETTER_TEMPLATES =
+        "attributes.statement.setter.templates";
+
+    /**
      * The Mock DAO template prefix.
      */
     public static final String MOCK_DAO_TEMPLATE_PREFIX = "mock.dao.";

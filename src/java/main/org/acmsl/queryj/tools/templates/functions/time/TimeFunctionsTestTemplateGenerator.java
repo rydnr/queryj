@@ -488,7 +488,7 @@ public class TimeFunctionsTestTemplateGenerator
                       outputDir.getAbsolutePath()
                     + File.separator
                     + "TimeFunctionsTest.java",
-                    timeFunctionsTestTemplate.toString());
+                    timeFunctionsTestTemplate.generate());
             }
         }
     }

@@ -35,13 +35,7 @@
  *
  * Description: Is able to create time function templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
  * Project version: $Name$
- *
- * $Id$
  *
  */
 package org.acmsl.queryj.tools.templates.functions.time;
@@ -63,7 +57,6 @@ import org.apache.tools.ant.Task;
  * Is able to create time function templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface TimeFunctionsTemplateFactory
     extends  TemplateFactory

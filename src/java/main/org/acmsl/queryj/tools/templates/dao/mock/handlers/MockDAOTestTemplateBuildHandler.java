@@ -35,13 +35,7 @@
  *
  * Description: Builds a Mock DAO test template using database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
  * Project version: $Name$
- *
- * $Id$
  *
  */
 package org.acmsl.queryj.tools.templates.dao.mock.handlers;
@@ -87,7 +81,6 @@ import java.util.Map;
  * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$ at $Date$
  */
 public class MockDAOTestTemplateBuildHandler
     extends    AbstractAntCommandHandler

@@ -556,7 +556,7 @@ public class NumericFunctionsTestTemplateGenerator
                       outputDir.getAbsolutePath()
                     + File.separator
                     + "NumericFunctionsTest.java",
-                    numericFunctionsTestTemplate.toString());
+                    numericFunctionsTestTemplate.generate());
             }
         }
     }

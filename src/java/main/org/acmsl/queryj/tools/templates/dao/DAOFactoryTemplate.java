@@ -82,7 +82,6 @@ import java.util.Map;
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DAOFactoryTemplate
     extends  AbstractDAOFactoryTemplate

@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes DAO templates.
+ * Description: Writes ResultSetExtractor templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -54,9 +54,9 @@ import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
+import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.handlers.ResultSetExtractorTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
@@ -76,25 +76,19 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Writes DAO templates.
+ * Writes ResultSetExtractor templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public class DAOTemplateWritingHandler
+public class ResultSetExtractorTemplateWritingHandler
     extends    AbstractAntCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * A cached empty DAO template array.
+     * Creates a ResultSetExtractorTemplateWritingHandler.
      */
-    public static final DAOTemplate[] EMPTY_DAO_TEMPLATE_ARRAY =
-        new DAOTemplate[0];
-
-    /**
-     * Creates a DAOTemplateWritingHandler.
-     */
-    public DAOTemplateWritingHandler() {};
+    public ResultSetExtractorTemplateWritingHandler() {};
 
     /**
      * Handles given command.
@@ -142,7 +136,11 @@ public class DAOTemplateWritingHandler
 
         try
         {
-            handle(parameters, metaData.getDatabaseProductName());
+            handle(
+                parameters,
+                metaData.getDatabaseProductName(),
+                retrieveTemplates(parameters),
+                ResultSetExtractorTemplateGenerator.getInstance());
         }
         catch  (final SQLException sqlException)
         {
@@ -156,33 +154,19 @@ public class DAOTemplateWritingHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
+     * @param templates the templates.
+     * @param templateGenerator the template generator.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
-     */
-    protected void handle(final Map parameters, final String engineName)
-      throws  BuildException
-    {
-        handle(
-            retrieveDAOTemplates(parameters),
-            retrieveOutputDir(engineName, parameters),
-            DAOTemplateGenerator.getInstance());
-    }
-            
-    /**
-     * Handles given information.
-     * @param templates the DAO templates.
-     * @param outputDir the output dir.
-     * @param templateGenerator the template generator.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition metaData != null
-     * @precondition outputDir != null
+     * @precondition templates != null
      * @precondition templateGenerator != null
      */
     protected void handle(
-        final DAOTemplate[] templates,
-        final File outputDir,
-        final DAOTemplateGenerator templateGenerator)
+        final Map parameters,
+        final String engineName,
+        final ResultSetExtractorTemplate[] templates,
+        final ResultSetExtractorTemplateGenerator templateGenerator)
       throws  BuildException
     {
         try 
@@ -192,7 +176,11 @@ public class DAOTemplateWritingHandler
                       t_iIndex++)
             {
                 templateGenerator.write(
-                    templates[t_iIndex], outputDir);
+                    templates[t_iIndex],
+                    retrieveOutputDir(
+                        engineName,
+                        templates[t_iIndex].getTableTemplate().getTableName(),
+                        parameters));
             }
         }
         catch  (final IOException ioException)
@@ -202,60 +190,75 @@ public class DAOTemplateWritingHandler
     }
 
     /**
-     * Retrieves the DAO templates from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
-     * @return the template.
+     * @return the templates.
      * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected DAOTemplate[] retrieveDAOTemplates(final Map parameters)
-        throws  BuildException
+    protected ResultSetExtractorTemplate[] retrieveTemplates(
+        final Map parameters)
+      throws  BuildException
     {
         return
-            (DAOTemplate[])
+            (ResultSetExtractorTemplate[])
                 parameters.get(
-                    TemplateMappingManager.DAO_TEMPLATES);
+                    TemplateMappingManager.RESULTSET_EXTRACTOR_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
      * @param engineName the engine name.
+     * @param tableName the table name.
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition engineName != null
+     * @precondition tableName != null
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(
-        final String engineName, final Map parameters)
+        final String engineName, final String tableName, final Map parameters)
       throws  BuildException
     {
         return
             retrieveOutputDir(
-                engineName, parameters, PackageUtils.getInstance());
+                engineName,
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                tableName,
+                PackageUtils.getInstance());
     }
 
     /**
      * Retrieves the output dir from the attribute map.
      * @param engineName the engine name.
-     * @param parameters the parameter map.
+     * @param projectOutputDir the project output dir.
+     * @param projectPackage the project package.
+     * @param tableName the table name.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition engineName != null
-     * @precondition parameters != null
+     * @precondition projectOutputDir != null
+     * @precondition projectPackage != null
+     * @precondition tableName != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
         final String engineName,
-        final Map parameters,
+        final File projectOutputDir,
+        final String projectPackage,
+        final String tableName,
         final PackageUtils packageUtils)
       throws  BuildException
     {
         return
-            packageUtils.retrieveDAOFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                engineName);
+            packageUtils.retrieveResultSetExtractorFolder(
+                projectOutputDir,
+                projectPackage,
+                engineName,
+                tableName);
     }
 
     /**
@@ -268,7 +271,22 @@ public class DAOTemplateWritingHandler
     protected File retrieveProjectOutputDir(final Map parameters)
         throws  BuildException
     {
-        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
+        return
+            (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
+    }
+
+    /**
+     * Retrieves the package name from the attribute map.
+     * @param parameters the parameter map.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    protected String retrieveProjectPackage(final Map parameters)
+        throws  BuildException
+    {
+        return
+            (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**
@@ -286,19 +304,5 @@ public class DAOTemplateWritingHandler
             (DatabaseMetaData)
                 parameters.get(
                     DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 }

@@ -72,7 +72,6 @@ import java.util.List;
  * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DataAccessManagerTemplate
     extends  AbstractDataAccessManagerTemplate

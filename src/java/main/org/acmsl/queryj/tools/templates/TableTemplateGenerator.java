@@ -51,6 +51,7 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.TableTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -74,10 +75,11 @@ import java.lang.ref.WeakReference;
 /**
  * Is able to generate Table repositories according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class TableTemplateGenerator
+    implements  TableTemplateFactory
 {
     /**
      * Singleton implemented as a weak reference.

@@ -94,7 +94,7 @@ import org.apache.tools.ant.types.Reference;
 /**
  * Generates QueryJ classes using Ant.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$ at $Date$
  */
 public class QueryJTask

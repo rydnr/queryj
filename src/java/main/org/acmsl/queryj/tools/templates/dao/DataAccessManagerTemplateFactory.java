@@ -62,7 +62,6 @@ import org.apache.tools.ant.Task;
  * Represents entities able to create data access manager templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface DataAccessManagerTemplateFactory
 {

@@ -82,7 +82,6 @@ import java.lang.ref.WeakReference;
  * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DAOFactoryTemplateGenerator
     implements  DAOFactoryTemplateFactory

@@ -77,7 +77,6 @@ import java.lang.ref.WeakReference;
  * to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DataAccessManagerTemplateGenerator
     implements  DataAccessManagerTemplateFactory

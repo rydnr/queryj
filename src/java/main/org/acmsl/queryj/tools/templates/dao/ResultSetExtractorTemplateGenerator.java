@@ -33,23 +33,33 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate DAOChooser classes according to
- *              database metadata.
+ * Description: Is able to generate ResultSetExtractor templates.
+ *
+ * Last modified by: $Author$ at $Date$
+ *
+ * File version: $Revision$
  *
  * Project version: $Name$
+ *
+ * $Id$
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some project-specific  classes.
+ * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateFactory;
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
+import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplateFactory;
+import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -67,13 +77,13 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Is able to generate DAOChooser instances according
- * to database metadata.
+ * Is able to generate ResultSetExtractor templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
+ * @version $Revision$
  */
-public class DAOChooserTemplateGenerator
-    implements  DAOChooserTemplateFactory
+public class ResultSetExtractorTemplateGenerator
+    implements  ResultSetExtractorTemplateFactory
 {
     /**
      * Singleton implemented as a weak reference.
@@ -83,14 +93,14 @@ public class DAOChooserTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DAOChooserTemplateGenerator() {};
+    protected ResultSetExtractorTemplateGenerator() {};
 
     /**
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        final DAOChooserTemplateGenerator generator)
+        final ResultSetExtractorTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -105,23 +115,24 @@ public class DAOChooserTemplateGenerator
     }
 
     /**
-     * Retrieves a DAOChooserTemplateGenerator instance.
+     * Retrieves a ResultSetExtractorTemplateGenerator instance.
      * @return such instance.
      */
-    public static DAOChooserTemplateGenerator getInstance()
+    public static ResultSetExtractorTemplateGenerator getInstance()
     {
-        DAOChooserTemplateGenerator result = null;
+        ResultSetExtractorTemplateGenerator result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (DAOChooserTemplateGenerator) reference.get();
+            result =
+                (ResultSetExtractorTemplateGenerator) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new DAOChooserTemplateGenerator();
+            result = new ResultSetExtractorTemplateGenerator();
 
             setReference(result);
         }
@@ -130,60 +141,84 @@ public class DAOChooserTemplateGenerator
     }
 
     /**
-     * Creates a DAOChooser template instance.
+     * Generates a ResultSetExtractor template.
+     * @param tableTemplate the table template.
+     * @param metaDataManager the metadata manager.
      * @param packageName the package name.
-     * @param repository the repository.
+     * @param basePackageName the base package name.
+     * @param repositoryName the name of the repository.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
-     * @return such template.
+     * @return a template.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition tableTemplate != null
+     * @precondition metaDataManager != null
      * @precondition packageName != null
-     * @precondition repository != null
+     * @precondition basePackageName != null
+     * @precondition repositoryName != null
      */
-    public DAOChooserTemplate createDAOChooserTemplate(
+    public ResultSetExtractorTemplate createResultSetExtractorTemplate(
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
         final String packageName,
-        final String repository,
+        final String basePackageName,
+        final String repositoryName,
         final Project project,
         final Task task)
+      throws  QueryJException
     {
-        return new DAOChooserTemplate(packageName, repository, project, task);
+        return
+            new ResultSetExtractorTemplate(
+                tableTemplate,
+                metaDataManager,
+                packageName,
+                basePackageName,
+                repositoryName,
+                project,
+                task);
     }
 
     /**
-     * Writes a DAOChooser to disk.
-     * @param daoChooserTemplate the template to write.
+     * Writes a ResultSetExtractor template to disk.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition daoChooserTemplate != null
+     * @precondition template != null
      * @precondition outputDir != null
      */
     public void write(
-        final DAOChooserTemplate daoChooserTemplate,
+        final ResultSetExtractorTemplate template,
         final File outputDir)
       throws  IOException
     {
         write(
-            daoChooserTemplate,
-            outputDir,
+            template,
+            outputDir, 
             StringUtils.getInstance(),
+            EnglishGrammarUtils.getInstance(),
             FileUtils.getInstance());
     }
 
     /**
-     * Writes a DAOChooser to disk.
-     * @param daoChooserTemplate the template to write.
+     * Writes a ResultSetExtractorCreator template to disk.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition daoChooserTemplate != null
+     * @precondition template != null
      * @precondition outputDir != null
      * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final DAOChooserTemplate daoChooserTemplate,
+        final ResultSetExtractorTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils,
         final FileUtils fileUtils)
       throws  IOException
     {
@@ -192,7 +227,13 @@ public class DAOChooserTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + "DAOChooser.java",
-            daoChooserTemplate.generate());
+            + stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    template
+                        .getTableTemplate()
+                            .getTableName().toLowerCase()),
+                '_')
+            + "ResultSetExtractor.java",
+            template.generate());
     }
 }

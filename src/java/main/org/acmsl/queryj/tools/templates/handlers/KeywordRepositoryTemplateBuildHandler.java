@@ -206,7 +206,9 @@ public class KeywordRepositoryTemplateBuildHandler
                                     metaDataUtils.getQueryJFieldType(
                                         t_MetaDataManager.getColumnType(
                                             t_Field.getTableName(),
-                                            t_Field.getName())));
+                                            t_Field.getName()),
+                                        project,
+                                        task));
                             }
                         }
                     }

@@ -36,13 +36,7 @@
  * Description: Is able to generate DAO implementations according to
  *              database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
  * Project version: $Name$
- *
- * $Id$
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
@@ -83,7 +77,6 @@ import java.lang.ref.WeakReference;
  * metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DAOTemplateGenerator
     implements  DAOTemplateFactory
@@ -321,6 +314,8 @@ public class DAOTemplateGenerator
      * @precondition engineName != null
      * @precondition engineVersion != null
      * @precondition quote != null
+     * @precondition basePackageName != null
+     * @precondition repositoryName != null
      */
     public DAOTemplate createDAOTemplate(
         final TableTemplate tableTemplate,
