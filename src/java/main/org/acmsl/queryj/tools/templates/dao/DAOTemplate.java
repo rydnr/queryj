@@ -151,6 +151,7 @@ public class DAOTemplate
             DEFAULT_CLASS_DEFINITION,
             DEFAULT_CLASS_START,
             DEFAULT_CLASS_CONSTANTS,
+            DEFAULT_CUSTOM_RESULT_SET_EXTRACTOR_CONSTANT,
             DEFAULT_CLASS_CONSTRUCTOR,
             DEFAULT_PK_JAVADOC,
             DEFAULT_ATTRIBUTE_JAVADOC,
@@ -427,7 +428,10 @@ public class DAOTemplate
                 {
                     t_strValueObjectName,
                     t_strValueObjectName.toUpperCase(),
-                    t_strCapitalizedValueObjectName
+                    t_strCapitalizedValueObjectName,
+                    buildCustomResultSetExtractorConstants(
+                        getCustomResultSetExtractorConstant(),
+                        stringUtils),
                 }));
 
         t_sbResult.append(
@@ -720,6 +724,86 @@ public class DAOTemplate
                             new Object[]
                             {
                                 jdbcOperationsPackage,
+                                stringUtils.capitalize(
+                                    stringUtils.capitalize(
+                                        stringUtils.capitalize(
+                                            t_ResultElement.getId(), '_'),
+                                        '-'),
+                                    '.')
+                            }));
+                }
+            }
+        }
+
+        return t_sbResult.toString();
+    }
+
+    /**
+     * Builds the custom result set extractor constants.
+     * @param customResultSetExtractorConstant the constant template.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return such generated code.
+     * @precondition customResultSetExtractorConstant != null
+     * @precondition stringUtils != null
+     */
+    protected String buildCustomResultSetExtractorConstants(
+        final String customResultSetExtractorConstant,
+        final StringUtils stringUtils)
+    {
+        return
+            buildCustomResultSetExtractorConstants(
+                customResultSetExtractorConstant,
+                stringUtils,
+                getCustomSqlProvider());
+    }
+
+    /**
+     * Builds the custom result set extractor constants.
+     * @param customResultSetExtractorConstant the constant template.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @return such generated code.
+     * @precondition customResultSetExtractorConstant != null
+     * @precondition stringUtils != null
+     * @precondition customSqlProvider != null
+     */
+    protected String buildCustomResultSetExtractorConstants(
+        final String customResultSetExtractorConstant,
+        final StringUtils stringUtils,
+        final CustomSqlProvider customSqlProvider)
+    {
+        StringBuffer t_sbResult = new StringBuffer();
+
+        Collection t_cContents = customSqlProvider.getCollection();
+
+        if  (t_cContents != null)
+        {
+            Iterator t_itContentIterator = t_cContents.iterator();
+
+            MessageFormat t_CustomResultSetExtractorConstantFormatter =
+                new MessageFormat(customResultSetExtractorConstant);
+
+            while  (t_itContentIterator.hasNext())
+            {
+                Object t_Content = t_itContentIterator.next();
+
+                if  (t_Content instanceof ResultElement)
+                {
+                    ResultElement t_ResultElement =
+                        (ResultElement) t_Content;
+
+                    t_sbResult.append(
+                        t_CustomResultSetExtractorConstantFormatter.format(
+                            new Object[]
+                            {
+                                t_ResultElement.getId(),
+                                stringUtils.removeDuplicate(
+                                    stringUtils.replace(
+                                        stringUtils.replace(
+                                            t_ResultElement.getId(), "-", "_"),
+                                        ".",
+                                        "_"),
+                                    '_'),
                                 stringUtils.capitalize(
                                     stringUtils.capitalize(
                                         stringUtils.capitalize(

@@ -186,6 +186,11 @@ public abstract class AbstractDAOTemplate
     private String m__strClassConstants;
 
     /**
+     * The custom result set extractor constant.
+     */
+    private String m__strCustomResultSetExtractorConstant;
+
+    /**
      * The class constructor.
      */
     private String m__strClassConstructor;
@@ -351,6 +356,8 @@ public abstract class AbstractDAOTemplate
      * @param classDefinition the class definition.
      * @param classStart the class start.
      * @param classConstants the class' constants.
+     * @param customResultSetExtractorConstant the custom result set extractor
+     * constant subtemplate.
      * @param classConstructor the class constructor.
      * @param pkJavadoc the pk javadoc subtemplate.
      * @param attributeJavadoc the attribute javadoc subtemplate.
@@ -418,6 +425,7 @@ public abstract class AbstractDAOTemplate
         final String classDefinition,
         final String classStart,
         final String classConstants,
+        final String customResultSetExtractorConstant,
         final String classConstructor,
         final String pkJavadoc,
         final String attributeJavadoc,
@@ -515,6 +523,9 @@ public abstract class AbstractDAOTemplate
 
         immutableSetClassConstants(
             classConstants);
+
+        immutableSetCustomResultSetExtractorConstant(
+            customResultSetExtractorConstant);
 
         immutableSetClassConstructor(
             classConstructor);
@@ -1226,6 +1237,38 @@ public abstract class AbstractDAOTemplate
     public String getClassConstants() 
     {
         return m__strClassConstants;
+    }
+
+    /**
+     * Specifies the custom result set extractor constant subtemplate.
+     * @param customResultSetExtractorConstant the new custom result set
+     * extractor constant.
+     */
+    private void immutableSetCustomResultSetExtractorConstant(
+        final String customResultSetExtractorConstant)
+    {
+        m__strCustomResultSetExtractorConstant = customResultSetExtractorConstant;
+    }
+
+    /**
+     * Specifies the result set extractor constant subtemplate.
+     * @param customResultSetExtractorConstant the new custom result set
+     * extractor constant.
+     */
+    protected void setCustomResultSetExtractorConstant(
+        final String customResultSetExtractorConstant)
+    {
+        immutableSetCustomResultSetExtractorConstant(
+            customResultSetExtractorConstant);
+    }
+
+    /**
+     * Retrieves the custom result set extractor constant subtemplate.
+     * @return such information.
+     */
+    public String getCustomResultSetExtractorConstant() 
+    {
+        return m__strCustomResultSetExtractorConstant;
     }
 
     /**

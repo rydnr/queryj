@@ -263,7 +263,21 @@ public interface DAOTemplateDefaults
         + "    public static final ResultSetExtractor "
         + "{1}_RESULT_SET_EXTRACTOR =\n"
         + "        new {2}ResultSetExtractor();\n\n"
+        + "{3}"
+         // custom result set extractor constant
         + "    // </constants>\n\n";
+
+    /**
+     * The custom result set extractor constant.
+     */
+    public static final String DEFAULT_CUSTOM_RESULT_SET_EXTRACTOR_CONSTANT =
+          "    /**\n"
+        + "     * The result set extractor for <i>{0}</i>\n"
+        + "     * operation.\n"
+        + "     */\n"
+        + "    public static final ResultSetExtractor "
+        + "{1}_RESULT_SET_EXTRACTOR =\n"
+        + "        new {2}ResultSetExtractor();\n\n";
 
     /**
      * The class constructor.
