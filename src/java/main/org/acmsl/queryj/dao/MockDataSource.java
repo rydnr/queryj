@@ -131,6 +131,16 @@ public class MockDataSource
     private Collection m__cExceptions;
 
     /**
+     * The log writer.
+     */
+    private PrintWriter m__pwLogWriter = null; 
+
+    /**
+     * The login timeout.
+     */
+    private int m__iLoginTimeout = 0;
+
+    /**
      * Creates a MockDataSource using given URL for accessing the 
      * database.
      * @param driverClassName the driver's class name.
@@ -562,7 +572,7 @@ public class MockDataSource
     public PrintWriter getLogWriter()
         throws SQLException
     {
-        return null;
+        return m__pwLogWriter;
     }
 
     /**
@@ -579,9 +589,10 @@ public class MockDataSource
      * @param out the new log writer; to disable, set to null
      * @throws SQLException if a database-access error occurs.
      */
-    public void setLogWriter(PrintWriter out)
+    public void setLogWriter(final PrintWriter out)
         throws SQLException
     {
+        m__pwLogWriter = out;
     }
 
     /**
@@ -593,9 +604,10 @@ public class MockDataSource
      * @param seconds the data source login time limit.
      * @throws SQLException if a database access error occurs.
      */
-    public void setLoginTimeout(int seconds)
+    public void setLoginTimeout(final int seconds)
         throws SQLException
     {
+        m__iLoginTimeout = seconds;
     }
 
     /**
@@ -610,6 +622,6 @@ public class MockDataSource
     public int getLoginTimeout()
         throws SQLException
     {
-        return -1;
+        return m__iLoginTimeout;
     }
 }

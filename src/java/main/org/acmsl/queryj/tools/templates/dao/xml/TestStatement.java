@@ -1,4 +1,4 @@
-package org.acmsl.query.tools.templates.dao.xml;
+package org.acmsl.queryj.tools.templates.dao.xml;
 
 import java.sql.Connection;
 import java.sql.SQLWarning;

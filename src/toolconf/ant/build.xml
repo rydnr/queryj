@@ -331,25 +331,32 @@
         </tstamp>
 
         <!--
+         Reads some specific properties from an external property files.
+        -->
+        <property file="src/toolconf/ant/build.properties"/>
+        <property file="src/toolconf/ant/project.properties"/>
+        <property file="src/toolconf/ant/user.properties"/>
+
+        <!--
          Requests CVS to perform the keyword clean substitution.
         -->
-        <!--cvs command="update -kv src/toolconf/ant/build.properties"/-->
+        <cvs command="update -kv src/toolconf/ant/version.properties"/>
 
         <!--
          Reads some specific properties from an external property file.
         -->
-        <property file="src/toolconf/ant/build.properties"/>
+        <property file="src/toolconf/ant/version.properties"/>
 
         <!--
-         Removes the build.properties file to get rid of the sticky
+         Removes the version.properties file to get rid of the sticky
          keyword substitution setting.
         -->
-        <!--delete file="src/toolconf/ant/build.properties"/-->
+        <delete file="src/toolconf/ant/version.properties"/>
 
         <!--
-         Restores build.properties state.
+         Restores version.properties state.
         -->
-        <!--cvs command="update -A src/toolconf/ant/build.properties"/-->
+        <cvs command="update -A src/toolconf/ant/version.properties"/>
 
         <!--
          Displays some project information.
@@ -1238,9 +1245,9 @@
       @return some properties with the results of the checks.
       -->
       <target
-          name="init.conditions"
-          depends="init.paths"
-          description="Checks all defined conditions.">
+        name="init.conditions"
+        depends="init.paths"
+        description="Checks all defined conditions.">
 
 <!--          BEGIN OS CHECK SECTION                                        -->
 
@@ -1259,7 +1266,6 @@
             <os family="windows"/>
             <os family="dos"/>
           </or>
-
         </condition>
 
 <!--          END OS CHECK SECTION                                          -->
@@ -1276,91 +1282,43 @@
         <!--
          Checks if antlr.jar is available.
         -->
-        <available property="antlr.jar.available" file="antlr.jar">
-
-            <filepath>
-
-                <!--
-                 Tries to find it in the folder where the ANTLR libraries
-                 are located.
-                -->
-                <path refid="antlr.class.path"/>
-
-            </filepath>
-
-        </available>
+        <available
+          classname="antlr.ANTLRParser"
+          property="antlr.jar.available"
+          classpathref="antlr.class.path"/>
 
         <!--
          Checks if junit.jar is available.
         -->
         <available
-            property="junit.jar.available"
-            file="junit.jar">
-
-            <filepath>
-
-                <!--
-                 Tries to find it in the folder where the JUnit libraries
-                 are located.
-                -->
-                <path refid="unit.test.class.path"/>
-
-            </filepath>
-
-        </available>
+          classname="junit.framework.TestCase"
+          property="junit.jar.available"
+          classpathref="unit.test.class.path"/>
 
         <!--
-         Checks if junit.jar is available.
+         Checks if optional.jar is available.
         -->
         <available
-            property="optional.jar.available"
-            file="optional.jar">
-
-            <filepath>
-
-                <!--
-                 Tries to find it in the folder where the optional libraries
-                 are located.
-                -->
-                <path refid="unit.test.class.path"/>
-
-            </filepath>
-
-        </available>
+          classname="org.apache.tools.ant.taskdefs.optional.ANTLR"
+          property="optional.jar.available"
+          classpathref="unit.test.class.path"/>
 
         <!--
          Checks if jdktools.jar is available.
         -->
-        <available property="jdktools.jar.available" file="tools.jar">
-
-            <filepath>
-
-                <!--
-                 Tries to find it in the folder where the JDK tools
-                 are located.
-                -->
-                <path location="${java.home}/lib"/>
-
-            </filepath>
-
-        </available>
-
-        <!--
-         Checks if aspectjtools.jar is available.
-        -->
         <available
-            property="aspectjtools.jar.available"
-            file="aspectjtools.jar">
+          classname="com.sun.tools.javadoc.DocletInvoker"
+          property="jdktools.jar.available">
 
-            <filepath>
+          <classpath>
 
-                <!--
-                 Tries to find it in the folder where the Ant add-ins
-                 are located.
-                -->
-                <path refid="java.development.class.path"/>
+            <!--
+             Tries to find it in the folder where the JDK tools
+             are located.
+            -->
+            <path location="${java.home}/lib"/>
 
-            </filepath>
+          </classpath>
 
         </available>
 
@@ -1368,96 +1326,49 @@
          Checks if aspectjrt.jar is available.
         -->
         <available
-            property="aspectjrt.jar.available"
-            file="aspectjrt.jar">
+          classname="org.aspectj.lang.JoinPoint"
+          property="aspectjrt.jar.available"
+          classpathref="java.development.class.path"/>
 
-            <filepath>
-
-                <!--
-                 Tries to find it in the folder where the Ant add-ins
-                 are located.
-                -->
-                <path refid="java.development.class.path"/>
-
-            </filepath>
-
-        </available>
+        <!--
+         Checks if aspectjtools.jar is available.
+        -->
+        <available
+          classname="org.aspectj.asm.AsmManager"
+          property="aspectjtools.jar.available"
+          classpathref="java.development.class.path"/>
 
         <!--
          Checks if junitdoclet.jar is available.
         -->
         <available
-            property="junitdoclet.jar.available"
-            file="junitdoclet.jar">
-
-            <filepath>
-
-                <!--
-                 Tries to find it in the folder where the Ant add-ins
-                 are located.
-                -->
-                <path refid="java.development.class.path"/>
-
-            </filepath>
-
-        </available>
+          classname="com.objectfab.tools.junitdoclet.JUnitDoclet"
+          property="junitdoclet.jar.available"
+          classpathref="java.development.class.path"/>
 
         <!--
          Checks if junitdoclet-acmsl.jar is available.
         -->
         <available
-            property="junitdoclet-acmsl.jar.available"
-            file="junitdoclet-acmsl.jar">
-
-            <filepath>
-
-                <!--
-                 Tries to find it in the folder where the Ant add-ins
-                 are located.
-                -->
-                <path refid="java.development.class.path"/>
-
-            </filepath>
-
-        </available>
+          classname="org.acmsl.junitdoclet.AcmslNamingStrategy"
+          property="junitdoclet-acmsl.jar.available"
+          classpathref="java.development.class.path"/>
 
         <!--
          Checks if jalopy-ant.jar is available.
         -->
         <available
-            property="jalopy-ant.jar.available"
-            file="jalopy-ant-0.6.1.jar">
-
-            <filepath>
-
-                <!--
-                 Tries to find it in the folder where the Ant add-ins
-                 are located.
-                -->
-                <path refid="java.development.class.path"/>
-
-            </filepath>
-
-        </available>
+          classname="de.hunsicker.jalopy.plugin.ant.AntPlugin"
+          property="jalopy-ant.jar.available"
+          classpathref="java.development.class.path"/>
 
         <!--
          Checks if jalopy.jar is available.
         -->
         <available
-            property="jalopy.jar.available"
-            file="jalopy-1.0b10.jar">
-
-            <filepath>
-
-                <!--
-                 Tries to find it in the folder where the Ant add-ins
-                 are located.
-                -->
-                <path refid="java.development.class.path"/>
-
-            </filepath>
-
-        </available>
+          classname="de.hunsicker.jalopy.Jalopy"
+          property="jalopy.jar.available"
+          classpathref="java.development.class.path"/>
 
 <!--         END REQUIRED LIBRARIES/FILES/FOLDERS CHECK SECTION             -->
 
@@ -2774,10 +2685,6 @@
         depends="junitdoclet"
         description="Executes all defined unit tests.">
 
-        <property name="unit-test-path" refid="unit.test.class.path"/>
-
-        <echo message="${unit-test-path}"/>
-
         <!--
          Actual JUnit invokation.
         -->
@@ -2853,38 +2760,6 @@
 <!--         END TEST TASKS SECTION                                         -->
 
 <!--         BEGIN DEBUG TASKS SECTION                                      -->
-
-    <!--
-     Debugs the application.
-     @depends compile to make sur eall classes are already compiled.
-     @param project.class.name the project class name.
-     @param classes.dir the compiled classes folder.
-     @param debug.class.name the debug class name.
-     @param debug.vm.address the port the virtual machine is listening for
-            debugging purposes.
-     @param debug.suspend <i>y</i> to suspend the virtual machine till the
-            debugger attaches to it.
-     @calls exec to execute the debug script.
-     @return the invokation of the jdb tool.
-    -->
-    <target
-        name="debug"
-        depends="compile"
-        description="Debugs the application.">
-
-        <exec executable="${debug.script}">
-
-            <env key="CLASSPATH" path="${project.class.path}:${build.dir}"/> 
-
-            <arg value="${debug.classname}"/>
-
-            <arg value="${debug.vm.address}"/>
-
-            <arg value="${debug.suspend}"/>
-
-        </exec>
-
-    </target>
 
     <!--
      Debugs defined unit tests.

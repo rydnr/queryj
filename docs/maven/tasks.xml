@@ -41,6 +41,25 @@
           </ul>
         </p>
       </subsection>
+      <subsection name="0.6.2">
+        <p>
+          <ul>
+            <li>
+              Generate Javadoc package documentation.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="0.6.1">
+        <p>
+          <ul>
+            <li>
+              Build dynamic value-object aggregator depending on
+              procedure's return and output parameters.
+            </li>
+          </ul>
+        </p>
+      </subsection>
       <subsection name="0.6">
         <p>
           <ul>
@@ -53,32 +72,12 @@
           </ul>
         </p>
       </subsection>
-      <subsection name="0.5.9">
-        <p>
-          <ul>
-            <li>
-              Generate Javadoc package documentation.
-            </li>
-          </ul>
-        </p>
-      </subsection>
-      <subsection name="0.5.8">
-        <p>
-          <ul>
-            <li>
-              Add optional CVS logic to allow generated
-              code's customization, instead of current behaviour, which
-              always overrides the generated files.
-            </li>
-          </ul>
-        </p>
-      </subsection>
       <subsection name="0.5.7">
         <p>
           <ul>
             <li>
-              Build dynamic value-object aggregator depending on
-              procedure's return and output parameters.
+              Add early-access <a href="${issue.url}531">persistence support</a> for XML DAO
+              implementations.
             </li>
           </ul>
         </p>

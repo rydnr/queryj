@@ -83,7 +83,7 @@ public class ConditionFactory
      * Specifies a new weak reference.
      * @param factory the factory instance to use.
      */
-    protected static void setReference(ConditionFactory factory)
+    protected static void setReference(final ConditionFactory factory)
     {
         singleton = new WeakReference(factory);
     }
@@ -130,9 +130,9 @@ public class ConditionFactory
      * @return such type of instance.
      */
     public Condition createCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        Field              rightSideField)
+        final Field              leftSideField,
+        final ConditionOperator  operator,
+        final Field              rightSideField)
     {
         Condition result = null;
 
@@ -156,9 +156,9 @@ public class ConditionFactory
      * @return such type of instance.
      */
     public Condition createCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        int                value)
+        final Field              leftSideField,
+        final ConditionOperator  operator,
+        final int                value)
     {
         Condition result = null;
 
@@ -179,9 +179,9 @@ public class ConditionFactory
      * @return such type of instance.
      */
     public Condition createCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        long                value)
+        final Field              leftSideField,
+        final ConditionOperator  operator,
+        final long                value)
     {
         Condition result = null;
 
@@ -202,9 +202,9 @@ public class ConditionFactory
      * @return such type of instance.
      */
     public Condition createCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        double             value)
+        final Field              leftSideField,
+        final ConditionOperator  operator,
+        final double             value)
     {
         Condition result = null;
 
@@ -225,9 +225,9 @@ public class ConditionFactory
      * @return such type of instance.
      */
     public Condition createCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        BigDecimal         value)
+        final Field              leftSideField,
+        final ConditionOperator  operator,
+        final BigDecimal         value)
     {
         Condition result = null;
 
@@ -248,9 +248,9 @@ public class ConditionFactory
      * @return such type of instance.
      */
     public Condition createCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        String             value)
+        final Field              leftSideField,
+        final ConditionOperator  operator,
+        final String             value)
     {
         Condition result = null;
 
@@ -271,9 +271,9 @@ public class ConditionFactory
      * @return such type of instance.
      */
     public Condition createCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        Calendar           value)
+        final Field              leftSideField,
+        final ConditionOperator  operator,
+        final Calendar           value)
     {
         Condition result = null;
 
@@ -294,9 +294,9 @@ public class ConditionFactory
      * @return such type of instance.
      */
     public Condition createCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        Date               value)
+        final Field              leftSideField,
+        final ConditionOperator  operator,
+        final Date               value)
     {
         Condition result = null;
 
@@ -316,8 +316,8 @@ public class ConditionFactory
      * @return such type of instance.
      */
     public VariableCondition createVariableCondition(
-        Field              field,
-        ConditionOperator  operator)
+        final Field              field,
+        final ConditionOperator  operator)
     {
         VariableCondition result = null;
 
@@ -337,7 +337,8 @@ public class ConditionFactory
      * @param suffix the suffix.
      * @return the wrapped condition.
      */
-    public Condition wrap(Condition condition, String prefix, String suffix)
+    public Condition wrap(
+        final Condition condition, final String prefix, final String suffix)
     {
         Condition result = condition;
 
@@ -357,7 +358,9 @@ public class ConditionFactory
      * @return the wrapped condition.
      */
     public Condition wrap(
-        AtomicCondition condition, String prefix, String suffix)
+        final AtomicCondition condition,
+        final String prefix,
+        final String suffix)
     {
         Condition result = condition;
 
@@ -377,7 +380,9 @@ public class ConditionFactory
      * @return the wrapped condition.
      */
     public VariableCondition wrap(
-        VariableCondition condition, String prefix, String suffix)
+        final VariableCondition condition,
+        final String prefix,
+        final String suffix)
     {
         VariableCondition result = condition;
 
@@ -420,19 +425,21 @@ public class ConditionFactory
          * @param suffix the suffix.
          */
         public _ConditionWrapper(
-            Condition condition, String prefix, String suffix)
+            final Condition condition,
+            final String prefix,
+            final String suffix)
         {
             super();
 
-            inmutableSetCondition(condition);
-            inmutableSetPrefix(prefix);
-            inmutableSetSuffix(suffix);
+            immutableSetCondition(condition);
+            immutableSetPrefix(prefix);
+            immutableSetSuffix(suffix);
         }
         /**
          * Specifies the condition to wrap.
          * @param condition such condition.
          */
-        private void inmutableSetCondition(Condition condition)
+        private void immutableSetCondition(final Condition condition)
         {
             m__Condition = condition;
         }
@@ -441,9 +448,9 @@ public class ConditionFactory
          * Specifies the condition to wrap.
          * @param condition such condition.
          */
-        protected void setCondition(Condition condition)
+        protected void setCondition(final Condition condition)
         {
-            inmutableSetCondition(condition);
+            immutableSetCondition(condition);
         }
 
         /**
@@ -459,7 +466,7 @@ public class ConditionFactory
          * Specifies the prefix.
          * @param prefix such prefix.
          */
-        private void inmutableSetPrefix(String prefix)
+        private void immutableSetPrefix(final String prefix)
         {
             m__strPrefix = prefix;
         }
@@ -468,9 +475,9 @@ public class ConditionFactory
          * Specifies the prefix.
          * @param prefix such prefix.
          */
-        protected void setPrefix(String prefix)
+        protected void setPrefix(final String prefix)
         {
-            inmutableSetPrefix(prefix);
+            immutableSetPrefix(prefix);
         }
 
         /**
@@ -486,7 +493,7 @@ public class ConditionFactory
          * Specifies the suffix.
          * @param suffix such suffix.
          */
-        private void inmutableSetSuffix(String suffix)
+        private void immutableSetSuffix(final String suffix)
         {
             m__strSuffix = suffix;
         }
@@ -495,9 +502,9 @@ public class ConditionFactory
          * Specifies the suffix.
          * @param suffix such suffix.
          */
-        protected void setSuffix(String suffix)
+        protected void setSuffix(final String suffix)
         {
-            inmutableSetSuffix(suffix);
+            immutableSetSuffix(suffix);
         }
 
         /**
@@ -603,23 +610,25 @@ public class ConditionFactory
          * @param suffix the suffix.
          */
         public _AtomicConditionWrapper(
-            AtomicCondition condition, String prefix, String suffix)
+            final AtomicCondition condition,
+            final String prefix,
+            final String suffix)
         {
             super(
                 condition.getLeftSideField(),
                 condition.getOperator(),
                 condition.getRightSideField());
 
-            inmutableSetCondition(condition);
-            inmutableSetPrefix(prefix);
-            inmutableSetSuffix(suffix);
+            immutableSetCondition(condition);
+            immutableSetPrefix(prefix);
+            immutableSetSuffix(suffix);
         }
 
         /**
          * Specifies the condition to wrap.
          * @param condition such condition.
          */
-        private void inmutableSetCondition(AtomicCondition condition)
+        private void immutableSetCondition(final AtomicCondition condition)
         {
             m__Condition = condition;
         }
@@ -628,9 +637,9 @@ public class ConditionFactory
          * Specifies the condition to wrap.
          * @param condition such condition.
          */
-        protected void setCondition(AtomicCondition condition)
+        protected void setCondition(final AtomicCondition condition)
         {
-            inmutableSetCondition(condition);
+            immutableSetCondition(condition);
         }
 
         /**
@@ -646,7 +655,7 @@ public class ConditionFactory
          * Specifies the prefix.
          * @param prefix such prefix.
          */
-        private void inmutableSetPrefix(String prefix)
+        private void immutableSetPrefix(final String prefix)
         {
             m__strPrefix = prefix;
         }
@@ -655,9 +664,9 @@ public class ConditionFactory
          * Specifies the prefix.
          * @param prefix such prefix.
          */
-        protected void setPrefix(String prefix)
+        protected void setPrefix(final String prefix)
         {
-            inmutableSetPrefix(prefix);
+            immutableSetPrefix(prefix);
         }
 
         /**
@@ -673,7 +682,7 @@ public class ConditionFactory
          * Specifies the suffix.
          * @param suffix such suffix.
          */
-        private void inmutableSetSuffix(String suffix)
+        private void immutableSetSuffix(final String suffix)
         {
             m__strSuffix = suffix;
         }
@@ -682,9 +691,9 @@ public class ConditionFactory
          * Specifies the suffix.
          * @param suffix such suffix.
          */
-        protected void setSuffix(String suffix)
+        protected void setSuffix(final String suffix)
         {
-            inmutableSetSuffix(suffix);
+            immutableSetSuffix(suffix);
         }
 
         /**
@@ -863,22 +872,24 @@ public class ConditionFactory
          * @param suffix the suffix.
          */
         public _VariableConditionWrapper(
-            VariableCondition condition, String prefix, String suffix)
+            final VariableCondition condition,
+            final String prefix,
+            final String suffix)
         {
             super(
                 condition.getLeftSideField(),
                 condition.getOperator());
 
-            inmutableSetCondition(condition);
-            inmutableSetPrefix(prefix);
-            inmutableSetSuffix(suffix);
+            immutableSetCondition(condition);
+            immutableSetPrefix(prefix);
+            immutableSetSuffix(suffix);
         }
 
         /**
          * Specifies the condition to wrap.
          * @param condition such condition.
          */
-        private void inmutableSetCondition(VariableCondition condition)
+        private void immutableSetCondition(final VariableCondition condition)
         {
             m__Condition = condition;
         }
@@ -887,9 +898,9 @@ public class ConditionFactory
          * Specifies the condition to wrap.
          * @param condition such condition.
          */
-        protected void setCondition(VariableCondition condition)
+        protected void setCondition(final VariableCondition condition)
         {
-            inmutableSetCondition(condition);
+            immutableSetCondition(condition);
         }
 
         /**
@@ -905,7 +916,7 @@ public class ConditionFactory
          * Specifies the prefix.
          * @param prefix such prefix.
          */
-        private void inmutableSetPrefix(String prefix)
+        private void immutableSetPrefix(final String prefix)
         {
             m__strPrefix = prefix;
         }
@@ -914,9 +925,9 @@ public class ConditionFactory
          * Specifies the prefix.
          * @param prefix such prefix.
          */
-        protected void setPrefix(String prefix)
+        protected void setPrefix(final String prefix)
         {
-            inmutableSetPrefix(prefix);
+            immutableSetPrefix(prefix);
         }
 
         /**
@@ -932,7 +943,7 @@ public class ConditionFactory
          * Specifies the suffix.
          * @param suffix such suffix.
          */
-        private void inmutableSetSuffix(String suffix)
+        private void immutableSetSuffix(final String suffix)
         {
             m__strSuffix = suffix;
         }
@@ -941,9 +952,9 @@ public class ConditionFactory
          * Specifies the suffix.
          * @param suffix such suffix.
          */
-        protected void setSuffix(String suffix)
+        protected void setSuffix(final String suffix)
         {
-            inmutableSetSuffix(suffix);
+            immutableSetSuffix(suffix);
         }
 
         /**

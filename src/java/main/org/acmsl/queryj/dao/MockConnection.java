@@ -90,21 +90,52 @@ public class MockConnection
     private MockDataSource m__MockDataSource;
 
     /**
+     * The temporary auto-commit (in case connection set is null).
+     */
+    private boolean m__bTempAutoCommit = false; 
+
+    /**
+     * The temporary catalog (in case connection set is null).
+     */
+    private String m__strTempCatalog = null; 
+
+    /**
+     * The temporary read-only attribute (in case connection set is null).
+     */
+    private boolean m__bTempReadOnly = true; 
+
+    /**
+     * The temporary transaction-isolation level attribute (in case connection set is null).
+     */
+    private int m__iTempTransactionIsolation = -1; 
+
+    /**
+     * The temporary type map (in case connection set is null).
+     */
+    private Map m__mTempTypeMap = null; 
+
+    /**
+     * The temporary holdability attribute (in case connection set is null).
+     */
+    private int m__iTempHoldability = -1; 
+
+    /**
      * Constructs a MockConnection using both objects.
      * @param connection the actual connection to wrap.
      * @param mockDataSource the data source to be notified of events.
      */
-    public MockConnection(Connection connection, MockDataSource mockDataSource)
+    public MockConnection(
+        final Connection connection, final MockDataSource mockDataSource)
     {
-        inmutableSetConnection(connection);
-        inmutableSetMockDataSource(mockDataSource);
+        immutableSetConnection(connection);
+        immutableSetMockDataSource(mockDataSource);
     }
 
     /**
      * Sets the wrapped connection.
      * @param connection the connection to be wrapped.
      */
-    private void inmutableSetConnection(Connection connection)
+    private void immutableSetConnection(final Connection connection)
     {
         m__Connection = connection;
     }
@@ -113,9 +144,9 @@ public class MockConnection
      * Sets the wrapped connection.
      * @param connection the connection to be wrapped.
      */
-    protected void setConnection(Connection connection)
+    protected void setConnection(final Connection connection)
     {
-        inmutableSetConnection(connection);
+        immutableSetConnection(connection);
     }
 
     /**
@@ -131,7 +162,7 @@ public class MockConnection
      * Sets the mock data source.
      * @param mockDataSource the mock data source.
      */
-    private void inmutableSetMockDataSource(MockDataSource mockDataSource)
+    private void immutableSetMockDataSource(final MockDataSource mockDataSource)
     {
         m__MockDataSource = mockDataSource;
     }
@@ -140,9 +171,9 @@ public class MockConnection
      * Sets the mock data source.
      * @param mockDataSource the mock data source.
      */
-    protected void setMockDataSource(MockDataSource mockDataSource)
+    protected void setMockDataSource(final MockDataSource mockDataSource)
     {
-        inmutableSetMockDataSource(mockDataSource);
+        immutableSetMockDataSource(mockDataSource);
     }
 
     /**
@@ -500,7 +531,7 @@ public class MockConnection
     public boolean getAutoCommit()
         throws  SQLException
     {
-        boolean result = false;
+        boolean result = m__bTempAutoCommit;
 
         Connection t_Connection = getConnection();
 
@@ -527,7 +558,7 @@ public class MockConnection
     public String getCatalog()
         throws  SQLException
     {
-        String result = null;
+        String result = m__strTempCatalog;
 
         try
         {
@@ -624,7 +655,7 @@ public class MockConnection
     public int getTransactionIsolation()
         throws  SQLException
     {
-        int result = -1;
+        int result = m__iTempTransactionIsolation;
 
         try
         {
@@ -674,7 +705,7 @@ public class MockConnection
     public Map getTypeMap()
         throws  SQLException
     {
-        Map result = null;
+        Map result = m__mTempTypeMap;
 
         try
         {
@@ -832,7 +863,7 @@ public class MockConnection
     public boolean isReadOnly()
         throws  SQLException
     {
-        boolean result = true;
+        boolean result = m__bTempReadOnly;
 
         try
         {
@@ -1272,6 +1303,8 @@ public class MockConnection
             {
                 LogFactory.getLog(getClass()).fatal(
                     "Wrapped connection null");
+
+                m__bTempAutoCommit = autoCommit;
             }
         }
         catch  (SQLException sqlException)
@@ -1303,7 +1336,7 @@ public class MockConnection
      * @exception SQLException if a database access error occurs.
      * @see #getCatalog()
      */
-    public void setCatalog(String catalog)
+    public void setCatalog(final String catalog)
         throws  SQLException
     {
         try
@@ -1318,6 +1351,8 @@ public class MockConnection
             {
                 LogFactory.getLog(getClass()).fatal(
                     "Wrapped connection null");
+
+                m__strTempCatalog = catalog;
             }
         }
         catch  (SQLException sqlException)
@@ -1348,7 +1383,7 @@ public class MockConnection
      * @exception SQLException if a database access error occurs
      * or this method is called during a transaction.
      */
-    public void setReadOnly(boolean readOnly)
+    public void setReadOnly(final boolean readOnly)
         throws  SQLException
     {
         try
@@ -1363,6 +1398,8 @@ public class MockConnection
             {
                 LogFactory.getLog(getClass()).fatal(
                     "Wrapped connection null");
+
+                m__bTempReadOnly = readOnly;
             }
         }
         catch  (SQLException sqlException)
@@ -1403,7 +1440,7 @@ public class MockConnection
      * @see java.sql.DatabaseMetaData#supportsTransactionIsolationLevel(int)
      * @see #getTransactionIsolation()
      */
-    public void setTransactionIsolation(int level)
+    public void setTransactionIsolation(final int level)
         throws  SQLException
     {
         try
@@ -1418,6 +1455,8 @@ public class MockConnection
             {
                 LogFactory.getLog(getClass()).fatal(
                     "Wrapped connection null");
+
+                m__iTempTransactionIsolation = level;
             }
         }
         catch  (SQLException sqlException)
@@ -1450,7 +1489,7 @@ public class MockConnection
      * @since 1.2
      * @see #getTypeMap()
      */
-    public void setTypeMap(Map map)
+    public void setTypeMap(final Map map)
         throws  SQLException
     {
         try
@@ -1465,6 +1504,8 @@ public class MockConnection
             {
                 LogFactory.getLog(getClass()).fatal(
                     "Wrapped connection null");
+
+                m__mTempTypeMap = map;
             }
         }
         catch  (SQLException sqlException)
@@ -1499,7 +1540,7 @@ public class MockConnection
      * @see #getHoldability()
      * @see java.sql.ResultSet
      */
-    public void setHoldability(int holdability)
+    public void setHoldability(final int holdability)
         throws  SQLException
     {
         try
@@ -1514,6 +1555,8 @@ public class MockConnection
             {
                 LogFactory.getLog(getClass()).fatal(
                     "Wrapped connection null");
+
+                m__iTempHoldability = holdability;
             }
         }
         catch  (SQLException sqlException)
@@ -1549,7 +1592,7 @@ public class MockConnection
     public int getHoldability()
         throws  SQLException
     {
-        int result = -1;
+        int result = m__iTempHoldability;
 
         try
         {
@@ -1646,7 +1689,7 @@ public class MockConnection
      * @since 1.4
      * @see Savepoint
      */
-    public Savepoint setSavepoint(String savepoint)
+    public Savepoint setSavepoint(final String savepoint)
         throws  SQLException
     {
         Savepoint result = null;
@@ -1697,7 +1740,7 @@ public class MockConnection
      * @see Savepoint
      * @see #rollback()
      */
-    public void rollback(Savepoint savepoint)
+    public void rollback(final Savepoint savepoint)
         throws  SQLException
     {
         try
@@ -1743,7 +1786,7 @@ public class MockConnection
      * current transaction.
      * @since 1.4
      */
-    public void releaseSavepoint(Savepoint savepoint)
+    public void releaseSavepoint(final Savepoint savepoint)
         throws  SQLException
     {
         try
@@ -1806,11 +1849,11 @@ public class MockConnection
      * @see java.sql.ResultSet
      */
     public PreparedStatement prepareStatement(
-            String sql,
-            int    resultSetType,
-            int    resultSetConcurrency,
-            int    resultSetHoldability)
-        throws  SQLException
+        final String sql,
+        final int    resultSetType,
+        final int    resultSetConcurrency,
+        final int    resultSetHoldability)
+      throws  SQLException
     {
         PreparedStatement result = null;
 
@@ -1882,11 +1925,11 @@ public class MockConnection
      * @see java.sql.ResultSet
      */
     public CallableStatement prepareCall(
-            String sql,
-            int    resultSetType,
-            int    resultSetConcurrency,
-            int    resultSetHoldability)
-        throws  SQLException
+        final String sql,
+        final int    resultSetType,
+        final int    resultSetConcurrency,
+        final int    resultSetHoldability)
+      throws  SQLException
     {
         CallableStatement result = null;
 
@@ -1963,8 +2006,8 @@ public class MockConnection
      * @since 1.4
      */
     public PreparedStatement prepareStatement(
-            String sql, int autoGeneratedKeys)
-        throws  SQLException
+        final String sql, final int autoGeneratedKeys)
+      throws  SQLException
     {
         PreparedStatement result = null;
 
@@ -2037,8 +2080,8 @@ public class MockConnection
      * @since 1.4
      */
     public PreparedStatement prepareStatement(
-            String sql, int[] columnIndexes)
-        throws  SQLException
+        final String sql, final int[] columnIndexes)
+      throws  SQLException
     {
         PreparedStatement result = null;
 
@@ -2114,8 +2157,8 @@ public class MockConnection
      * @since 1.4
      */
     public PreparedStatement prepareStatement(
-            String sql, String[] columnNames)
-        throws  SQLException
+        final String sql, final String[] columnNames)
+      throws  SQLException
     {
         PreparedStatement result = null;
 

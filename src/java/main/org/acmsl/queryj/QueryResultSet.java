@@ -93,21 +93,31 @@ public class QueryResultSet
     private ResultSet m__ResultSet;
 
     /**
+     * The temporary fetch direction (in case wrapped result set is null).
+     */
+    private int m__iTempFetchDirection = -1; 
+
+    /**
+     * The temporary fetch size (in case wrapped result set is null).
+     */
+    private int m__iTempFetchSize = -1; 
+
+    /**
      * Builds a query result set with given references.
      * @param query the query.
      * @param resultSet the wrapped result set.
      */
-    public QueryResultSet(Query query, ResultSet resultSet)
+    public QueryResultSet(final Query query, final ResultSet resultSet)
     {
-        unmodifiableSetQuery(query);
-        unmodifiableSetResultSet(resultSet);
+        immutableSetQuery(query);
+        immutableSetResultSet(resultSet);
     }
 
     /**
      * Specifies the query reference.
      * @param query the query.
      */
-    private void unmodifiableSetQuery(Query query)
+    private void immutableSetQuery(final Query query)
     {
         m__Query = query;
     }
@@ -116,9 +126,9 @@ public class QueryResultSet
      * Specifies the query reference.
      * @param query the query.
      */
-    protected void setQuery(Query query)
+    protected void setQuery(final Query query)
     {
-        unmodifiableSetQuery(query);
+        immutableSetQuery(query);
     }
 
     /**
@@ -134,7 +144,7 @@ public class QueryResultSet
      * Specifies the result set reference.
      * @param resultSet the result set.
      */
-    private void unmodifiableSetResultSet(ResultSet resultSet)
+    private void immutableSetResultSet(final ResultSet resultSet)
     {
         m__ResultSet = resultSet;
     }
@@ -143,9 +153,9 @@ public class QueryResultSet
      * Specifies the result set reference.
      * @param resultSet the result set.
      */
-    protected void setResultSet(ResultSet resultSet)
+    protected void setResultSet(final ResultSet resultSet)
     {
-        unmodifiableSetResultSet(resultSet);
+        immutableSetResultSet(resultSet);
     }
 
     /**
@@ -168,7 +178,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null
      * @exception SQLException if an error occurs.
      */
-    public byte[] getBytes(int index)
+    public byte[] getBytes(final int index)
         throws  SQLException
     {
         byte[] result = null;
@@ -192,7 +202,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public byte[] getBytes(String columnName)
+    public byte[] getBytes(final String columnName)
         throws  SQLException
     {
         byte[] result = null;
@@ -260,7 +270,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is <code>false</code>.
      * @exception SQLException if an error occurs.
      */
-    public boolean getBoolean(int index)
+    public boolean getBoolean(final int index)
         throws SQLException
     {
         boolean result = false;
@@ -284,7 +294,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is <code>false</code>.
      * @exception SQLException if an error occurs.
      */
-    public boolean getBoolean(String columnName)
+    public boolean getBoolean(final String columnName)
         throws  SQLException
     {
         boolean result = false;
@@ -330,7 +340,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is 0.
      * @exception SQLException if an error occurs.
      */
-    public long getLong(int index)
+    public long getLong(final int index)
         throws  SQLException
     {
         long result = 0;
@@ -354,7 +364,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is 0.
      * @exception SQLException if an error occurs.
      */
-    public long getLong(String columnName)
+    public long getLong(final String columnName)
         throws  SQLException
     {
         long result = 0;
@@ -378,7 +388,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Object getObject(int index)
+    public Object getObject(final int index)
         throws  SQLException
     {
         Object result = null;
@@ -400,7 +410,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public Object getObject(String columnName)
+    public Object getObject(final String columnName)
         throws  SQLException
     {
         Object result = null;
@@ -427,7 +437,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Object getObject(int index, Map map)
+    public Object getObject(final int index, final Map map)
         throws  SQLException
     {
         Object result = null;
@@ -454,7 +464,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Object getObject(String columnName, Map map)
+    public Object getObject(final String columnName, final Map map)
         throws  SQLException
     {
         Object result = null;
@@ -494,7 +504,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Ref getRef(int index)
+    public Ref getRef(final int index)
         throws  SQLException
     {
         Ref result = null;
@@ -518,7 +528,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Ref getRef(String columnName)
+    public Ref getRef(final String columnName)
         throws  SQLException
     {
         Ref result = null;
@@ -542,7 +552,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Time getTime(int index)
+    public Time getTime(final int index)
         throws  SQLException
     {
         Time result = null;
@@ -566,7 +576,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Time getTime(String columnName)
+    public Time getTime(final String columnName)
         throws  SQLException
     {
         Time result = null;
@@ -592,7 +602,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Time getTime(int index, Calendar calendar)
+    public Time getTime(final int index, final Calendar calendar)
         throws  SQLException
     {
         Time result = null;
@@ -618,7 +628,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Time getTime(String columnName, Calendar calendar)
+    public Time getTime(final String columnName, final Calendar calendar)
         throws  SQLException
     {
         Time result = null;
@@ -643,7 +653,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Date getDate(int index)
+    public Date getDate(final int index)
         throws  SQLException
     {
         Date result = null;
@@ -665,7 +675,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public Date getDate(String columnName)
+    public Date getDate(final String columnName)
         throws  SQLException
     {
         Date result = null;
@@ -691,7 +701,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Date getDate(int index, Calendar calendar)
+    public Date getDate(final int index, final Calendar calendar)
         throws  SQLException
     {
         Date result = null;
@@ -717,7 +727,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Date getDate(String columnName, Calendar calendar)
+    public Date getDate(final String columnName, final Calendar calendar)
         throws  SQLException
     {
         Date result = null;
@@ -762,7 +772,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is 0.
      * @exception SQLException if an error occurs.
      */
-    public byte getByte(int index)
+    public byte getByte(final int index)
         throws  SQLException
     {
         byte result = 0;
@@ -784,7 +794,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public byte getByte(String columnName)
+    public byte getByte(final String columnName)
         throws  SQLException
     {
         byte result = 0;
@@ -808,7 +818,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is 0.
      * @exception SQLException if an error occurs.
      */
-    public short getShort(int index)
+    public short getShort(final int index)
         throws  SQLException
     {
         short result = 0;
@@ -830,7 +840,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public short getShort(String columnName)
+    public short getShort(final String columnName)
         throws  SQLException
     {
         short result = 0;
@@ -854,7 +864,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is 0.
      * @exception SQLException if an error occurs.
      */
-    public int getInt(int index)
+    public int getInt(final int index)
         throws  SQLException
     {
         int result = 0;
@@ -876,7 +886,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public int getInt(String columnName)
+    public int getInt(final String columnName)
         throws  SQLException
     {
         int result = 0;
@@ -900,7 +910,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is 0.
      * @exception SQLException if an error occurs.
      */
-    public float getFloat(int index)
+    public float getFloat(final int index)
         throws  SQLException
     {
         float result = 0;
@@ -922,7 +932,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public float getFloat(String columnName)
+    public float getFloat(final String columnName)
         throws  SQLException
     {
         float result = 0;
@@ -946,7 +956,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is 0.
      * @exception SQLException if an error occurs.
      */
-    public double getDouble(int index)
+    public double getDouble(final int index)
         throws  SQLException
     {
         double result = 0;
@@ -970,7 +980,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is 0.
      * @exception SQLException if an error occurs.
      */
-    public double getDouble(String columnName)
+    public double getDouble(final String columnName)
         throws  SQLException
     {
         double result = 0;
@@ -1054,7 +1064,7 @@ public class QueryResultSet
      * ResultSet.FETCH_REVERSE, or ResultSet.FETCH_UNKNOWN.
      * @exception SQLException if an error occurs.
      */
-    public void setFetchDirection(int direction)
+    public void setFetchDirection(final int direction)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -1062,6 +1072,10 @@ public class QueryResultSet
         if  (t_ResultSet != null) 
         {
             t_ResultSet.setFetchDirection(direction);
+        }
+        else
+        {
+            m__iTempFetchDirection = direction;
         }
     }
 
@@ -1075,7 +1089,7 @@ public class QueryResultSet
     public int getFetchDirection()
         throws  SQLException
     {
-        int result = -1;
+        int result = m__iTempFetchDirection;
 
         ResultSet t_ResultSet = getResultSet();
 
@@ -1093,7 +1107,7 @@ public class QueryResultSet
      * @param size (Taken from Sun's Javadoc) the number of rows to fetch.
      * @exception SQLException if an error occurs.
      */
-    public void setFetchSize(int size)
+    public void setFetchSize(final int size)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -1101,6 +1115,10 @@ public class QueryResultSet
         if  (t_ResultSet != null) 
         {
             t_ResultSet.setFetchSize(size);
+        }
+        else
+        {
+            m__iTempFetchSize = size;
         }
     }
 
@@ -1114,7 +1132,7 @@ public class QueryResultSet
     public int getFetchSize()
         throws  SQLException
     {
-        int result = -1;
+        int result = m__iTempFetchSize;
 
         ResultSet t_ResultSet = getResultSet();
 
@@ -1135,7 +1153,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public String getString(int index)
+    public String getString(final int index)
         throws  SQLException
     {
         String result = null;
@@ -1157,7 +1175,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public String getString(String columnName)
+    public String getString(final String columnName)
         throws  SQLException
     {
         String result = null;
@@ -1181,7 +1199,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Array getArray(int index)
+    public Array getArray(final int index)
         throws  SQLException
     {
         Array result = null;
@@ -1203,7 +1221,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public Array getArray(String columnName)
+    public Array getArray(final String columnName)
         throws  SQLException
     {
         Array result = null;
@@ -1227,7 +1245,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public InputStream getAsciiStream(int index)
+    public InputStream getAsciiStream(final int index)
         throws  SQLException
     {
         InputStream result = null;
@@ -1249,7 +1267,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public InputStream getAsciiStream(String columnName)
+    public InputStream getAsciiStream(final String columnName)
         throws  SQLException
     {
         InputStream result = null;
@@ -1276,7 +1294,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @deprecated since it's deprecated in JDK 1.4 as well.
      */
-    public BigDecimal getBigDecimal(int index, int scale)
+    public BigDecimal getBigDecimal(final int index, final int scale)
         throws  SQLException
     {
         BigDecimal result = null;
@@ -1301,7 +1319,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @deprecated since it's deprecated in JDK 1.4 as well.
      */
-    public BigDecimal getBigDecimal(String columnName, int scale)
+    public BigDecimal getBigDecimal(final String columnName, final int scale)
         throws  SQLException
     {
         BigDecimal result = null;
@@ -1325,7 +1343,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public BigDecimal getBigDecimal(int index)
+    public BigDecimal getBigDecimal(final int index)
         throws  SQLException
     {
         BigDecimal result = null;
@@ -1347,7 +1365,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public BigDecimal getBigDecimal(String columnName)
+    public BigDecimal getBigDecimal(final String columnName)
         throws  SQLException
     {
         BigDecimal result = null;
@@ -1371,7 +1389,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public InputStream getBinaryStream(int index)
+    public InputStream getBinaryStream(final int index)
         throws  SQLException
     {
         InputStream result = null;
@@ -1393,7 +1411,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public InputStream getBinaryStream(String columnName)
+    public InputStream getBinaryStream(final String columnName)
         throws  SQLException
     {
         InputStream result = null;
@@ -1417,7 +1435,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Blob getBlob(int index)
+    public Blob getBlob(final int index)
         throws  SQLException
     {
         Blob result = null;
@@ -1441,7 +1459,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Blob getBlob(String columnName)
+    public Blob getBlob(final String columnName)
         throws  SQLException
     {
         Blob result = null;
@@ -1465,7 +1483,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Clob getClob(int index)
+    public Clob getClob(final int index)
         throws  SQLException
     {
         Clob result = null;
@@ -1489,7 +1507,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Clob getClob(String columnName)
+    public Clob getClob(final String columnName)
         throws  SQLException
     {
         Clob result = null;
@@ -1513,7 +1531,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Timestamp getTimestamp(int index)
+    public Timestamp getTimestamp(final int index)
         throws  SQLException
     {
         Timestamp result = null;
@@ -1537,7 +1555,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Timestamp getTimestamp(String columnName)
+    public Timestamp getTimestamp(final String columnName)
         throws  SQLException
     {
         Timestamp result = null;
@@ -1563,7 +1581,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Timestamp getTimestamp(int index, Calendar calendar)
+    public Timestamp getTimestamp(final int index, final Calendar calendar)
         throws  SQLException
     {
         Timestamp result = null;
@@ -1589,7 +1607,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Timestamp getTimestamp(String columnName, Calendar calendar)
+    public Timestamp getTimestamp(final String columnName, final Calendar calendar)
         throws  SQLException
     {
         Timestamp result = null;
@@ -1614,7 +1632,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @deprecated since it's deprecated in JDK 1.4 as well.
      */
-    public InputStream getUnicodeStream(int index)
+    public InputStream getUnicodeStream(final int index)
         throws  SQLException
     {
         InputStream result = null;
@@ -1637,7 +1655,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @deprecated since it's deprecated in JDK 1.4 as well.
      */
-    public InputStream getUnicodeStream(String columnName)
+    public InputStream getUnicodeStream(final String columnName)
         throws  SQLException
     {
         InputStream result = null;
@@ -1683,7 +1701,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Reader getCharacterStream(int index)
+    public Reader getCharacterStream(final int index)
         throws  SQLException
     {
         Reader result = null;
@@ -1707,7 +1725,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Reader getCharacterStream(String columnName)
+    public Reader getCharacterStream(final String columnName)
         throws  SQLException
     {
         Reader result = null;
@@ -1731,7 +1749,7 @@ public class QueryResultSet
      * is on the result set; <code>false</code> otherwise.
      * @exception SQLException if an error occurs.
      */
-    public boolean absolute(int index)
+    public boolean absolute(final int index)
         throws  SQLException
     {
         boolean result = false;
@@ -1819,7 +1837,7 @@ public class QueryResultSet
      * given column name.
      * @exception SQLException if an error occurs.
      */
-    public int findColumn(String columnName)
+    public int findColumn(final String columnName)
         throws  SQLException
     {
         int result = -1;
@@ -2112,7 +2130,7 @@ public class QueryResultSet
      * on a row; <code>false</code> otherwise.
      * @exception SQLException if an error occurs.
      */
-    public boolean relative(int index)
+    public boolean relative(final int index)
         throws  SQLException
     {
         boolean result = false;
@@ -2248,7 +2266,7 @@ public class QueryResultSet
      * @param value a <code>BigDecimal</code> value
      * @exception SQLException if an error occurs.
      */
-    public void updateBigDecimal(int index, BigDecimal value)
+    public void updateBigDecimal(final int index, final BigDecimal value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2267,7 +2285,7 @@ public class QueryResultSet
      * @param value a <code>BigDecimal</code> value
      * @exception SQLException if an error occurs.
      */
-    public void updateBigDecimal(String columnName, BigDecimal value)
+    public void updateBigDecimal(final String columnName, final BigDecimal value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2332,7 +2350,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateBoolean(int index, boolean value)
+    public void updateBoolean(final int index, final boolean value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2351,7 +2369,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateBoolean(String columnName, boolean value)
+    public void updateBoolean(final String columnName, final boolean value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2370,7 +2388,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateByte(int index, byte value)
+    public void updateByte(final int index, final byte value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2389,7 +2407,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateByte(String columnName, byte value)
+    public void updateByte(final String columnName, final byte value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2408,7 +2426,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateBytes(int index, byte[] value)
+    public void updateBytes(final int index, final byte[] value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2427,7 +2445,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateBytes(String columnName, byte[] value)
+    public void updateBytes(final String columnName, final byte[] value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2447,7 +2465,7 @@ public class QueryResultSet
      * @param length (Taken from Sun's Javadoc) the length of the stream.
      * @exception SQLException if an error occurs.
      */
-    public void updateCharacterStream(int index, Reader value, int length)
+    public void updateCharacterStream(final int index, Reader value, final int length)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2489,7 +2507,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateDate(int index, Date value)
+    public void updateDate(final int index, final Date value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2508,7 +2526,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateDate(String columnName, Date value)
+    public void updateDate(final String columnName, final Date value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2527,7 +2545,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateDouble(int index, double value)
+    public void updateDouble(final int index, final double value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2546,7 +2564,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateDouble(String columnName, double value)
+    public void updateDouble(final String columnName, final double value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2565,7 +2583,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateFloat(int index, float value)
+    public void updateFloat(final int index, final float value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2584,7 +2602,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs
      */
-    public void updateFloat(String columnName, float value)
+    public void updateFloat(final String columnName, final float value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2603,7 +2621,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateInt(int index, int value)
+    public void updateInt(final int index, final int value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2622,7 +2640,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateInt(String columnName, int value)
+    public void updateInt(final String columnName, final int value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2641,7 +2659,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateLong(int index, long value)
+    public void updateLong(final int index, final long value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2660,7 +2678,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs
      */
-    public void updateLong(String columnName, long value)
+    public void updateLong(final String columnName, final long value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2679,7 +2697,7 @@ public class QueryResultSet
      *
      * @exception SQLException if an error occurs.
      */
-    public void updateNull(int index)
+    public void updateNull(final int index)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2697,7 +2715,7 @@ public class QueryResultSet
      * the column.
      * @exception SQLException if an error occurs.
      */
-    public void updateNull(String columnName)
+    public void updateNull(final String columnName)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2719,7 +2737,7 @@ public class QueryResultSet
      * the decimal point. For all other types this value will be ignored.
      * @exception SQLException if an error occurs.
      */
-    public void updateObject(int index, Object value, int scale)
+    public void updateObject(final int index, final Object value, final int scale)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2738,7 +2756,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateObject(int index, Object value)
+    public void updateObject(final int index, final Object value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2760,7 +2778,7 @@ public class QueryResultSet
      * the decimal point. For all other types this value will be ignored.
      * @exception SQLException if an error occurs.
      */
-    public void updateObject(String columnName, Object value, int scale)
+    public void updateObject(final String columnName, final Object value, final int scale)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2779,7 +2797,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateObject(String columnName, Object value)
+    public void updateObject(final String columnName, final Object value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2814,7 +2832,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateShort(int index, short value)
+    public void updateShort(final int index, final short value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2833,7 +2851,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateShort(String columnName, short value)
+    public void updateShort(final String columnName, final short value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2852,7 +2870,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateString(int index, String value)
+    public void updateString(final int index, final String value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2871,7 +2889,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateString(String columnName, String value)
+    public void updateString(final String columnName, final String value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2890,7 +2908,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateTime(int index, Time value)
+    public void updateTime(final int index, final Time value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2909,7 +2927,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateTime(String columnName, Time value)
+    public void updateTime(final String columnName, final Time value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2928,7 +2946,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateTimestamp(int index, Timestamp value)
+    public void updateTimestamp(final int index, final Timestamp value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2947,7 +2965,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateTimestamp(String columnName, Timestamp value)
+    public void updateTimestamp(final String columnName, final Timestamp value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -2970,7 +2988,7 @@ public class QueryResultSet
      * Java programming language.
      * @exception SQLException if an error occurs.
      */
-    public URL getURL(int columnIndex)
+    public URL getURL(final int columnIndex)
         throws  SQLException
     {
         URL result = null;
@@ -2994,7 +3012,7 @@ public class QueryResultSet
      * Java programming language.
      * @exception SQLException if an error occurs.
      */
-    public URL getURL(String columnName)
+    public URL getURL(final String columnName)
         throws  SQLException
     {
         URL result = null;
@@ -3017,7 +3035,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateRef(int columnIndex, Ref value)
+    public void updateRef(final int columnIndex, final Ref value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -3035,7 +3053,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateRef(String columnName, Ref value)
+    public void updateRef(final String columnName, final Ref value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -3054,7 +3072,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateBlob(int columnIndex, Blob value)
+    public void updateBlob(final int columnIndex, final Blob value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -3072,7 +3090,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateBlob(String columnName, Blob value)
+    public void updateBlob(final String columnName, final Blob value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -3092,7 +3110,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateClob(int columnIndex, Clob value)
+    public void updateClob(final int columnIndex, final Clob value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -3110,7 +3128,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateClob(String columnName, Clob value)
+    public void updateClob(final String columnName, final Clob value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -3130,7 +3148,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateArray(int columnIndex, Array value)
+    public void updateArray(final int columnIndex, final Array value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -3148,7 +3166,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateArray(String columnName, Array value)
+    public void updateArray(final String columnName, final Array value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -3168,7 +3186,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public byte[] getBytes(Field field)
+    public byte[] getBytes(final Field field)
         throws  SQLException
     {
         byte[] result = null;
@@ -3197,7 +3215,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is <code>false</code>.
      * @exception SQLException if an error occurs.
      */
-    public boolean getBoolean(Field field)
+    public boolean getBoolean(final Field field)
         throws  SQLException
     {
         boolean result = false;
@@ -3226,7 +3244,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is 0.
      * @exception SQLException if an error occurs.
      */
-    public long getLong(Field field)
+    public long getLong(final Field field)
         throws  SQLException
     {
         long result = 0;
@@ -3253,7 +3271,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public Object getObject(Field field)
+    public Object getObject(final Field field)
         throws  SQLException
     {
         Object result = null;
@@ -3285,7 +3303,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Object getObject(Field field, Map map)
+    public Object getObject(final Field field, final Map map)
         throws  SQLException
     {
         Object result = null;
@@ -3314,7 +3332,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Ref getRef(Field field)
+    public Ref getRef(final Field field)
         throws  SQLException
     {
         Ref result = null;
@@ -3343,7 +3361,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Time getTime(Field field)
+    public Time getTime(final Field field)
         throws  SQLException
     {
         Time result = null;
@@ -3374,7 +3392,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Time getTime(Field field, Calendar calendar)
+    public Time getTime(final Field field, final Calendar calendar)
         throws  SQLException
     {
         Time result = null;
@@ -3401,7 +3419,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public Date getDate(Field field)
+    public Date getDate(final Field field)
         throws  SQLException
     {
         Date result = null;
@@ -3432,7 +3450,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Date getDate(Field field, Calendar calendar)
+    public Date getDate(final Field field, final Calendar calendar)
         throws  SQLException
     {
         Date result = null;
@@ -3459,7 +3477,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public byte getByte(Field field)
+    public byte getByte(final Field field)
         throws  SQLException
     {
         byte result = 0;
@@ -3486,7 +3504,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public short getShort(Field field)
+    public short getShort(final Field field)
         throws  SQLException
     {
         short result = 0;
@@ -3513,7 +3531,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public int getInt(Field field)
+    public int getInt(final Field field)
         throws  SQLException
     {
         int result = 0;
@@ -3540,7 +3558,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public float getFloat(Field field)
+    public float getFloat(final Field field)
         throws  SQLException
     {
         float result = 0;
@@ -3569,7 +3587,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is 0.
      * @exception SQLException if an error occurs.
      */
-    public double getDouble(Field field)
+    public double getDouble(final Field field)
         throws  SQLException
     {
         double result = 0;
@@ -3596,7 +3614,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public String getString(Field field)
+    public String getString(final Field field)
         throws  SQLException
     {
         String result = null;
@@ -3623,7 +3641,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public Array getArray(Field field)
+    public Array getArray(final Field field)
         throws  SQLException
     {
         Array result = null;
@@ -3650,7 +3668,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public InputStream getAsciiStream(Field field)
+    public InputStream getAsciiStream(final Field field)
         throws  SQLException
     {
         InputStream result = null;
@@ -3680,7 +3698,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @deprecated since it's deprecated in JDK 1.4 as well.
      */
-    public BigDecimal getBigDecimal(Field field, int scale)
+    public BigDecimal getBigDecimal(final Field field, final int scale)
         throws  SQLException
     {
         BigDecimal result = null;
@@ -3707,7 +3725,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public BigDecimal getBigDecimal(Field field)
+    public BigDecimal getBigDecimal(final Field field)
         throws  SQLException
     {
         BigDecimal result = null;
@@ -3734,7 +3752,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public InputStream getBinaryStream(Field field)
+    public InputStream getBinaryStream(final Field field)
         throws  SQLException
     {
         InputStream result = null;
@@ -3763,7 +3781,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Blob getBlob(Field field)
+    public Blob getBlob(final Field field)
         throws  SQLException
     {
         Blob result = null;
@@ -3792,7 +3810,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Clob getClob(Field field)
+    public Clob getClob(final Field field)
         throws  SQLException
     {
         Clob result = null;
@@ -3821,7 +3839,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Timestamp getTimestamp(Field field)
+    public Timestamp getTimestamp(final Field field)
         throws  SQLException
     {
         Timestamp result = null;
@@ -3852,7 +3870,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Timestamp getTimestamp(Field field, Calendar calendar)
+    public Timestamp getTimestamp(final Field field, final Calendar calendar)
         throws  SQLException
     {
         Timestamp result = null;
@@ -3881,7 +3899,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @deprecated since it's deprecated in JDK 1.4 as well.
      */
-    public InputStream getUnicodeStream(Field field)
+    public InputStream getUnicodeStream(final Field field)
         throws  SQLException
     {
         InputStream result = null;
@@ -3910,7 +3928,7 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null.
      * @exception SQLException if an error occurs.
      */
-    public Reader getCharacterStream(Field field)
+    public Reader getCharacterStream(final Field field)
         throws  SQLException
     {
         Reader result = null;
@@ -3942,7 +3960,7 @@ public class QueryResultSet
      * Java programming language.
      * @exception SQLException if an error occurs.
      */
-    public URL getURL(Field field)
+    public URL getURL(final Field field)
         throws  SQLException
     {
         URL result = null;
@@ -3970,7 +3988,7 @@ public class QueryResultSet
      * @return the column index of the given field.
      * @exception SQLException if an error occurs.
      */
-    public int findColumn(Field field)
+    public int findColumn(final Field field)
         throws  SQLException
     {
         int result = -1;
@@ -3993,10 +4011,10 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      */
     public void updateAsciiStream(
-            Field        field,
-            InputStream  value,
-            int          length)
-        throws  SQLException
+        final Field        field,
+        final InputStream  value,
+        final int          length)
+      throws  SQLException
     {
         Query t_Query = getQuery();
 
@@ -4022,7 +4040,7 @@ public class QueryResultSet
      * @param value a <code>BigDecimal</code> value
      * @exception SQLException if an error occurs.
      */
-    public void updateBigDecimal(Field field, BigDecimal value)
+    public void updateBigDecimal(final Field field, final BigDecimal value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4048,10 +4066,10 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      */
     public void updateBinaryStream(
-            Field        field,
-            InputStream  value,
-            int          length)
-        throws  SQLException
+        final Field        field,
+        final InputStream  value,
+        final int          length)
+      throws  SQLException
     {
         Query t_Query = getQuery();
 
@@ -4075,7 +4093,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateBoolean(Field field, boolean value)
+    public void updateBoolean(final Field field, final boolean value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4099,7 +4117,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateByte(Field field, byte value)
+    public void updateByte(final Field field, final byte value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4123,7 +4141,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateBytes(Field field, byte[] value)
+    public void updateBytes(final Field field, final byte[] value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4149,10 +4167,10 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      */
     public void updateCharacterStream(
-            Field   field,
-            Reader  value,
-            int     length)
-        throws  SQLException
+        final Field   field,
+        final Reader  value,
+        final int     length)
+      throws  SQLException
     {
         Query t_Query = getQuery();
 
@@ -4176,7 +4194,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateDate(Field field, Date value)
+    public void updateDate(final Field field, final Date value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4200,7 +4218,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateDouble(Field field, double value)
+    public void updateDouble(final Field field, final double value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4224,7 +4242,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs
      */
-    public void updateFloat(Field field, float value)
+    public void updateFloat(final Field field, final float value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4248,7 +4266,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateInt(Field field, int value)
+    public void updateInt(final Field field, final int value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4272,7 +4290,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs
      */
-    public void updateLong(Field field, long value)
+    public void updateLong(final Field field, final long value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4295,7 +4313,7 @@ public class QueryResultSet
      * @param field the field.
      * @exception SQLException if an error occurs.
      */
-    public void updateNull(Field field)
+    public void updateNull(final Field field)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4322,8 +4340,9 @@ public class QueryResultSet
      * the decimal point. For all other types this value will be ignored.
      * @exception SQLException if an error occurs.
      */
-    public void updateObject(Field field, Object value, int scale)
-        throws  SQLException
+    public void updateObject(
+        final Field field, final Object value, final int scale)
+      throws  SQLException
     {
         Query t_Query = getQuery();
 
@@ -4346,7 +4365,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateObject(Field field, Object value)
+    public void updateObject(final Field field, final Object value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4370,7 +4389,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateShort(Field field, short value)
+    public void updateShort(final Field field, final short value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4394,7 +4413,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateString(Field field, String value)
+    public void updateString(final Field field, final String value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4418,7 +4437,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateTime(Field field, Time value)
+    public void updateTime(final Field field, final Time value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4442,7 +4461,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateTimestamp(Field field, Timestamp value)
+    public void updateTimestamp(final Field field, final Timestamp value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4468,7 +4487,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateRef(Field field, Ref value)
+    public void updateRef(final Field field, final Ref value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4492,7 +4511,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateBlob(Field field, Blob value)
+    public void updateBlob(final Field field, final Blob value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4516,7 +4535,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateClob(Field field, Clob value)
+    public void updateClob(final Field field, final Clob value)
         throws  SQLException
     {
         Query t_Query = getQuery();
@@ -4540,7 +4559,7 @@ public class QueryResultSet
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
-    public void updateArray(Field field, Array value)
+    public void updateArray(final Field field, final Array value)
         throws  SQLException
     {
         Query t_Query = getQuery();

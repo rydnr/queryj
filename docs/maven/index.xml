@@ -72,6 +72,15 @@
             $Date$
           </td>
           <td>
+            Added <a href="${issue.url}521">persistence support</a> to XML-based DAO implementations.<br/>
+            Released <b>0.5.7</b>,
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/10/16 10:12:39
+          </td>
+          <td>
             QueryJ now generates <a href="${issue.url}521">XML</a>-based DAO implementations for each table.
           </td>
         </tr>

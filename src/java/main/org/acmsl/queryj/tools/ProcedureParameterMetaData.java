@@ -109,28 +109,29 @@ public class ProcedureParameterMetaData
      * @param nullable the nullable flag.
      */
     public ProcedureParameterMetaData(
-        String name,
-        int    type,
-        String comment,
-        int    dataType,
-        int    length,
-        int    nullable)
+        final String name,
+        final int    type,
+        final String comment,
+        final int    dataType,
+        final int    length,
+        final int    nullable)
     {
         super(name, type, comment);
-        inmutableSetDataType(dataType);
-        inmutableSetLength(length);
-        inmutableSetNullable(nullable);
+        immutableSetDataType(dataType);
+        immutableSetLength(length);
+        immutableSetNullable(nullable);
 
         org.apache.commons.logging.LogFactory.getLog(getClass()).info(
-            "Parameter (name, type, comment, dataType, length, nullable) =\n"
-            + name + ", " + type + ", " + comment + ", " + dataType + ", " + length + ", " + nullable);
+              "Parameter (name, type, comment, dataType, length, nullable) =\n"
+            + name + ", " + type + ", " + comment + ", " + dataType
+            + ", " + length + ", " + nullable);
     }
 
     /**
      * Specifies the data type.
      * @param dataType the data type.
      */
-    private void inmutableSetDataType(int dataType)
+    private void immutableSetDataType(final int dataType)
     {
         m__iDataType = dataType;
     }
@@ -139,9 +140,9 @@ public class ProcedureParameterMetaData
      * Specifies the data type.
      * @param dataType the data type.
      */
-    protected void setDataType(int dataType)
+    protected void setDataType(final int dataType)
     {
-        inmutableSetDataType(dataType);
+        immutableSetDataType(dataType);
     }
 
     /**
@@ -157,7 +158,7 @@ public class ProcedureParameterMetaData
      * Specifies the length.
      * @param length the length.
      */
-    private void inmutableSetLength(int length)
+    private void immutableSetLength(final int length)
     {
         m__iLength = length;
     }
@@ -166,9 +167,9 @@ public class ProcedureParameterMetaData
      * Specifies the length.
      * @param length the length.
      */
-    protected void setLength(int length)
+    protected void setLength(final int length)
     {
-        inmutableSetLength(length);
+        immutableSetLength(length);
     }
 
     /**
@@ -184,7 +185,7 @@ public class ProcedureParameterMetaData
      * Specifies the nullable setting.
      * @param nullable the nullable setting.
      */
-    private void inmutableSetNullable(int nullable)
+    private void immutableSetNullable(final int nullable)
     {
         m__iNullable = nullable;
     }
@@ -193,9 +194,9 @@ public class ProcedureParameterMetaData
      * Specifies the nullable setting.
      * @param nullable the nullable setting.
      */
-    protected void setNullable(int nullable)
+    protected void setNullable(final int nullable)
     {
-        inmutableSetNullable(nullable);
+        immutableSetNullable(nullable);
     }
 
     /**

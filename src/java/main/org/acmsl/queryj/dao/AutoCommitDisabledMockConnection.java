@@ -71,11 +71,12 @@ public class AutoCommitDisabledMockConnection
      * Constructs a MockConnection using both objects.
      * @param connection the actual connection to wrap.
      * @param mockDataSource the data source to be notified of events.
+     * @precondition connection != null
      */
     public AutoCommitDisabledMockConnection(
-            Connection connection,
-            MockDataSource mockDataSource)
-        throws  SQLException
+        final Connection connection,
+        final MockDataSource mockDataSource)
+      throws  SQLException
     {
         super(connection, mockDataSource);
         connection.setAutoCommit(false);
