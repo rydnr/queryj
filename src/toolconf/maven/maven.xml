@@ -61,7 +61,7 @@
     -->
     <!--attainGoal name="jdiff"/-->
 
-    <attainGoal name="pdf"/>
+    <!--attainGoal name="pdf"/-->
 
   </preGoal>
 
