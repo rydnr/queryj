@@ -54,6 +54,12 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
+/*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
 /**
  * Is able to create DAO test templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
@@ -76,21 +82,25 @@ public interface DAOTestTemplateFactory
      * @param jdbcUrl the JDBC URL.
      * @param jdbcUsername the JDBC username.
      * @param jdbcPassword the JDBC password.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
     public DAOTestTemplate createDAOTestTemplate(
-            TableTemplate           tableTemplate,
-            DatabaseMetaDataManager metaDataManager,
-            String                  packageName,
-            String                  engineName,
-            String                  engineVersion,
-            String                  quote,
-            String                  daoPackageName,
-            String                  valueObjectPackageName,
-            String                  jdbcDriver,
-            String                  jdbcUrl,
-            String                  jdbcUsername,
-            String                  jdbcPassword)
-        throws  QueryJException;
-}
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String daoPackageName,
+        final String valueObjectPackageName,
+        final String jdbcDriver,
+        final String jdbcUrl,
+        final String jdbcUsername,
+        final String jdbcPassword,
+        final Project project,
+        final Task task)
+      throws QueryJException;
+} 

@@ -153,7 +153,28 @@ public class MockDAOTestTemplateGenerator
         final String daoName,
         final String templateFactoryClass)
     {
-        TemplateMappingManager.getInstance().addDefaultTemplateFactoryClass(
+        addTemplateFactoryClass(
+            daoName,
+            templateFactoryClass,
+            TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Adds a new template factory class.
+     * @param daoName the DAO name.
+     * @param templateFactoryClass the template factory.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @precondition daoName != null
+     * @precondition templateFactoryClass != null
+     * @precondition templateMappingManager != null
+     */
+    public void addTemplateFactoryClass(
+        final String daoName,
+        final String templateFactoryClass,
+        final TemplateMappingManager templateMappingManager)
+    {
+        templateMappingManager.addDefaultTemplateFactoryClass(
             TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX + daoName,
             templateFactoryClass);
     }
@@ -161,19 +182,33 @@ public class MockDAOTestTemplateGenerator
     /**
      * Retrieves the template factory class.
      * @param daoName the DAO name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @return the template factory class name.
      * @precondition daoName != null
-     * @precondition TemplateMappingManager.getInstance() != null
      */
     protected String getTemplateFactoryClass(final String daoName)
     {
         return
-            TemplateMappingManager.getInstance()
-                .getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX
-                    + daoName);
+            getTemplateFactoryClass(
+                daoName, TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Retrieves the template factory class.
+     * @param daoName the DAO name.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @precondition daoName != null
+     * @precondition templateMappingManager != null
+     */
+    protected String getTemplateFactoryClass(
+        final String daoName,
+        final TemplateMappingManager templateMappingManager)
+    {
+        return
+            templateMappingManager.getDefaultTemplateFactoryClass(
+                  TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX
+                + daoName);
     }
 
     /**
@@ -187,13 +222,30 @@ public class MockDAOTestTemplateGenerator
     protected MockDAOTestTemplateFactory getTemplateFactory(final String daoName)
         throws  QueryJException
     {
+        return getTemplateFactory(daoName, TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Retrieves the template factory instance.
+     * @param daoName the DAO name.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition daoName != null
+     * @precondition templateMappingManager != null
+     */
+    protected MockDAOTestTemplateFactory getTemplateFactory(
+        final String daoName,
+        final TemplateMappingManager templateMappingManager)
+      throws  QueryJException
+    {
         MockDAOTestTemplateFactory result = null;
 
         Object t_TemplateFactory =
-            TemplateMappingManager.getInstance()
-                .getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX
-                    + daoName);
+            templateMappingManager.getDefaultTemplateFactoryClass(
+                  TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX
+                + daoName);
 
         if  (t_TemplateFactory != null)
         {
@@ -222,48 +274,54 @@ public class MockDAOTestTemplateGenerator
      * @param quote the identifier quote string.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectPackageName the value object's package name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
+     * @precondition tableTemplate != null
+     * @precondition metaDataManager != null
+     * @precondition packageName != null
+     * @precondition daoPackageName != null
+     * @precondition valueObjectPackageName != null
      */
     public MockDAOTestTemplate createMockDAOTestTemplate(
-        final TableTemplate           tableTemplate,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final String                  packageName,
-        final String                  daoPackageName,
-        final String                  valueObjectPackageName)
+        final String packageName,
+        final String daoPackageName,
+        final String valueObjectPackageName,
+        final Project project,
+        final Task task)
       throws  QueryJException
     {
         MockDAOTestTemplate result = null;
 
-        if  (   (tableTemplate          != null)
-             && (metaDataManager        != null)
-             && (packageName            != null)
-             && (daoPackageName         != null)
-             && (valueObjectPackageName != null))
-        {
-            MockDAOTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(tableTemplate.getTableName());
+        MockDAOTestTemplateFactory t_TemplateFactory =
+            getTemplateFactory(tableTemplate.getTableName());
 
-            if  (t_TemplateFactory != null)
-            {
-                result =
-                    t_TemplateFactory.createMockDAOTestTemplate(
-                        tableTemplate,
-                        metaDataManager,
-                        packageName,
-                        daoPackageName,
-                        valueObjectPackageName);
-            }
-            else 
-            {
-                result =
-                    new MockDAOTestTemplate(
-                        tableTemplate,
-                        metaDataManager,
-                        packageName,
-                        daoPackageName,
-                        valueObjectPackageName) {};
-            }
+        if  (t_TemplateFactory != null)
+        {
+            result =
+                t_TemplateFactory.createMockDAOTestTemplate(
+                    tableTemplate,
+                    metaDataManager,
+                    packageName,
+                    daoPackageName,
+                    valueObjectPackageName,
+                    project,
+                    task);
+        }
+        else 
+        {
+            result =
+                new MockDAOTestTemplate(
+                    tableTemplate,
+                    metaDataManager,
+                    packageName,
+                    daoPackageName,
+                    valueObjectPackageName,
+                    project,
+                    task) {};
         }
 
         return result;
@@ -281,51 +339,79 @@ public class MockDAOTestTemplateGenerator
      */
     public void write(
         final MockDAOTestTemplate mockDAOTestTemplate,
-        final File                outputDir,
-        final Project             project,
-        final Task                task)
+        final File outputDir,
+        final Project project,
+        final Task task)
       throws  IOException
     {
-        StringUtils t_StringUtils = StringUtils.getInstance();
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
-        FileUtils t_FileUtils     = FileUtils.getInstance();
+        write(
+            mockDAOTestTemplate,
+            outputDir,
+            project,
+            task,
+            StringUtils.getInstance(),
+            EnglishGrammarUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-        if  (   (t_StringUtils != null)
-             && (t_FileUtils   != null))
+    /**
+     * Writes a Mock DAO template to disk.
+     * @param mockDAOTestTemplate the Mock DAO test template to write.
+     * @param outputDir the output folder.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition mockDAOTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final MockDAOTestTemplate mockDAOTestTemplate,
+        final File outputDir,
+        final Project project,
+        final Task task,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
+
+        if  (project != null)
         {
-            outputDir.mkdirs();
-
-            if  (project != null)
-            {
-                project.log(
-                    task,
-                    "Writing "
-                    + outputDir.getAbsolutePath()
-                    + File.separator
-                    + "Mock"
-                    + t_StringUtils.capitalize(
-                          t_EnglishGrammarUtils.getSingular(
-                              mockDAOTestTemplate
-                                  .getTableTemplate()
-                                      .getTableName().toLowerCase()),
-                        '_')
-                    + "DAOTest.java",
-                    Project.MSG_VERBOSE);
-            }
-            
-            t_FileUtils.writeFile(
-                  outputDir.getAbsolutePath()
+            project.log(
+                task,
+                  "Writing "
+                + outputDir.getAbsolutePath()
                 + File.separator
                 + "Mock"
-                + t_StringUtils.capitalize(
-                      t_EnglishGrammarUtils.getSingular(
+                + stringUtils.capitalize(
+                      englishGrammarUtils.getSingular(
                           mockDAOTestTemplate
                               .getTableTemplate()
                                   .getTableName().toLowerCase()),
                       '_')
                 + "DAOTest.java",
-                mockDAOTestTemplate.toString());
+                Project.MSG_VERBOSE);
         }
+            
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + "Mock"
+            + stringUtils.capitalize(
+                  englishGrammarUtils.getSingular(
+                      mockDAOTestTemplate
+                          .getTableTemplate()
+                              .getTableName().toLowerCase()),
+                '_')
+              + "DAOTest.java",
+              mockDAOTestTemplate.generate());
     }
 }

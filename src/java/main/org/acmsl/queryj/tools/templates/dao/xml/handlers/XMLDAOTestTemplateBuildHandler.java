@@ -156,7 +156,9 @@ public class XMLDAOTestTemplateBuildHandler
                                             t_MetaData
                                                 .getDatabaseProductName(),
                                             attributes),
-                                        retrieveValueObjectPackage(attributes));
+                                        retrieveValueObjectPackage(attributes),
+                                        command.getProject(),
+                                        command.getTask());
 
                             storeTestTemplate(
                                 t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex],

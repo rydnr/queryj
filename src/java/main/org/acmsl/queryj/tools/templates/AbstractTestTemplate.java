@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Identifies all test templates.
+ * Description: Represents generic templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -46,30 +46,36 @@
  */
 package org.acmsl.queryj.tools.templates;
 
+/*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.templates.AbstractTemplate;
+import org.acmsl.queryj.tools.templates.TestTemplate;
+
+/*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
 /**
- * Identifies all test templates.
+ * Represents generic templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface TestTemplate
-    extends  Template
+public abstract class AbstractTestTemplate
+    extends  AbstractTemplate
+    implements  TestTemplate
 {
     /**
-     * Retrieves the test name.
-     * @return such name.
+     * Builds an <code>AbstractTestTemplate</code> using
+     * given information.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
-    public String getTestName();
-
-    /**
-     * Indicates if the test should be considered a suite or not.
-     * @return such information.
-     */
-    public boolean isSuite();
-
-    /**
-     * Retrieves the package name.
-     * @return such information.
-     */
-    public String getPackageName();
+    protected AbstractTestTemplate(final Project project, final Task task)
+    {
+        super(project, task);
+    }
 }

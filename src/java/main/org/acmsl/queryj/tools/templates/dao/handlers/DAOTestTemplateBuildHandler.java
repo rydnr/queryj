@@ -90,12 +90,6 @@ public class DAOTestTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
-     * A cached empty table template array.
-     */
-    public static final TableTemplate[] EMPTY_TABLE_TEMPLATE_ARRAY =
-        new TableTemplate[0];
-
-    /**
      * Creates a DAOTestTemplateBuildHandler.
      */
     public DAOTestTemplateBuildHandler() {};
@@ -177,7 +171,9 @@ public class DAOTestTemplateBuildHandler
                                         retrieveJdbcDriver(attributes),
                                         retrieveJdbcUrl(attributes),
                                         retrieveJdbcUsername(attributes),
-                                        retrieveJdbcPassword(attributes));
+                                        retrieveJdbcPassword(attributes),
+                                        command.getProject(),
+                                        command.getTask());
 
                             storeTestTemplate(
                                 t_aDAOTestTemplates[t_iDAOTestIndex],
@@ -188,11 +184,11 @@ public class DAOTestTemplateBuildHandler
                     }
                 }
             }
-            catch  (SQLException sqlException)
+            catch  (final SQLException sqlException)
             {
                 throw new BuildException(sqlException);
             }
-            catch  (QueryJException queryjException)
+            catch  (final QueryJException queryjException)
             {
                 throw new BuildException(queryjException);
             }
@@ -206,22 +202,16 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the metadata.
      * @throws BuildException if the metadata retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected DatabaseMetaData retrieveDatabaseMetaData(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
+        return
+            (DatabaseMetaData)
+            parameters.get(
+                DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
     }
 
     /**
@@ -229,22 +219,16 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the manager.
      * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
-        DatabaseMetaDataManager result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-        }
-        
-        return result;
+        return
+            (DatabaseMetaDataManager)
+                parameters.get(
+                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**
@@ -252,19 +236,13 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveProjectPackage(Map parameters)
+    protected String retrieveProjectPackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**
@@ -273,24 +251,39 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition engineName != nul
+     * @precondition parameters != null
      */
-    protected String retrieveDAOTestPackage(String engineName, Map parameters)
-        throws  BuildException
+    protected String retrieveDAOTestPackage(
+        final String engineName, final Map parameters)
+      throws  BuildException
     {
-        String result = null;
+        return
+            retrieveDAOTestPackage(
+                engineName, parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveDAOTestPackage(
-                    retrieveProjectPackage(parameters),
-                    engineName);
-        }
-        
-        return result;
+    /**
+     * Retrieves the DAO Test's package name from the attribute map.
+     * @param engineName the engine name.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition engineName != nul
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected String retrieveDAOTestPackage(
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveDAOTestPackage(
+                retrieveProjectPackage(parameters),
+                engineName);
     }
 
     /**
@@ -299,24 +292,41 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition engineName != nul
+     * @precondition parameters != null
      */
-    protected String retrieveDAOPackage(String engineName, Map parameters)
-        throws  BuildException
+    protected String retrieveDAOPackage(
+        final String engineName, final Map parameters)
+      throws  BuildException
     {
-        String result = null;
+        return
+            retrieveDAOPackage(
+                engineName,
+                parameters,
+                PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveDAOPackage(
-                    retrieveProjectPackage(parameters),
-                    engineName);
-        }
-        
-        return result;
+    /**
+     * Retrieves the DAO's package name from the attribute map.
+     * @param engineName the engine name.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition engineName != nul
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected String retrieveDAOPackage(
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveDAOPackage(
+                retrieveProjectPackage(parameters),
+                engineName);
     }
 
     /**
@@ -324,23 +334,32 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveValueObjectPackage(Map parameters)
+    protected String retrieveValueObjectPackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
+        return
+            retrieveValueObjectPackage(
+                parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveValueObjectPackage(
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+    /**
+     * Retrieves the value object's package name from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected String retrieveValueObjectPackage(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveValueObjectPackage(
+                retrieveProjectPackage(parameters));
     }
 
     /**
@@ -348,19 +367,13 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the driver name.
      * @throws BuildException if the driver retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveJdbcDriver(Map parameters)
+    protected String retrieveJdbcDriver(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.JDBC_DRIVER);
-        }
-
-        return result;
+        return
+            (String) parameters.get(ParameterValidationHandler.JDBC_DRIVER);
     }
 
     /**
@@ -368,19 +381,13 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the url name.
      * @throws BuildException if the url retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveJdbcUrl(Map parameters)
+    protected String retrieveJdbcUrl(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.JDBC_URL);
-        }
-
-        return result;
+        return
+            (String) parameters.get(ParameterValidationHandler.JDBC_URL);
     }
 
     /**
@@ -388,19 +395,13 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the username name.
      * @throws BuildException if the username retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveJdbcUsername(Map parameters)
+    protected String retrieveJdbcUsername(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.JDBC_USERNAME);
-        }
-
-        return result;
+        return
+            (String) parameters.get(ParameterValidationHandler.JDBC_USERNAME);
     }
 
     /**
@@ -408,19 +409,13 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the password name.
      * @throws BuildException if the password retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveJdbcPassword(Map parameters)
+    protected String retrieveJdbcPassword(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);
-        }
-
-        return result;
+        return
+            (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);
     }
 
     /**
@@ -428,19 +423,13 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the test templates.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected Collection retrieveTestTemplates(Map parameters)
+    protected Collection retrieveTestTemplates(final Map parameters)
         throws  BuildException
     {
-        Collection result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
-        }
-        
-        return result;
+        return
+            (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
     }
 
     /**
@@ -448,17 +437,15 @@ public class DAOTestTemplateBuildHandler
      * @param daoTestTemplates the DAO templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition daoTestTemplates != null
+     * @precondition parameters != null
      */
     protected void storeDAOTestTemplates(
-            DAOTestTemplate[] daoTestTemplates,
-            Map           parameters)
-        throws  BuildException
+        final DAOTestTemplate[] daoTestTemplates,
+        final Map parameters)
+      throws  BuildException
     {
-        if  (   (daoTestTemplates != null)
-             && (parameters       != null))
-        {
-            parameters.put(TemplateMappingManager.DAO_TEST_TEMPLATES, daoTestTemplates);
-        }
+        parameters.put(TemplateMappingManager.DAO_TEST_TEMPLATES, daoTestTemplates);
     }
 
     /**
@@ -466,21 +453,15 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return such templates.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition parameters != null
      */
     protected TableTemplate[] retrieveTableTemplates(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
-        TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (TableTemplate[])
-                    parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-        }
-
-        return result;
+        return
+            (TableTemplate[])
+                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
     }
 
     /**
@@ -489,15 +470,14 @@ public class DAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the test templates.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition templates != null
+     * @precondition parameters != null
      */
-    protected void storeTestTemplates(Collection templates, Map parameters)
-        throws  BuildException
+    protected void storeTestTemplates(
+        final Collection templates, final Map parameters)
+      throws  BuildException
     {
-        if  (   (templates  != null)
-             && (parameters != null))
-        {
-            parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
-        }
+        parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
     }
 
     /**
@@ -505,22 +485,21 @@ public class DAOTestTemplateBuildHandler
      * @param testTemplate the test template.
      * @param parameters the parameter map.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition template != null
+     * @precondition parameters != null
      */
-    protected void storeTestTemplate(TestTemplate template, Map parameters)
-        throws  BuildException
+    protected void storeTestTemplate(
+        final TestTemplate template, final Map parameters)
+      throws  BuildException
     {
-        if  (   (template   != null)
-             && (parameters != null))
+        Collection t_cTestTemplates = retrieveTestTemplates(parameters);
+
+        if  (t_cTestTemplates == null) 
         {
-            Collection t_cTestTemplates = retrieveTestTemplates(parameters);
-
-            if  (t_cTestTemplates == null) 
-            {
-                t_cTestTemplates = new ArrayList();
-                storeTestTemplates(t_cTestTemplates, parameters);
-            }
-
-            t_cTestTemplates.add(template);
+            t_cTestTemplates = new ArrayList();
+            storeTestTemplates(t_cTestTemplates, parameters);
         }
+
+        t_cTestTemplates.add(template);
     }
 }

@@ -147,13 +147,30 @@ public class XMLDAOTestTemplateGenerator
      * @param templateFactoryClass the template factory.
      * @precondition daoName != null
      * @precondition templateFactoryClass != null
-     * @precondition TemplateMappingManager.getInstance() != null
      */
     public void addTemplateFactoryClass(
-        final String daoName,
-        final String templateFactoryClass)
+        final String daoName, final String templateFactoryClass)
     {
-        TemplateMappingManager.getInstance().addDefaultTemplateFactoryClass(
+        addTemplateFactoryClass(
+            daoName, templateFactoryClass, TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Adds a new template factory class.
+     * @param daoName the DAO name.
+     * @param templateFactoryClass the template factory.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @precondition daoName != null
+     * @precondition templateFactoryClass != null
+     * @precondition templateMappingManager != null
+     */
+    protected void addTemplateFactoryClass(
+        final String daoName,
+        final String templateFactoryClass,
+        final TemplateMappingManager templateMappingManager)
+    {
+        templateMappingManager.addDefaultTemplateFactoryClass(
             TemplateMappingManager.XML_DAO_TEST_TEMPLATE_PREFIX + daoName,
             templateFactoryClass);
     }
@@ -161,19 +178,33 @@ public class XMLDAOTestTemplateGenerator
     /**
      * Retrieves the template factory class.
      * @param daoName the DAO name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @return the template factory class name.
      * @precondition daoName != null
-     * @precondition TemplateMappingManager.getInstance() != null
      */
     protected String getTemplateFactoryClass(final String daoName)
     {
         return
-            TemplateMappingManager.getInstance()
-                .getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.XML_DAO_TEST_TEMPLATE_PREFIX
-                    + daoName);
+            getTemplateFactoryClass(
+                daoName, TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Retrieves the template factory class.
+     * @param daoName the DAO name.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @precondition daoName != null
+     * @precondition templateMappingManager != null
+     */
+    protected String getTemplateFactoryClass(
+        final String daoName,
+        final TemplateMappingManager templateMappingManager)
+    {
+        return
+            templateMappingManager.getDefaultTemplateFactoryClass(
+                  TemplateMappingManager.XML_DAO_TEST_TEMPLATE_PREFIX
+                + daoName);
     }
 
     /**
@@ -182,18 +213,35 @@ public class XMLDAOTestTemplateGenerator
      * @return the template factory class name.
      * @throws QueryJException if the factory class is invalid.
      * @precondition daoName != null
-     * @precondition TemplateMappingManager.getInstance() != null
      */
     protected XMLDAOTestTemplateFactory getTemplateFactory(final String daoName)
         throws  QueryJException
     {
+        return
+            getTemplateFactory(daoName, TemplateMappingManager.getInstance());
+    }
+
+    /**
+     * Retrieves the template factory instance.
+     * @param daoName the DAO name.
+     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * instance.
+     * @return the template factory class name.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition daoName != null
+     * @precondition templateMappingManager != null
+     */
+    protected XMLDAOTestTemplateFactory getTemplateFactory(
+        final String daoName,
+        final TemplateMappingManager templateMappingManager)
+      throws  QueryJException
+    {
         XMLDAOTestTemplateFactory result = null;
 
         Object t_TemplateFactory =
-            TemplateMappingManager.getInstance()
-                .getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.XML_DAO_TEST_TEMPLATE_PREFIX
-                    + daoName);
+            templateMappingManager.getDefaultTemplateFactoryClass(
+                  TemplateMappingManager.XML_DAO_TEST_TEMPLATE_PREFIX
+                + daoName);
 
         if  (t_TemplateFactory != null)
         {
@@ -207,6 +255,12 @@ public class XMLDAOTestTemplateGenerator
             {
                 result = (XMLDAOTestTemplateFactory) t_TemplateFactory;
             }
+        }
+        else
+        {
+            throw
+                new QueryJException(
+                    "xml.dao.test.template.factory.not.found");
         }
 
         return result;
@@ -222,15 +276,19 @@ public class XMLDAOTestTemplateGenerator
      * @param quote the identifier quote string.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectPackageName the value object's package name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
     public XMLDAOTestTemplate createXMLDAOTestTemplate(
-        final TableTemplate           tableTemplate,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final String                  packageName,
-        final String                  daoPackageName,
-        final String                  valueObjectPackageName)
+        final String packageName,
+        final String daoPackageName,
+        final String valueObjectPackageName,
+        final Project project,
+        final Task task)
       throws  QueryJException
     {
         XMLDAOTestTemplate result = null;
@@ -252,7 +310,9 @@ public class XMLDAOTestTemplateGenerator
                         metaDataManager,
                         packageName,
                         daoPackageName,
-                        valueObjectPackageName);
+                        valueObjectPackageName,
+                        project,
+                        task);
             }
             else 
             {
@@ -262,7 +322,9 @@ public class XMLDAOTestTemplateGenerator
                         metaDataManager,
                         packageName,
                         daoPackageName,
-                        valueObjectPackageName) {};
+                        valueObjectPackageName,
+                        project,
+                        task) {};
             }
         }
 

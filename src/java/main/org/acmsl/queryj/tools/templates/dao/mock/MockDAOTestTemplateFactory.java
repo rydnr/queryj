@@ -54,6 +54,12 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
+/*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
 /**
  * Is able to create Mock DAO test templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
@@ -69,14 +75,18 @@ public interface MockDAOTestTemplateFactory
      * @param packageName the package name.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectPackageName the value object's package name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
     public MockDAOTestTemplate createMockDAOTestTemplate(
-        final TableTemplate           tableTemplate,
+        final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
-        final String                  packageName,
-        final String                  daoPackageName,
-        final String                  valueObjectPackageName)
+        final String packageName,
+        final String daoPackageName,
+        final String valueObjectPackageName,
+        final Project project,
+        final Task task)
       throws  QueryJException;
 }

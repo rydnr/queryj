@@ -63,6 +63,12 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+
+/*
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
@@ -74,11 +80,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Template for creating JUnit tests to ensure generated DAOs
  * are working fine and the connection correctly managed.
@@ -87,854 +88,140 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$
  */
 public abstract class DAOTestTemplate
-    implements  TestTemplate
+    extends  AbstractDAOTestTemplate
+    implements  DAOTestTemplateDefaults
 {
     /**
-     * The default header.
+     * Builds a <code>DAOTestTemplate</code> using given information.
+     * @param tableTemplate the table template.
+     * @param metaDataManager the database metadata manager.
+     * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param daoPackageName the DAO's package name.
+     * @param valueObjectsPackageName the value objects' package name.
+     * @param jdbcDriver the JDBC driver.
+     * @param jdbcUrl the JDBC URL.
+     * @param jdbcUsername the JDBC username.
+     * @param jdbcPassword the JDBC password.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      */
-    public static final String DEFAULT_HEADER =
-          "/*\n"
-        + "                        QueryJ\n"
-        + "\n"
-        + "    Copyright (C) 2002  Jose San Leandro Armendariz\n"
-        + "                        jsanleandro@yahoo.es\n"
-        + "                        chousz@yahoo.com\n"
-        + "\n"
-        + "    This library is free software; you can redistribute it and/or\n"
-        + "    modify it under the terms of the GNU General Public\n"
-        + "    License as published by the Free Software Foundation; either\n"
-        + "    version 2 of the License, or any later "
-        + "version.\n"
-        + "\n"
-        + "    This library is distributed in the hope that it will be "
-        + "useful,\n"
-        + "    but WITHOUT ANY WARRANTY; without even the implied warranty "
-        + "of\n"
-        + "    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
-        + "GNU\n"
-        + "    General Public License for more details.\n"
-        + "\n"
-        + "    You should have received a copy of the GNU General Public\n"
-        + "    License along with this library; if not, write to the Free "
-        + "Software\n"
-        + "    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  "
-        + "02111-1307  USA\n"
-        + "\n"
-        + "    Thanks to ACM S.L. for distributing this library under the GPL "
-        + "license.\n"
-        + "    Contact info: jsanleandro@yahoo.es\n"
-        + "    Postal Address: c/Playa de Lagoa, 1\n"
-        + "                    Urb. Valdecabanas\n"
-        + "                    Boadilla del monte\n"
-        + "                    28660 Madrid\n"
-        + "                    Spain\n"
-        + "\n"
-        + " *****************************************************************"
-        + "*************\n"
-        + " *\n"
-        + " * Filename: $" + "RCSfile: $\n"
-        + " *\n"
-        + " * Author: QueryJ\n"
-        + " *\n"
-        + " * Description: Executes JUnit tests to ensure {0}DAO works as\n"
-         // table
-        + " *              expected and connections are correctly managed.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
-        + " */\n";
+    public DAOTestTemplate(
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String daoPackageName,
+        final String valueObjectsPackageName,
+        final String jdbcDriver,
+        final String jdbcUrl,
+        final String jdbcUsername,
+        final String jdbcPassword,
+        final Project project,
+        final Task task)
+    {
+        super(
+            tableTemplate,
+            metaDataManager,
+            DEFAULT_HEADER,
+            DEFAULT_PACKAGE_DECLARATION,
+            packageName,
+            engineName,
+            engineVersion,
+            quote,
+            daoPackageName,
+            valueObjectsPackageName,
+            jdbcDriver,
+            jdbcUrl,
+            jdbcUsername,
+            jdbcPassword,
+            DEFAULT_PROJECT_IMPORTS,
+            DEFAULT_ACMSL_IMPORTS,
+            DEFAULT_JDK_IMPORTS,
+            DEFAULT_JUNIT_IMPORTS,
+            DEFAULT_JAVADOC,
+            DEFAULT_CLASS_DEFINITION,
+            DEFAULT_CLASS_START,
+            DEFAULT_TEST_VALUES,
+            DEFAULT_TEST_UPDATED_VALUES,
+            DEFAULT_CONSTRUCTOR,
+            DEFAULT_INNER_METHODS,
+            DEFAULT_INIT_METHODS,
+            DEFAULT_TEST_SUITE,
+            DEFAULT_CONSTRUCTOR_TEST,
+            DEFAULT_CONNECTION_TEST,
+            DEFAULT_STORE_TEST,
+            DEFAULT_TEST_PARAMETERS_VALUES,
+            DEFAULT_LOAD_TEST,
+            DEFAULT_UPDATE_TEST,
+            DEFAULT_UPDATE_FILTER_VALUES,
+            DEFAULT_TEST_PARAMETERS_UPDATED_VALUES,
+            DEFAULT_REMOVE_TEST,
+            DEFAULT_REMOVE_FILTER_VALUES,
+            DEFAULT_CLASS_END,
+            project,
+            task);
+    }
 
     /**
-     * The package declaration.
+     * Produces a text version of the template, weaving the
+     * dynamic parts with the static skeleton.
+     * @return such source code.
      */
-    public static final String DEFAULT_PACKAGE_DECLARATION =
-        "package {0};\n\n"; // package
+    protected String generateOutput()
+    {
+        return
+            generateOutput(
+                getTableTemplate(),
+                getMetaDataManager(),
+                getHeader(),
+                getPackageDeclaration(),
+                getPackageName(),
+                getEngineName(),
+                getEngineVersion(),
+                getQuote(),
+                getDAOPackageName(),
+                getValueObjectPackageName(),
+                getJdbcDriver(),
+                getJdbcUrl(),
+                getJdbcUsername(),
+                getJdbcPassword(),
+                getProjectImports(),
+                getAcmslImports(),
+                getJdkImports(),
+                getJUnitImports(),
+                getJavadoc(),
+                getClassDefinition(),
+                getClassStart(),
+                getTestValues(),
+                getTestUpdatedValues(),
+                getConstructor(),
+                getInnerMethods(),
+                getInitMethods(),
+                getTestSuite(),
+                getConstructorTest(),
+                getConnectionTest(),
+                getStoreTest(),
+                getTestParametersValues(),
+                getLoadTest(),
+                getUpdateTest(),
+                getUpdateFilterValues(),
+                getTestParametersUpdatedValues(),
+                getRemoveTest(),
+                getRemoveFilterValues(),
+                getClassEnd(),
+                MetaDataUtils.getInstance(),
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance());
+    }
 
     /**
-     * The project-specific imports.
-     */
-    public static final String DEFAULT_PROJECT_IMPORTS =
-          "/*\n"
-        + " * Importing project classes.\n"
-        + " */\n"
-        + "import {0}.{1}{2}DAO;\n"
-    // DAO package - engine name - table name
-        + "import {3}.{2}ValueObject;\n\n";
-    // package - table name
-
-    /**
-     * The ACMSL imports.
-     */
-    public static final String DEFAULT_ACMSL_IMPORTS =
-          "/*\n"
-        + " * Importing some ACM-SL classes.\n"
-        + " */\n"
-        + "import org.acmsl.queryj.dao.MockDataSource;\n\n";
-
-    /**
-     * The JDK imports.
-     */
-    public static final String DEFAULT_JDK_IMPORTS =
-          "/*\n"
-        + " * Importing some JDK classes.\n"
-        + " */\n"
-        + "import java.math.BigDecimal;\n"
-        + "import java.util.Calendar;\n"
-        + "import java.util.Date;\n"
-        + "import java.util.Iterator;\n"
-        + "import javax.sql.DataSource;\n\n";
-
-    /**
-     * The JUnit imports.
-     */
-    public static final String DEFAULT_JUNIT_IMPORTS =
-          "/*\n"
-        + " * Importing some JUnit classes.\n"
-        + " */\n"
-        + "import junit.framework.Test;\n"
-        + "import junit.framework.TestCase;\n"
-        + "import junit.framework.TestSuite;\n\n";
-    
-    /**
-     * The default class Javadoc.
-     */
-    public static final String DEFAULT_JAVADOC =
-          "/**\n"
-        + " * Executes JUnit tests to ensure {1}{2}DAO works as\n"
-         // table
-        + " * expected and connections are correctly managed.\n"
-        + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
-        + " * @see {0}.{1}{2}DAO\n"
-        + " */\n";
-
-    /**
-     * The class definition.
-     */
-    public static final String DEFAULT_CLASS_DEFINITION =
-          "public class {1}{2}DAOTest\n"
-         // Table
-        + "    extends  TestSuite\n";
-
-    /**
-     * The class start.
-     */
-    public static final String DEFAULT_CLASS_START =
-          "'{'\n"
-        + "    /**\n"
-        + "     * Driver class name.\n"
-        + "     */\n"
-        + "    public static final String DRIVER_CLASS_NAME =\n"
-        + "        \"{0}\";\n\n"
-         // the driver class name.
-        + "    /**\n"
-        + "     * The database connection''s URL.\n"
-        + "     */\n"
-        + "    public static final String URL_CONNECTION =\n"
-        + "        \"{1}\";\n\n"
-         // the database url.
-        + "    /**\n"
-        + "     * The database connection''s username.\n"
-        + "     */\n"
-        + "    public static final String USER_NAME =\n"
-        + "        \"{2}\";\n\n"
-         // the jdbc username.
-        + "    /**\n"
-        + "     * The database connection''s password.\n"
-        + "     */\n"
-        + "    public static final String PASSWORD =\n"
-        + "        \"{3}\";\n\n"
-         // the jdbc password.
-        + "    /**\n"
-        + "     * The mock data source.\n"
-        + "     */\n"
-        + "    private static MockDataSource m__DataSource;\n\n"
-        + "    /**\n"
-        + "     * {4} information used just for testing.\n"
-         // value object name.
-        + "     */\n"
-        + "    private static {4}ValueObject m__ValueObject;\n\n"
-         // value object name.
-        + "    /**\n"
-        + "     * The tested instance.\n"
-        + "     */\n"
-        + "    private static {5}{4}DAO m__TestedInstance;\n\n";
-         // DAO name.
-
-    /**
-     * Default test values.
-     */
-    public static final String DEFAULT_TEST_VALUES =
-          "    /**\n"
-        + "     * A test calendar.\n"
-        + "     */\n"
-        + "    public static final Calendar CALENDAR_VALUE =\n"
-        + "        Calendar.getInstance();\n\n"
-        + "    /**\n"
-        + "     * A test date.\n"
-        + "     */\n"
-        + "    public static final Date DATE_VALUE =\n"
-        + "        CALENDAR_VALUE.getTime();\n\n"
-        + "    /**\n"
-        + "     * A test integer.\n"
-        + "     */\n"
-        + "    public static final int INT_VALUE =\n"
-        + "        (int) Math.round(Math.random() * 1000000.0);\n\n"
-        + "    /**\n"
-        + "     * A test long.\n"
-        + "     */\n"
-        + "    public static final long LONG_VALUE =\n"
-        + "        Math.round(Math.random() * (double) INT_VALUE);\n\n"
-        + "    /**\n"
-        + "     * A test double.\n"
-        + "     */\n"
-        + "    public static final double DOUBLE_VALUE =\n"
-        + "        Math.random() * (double) LONG_VALUE;\n\n"
-        + "    /**\n"
-        + "     * A test big decimal.\n"
-        + "     */\n"
-        + "    public static final BigDecimal BIGDECIMAL_VALUE =\n"
-        + "        new BigDecimal(Math.random() * DOUBLE_VALUE);\n"
-        + "    /**\n"
-        + "     * A test object.\n"
-        + "     */\n"
-        + "    public static final Object OBJECT_VALUE =\n"
-        + "        \"Test object-\" + DOUBLE_VALUE;\n\n"
-        + "    /**\n"
-        + "     * A test text.\n"
-        + "     */\n"
-        + "    public static final String STRING_VALUE =\n"
-        + "        \"testing-\" + DOUBLE_VALUE;\n\n";
-
-    /**
-     * Default test updated values.
-     */
-    public static final String DEFAULT_TEST_UPDATED_VALUES =
-          "    /**\n"
-        + "     * A test text for updates.\n"
-        + "     */\n"
-        + "    public static final String UPDATED_STRING_VALUE = \"updated \" + STRING_VALUE;\n\n"
-        + "    /**\n"
-        + "     * A test calendar for updates.\n"
-        + "     */\n"
-        + "    public static final Calendar UPDATED_CALENDAR_VALUE =\n"
-        + "        Calendar.getInstance();\n\n"
-        + "    /**\n"
-        + "     * A test date for updates.\n"
-        + "     */\n"
-        + "    public static final Date UPDATED_DATE_VALUE =\n"
-        + "        UPDATED_CALENDAR_VALUE.getTime();\n\n"
-        + "    /**\n"
-        + "     * A test integer for updates.\n"
-        + "     */\n"
-        + "    public static final int UPDATED_INT_VALUE = INT_VALUE + 1;\n\n"
-        + "    /**\n"
-        + "     * A test long for updates.\n"
-        + "     */\n"
-        + "    public static final long UPDATED_LONG_VALUE = LONG_VALUE + 1;\n\n"
-        + "    /**\n"
-        + "     * A test double for updates.\n"
-        + "     */\n"
-        + "    public static final double UPDATED_DOUBLE_VALUE = DOUBLE_VALUE + 1;\n\n"
-        + "    /**\n"
-        + "     * A test big decimal for updates.\n"
-        + "     */\n"
-        + "    public static final BigDecimal UPDATED_BIGDECIMAL_VALUE =\n"
-        + "        BIGDECIMAL_VALUE.add(new BigDecimal(Math.random() * DOUBLE_VALUE));\n"
-        + "    /**\n"
-        + "     * A test object for updates.\n"
-        + "     */\n"
-        + "    public static final Object UPDATED_OBJECT_VALUE =\n"
-        + "        \"Updated test object\";\n\n";
-
-    /**
-     * The default constructor.
-     */
-    public static final String DEFAULT_CONSTRUCTOR =
-          "    /**\n"
-        + "     * Constructs a {0}{1}DAOTest with given name.\n"
-         // engine - DAO name.
-        + "     * @param name the test name.\n"
-        + "     */\n"
-        + "    public {0}{1}DAOTest(String name)\n"
-        + "    '{'\n"
-        + "        super(name);\n"
-        + "    '}'\n\n";
-
-    /**
-     * The inner methods.
-     */
-    public static final String DEFAULT_INNER_METHODS =
-          "    /**\n"
-        + "     * Specifies the data source.\n"
-        + "     * @param dataSource the data source to use.\n"
-        + "     */\n"
-        + "    private static void setDataSource(MockDataSource dataSource)\n"
-        + "    {\n"
-        + "        m__DataSource = dataSource;\n"
-        + "    }\n\n"
-        + "    /**\n"
-        + "     * Retrieves the data source.\n"
-        + "     * @return such data source.\n"
-        + "     */\n"
-        + "    public static MockDataSource getDataSource()\n"
-        + "    {\n"
-        + "        return m__DataSource;\n"
-        + "    }\n\n";
-
-    /**
-     * The initialization methods.
-     */
-    public static final String DEFAULT_INIT_METHODS =
-          "    /**\n"
-        + "     * Specifies the DAO to test.\n"
-        + "     * @param dao the DAO to test.\n"
-        + "     */\n"
-        + "    private static void setTestedInstance({0}{1}DAO dao)\n"
-         // engine name - DAO name.
-        + "    '{'\n"
-        + "        m__TestedInstance = dao;\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Retrieves the DAO under test.\n"
-        + "     * @return such DAO.\n"
-        + "     */\n"
-        + "    public static {0}{1}DAO getTestedInstance()\n"
-         // engine name - DAO name.
-        + "    '{'\n"
-        + "        return m__TestedInstance;\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Specifies the {1} information used for testing.\n"
-         // Value Object Name
-        + "     * @param {2} such information.\n"
-         // value object name
-        + "     */\n"
-        + "    private static void set{1}({1}ValueObject {2})\n"
-         // Value Object Name - Value Object Name - value object name
-        + "    '{'\n"
-        + "        m__ValueObject = {2};\n"
-         // value object name
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Retrieves the {1} information used for testing.\n"
-         // Value Object Name
-        + "     * @return such information.\n"
-        + "     */\n"
-        + "    public static {1}ValueObject get{1}()\n"
-         // Value Object Name - Value Object Name
-        + "    '{'\n"
-        + "        return m__ValueObject;\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Sets up the mock objects.\n"
-        + "     */\n"
-        + "    protected static void init()\n"
-        + "    '{'\n"
-        + "        setDataSource(\n"
-        + "            new MockDataSource(\n"
-        + "                DRIVER_CLASS_NAME,\n"
-        + "                URL_CONNECTION,\n"
-        + "                USER_NAME,\n"
-        + "                PASSWORD));\n\n"
-        + "        setTestedInstance(\n"
-        + "            new {0}{1}DAO(getDataSource()) '{' '}');\n"
-         // DAO name.
-        + "    '}'\n\n";
-
-    /**
-     * The test suite.
-     */
-    public static final String DEFAULT_TEST_SUITE =
-          "    /**\n"
-        + "     * Executes the tests.\n"
-        + "     * @return the ordered global test.\n"
-        + "     */\n"
-        + "    public static Test suite()\n"
-        + "    '{'\n"
-        + "        TestSuite result = new TestSuite(\"{0}{1}DAOTest - test suite\");\n\n"
-         // DAO name.
-        + "        init();\n\n"
-        + "        result.addTest(new ConstructorTest(\"testConstructor\"));\n"
-        + "        result.addTestSuite(ConnectionTest.class);\n"
-        + "        result.addTest(new Insert{1}Test(\"testInsert\"));\n"
-         // Value Object Name - Value Object Name.
-        + "        result.addTestSuite(ConnectionTest.class);\n"
-        + "        result.addTest(new FindByPrimaryKey{1}Test(\"testFindByPrimaryKey\"));\n"
-         // Value Object Name - Value Object Name.
-        + "        result.addTestSuite(ConnectionTest.class);\n"
-        + "        result.addTest(new Update{1}Test(\"testUpdate\"));\n"
-         // Value Object Name - Value Object Name.
-        + "        result.addTestSuite(ConnectionTest.class);\n"
-        + "        result.addTest(new Delete{1}Test(\"testDelete\"));\n"
-         // Value Object Name - Value Object Name.
-        + "        result.addTestSuite(ConnectionTest.class);\n\n"
-        + "        return result;\n"
-        + "    '}'\n\n";
- 
-    /**
-     * The constructor test.
-     */
-    public static final String DEFAULT_CONSTRUCTOR_TEST =
-          "    /**\n"
-        + "     * Tests {0}{1}DAO constructor.\n"
-         // engine name - DAO name.
-        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
-        + "     */\n"
-        + "    public static class ConstructorTest\n"
-        + "        extends  TestCase\n"
-        + "    '{'\n"
-        + "        /**\n"
-        + "         * Constructs a ConstructorTest with given name.\n"
-        + "         * @param name the test name.\n"
-        + "         */\n"
-        + "        public ConstructorTest(String name)\n"
-        + "        '{'\n"
-        + "            super(name);\n"
-        + "        '}'\n\n"
-        + "        /**\n"
-        + "         * Tests the constructor.\n"
-        + "         */\n"
-        + "        public void testConstructor()\n"
-        + "        '{'\n"
-        + "            {0}{1}DAO t_TestedInstance = getTestedInstance();\n"
-         // engine name - DAO name.
-        + "            assertTrue(t_TestedInstance != null);\n\n"
-        + "            DataSource t_DataSource = t_TestedInstance.getDataSource();\n"
-        + "            assertNotNull(t_DataSource);\n\n"
-        + "            assertTrue(t_DataSource == getDataSource());\n"
-        + "            assertTrue(t_DataSource.equals(getDataSource()));\n"
-        + "        '}'\n\n"
-        + "    '}'\n\n";
-
-    /**
-     * Connection test.
-     */
-    public static final String DEFAULT_CONNECTION_TEST =
-          "    /**\n"
-        + "     * Tests whether the connection is managed correctly.\n"
-        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
-        + "     */\n"
-        + "    public static class ConnectionTest\n"
-        + "        extends  TestCase\n"
-        + "    {\n"
-        + "        /**\n"
-        + "         * Constructs a ConnectionTest with given name.\n"
-        + "         * @param name the test name.\n"
-        + "         */\n"
-        + "        public ConnectionTest(String name)\n"
-        + "        {\n"
-        + "            super(name);\n"
-        + "        }\n\n"
-        + "        /**\n"
-        + "         * Tests if the <code>close()</code> method is invoked for each opened\n"
-        + "         * connection.\n"
-        + "         */\n"
-        + "        public void testConnectionClosed()\n"
-        + "        {\n"
-        + "            assertTrue(\n"
-        + "                   getDataSource().getOpenedConnections()\n"
-        + "                == getDataSource().getCloseMethodCalls());\n"
-        + "        }\n\n"
-        + "        /**\n"
-        + "         * Tests if there's been any rollback.\n"
-        + "         */\n"
-        + "        public void testNotRollbacks()\n"
-        + "        {\n"
-        + "            assertTrue(\n"
-        + "               getDataSource().getRollbackMethodCalls() == 0);\n"
-        + "        }\n\n"
-        + "        /**\n"
-        + "         * Tests if there's been any exception.\n"
-        + "         */\n"
-        + "        public void testNotExceptions()\n"
-        + "        {\n"
-        + "            Iterator t_ExceptionIterator = getDataSource().exceptionIterator();\n\n"
-        + "            assertTrue(\n"
-        + "                (   (t_ExceptionIterator == null)\n"
-        + "                 || (!t_ExceptionIterator.hasNext())));\n"
-        + "        }\n\n"
-        + "    }\n\n";
-
-    /**
-     * Store test.
-     */
-    public static final String DEFAULT_STORE_TEST =
-          "    /**\n"
-        + "     * Tests {1}{2}DAO.insert() method.\n"
-        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.{1}{2}DAO#insert({3},org.acmsl.queryj.dao.TransactionToken)\n"
-         // method parameter type declaration
-        + "     */\n"
-        + "    public static class Insert{2}Test\n"
-        + "        extends  TestCase\n"
-        + "    '{'\n"
-        + "        /**\n"
-        + "         * Constructs a Insert{1}Test with given name.\n"
-        + "         * @param name the test name.\n"
-        + "         */\n"
-        + "        public Insert{2}Test(String name)\n"
-        + "        '{'\n"
-        + "            super(name);\n"
-        + "        '}'\n\n"
-        + "        /**\n"
-        + "         * Tests the insert method.\n"
-        + "         */\n"
-        + "        public void testInsert()\n"
-        + "        '{'\n"
-        + "            assertNotNull(getTestedInstance());\n\n"
-        + "            getTestedInstance()\n"
-        + "                .insert("
-        + "{4}"
-         // store invokaton with test parameters
-        + "\n                        null); // transactionless\n"
-        + "        '}'\n\n"
-        + "    '}'\n\n";
-
-    /**
-     * Test parameters' values.
-     */
-    public static final String DEFAULT_TEST_PARAMETERS_VALUES =
-        "\n                        {0}_VALUE,";
-
-    /**
-     * Load test.
-     */
-    public static final String DEFAULT_LOAD_TEST =
-          "    /**\n"
-        + "     * Tests {1}{2}DAO.findByPrimaryKey()} method.\n"
-        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.{1}{2}DAO#findByPrimaryKey({3},org.acmsl.queryj.dao.TransactionToken)\n"
-        + "     */\n"
-        + "    public static class FindByPrimaryKey{2}Test\n"
-        + "        extends  TestCase\n"
-        + "    '{'\n"
-        + "        /**\n"
-        + "         * Constructs a FindByPrimaryKey{2}Test with given name.\n"
-        + "         * @param name the test name.\n"
-        + "         */\n"
-        + "        public FindByPrimaryKey{2}Test(String name)\n"
-        + "        '{'\n"
-        + "            super(name);\n"
-        + "        '}'\n\n"
-        + "        /**\n"
-        + "         * Tests the findByPrimaryKey() method.\n"
-        + "         */\n"
-        + "        public void testFindByPrimaryKey()\n"
-        + "        '{'\n"
-        + "            assertNotNull(getTestedInstance());\n\n"
-        + "            {2}ValueObject t_ValueObject =\n"
-        + "                getTestedInstance()\n"
-        + "                    .findByPrimaryKey("
-        + "{4}"
-         // load invokaton with test parameters
-        + "\n                        null); // transactionless\n"
-        + "            assertNotNull(t_ValueObject);\n"
-        + "            set{2}(t_ValueObject);\n"
-        + "        '}'\n\n"
-        + "    '}'\n\n";
-     
-    /**
-     * Update test.
-     */
-    public static final String DEFAULT_UPDATE_TEST =
-          "    /**\n"
-        + "     * Tests {1}{2}DAO.update() method.\n"
-        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.{1}{2}DAO#update({3},org.acmsl.queryj.dao.TransactionToken)\n"
-         // method parameter type declaration
-        + "     */\n"
-        + "    public static class Update{2}Test\n"
-        + "        extends  TestCase\n"
-        + "    '{'\n"
-        + "        /**\n"
-        + "         * Constructs a Update{1}Test with given name.\n"
-        + "         * @param name the test name.\n"
-        + "         */\n"
-        + "        public Update{2}Test(String name)\n"
-        + "        '{'\n"
-        + "            super(name);\n"
-        + "        '}'\n\n"
-        + "        /**\n"
-        + "         * Tests the update method.\n"
-        + "         */\n"
-        + "        public void testUpdate()\n"
-        + "        '{'\n"
-        + "            assertNotNull(getTestedInstance());\n\n"
-        + "            assertNotNull(get{2}());\n\n"
-        + "            getTestedInstance()\n"
-        + "                .update("
-        + "{4}"
-         // primary key values.
-        + "{5}"
-         // update test parameters.
-        + "\n                    null);  // no transactions\n"
-        + "        '}'\n\n"
-        + "    '}'\n\n";
-
-    /**
-     * Update filter values.
-     */
-    public static final String DEFAULT_UPDATE_FILTER_VALUES =
-        "\n                    get{0}().get{1}(),";
-        
-    /**
-     * Test parameters' updated values.
-     */
-    public static final String DEFAULT_TEST_PARAMETERS_UPDATED_VALUES =
-        "\n                    UPDATED_{0}_VALUE,";
-
-    /**
-     * Remove test.
-     */
-    public static final String DEFAULT_REMOVE_TEST =
-          "    /**\n"
-        + "     * Tests {1}{2}DAO.delete() method.\n"
-        + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.{1}{2}DAO#delete({3},org.acmsl.queryj.dao.TransactionToken)\n"
-        + "     */\n"
-        + "    public static class Delete{2}Test\n"
-        + "        extends  TestCase\n"
-        + "    '{'\n"
-        + "        /**\n"
-        + "         * Constructs a Delete{2}Test with given name.\n"
-        + "         * @param name the test name.\n"
-        + "         */\n"
-        + "        public Delete{2}Test(String name)\n"
-        + "        '{'\n"
-        + "            super(name);\n"
-        + "        '}'\n\n"
-        + "        /**\n"
-        + "         * Tests the delete method.\n"
-        + "         */\n"
-        + "        public void testDelete()\n"
-        + "        '{'\n"
-        + "            assertNotNull(getTestedInstance());\n\n"
-        + "            assertNotNull(get{2}());\n\n"
-        + "            assertTrue(\n"
-        + "                getTestedInstance()\n"
-        + "                    .delete("
-        + "{4}"
-        + "\n                        null));  // no transactions\n"
-         // remove invokaton with test pks.
-        + "        '}'\n\n"
-        + "    '}'\n";
-
-    /**
-     * Remove filter values.
-     */
-    public static final String DEFAULT_REMOVE_FILTER_VALUES =
-        "\n                        get{0}().get{1}(),";
-        
-    /**
-     * The default class end.
-     */
-    public static final String DEFAULT_CLASS_END = "}\n";
-
-    /**
-     * The table template.
-     */
-    private TableTemplate m__TableTemplate;
-
-    /**
-     * The database metadata manager.
-     */
-    private DatabaseMetaDataManager m__MetaDataManager;
-
-    /**
-     * The header.
-     */
-    private String m__strHeader;
-
-    /**
-     * The package declaration.
-     */
-    private String m__strPackageDeclaration;
-
-    /**
-     * The package name.
-     */
-    private String m__strPackageName;
-
-    /**
-     * The engine name.
-     */
-    private String m__strEngineName;
-
-    /**
-     * The engine's version.
-     */
-    private String m__strEngineVersion;
-
-    /**
-     * The quote.
-     */
-    private String m__strQuote;
-
-    /**
-     * The DAO package name.
-     */
-    private String m__strDAOPackageName;
-
-    /**
-     * The value object's package name.
-     */
-    private String m__strValueObjectPackageName;
-
-    /**
-     * The JDBC driver.
-     */
-    private String m__strJdbcDriver;
-
-    /**
-     * The JDBC URL.
-     */
-    private String m__strJdbcUrl;
-
-    /**
-     * The JDBC username.
-     */
-    private String m__strJdbcUsername;
-
-    /**
-     * The JDBC password.
-     */
-    private String m__strJdbcPassword;
-
-    /**
-     * The project imports.
-     */
-    private String m__strProjectImports;
-
-    /**
-     * The ACM-SL imports.
-     */
-    private String m__strAcmslImports;
-
-    /**
-     * The JDK imports.
-     */
-    private String m__strJdkImports;
-
-    /**
-     * The JUnit imports.
-     */
-    private String m__strJUnitImports;
-
-    /**
-     * The Javadoc.
-     */
-    private String m__strJavadoc;
-
-    /**
-     * The class definition.
-     */
-    private String m__strClassDefinition;
-
-    /**
-     * The class start.
-     */
-    private String m__strClassStart;
-
-    /**
-     * The test values.
-     */
-    private String m__strTestValues;
-
-    /**
-     * The test updated values.
-     */
-    private String m__strTestUpdatedValues;
-
-    /**
-     * The constructor.
-     */
-    private String m__strConstructor;
-
-    /**
-     * The inner methods.
-     */
-    private String m__strInnerMethods;
-
-    /**
-     * The init methods.
-     */
-    private String m__strInitMethods;
-
-    /**
-     * The test suite.
-     */
-    private String m__strTestSuite;
-
-    /**
-     * The constructor test.
-     */
-    private String m__strConstructorTest;
-
-    /**
-     * The connection test.
-     */
-    private String m__strConnectionTest;
-
-    /**
-     * The store test.
-     */
-    private String m__strStoreTest;
-
-    /**
-     * The test values subtemplate.
-     */
-    private String m__strTestParametersValues;
-
-    /**
-     * The load test.
-     */
-    private String m__strLoadTest;
-
-    /**
-     * The update test.
-     */
-    private String m__strUpdateTest;
-
-    /**
-     * The update filter values subtemplate.
-     */
-    private String m__strUpdateFilterValues;
-
-    /**
-     * The test updated values subtemplate.
-     */
-    private String m__strTestParametersUpdatedValues;
-
-    /**
-     * The remove test.
-     */
-    private String m__strRemoveTest;
-
-    /**
-     * The remove filter values subtemplate.
-     */
-    private String m__strRemoveFilterValues;
-
-    /**
-     * The class end.
-     */
-    private String m__strClassEnd;
-
-    /**
-     * Builds a DAOTestTemplate using given information.
+     * Produces a text version of the template, weaving the
+     * dynamic parts with the static skeleton.
      * @param tableTemplate the table template.
      * @param metaDataManager the database metadata manager.
      * @param header the header.
@@ -977,1610 +264,416 @@ public abstract class DAOTestTemplate
      * @param removeFilterValues the remove filter values
      * subtemplate.
      * @param classEnd the class end.
-     */
-    public DAOTestTemplate(
-        TableTemplate           tableTemplate,
-        DatabaseMetaDataManager metaDataManager,
-        String                  header,
-        String                  packageDeclaration,
-        String                  packageName,
-        String                  engineName,
-        String                  engineVersion,
-        String                  quote,
-        String                  daoPackageName,
-        String                  valueObjectPackageName,
-        String                  jdbcDriver,
-        String                  jdbcUrl,
-        String                  jdbcUsername,
-        String                  jdbcPassword,
-        String                  projectImports,
-        String                  acmslImports,
-        String                  jdkImports,
-        String                  junitImports,
-        String                  javadoc,
-        String                  classDefinition,
-        String                  classStart,
-        String                  testValues,
-        String                  testUpdatedValues,
-        String                  constructor,
-        String                  innerMethods,
-        String                  initMethods,
-        String                  testSuite,
-        String                  constructorTest,
-        String                  connectionTest,
-        String                  storeTest,
-        String                  testParametersValues,
-        String                  loadTest,
-        String                  updateTest,
-        String                  updateFilterValues,
-        String                  testParametersUpdatedValues,
-        String                  removeTest,
-        String                  removeFilterValues,
-        String                  classEnd)
-    {
-        immutableSetTableTemplate(tableTemplate);
-        immutableSetMetaDataManager(metaDataManager);
-        immutableSetHeader(header);
-        immutableSetPackageDeclaration(packageDeclaration);
-        immutableSetPackageName(packageName);
-        immutableSetEngineName(engineName);
-        immutableSetEngineVersion(engineVersion);
-        immutableSetQuote(quote);
-        immutableSetDAOPackageName(daoPackageName);
-        immutableSetValueObjectPackageName(valueObjectPackageName);
-        immutableSetJdbcDriver(jdbcDriver);
-        immutableSetJdbcUrl(jdbcUrl);
-        immutableSetJdbcUsername(jdbcUsername);
-        immutableSetJdbcPassword(jdbcPassword);
-        immutableSetProjectImports(projectImports);
-        immutableSetAcmslImports(acmslImports);
-        immutableSetJdkImports(jdkImports);
-        immutableSetJUnitImports(junitImports);
-        immutableSetJavadoc(javadoc);
-        immutableSetClassDefinition(classDefinition);
-        immutableSetClassStart(classStart);
-        immutableSetTestValues(testValues);
-        immutableSetTestUpdatedValues(testUpdatedValues);
-        immutableSetConstructor(constructor);
-        immutableSetInnerMethods(innerMethods);
-        immutableSetInitMethods(initMethods);
-        immutableSetTestSuite(testSuite);
-        immutableSetConstructorTest(constructorTest);
-        immutableSetConnectionTest(connectionTest);
-        immutableSetStoreTest(storeTest);
-        immutableSetTestParametersValues(testParametersValues);
-        immutableSetLoadTest(loadTest);
-        immutableSetUpdateTest(updateTest);
-        immutableSetUpdateFilterValues(updateFilterValues);
-        immutableSetTestParametersUpdatedValues(testParametersUpdatedValues);
-        immutableSetRemoveTest(removeTest);
-        immutableSetRemoveFilterValues(removeFilterValues);
-        immutableSetClassEnd(classEnd);
-    }
-
-    /**
-     * Builds a DAOTestTemplate using given information.
-     * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param daoPackageName the DAO's package name.
-     * @param valueObjectsPackageName the value objects' package name.
-     * @param jdbcDriver the JDBC driver.
-     * @param jdbcUrl the JDBC URL.
-     * @param jdbcUsername the JDBC username.
-     * @param jdbcPassword the JDBC password.
-     */
-    public DAOTestTemplate(
-        TableTemplate           tableTemplate,
-        DatabaseMetaDataManager metaDataManager,
-        String                  packageName,
-        String                  engineName,
-        String                  engineVersion,
-        String                  quote,
-        String                  daoPackageName,
-        String                  valueObjectsPackageName,
-        String                  jdbcDriver,
-        String                  jdbcUrl,
-        String                  jdbcUsername,
-        String                  jdbcPassword)
-    {
-        this(
-            tableTemplate,
-            metaDataManager,
-            DEFAULT_HEADER,
-            DEFAULT_PACKAGE_DECLARATION,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            daoPackageName,
-            valueObjectsPackageName,
-            jdbcDriver,
-            jdbcUrl,
-            jdbcUsername,
-            jdbcPassword,
-            DEFAULT_PROJECT_IMPORTS,
-            DEFAULT_ACMSL_IMPORTS,
-            DEFAULT_JDK_IMPORTS,
-            DEFAULT_JUNIT_IMPORTS,
-            DEFAULT_JAVADOC,
-            DEFAULT_CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            DEFAULT_TEST_VALUES,
-            DEFAULT_TEST_UPDATED_VALUES,
-            DEFAULT_CONSTRUCTOR,
-            DEFAULT_INNER_METHODS,
-            DEFAULT_INIT_METHODS,
-            DEFAULT_TEST_SUITE,
-            DEFAULT_CONSTRUCTOR_TEST,
-            DEFAULT_CONNECTION_TEST,
-            DEFAULT_STORE_TEST,
-            DEFAULT_TEST_PARAMETERS_VALUES,
-            DEFAULT_LOAD_TEST,
-            DEFAULT_UPDATE_TEST,
-            DEFAULT_UPDATE_FILTER_VALUES,
-            DEFAULT_TEST_PARAMETERS_UPDATED_VALUES,
-            DEFAULT_REMOVE_TEST,
-            DEFAULT_REMOVE_FILTER_VALUES,
-            DEFAULT_CLASS_END);
-    }
-
-    /**
-     * Specifies the table template.
-     * @param tableTemplate the table template.
-     */
-    private void immutableSetTableTemplate(TableTemplate tableTemplate)
-    {
-        m__TableTemplate = tableTemplate;
-    }
-
-    /**
-     * Specifies the table template.
-     * @param tableTemplate the table template.
-     */
-    protected void setTableTemplate(TableTemplate tableTemplate)
-    {
-        immutableSetTableTemplate(tableTemplate);
-    }
-
-    /**
-     * Retrieves the table template.
-     * @return such template.
-     */
-    public TableTemplate getTableTemplate()
-    {
-        return m__TableTemplate;
-    }
-
-
-    /**
-     * Specifies the metadata manager.
-     * @param metaDataManager the metadata manager.
-     */
-    private void immutableSetMetaDataManager(DatabaseMetaDataManager metaDataManager)
-    {
-        m__MetaDataManager = metaDataManager;
-    }
-
-    /**
-     * Specifies the metadata manager.
-     * @param metaDataManager the metadata manager.
-     */
-    protected void setMetaDataManager(DatabaseMetaDataManager metaDataManager)
-    {
-        immutableSetMetaDataManager(metaDataManager);
-    }
-
-    /**
-     * Retrieves the metadata manager.
-     * @return such manager.
-     */
-    public DatabaseMetaDataManager getMetaDataManager()
-    {
-        return m__MetaDataManager;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    private void immutableSetHeader(String header)
-    {
-        m__strHeader = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected void setHeader(String header)
-    {
-        immutableSetHeader(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    public String getHeader() 
-    {
-        return m__strHeader;
-    }
-
-    /**
-     * Specifies the package declaration.
-     * @param packageDeclaration the new package declaration.
-     */
-    private void immutableSetPackageDeclaration(String packageDeclaration)
-    {
-        m__strPackageDeclaration = packageDeclaration;
-    }
-
-    /**
-     * Specifies the package declaration.
-     * @param packageDeclaration the new package declaration.
-     */
-    protected void setPackageDeclaration(String packageDeclaration)
-    {
-        immutableSetPackageDeclaration(packageDeclaration);
-    }
-
-    /**
-     * Retrieves the package declaration.
-     * @return such information.
-     */
-    public String getPackageDeclaration() 
-    {
-        return m__strPackageDeclaration;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName the new package name.
-     */
-    private void immutableSetPackageName(String packageName)
-    {
-        m__strPackageName = packageName;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName the new package name.
-     */
-    protected void setPackageName(String packageName)
-    {
-        immutableSetPackageName(packageName);
-    }
-
-    /**
-     * Retrieves the package name.
-     * @return such information.
-     */
-    public String getPackageName() 
-    {
-        return m__strPackageName;
-    }
-
-    /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
-     */
-    private void immutableSetEngineName(String engineName)
-    {
-        m__strEngineName = engineName;
-    }
-
-    /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
-     */
-    protected void setEngineName(String engineName)
-    {
-        immutableSetEngineName(engineName);
-    }
-
-    /**
-     * Retrieves the engine name.
-     * @return such information.
-     */
-    public String getEngineName() 
-    {
-        return m__strEngineName;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    private void immutableSetEngineVersion(String engineVersion)
-    {
-        m__strEngineVersion = engineVersion;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    protected void setEngineVersion(String engineVersion)
-    {
-        immutableSetEngineVersion(engineVersion);
-    }
-
-    /**
-     * Retrieves the engine version.
-     * @return such information.
-     */
-    public String getEngineVersion()
-    {
-        return m__strEngineVersion;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    private void immutableSetQuote(String quote)
-    {
-        m__strQuote = quote;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    protected void setQuote(String quote)
-    {
-        immutableSetQuote(quote);
-    }
-
-    /**
-     * Retrieves the identifier quote string.
-     * @return such identifier.
-     */
-    public String getQuote()
-    {
-        return m__strQuote;
-    }
-
-    /**
-     * Specifies the DAO package name.
-     * @return such package.
-     */
-    private void immutableSetDAOPackageName(String value)
-    {
-        m__strDAOPackageName = value;
-    }
-
-    /**
-     * Specifies the DAO package name.
-     * @param value such package.
-     */
-    protected void setDAOPackageName(String value)
-    {
-        immutableSetDAOPackageName(value);
-    }
-
-    /**
-     * Retrieves the DAO package name
-     * @return such package.
-     */
-    public String getDAOPackageName()
-    {
-        return m__strDAOPackageName;
-    }
-
-    /**
-     * Specifies the value object's package name.
-     * @return such package.
-     */
-    private void immutableSetValueObjectPackageName(String value)
-    {
-        m__strValueObjectPackageName = value;
-    }
-
-    /**
-     * Specifies the value object's package name.
-     * @param value such package.
-     */
-    protected void setValueObjectPackageName(String value)
-    {
-        immutableSetValueObjectPackageName(value);
-    }
-
-    /**
-     * Retrieves the value object's package name
-     * @return such package.
-     */
-    public String getValueObjectPackageName()
-    {
-        return m__strValueObjectPackageName;
-    }
-
-    /**
-     * Specifies the JDBC driver.
-     * @param jdbcDriver the new JDBC driver.
-     */
-    private void immutableSetJdbcDriver(String jdbcDriver)
-    {
-        m__strJdbcDriver = jdbcDriver;
-    }
-
-    /**
-     * Specifies the JDBC driver.
-     * @param jdbcDriver the new JDBC driver.
-     */
-    protected void setJdbcDriver(String jdbcDriver)
-    {
-        immutableSetJdbcDriver(jdbcDriver);
-    }
-
-    /**
-     * Retrieves the JDBC driver.
-     * @return such information.
-     */
-    public String getJdbcDriver()
-    {
-        return m__strJdbcDriver;
-    }
-
-    /**
-     * Specifies the JDBC url.
-     * @param jdbcUrl the new JDBC url.
-     */
-    private void immutableSetJdbcUrl(String jdbcUrl)
-    {
-        m__strJdbcUrl = jdbcUrl;
-    }
-
-    /**
-     * Specifies the JDBC url.
-     * @param jdbcUrl the new JDBC url.
-     */
-    protected void setJdbcUrl(String jdbcUrl)
-    {
-        immutableSetJdbcUrl(jdbcUrl);
-    }
-
-    /**
-     * Retrieves the JDBC url.
-     * @return such information.
-     */
-    public String getJdbcUrl()
-    {
-        return m__strJdbcUrl;
-    }
-
-    /**
-     * Specifies the JDBC username.
-     * @param jdbcUsername the new JDBC username.
-     */
-    private void immutableSetJdbcUsername(String jdbcUsername)
-    {
-        m__strJdbcUsername = jdbcUsername;
-    }
-
-    /**
-     * Specifies the JDBC username.
-     * @param jdbcUsername the new JDBC username.
-     */
-    protected void setJdbcUsername(String jdbcUsername)
-    {
-        immutableSetJdbcUsername(jdbcUsername);
-    }
-
-    /**
-     * Retrieves the JDBC username.
-     * @return such information.
-     */
-    public String getJdbcUsername()
-    {
-        return m__strJdbcUsername;
-    }
-
-    /**
-     * Specifies the JDBC password.
-     * @param jdbcPassword the new JDBC password.
-     */
-    private void immutableSetJdbcPassword(String jdbcPassword)
-    {
-        m__strJdbcPassword = jdbcPassword;
-    }
-
-    /**
-     * Specifies the JDBC password.
-     * @param jdbcPassword the new JDBC password.
-     */
-    protected void setJdbcPassword(String jdbcPassword)
-    {
-        immutableSetJdbcPassword(jdbcPassword);
-    }
-
-    /**
-     * Retrieves the JDBC password.
-     * @return such information.
-     */
-    public String getJdbcPassword()
-    {
-        return m__strJdbcPassword;
-    }
-
-    /**
-     * Specifies the project imports.
-     * @param projectImports the new project imports.
-     */
-    private void immutableSetProjectImports(String projectImports)
-    {
-        m__strProjectImports = projectImports;
-    }
-
-    /**
-     * Specifies the project imports.
-     * @param projectImports the new project imports.
-     */
-    protected void setProjectImports(String projectImports)
-    {
-        immutableSetProjectImports(projectImports);
-    }
-
-    /**
-     * Retrieves the project imports.
-     * @return such information.
-     */
-    public String getProjectImports() 
-    {
-        return m__strProjectImports;
-    }
-
-    /**
-     * Specifies the ACM-SL imports.
-     * @param acmslImports the new ACM-SL imports.
-     */
-    private void immutableSetAcmslImports(String acmslImports)
-    {
-        m__strAcmslImports = acmslImports;
-    }
-
-    /**
-     * Specifies the ACM-SL imports.
-     * @param acmslImports the new ACM-SL imports.
-     */
-    protected void setAcmslImports(String acmslImports)
-    {
-        immutableSetAcmslImports(acmslImports);
-    }
-
-    /**
-     * Retrieves the ACM-SL imports.
-     * @return such information.
-     */
-    public String getAcmslImports() 
-    {
-        return m__strAcmslImports;
-    }
-
-    /**
-     * Specifies the JDK imports.
-     * @param jdkImports the new JDK imports.
-     */
-    private void immutableSetJdkImports(String jdkImports)
-    {
-        m__strJdkImports = jdkImports;
-    }
-
-    /**
-     * Specifies the JDK imports.
-     * @param jdkImports the new JDK imports.
-     */
-    protected void setJdkImports(String jdkImports)
-    {
-        immutableSetJdkImports(jdkImports);
-    }
-
-    /**
-     * Retrieves the JDK Imports.
-     * @return such information.
-     */
-    public String getJdkImports() 
-    {
-        return m__strJdkImports;
-    }
-
-    /**
-     * Specifies the JUnit imports.
-     * @param junitImports the new JUnit imports.
-     */
-    private void immutableSetJUnitImports(String junitImports)
-    {
-        m__strJUnitImports = junitImports;
-    }
-
-    /**
-     * Specifies the JUnit imports.
-     * @param junitImports the new JUnit imports.
-     */
-    protected void setJUnitImports(String junitImports)
-    {
-        immutableSetJUnitImports(junitImports);
-    }
-
-    /**
-     * Retrieves the JUnit imports.
-     * @return such information.
-     */
-    public String getJUnitImports() 
-    {
-        return m__strJUnitImports;
-    }
-
-    /**
-     * Specifies the Javadoc.
-     * @param javadoc the new Javadoc.
-     */
-    private void immutableSetJavadoc(String javadoc)
-    {
-        m__strJavadoc = javadoc;
-    }
-
-    /**
-     * Specifies the Javadoc.
-     * @param javadoc the new Javadoc.
-     */
-    protected void setJavadoc(String javadoc)
-    {
-        immutableSetJavadoc(javadoc);
-    }
-
-    /**
-     * Retrieves the javadoc.
-     * @return such information.
-     */
-    public String getJavadoc() 
-    {
-        return m__strJavadoc;
-    }
-
-    /**
-     * Specifies the class definition.
-     * @param classDefinition the new class definition.
-     */
-    private void immutableSetClassDefinition(String classDefinition)
-    {
-        m__strClassDefinition = classDefinition;
-    }
-
-    /**
-     * Specifies the class definition.
-     * @param classDefinition the new class definition.
-     */
-    protected void setClassDefinition(String classDefinition)
-    {
-        immutableSetClassDefinition(classDefinition);
-    }
-
-    /**
-     * Retrieves the class definition.
-     * @return such information.
-     */
-    public String getClassDefinition() 
-    {
-        return m__strClassDefinition;
-    }
-
-    /**
-     * Specifies the class start.
-     * @param classStart the new class start.
-     */
-    private void immutableSetClassStart(String classStart)
-    {
-        m__strClassStart = classStart;
-    }
-
-    /**
-     * Specifies the class start.
-     * @param classStart the new class start.
-     */
-    protected void setClassStart(String classStart)
-    {
-        immutableSetClassStart(classStart);
-    }
-
-    /**
-     * Retrieves the class start.
-     * @return such information.
-     */
-    public String getClassStart() 
-    {
-        return m__strClassStart;
-    }
-
-    /**
-     * Specifies the test values.
-     * @param testValues the new test values.
-     */
-    private void immutableSetTestValues(String testValues)
-    {
-        m__strTestValues = testValues;
-    }
-
-    /**
-     * Specifies the test values.
-     * @param testValues the new test values.
-     */
-    protected void setTestValues(String testValues)
-    {
-        immutableSetTestValues(testValues);
-    }
-
-    /**
-     * Retrieves the test values.
-     * @return such information.
-     */
-    public String getTestValues() 
-    {
-        return m__strTestValues;
-    }
-
-    /**
-     * Specifies the test updated values.
-     * @param testUpdatedValues the new test updated values.
-     */
-    private void immutableSetTestUpdatedValues(String testUpdatedValues)
-    {
-        m__strTestUpdatedValues = testUpdatedValues;
-    }
-
-    /**
-     * Specifies the test updated values.
-     * @param testUpdatedValues the new test updated values.
-     */
-    protected void setTestUpdatedValues(String testUpdatedValues)
-    {
-        immutableSetTestUpdatedValues(testUpdatedValues);
-    }
-
-    /**
-     * Retrieves the test updated values.
-     * @return such information.
-     */
-    public String getTestUpdatedValues() 
-    {
-        return m__strTestUpdatedValues;
-    }
-
-    /**
-     * Specifies the constructor.
-     * @param constructor the new constructor.
-     */
-    private void immutableSetConstructor(String constructor)
-    {
-        m__strConstructor = constructor;
-    }
-
-    /**
-     * Specifies the constructor.
-     * @param constructor the new constructor.
-     */
-    protected void setConstructor(String constructor)
-    {
-        immutableSetConstructor(constructor);
-    }
-
-    /**
-     * Retrieves the constructor.
-     * @return such information.
-     */
-    public String getConstructor() 
-    {
-        return m__strConstructor;
-    }
-
-    /**
-     * Specifies the inner methods.
-     * @param innerMethods the new inner methods.
-     */
-    private void immutableSetInnerMethods(String innerMethods)
-    {
-        m__strInnerMethods = innerMethods;
-    }
-
-    /**
-     * Specifies the inner methods.
-     * @param innerMethods the new inner methods.
-     */
-    protected void setInnerMethods(String innerMethods)
-    {
-        immutableSetInnerMethods(innerMethods);
-    }
-
-    /**
-     * Retrieves the inner methods.
-     * @return such information.
-     */
-    public String getInnerMethods() 
-    {
-        return m__strInnerMethods;
-    }
-
-    /**
-     * Specifies the init methods.
-     * @param initMethods the new init methods.
-     */
-    private void immutableSetInitMethods(String initMethods)
-    {
-        m__strInitMethods = initMethods;
-    }
-
-    /**
-     * Specifies the init methods.
-     * @param initMethods the new init methods.
-     */
-    protected void setInitMethods(String initMethods)
-    {
-        immutableSetInitMethods(initMethods);
-    }
-
-    /**
-     * Retrieves the init methods.
-     * @return such information.
-     */
-    public String getInitMethods() 
-    {
-        return m__strInitMethods;
-    }
-
-    /**
-     * Specifies the test suite.
-     * @param testSuite the new test suite.
-     */
-    private void immutableSetTestSuite(String testSuite)
-    {
-        m__strTestSuite = testSuite;
-    }
-
-    /**
-     * Specifies the test suite.
-     * @param testSuite the new test suite.
-     */
-    protected void setTestSuite(String testSuite)
-    {
-        immutableSetTestSuite(testSuite);
-    }
-
-    /**
-     * Retrieves the test suite.
-     * @return such information.
-     */
-    public String getTestSuite() 
-    {
-        return m__strTestSuite;
-    }
-
-    /**
-     * Specifies the constructor test.
-     * @param constructorTest the new constructor test.
-     */
-    private void immutableSetConstructorTest(String constructorTest)
-    {
-        m__strConstructorTest = constructorTest;
-    }
-
-    /**
-     * Specifies the constructor test.
-     * @param constructorTest the new constructor test.
-     */
-    protected void setConstructorTest(String constructorTest)
-    {
-        immutableSetConstructorTest(constructorTest);
-    }
-
-    /**
-     * Retrieves the constructor test.
-     * @return such information.
-     */
-    public String getConstructorTest() 
-    {
-        return m__strConstructorTest;
-    }
-
-    /**
-     * Specifies the connection test.
-     * @param connectionTest the new connection test.
-     */
-    private void immutableSetConnectionTest(String connectionTest)
-    {
-        m__strConnectionTest = connectionTest;
-    }
-
-    /**
-     * Specifies the connection test.
-     * @param connectionTest the new connection test.
-     */
-    protected void setConnectionTest(String connectionTest)
-    {
-        immutableSetConnectionTest(connectionTest);
-    }
-
-    /**
-     * Retrieves the connection test.
-     * @return such information.
-     */
-    public String getConnectionTest() 
-    {
-        return m__strConnectionTest;
-    }
-
-    /**
-     * Specifies the store test.
-     * @param storeTest the new store test.
-     */
-    private void immutableSetStoreTest(String storeTest)
-    {
-        m__strStoreTest = storeTest;
-    }
-
-    /**
-     * Specifies the store test.
-     * @param storeTest the new store test.
-     */
-    protected void setStoreTest(String storeTest)
-    {
-        immutableSetStoreTest(storeTest);
-    }
-
-    /**
-     * Retrieves the store test.
-     * @return such information.
-     */
-    public String getStoreTest() 
-    {
-        return m__strStoreTest;
-    }
-
-    /**
-     * Specifies the test values subtemplate.
-     * @param template the template.
-     */
-    private void immutableSetTestParametersValues(String template)
-    {
-        m__strTestParametersValues = template;
-    }
-
-    /**
-     * Specifies the test values subtemplate.
-     * @param template the template.
-     */
-    protected void setTestParametersValues(String template)
-    {
-        immutableSetTestParametersValues(template);
-    }
-
-    /**
-     * Retrieves the test values subtemplate.
-     * @return such source code template.
-     */
-    public String getTestParametersValues()
-    {
-        return m__strTestParametersValues;
-    }
-
-    /**
-     * Specifies the load test.
-     * @param loadTest the new load test.
-     */
-    private void immutableSetLoadTest(String loadTest)
-    {
-        m__strLoadTest = loadTest;
-    }
-
-    /**
-     * Specifies the load test.
-     * @param loadTest the new load test.
-     */
-    protected void setLoadTest(String loadTest)
-    {
-        immutableSetLoadTest(loadTest);
-    }
-
-    /**
-     * Retrieves the load test.
-     * @return such information.
-     */
-    public String getLoadTest() 
-    {
-        return m__strLoadTest;
-    }
-
-    /**
-     * Specifies the update test.
-     * @param updateTest the new update test.
-     */
-    private void immutableSetUpdateTest(String updateTest)
-    {
-        m__strUpdateTest = updateTest;
-    }
-
-    /**
-     * Specifies the update test.
-     * @param updateTest the new update test.
-     */
-    protected void setUpdateTest(String updateTest)
-    {
-        immutableSetUpdateTest(updateTest);
-    }
-
-    /**
-     * Retrieves the update test.
-     * @return such information.
-     */
-    public String getUpdateTest() 
-    {
-        return m__strUpdateTest;
-    }
-
-
-    /**
-     * Specifies the test updated values subtemplate.
-     * @param template the template.
-     */
-    private void immutableSetTestParametersUpdatedValues(String template)
-    {
-        m__strTestParametersUpdatedValues = template;
-    }
-
-    /**
-     * Specifies the test updated values subtemplate.
-     * @param template the template.
-     */
-    protected void setTestParametersUpdatedValues(String template)
-    {
-        immutableSetTestParametersUpdatedValues(template);
-    }
-
-    /**
-     * Retrieves the test updated values subtemplate.
-     * @return such source code template.
-     */
-    public String getTestParametersUpdatedValues()
-    {
-        return m__strTestParametersUpdatedValues;
-    }
-
-    /**
-     * Specifies the update filter values.
-     * @param updateFilterValues the new update filter values.
-     */
-    private void immutableSetUpdateFilterValues(String updateFilterValues)
-    {
-        m__strUpdateFilterValues = updateFilterValues;
-    }
-
-    /**
-     * Specifies the update filter values.
-     * @param updateFilterValues the new update filter values.
-     */
-    protected void setUpdateFilterValues(String updateFilterValues)
-    {
-        immutableSetUpdateFilterValues(updateFilterValues);
-    }
-
-    /**
-     * Retrieves the update filter values.
-     * @return such information.
-     */
-    public String getUpdateFilterValues()
-    {
-        return m__strUpdateFilterValues;
-    }
-
-    /**
-     * Specifies the remove test.
-     * @param removeTest the new remove test.
-     */
-    private void immutableSetRemoveTest(String removeTest)
-    {
-        m__strRemoveTest = removeTest;
-    }
-
-    /**
-     * Specifies the remove test.
-     * @param removeTest the new remove test.
-     */
-    protected void setRemoveTest(String removeTest)
-    {
-        immutableSetRemoveTest(removeTest);
-    }
-
-    /**
-     * Retrieves the removeTest.
-     * @return such information.
-     */
-    public String getRemoveTest() 
-    {
-        return m__strRemoveTest;
-    }
-
-    /**
-     * Specifies the remove filter values.
-     * @param removeFilterValues the new remove filter values.
-     */
-    private void immutableSetRemoveFilterValues(String removeFilterValues)
-    {
-        m__strRemoveFilterValues = removeFilterValues;
-    }
-
-    /**
-     * Specifies the remove filter values.
-     * @param removeFilterValues the new remove filter values.
-     */
-    protected void setRemoveFilterValues(String removeFilterValues)
-    {
-        immutableSetRemoveFilterValues(removeFilterValues);
-    }
-
-    /**
-     * Retrieves the remove filter values.
-     * @return such information.
-     */
-    public String getRemoveFilterValues()
-    {
-        return m__strRemoveFilterValues;
-    }
-
-    /**
-     * Specifies the class end.
-     * @param classEnd the new class end.
-     */
-    private void immutableSetClassEnd(String classEnd)
-    {
-        m__strClassEnd = classEnd;
-    }
-
-    /**
-     * Specifies the class end.
-     * @param classEnd the new class end.
-     */
-    protected void setClassEnd(String classEnd)
-    {
-        immutableSetClassEnd(classEnd);
-    }
-
-    /**
-     * Retrieves the class end.
-     * @return such information.
-     */
-    public String getClassEnd() 
-    {
-        return m__strClassEnd;
-    }
-
-    /**
-     * Retrieves the test name.
-     * @return such name.
-     */
-    public String getTestName()
-    {
-        return
-            getTestName(
-                StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the test name.
-     * @param stringUtils the StringUtils instance.
-     * @param englishGrammarUtils the EnglishGrammarUtils instance.
-     * @return such name.
+     * @param metaDataUtils the <code>MetaDataUtis</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @return such source code.
+     * @precondition tableTemplate != null
+     * @precondition metaDataManager != null
+     * @precondition metaDataUtils != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      */
-    protected String getTestName(
+    protected String generateOutput(
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String header,
+        final String packageDeclaration,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String daoPackageName,
+        final String valueObjectPackageName,
+        final String jdbcDriver,
+        final String jdbcUrl,
+        final String jdbcUsername,
+        final String jdbcPassword,
+        final String projectImports,
+        final String acmslImports,
+        final String jdkImports,
+        final String junitImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String testValues,
+        final String testUpdatedValues,
+        final String constructor,
+        final String innerMethods,
+        final String initMethods,
+        final String testSuite,
+        final String constructorTest,
+        final String connectionTest,
+        final String storeTest,
+        final String testParametersValues,
+        final String loadTest,
+        final String updateTest,
+        final String updateFilterValues,
+        final String testParametersUpdatedValues,
+        final String removeTest,
+        final String removeFilterValues,
+        final String classEnd,
+        final MetaDataUtils metaDataUtils,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils)
     {
-        return
-              getEngineName()
-            + stringUtils.capitalize(
-                  englishGrammarUtils.getSingular(
-                      getTableTemplate().getTableName().toLowerCase()),
-                  '_')
-            + "DAOTest";
-    }
-
-
-    /**
-     * Indicates if the test should be considered a suite or not.
-     * @return such information.
-     */
-    public boolean isSuite()
-    {
-        return true;
-    }
-
-    /**
-     * Produces a text version of the template, weaving the
-     * dynamic parts with the static skeleton.
-     * @return such source code.
-     */
-    public String toString()
-    {
         StringBuffer t_sbResult = new StringBuffer();
 
-        StringUtils t_StringUtils = StringUtils.getInstance();
-
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
-
-        MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
-
-        TableTemplate t_TableTemplate = getTableTemplate();
-
-        DatabaseMetaDataManager t_MetaDataManager = getMetaDataManager();
-
-        if  (   (t_TableTemplate                 != null)
-             && (t_MetaDataManager               != null)
-             && (t_MetaDataUtils                 != null)
-             && (t_MetaDataManager.getMetaData() != null)
-             && (t_StringUtils                   != null))
+        String t_strCapitalizedTableName =
+            stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    tableTemplate.getTableName().toLowerCase()),
+                '_');
+        /*
+        try 
         {
-            String t_strCapitalizedTableName =
-                t_StringUtils.capitalize(
-                    t_EnglishGrammarUtils.getSingular(
-                        t_TableTemplate.getTableName().toLowerCase()),
-                    '_');
-            /*
-            try 
-            */
-            {
-                DatabaseMetaData t_MetaData = t_MetaDataManager.getMetaData();
+        */
+        MessageFormat t_Formatter = new MessageFormat(header);
 
-                MessageFormat t_Formatter = new MessageFormat(getHeader());
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[] { tableTemplate.getTableName() }));
 
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[] { t_TableTemplate.getTableName() }));
+        t_Formatter = new MessageFormat(packageDeclaration);
 
-                t_Formatter = new MessageFormat(getPackageDeclaration());
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]{packageName}));
 
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]{getPackageName()}));
+        t_Formatter = new MessageFormat(projectImports);
 
-                t_Formatter = new MessageFormat(getProjectImports());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            getEngineName(),
-                            t_strCapitalizedTableName,
-                            getValueObjectPackageName()
-                        }));
-
-                t_sbResult.append(getAcmslImports());
-                t_sbResult.append(getJdkImports());
-                t_sbResult.append(getJUnitImports());
-
-                t_Formatter = new MessageFormat(getJavadoc());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            getEngineName(),
-                            t_strCapitalizedTableName
-                        }));
-
-                t_Formatter = new MessageFormat(getClassDefinition());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getPackageName(),
-                            getEngineName(),
-                            t_strCapitalizedTableName
-                        }));
-
-                t_Formatter = new MessageFormat(getClassStart());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getJdbcDriver(),
-                            getJdbcUrl(),
-                            getJdbcUsername(),
-                            getJdbcPassword(),
-                            t_strCapitalizedTableName,
-                            getEngineName()
-                        }));
-
-                t_sbResult.append(getTestValues());
-
-                t_sbResult.append(getTestUpdatedValues());
-
-                t_Formatter = new MessageFormat(getConstructor());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getEngineName(),
-                            t_strCapitalizedTableName
-                        }));
-
-                t_sbResult.append(getInnerMethods());
-
-                t_Formatter = new MessageFormat(getInitMethods());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getEngineName(),
-                            t_strCapitalizedTableName,
-                              t_strCapitalizedTableName
-                                  .substring(0,1).toLowerCase()
-                            + t_strCapitalizedTableName.substring(1)
-                        }));
-
-                t_Formatter = new MessageFormat(getTestSuite());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getEngineName(),
-                            t_strCapitalizedTableName
-                        }));
-
-                t_Formatter = new MessageFormat(getConstructorTest());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getEngineName(),
-                            t_strCapitalizedTableName
-                        }));
-
-                t_sbResult.append(getConnectionTest());
-
-                t_Formatter = new MessageFormat(getTestParametersValues());
-
-                MessageFormat t_UpdateFilterValuesFormatter =
-                    new MessageFormat(getUpdateFilterValues());
-
-                StringBuffer t_sbUpdateFilterValues =
-                    new StringBuffer();
-
-                String[] t_astrPrimaryKeys =
-                    t_MetaDataManager.getPrimaryKeys(
-                        t_TableTemplate.getTableName());
-
-                StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
-                    new StringBuffer();
-
-                StringBuffer t_sbFindByPrimaryKeyParametersTypes =
-                    new StringBuffer();
-
-                StringBuffer t_sbUpdateParametersTypes =
-                    new StringBuffer();
-
-                MessageFormat t_RemoveFilterValuesFormatter =
-                    new MessageFormat(getRemoveFilterValues());
-
-                StringBuffer t_sbRemoveFilterValues =
-                    new StringBuffer();
-
-                if  (t_astrPrimaryKeys != null)
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
                 {
+                    daoPackageName,
+                    engineName,
+                    t_strCapitalizedTableName,
+                    valueObjectPackageName
+                }));
 
-                    for  (int t_iPkIndex = 0;
-                              t_iPkIndex < t_astrPrimaryKeys.length;
-                              t_iPkIndex++) 
-                    {
-                        t_sbFindByPrimaryKeyTestParametersValues.append(
-                            t_Formatter.format(
-                                new Object[]
-                                {
-                                    t_MetaDataUtils.getNativeType(
-                                        t_MetaDataManager.getColumnType(
-                                            t_TableTemplate.getTableName(),
-                                            t_astrPrimaryKeys[t_iPkIndex]))
-                                        .toUpperCase()
-                                }));
+        t_sbResult.append(acmslImports);
+        t_sbResult.append(jdkImports);
+        t_sbResult.append(junitImports);
 
-                        t_sbUpdateFilterValues.append(
-                            t_UpdateFilterValuesFormatter.format(
-                                new Object[]
-                                {
-                                    t_strCapitalizedTableName,
-                                    t_StringUtils.capitalize(
-                                        t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
-                                        '_')
-                                }));
+        t_Formatter = new MessageFormat(javadoc);
 
-                        t_sbRemoveFilterValues.append(
-                            t_RemoveFilterValuesFormatter.format(
-                                new Object[]
-                                {
-                                    t_strCapitalizedTableName,
-                                    t_StringUtils.capitalize(
-                                        t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
-                                        '_')
-                                }));
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    daoPackageName,
+                    engineName,
+                    t_strCapitalizedTableName
+                }));
 
-                        t_sbFindByPrimaryKeyParametersTypes.append(
-                            t_MetaDataUtils.getNativeType(
-                                t_MetaDataManager.getColumnType(
-                                    t_TableTemplate.getTableName(),
-                                    t_astrPrimaryKeys[t_iPkIndex])));
+        t_Formatter = new MessageFormat(classDefinition);
 
-                        if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    packageName,
+                    engineName,
+                    t_strCapitalizedTableName
+                }));
+
+        t_Formatter = new MessageFormat(classStart);
+
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    jdbcDriver,
+                    jdbcUrl,
+                    jdbcUsername,
+                    jdbcPassword,
+                    t_strCapitalizedTableName,
+                    engineName
+                }));
+
+        t_sbResult.append(testValues);
+
+        t_sbResult.append(testUpdatedValues);
+
+        t_Formatter = new MessageFormat(constructor);
+
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    engineName,
+                    t_strCapitalizedTableName
+                }));
+
+        t_sbResult.append(innerMethods);
+
+        t_Formatter = new MessageFormat(initMethods);
+
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    engineName,
+                    t_strCapitalizedTableName,
+                    t_strCapitalizedTableName
+                    .substring(0,1).toLowerCase()
+                    + t_strCapitalizedTableName.substring(1)
+                }));
+
+        t_Formatter = new MessageFormat(testSuite);
+
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    engineName,
+                    t_strCapitalizedTableName
+                }));
+
+        t_Formatter = new MessageFormat(constructorTest);
+
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    engineName,
+                    t_strCapitalizedTableName
+                }));
+
+        t_sbResult.append(connectionTest);
+
+        t_Formatter = new MessageFormat(testParametersValues);
+
+        MessageFormat t_UpdateFilterValuesFormatter =
+            new MessageFormat(updateFilterValues);
+
+        StringBuffer t_sbUpdateFilterValues =
+            new StringBuffer();
+
+        String[] t_astrPrimaryKeys =
+            metaDataManager.getPrimaryKeys(
+                tableTemplate.getTableName());
+
+        StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
+            new StringBuffer();
+
+        StringBuffer t_sbFindByPrimaryKeyParametersTypes =
+            new StringBuffer();
+
+        StringBuffer t_sbUpdateParametersTypes =
+            new StringBuffer();
+
+        MessageFormat t_RemoveFilterValuesFormatter =
+            new MessageFormat(removeFilterValues);
+
+        StringBuffer t_sbRemoveFilterValues =
+            new StringBuffer();
+
+        if  (t_astrPrimaryKeys != null)
+        {
+
+            for  (int t_iPkIndex = 0;
+                  t_iPkIndex < t_astrPrimaryKeys.length;
+                  t_iPkIndex++) 
+            {
+                t_sbFindByPrimaryKeyTestParametersValues.append(
+                    t_Formatter.format(
+                        new Object[]
                         {
-                            t_sbFindByPrimaryKeyParametersTypes.append(",");
-                        }
+                            metaDataUtils.getNativeType(
+                                metaDataManager.getColumnType(
+                                    tableTemplate.getTableName(),
+                                    t_astrPrimaryKeys[t_iPkIndex]))
+                            .toUpperCase()
+                        }));
+
+                t_sbUpdateFilterValues.append(
+                    t_UpdateFilterValuesFormatter.format(
+                        new Object[]
+                        {
+                            t_strCapitalizedTableName,
+                            stringUtils.capitalize(
+                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                                '_')
+                        }));
+
+                t_sbRemoveFilterValues.append(
+                    t_RemoveFilterValuesFormatter.format(
+                        new Object[]
+                        {
+                            t_strCapitalizedTableName,
+                            stringUtils.capitalize(
+                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                                '_')
+                        }));
+
+                t_sbFindByPrimaryKeyParametersTypes.append(
+                    metaDataUtils.getNativeType(
+                        metaDataManager.getColumnType(
+                            tableTemplate.getTableName(),
+                            t_astrPrimaryKeys[t_iPkIndex])));
+
+                if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
+                {
+                    t_sbFindByPrimaryKeyParametersTypes.append(",");
+                }
+
+                t_sbUpdateParametersTypes.append(
+                    metaDataUtils.getNativeType(
+                        metaDataManager.getColumnType(
+                            tableTemplate.getTableName(),
+                            t_astrPrimaryKeys[t_iPkIndex])));
+
+                t_sbUpdateParametersTypes.append(",");
+            }
+        }
+
+        String[] t_astrColumnNames =
+            metaDataManager.getColumnNames(
+                tableTemplate.getTableName());
+
+        StringBuffer t_sbInsertTestParametersValues =
+            new StringBuffer();
+
+        StringBuffer t_sbInsertParametersTypes =
+            new StringBuffer();
+
+        MessageFormat t_TestParametersUpdatedValuesFormatter =
+            new MessageFormat(testParametersUpdatedValues);
+
+        StringBuffer t_sbTestParametersUpdatedValues =
+            new StringBuffer();
+
+        if  (t_astrColumnNames != null)
+        {
+            for  (int t_iColumnIndex = 0;
+                  t_iColumnIndex < t_astrColumnNames.length;
+                  t_iColumnIndex++)
+            {
+                if  (!metaDataManager.isManagedExternally(
+                         tableTemplate.getTableName(),
+                         t_astrColumnNames[t_iColumnIndex]))
+                {
+                    t_sbInsertTestParametersValues.append(
+                        t_Formatter.format(
+                            new Object[]
+                            {
+                                metaDataUtils.getNativeType(
+                                    metaDataManager.getColumnType(
+                                        tableTemplate.getTableName(),
+                                        t_astrColumnNames[
+                                            t_iColumnIndex]))
+                                .toUpperCase()
+                            }));
+
+                    t_sbInsertParametersTypes.append(
+                        metaDataUtils.getNativeType(
+                            metaDataManager.getColumnType(
+                                tableTemplate.getTableName(),
+                                t_astrColumnNames[t_iColumnIndex])));
+
+                    if  (!metaDataManager.isPrimaryKey(
+                             tableTemplate.getTableName(),
+                             t_astrColumnNames[t_iColumnIndex]))
+                    {
+                        t_sbTestParametersUpdatedValues.append(
+                            t_TestParametersUpdatedValuesFormatter.format(
+                                new Object[]
+                                {
+                                    metaDataUtils.getNativeType(
+                                        metaDataManager.getColumnType(
+                                            tableTemplate.getTableName(),
+                                            t_astrColumnNames[
+                                                t_iColumnIndex]))
+                                    .toUpperCase()
+                                }));
 
                         t_sbUpdateParametersTypes.append(
-                            t_MetaDataUtils.getNativeType(
-                                t_MetaDataManager.getColumnType(
-                                    t_TableTemplate.getTableName(),
-                                    t_astrPrimaryKeys[t_iPkIndex])));
+                            metaDataUtils.getNativeType(
+                                metaDataManager.getColumnType(
+                                    tableTemplate.getTableName(),
+                                    t_astrColumnNames[
+                                        t_iColumnIndex])));
 
-                        t_sbUpdateParametersTypes.append(",");
-                    }
-                }
-
-                String[] t_astrColumnNames =
-                    t_MetaDataManager.getColumnNames(
-                        t_TableTemplate.getTableName());
-
-                StringBuffer t_sbInsertTestParametersValues =
-                    new StringBuffer();
-
-                StringBuffer t_sbInsertParametersTypes =
-                    new StringBuffer();
-
-                MessageFormat t_TestParametersUpdatedValuesFormatter =
-                    new MessageFormat(getTestParametersUpdatedValues());
-
-                StringBuffer t_sbTestParametersUpdatedValues =
-                    new StringBuffer();
-
-                if  (t_astrColumnNames != null)
-                {
-                    for  (int t_iColumnIndex = 0;
-                              t_iColumnIndex < t_astrColumnNames.length;
-                              t_iColumnIndex++)
-                    {
-                        if  (!t_MetaDataManager.isManagedExternally(
-                                 t_TableTemplate.getTableName(),
-                                 t_astrColumnNames[t_iColumnIndex]))
+                        if  (t_iColumnIndex < t_astrColumnNames.length - 1)
                         {
-                            t_sbInsertTestParametersValues.append(
-                                t_Formatter.format(
-                                    new Object[]
-                                    {
-                                        t_MetaDataUtils.getNativeType(
-                                            t_MetaDataManager.getColumnType(
-                                                t_TableTemplate.getTableName(),
-                                                t_astrColumnNames[
-                                                    t_iColumnIndex]))
-                                        .toUpperCase()
-                                }));
-
-                            t_sbInsertParametersTypes.append(
-                                t_MetaDataUtils.getNativeType(
-                                    t_MetaDataManager.getColumnType(
-                                        t_TableTemplate.getTableName(),
-                                        t_astrColumnNames[t_iColumnIndex])));
-
-                            if  (!t_MetaDataManager.isPrimaryKey(
-                                     t_TableTemplate.getTableName(),
-                                     t_astrColumnNames[t_iColumnIndex]))
-                            {
-                                t_sbTestParametersUpdatedValues.append(
-                                    t_TestParametersUpdatedValuesFormatter.format(
-                                        new Object[]
-                                        {
-                                            t_MetaDataUtils.getNativeType(
-                                                t_MetaDataManager.getColumnType(
-                                                    t_TableTemplate.getTableName(),
-                                                    t_astrColumnNames[
-                                                        t_iColumnIndex]))
-                                            .toUpperCase()
-                                        }));
-
-                                t_sbUpdateParametersTypes.append(
-                                    t_MetaDataUtils.getNativeType(
-                                        t_MetaDataManager.getColumnType(
-                                            t_TableTemplate.getTableName(),
-                                            t_astrColumnNames[
-                                                t_iColumnIndex])));
-
-                                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-                                {
-                                    t_sbUpdateParametersTypes.append(",");
-                                }
-                            }
-
-                            if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-                            {
-                                    t_sbInsertParametersTypes.append(",");
-                            }
+                            t_sbUpdateParametersTypes.append(",");
                         }
                     }
+
+                    if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                    {
+                        t_sbInsertParametersTypes.append(",");
+                    }
                 }
-
-                t_Formatter = new MessageFormat(getStoreTest());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            getEngineName(),
-                            t_strCapitalizedTableName,
-                            t_sbInsertParametersTypes,
-                            t_sbInsertTestParametersValues
-                        }));
-
-                t_Formatter = new MessageFormat(getLoadTest());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            getEngineName(),
-                            t_strCapitalizedTableName,
-                            t_sbFindByPrimaryKeyParametersTypes,
-                            t_sbFindByPrimaryKeyTestParametersValues
-                        }));
-
-                t_Formatter = new MessageFormat(getUpdateTest());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            getEngineName(),
-                            t_strCapitalizedTableName,
-                            t_sbUpdateParametersTypes,
-                            t_sbUpdateFilterValues,
-                            t_sbTestParametersUpdatedValues
-                        }));
-
-                t_Formatter = new MessageFormat(getRemoveTest());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            getEngineName(),
-                            t_strCapitalizedTableName,
-                            t_sbFindByPrimaryKeyParametersTypes,
-                            t_sbRemoveFilterValues
-                        }));
-
-                t_sbResult.append(getClassEnd());
             }
-            /*
-            catch  (SQLException sqlException)
-            {
-                LogFactory.getLog(getClass()).error(
-                    "database.meta.data.error",
-                    sqlException);
-            }
-            */
         }
+
+        t_Formatter = new MessageFormat(storeTest);
+
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    daoPackageName,
+                    engineName,
+                    t_strCapitalizedTableName,
+                    t_sbInsertParametersTypes,
+                    t_sbInsertTestParametersValues
+                }));
+
+        t_Formatter = new MessageFormat(loadTest);
+
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    daoPackageName,
+                    engineName,
+                    t_strCapitalizedTableName,
+                    t_sbFindByPrimaryKeyParametersTypes,
+                    t_sbFindByPrimaryKeyTestParametersValues
+                }));
+
+        t_Formatter = new MessageFormat(updateTest);
+
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    daoPackageName,
+                    engineName,
+                    t_strCapitalizedTableName,
+                    t_sbUpdateParametersTypes,
+                    t_sbUpdateFilterValues,
+                    t_sbTestParametersUpdatedValues
+                }));
+
+        t_Formatter = new MessageFormat(removeTest);
+
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    daoPackageName,
+                    engineName,
+                    t_strCapitalizedTableName,
+                    t_sbFindByPrimaryKeyParametersTypes,
+                    t_sbRemoveFilterValues
+                }));
+
+        t_sbResult.append(classEnd);
+        /*
+        }
+        catch  (SQLException sqlException)
+        {
+            LogFactory.getLog(getClass()).error(
+                "database.meta.data.error",
+                sqlException);
+        }
+        */
 
         return t_sbResult.toString();
     }
