@@ -118,7 +118,7 @@ public class TableTemplateGenerator
 
         if  (result == null) 
         {
-            result = new TableTemplateGenerator() {};
+            result = new TableTemplateGenerator();
 
             setReference(result);
         }
@@ -138,7 +138,7 @@ public class TableTemplateGenerator
         final String packageName,
         final String tableName)
     {
-        return new TableTemplate(packageName, tableName) {};
+        return new TableTemplate(packageName, tableName);
     }
 
     /**
@@ -148,26 +148,45 @@ public class TableTemplateGenerator
      * @throws IOException if the file cannot be created.
      * @precondition tableTemplate != null
      * @precondition outputDir != null
-     * @precondition StringUtils.getInstance() != null
-     * @precondition FileUtils.getInstance() != null
      */
     public void write(
         final TableTemplate tableTemplate,
         final File          outputDir)
       throws  IOException
     {
-        StringUtils t_StringUtils = StringUtils.getInstance();
-        FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            tableTemplate,
+            outputDir,
+            FileUtils.getInstance(),
+            TableUtils.getInstance());
+    }
 
+    /**
+     * Writes a table template to disk.
+     * @param tableTemplate the table template to write.
+     * @param outputDir the output folder.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param tableUtils the <code>TableUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition tableTemplate != null
+     * @precondition outputDir != null
+     * @precondition fileUtils != null
+     * @precondition tableTemplateUtils != null
+     */
+    public void write(
+        final TableTemplate tableTemplate,
+        final File outputDir,
+        final FileUtils fileUtils,
+        final TableUtils tableUtils)
+      throws  IOException
+    {
         outputDir.mkdirs();
 
-        t_FileUtils.writeFile(
+        fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + t_StringUtils.capitalize(
-                  tableTemplate.getTableName().toLowerCase(),
-                  '_')
-            + "Table.java",
+            + tableUtils.retrieveTableClassName(
+                  tableTemplate.getTableName()),
             tableTemplate.toString());
     }
 }
