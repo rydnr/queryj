@@ -1271,6 +1271,36 @@ public abstract class DAOTemplate
         + "    '}'\n\n";
 
     /**
+     * The custom select for update template.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE =
+        DEFAULT_CUSTOM_SELECT_FOR_UPDATE_WITH_RETURN;
+
+    /**
+     * The custom select-for-update parameter javadoc.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_JAVADOC =
+        DEFAULT_CUSTOM_SELECT_PARAMETER_JAVADOC;
+
+    /**
+     * The custom select-for-update parameter declaration.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_DECLARATION =
+        DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION;
+
+    /**
+     * The custom select-for-update parameter values.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_VALUES =
+        DEFAULT_CUSTOM_SELECT_PARAMETER_VALUES;
+
+    /**
+     * The custom select result properties.
+     */
+    public static final String DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RESULT_PROPERTIES =
+        DEFAULT_CUSTOM_SELECT_RESULT_PROPERTIES;
+
+    /**
      * The default class end.
      */
     public static final String DEFAULT_CLASS_END = "}\n";
@@ -1571,6 +1601,31 @@ public abstract class DAOTemplate
     private String m__strCustomUpdateOrInsertQueryLine;
 
     /**
+     * The custom select-for-update.
+     */
+    private String m__strCustomSelectForUpdate;
+
+    /**
+     * The custom select-for-update parameter javadoc.
+     */
+    private String m__strCustomSelectForUpdateParameterJavadoc;
+
+    /**
+     * The custom select-for-update parameter declaration.
+     */
+    private String m__strCustomSelectForUpdateParameterDeclaration;
+
+    /**
+     * The custom select-for-update parameter values.
+     */
+    private String m__strCustomSelectForUpdateParameterValues;
+
+    /**
+     * The custom select-for-update result properties.
+     */
+    private String m__strCustomSelectForUpdateResultPropertyValues;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
@@ -1657,6 +1712,15 @@ public abstract class DAOTemplate
      * the custom updates or inserts.
      * @param customUpdateOrInsertQueryLine the custom update or insert
      * query line.
+     * @param customSelectForUpdate the custom select-for-update template.
+     * @param customSelectForUpdateParameterJavadoc the Javadoc for the
+     * parameters of the custom select-for-update operations.
+     * @param customSelectForUpdateParameterDeclaration the parameter
+     * declaration of the custom select-for-update opèrations.
+     * @param customSelectForUpdateParameterValues the parameter values of
+     * the custom select-for-update operations.
+     * @param customForUpdateSelectResultPropertyValues the properties
+     * of the result* set for custom select-for-update operations.
      * @param classEnd the class end.
      */
     public DAOTemplate(
@@ -1719,6 +1783,11 @@ public abstract class DAOTemplate
         final String                  customUpdateOrInsertParameterDeclaration,
         final String                  customUpdateOrInsertParameterValues,
         final String                  customUpdateOrInsertQueryLine,
+        final String                  customSelectForUpdate,
+        final String                  customSelectForUpdateParameterJavadoc,
+        final String                  customSelectForUpdateParameterDeclaration,
+        final String                  customSelectForUpdateParameterValues,
+        final String                  customSelectForUpdateResultPropertyValues,
         final String                  classEnd)
     {
         immutableSetTableTemplate(
@@ -1898,6 +1967,21 @@ public abstract class DAOTemplate
         immutableSetCustomUpdateOrInsertQueryLine(
             customUpdateOrInsertQueryLine);
 
+        immutableSetCustomSelectForUpdate(
+            customSelectForUpdate);
+
+        immutableSetCustomSelectForUpdateParameterJavadoc(
+            customSelectForUpdateParameterJavadoc);
+
+        immutableSetCustomSelectForUpdateParameterDeclaration(
+            customSelectForUpdateParameterDeclaration);
+
+        immutableSetCustomSelectForUpdateParameterValues(
+            customSelectForUpdateParameterValues);
+
+        immutableSetCustomSelectForUpdateResultPropertyValues(
+            customSelectForUpdateResultPropertyValues);
+
         immutableSetClassEnd(
             classEnd);
     }
@@ -1985,6 +2069,11 @@ public abstract class DAOTemplate
             DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION,
             DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_VALUES,
             DEFAULT_CUSTOM_UPDATE_OR_INSERT_QUERY_LINE,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_JAVADOC,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_DECLARATION,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_VALUES,
+            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RESULT_PROPERTIES,
             DEFAULT_CLASS_END);
     }
 
@@ -3671,6 +3760,152 @@ public abstract class DAOTemplate
         return m__strCustomUpdateOrInsertQueryLine;
     }
 
+//
+    /**
+     * Specifies the custom select-for-update template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdate(
+        final String select)
+    {
+        m__strCustomSelectForUpdate = select;
+    }
+
+    /**
+     * Specifies the custom select-for-update template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdate(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdate(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdate()
+    {
+        return m__strCustomSelectForUpdate;
+    }
+
+    /**
+     * Specifies the custom select-for-update parameter Javadoc template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateParameterJavadoc(
+        final String template)
+    {
+        m__strCustomSelectForUpdateParameterJavadoc = template;
+    }
+
+    /**
+     * Specifies the custom select-for-update parameter Javadoc template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateParameterJavadoc(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateParameterJavadoc(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update parameter Javadoc template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateParameterJavadoc()
+    {
+        return m__strCustomSelectForUpdateParameterJavadoc;
+    }
+
+    /**
+     * Specifies the custom select-for-update parameter declaration template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateParameterDeclaration(
+        final String template)
+    {
+        m__strCustomSelectForUpdateParameterDeclaration = template;
+    }
+
+    /**
+     * Specifies the custom select-for-update parameter declaration template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateParameterDeclaration(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateParameterDeclaration(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update parameter declaration template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateParameterDeclaration()
+    {
+        return m__strCustomSelectForUpdateParameterDeclaration;
+    }
+
+    /**
+     * Specifies the custom select-for-update parameter values template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateParameterValues(
+        final String template)
+    {
+        m__strCustomSelectForUpdateParameterValues = template;
+    }
+
+    /**
+     * Specifies the custom select-for-update parameter values template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateParameterValues(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateParameterValues(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update parameter values template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateParameterValues()
+    {
+        return m__strCustomSelectForUpdateParameterValues;
+    }
+
+    /**
+     * Specifies the custom select-for-update result properties' values template.
+     * @param select such template.
+     */
+    private void immutableSetCustomSelectForUpdateResultPropertyValues(
+        final String template)
+    {
+        m__strCustomSelectForUpdateResultPropertyValues = template;
+    }
+
+    /**
+     * Specifies the custom select-for-update result properties' values template.
+     * @param select such template.
+     */
+    protected void setCustomSelectForUpdateResultPropertyValues(
+        final String select)
+    {
+        immutableSetCustomSelectForUpdateResultPropertyValues(select);
+    }
+
+    /**
+     * Retrieves the custom select-for-update result properties' values template.
+     * @return such template.
+     */
+    public String getCustomSelectForUpdateResultPropertyValues()
+    {
+        return m__strCustomSelectForUpdateResultPropertyValues;
+    }
+
     /**
      * Specifies the class end.
      * @param classEnd the new class end.
@@ -4339,6 +4574,7 @@ public abstract class DAOTemplate
             result.append(buildCustomUpdates(provider));
             result.append(buildCustomInserts(provider));
             result.append(buildCustomDeletes(provider));
+            result.append(buildCustomSelectForUpdates(provider));
         }
 
         return result.toString();
@@ -4964,6 +5200,184 @@ public abstract class DAOTemplate
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
                 createHelper(RegexpManager.getInstance()));
+    }
+
+    /**
+     * Builds the custom select-for-update operationss.
+     * @param provider the CustomSqlProvider instance.
+     * @return such generated code.
+     * @precondition provider != null
+     */
+    protected String buildCustomSelectForUpdates(
+        final CustomSqlProvider provider)
+    {
+        return
+            buildCustomSelectForUpdates(
+                provider,
+                getCustomSelectForUpdate(),
+                getCustomSelectForUpdateParameterJavadoc(),
+                getCustomSelectForUpdateParameterDeclaration(),
+                getCustomSelectForUpdateParameterValues(),
+                getCustomSelectForUpdateResultPropertyValues(),
+                StringUtils.getInstance(),
+                StringValidator.getInstance());
+    }
+
+    /**
+     * Builds the custom select-for-update operations.
+     * @param customSqlProvider the CustomSqlProvider instance.
+     * @param customSelectForUpdate the custom select-for-update.
+     * @param parameterJavadoc the Javadoc template
+     * of the parameters.
+     * @param parameterDeclaration the parameter declaration.
+     * @param parameterValues the parameter values.
+     * @param resultPropertyValues the result property values.
+     * @param stringUtils the StringUtils isntance.
+     * @param stringValidator the StringValidator instance.
+     * @return such generated code.
+     * @precondition customSqlProvider != null
+     * @precondition customSelectForUpdate != null
+     * @precondition parameterJavadoc != null
+     * @precondition parameterDeclaration != null
+     * @precondition parameterValues != null
+     * @precondition resultPropertyValues != null
+     * @precondition stringUtils != null
+     * @precondition stringValidator != null
+     */
+    protected String buildCustomSelectForUpdates(
+        final CustomSqlProvider customSqlProvider,
+        final String customSelectForUpdate,
+        final String parameterJavadoc,
+        final String parameterDeclaration,
+        final String parameterValues,
+        final String resultPropertyValues,
+        final StringUtils stringUtils,
+        final StringValidator stringValidator)
+    {
+        StringBuffer result = new StringBuffer();
+
+        Collection t_cContents = customSqlProvider.getCollection();
+
+        if  (t_cContents != null)
+        {
+            Iterator t_itContentIterator = t_cContents.iterator();
+
+            System.out.println("Building select-for-updates?");
+
+            while  (t_itContentIterator.hasNext())
+            {
+                Object t_Content = t_itContentIterator.next();
+
+                if  (t_Content instanceof SqlElement)
+                {
+                    SqlElement t_SqlElement =
+                        (SqlElement) t_Content;
+
+                    if  (t_SqlElement.SELECT_FOR_UPDATE.equals(
+                             t_SqlElement.getType()))
+                    {
+                        System.out.println("Yes");
+
+                        String[] t_astrParameterTemplates =
+                            buildParameterTemplates(
+                                customSqlProvider,
+                                t_SqlElement.getParameterRefs(),
+                                parameterJavadoc,
+                                parameterDeclaration,
+                                parameterValues,
+                                stringUtils,
+                                stringValidator);
+
+                        String t_strResultPropertyValues =
+                            buildResultPropertyValues(
+                                customSqlProvider,
+                                t_SqlElement.getResultRef(),
+                                resultPropertyValues);
+
+                        result.append(
+                            buildCustomSelectForUpdate(
+                                customSqlProvider,
+                                t_SqlElement,
+                                customSelectForUpdate,
+                                t_astrParameterTemplates[0],
+                                t_astrParameterTemplates[1],
+                                t_astrParameterTemplates[2],
+                                t_strResultPropertyValues,
+                                stringUtils));
+                    }
+                }
+            }
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * Builds the complete custom select.
+     * @param provider the CustomSqlProvider instance.
+     * @param sqlElement the SqlElement instance.
+     * @param customSelectForUpdate the custom select-for-update template.
+     * @param parameterJavadoc the generated parameter Javadoc.
+     * @param parameterDeclaration the generated parameter declaration.
+     * @param parameterValues the generared parameter values.
+     * @param resultPropertyValues the generated result property values.
+     * @param stringUtils the StringUtils isntance.
+     * @return the generated code.
+     * @precondition provider != null
+     * @precondition sqlElement != null
+     * @precondition customSelectForUpdate != null
+     * @precondition parameterJavadoc != null
+     * @precondition parameterDeclaration != null
+     * @precondition parameterValues != null
+     * @precondition resultPropertyValues != null
+     * @precondition stringUtils != null
+     */
+    protected String buildCustomSelectForUpdate(
+        final CustomSqlProvider provider,
+        final SqlElement sqlElement,
+        final String customSelectForUpdate,
+        final String parameterJavadoc,
+        final String parameterDeclaration,
+        final String parameterValues,
+        final String resultPropertyValues,
+        final StringUtils stringUtils)
+    {
+        String result = "";
+
+        MessageFormat t_CustomSelectForUpdateFormatter =
+            new MessageFormat(customSelectForUpdate);
+
+        ResultElement t_Result = null;
+
+        ResultRefElement t_ResultRef = sqlElement.getResultRef();
+
+        if  (t_ResultRef != null)
+        {
+            t_Result = provider.resolveReference(t_ResultRef);
+        }
+
+        result =
+            t_CustomSelectForUpdateFormatter.format(
+                new Object[]
+                {
+                    (   (t_Result != null)
+                     ?  t_Result.getClassValue()
+                     :  "-no-result-type-defined-"),
+                    parameterJavadoc,
+                    stringUtils.unCapitalizeStart(
+                        stringUtils.capitalize(
+                            sqlElement.getName(), '-')),
+                    parameterDeclaration,
+                    sqlElement.getValue(),
+                    parameterValues,
+                    (   (t_Result != null)
+                     ?  stringUtils.extractPackageName(
+                            t_Result.getClassValue())
+                     :  "-no-result-type-defined-"),
+                    resultPropertyValues
+                });
+
+        return result;
     }
 
     /**

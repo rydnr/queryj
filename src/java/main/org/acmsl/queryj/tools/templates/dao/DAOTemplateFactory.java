@@ -137,6 +137,13 @@ public interface DAOTemplateFactory
      * the custom updates or inserts.
      * @param customUpdateOrInsertQueryLine the custom update or insert
      * query line.
+     * @param customSelectForUpdate the custom select-for-update template.
+     * @param customSelectForUpdateParameterJavadoc the Javadoc for the
+     * parameters of the custom select-for-update operations.
+     * @param customSelectForUpdateParameterDeclaration the parameter
+     * declaration of the custom select-for-update operations.
+     * @param customSelectForUpdateParameterValues the parameter values of
+     * the custom select-for-update operations.
      * @param classEnd the class end.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
@@ -201,6 +208,11 @@ public interface DAOTemplateFactory
         final String                  customUpdateOrInsertParameterDeclaration,
         final String                  customUpdateOrInsertParameterValues,
         final String                  customUpdateOrInsertQueryLine,
+        final String                  customSelectForUpdate,
+        final String                  customSelectForUpdateParameterJavadoc,
+        final String                  customSelectForUpdateParameterDeclaration,
+        final String                  customSelectForUpdateParameterValues,
+        final String                  customSelectForUpdateResultPropertyValues,
         final String                  classEnd)
       throws  QueryJException;
 

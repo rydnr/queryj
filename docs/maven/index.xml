@@ -73,6 +73,14 @@
             $Date$
           </td>
           <td>
+            Spent some time implementing custom <i>select for update</i> operations.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/12/02 07:29:59
+          </td>
+          <td>
             <a href="${issue.url}566">Upgraded</a>
              ACM-SL <a href="http://www.acm-sl.org/commons/">Commons</a>'
              dependency to <b>0.5.6</b>.

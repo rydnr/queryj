@@ -72,6 +72,16 @@
     <value>insert into customers (customer_id, name) values (?, "test")</value>
     <parameter-ref id="long-parameter-1"/>
   </sql>
+  <sql
+    id="find-customer-for-update"
+    dao="customer"
+    name="find-customer-for-update"
+    type="select-for-update"
+    implementation="all">
+    <value>select * from customers where customer_id = ?</value>
+    <parameter-ref id="long-parameter-1"/>
+    <result-ref id="find-customer-for-update.result"/>
+  </sql>
 
   <!-- SQL parameter metadata -->
   <parameter-list>
@@ -101,6 +111,14 @@
       <property-ref
         id="find-customer-by-person.personName.property"/>
     </result>
+    <result
+      id="find-customer-for-update.result"
+      matches="single">
+      <property-ref
+        id="find-customer-for-update.customer_id.property"/>
+      <property-ref
+        id="find-customer-for-update.name.property"/>
+    </result>
   </result-list>
 
   <!-- Result property metadata -->
@@ -122,6 +140,13 @@
       column_name="p.name"
       name="personName"
       type="String"/>
+    <property
+      id="find-customer-for-update.customer_id.property"
+      column_name="customer_id"
+      type="long"/>
+    <property
+      id="find-customer-for-update.name.property"
+      column_name="name" type="String"/>
   </property-list>
 
 </sql-list>

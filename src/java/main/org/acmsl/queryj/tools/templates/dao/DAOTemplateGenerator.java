@@ -264,10 +264,10 @@ public class DAOTemplateGenerator
      * @param findByPrimaryKeyMethod the find by primary key method.
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
-     *        declaration.
+     * declaration.
      * @param findByPrimaryKeySelectFields the find by primary key select fields.
      * @param findByPrimaryKeyFilterDeclaration the find by primary key filter
-     *        declaration.
+     * declaration.
      * @param findByPrimaryKeyFilterValues the find by primary key filter values.
      * @param buildValueObjectMethod the build value object method.
      * @param buildValueObjectValueRetrieval the build value object value retrieval.
@@ -310,6 +310,13 @@ public class DAOTemplateGenerator
      * @param customUpdateParameterValues the parameter values of the custom
      * updates.
      * @param customUpdateQueryLine the custom update query line.
+     * @param customSelectForUpdate the custom select-for-update template.
+     * @param customSelectForUpdateParameterJavadoc the Javadoc for the
+     * parameters of the custom select-for-update operations.
+     * @param customSelectForUpdateParameterDeclaration the parameter
+     * declaration of the custom select-for-update operations.
+     * @param customSelectForUpdateParameterValues the parameter values of
+     * the custom select-for-update operations.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -373,6 +380,11 @@ public class DAOTemplateGenerator
         final String                  customUpdateOrInsertParameterDeclaration,
         final String                  customUpdateOrInsertParameterValues,
         final String                  customUpdateOrInsertQueryLine,
+        final String                  customSelectForUpdate,
+        final String                  customSelectForUpdateParameterJavadoc,
+        final String                  customSelectForUpdateParameterDeclaration,
+        final String                  customSelectForUpdateParameterValues,
+        final String                  customSelectForUpdateResultPropertyValues,
         final String                  classEnd)
       throws  QueryJException
     {
@@ -452,6 +464,11 @@ public class DAOTemplateGenerator
                         customUpdateOrInsertParameterDeclaration,
                         customUpdateOrInsertParameterValues,
                         customUpdateOrInsertQueryLine,
+                        customSelectForUpdate,
+                        customSelectForUpdateParameterJavadoc,
+                        customSelectForUpdateParameterDeclaration,
+                        customSelectForUpdateParameterValues,
+                        customSelectForUpdateResultPropertyValues,
                         classEnd);
             }
             else 
@@ -517,6 +534,11 @@ public class DAOTemplateGenerator
                         customUpdateOrInsertParameterDeclaration,
                         customUpdateOrInsertParameterValues,
                         customUpdateOrInsertQueryLine,
+                        customSelectForUpdate,
+                        customSelectForUpdateParameterJavadoc,
+                        customSelectForUpdateParameterDeclaration,
+                        customSelectForUpdateParameterValues,
+                        customSelectForUpdateResultPropertyValues,
                         classEnd) {};
             }
         }
