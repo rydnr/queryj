@@ -110,21 +110,21 @@
 
     <faq id="comparing-to-declarative-bmp">
       <question>
-        Such approach sounds me someway. Is it like SQLJ's?
+        Such approach sounds familiar to me in someway. Is it like SQLJ's?
       </question>
       <answer>
         <p>
-          The approach is quite similar, but there're some differences.
+          Both approaches are quite similar, but there're some differences.
         </p>
         <p>
-          As long as I know, SQLJ allows mixing SQL directly in Java code.
+          As long as I know, SQLJ expects SQL syntax mixed within regular Java code.
           When compiling, such SQL is validated by a special compiler extension,
-          which translates such queries to Java, or weaves them to finally build
+          which translates the SQL logic to Java, or weaves them to finally build
           the byte-code.
         </p>
         <p>
-          I'm neither a SQLJ expert nor fan. It's propietary, it allows no
-          customization, it's vendor-specific, and it's not Java compatible.
+          We're not particularly SQLJ experts. It's propietary, allows no
+          customization, is vendor-specific, and isn't not Java compatible.
         </p>
         <p>
           However, it detects invalid SQL statements early. That is exactly what

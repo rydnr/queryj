@@ -14,7 +14,7 @@
         <strong>QueryJ</strong>
           provides a way of ensuring error-free SQL statements,
           maintaining SQL simplicity, and allowing statement customization
-          independent to the developer.
+          independent from the developer.
       </p>
       <subsection name="Status">
         <p>
