@@ -130,7 +130,7 @@ public interface BaseDAOTemplateDefaults
         + " * Author: QueryJ\n"
         + " *\n"
         + " * Description: DAO abstract layer responsible of retrieving\n"
-        + "                {0} structures from persistence layers.\n"
+        + " *              \"{0}\" structures from persistence layers.\n"
          // Table name
         + " *\n"
         + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
@@ -179,7 +179,7 @@ public interface BaseDAOTemplateDefaults
     public static final String DEFAULT_JAVADOC =
           "/**\n"
         + " * DAO abstract class responsible of requesting services\n"
-        + " * to manage {0} structures from persistence layers.\n"
+        + " * to manage \"{0}\" structures from persistence layers.\n"
          // Table name
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
@@ -249,10 +249,10 @@ public interface BaseDAOTemplateDefaults
         + "     * @param transactionToken the transaction boundary.\n"
         + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public void insert("
+        + "    public void insert(\n"
         + "{3}"
          // (optional) pk declaration
-        + "{4}\n"
+        + "{4}"
          // insert parameters declaration
         + "        final TransactionToken transactionToken)\n"
         + "      throws DataAccessException;\n\n";
@@ -268,7 +268,7 @@ public interface BaseDAOTemplateDefaults
      * The insert parameters declaration.
      */
     public static final String DEFAULT_INSERT_PARAMETERS_DECLARATION =
-        "\n        final {0} {1}";
+        "        final {0} {1},\n";
     // field type - field name
 
     /**
@@ -305,7 +305,7 @@ public interface BaseDAOTemplateDefaults
      * The update parameters declaration.
      */
     public static final String DEFAULT_UPDATE_PARAMETERS_DECLARATION =
-        "\n        final {0} {1}";
+        "        final {0} {1},";
     // field type - field name
 
     /**

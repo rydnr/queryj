@@ -79,7 +79,7 @@ import org.apache.commons.logging.LogFactory;
  * Is able to create DAO interfaces for each table in the
  * persistence model.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class BaseDAOTemplate
@@ -290,8 +290,7 @@ public class BaseDAOTemplate
                         {
                             t_TableTemplate.getTableName(),
                             t_sbPkJavadoc,
-                            t_sbPkDeclaration,
-                            "Phoenix"
+                            t_sbPkDeclaration
                         }));
             }
 
@@ -357,8 +356,6 @@ public class BaseDAOTemplate
                                             .toLowerCase()
                                     }));
 
-                            t_sbInsertParametersDeclaration.append(",");
-
                             t_sbUpdateParametersDeclaration.append(
                                 t_UpdateParametersDeclarationFormatter.format(
                                     new Object[]
@@ -371,8 +368,6 @@ public class BaseDAOTemplate
                                         t_astrColumnNames[t_iColumnIndex]
                                             .toLowerCase()
                                     }));
-
-                            t_sbUpdateParametersDeclaration.append(",");
                         }
                     }
                 }

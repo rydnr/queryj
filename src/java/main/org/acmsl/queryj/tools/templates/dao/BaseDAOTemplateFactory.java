@@ -71,8 +71,8 @@ public interface BaseDAOTemplateFactory
      * @throws QueryJException if the input values are invalid.
      */
     public BaseDAOTemplate createBaseDAOTemplate(
-            TableTemplate           tableTemplate,
-            DatabaseMetaDataManager metaDataManager,
-            String                  packageName)
-        throws  QueryJException;
+        final TableTemplate           tableTemplate,
+        final DatabaseMetaDataManager metaDataManager,
+        final String                  packageName)
+      throws  QueryJException;
 }
