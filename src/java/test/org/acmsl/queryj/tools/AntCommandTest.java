@@ -227,30 +227,6 @@ extends TestCase
     // JUnitDoclet end method getTask
   }
   
-  /**
-  * Tests AntCommandTestgetVersion()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.AntCommand#getVersion()
-  */
-  public void testGetVersion()
-  throws Exception
-  {
-    // JUnitDoclet begin method getVersion
-    // JUnitDoclet end method getVersion
-  }
-  
-  /**
-  * Tests AntCommandTestgetClassVersion()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.AntCommand#getClassVersion()
-  */
-  public void testGetClassVersion()
-  throws Exception
-  {
-    // JUnitDoclet begin method getClassVersion
-    // JUnitDoclet end method getClassVersion
-  }
-  
   
   
   /**

@@ -58,8 +58,6 @@ import org.acmsl.queryj.tools.AntTablesElement;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.version.Version;
-import org.acmsl.commons.version.VersionFactory;
 
 /*
  * Importing some Ant classes.
@@ -296,7 +294,7 @@ public class ParameterValidationHandler
             {
                 result = handle((AntCommand) command);
             }
-            catch  (BuildException buildException)
+            catch  (final BuildException buildException)
             {
                 LogFactory.getLog(getClass()).error(
                     "unhandled.exception",
@@ -313,7 +311,7 @@ public class ParameterValidationHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -333,7 +331,7 @@ public class ParameterValidationHandler
      * of invalid parameters.
      * @throws BuildException if the build process cannot be performed.
      */
-    public void validateParameters(Map parameters)
+    public void validateParameters(final Map parameters)
         throws  BuildException
     {
         if  (parameters != null) 
@@ -355,7 +353,7 @@ public class ParameterValidationHandler
                 (Boolean)          parameters.get(GENERATE_MOCK_DAO),
                 (AntTablesElement) parameters.get(TABLES),
                 (AntExternallyManagedFieldsElement)
-                parameters.get(EXTERNALLY_MANAGED_FIELDS),
+                    parameters.get(EXTERNALLY_MANAGED_FIELDS),
                 (String)           parameters.get(CUSTOM_SQL_MODEL),
                 (File)             parameters.get(SQL_XML_FILE));
         }
@@ -503,31 +501,5 @@ public class ParameterValidationHandler
         {
             throw new BuildException(SQL_XML_FILE_MISSING);
         }
-    }
-
-    /**
-     * Concrete version object updated everytime it's checked-in in a
-     * CVS repository.
-     */
-    public static final Version VERSION =
-        VersionFactory.createVersion("$Revision$");
-
-    /**
-     * Retrieves the current version of this object.
-     * @return the version object with such information.
-     */
-    public Version getVersion()
-    {
-        return VERSION;
-    }
-
-    /**
-     * Retrieves the current version of this class. It's defined because
-     * this is a utility class that cannot be instantiated.
-     * @return the object with class version information.
-     */
-    public static Version getClassVersion()
-    {
-        return VERSION;
     }
 }

@@ -159,30 +159,6 @@ extends TestCase
     // JUnitDoclet end method handle
   }
   
-  /**
-  * Tests JdbcConnectionClosingHandlerTestgetVersion()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler#getVersion()
-  */
-  public void testGetVersion()
-  throws Exception
-  {
-    // JUnitDoclet begin method getVersion
-    // JUnitDoclet end method getVersion
-  }
-  
-  /**
-  * Tests JdbcConnectionClosingHandlerTestgetClassVersion()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler#getClassVersion()
-  */
-  public void testGetClassVersion()
-  throws Exception
-  {
-    // JUnitDoclet begin method getClassVersion
-    // JUnitDoclet end method getClassVersion
-  }
-  
   
   
   /**

@@ -57,8 +57,6 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.version.Version;
-import org.acmsl.commons.version.VersionFactory;
 
 /*
  * Importing some Ant classes.
@@ -106,7 +104,7 @@ public class JdbcConnectionClosingHandler
             {
                 result = handle((AntCommand) command);
             }
-            catch  (BuildException buildException)
+            catch  (final BuildException buildException)
             {
                 LogFactory.getLog(getClass()).error(
                     "unhandled.exception",
@@ -123,7 +121,7 @@ public class JdbcConnectionClosingHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -143,7 +141,7 @@ public class JdbcConnectionClosingHandler
      * @param parameters the parameter map.
      * @throws BuildException if the connection cannot be closed.
      */
-    protected void closeConnection(Map parameters)
+    protected void closeConnection(final Map parameters)
         throws  BuildException
     {
         if  (parameters != null) 
@@ -161,7 +159,7 @@ public class JdbcConnectionClosingHandler
      * @throws org.apache.tools.ant.BuildException whenever the required
      * connection is not present or valid.
      */
-    protected void closeConnection(Connection connection)
+    protected void closeConnection(final Connection connection)
         throws  BuildException
     {
         if  (connection != null)
@@ -170,7 +168,7 @@ public class JdbcConnectionClosingHandler
             {
                 connection.close();
             }
-            catch  (SQLException sqlException)
+            catch  (final SQLException sqlException)
             {
                 throw new BuildException(sqlException);
             }
@@ -182,39 +180,12 @@ public class JdbcConnectionClosingHandler
      * @param parameters the parameter map.
      * @throws BuildException if the connection cannot be removed for any reason.
      */
-    protected void removeConnection(
-            Map parameters)
+    protected void removeConnection(final Map parameters)
         throws  BuildException
     {
         if  (parameters != null)
         {
             parameters.remove(JdbcConnectionOpeningHandler.JDBC_CONNECTION);
         }
-    }
-
-    /**
-     * Concrete version object updated everytime it's checked-in in a
-     * CVS repository.
-     */
-    public static final Version VERSION =
-        VersionFactory.createVersion("$Revision$");
-
-    /**
-     * Retrieves the current version of this object.
-     * @return the version object with such information.
-     */
-    public Version getVersion()
-    {
-        return VERSION;
-    }
-
-    /**
-     * Retrieves the current version of this class. It's defined because
-     * this is a utility class that cannot be instantiated.
-     * @return the object with class version information.
-     */
-    public static Version getClassVersion()
-    {
-        return VERSION;
     }
 }

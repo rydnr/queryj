@@ -256,6 +256,18 @@ extends TestCase
   }
   
   /**
+  * Tests StatementFlagsElementTestgetCursorName()
+  * @throws Exception if an unexpected situation occurs.
+  * @see org.acmsl.queryj.tools.customsql.StatementFlagsElement#getCursorName()
+  */
+  public void testGetCursorName()
+  throws Exception
+  {
+    // JUnitDoclet begin method getCursorName
+    // JUnitDoclet end method getCursorName
+  }
+  
+  /**
   * Tests StatementFlagsElementTesttoString()
   * @throws Exception if an unexpected situation occurs.
   * @see org.acmsl.queryj.tools.customsql.StatementFlagsElement#toString()

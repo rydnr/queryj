@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.handlers.
+*              unittests.org.acmsl.queryj.tools.templates.dao.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.tools.handlers;
+package unittests.org.acmsl.queryj.tools.templates.dao;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
+import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 // JUnitDoclet end import
 
 /*
@@ -84,28 +84,28 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests DatabaseMetaDataLoggingHandlerTest class.
+* Tests DAOTemplateTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler
+* @see org.acmsl.queryj.tools.templates.dao.DAOTemplate
 */
-public class DatabaseMetaDataLoggingHandlerTest
+public class DAOTemplateTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler databasemetadatalogginghandler = null;
+  org.acmsl.queryj.tools.templates.dao.DAOTemplate daotemplate = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a DatabaseMetaDataLoggingHandlerTest with given name.
+  * Creates a DAOTemplateTest with given name.
   * @param name such name.
   */
-  public DatabaseMetaDataLoggingHandlerTest(String name)
+  public DAOTemplateTest(String name)
   {
-    // JUnitDoclet begin method DatabaseMetaDataLoggingHandlerTest
+    // JUnitDoclet begin method DAOTemplateTest
     super(name);
-    // JUnitDoclet end method DatabaseMetaDataLoggingHandlerTest
+    // JUnitDoclet end method DAOTemplateTest
   }
   
   /**
@@ -113,11 +113,21 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler createInstance()
+  public org.acmsl.queryj.tools.templates.dao.DAOTemplate createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler();
+    return
+        new org.acmsl.queryj.tools.templates.dao.DAOTemplate(
+            null, // table template
+            null, // database metadata manager
+            null, // custom sql provider
+            "com.foo.bar.rdb.mysql", // package name
+            "mysql", // engine name
+            "4.0.1", // engine version
+            "'", // quote
+            "com.foo.bar", // base package name
+            "bar"); // repository name
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -130,7 +140,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    databasemetadatalogginghandler = createInstance();
+    daotemplate = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -142,21 +152,21 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    databasemetadatalogginghandler = null;
+    daotemplate = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
   }
   
   /**
-  * Tests DatabaseMetaDataLoggingHandlerTesthandle()
+  * Tests DAOTemplateTesttoString()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler#handle(org.acmsl.commons.patterns.Command)
+  * @see org.acmsl.queryj.tools.templates.dao.DAOTemplate#toString()
   */
-  public void testHandle()
+  public void testToString()
   throws Exception
   {
-    // JUnitDoclet begin method handle
-    // JUnitDoclet end method handle
+    // JUnitDoclet begin method toString
+    // JUnitDoclet end method toString
   }
   
   
@@ -178,7 +188,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(DatabaseMetaDataLoggingHandlerTest.class);
+    junit.textui.TestRunner.run(DAOTemplateTest.class);
     // JUnitDoclet end method testcase.main
   }
 }

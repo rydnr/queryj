@@ -50,8 +50,6 @@ package org.acmsl.queryj.tools;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.version.Version;
-import org.acmsl.commons.version.VersionFactory;
 
 /*
  * Importing some Ant classes.
@@ -93,7 +91,7 @@ public class AntCommand
      */
     public AntCommand()
     {
-        inmutableSetAttributeMap(new HashMap());
+        immutableSetAttributeMap(new HashMap());
     }
 
     /**
@@ -102,18 +100,18 @@ public class AntCommand
      * (optional).
      * @param task the task, for logging purposes (optional).
      */
-    public AntCommand(Project project, Task task)
+    public AntCommand(final Project project, final Task task)
     {
         this();
-        inmutableSetProject(project);
-        inmutableSetTask(task);
+        immutableSetProject(project);
+        immutableSetTask(task);
     }
 
     /**
      * Specifies the attribute map.
      * @param map such map.
      */
-    private void inmutableSetAttributeMap(Map map)
+    private void immutableSetAttributeMap(final Map map)
     {
         m__mAttributes = map;
     }
@@ -122,9 +120,9 @@ public class AntCommand
      * Specifies the attribute map.
      * @param map such map.
      */
-    public void setAttributeMap(Map map)
+    public void setAttributeMap(final Map map)
     {
-        inmutableSetAttributeMap(map);
+        immutableSetAttributeMap(map);
     }
 
     /**
@@ -141,7 +139,7 @@ public class AntCommand
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setAttribute(String name, Object value)
+    public void setAttribute(final String name, final Object value)
     {
         if  (   (name  != null)
              && (value != null))
@@ -160,7 +158,7 @@ public class AntCommand
      * @param name the attribute name.
      * @return the value or <code>null</code> if it wasn't found.
      */
-    public Object getAttribute(String name)
+    public Object getAttribute(final String name)
     {
         Object result = null;
 
@@ -182,7 +180,7 @@ public class AntCommand
      * @param name the attribute name.
      * @return <code>true</code> if the attribute is already defined.
      */
-    public boolean contains(String name)
+    public boolean contains(final String name)
     {
         boolean result = false;
 
@@ -203,7 +201,7 @@ public class AntCommand
      * Specifies the project.
      * @param project the project.
      */
-    private void inmutableSetProject(Project project)
+    private void immutableSetProject(final Project project)
     {
         m__Project = project;
     }
@@ -212,9 +210,9 @@ public class AntCommand
      * Specifies the project.
      * @param project the project.
      */
-    protected void setProject(Project project)
+    protected void setProject(final Project project)
     {
-        inmutableSetProject(project);
+        immutableSetProject(project);
     }
 
     /**
@@ -230,7 +228,7 @@ public class AntCommand
      * Specifies the task.
      * @param task the task.
      */
-    private void inmutableSetTask(Task task)
+    private void immutableSetTask(final Task task)
     {
         m__Task = task;
     }
@@ -239,9 +237,9 @@ public class AntCommand
      * Specifies the task.
      * @param task the task.
      */
-    protected void setTask(Task task)
+    protected void setTask(final Task task)
     {
-        inmutableSetTask(task);
+        immutableSetTask(task);
     }
 
     /**
@@ -251,31 +249,5 @@ public class AntCommand
     public Task getTask()
     {
         return m__Task;
-    }
-
-    /**
-     * Concrete version object updated everytime it's checked-in in a
-     * CVS repository.
-     */
-    public static final Version VERSION =
-        VersionFactory.createVersion("$Revision$");
-
-    /**
-     * Retrieves the current version of this object.
-     * @return the version object with such information.
-     */
-    public Version getVersion()
-    {
-        return VERSION;
-    }
-
-    /**
-     * Retrieves the current version of this class. It's defined because
-     * this is a utility class that cannot be instantiated.
-     * @return the object with class version information.
-     */
-    public static Version getClassVersion()
-    {
-        return VERSION;
     }
 }

@@ -171,30 +171,6 @@ extends TestCase
     // JUnitDoclet end method validateParameters
   }
   
-  /**
-  * Tests ParameterValidationHandlerTestgetVersion()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.handlers.ParameterValidationHandler#getVersion()
-  */
-  public void testGetVersion()
-  throws Exception
-  {
-    // JUnitDoclet begin method getVersion
-    // JUnitDoclet end method getVersion
-  }
-  
-  /**
-  * Tests ParameterValidationHandlerTestgetClassVersion()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.handlers.ParameterValidationHandler#getClassVersion()
-  */
-  public void testGetClassVersion()
-  throws Exception
-  {
-    // JUnitDoclet begin method getClassVersion
-    // JUnitDoclet end method getClassVersion
-  }
-  
   
   
   /**

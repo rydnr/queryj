@@ -57,8 +57,6 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.version.Version;
-import org.acmsl.commons.version.VersionFactory;
 
 /*
  * Importing some Ant classes.

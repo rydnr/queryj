@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.handlers.
+*              unittests.org.acmsl.queryj.tools.templates.dao.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,13 +44,13 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj.tools.handlers;
+package unittests.org.acmsl.queryj.tools.templates.dao;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
+import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 // JUnitDoclet end import
 
 /*
@@ -84,28 +84,28 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests DatabaseMetaDataLoggingHandlerTest class.
+* Tests DAOTemplateUtilsTest class.
 * @version $Revision$
-* @see org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler
+* @see org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils
 */
-public class DatabaseMetaDataLoggingHandlerTest
+public class DAOTemplateUtilsTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler databasemetadatalogginghandler = null;
+  org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils daotemplateutils = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a DatabaseMetaDataLoggingHandlerTest with given name.
+  * Creates a DAOTemplateUtilsTest with given name.
   * @param name such name.
   */
-  public DatabaseMetaDataLoggingHandlerTest(String name)
+  public DAOTemplateUtilsTest(String name)
   {
-    // JUnitDoclet begin method DatabaseMetaDataLoggingHandlerTest
+    // JUnitDoclet begin method DAOTemplateUtilsTest
     super(name);
-    // JUnitDoclet end method DatabaseMetaDataLoggingHandlerTest
+    // JUnitDoclet end method DAOTemplateUtilsTest
   }
   
   /**
@@ -113,11 +113,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler createInstance()
+  public org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler();
+    return org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils.getInstance();
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -130,7 +130,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    databasemetadatalogginghandler = createInstance();
+    daotemplateutils = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -142,21 +142,69 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    databasemetadatalogginghandler = null;
+    daotemplateutils = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
   }
   
   /**
-  * Tests DatabaseMetaDataLoggingHandlerTesthandle()
+  * Tests DAOTemplateUtilsTestgetInstance()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler#handle(org.acmsl.commons.patterns.Command)
+  * @see org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils#getInstance()
   */
-  public void testHandle()
+  public void testGetInstance()
   throws Exception
   {
-    // JUnitDoclet begin method handle
-    // JUnitDoclet end method handle
+    // JUnitDoclet begin method getInstance
+    // JUnitDoclet end method getInstance
+  }
+  
+  /**
+  * Tests DAOTemplateUtilsTestretrieveConnectionFlagsForFindByPrimaryKeyOperation()
+  * @throws Exception if an unexpected situation occurs.
+  * @see org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils#retrieveConnectionFlagsForFindByPrimaryKeyOperation(org.acmsl.queryj.tools.customsql.CustomSqlProvider)
+  */
+  public void testRetrieveConnectionFlagsForFindByPrimaryKeyOperation()
+  throws Exception
+  {
+    // JUnitDoclet begin method retrieveConnectionFlagsForFindByPrimaryKeyOperation
+    // JUnitDoclet end method retrieveConnectionFlagsForFindByPrimaryKeyOperation
+  }
+  
+  /**
+  * Tests DAOTemplateUtilsTestretrieveStatementFlagsForFindByPrimaryKeyOperation()
+  * @throws Exception if an unexpected situation occurs.
+  * @see org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils#retrieveStatementFlagsForFindByPrimaryKeyOperation(org.acmsl.queryj.tools.customsql.CustomSqlProvider)
+  */
+  public void testRetrieveStatementFlagsForFindByPrimaryKeyOperation()
+  throws Exception
+  {
+    // JUnitDoclet begin method retrieveStatementFlagsForFindByPrimaryKeyOperation
+    // JUnitDoclet end method retrieveStatementFlagsForFindByPrimaryKeyOperation
+  }
+  
+  /**
+  * Tests DAOTemplateUtilsTestretrieveStatementFlagsSetters()
+  * @throws Exception if an unexpected situation occurs.
+  * @see org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils#retrieveStatementFlagsSetters()
+  */
+  public void testRetrieveStatementFlagsSetters()
+  throws Exception
+  {
+    // JUnitDoclet begin method retrieveStatementFlagsSetters
+    // JUnitDoclet end method retrieveStatementFlagsSetters
+  }
+  
+  /**
+  * Tests DAOTemplateUtilsTestretrieveResultSetFlagsForFindByPrimaryKeyOperation()
+  * @throws Exception if an unexpected situation occurs.
+  * @see org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils#retrieveResultSetFlagsForFindByPrimaryKeyOperation(org.acmsl.queryj.tools.customsql.CustomSqlProvider)
+  */
+  public void testRetrieveResultSetFlagsForFindByPrimaryKeyOperation()
+  throws Exception
+  {
+    // JUnitDoclet begin method retrieveResultSetFlagsForFindByPrimaryKeyOperation
+    // JUnitDoclet end method retrieveResultSetFlagsForFindByPrimaryKeyOperation
   }
   
   
@@ -178,7 +226,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(DatabaseMetaDataLoggingHandlerTest.class);
+    junit.textui.TestRunner.run(DAOTemplateUtilsTest.class);
     // JUnitDoclet end method testcase.main
   }
 }

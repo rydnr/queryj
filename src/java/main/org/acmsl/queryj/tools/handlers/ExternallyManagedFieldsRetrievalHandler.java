@@ -64,8 +64,6 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
  */
 import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.utils.StringValidator;
-import org.acmsl.commons.version.Version;
-import org.acmsl.commons.version.VersionFactory;
 
 /*
  * Importing some Ant classes.
@@ -108,7 +106,7 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      */
-    public boolean handle(Command command)
+    public boolean handle(final Command command)
     {
         boolean result = false;
 
@@ -135,7 +133,7 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -216,8 +214,8 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @throws BuildException if the manager retrieval process if faulty.
      */
     protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
         DatabaseMetaDataManager result = null;
 
@@ -240,7 +238,7 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @throws BuildException if the retrieval process cannot be performed.
      */
     protected AntExternallyManagedFieldsElement
-        retrieveExternallyManagedFieldsElement(Map parameters)
+        retrieveExternallyManagedFieldsElement(final Map parameters)
         throws  BuildException
     {
         AntExternallyManagedFieldsElement result = null;
@@ -254,31 +252,5 @@ public class ExternallyManagedFieldsRetrievalHandler
         }
 
         return result;
-    }
-
-    /**
-     * Concrete version object updated everytime it's checked-in in a
-     * CVS repository.
-     */
-    public static final Version VERSION =
-        VersionFactory.createVersion("$Revision$");
-
-    /**
-     * Retrieves the current version of this object.
-     * @return the version object with such information.
-     */
-    public Version getVersion()
-    {
-        return VERSION;
-    }
-
-    /**
-     * Retrieves the current version of this class. It's defined because
-     * this is a utility class that cannot be instantiated.
-     * @return the object with class version information.
-     */
-    public static Version getClassVersion()
-    {
-        return VERSION;
     }
 }

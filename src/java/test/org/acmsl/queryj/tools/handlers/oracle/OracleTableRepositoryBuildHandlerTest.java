@@ -159,30 +159,6 @@ extends TestCase
     // JUnitDoclet end method handle
   }
   
-  /**
-  * Tests OracleTableRepositoryBuildHandlerTestgetVersion()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.handlers.oracle.OracleTableRepositoryBuildHandler#getVersion()
-  */
-  public void testGetVersion()
-  throws Exception
-  {
-    // JUnitDoclet begin method getVersion
-    // JUnitDoclet end method getVersion
-  }
-  
-  /**
-  * Tests OracleTableRepositoryBuildHandlerTestgetClassVersion()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.handlers.oracle.OracleTableRepositoryBuildHandler#getClassVersion()
-  */
-  public void testGetClassVersion()
-  throws Exception
-  {
-    // JUnitDoclet begin method getClassVersion
-    // JUnitDoclet end method getClassVersion
-  }
-  
   
   
   /**

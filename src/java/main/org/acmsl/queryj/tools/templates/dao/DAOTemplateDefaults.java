@@ -224,7 +224,7 @@ public interface DAOTemplateDefaults
         + " * DAO class responsible of retrieving\n"
         + " * {2} structures from "
          // Table name
-        + "{0} {1} persistence layers.\n"
+        + " * {0} {1} persistence layers.\n"
          // engine name - driver version
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"

@@ -147,7 +147,7 @@
     <dependency>
       <groupId>acmsl-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>0.5.6</version>
+      <version>0.5.7b3</version>
       <url>http://maven.acm-sl.com/commons</url>
       <properties>
         <required.to.compile>true</required.to.compile>
