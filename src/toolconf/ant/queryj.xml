@@ -140,6 +140,21 @@
 
         </fileset>
 
+        <fileset dir="${runtime.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <!--
+         Java libraries needed compiling the unit tests.
+        -->
+        <fileset dir="${unittests.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
       </path>
 
       <!--

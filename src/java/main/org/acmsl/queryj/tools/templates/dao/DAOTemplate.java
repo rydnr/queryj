@@ -1100,17 +1100,6 @@ public abstract class DAOTemplate
         + "        '{'\n"
         + "            try\n"
         + "            '{'\n"
-        + "                if  (t_rsResults != null)\n"
-        + "                '{'\n"
-        + "                    t_rsResults.close();\n"
-        + "                '}'\n"
-        + "            '}'\n"
-        + "            catch  (final Exception exception)\n"
-        + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(exception);\n"
-        + "            '}'\n"
-        + "            try\n"
-        + "            '{'\n"
         + "                if  (t_PreparedStatement != null)\n"
         + "                '{'\n"
         + "                    t_PreparedStatement.close();\n"
@@ -1132,7 +1121,6 @@ public abstract class DAOTemplate
         + "                LogFactory.getLog(getClass()).error(exception);\n"
         + "            '}'\n"
         + "        '}'\n\n"
-        + "        return result;\n"
         + "    '}'\n\n";
 
     /**
