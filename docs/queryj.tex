@@ -1,0 +1,230 @@
+\documentclass[dvips]{article}
+\usepackage[
+pdfauthor={Jose San Leandro},
+pdftitle={QueryJ},
+pdfcreator={pdftex},
+pdfsubject={QueryJ},
+pdfkeywords={QueryJ,ACM-SL,code,Java,database,DAO}
+]{hyperref}
+\usepackage[spanish]{babel}
+\title{QueryJ}
+\author{Author Jose San Leandro}
+\date{\today}
+\begin{document}
+\newcommand{\queryj}{\textit{QueryJ} }
+\newcommand{\acronim}[1]{\textsf{#1}}
+\newcommand{\tech}[1]{\texttt{#1}}
+\newcommand{\company}[1]{\textsf{#1}}
+\maketitle
+\begin{abstract}
+Objetivos y funcionalidades de QueryJ
+\end{abstract}
+\section{Introducci\'on}
+Antes de definir \textit{qu\'e} es \queryj, es preferible describir el
+marco tecnol\'ogico que lo rodea, para detallar en qu\'e modo solventa
+las deficiencias del mismo.
+\subsection{Capas de persistencia}
+En arquitecturas multicapa, es conveniente aislar en la medida de lo
+posible la l\'ogica destinada a realizar b\'usquedas o modificaciones
+sobre los datos persistentes, del resto.\\
+En el caso general, esos datos estar\'an almacenados en una base de
+datos relacional, y las operaciones sobre los mismos se representan
+mediante sentencias \acronim{SQL}.\\
+Restringi\'endonos a desarrollos \tech{Java}, la capa de persistencia
+puede implementarse usando distintas tecnolog\'i{}as,
+\begin{enumerate}
+\item
+  \tech{EJB}. Es parte de \tech{J2EE}, una especificaci\'on de
+  \company{Sun} para entornos con m\'aquinas virtuales \tech{Java}
+  distribuidas. El caso concreto de \textit{EJB de entidad} permite
+  definir c\'omo gestionar el acceso a los datos, as\'i{} como la
+  l\'ogica transaccional.
+\item
+  \tech{JDBC}. Es un subconjunto del API \tech{J2SE} para
+  facilitar la comunicaci\'on con motores de bases de datos. En
+  general, la l\'ogica utiliza \'unicamente \tech{JDBC}, y es el
+  \tech{driver} espec\'i{}fico el que lleva a cabo tanto el env\'i{}o
+  de la solicitud como la recepci\'on de la respuesta.
+\item
+  \tech{JDO}. Es una especificaci\'on de \company{Sun} que define
+  expl\'icitamente tanto el ciclo de vida como la transaccionalidad de
+  las operaciones sobre los datos. \tech{JDO} no est\'a muy extendido
+  debido principalmente a su tard\'i{}a aparici\'on y a la falta de
+  implementaciones.
+\end{enumerate}
+
+En el caso de arquitecturas no distribuidas, o bien aqu\'ellas que,
+siendo distribuidas, utilicen un mecanismo no basado en
+\tech{clusters} de m\'aquinas virtuales, las operaciones 
+sobre los datos persistentes se realizan utilizando \tech{JDBC}.\\
+
+\subsubsection{JDBC}
+Como en la mayor parte de las \tech{API}s, \acronim{JDBC} no est\'a
+debidamente protegido frente a usos indebidos, siendo los m\'as
+comunes
+\begin{enumerate}
+  \item Gesti\'on de recursos. Para realizar una consulta, se debe
+  establecer una conexi\'on (en general, de red) con el motor de base
+  de datos, a trav\'es de la cual se realiza la solicitud y
+  posteriormente se recuperan los resultados, en su caso. Una
+  gesti\'on indebida de los recursos reservados genera errores
+  sintom\'aticos dif\'i{}ciles de detectar.
+  \item Eficiencia de las consultas. \tech{JDBC} ofrece la posibilidad
+  de sacar provecho de la precompilaci\'on de sentencias \acronim{SQL}
+  por parte del motor de base de datos. Sin embargo, no hay certeza de
+  que se est\'e utilizando globalmente sin examinar las mismas una a
+  una.
+  \item Validez de las consultas. \tech{JDBC} no ofrece ning\'un
+  m\'etodo de validaci\'on de consultas previa a su ejecuci\'on. Un
+  error de sintaxis, por trivial que sea, obliga a recompilar la
+  aplicaci\'on en su conjunto, lo que, aparte de inconveniente,
+  introduce una penalizaci\'on en tiempo de desarrollo.
+\end{enumerate}
+Como resultado se obtiene, en la inmensa mayor\'i{}a de las ocasiones,
+aplicaciones con \tech{connection} o \tech{cursor} \tech{leaks}.
+En los casos poco frecuentes en los que no se reusen las conexiones,
+los \tech{leaks} impiden que \'estas se puedan cerrar salvo despu\'es
+de vencimiento de un tiempo de espera (\tech{timeout}).\\
+En el caso general, las conexiones estar\'an gestionadas
+transparentemente por un mecanismo de \tech{cache} (\tech{connection
+pool} el cual eventualmente no podr\'a proveer de este tipo de
+recursos conforme el n\'umero de \'estos vaya aproxim\'andose al
+tama\~no de dicho \tech{pool}.\\
+Como resultado, la \'unica soluci\'on pasa por liberar dichas
+conexiones, que se realiza habitualmente \textbf{reiniciando} la
+aplicaci\'on.\\
+Es conveniente resaltar que los principales problemas de \tech{JDBC}
+son a nivel de API, no de mecanismo de comunicaci\'on. Para resolver
+estos problemas, es conveniente disponer de medios que impidan
+que \tech{JDBC} se utilice indebidamente.
+
+\subsubsection{Relaci\'on del dise\~no con el modelo relacional}
+\tech{Java} es un lenguaje \textit{orientado a objetos}. Sin entrar en
+detalles, eso implica que una aplicaci\'on \tech{Java} llevar\'a
+asociada un dise\~no de clases concreta, que refleje en mayor o menor
+medida las especificaciones de la misma, a nivel conceptual.\\
+Un subconjunto de ese dise\~no estar\'a directamente relacionado con
+el modelo relacional utilizado como medio de almacenamiento
+persistente. Esta relaci\'on puede ser trivial, o por el contrario
+revestir cierta complejidad.\\
+Las librer\'i{}as de \tech{O/R Mapping} tienen como objetivo facilitar
+la sincronizaci\'on de ambos modelos en el segundo caso. Asimismo, son
+un recubrimiento de \tech{JDBC} que tratan de evitar que se use
+indebidamente. Habitualmente, utilizan un mecanismo para definir las
+relaciones entre los modelos, y las consultas espec\'i{}ficas, basado
+en XML, de forma que queden separados del la l\'ogica de la
+aplicaci\'on. Los productos de este tipo de mayor difusi\'on son
+\href{http://www.hibernate.org}{Hibernate},
+\href{http://www.ibatis.com}{IBatis},
+\href{http://db.apache.org/ojb}{Object Relational Bridge} y
+\href{http://www,springframework.org}{Spring}.\\
+Por el contrario, hay dise\~nos que necesitan sincronizarse con el
+modelo relacional, ya que en su concepci\'on se parti\'o del mismo. En
+esos casos, lo recomendable es utilizar un \textit{patr\'on de
+dise\~no} denominado
+\href{http://java.sun.com/blueprints/corej2eepatterns/Patterns/DataAccessObject.html}{\tech{Data
+    Access Object} (\acronim{DAO})}, el
+cual a\'i{}sla convenientemente los detalles del mecanismo de
+persistencia respecto al dise\~no orientado a objetos de la
+aplicaci\'on. \'Este es el enfoque utilizado por \queryj.
+
+\section{Descripci\'on t\'ecnica}
+\queryj es un producto software compuesto por los siguientes m\'odulos:
+\begin{enumerate}
+  \item Librer\'i{}a \tech{Java} de ejecuci\'on de operaciones
+  \acronim{SQL},
+  \item Herramienta de generaci\'on de c\'odigo a partir de un modelo
+  relacional arbitrario:
+  \begin{enumerate}
+    \item API basado en patrones \acronim{DAO},
+    \item Implementaci\'on \tech{JDBC} de dichos \acronim{DAO}s,
+    \item Implementaciones alternativas (\acronim{XML}, \tech{Mock})
+    \item Sincronizaci\'on de los metadatos del modelo como mecanismo
+    de validaci\'on de consultas.
+  \end{enumerate}
+\end{enumerate}
+\subsection{Librer\'i{}a \acronim{SQL}}
+El objetivo de este m\'odulo es
+proporcionar mecanismos de seguridad
+en lo referente a la sintaxis y parametrizaci\'on de las operaciones
+\acronim{SQL}.\\
+Para ello, se dispone de un API que modela el lenguaje \acronim{SQL},
+impidiendo expl\'i{}citamente la utilizaci\'on de sentencias no
+v\'alidas. Al utilizarse conjuntamente con el resultado de la
+generaci\'on de c\'odigo relativo a la sincronizaci\'on de metadatos,
+permite comprobar y corregir las consultas \textbf{en tiempo de
+  compilaci\'on}.
+\subsection{Herramienta de generaci\'on de c\'odigo}
+Mediante un an\'alisis exhaustivo de un modelo relacional dado, se
+obtiene la informaci\'on necesaria para generar \textit{todo} el
+c\'odigo de la capa de persistencia.\\
+Este m\'odulo permite su integraci\'on con la herramienta de
+desarrollo \tech{Java} m\'as difundida y de mayor aceptaci\'on,
+\href{http://ant.apache.org}{Ant}. Esto permite, asimismo, una mayor
+claridad y facilidad de configuraci\'on.\\
+Para garantizar la robustez del c\'odigo generado, todas las \textbf{consultas
+espec\'i{}ficas} definidas por el desarollador son \textbf{validadas
+  en el proceso de generaci\'on}, con lo cual cualquier error en las mismas se
+detecta en una fase temprana.
+\subsubsection{Generaci\'on del API de la capa de persistencia basado en \acronim{DAO}}
+El modelo generado se basa en la idea de establecer una granularidad
+de un \acronim{DAO} por cada \textit{entidad} del modelo
+relacional.\\
+El API, adem\'as, genera los \tech{Value Objects} o \tech{Data
+Transfer Objects} asociados, as\'i{}como un mecanismo flexible para
+la selecci\'on de la implementaci\'on concreta del \acronim{DAO}.\\
+Por conveniencia, para entidades \textit{d\'ebiles} del modelo,
+utilizadas \'unicamente como identificadores de tipos, o tablas con
+contenidos constantes en general, \queryj permite incluir
+autom\'aticamente dichos en el API, de forma que la aplicaci\'on
+pueda, si lo necesita, utilizar dichos valores sin realizar
+operaciones \acronim{SQL} innecesarias.
+\subsubsection{Generaci\'on de implementaciones \acronim{DAO}}
+Cuando la aplicaci\'on utiliza el API generado,
+est\'a ejecutando transparentemente l\'ogica \acronim{JDBC}, dentro de
+la implementaci\'on espec\i{}ifica para el motor de base de datos
+sobre el cual se despleg\'o el modelo relacional.\\
+Dicha implementaci\'on utiliza fundamentalmente el m\'odulo de
+validaci\'on descrito anteriormente, junto con \tech{Spring}, por su
+capacidad para identificar errores espec\i{}ficos de cada base de
+datos.\\
+Es importante indicar asimismo que dicha implementaci\'on gestiona
+adecuadamente las claves for\'aneas (\tech{foreign keys}), siendo
+capaz de conocer si la eliminaci\'on de un registro de una tabla
+conlleva la eliminaci\'on \textit{en cascada} de registros
+dependientes. o no.\\
+Adem\'as de la implementaci\'on por defecto, \queryj permite utilizar,
+si los requisitos lo aconsejan, \acronim{DAO}s basados en
+\acronim{XML} y \tech{Mock}. Los primeros pueden ser \'utiles a la
+hora de realizar operaciones tales como importar o exportar datos,
+mientras que el segundo es conveniente en la ejecuci\'on de pruebas
+unitarias.\\
+Cabe indicar que para todas las implementaciones se generan casos de
+prueba basados en \href{http://www.junit.org}{JUnit}.
+\subsubsection{Sincronizaci\'on del modelo}
+En el caso de necesitar realizar operaciones \acronim{SQL}
+independientemente de la capa de persistencia, \queryj proporciona un
+API en \tech{Java} asociado al modelo analizado, incluyendo
+\begin{enumerate}
+  \item nombres de las tablas,
+  \item nombres de las columnas,
+  \item tipos de las columnas,
+  \item extensiones \acronim{SQL} soportadas: funciones num\'ericas,
+  sobre cadenas, sobre fechas, etc.
+  \item procedimientos almacenados.
+\end{enumerate}
+Esto permite, dentro del \tech{IDE} de \tech{Java}, funciones como el
+\textit{autocompletado} de nombres de tablas y columnas, validaci\'on
+de tipos de columnas, consulta y utilizaci\'on de las extensiones
+\acronim{SQL} soportadas, llamadas a procedimientos almacenados como
+si se tratara de c\'odigo \tech{Java}, etc.
+\section{Adaptabilidad}
+La herramienta de generaci\'on de c\'odigo est\'a dise\~ntilde para
+poder adaptar el resultado del proceso al estilo e incluso a la
+tecnolog\'i{}a que se desee.
+\section{Competencia}
+\subsection{Firestorm}
+\href{http://www.codefutures.com/products/firestorm/}{Firestorm/DAO}
+\subsection{TopLink}
+\href{http://www.oracle.com/technology/products/ias/toplink/}{TopLink}
+\end{document}
