@@ -36,14 +36,6 @@
  * Description: Contains the subtemplates used to generate base value objects
  *              according to database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -66,7 +58,6 @@ import org.apache.tools.ant.Task;
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
- * @version $Revision$
  */
 public abstract class AbstractBaseValueObjectTemplate
     extends  AbstractTemplate

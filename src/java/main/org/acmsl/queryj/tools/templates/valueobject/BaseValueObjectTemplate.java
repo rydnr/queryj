@@ -36,14 +36,6 @@
  * Description: Is able to generate value objects according to database
  *              metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -81,7 +73,6 @@ import java.util.Map;
  * Is able to generate base value objects according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class BaseValueObjectTemplate
     extends  AbstractBaseValueObjectTemplate
@@ -263,6 +254,9 @@ public class BaseValueObjectTemplate
                 String t_strFieldType =
                     metaDataUtils.getNativeType(
                         metaDataManager.getColumnType(
+                            tableTemplate.getTableName(),
+                            t_strField),
+                        metaDataManager.allowsNull(
                             tableTemplate.getTableName(),
                             t_strField));
 

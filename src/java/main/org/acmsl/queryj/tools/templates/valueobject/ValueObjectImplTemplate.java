@@ -36,14 +36,6 @@
  * Description: Is able to generate basic value objects implementations
  *              according to database metadata.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -82,7 +74,6 @@ import java.util.Map;
  * to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class ValueObjectImplTemplate
     extends  AbstractValueObjectImplTemplate
@@ -321,6 +312,9 @@ public class ValueObjectImplTemplate
                     metaDataUtils.getNativeType(
                         metaDataManager.getColumnType(
                             tableTemplate.getTableName(),
+                            t_strField),
+                        metaDataManager.allowsNull(
+                            tableTemplate.getTableName(),
                             t_strField));
 
                 t_sbResult.append(
@@ -328,10 +322,7 @@ public class ValueObjectImplTemplate
                         new Object[]
                         {
                             t_strField,
-                            metaDataUtils.getNativeType(
-                                metaDataManager.getColumnType(
-                                    tableTemplate.getTableName(),
-                                    t_strField)),
+                            t_strFieldType,
                             t_strField.toLowerCase()
                         }));
 

@@ -35,14 +35,6 @@
  *
  * Description: Contains default subtemplates for all templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -55,7 +47,6 @@ import java.util.Calendar;
  * Contains default subtemplates for all templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface JavaTemplateDefaults
 {
