@@ -567,7 +567,7 @@ public abstract class KeywordRepositoryTemplate
 
     /**
      * Specifies the ACM-SL import template.
-     * @param acmslImports the new ACM-SL import template.
+     * @param acmslImportTemplate the new ACM-SL import template.
      */
     protected void setAcmslImportTemplate(String acmslImportTemplate)
     {

@@ -318,7 +318,6 @@ public abstract class Field
 
     /**
      * Retrieves the variable condition to be able to filter for null values.
-     * @param value the value.
      * @return such kind of condition.
      */
     public Condition isNull()

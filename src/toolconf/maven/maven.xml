@@ -33,7 +33,7 @@
 
     <attainGoal name="faq"/>
 
-    <attainGoal name="statcvs"/>
+    <!--attainGoal name="statcvs"/-->
 
     <!--
       HTML2xdoc makes the site generation crash if no documents are
@@ -50,10 +50,10 @@
     <!--
       JavaNCSS makes the site generation crash if no source files are
       found. Uncomment whenever any source files are added.
-    -->
     <attainGoal name="javancss:do-xml"/>
 
     <attainGoal name="javancss:do-html"/>
+    -->
 
     <!--
       JDiff makes the site generation crash if no source files are

@@ -2245,7 +2245,7 @@ public class QueryResultSet
      * @see java.sql.ResultSet#updateBigDecimal(int,java.math.BigDecimal)
      * @param index (Taken from Sun's Javadoc) the first column
      * is 1, the second is 2, ...
-     * @param bigDecimal a <code>BigDecimal</code> value
+     * @param value a <code>BigDecimal</code> value
      * @exception SQLException if an error occurs.
      */
     public void updateBigDecimal(int index, BigDecimal value)
@@ -2264,7 +2264,7 @@ public class QueryResultSet
      * @see java.sql.ResultSet#updateBigDecimal(java.lang.String,java.math.BigDecimal)
      * @param columnName (Taken from Sun's Javadoc) the SQL name of
      * the column.
-     * @param bigDecimal a <code>BigDecimal</code> value
+     * @param value a <code>BigDecimal</code> value
      * @exception SQLException if an error occurs.
      */
     public void updateBigDecimal(String columnName, BigDecimal value)
@@ -4019,7 +4019,7 @@ public class QueryResultSet
      * @see java.sql.ResultSet#updateBigDecimal(java.lang.String,java.math.BigDecimal)
      * @param columnName (Taken from Sun's Javadoc) the SQL name of
      * the column.
-     * @param bigDecimal a <code>BigDecimal</code> value
+     * @param value a <code>BigDecimal</code> value
      * @exception SQLException if an error occurs.
      */
     public void updateBigDecimal(Field field, BigDecimal value)

@@ -81,8 +81,8 @@ public abstract class Condition
     public Condition() {};
 
     /**
-     * Specifies a new condition collection.
-     * @param conditions the new conditions.
+     * Specifies a new inner condition.
+     * @param condition the new condition.
      */
     protected void setInnerCondition(Condition condition)
     {
@@ -100,7 +100,7 @@ public abstract class Condition
 
     /**
      * Specifies the variable conditions.
-     * @param variableConditions the variable conditions.
+     * @param collection the variable conditions.
      */
     protected void setVariableConditionCollection(Collection collection)
     {

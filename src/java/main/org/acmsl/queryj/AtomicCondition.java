@@ -110,7 +110,7 @@ public abstract class AtomicCondition
      * Creates a condition using given information.
      * @param leftSideField the left-side field.
      * @param operator the operator.
-     * @param rightSideField the right-side field.
+     * @param rightSideValue the right-side value.
      */
     protected AtomicCondition(
         Field              leftSideField,
@@ -126,7 +126,7 @@ public abstract class AtomicCondition
      * Creates a condition using given information.
      * @param leftSideField the left-side field.
      * @param operator the operator.
-     * @param rightSideField the right-side field.
+     * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
         Field              leftSideField,
@@ -141,7 +141,7 @@ public abstract class AtomicCondition
      * Creates a condition using given information.
      * @param leftSideField the left-side field.
      * @param operator the operator.
-     * @param rightSideField the right-side field.
+     * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
         Field              leftSideField,
@@ -156,7 +156,7 @@ public abstract class AtomicCondition
      * Creates a condition using given information.
      * @param leftSideField the left-side field.
      * @param operator the operator.
-     * @param rightSideField the right-side field.
+     * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
         Field              leftSideField,
@@ -171,7 +171,7 @@ public abstract class AtomicCondition
      * Creates a condition using given information.
      * @param leftSideField the left-side field.
      * @param operator the operator.
-     * @param rightSideField the right-side field.
+     * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
         Field              leftSideField,
@@ -186,7 +186,7 @@ public abstract class AtomicCondition
      * Creates a condition using given information.
      * @param leftSideField the left-side field.
      * @param operator the operator.
-     * @param rightSideField the right-side field.
+     * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
         Field              leftSideField,
@@ -202,7 +202,7 @@ public abstract class AtomicCondition
      * Creates a condition using given information.
      * @param leftSideField the left-side field.
      * @param operator the operator.
-     * @param rightSideField the right-side field.
+     * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
         Field              leftSideField,

@@ -68,6 +68,14 @@
             $Date$
           </td>
           <td>
+            Deployed at new server, <a href="http://maven.acm-sl.org">maven.acm-sl.org</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/09/06 07:07:44
+          </td>
+          <td>
             Mock DAO template development almost done.<br/>
             Remaining issues for <b>0.5.5</b>:
             <ul>

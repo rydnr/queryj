@@ -496,7 +496,7 @@ public class MockDataSource
 
     /**
      * Attempts to establish a database connection.
-     * @param user the database user on whose behalf the Connection
+     * @param username the database user on whose behalf the Connection
      * is being made.
      * @param password the user's password.
      * @return a Connection to the database

@@ -473,7 +473,6 @@ public abstract class PackageUtils
     /**
      * Retrieves the package name for the base test suite template.
      * @param packageName the original package.
-     * @param engineName the engine name.
      * @return the package for the associated suite.
      */
     public String retrieveBaseTestSuitePackage(String packageName)
@@ -485,7 +484,6 @@ public abstract class PackageUtils
      * Retrieves the folder for the base test suite template.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param engineName the engine name.
      * @return the folder in which the associated suite class should be
      * generated.
      */
@@ -514,7 +512,6 @@ public abstract class PackageUtils
     /**
      * Retrieves the package name for the functions templates.
      * @param packageName the original package.
-     * @param engineName the engine name.
      * @return the package for the associated functions classes.
      */
     public String retrieveFunctionsPackage(String packageName)
@@ -526,7 +523,6 @@ public abstract class PackageUtils
      * Retrieves the folder for the functions templates.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param engineName the engine name.
      * @return the folder in which the associated functions classes should be
      * generated.
      */
@@ -555,7 +551,6 @@ public abstract class PackageUtils
     /**
      * Retrieves the package name for the functions test templates.
      * @param packageName the original package.
-     * @param engineName the engine name.
      * @return the package for the associated test classes.
      */
     public String retrieveTestFunctionsPackage(String packageName)
@@ -567,7 +562,6 @@ public abstract class PackageUtils
      * Retrieves the folder for the functions test templates.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param engineName the engine name.
      * @return the folder in which the associated functions classes should be
      * generated.
      */

@@ -2103,7 +2103,7 @@ public abstract class DAOTemplate
 
     /**
      * Specifies the find-by-primary-key pk declaration.
-     * @param findByPrimaryKeyPkdeclaration such declaration.
+     * @param findByPrimaryKeyPkDeclaration such declaration.
      */
     protected void setFindByPrimaryKeyPkdeclaration(
         String findByPrimaryKeyPkDeclaration)

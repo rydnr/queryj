@@ -202,7 +202,7 @@ public abstract class QueryUtils
 
     /**
      * Checks if given object should be escaped inside a query or not.
-     * @param element the element.
+     * @param object the element.
      * @return <code>true</code> if such object should be escaped.
      */
     public boolean shouldBeEscaped(Object object)

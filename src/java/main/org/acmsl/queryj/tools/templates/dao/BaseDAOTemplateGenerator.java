@@ -136,8 +136,6 @@ public class BaseDAOTemplateGenerator
     /**
      * Adds a new template factory class.
      * @param baseDAOName the base DAO name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @param templateFactoryClass the template factory.
      */
     public void addTemplateFactoryClass(
@@ -159,8 +157,6 @@ public class BaseDAOTemplateGenerator
     /**
      * Retrieves the template factory class.
      * @param baseDAOName the base DAO name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @return the template factory class name.
      */
     protected String getTemplateFactoryClass(
@@ -176,7 +172,7 @@ public class BaseDAOTemplateGenerator
             result =
                 t_MappingManager.getDefaultTemplateFactoryClass(
                       TemplateMappingManager.BASE_DAO_TEMPLATE_PREFIX
-		    + baseDAOName);
+            + baseDAOName);
         }
 
         return result;
@@ -202,7 +198,7 @@ public class BaseDAOTemplateGenerator
             Object t_TemplateFactory =
                 t_MappingManager.getDefaultTemplateFactoryClass(
                       TemplateMappingManager.BASE_DAO_TEMPLATE_PREFIX
-		    + baseDAOName);
+            + baseDAOName);
 
             if  (t_TemplateFactory != null)
             {
@@ -294,7 +290,7 @@ public class BaseDAOTemplateGenerator
                     + File.separator
                     + t_StringUtils.capitalize(
                           baseDAOTemplate
-			      .getTableTemplate().getTableName().toLowerCase(),
+                              .getTableTemplate().getTableName().toLowerCase(),
                           '_')
                     + "DAO.java",
                     baseDAOTemplate.toString());

@@ -646,7 +646,7 @@ public abstract class ProcedureRepositoryTemplate
 
     /**
      * Specifies the project imports Javadoc.
-     * @param projectImports the new project imports Javadoc.
+     * @param importJavadoc the new project imports Javadoc.
      */
     protected void setProjectImportsJavadoc(String importJavadoc)
     {

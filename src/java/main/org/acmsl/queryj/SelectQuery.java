@@ -280,10 +280,7 @@ public abstract class SelectQuery
 
     /**
      * Looks for the records that match the filter.
-     * @param sql (Taken from Sun's Javadoc) an SQL statement to be sent
-     * to the database, typically a static SQL SELECT statement.
-     * @return (Taken from Sun's Javadoc) a ResultSet object that
-     * contains the data produced by the given query; never null. 
+     * @return the result set.
      * @exception SQLException if an error occurs.
      */
     public QueryResultSet retrieveMatchingResults()

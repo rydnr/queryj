@@ -427,7 +427,6 @@ public class DatabaseMetaDataManager
      * @param project the project, for logging purposes
      * (optional).
      * @param task the task, for logging purposes (optional).
-     * @{link http://192.168.0.2/bugzilla/show_bug.cgi?id=111}
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
@@ -484,7 +483,6 @@ public class DatabaseMetaDataManager
      * @param task the task, for logging purposes (optional).
      * @param project the project, for logging purposes
      * (optional).
-     * @{link http://192.168.0.2/bugzilla/show_bug.cgi?id=111}
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
@@ -828,7 +826,7 @@ public class DatabaseMetaDataManager
     /**
      * Adds the column names of given table.
      * @param tableName the table name.
-     * @param columnName the column name.
+     * @param columnNames the column names.
      */
     public void addColumnNames(
         String   tableName,
@@ -1684,7 +1682,6 @@ public class DatabaseMetaDataManager
     /**
      * Builds a fk key using given object.
      * @param firstKey the first object key.
-     * @param secondKey the second object key.
      * @return the map key.
      */
     protected Object buildFkKey(Object firstKey)
@@ -2650,13 +2647,11 @@ public class DatabaseMetaDataManager
      * Extracts concrete integer fields from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
-     * @param size the number of fields to extract.
      * @return the list of field values.
      * @throws SQLException if the database operation fails.
      */
     protected int[] extractIntFields(
-            ResultSet resultSet,
-            String    field)
+            ResultSet resultSet, String    field)
         throws  SQLException
     {
         return extractIntFields(resultSet, field, -1);

@@ -129,7 +129,6 @@ public class TestSuiteTemplateGenerator
     /**
      * Generates a test suite template.
      * @param packageName the package name.
-     * @param testPackageName the test package name.
      * @param suiteName the suite name.
      * @return a template.
      */

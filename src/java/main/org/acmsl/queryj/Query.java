@@ -648,7 +648,7 @@ public abstract class Query
     /**
      * See java.sql.Statement#setEscapeProcessing(boolean).
      * @see java.sql.Statement#setEscapeProcessing(boolean)
-     * @param enable (Taken from Sun's Javadoc) <code>true</code>
+     * @param flag (Taken from Sun's Javadoc) <code>true</code>
      * to enable escape processing; <code>false</code> to
      * disable it.
      * @exception SQLException if an error occurs

@@ -834,7 +834,6 @@ public class OracleMetaDataManager
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
-     * @param size the number of fields to extract.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      */

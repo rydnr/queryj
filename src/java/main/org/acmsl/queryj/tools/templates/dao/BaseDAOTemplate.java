@@ -925,7 +925,7 @@ public abstract class BaseDAOTemplate
 
     /**
      * Specifies the find-by-primary-key pk declaration.
-     * @param findByPrimaryKeyPkdeclaration such declaration.
+     * @param findByPrimaryKeyPkDeclaration such declaration.
      */
     protected void setFindByPrimaryKeyPkdeclaration(
         String findByPrimaryKeyPkDeclaration)
@@ -1178,7 +1178,7 @@ public abstract class BaseDAOTemplate
 
     /**
      * Specifies the delete pk declaration.
-     * @param deletePkdeclaration such declaration.
+     * @param deletePkDeclaration such declaration.
      */
     protected void setDeletePkdeclaration(
         String deletePkDeclaration)

@@ -101,7 +101,6 @@ public class AntCommand
      * @param project the project, for logging purposes
      * (optional).
      * @param task the task, for logging purposes (optional).
-     * @{link http://192.168.0.2/bugzilla/show_bug.cgi?id=111}
      */
     public AntCommand(Project project, Task task)
     {

@@ -307,7 +307,7 @@ public class ParameterValidationHandler
 
     /**
      * Validates the parameters.
-     * @param map the parameter map.
+     * @param parameters the parameter map.
      * @return <code>false</code> if the chain should be stopped because
      * of invalid parameters.
      * @throws BuildException if the build process cannot be performed.

@@ -415,7 +415,7 @@ public abstract class TableRepositoryTemplate
 
     /**
      * Specifies the project imports Javadoc.
-     * @param projectImports the new project imports Javadoc.
+     * @param importJavadoc the new project imports Javadoc.
      */
     protected void setProjectImportsJavadoc(final String importJavadoc)
     {

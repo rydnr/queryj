@@ -76,7 +76,7 @@ public class ConditionOperatorRepository
 
     /**
      * Specifies a new weak reference.
-     * @param factory the factory instance to use.
+     * @param repository the repository instance to use.
      */
     protected static void setReference(ConditionOperatorRepository repository)
     {

@@ -1639,7 +1639,7 @@ public class MockConnection
      * Creates a savepoint with the given name in the current
      * transaction and returns the new Savepoint object that
      * represents it. 
-     * @param name a String containing the name of the savepoint.
+     * @param savepoint a String containing the name of the savepoint.
      * @return the new Savepoint object.
      * @exception SQLException if a database access error occurs
      * or this Connection object is currently in auto-commit mode

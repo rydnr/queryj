@@ -124,7 +124,7 @@ public class AntFieldElement
 
     /**
      * Specifies the field type.
-     * @param name the field type.
+     * @param type the field type.
      */
     protected void setType(String type)
     {
