@@ -250,7 +250,7 @@ public abstract class ValueObjectFactoryTemplate
         + "        {0}ValueObject result = null;\n\n"
         + "        result =\n"
         + "            new {0}ValueObject("
-        + "{3}) '{' '}';\n\n"  // factory method value object build.
+        + "{3});\n\n"  // factory method value object build.
         + "        return result;\n"
         + "    '}'\n\n";
 

@@ -107,6 +107,8 @@ public interface XMLDAOTemplateFactory
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
      * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete request.
      * @param deleteWithFkPkValues the delete with FK PK values.
+     * @param persistMethod the persist method.
+     * @param undigesterPropertyRules the Undigester property rules.
      * @param classEnd the class end.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
@@ -152,6 +154,8 @@ public interface XMLDAOTemplateFactory
         final String                  deleteWithFkPkDeclaration,
         final String                  deleteWithFkDAODeleteRequest,
         final String                  deleteWithFkPkValues,
+        final String                  persistMethod,
+        final String                  undigesterPropertyRules,
         final String                  classEnd)
       throws  QueryJException;
 

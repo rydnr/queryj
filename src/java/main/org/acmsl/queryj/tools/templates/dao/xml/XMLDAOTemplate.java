@@ -134,7 +134,7 @@ public abstract class XMLDAOTemplate
         + " * Author: QueryJ\n"
         + " *\n"
         + " * Description: XML-based DAO layer responsible of simulating a persistence\n"
-        + "                layer for {0} structures.\n"
+        + " *              layer for {0} structures.\n"
         + " *\n"
         + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
         + " *\n"
@@ -190,7 +190,8 @@ public abstract class XMLDAOTemplate
         + "/*\n"
         + " * Importing ACM-SL Commons classes.\n"
         + " */\n"
-        + "import org.acmsl.commons.patterns.dao.DataAccessException;\n\n";
+        + "import org.acmsl.commons.patterns.dao.DataAccessException;\n"
+        + "import org.acmsl.commons.utils.io.IOUtils;\n\n";
 
     /**
      * The JDK imports.
@@ -200,7 +201,8 @@ public abstract class XMLDAOTemplate
         + " * Importing some JDK classes.\n"
         + " */\n"
         + "import java.io.InputStream;\n"
-        + "import java.io.Reader;\n"
+        + "import java.io.OutputStream;\n"
+        + "import java.io.PrintStream;\n"
         + "import java.util.ArrayList;\n"
         + "import java.math.BigDecimal;\n"
         + "import java.util.Calendar;\n"
@@ -215,6 +217,14 @@ public abstract class XMLDAOTemplate
      */
     public static final String EXTRA_IMPORTS =
           "/*\n"
+        + " * Importing Undigester classes.\n"
+        + " */\n"
+        + "import org.acmsl.undigester.GetNameRule;\n"
+        + "import org.acmsl.undigester.GetNextRule;\n"
+        + "import org.acmsl.undigester.GetPropertyRule;\n"
+        + "import org.acmsl.undigester.Undigester;\n\n"
+        + "import org.acmsl.undigester.UndigesterException;\n\n"
+        + "/*\n"
         + " * Importing Digester classes.\n"
         + " */\n"
         + "import org.apache.commons.digester.Digester;\n\n"
@@ -264,9 +274,9 @@ public abstract class XMLDAOTemplate
         + "     */\n"
         + "    private InputStream m__isInput;\n\n"
         + "    /**\n"
-        + "     * The input reader.\n"
+        + "     * The output stream.\n"
         + "     */\n"
-        + "    private Reader m__rReader;\n\n";
+        + "    private OutputStream m__osOutput;\n\n";
 
     /**
      * The class constructor.
@@ -276,21 +286,13 @@ public abstract class XMLDAOTemplate
         + "     * Creates a XML{0}DAO with given input stream.\n"
         // table name
         + "     * @param input the input stream.\n"
+        + "     * @param output (<b>optional</b>) where to save the changes to.\n"
         + "     * @precondition input != null\n"
         + "     */\n"
-        + "    public XML{0}DAO(final InputStream input)\n"
+        + "    public XML{0}DAO(final InputStream input, final OutputStream output)\n"
         + "    '{'\n"
         + "        immutableSetInput(input);\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Creates a XML{0}DAO with given reader.\n"
-        // table name
-        + "     * @param reader the reader.\n"
-        + "     * @precondition reader != null\n"
-        + "     */\n"
-        + "    public XML{0}DAO(final Reader reader)\n"
-        + "    '{'\n"
-        + "        immutableSetReader(reader);\n"
+        + "        immutableSetOutput(output);\n"
         + "    '}'\n\n";
 
     /**
@@ -367,28 +369,28 @@ public abstract class XMLDAOTemplate
         + "        return m__isInput;\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Specifies the reader.\n"
-        + "     * @param reader the reader.\n"
+        + "     * Specifies the output stream.\n"
+        + "     * @param input the output stream.\n"
         + "     */\n"
-        + "    private void immutableSetReader(final Reader reader)\n"
+        + "    private void immutableSetOutput(final OutputStream output)\n"
         + "    '{'\n"
-        + "        m__rReader = reader;\n"
+        + "        m__osOutput = output;\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Specifies the reader.\n"
-        + "     * @param reader the reader.\n"
+        + "     * Specifies the output stream.\n"
+        + "     * @param output the output stream.\n"
         + "     */\n"
-        + "    protected void setReader(final Reader reader)\n"
+        + "    protected void setOutput(final OutputStream output)\n"
         + "    '{'\n"
-        + "        immutableSetReader(reader);\n"
+        + "        immutableSetOutput(output);\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Retrieves the reader.\n"
-        + "     * @return such reader.\n"
+        + "     * Retrieves the output stream.\n"
+        + "     * @return such stream.\n"
         + "     */\n"
-        + "    protected Reader getReader()\n"
+        + "    protected OutputStream getOutput()\n"
         + "    '{'\n"
-        + "        return m__rReader;\n"
+        + "        return m__osOutput;\n"
         + "    '}'\n\n"
         + "    /**\n"
         + "     * Loads the information from the XML resource.\n"
@@ -398,21 +400,19 @@ public abstract class XMLDAOTemplate
         + "    protected Map load()\n"
         + "      throws  DataAccessException\n"
         + "    '{'\n"
-        + "        return load(configureDigester(), getInput(), getReader());\n"
+        + "        return load(configureDigester(), getInput());\n"
         + "    '}'\n\n"
         + "    /**\n"
         + "     * Loads the information from the XML resource.\n"
         + "     * @param digester the Digester instance.\n"
         + "     * @param stream the input stream.\n"
-        + "     * @param reader the input reader.\n"
         + "     * @return the {0} information.\n"
         + "     * @throws DataAccessException if the data can not be parsed.\n"
-        + "     * @precondition (stream != null || reader != null)\n"
+        + "     * @precondition (stream != null)\n"
         + "     */\n"
         + "    protected synchronized Map load(\n"
         + "        final Digester digester,\n"
-        + "        final InputStream input,\n"
-        + "        final Reader reader)\n"
+        + "        final InputStream input)\n"
         + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        Map result = null;\n\n"
@@ -422,22 +422,9 @@ public abstract class XMLDAOTemplate
         + "            digester.push(collection);\n\n"
         + "            try\n"
         + "            '{'\n"
-        + "                boolean t_bParsed = false;\n\n"
         + "                if  (input != null)\n"
         + "                '{'\n"
         + "                    digester.parse(input);\n\n"
-        + "                    t_bParsed = true;\n"
-        + "                '}'\n"
-        + "                else\n"
-        + "                '{'\n"
-        + "                    if  (reader != null)\n"
-        + "                    '{'\n"
-        + "                        digester.parse(reader);\n\n"
-        + "                        t_bParsed = true;\n"
-        + "                    '}'\n"
-        + "                '}'\n\n"
-        + "                if  (t_bParsed)\n"
-        + "                '{'\n"
         + "                    result = new Hashtable();\n"
         + "                    process{0}(collection, result);\n"
         + "                    set{0}Collection(collection);\n"
@@ -881,6 +868,108 @@ public abstract class XMLDAOTemplate
         "\n                    {0},";
 
     /**
+     * The persist method.
+     */
+    public static final String DEFAULT_PERSIST_METHOD =
+          "    /**\n"
+        + "     * Persists in-memory contents to the output stream\n"
+        + "     * associated to this instance.\n"
+        + "     */\n"
+        + "    public void persist()\n"
+        + "    '{'\n"
+        + "        persist(\n"
+        + "            get{0}Collection(), getOutput(), IOUtils.getInstance());\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Persists in-memory contents to the output stream\n"
+        + "     * associated to this instance.\n"
+        + "     * @param collection the collection to serialize.\n"
+        + "     * @param output where to write the contents to.\n"
+        + "     * @param ioUtils the IOUtils instance.\n"
+        + "     * @precondition ioUtils != null\n"
+        + "     */\n"
+        + "    protected void persist(\n"
+        + "        final Collection collection,\n"
+        + "        final OutputStream output,\n"
+        + "        final IOUtils ioUtils)\n"
+        + "    '{'\n"
+        + "        if  (collection == null)\n"
+        + "        '{'\n"
+        + "            LogFactory.getLog(getClass()).warn(\n"
+        + "                \"No {0} information to serialize.\");\n"
+        + "        '}'\n"
+        + "        else if  (output == null)\n"
+        + "        '{'\n"
+        + "            LogFactory.getLog(getClass()).warn(\n"
+        + "                \"No output stream to serialize the information through.\");\n"
+        + "        '}'\n"
+        + "        else\n"
+        + "        '{'\n"
+        + "            Undigester t_Undigester = new Undigester(collection);\n"
+        + "            configureUndigester(t_Undigester, collection);\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                ioUtils.write(t_Undigester.unparse(), output);\n"
+        + "            '}'\n"
+        + "            catch  (final UndigesterException undigesterException)\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).fatal(\n"
+        + "                      \"Cannot serialize {0} information. This could be \"\n"
+        + "                    + \"a bug in QueryJ-based generated code. \"\n"
+        + "                    + \"Please provide us information about this issue\"\n"
+        + "                    + \"though http://bugzilla.acm-sl.org\",\n"
+        + "                    undigesterException);\n"
+        + "            '}'\n"
+        + "        '}'\n"
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Configures given Undigester instance.\n"
+        + "     * @param undigester the Undigester instance.\n"
+        + "     * @param collection the {0} collection, required to build\n"
+        + "     * Undigester patterns.\n"
+        + "     * @precondition undigester != null\n"
+        + "     * @precondition collection != null\n"
+        + "     */\n"
+        + "    protected void configureUndigester(\n"
+        + "        final Undigester undigester, final Collection collection)\n"
+        + "    '{'\n"
+        + "        undigester.addRule(\n"
+        + "            new GetNameRule(\n"
+        + "                collection.getClass().getName(),\n"
+        + "                \"{1}-list\",\n"
+        + "                null));\n\n"
+        + "        GetNextRule t_ItemRule =\n"
+        + "            new GetNextRule(\n"
+        + "                collection.getClass().getName(),\n"
+        + "                \"toArray\",\n"
+        + "                new Object[]\n"
+        + "                '{'\n"
+        + "                    new {0}ValueObject[0]\n"
+        + "                '}',\n"
+        + "                (GetNextRule) null);\n"
+        + "        undigester.addRule(t_ItemRule);\n\n"
+        + "        undigester.addRule(\n"
+        + "            new GetNameRule(\n"
+        + "                  collection.getClass().getName()\n"
+        + "                + \"/\" + {0}ValueObject.class.getName(),\n"
+        + "                \"{1}\",\n"
+        + "                t_ItemRule));\n\n"
+        + "{2}"
+        + "    '}'\n";
+
+
+    /**
+     * The property rules.
+     */
+    public static final String DEFAULT_UNDIGESTER_PROPERTY_RULES =
+          "        undigester.addRule(\n"
+        + "            new GetPropertyRule(\n"
+        + "                  collection.getClass().getName()\n"
+        + "                + \"/\" + {0}ValueObject.class.getName(),\n"
+        + "                \"{1}\",\n"
+        + "                t_ItemRule));\n\n";
+
+    /**
      * The default class end.
      */
     public static final String DEFAULT_CLASS_END = "}\n";
@@ -1091,6 +1180,16 @@ public abstract class XMLDAOTemplate
     private String m__strDeleteWithFkPkValues;
 
     /**
+     * The persist method.
+     */
+    private String m__strPersistMethod;
+
+    /**
+     * The Undigester property rules.
+     */
+    private String m__strUndigesterPropertyRules;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
@@ -1140,6 +1239,8 @@ public abstract class XMLDAOTemplate
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
      * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete request.
      * @param deleteWithFkPkValues the delete with FK PK values.
+     * @param persistMethod the persist method.
+     * @param undigesterPropertyRules the Undigester property rules.
      * @param classEnd the class end.
      */
     public XMLDAOTemplate(
@@ -1183,6 +1284,8 @@ public abstract class XMLDAOTemplate
         final String                  deleteWithFkPkDeclaration,
         final String                  deleteWithFkDAODeleteRequest,
         final String                  deleteWithFkPkValues,
+        final String                  persistMethod,
+        final String                  undigesterPropertyRules,
         final String                  classEnd)
     {
         immutableSetTableTemplate(
@@ -1305,6 +1408,12 @@ public abstract class XMLDAOTemplate
         immutableSetDeleteWithFkPkValues(
             deleteWithFkPkValues);
 
+        immutableSetPersistMethod(
+            persistMethod);
+
+        immutableSetUndigesterPropertyRules(
+            undigesterPropertyRules);
+
         immutableSetClassEnd(
             classEnd);
     }
@@ -1365,6 +1474,8 @@ public abstract class XMLDAOTemplate
             DEFAULT_DELETE_WITH_FK_PK_DECLARATION,
             DEFAULT_DELETE_WITH_FK_DAO_DELETE_REQUEST,
             DEFAULT_DELETE_WITH_FK_PK_VALUES,
+            DEFAULT_PERSIST_METHOD,
+            DEFAULT_UNDIGESTER_PROPERTY_RULES,
             DEFAULT_CLASS_END);
     }
 
@@ -2511,6 +2622,62 @@ public abstract class XMLDAOTemplate
     }
 
     /**
+     * Specifies the persist method.
+     * @param persistMethod such method.
+     */
+    private void immutableSetPersistMethod(final String persistMethod)
+    {
+        m__strPersistMethod = persistMethod;
+    }
+
+    /**
+     * Specifies the persist method.
+     * @param persistMethod such method.
+     */
+    protected void setPersistMethod(final String persistMethod)
+    {
+        immutableSetPersistMethod(persistMethod);
+    }
+
+    /**
+     * Retrieves the persist method.
+     * @return such method.
+     */
+    public String getPersistMethod()
+    {
+        return m__strPersistMethod;
+    }
+
+    /**
+     * Specifies the Undigester's property rules.
+     * @param undigesterPropertyRules such rules.
+     */
+    private void immutableSetUndigesterPropertyRules(
+        final String undigesterPropertyRules)
+    {
+        m__strUndigesterPropertyRules = undigesterPropertyRules;
+    }
+
+    /**
+     * Specifies the Undigester's property rules.
+     * @param undigesterPropertyRules such rules.
+     */
+    protected void setUndigesterPropertyRules(
+        final String undigesterPropertyRules)
+    {
+        immutableSetUndigesterPropertyRules(undigesterPropertyRules);
+    }
+
+    /**
+     * Retrieves the Undigester's property rules.
+     * @return such rules.
+     */
+    public String getUndigesterPropertyRules()
+    {
+        return m__strUndigesterPropertyRules;
+    }
+
+    /**
      * Specifies the class end.
      * @param classEnd the new class end.
      */
@@ -2653,6 +2820,12 @@ public abstract class XMLDAOTemplate
             MessageFormat t_DeleteWithFkPkValuesFormatter =
                 new MessageFormat(getDeleteWithFkPkValues());
 
+            MessageFormat t_PersistMethodFormatter =
+                new MessageFormat(getPersistMethod());
+
+            MessageFormat t_UndigesterPropertyRulesFormatter =
+                new MessageFormat(getUndigesterPropertyRules());
+
             StringBuffer t_sbForeignDAOImports = new StringBuffer();
             StringBuffer t_sbPkJavadoc = new StringBuffer();
             StringBuffer t_sbPkDeclaration = new StringBuffer();
@@ -2682,6 +2855,9 @@ public abstract class XMLDAOTemplate
             StringBuffer t_sbUpdateParametersJavadoc       = new StringBuffer();
             StringBuffer t_sbUpdateParametersDeclaration   = new StringBuffer();
             StringBuffer t_sbUpdateParametersSpecification = new StringBuffer();
+
+            StringBuffer t_sbPersistMethod = new StringBuffer();
+            StringBuffer t_sbUndigesterPropertyRules = new StringBuffer();
 
             String t_strDeleteMethodModifier = "public";
             String t_strDeleteMethodSuffix = "";
@@ -2901,6 +3077,21 @@ public abstract class XMLDAOTemplate
                     t_sbBuildValueObjectRetrieval.append(
                         t_astrColumnNames[t_iColumnIndex].toLowerCase());
 
+                    t_sbUndigesterPropertyRules.append(
+                        t_UndigesterPropertyRulesFormatter.format(
+                            new Object[]
+                            {
+                                t_StringUtils.capitalize(
+                                    t_EnglishGrammarUtils.getSingular(
+                                        t_TableTemplate.getTableName()
+                                            .toLowerCase()),
+                                    '_'),
+                                t_StringUtils.unCapitalizeStart(
+                                    t_StringUtils.capitalize(
+                                        t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                                        '_')),
+                            }));
+
                     if  (!t_MetaDataManager.isManagedExternally(
                              t_TableTemplate.getTableName(),
                              t_astrColumnNames[t_iColumnIndex]))
@@ -3117,6 +3308,23 @@ public abstract class XMLDAOTemplate
                         }));
 
                 t_sbResult.append(t_sbDeleteMethod);
+
+                t_sbPersistMethod.append(
+                    t_PersistMethodFormatter.format(
+                        new Object[]
+                        {
+                            t_StringUtils.capitalize(
+                                t_EnglishGrammarUtils.getSingular(
+                                    t_TableTemplate.getTableName()
+                                        .toLowerCase()),
+                                '_'),
+                            t_EnglishGrammarUtils.getSingular(
+                                t_TableTemplate.getTableName()
+                                    .toLowerCase()),
+                            t_sbUndigesterPropertyRules
+                        }));
+
+                t_sbResult.append(t_sbPersistMethod);
             }
         }
 

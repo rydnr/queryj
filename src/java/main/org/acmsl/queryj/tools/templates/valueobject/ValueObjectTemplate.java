@@ -176,7 +176,7 @@ public abstract class ValueObjectTemplate
      * The class definition.
      */
     public static final String CLASS_DEFINITION =
-           "public abstract class {0}ValueObject\n"; // table
+           "public class {0}ValueObject\n"; // table
 
     /**
      * The class start.

@@ -1248,23 +1248,17 @@
          Checks if the operating system is Unix.
         -->
         <condition property="unix">
-
-            <os family="unix"/>
-
+          <os family="unix"/>
         </condition>
 
         <!--
          Checks if the operating system is Microsoft's.
         -->
         <condition property="windows">
-
-            <or>
-
-                <os family="windows"/>
-
-                <os family="dos"/>
-
-            </or>
+          <or>
+            <os family="windows"/>
+            <os family="dos"/>
+          </or>
 
         </condition>
 

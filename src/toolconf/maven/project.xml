@@ -1,9 +1,58 @@
 <?xml version="1.0"?>
+<!--
+ @license
+                             QueryJ
+
+    Copyright (C) 2001-2004  Jose San Leandro Armend&aacute;riz
+                             jsanleandro@yahoo.es
+                             chousz@yahoo.com
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+    Thanks to ACM S.L. for distributing this library under the GPL license.
+    Contact info: jsr000@terra.es
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecaba&ntilde;as
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
+
+ @header
+  
+   Filename: $RCSfile$
+
+   Author: Jose San Leandro Armendariz
+
+   Description: Maven project descriptor for QueryJ.
+
+   Last modified by: $Author$ at $Date$
+
+   File version: $Revision$
+
+   Project version: $Name$
+                    ("Name" means no concrete version has been checked out)
+
+   $Id$
+
+-->
 <project>
   <pomVersion>3</pomVersion>
   <name>QueryJ</name>
   <id>queryj</id>
-  <groupId>org.acmlsl.queryj</groupId>
+  <groupId>org.acmsl.queryj</groupId>
   <currentVersion>0.5.6</currentVersion>
   <organization>
     <name>ACM S.L.</name>
@@ -98,8 +147,27 @@
     <dependency>
       <groupId>acmsl-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>0.5.5b10</version>
+      <version>0.5.5b11</version>
       <url>http://maven.acm-sl.com/commons</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>true</required.to.build>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>undigester</groupId>
+      <artifactId>undigester</artifactId>
+      <version>0.6b3</version>
+      <url>http://maven.acm-sl.com/undigester</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+      </properties>
     </dependency>
 
     <dependency>
@@ -107,6 +175,12 @@
       <artifactId>commons-logging</artifactId>
       <version>1.0.3</version>
       <url>http://jakarta.apache.org/commons/</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>true</required.to.build>
+      </properties>
     </dependency>
 
     <dependency>
@@ -114,6 +188,12 @@
       <artifactId>ant</artifactId>
       <version>1.6.1</version>
       <url>http://ant.apache.org</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+      </properties>
     </dependency>
 
     <dependency>
@@ -121,6 +201,12 @@
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <url>http://www.junit.org</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>false</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+      </properties>
     </dependency>
 
     <dependency>
@@ -128,6 +214,12 @@
       <artifactId>junitdoclet-acmsl</artifactId>
       <version>1.0.2</version>
       <url>http://junitdoclet.sourceforge.net</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>false</required.to.run>
+        <required.to.test>false</required.to.test>
+        <required.to.build>true</required.to.build>
+      </properties>
     </dependency>
 
     <dependency>
@@ -135,6 +227,12 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>2.0.14-bin</version>
       <url>http://www.mysql.com</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+      </properties>
     </dependency>
 
     <dependency>
@@ -142,6 +240,12 @@
       <artifactId>rmijdbc</artifactId>
       <version>3.0.1</version>
       <url>http://www.objectweb.org</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+      </properties>
     </dependency>
 
     <dependency>
@@ -149,6 +253,40 @@
       <artifactId>commons-digester</artifactId>
       <version>1.4.1</version>
       <url>http://jakarta.apache.org/commons/digester</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>2.1</version>
+      <url>http://jakarta.apache.org/commons/</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+        <injected.by>commons-digester</injected.by>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.7.0</version>
+      <url>http://jakarta.apache.org/commons/</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+        <injected.by>commons-digester</injected.by>
+      </properties>
     </dependency>
 
     <dependency>
@@ -156,6 +294,12 @@
       <artifactId>jta</artifactId>
       <version>1.0</version>
       <url>http://java.sun.com</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+      </properties>
     </dependency>
 
     <dependency>
@@ -163,6 +307,20 @@
       <artifactId>oro</artifactId>
       <version>2.0.7</version>
       <url>http://jakarta.apache.org/oro</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>true</required.to.build>
+        <injected.by>acmsl-commons/commons</injected.by>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.0</version>
+      <url>http://jakarta.apache.org/commons</url>
     </dependency>
 
   </dependencies>
