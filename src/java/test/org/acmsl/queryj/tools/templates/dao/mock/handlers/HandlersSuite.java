@@ -106,15 +106,15 @@ public class HandlersSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers");
     
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateWritingHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateHandlerBundleTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateBuildHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateWritingHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateHandlerBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateWritingHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateBuildHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateWritingHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateHandlerBundleTest.class);
     
     
     

@@ -107,15 +107,15 @@ public class HandlersSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.handlers");
     
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.MetaDataBasedTableRepositoryBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.CompositeAntCommandHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.ParameterValidationHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.DatabaseEngineHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandlerTest.class);
     
     suite.addTest(unittests.org.acmsl.queryj.tools.handlers.oracle.OracleSuite.suite());
     

@@ -106,13 +106,13 @@ public class HandlersSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions.time.handlers");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTestTemplateWritingHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTestTemplateBuildHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTemplateBuildHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsBundleTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTestTemplateWritingHandlerTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTestTemplateHandlerBundleTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTemplateWritingHandlerTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.time.handlers.TimeFunctionsTemplateBuildHandlerTest.class);
     
     
     

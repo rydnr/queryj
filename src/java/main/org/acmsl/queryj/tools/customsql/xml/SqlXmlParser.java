@@ -233,69 +233,83 @@ public abstract class SqlXmlParser
     {
         Digester result = new Digester();
 
+        // <sql-list>
+
+        //   <sql>
         result.addFactoryCreate(
             "sql-list/sql",
             new SqlElementFactory());
+
+        //     <value>
         result.addCallMethod("sql-list/sql/value", "setValue", 0);
+        //     </value>
+
+        //     <parameter-ref>
         result.addFactoryCreate(
             "sql-list/sql/parameter-ref",
             new ParameterRefElementFactory());
-        result.addSetNext(
-            "sql-list/sql/parameter-ref",
-            "add",
-            "org.acmsl.queryj.sqlxml.ParameterRefElement");
+        result.addSetNext("sql-list/sql/parameter-ref", "add");
+        //     </parameter-ref>
+
+        //     <result-ref>
         result.addFactoryCreate(
             "sql-list/sql/result-ref",
             new ResultRefElementFactory());
         result.addSetNext(
             "sql-list/sql/result-ref",
-            "add",
+            "setResultRef",
             "org.acmsl.queryj.sqlxml.ResultRefElement");
-        result.addSetNext(
-            "sql-list/sql",
-            "add",
-            "org.acmsl.queryj.sqlxml.SqlElement");
+        //     </result-ref>
 
+        result.addSetNext("sql-list/sql", "add");
+
+        //   </sql>
+
+        //   <parameter-list>
+
+        /*
         result.addObjectCreate(
             "sql-list/parameter-list",
             "java.util.ArrayList");
+        */
+
+        //     <parameter>
         result.addFactoryCreate(
             "sql-list/parameter-list/parameter",
             new ParameterElementFactory());
-        result.addSetNext(
-            "sql-list/parameter-list/parameter",
-            "add",
-            "org.acmsl.queryj.sqlxml.ParameterElement");
+        result.addSetRoot(
+            "sql-list/parameter-list/parameter", "add");
+        //     </parameter>
+        //   </parameter-list>
 
-        result.addObjectCreate(
-            "sql-list/result-list",
-            "java.util.ArrayList");
+        //   <result-list>
+        //     <result>
         result.addFactoryCreate(
             "sql-list/result-list/result",
             new ParameterElementFactory());
-        result.addSetNext(
-            "sql-list/result-list/result",
-            "add",
-            "org.acmsl.queryj.sqlxml.ResultElement");
+        result.addSetRoot("sql-list/result-list/result", "add");
 
+        //       <property-ref>
         result.addFactoryCreate(
             "sql-list/result-list/result/property-ref",
             new PropertyRefElementFactory());
-        result.addSetNext(
-            "sql-list/result-list/result/property-ref",
-            "add",
-            "org.acmsl.queryj.sqlxml.PropertyRefElement");
+        result.addSetRoot(
+            "sql-list/result-list/result/property-ref", "add");
+        //       </property-ref>
+        //     </result>
+        //   </result-list>
 
-        result.addObjectCreate(
-            "sql-list/property-list",
-            "java.util.ArrayList");
+        //   <property-list>
+        //     <property>
         result.addFactoryCreate(
             "sql-list/property-list/property",
             new PropertyElementFactory());
-        result.addSetNext(
-            "sql-list/property-list/property",
-            "add",
-            "org.acmsl.queryj.sqlxml.PropertyElement");
+        result.addSetRoot(
+            "sql-list/property-list/property", "add");
+        //     </property>
+        //   </property-list>
+
+        // <sql-list>
 
         return result;
     }
