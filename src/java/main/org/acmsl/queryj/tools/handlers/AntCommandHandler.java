@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendariz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Inside a Chain Of Responsibility, these are the chain links.
  *              This means they perform specific actions when receiving the

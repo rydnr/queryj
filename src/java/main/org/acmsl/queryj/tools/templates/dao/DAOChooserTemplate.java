@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendariz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Is able to generate DAOChooser class according
  *              to database metadata.
@@ -76,7 +76,7 @@ public abstract class DAOChooserTemplate
           "/*\n"
         + "                        QueryJ\n"
         + "\n"
-        + "    Copyright (C) 2002  Jose San Leandro Armendáriz\n"
+        + "    Copyright (C) 2002  Jose San Leandro Armendariz\n"
         + "                        jsanleandro@yahoo.es\n"
         + "                        chousz@yahoo.com\n"
         + "\n"

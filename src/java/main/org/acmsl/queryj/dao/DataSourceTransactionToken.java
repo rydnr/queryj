@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendariz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: JDBC-related Transaction Token using DataSource class.
  *
@@ -71,7 +71,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * JDBC-related Transaction Token using DataSource class.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro Armendáriz</a>
+           >Jose San Leandro Armendariz</a>
  * @version $Revision$
  */
 public abstract class DataSourceTransactionToken
@@ -245,7 +245,7 @@ public abstract class DataSourceTransactionToken
     /**
      * Private DataSource wrapper.
      * @author <a href="mailto:jsanleandro@yahoo.es"
-               >Jose San Leandro Armendáriz</a>
+               >Jose San Leandro Armendariz</a>
      * @version $Revision$
      */
     private static class _DataSourceWrapper

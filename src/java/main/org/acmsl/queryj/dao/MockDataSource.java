@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendariz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Implements DataSource interface and 
  *              just returns connections using
@@ -74,7 +74,7 @@ import org.apache.commons.logging.LogFactory;
  * Implements DataSource interface and just returns
  * connections using DriverManager.getConnection()
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro Armendáriz</a>
+           >Jose San Leandro Armendariz</a>
  * @version $Revision$
  */
 public class MockDataSource

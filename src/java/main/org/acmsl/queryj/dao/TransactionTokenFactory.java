@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendariz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Has the responsibility of creating transaction tokens.
  *              Right now, it follows the FactoryMethod pattern, but could be
@@ -64,7 +64,7 @@ import javax.sql.DataSource;
  * follows the FactoryMethod pattern, but could be refactored as an abstract
  * factory as new technologies are supported.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro Armendáriz</a>
+           >Jose San Leandro Armendariz</a>
  * @version $Revision$
  */
 public abstract class TransactionTokenFactory

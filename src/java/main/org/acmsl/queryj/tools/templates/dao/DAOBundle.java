@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles the complete set of handlers related to Mock DAO
+ * Description: Bundles the complete set of handlers related to DAO
  *              templates.
  *
  * Last modified by: $Author$ at $Date$
@@ -45,35 +45,49 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.dao.mock;
+package org.acmsl.queryj.tools.templates.dao;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.ConfigurationPropertiesTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOChooserTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.mock.MockDAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles the complete set of handlers related to Mock DAO templates.
+ * Bundles the complete set of handlers related to DAO templates.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
  * @version $Revision$ at $Date$
  */
-public class MockDAOBundle
+public class DAOBundle
     extends  TemplateHandlerBundle
 {
     /**
-     * Builds a bundle with MockDAO-related handlers.
+     * Builds a bundle with DAO-related handlers.
      */
-    public MockDAOBundle()
+    public DAOBundle()
     {
         super(
             new TemplateHandlerBundle[]
             {
-                new MockDAOTemplateHandlerBundle(),
-                new MockDAOFactoryTemplateHandlerBundle(),
-                new MockDAOTestTemplateHandlerBundle()
+                new BaseDAOFactoryTemplateHandlerBundle(),
+                new BaseDAOTemplateHandlerBundle(),
+                new ConfigurationPropertiesTemplateHandlerBundle(),
+                new DAOChooserTemplateHandlerBundle(),
+                new DAOFactoryTemplateHandlerBundle(),
+                new DAOTemplateHandlerBundle(),
+                new DAOTestTemplateHandlerBundle(),
+                new DataAccessManagerTemplateHandlerBundle(),
+                new JdbcDAOTemplateHandlerBundle(),
+                new MockDAOBundle()
             });
     }
 }

@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendariz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Is able to create DAO interfaces for each table in the
  *              persistence model.
@@ -90,7 +90,7 @@ public abstract class BaseDAOTemplate
           "/*\n"
         + "                        QueryJ\n"
         + "\n"
-        + "    Copyright (C) 2002  Jose San Leandro Armendáriz\n"
+        + "    Copyright (C) 2002  Jose San Leandro Armendariz\n"
         + "                        jsanleandro@yahoo.es\n"
         + "                        chousz@yahoo.com\n"
         + "\n"

@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendariz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Wraps Connection objects and provides useful
  *              insight in unit testing.
@@ -73,7 +73,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Wraps Connection objects and provides useful insight in unit testing.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro Armendáriz</a>
+           >Jose San Leandro Armendariz</a>
  * @version $Revision$
  */
 public class MockConnection
