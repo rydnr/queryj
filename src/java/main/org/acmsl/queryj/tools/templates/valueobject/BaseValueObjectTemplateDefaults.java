@@ -53,13 +53,12 @@ package org.acmsl.queryj.tools.templates.valueobject;
 import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
 
 /**
- * Defines the default subtemplates used to generate value objects according
+ * Defines the default subtemplates used to generate base value objects according
  * to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
-public interface ValueObjectTemplateDefaults
+public interface BaseValueObjectTemplateDefaults
     extends  JavaTemplateDefaults
 {
     /**
@@ -74,8 +73,8 @@ public interface ValueObjectTemplateDefaults
         + " *\n"
         + " * Author: QueryJ\n"
         + " *\n"
-        + " * Description: Represents the \"{0}\" information stored in the\n"
-        + " *              persistence domain.\n"
+        + " * Description: Represents the public interface associated to\n"
+        + " * \"{0}\" information.\n"
         + " *\n"
         + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
         + " *\n"
@@ -116,7 +115,8 @@ public interface ValueObjectTemplateDefaults
      */
     public static final String DEFAULT_JAVADOC =
           "/**\n"
-        + " * Represents the <i>{0}</i> information in the persistence domain.\n" // table
+        + " * Represents the public interface associated to\n"
+        + " * <i>{0}</i> information in the persistence domain.\n" // table
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
         + " */\n";
@@ -125,8 +125,7 @@ public interface ValueObjectTemplateDefaults
      * The class definition.
      */
     public static final String CLASS_DEFINITION =
-          "public class {0}ValueObject\n" // table
-        + "    extends  Abstract{0}ValueObject\n";
+           "public interface {0}\n"; // table
 
     /**
      * The class start.
@@ -134,37 +133,15 @@ public interface ValueObjectTemplateDefaults
     public static final String DEFAULT_CLASS_START = "{\n";
 
     /**
-     * The class constructor.
+     * The default field getter method.
      */
-    public static final String DEFAULT_CONSTRUCTOR =
-          "    /**\n"
-        + "     * Creates a {0}ValueObject with given information.\n"
-        + "{1}" // constructor field javadoc
+    public static final String DEFAULT_FIELD_VALUE_GETTER_METHOD =
+          "\n"
+        + "    /**\n"
+        + "     * Retrieves the <i>{0}</i> information.\n" // field
+        + "     * @return such value.\n"
         + "     */\n"
-        + "    public {0}ValueObject(" // table
-        + "{2})\n" // constructor field declaration
-        + "    '{'\n"
-        + "        super("
-        + "{3});\n"  // constructor field value setter.
-        + "    '}'\n";
-
-    /**
-     * The default constructor field Javadoc.
-     */
-    public static final String DEFAULT_CONSTRUCTOR_FIELD_JAVADOC =
-        "     * @param {0} the <i>{1}</i> information.\n"; // field - FIELD;
-
-    /**
-     * The default constructor field declaration.
-     */
-    public static final String DEFAULT_CONSTRUCTOR_FIELD_DECLARATION =
-        "\n        final {0} {1}"; // field type - field;
-
-    /**
-     * The default constructor field value setter.
-     */
-    public static final String DEFAULT_CONSTRUCTOR_FIELD_VALUE_SETTER =
-          "\n            {0}";
+        + "    public {1} get{2}();\n"; // field type - capitalized field
 
     /**
      * The default class end.

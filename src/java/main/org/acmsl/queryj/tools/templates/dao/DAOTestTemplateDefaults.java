@@ -36,15 +36,6 @@
  * Description: Defines the default subTemplates for creating JUnit tests to
  *              ensure generated DAOs are working fine and the connection
  *              correctly managed.
- *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -58,7 +49,6 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * generated DAOs are working fine and the connection correctly managed.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface DAOTestTemplateDefaults
     extends  JavaTemplateDefaults

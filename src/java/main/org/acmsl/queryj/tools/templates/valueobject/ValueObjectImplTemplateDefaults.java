@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Defines the default subtemplates used to generate value
- *              objects according to database metadata.
+ * Description: Defines the default subtemplates used to generate basic value
+ *              objects implementation according to database metadata.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -53,13 +53,13 @@ package org.acmsl.queryj.tools.templates.valueobject;
 import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
 
 /**
- * Defines the default subtemplates used to generate value objects according
- * to database metadata.
+ * Defines the default subtemplates used to generate basic value
+ * objects implementation according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface ValueObjectTemplateDefaults
+public interface ValueObjectImplTemplateDefaults
     extends  JavaTemplateDefaults
 {
     /**
@@ -74,8 +74,8 @@ public interface ValueObjectTemplateDefaults
         + " *\n"
         + " * Author: QueryJ\n"
         + " *\n"
-        + " * Description: Represents the \"{0}\" information stored in the\n"
-        + " *              persistence domain.\n"
+        + " * Description: Abstract representation of the \"{0}\"\n"
+        + " * information stored in the persistence domain.\n"
         + " *\n"
         + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
         + " *\n"
@@ -116,7 +116,8 @@ public interface ValueObjectTemplateDefaults
      */
     public static final String DEFAULT_JAVADOC =
           "/**\n"
-        + " * Represents the <i>{0}</i> information in the persistence domain.\n" // table
+        + " * Abstract implementation of the <i>{0}</i>\n"
+        + " * information stored in the persistence domain.\n" // table
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
         + " */\n";
@@ -125,8 +126,8 @@ public interface ValueObjectTemplateDefaults
      * The class definition.
      */
     public static final String CLASS_DEFINITION =
-          "public class {0}ValueObject\n" // table
-        + "    extends  Abstract{0}ValueObject\n";
+          "public abstract class Abstract{0}ValueObject\n" // table
+        + "    implements {0}\n";
 
     /**
      * The class start.
@@ -134,18 +135,27 @@ public interface ValueObjectTemplateDefaults
     public static final String DEFAULT_CLASS_START = "{\n";
 
     /**
+     * The field declaration.
+     */
+    public static final String DEFAULT_FIELD_DECLARATION =
+          "    /**\n"
+        + "     * The <i>{0}</i> information.\n" // field
+        + "     */\n"
+        + "    private {1} {2};\n\n"; // field type - field
+
+    /**
      * The class constructor.
      */
     public static final String DEFAULT_CONSTRUCTOR =
           "    /**\n"
-        + "     * Creates a {0}ValueObject with given information.\n"
+        + "     * Creates an <code>Abstract{0}ValueObject</code>\n"
+        + "     *  with given information.\n"
         + "{1}" // constructor field javadoc
         + "     */\n"
-        + "    public {0}ValueObject(" // table
+        + "    protected Abstract{0}ValueObject(" // table
         + "{2})\n" // constructor field declaration
-        + "    '{'\n"
-        + "        super("
-        + "{3});\n"  // constructor field value setter.
+        + "    '{'"
+        + "{3}\n"  // constructor field value setter.
         + "    '}'\n";
 
     /**
@@ -164,7 +174,46 @@ public interface ValueObjectTemplateDefaults
      * The default constructor field value setter.
      */
     public static final String DEFAULT_CONSTRUCTOR_FIELD_VALUE_SETTER =
-          "\n            {0}";
+          "\n        immutableSet{0}(\n"
+        + "            {1});"; // Field - field;
+
+    /**
+     * The default field setter method.
+     */
+    public static final String DEFAULT_FIELD_VALUE_SETTER_METHOD =
+          "\n"
+        + "    /**\n"
+        + "     * Specifies the <i>{0}</i> information.\n" // field
+        + "     * @param {0} the <i>{0}</i> value.\n"
+        + "     */\n"
+        + "    private void immutableSet{2}(\n" // capitalized field
+        + "        final {1} {0})\n" // field type - field name
+        + "    '{'\n"
+        + "        this.{0} = {0};\n" // field
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Specifies the <i>{0}</i> information.\n" // field
+        + "     * @param {0} the new <i>{0}</i> value.\n"
+        + "     */\n"
+        + "    protected void set{2}(\n" // capitalized field
+        + "        final {1} {0})\n" // field type - field name
+        + "    '{'\n"
+        + "        immutableSet{2}({0});\n" // field
+        + "    '}'\n";
+
+    /**
+     * The default field getter method.
+     */
+    public static final String DEFAULT_FIELD_VALUE_GETTER_METHOD =
+          "\n"
+        + "    /**\n"
+        + "     * Retrieves the <i>{0}</i> information.\n" // field
+        + "     * @return such value.\n"
+        + "     */\n"
+        + "    public {1} get{2}()\n" // field type - capitalized field
+        + "    '{'\n"
+        + "        return {0};\n" // field
+        + "    '}'\n";
 
     /**
      * The default class end.

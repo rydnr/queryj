@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create value object templates.
+ * Description: Is able to create basic value object implementation templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -52,7 +52,7 @@ package org.acmsl.queryj.tools.templates.valueobject;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplate;
 
 /*
  * Importing Ant classes.
@@ -61,15 +61,15 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 /**
- * Is able to create value object templates.
+ * Is able to create basic value object implementation templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface ValueObjectTemplateFactory
+public interface ValueObjectImplTemplateFactory
 {
     /**
-     * Generates a value object template.
+     * Generates a basic value object implementation template.
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
@@ -78,7 +78,7 @@ public interface ValueObjectTemplateFactory
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
-    public ValueObjectTemplate createValueObjectTemplate(
+    public ValueObjectImplTemplate createValueObjectImplTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,

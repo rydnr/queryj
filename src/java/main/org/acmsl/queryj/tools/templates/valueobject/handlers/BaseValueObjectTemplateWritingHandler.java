@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes value object templates.
+ * Description: Writes base value object templates.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -55,9 +55,9 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGenerator;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplateGenerator;
 
 /*
  * Importing some Ant classes.
@@ -74,26 +74,19 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Writes DAO templates.
+ * Writes Base Value Object templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public class ValueObjectTemplateWritingHandler
+public class BaseValueObjectTemplateWritingHandler
     extends    AbstractAntCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * A cached empty value object template array.
+     * Creates a <code>BaseValueObjectTemplateWritingHandler</code>.
      */
-    public static final ValueObjectTemplate[]
-        EMPTY_VALUE_OBJECT_TEMPLATE_ARRAY =
-            new ValueObjectTemplate[0];
-
-    /**
-     * Creates a ValueObjectTemplateWritingHandler.
-     */
-    public ValueObjectTemplateWritingHandler() {};
+    public BaseValueObjectTemplateWritingHandler() {};
 
     /**
      * Handles given command.
@@ -127,9 +120,9 @@ public class ValueObjectTemplateWritingHandler
     {
         return
             handle(
-                retrieveValueObjectTemplates(attributes),
+                retrieveBaseValueObjectTemplates(attributes),
                 retrieveOutputDir(attributes),
-                ValueObjectTemplateGenerator.getInstance(),
+                BaseValueObjectTemplateGenerator.getInstance(),
                 project,
                 task);
     }
@@ -150,9 +143,9 @@ public class ValueObjectTemplateWritingHandler
 
      */
     protected boolean handle(
-        final ValueObjectTemplate[] templates,
+        final BaseValueObjectTemplate[] templates,
         final File outputDir,
-        final ValueObjectTemplateGenerator generator,
+        final BaseValueObjectTemplateGenerator generator,
         final Project project,
         final Task task)
       throws  BuildException
@@ -178,19 +171,19 @@ public class ValueObjectTemplateWritingHandler
     }
 
     /**
-     * Retrieves the value object template from the attribute map.
+     * Retrieves the base value object template from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected ValueObjectTemplate[] retrieveValueObjectTemplates(final Map parameters)
+    protected BaseValueObjectTemplate[] retrieveBaseValueObjectTemplates(final Map parameters)
         throws  BuildException
     {
         return
-            (ValueObjectTemplate[])
+            (BaseValueObjectTemplate[])
                 parameters.get(
-                    TemplateMappingManager.VALUE_OBJECT_TEMPLATES);
+                    TemplateMappingManager.BASE_VALUE_OBJECT_TEMPLATES);
     }
 
     /**
@@ -228,7 +221,7 @@ public class ValueObjectTemplateWritingHandler
       throws  BuildException
     {
         return
-            packageUtils.retrieveValueObjectFolder(
+            packageUtils.retrieveBaseValueObjectFolder(
                 baseDir, projectPackage);
     }
 

@@ -155,6 +155,31 @@ public abstract class AbstractBaseDAOTemplate
     private String m__strConstantRecord;
 
     /**
+     * The constant array.
+     */
+    private String m__strConstantArray;
+
+    /**
+     * The constant array entry.
+     */
+    private String m__strConstantArrayEntry;
+
+    /**
+     * The find-by-static-field method.
+     */
+    private String m__strFindByStaticFieldMethod;
+
+    /**
+     * The find-by-static-field  javadoc.
+     */
+    private String m__strFindByStaticFieldJavadoc;
+
+    /**
+     * The find-by-static-field  declaration.
+     */
+    private String m__strFindByStaticFieldDeclaration;
+
+    /**
      * The find-by-primary-key method.
      */
     private String m__strFindByPrimaryKeyMethod;
@@ -310,6 +335,13 @@ public abstract class AbstractBaseDAOTemplate
      * @param classDefinition the class definition.
      * @param classStart the class start.
      * @param constantRecord the constant record subtemplate.
+     * @param constantArray the constant array.
+     * @param constantArrayEntry the constant array entry.
+     * @param findByStaticFieldMethod the find-by-static-field method.
+     * @param findByStaticFieldJavadoc the field javadoc for
+     * find-by-static-field method.
+     * @param findByStaticFieldDeclaration the field declaration for
+     * find-by-static-field method.
      * @param findByPrimaryKeyMethod the find by primary key method.
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
@@ -366,6 +398,11 @@ public abstract class AbstractBaseDAOTemplate
         final String classDefinition,
         final String classStart,
         final String constantRecord,
+        final String constantArray,
+        final String constantArrayEntry,
+        final String findByStaticFieldMethod,
+        final String findByStaticFieldJavadoc,
+        final String findByStaticFieldDeclaration,
         final String findByPrimaryKeyMethod,
         final String findByPrimaryKeyPkJavadoc,
         final String findByPrimaryKeyPkDeclaration,
@@ -410,6 +447,11 @@ public abstract class AbstractBaseDAOTemplate
         immutableSetClassDefinition(classDefinition);
         immutableSetClassStart(classStart);
         immutableSetConstantRecord(constantRecord);
+        immutableSetConstantArray(constantArray);
+        immutableSetConstantArrayEntry(constantArrayEntry);
+        immutableSetFindByStaticFieldMethod(findByStaticFieldMethod);
+        immutableSetFindByStaticFieldJavadoc(findByStaticFieldJavadoc);
+        immutableSetFindByStaticFieldDeclaration(findByStaticFieldDeclaration);
         immutableSetFindByPrimaryKeyMethod(findByPrimaryKeyMethod);
         immutableSetFindByPrimaryKeyPkJavadoc(findByPrimaryKeyPkJavadoc);
         immutableSetFindByPrimaryKeyPkDeclaration(findByPrimaryKeyPkDeclaration);
@@ -829,6 +871,151 @@ public abstract class AbstractBaseDAOTemplate
     public String getConstantRecord() 
     {
         return m__strConstantRecord;
+    }
+
+    /**
+     * Specifies the constant array.
+     * @param constantArray the new constant array.
+     */
+    private void immutableSetConstantArray(final String constantArray)
+    {
+        m__strConstantArray = constantArray;
+    }
+
+    /**
+     * Specifies the constant array.
+     * @param constantArray the new constant array.
+     */
+    protected void setConstantArray(final String constantArray)
+    {
+        immutableSetConstantArray(constantArray);
+    }
+
+    /**
+     * Retrieves the constant array.
+     * @return such information.
+     */
+    public String getConstantArray() 
+    {
+        return m__strConstantArray;
+    }
+
+    /**
+     * Specifies the constant array entry.
+     * @param constantArrayEntry the new constant array entry.
+     */
+    private void immutableSetConstantArrayEntry(final String constantArrayEntry)
+    {
+        m__strConstantArrayEntry = constantArrayEntry;
+    }
+
+    /**
+     * Specifies the constant array entry.
+     * @param constantArrayEntry the new constant array entry.
+     */
+    protected void setConstantArrayEntry(final String constantArrayEntry)
+    {
+        immutableSetConstantArrayEntry(constantArrayEntry);
+    }
+
+    /**
+     * Retrieves the constant array entry.
+     * @return such information.
+     */
+    public String getConstantArrayEntry() 
+    {
+        return m__strConstantArrayEntry;
+    }
+
+    /**
+     * Specifies the find-by-static-field method.
+     * @param findByStaticFieldMethod such method.
+     */
+    private void immutableSetFindByStaticFieldMethod(
+        final String findByStaticFieldMethod)
+    {
+        m__strFindByStaticFieldMethod = findByStaticFieldMethod;
+    }
+
+    /**
+     * Specifies the find-by-static-field method.
+     * @param findByStaticFieldMethod such method.
+     */
+    protected void setFindByStaticFieldMethod(
+        final String findByStaticFieldMethod)
+    {
+        immutableSetFindByStaticFieldMethod(
+            findByStaticFieldMethod);
+    }
+
+    /**
+     * Retrieves the find-by-static-field method.
+     * @return such method.
+     */
+    public String getFindByStaticFieldMethod()
+    {
+        return m__strFindByStaticFieldMethod;
+    }
+
+    /**
+     * Specifies the find-by-static-field  Javadoc.
+     * @param findByStaticFieldJavadoc such Javadoc.
+     */
+    private void immutableSetFindByStaticFieldJavadoc(
+        final String findByStaticFieldJavadoc)
+    {
+        m__strFindByStaticFieldJavadoc = findByStaticFieldJavadoc;
+    }
+
+    /**
+     * Specifies the find-by-static-field  Javadoc.
+     * @param findByStaticFieldJavadoc such Javadoc.
+     */
+    protected void setFindByStaticFieldJavadoc(
+        final String findByStaticFieldJavadoc)
+    {
+        immutableSetFindByStaticFieldJavadoc(
+            findByStaticFieldJavadoc);
+    }
+
+    /**
+     * Retrieves the find-by-static-field  Javadoc.
+     * @return such Javadoc.
+     */
+    public String getFindByStaticFieldJavadoc()
+    {
+        return m__strFindByStaticFieldJavadoc;
+    }
+    
+    /**
+     * Specifies the find-by-static-field  declaration.
+     * @param findByStaticFieldDeclaration such declaration.
+     */
+    private void immutableSetFindByStaticFieldDeclaration(
+        final String findByStaticFieldDeclaration)
+    {
+        m__strFindByStaticFieldDeclaration =
+            findByStaticFieldDeclaration;
+    }
+
+    /**
+     * Specifies the find-by-static-field  declaration.
+     * @param findByStaticFieldDeclaration such declaration.
+     */
+    protected void setFindByStaticFielddeclaration(
+        final String findByStaticFieldDeclaration)
+    {
+        immutableSetFindByStaticFieldDeclaration(
+            findByStaticFieldDeclaration);
+    }
+
+    /**
+     * Retrieves the find-by-static-field  declaration.
+     * @return such declaration.
+     */
+    public String getFindByStaticFieldDeclaration()
+    {
+        return m__strFindByStaticFieldDeclaration;
     }
 
     /**

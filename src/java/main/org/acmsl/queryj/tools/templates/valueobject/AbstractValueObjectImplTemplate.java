@@ -62,13 +62,13 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 /**
- * Contains the subtemplates used to generate value objects according to
- * database metadata.
+ * Contains the subtemplates used to generate basic value objects
+ * implementations  according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class AbstractValueObjectTemplate
+public abstract class AbstractValueObjectImplTemplate
     extends  AbstractTemplate
 {
     /**
@@ -122,6 +122,11 @@ public abstract class AbstractValueObjectTemplate
     private String m__strClassStart;
 
     /**
+     * The field declaration.
+     */
+    private String m__strFieldDeclaration;
+
+    /**
      * The constructor.
      */
     private String m__strConstructor;
@@ -142,13 +147,22 @@ public abstract class AbstractValueObjectTemplate
     private String m__strConstructorFieldValueSetter;
 
     /**
+     * The field value setter method.
+     */
+    private String m__strFieldValueSetterMethod;
+
+    /**
+     * The field value getter method.
+     */
+    private String m__strFieldValueGetterMethod;
+
+    /**
      * The class end.
      */
     private String m__strClassEnd;
 
     /**
-     * Builds an <code>AbstractValueObjectTemplate</code>
-     * using given information.
+     * Builds a <code>AbstractValueObjectImplTemplate</code> using given information.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -159,15 +173,18 @@ public abstract class AbstractValueObjectTemplate
      * @param javadoc the class Javadoc.
      * @param classDefinition the class definition.
      * @param classStart the class start.
+     * @param fieldDeclaration the field declaration.
      * @param constructor the constructor.
      * @param constructorFieldJavadoc the constructor field Javadoc.
      * @param constructorFieldDefinition the constructor field definition.
      * @param constructorFieldValueSetter the constructor field value setter.
+     * @param fieldValueSetterMethod the field value setter method.
+     * @param fieldValueGetterMethod the field value getter method.
      * @param classEnd the class end.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      */
-    public AbstractValueObjectTemplate(
+    public AbstractValueObjectImplTemplate(
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -178,10 +195,13 @@ public abstract class AbstractValueObjectTemplate
         final String javadoc,
         final String classDefinition,
         final String classStart,
+        final String fieldDeclaration,
         final String constructor,
         final String constructorFieldJavadoc,
         final String constructorFieldDefinition,
         final String constructorFieldValueSetter,
+        final String fieldValueSetterMethod,
+        final String fieldValueGetterMethod,
         final String classEnd,
         final Project project,
         final Task task)
@@ -198,10 +218,13 @@ public abstract class AbstractValueObjectTemplate
         immutableSetJavadoc(javadoc);
         immutableSetClassDefinition(classDefinition);
         immutableSetClassStart(classStart);
+        immutableSetFieldDeclaration(fieldDeclaration);
         immutableSetConstructor(constructor);
         immutableSetConstructorFieldJavadoc(constructorFieldJavadoc);
         immutableSetConstructorFieldDefinition(constructorFieldDefinition);
         immutableSetConstructorFieldValueSetter(constructorFieldValueSetter);
+        immutableSetFieldValueSetterMethod(fieldValueSetterMethod);
+        immutableSetFieldValueGetterMethod(fieldValueGetterMethod);
         immutableSetClassEnd(classEnd);
     }
     /**
@@ -477,6 +500,34 @@ public abstract class AbstractValueObjectTemplate
     }
 
     /**
+     * Specifies the field declaration.
+     * @param fieldDeclaration the new field declaration.
+     */
+    private void immutableSetFieldDeclaration(final String fieldDeclaration)
+    {
+        m__strFieldDeclaration = fieldDeclaration;
+    }
+
+    /**
+     * Specifies the field declaration.
+     * @param fieldDeclaration the new field declaration.
+     */
+    protected void setFieldDeclaration(final String fieldDeclaration)
+    {
+        immutableSetFieldDeclaration(fieldDeclaration);
+    }
+
+    /**
+     * Retrieves the field declaration.
+     * @return such information.
+     */
+    public String getFieldDeclaration()
+    {
+        return m__strFieldDeclaration;
+    }
+
+
+    /**
      * Specifies the class constructor.
      * @param constructor such source code.
      */
@@ -585,6 +636,60 @@ public abstract class AbstractValueObjectTemplate
     }
 
     /**
+     * Specifies the field value setter method.
+     * @param method such method.
+     */
+    private void immutableSetFieldValueSetterMethod(final String method)
+    {
+        m__strFieldValueSetterMethod = method;
+    }
+
+    /**
+     * Specifies the field value setter method.
+     * @param method such method.
+     */
+    protected void setFieldValueSetterMethod(final String method)
+    {
+        immutableSetFieldValueSetterMethod(method);
+    }
+
+    /**
+     * Retrieves the field value setter method.
+     * @return such method.
+     */
+    public String getFieldValueSetterMethod()
+    {
+        return m__strFieldValueSetterMethod;
+    }
+
+    /**
+     * Specifies the field value getter method.
+     * @param method such method.
+     */
+    private void immutableSetFieldValueGetterMethod(final String method)
+    {
+        m__strFieldValueGetterMethod = method;
+    }
+
+    /**
+     * Specifies the field value getter method.
+     * @param method such method.
+     */
+    protected void setFieldValueGetterMethod(final String method)
+    {
+        immutableSetFieldValueGetterMethod(method);
+    }
+
+    /**
+     * Retrieves the field value getter method.
+     * @return such method.
+     */
+    public String getFieldValueGetterMethod()
+    {
+        return m__strFieldValueGetterMethod;
+    }
+
+    /**
      * Specifies the class end.
      * @param classEnd the new class end.
      */
@@ -629,7 +734,7 @@ public abstract class AbstractValueObjectTemplate
     protected String buildHeader(final TableTemplate tableTemplate)
     {
         return
-              "Generating ValueObject for "
+              "Generating AbstractValueObject for "
             + tableTemplate.getTableName() + ".";
     }
 }

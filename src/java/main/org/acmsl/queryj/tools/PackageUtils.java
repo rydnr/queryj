@@ -85,6 +85,18 @@ public class PackageUtils
     public static final String VALUE_OBJECT_SUBPACKAGE = "vo";
 
     /**
+     * The subpackage for ValueObject entities.
+     */
+    public static final String BASE_VALUE_OBJECT_SUBPACKAGE =
+        VALUE_OBJECT_SUBPACKAGE;
+
+    /**
+     * The subpackage for ValueObject implementations.
+     */
+    public static final String VALUE_OBJECT_IMPL_SUBPACKAGE =
+        VALUE_OBJECT_SUBPACKAGE;
+
+    /**
      * The subpackage for Relational Database common classes.
      */
     public static final String RDB_SUBPACKAGE = "rdb";
@@ -445,6 +457,58 @@ public class PackageUtils
         final File parentFolder, final String packageName)
     {
         return retrieveValueObjectFolder(parentFolder, packageName);
+    }
+
+    /**
+     * Retrieves the package name for baseValue object templates.
+     * @param packageName the original package.
+     * @return the package for the associated baseValue object class.
+     * @precondition packageName != null
+     */
+    public String retrieveBaseValueObjectPackage(String packageName)
+    {
+        return retrievePackage(packageName, BASE_VALUE_OBJECT_SUBPACKAGE);
+    }
+
+    /**
+     * Retrieves the folder for baseValue object templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @return the folder in which the associated Jdbc DAO should be
+     * generated.
+     */
+    public File retrieveBaseValueObjectFolder(
+        final File parentFolder, final String packageName)
+    {
+        return
+            retrieveFolder(
+                parentFolder, packageName, BASE_VALUE_OBJECT_SUBPACKAGE);
+    }
+
+    /**
+     * Retrieves the package name for value object implementation templates.
+     * @param packageName the original package.
+     * @return the package for the associated value object class.
+     * @precondition packageName != null
+     */
+    public String retrieveValueObjectImplPackage(final String packageName)
+    {
+        return retrievePackage(packageName, VALUE_OBJECT_IMPL_SUBPACKAGE);
+    }
+
+    /**
+     * Retrieves the folder for value object implementation templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @return the folder in which the associated Jdbc DAO should be
+     * generated.
+     */
+    public File retrieveValueObjectImplFolder(
+        final File parentFolder, final String packageName)
+    {
+        return
+            retrieveFolder(
+                parentFolder, packageName, VALUE_OBJECT_IMPL_SUBPACKAGE);
     }
 
     /**

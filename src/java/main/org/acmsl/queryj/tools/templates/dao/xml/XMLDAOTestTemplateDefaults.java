@@ -35,15 +35,6 @@
  *
  * Description: Defines the default subtemplates for creating JUnit tests
  *              to ensure generated XML DAOs are working correctly.
- *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao.xml;
 

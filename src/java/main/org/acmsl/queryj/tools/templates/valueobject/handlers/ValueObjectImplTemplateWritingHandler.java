@@ -55,9 +55,9 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGenerator;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectImplTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplateGenerator;
 
 /*
  * Importing some Ant classes.
@@ -79,21 +79,21 @@ import java.util.Map;
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public class ValueObjectTemplateWritingHandler
+public class ValueObjectImplTemplateWritingHandler
     extends    AbstractAntCommandHandler
     implements TemplateWritingHandler
 {
     /**
      * A cached empty value object template array.
      */
-    public static final ValueObjectTemplate[]
-        EMPTY_VALUE_OBJECT_TEMPLATE_ARRAY =
-            new ValueObjectTemplate[0];
+    public static final ValueObjectImplTemplate[]
+        EMPTY_VALUE_OBJECT_IMPL_TEMPLATE_ARRAY =
+            new ValueObjectImplTemplate[0];
 
     /**
-     * Creates a ValueObjectTemplateWritingHandler.
+     * Creates a ValueObjectImplTemplateWritingHandler.
      */
-    public ValueObjectTemplateWritingHandler() {};
+    public ValueObjectImplTemplateWritingHandler() {};
 
     /**
      * Handles given command.
@@ -127,9 +127,9 @@ public class ValueObjectTemplateWritingHandler
     {
         return
             handle(
-                retrieveValueObjectTemplates(attributes),
+                retrieveValueObjectImplTemplates(attributes),
                 retrieveOutputDir(attributes),
-                ValueObjectTemplateGenerator.getInstance(),
+                ValueObjectImplTemplateGenerator.getInstance(),
                 project,
                 task);
     }
@@ -138,7 +138,7 @@ public class ValueObjectTemplateWritingHandler
      * Handles given command.
      * @param templates the templates.
      * @param outputDir the output dir.
-     * @param generator the <code>ValueObjectTemplateGenerator</code>
+     * @param generator the <code>ValueObjectImplTemplateGenerator</code>
      * instance.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
@@ -150,9 +150,9 @@ public class ValueObjectTemplateWritingHandler
 
      */
     protected boolean handle(
-        final ValueObjectTemplate[] templates,
+        final ValueObjectImplTemplate[] templates,
         final File outputDir,
-        final ValueObjectTemplateGenerator generator,
+        final ValueObjectImplTemplateGenerator generator,
         final Project project,
         final Task task)
       throws  BuildException
@@ -161,12 +161,12 @@ public class ValueObjectTemplateWritingHandler
 
         try 
         {
-            for  (int t_iValueObjectIndex = 0;
-                      t_iValueObjectIndex < templates.length;
-                      t_iValueObjectIndex++)
+            for  (int t_iValueObjectImplIndex = 0;
+                      t_iValueObjectImplIndex < templates.length;
+                      t_iValueObjectImplIndex++)
             {
                 generator.write(
-                    templates[t_iValueObjectIndex], outputDir);
+                    templates[t_iValueObjectImplIndex], outputDir);
             }
         }
         catch  (IOException ioException)
@@ -184,13 +184,13 @@ public class ValueObjectTemplateWritingHandler
      * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected ValueObjectTemplate[] retrieveValueObjectTemplates(final Map parameters)
+    protected ValueObjectImplTemplate[] retrieveValueObjectImplTemplates(final Map parameters)
         throws  BuildException
     {
         return
-            (ValueObjectTemplate[])
+            (ValueObjectImplTemplate[])
                 parameters.get(
-                    TemplateMappingManager.VALUE_OBJECT_TEMPLATES);
+                    TemplateMappingManager.VALUE_OBJECT_IMPL_TEMPLATES);
     }
 
     /**
@@ -228,7 +228,7 @@ public class ValueObjectTemplateWritingHandler
       throws  BuildException
     {
         return
-            packageUtils.retrieveValueObjectFolder(
+            packageUtils.retrieveValueObjectImplFolder(
                 baseDir, projectPackage);
     }
 

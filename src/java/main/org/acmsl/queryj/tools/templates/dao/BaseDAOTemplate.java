@@ -148,6 +148,11 @@ public class BaseDAOTemplate
             CLASS_DEFINITION,
             DEFAULT_CLASS_START,
             DEFAULT_CONSTANT_RECORD,
+            DEFAULT_CONSTANT_ARRAY,
+            DEFAULT_CONSTANT_ARRAY_ENTRY,
+            DEFAULT_FIND_BY_STATIC_FIELD_METHOD,
+            DEFAULT_FIND_BY_STATIC_FIELD_JAVADOC,
+            DEFAULT_FIND_BY_STATIC_FIELD_DECLARATION,
             DEFAULT_FIND_BY_PRIMARY_KEY_METHOD,
             DEFAULT_FIND_BY_PRIMARY_KEY_PK_JAVADOC,
             DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION,
@@ -201,6 +206,11 @@ public class BaseDAOTemplate
                 getClassDefinition(),
                 getClassStart(),
                 getConstantRecord(),
+                getConstantArray(),
+                getConstantArrayEntry(),
+                getFindByStaticFieldMethod(),
+                getFindByStaticFieldJavadoc(),
+                getFindByStaticFieldDeclaration(),
                 getFindByPrimaryKeyMethod(),
                 getFindByPrimaryKeyPkJavadoc(),
                 getFindByPrimaryKeyPkDeclaration(),
@@ -249,6 +259,13 @@ public class BaseDAOTemplate
      * @param classDefinition the class definition.
      * @param classStart the class start.
      * @param constantRecord the constant record subtemplate.
+     * @param constantArray the constant array.
+     * @param constantArrayEntry the constant array entry.
+     * @param findByStaticFieldMethod the find-by-static-field method.
+     * @param findByStaticFieldJavadoc the field javadoc for
+     * find-by-static-field method.
+     * @param findByStaticFieldDeclaration the field declaration for
+     * find-by-static-field method.
      * @param findByPrimaryKeyMethod the find by primary key method.
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
@@ -313,6 +330,11 @@ public class BaseDAOTemplate
         final String classDefinition,
         final String classStart,
         final String constantRecord,
+        final String constantArray,
+        final String constantArrayEntry,
+        final String findByStaticFieldMethod,
+        final String findByStaticFieldJavadoc,
+        final String findByStaticFieldDeclaration,
         final String findByPrimaryKeyMethod,
         final String findByPrimaryKeyPkJavadoc,
         final String findByPrimaryKeyPkDeclaration,
@@ -411,9 +433,6 @@ public class BaseDAOTemplate
 
         t_sbResult.append(classStart);
 
-        MessageFormat t_ConstantRecordFormatter =
-            new MessageFormat(constantRecord);
-
         String[] t_astrColumnNames =
             metaDataManager.getColumnNames(tableTemplate.getTableName());
 
@@ -427,6 +446,27 @@ public class BaseDAOTemplate
 
             if  (t_iKeyIndex >= 0)
             {
+                MessageFormat t_ConstantRecordFormatter =
+                    new MessageFormat(constantRecord);
+
+                MessageFormat t_ConstantArrayFormatter =
+                    new MessageFormat(constantArray);
+
+                MessageFormat t_ConstantArrayEntryFormatter =
+                    new MessageFormat(constantArrayEntry);
+
+                StringBuffer t_sbConstantArrayEntries =
+                    new StringBuffer();
+
+                MessageFormat t_FindByStaticFieldMethodFormatter =
+                    new MessageFormat(findByStaticFieldMethod);
+
+                MessageFormat t_FindByStaticFieldJavadocFormatter =
+                    new MessageFormat(findByStaticFieldJavadoc);
+
+                MessageFormat t_FindByStaticFieldDeclarationFormatter =
+                    new MessageFormat(findByStaticFieldDeclaration);
+
                 String t_strDescriptionColumn =
                     t_strTableComment.substring(
                         t_iKeyIndex + "@static".length()).trim();
@@ -496,6 +536,7 @@ public class BaseDAOTemplate
                                     if  (t_itColumns.hasNext())
                                     {
                                         t_sbRecordPropertiesSpecification.append(", ");
+                                        t_sbConstantArrayEntries.append(", ");
                                     }
                                 }
                             }
@@ -504,11 +545,56 @@ public class BaseDAOTemplate
                                 t_ConstantRecordFormatter.format(
                                     new Object[]
                                     {
-                                        t_strColumnName.toUpperCase(),
+                                        toJavaConstant(t_strColumnName),
                                         t_strCapitalizedValueObjectName,
                                         t_sbRecordPropertiesSpecification
                                     }));
+
+                            t_sbConstantArrayEntries.append(
+                                t_ConstantArrayEntryFormatter.format(
+                                    new Object[]
+                                    {
+                                        toJavaConstant(t_strColumnName)
+                                    }));
                         }
+
+                        t_sbResult.append(
+                            t_ConstantArrayFormatter.format(
+                                new Object[]
+                                {
+                                    t_strCapitalizedValueObjectName,
+                                    t_sbConstantArrayEntries
+                                }));
+
+                        String t_strFindByStaticFieldJavadoc =
+                            t_FindByStaticFieldJavadocFormatter.format(
+                                new Object[]
+                                {
+                                    t_strDescriptionColumn.toLowerCase(),
+                                    t_strDescriptionColumn
+                                });
+
+                        String t_strFindByStaticFieldDeclaration =
+                            t_FindByStaticFieldDeclarationFormatter.format(
+                                new Object[]
+                                {
+                                    metaDataUtils.getNativeType(
+                                        metaDataManager.getColumnType(
+                                            tableTemplate.getTableName(),
+                                            t_strDescriptionColumn)),
+                                    t_strDescriptionColumn.toLowerCase()
+                                });
+
+                        t_sbResult.append(
+                            t_FindByStaticFieldMethodFormatter.format(
+                                new Object[]
+                                {
+                                    tableTemplate.getTableName(),
+                                    t_strFindByStaticFieldJavadoc,
+                                    t_strCapitalizedValueObjectName,
+                                    t_strDescriptionColumn,
+                                    t_strFindByStaticFieldDeclaration
+                                }));
                     }
                 }
             }
@@ -1976,5 +2062,44 @@ public class BaseDAOTemplate
     protected Object buildListKey()
     {
         return ",.,list.,.";
+    }
+
+    /**
+     * Translates given column value into a Java constant.
+     * @param value the value.
+     * @return the constant.
+     * @precondition value != null
+     */
+    protected String toJavaConstant(final String value)
+    {
+        return toJavaConstant(value, createHelper(RegexpManager.getInstance()));
+    }
+
+    /**
+     * Translates given column value into a Java constant.
+     * @param value the value.
+     * @param helper the <code>Helper</code> instance.
+     * @return the constant.
+     * @precondition value != null
+     * @precondition stringUtils != null
+     */
+    protected String toJavaConstant(
+        final String value, final Helper helper)
+    {
+        return
+            helper.replaceAll(
+                helper.replaceAll(
+                    helper.replaceAll(
+                        helper.replaceAll(
+                            helper.replaceAll(
+                                helper.replaceAll(
+                                    helper.replaceAll(
+                                        value.trim().toUpperCase(), ",", "_"),
+                                    "\"", ""),
+                                "'", ""),
+                            "\\+", "_"),
+                        "\\.", "_"),
+                    "-", "_"),
+                "\\s", "_");
     }
 }

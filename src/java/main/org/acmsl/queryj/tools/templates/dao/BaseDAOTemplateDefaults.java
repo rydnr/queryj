@@ -160,6 +160,63 @@ public interface BaseDAOTemplateDefaults
         + "        new {1}ValueObject({2});\n\n";
 
     /**
+     * The constant records, if the table is static.
+     * @param 2 the capitalized value object name.
+     * @param 1 the constant records.
+     */
+    public static final String DEFAULT_CONSTANT_ARRAY =
+          "    /**\n"
+        + "     * The whole constants.\n"
+        + "     */\n"
+        + "    public static final {0}ValueObject[] _ALL_QUERYJ_CONSTANTS_ =\n"
+        + "        new {1}ValueObject[]\n"
+        + "        '{'\n"
+        + "{1}"
+        + "        '};\n\n";
+
+    /**
+     * The constant record entry, if the table is static.
+     * @param 0 the description.
+     */
+    public static final String DEFAULT_CONSTANT_ARRAY_ENTRY =
+        "\n            {0}";
+
+    /**
+     * The find by static field method.
+     * @param 0 the table name.
+     * @param 1 the static field.
+     * @param 2 the static field javadoc.
+     * @param 3 the capitalized table name.
+     * @param 4 the capitalized static column.
+     * @param 5 the static field declaration.
+     */
+    public static final String DEFAULT_FIND_BY_STATIC_FIELD_METHOD =
+          "    /**\n"
+        + "     * Loads <i>{0}</i> information from the persistence layer filtering\n"
+        + "     * by {1}."
+        + "{2}\n"
+        + "     * @return the information extracted from the persistence layer.\n"
+        + "     */\n"
+        + "    public {3}ValueObject findBy{4}("
+        + "{5});\n\n";
+
+    /**
+     * The find-by-static-field method's field javadoc.
+     * @param 0 the field name (Java valid).
+     * @param 1 the field name.
+     */
+    public static final String DEFAULT_FIND_BY_STATIC_FIELD_JAVADOC =
+        "\n     * @param {0} the <i>{1}</i> value to filter.";
+
+    /**
+     * The find-by-primary-key method's primary keys declaration.
+     * @param 0 the field type.
+     * @param 1 the field name (Java valid).
+     */
+    public static final String DEFAULT_FIND_BY_STATIC_FIELD_DECLARATION =
+        "\n        final {0} {1}";
+
+    /**
      * The find by primary key method.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_METHOD =
@@ -178,17 +235,19 @@ public interface BaseDAOTemplateDefaults
 
     /**
      * The find-by-primary-key method's primary keys javadoc.
+     * @param 0 the field name (Java valid).
+     * @param 1 the field name.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_JAVADOC =
-        "\n     * @param {0} the <i>{1}</i> value to filter.";
-         // java pk - pk
+        DEFAULT_FIND_BY_STATIC_FIELD_JAVADOC;
 
     /**
      * The find-by-primary-key method's primary keys declaration.
+     * @param 0 the field type.
+     * @param 1 the field name (Java valid).
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION =
-        "\n        final {0} {1}";
-         // pk type - java pk
+        DEFAULT_FIND_BY_STATIC_FIELD_DECLARATION;
 
     /**
      * The store method.

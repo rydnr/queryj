@@ -34,15 +34,6 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Defines the basic pieces to build function templates.
- *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.functions;
 
@@ -55,7 +46,6 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * Defines the basic pieces to build function templates.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public interface FunctionsTemplateDefaults
     extends  JavaTemplateDefaults

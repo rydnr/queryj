@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate ValueObject implementations according to
+ * Description: Is able to generate ValueObjectImpl implementations according to
  *              database metadata.
  *
  * Last modified by: $Author$ at $Date$
@@ -56,8 +56,8 @@ import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateFactory;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -86,8 +86,8 @@ import java.lang.ref.WeakReference;
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public class ValueObjectTemplateGenerator
-    implements  ValueObjectTemplateFactory
+public class ValueObjectImplTemplateGenerator
+    implements  ValueObjectImplTemplateFactory
 {
     /**
      * Singleton implemented as a weak reference.
@@ -97,14 +97,14 @@ public class ValueObjectTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected ValueObjectTemplateGenerator() {};
+    protected ValueObjectImplTemplateGenerator() {};
 
     /**
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        final ValueObjectTemplateGenerator generator)
+        final ValueObjectImplTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -119,23 +119,23 @@ public class ValueObjectTemplateGenerator
     }
 
     /**
-     * Retrieves a ValueObjectTemplateGenerator instance.
+     * Retrieves a ValueObjectImplTemplateGenerator instance.
      * @return such instance.
      */
-    public static ValueObjectTemplateGenerator getInstance()
+    public static ValueObjectImplTemplateGenerator getInstance()
     {
-        ValueObjectTemplateGenerator result = null;
+        ValueObjectImplTemplateGenerator result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (ValueObjectTemplateGenerator) reference.get();
+            result = (ValueObjectImplTemplateGenerator) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new ValueObjectTemplateGenerator();
+            result = new ValueObjectImplTemplateGenerator();
 
             setReference(result);
         }
@@ -145,22 +145,22 @@ public class ValueObjectTemplateGenerator
 
     /**
      * Adds a new template factory class.
-     * @param valueObjectName the value object name.
+     * @param valueObjectImplName the value object name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param templateFactoryClass the template factory.
-     * @precondition valueObjectName != null
+     * @precondition valueObjectImplName != null
      * @precondition engineName != null
      * @precondition templateFactoryClass != null
      */
     public void addTemplateFactoryClass(
-        final String valueObjectName,
+        final String valueObjectImplName,
         final String engineName,
         final String engineVersion,
         final String templateFactoryClass)
     {
         addTemplateFactoryClass(
-            valueObjectName,
+            valueObjectImplName,
             engineName,
             engineVersion,
             templateFactoryClass,
@@ -169,27 +169,27 @@ public class ValueObjectTemplateGenerator
 
     /**
      * Adds a new template factory class.
-     * @param valueObjectName the value object name.
+     * @param valueObjectImplName the value object name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param templateFactoryClass the template factory.
      * @param templateMappingManager the <code>TemplateMappingManager</code>
      * instance.
-     * @precondition valueObjectName != null
+     * @precondition valueObjectImplName != null
      * @precondition engineName != null
      * @precondition templateFactoryClass != null
      * @precondition templateMappingManager != null
      */
     protected void addTemplateFactoryClass(
-        final String valueObjectName,
+        final String valueObjectImplName,
         final String engineName,
         final String engineVersion,
         final String templateFactoryClass,
         final TemplateMappingManager templateMappingManager)
     {
         templateMappingManager.addTemplateFactoryClass(
-              TemplateMappingManager.VALUE_OBJECT_TEMPLATE_PREFIX
-            + valueObjectName,
+              TemplateMappingManager.VALUE_OBJECT_IMPL_TEMPLATE_PREFIX
+            + valueObjectImplName,
             engineName,
             engineVersion,
             templateFactoryClass);
@@ -197,21 +197,21 @@ public class ValueObjectTemplateGenerator
 
     /**
      * Retrieves the template factory class.
-     * @param valueObjectName the value object name.
+     * @param valueObjectImplName the value object name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
-     * @precondition valueObjectName != null
+     * @precondition valueObjectImplName != null
      * @precondition engineName != null
      */
     protected String getTemplateFactoryClass(
-        final String valueObjectName,
+        final String valueObjectImplName,
         final String engineName,
         final String engineVersion)
     {
         return
             getTemplateFactoryClass(
-                valueObjectName,
+                valueObjectImplName,
                 engineName,
                 engineVersion,
                 TemplateMappingManager.getInstance());
@@ -219,49 +219,49 @@ public class ValueObjectTemplateGenerator
 
     /**
      * Retrieves the template factory class.
-     * @param valueObjectName the value object name.
+     * @param valueObjectImplName the value object name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param templateMappingManager the <code>TemplateMappingManager</code>
      * instance.
      * @return the template factory class name.
-     * @precondition valueObjectName != null
+     * @precondition valueObjectImplName != null
      * @precondition engineName != null
      * @precondition templateMappingManager != null
      */
     protected String getTemplateFactoryClass(
-        final String valueObjectName,
+        final String valueObjectImplName,
         final String engineName,
         final String engineVersion,
         final TemplateMappingManager templateMappingManager)
     {
         return
             templateMappingManager.getTemplateFactoryClass(
-                  TemplateMappingManager.VALUE_OBJECT_TEMPLATE_PREFIX
-                + valueObjectName,
+                  TemplateMappingManager.VALUE_OBJECT_IMPL_TEMPLATE_PREFIX
+                + valueObjectImplName,
                 engineName,
                 engineVersion);
     }
 
     /**
      * Retrieves the template factory instance.
-     * @param valueObjectName the value object name.
+     * @param valueObjectImplName the value object name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
      * @throws QueryJException if the factory class is invalid.
-     * @precondition valueObjectName != null
+     * @precondition valueObjectImplName != null
      * @precondition engineName != null
      */
-    protected ValueObjectTemplateFactory getTemplateFactory(
-        final String valueObjectName,
+    protected ValueObjectImplTemplateFactory getTemplateFactory(
+        final String valueObjectImplName,
         final String engineName,
         final String engineVersion)
       throws  QueryJException
     {
         return
             getTemplateFactory(
-                valueObjectName,
+                valueObjectImplName,
                 engineName,
                 engineVersion,
                 TemplateMappingManager.getInstance());
@@ -269,45 +269,45 @@ public class ValueObjectTemplateGenerator
 
     /**
      * Retrieves the template factory instance.
-     * @param valueObjectName the value object name.
+     * @param valueObjectImplName the value object name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param templateMappingManager the <code>TemplateMappingManager</code>
      * instance.
      * @return the template factory class name.
      * @throws QueryJException if the factory class is invalid.
-     * @precondition valueObjectName != null
+     * @precondition valueObjectImplName != null
      * @precondition engineName != null
      * @precondition templateMappingManager != null
      */
-    protected ValueObjectTemplateFactory getTemplateFactory(
-        final String valueObjectName,
+    protected ValueObjectImplTemplateFactory getTemplateFactory(
+        final String valueObjectImplName,
         final String engineName,
         final String engineVersion,
         final TemplateMappingManager templateMappingManager)
       throws  QueryJException
     {
-        ValueObjectTemplateFactory result = null;
+        ValueObjectImplTemplateFactory result = null;
 
         Object t_TemplateFactory =
             templateMappingManager.getTemplateFactoryClass(
-                  TemplateMappingManager.VALUE_OBJECT_TEMPLATE_PREFIX
-                + valueObjectName,
+                  TemplateMappingManager.VALUE_OBJECT_IMPL_TEMPLATE_PREFIX
+                + valueObjectImplName,
                 engineName,
                 engineVersion);
 
         if  (t_TemplateFactory != null)
         {
             if  (!(  t_TemplateFactory
-                     instanceof ValueObjectTemplateFactory))
+                     instanceof ValueObjectImplTemplateFactory))
             {
                 throw
                     new QueryJException(
-                        "invalid.value.object.template.factory");
+                        "invalid.value.object.template.impl.factory");
             }
             else 
             {
-                result = (ValueObjectTemplateFactory) t_TemplateFactory;
+                result = (ValueObjectImplTemplateFactory) t_TemplateFactory;
             }
         }
 
@@ -327,7 +327,7 @@ public class ValueObjectTemplateGenerator
      * @precondition tableTemplate != null
      * @precondition metaDataManager != null
      */
-    public ValueObjectTemplate createValueObjectTemplate(
+    public ValueObjectImplTemplate createValueObjectImplTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
@@ -336,7 +336,7 @@ public class ValueObjectTemplateGenerator
         throws  QueryJException
     {
         return
-            new ValueObjectTemplate(
+            new ValueObjectImplTemplate(
                 packageName,
                 tableTemplate,
                 metaDataManager,
@@ -346,19 +346,19 @@ public class ValueObjectTemplateGenerator
 
     /**
      * Writes a value object template to disk.
-     * @param valueObjectTemplate the value object template to write.
+     * @param valueObjectImplTemplate the value object template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition valueObjectTemplate != null
+     * @precondition valueObjectImplTemplate != null
      * @precondition outputDir != null
      */
     public void write(
-        final ValueObjectTemplate valueObjectTemplate,
+        final ValueObjectImplTemplate valueObjectImplTemplate,
         final File outputDir)
       throws  IOException
     {
         write(
-            valueObjectTemplate,
+            valueObjectImplTemplate,
             outputDir, 
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
@@ -367,21 +367,21 @@ public class ValueObjectTemplateGenerator
 
     /**
      * Writes a value object template to disk.
-     * @param valueObjectTemplate the value object template to write.
+     * @param valueObjectImplTemplate the value object template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition valueObjectTemplate != null
+     * @precondition valueObjectImplTemplate != null
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final ValueObjectTemplate valueObjectTemplate,
+        final ValueObjectImplTemplate valueObjectImplTemplate,
         final File outputDir,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
@@ -393,14 +393,15 @@ public class ValueObjectTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
+            + "Abstract"
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    valueObjectTemplate
+                    valueObjectImplTemplate
                         .getTableTemplate()
                             .getTableName()
                                 .toLowerCase()),
                 '_')
             + "ValueObject.java",
-            valueObjectTemplate.generate());
+            valueObjectImplTemplate.generate());
     }
 }

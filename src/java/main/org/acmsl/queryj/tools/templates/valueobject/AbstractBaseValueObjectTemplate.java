@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Contains the subtemplates used to generate value objects
+ * Description: Contains the subtemplates used to generate base value objects
  *              according to database metadata.
  *
  * Last modified by: $Author$ at $Date$
@@ -62,13 +62,13 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 /**
- * Contains the subtemplates used to generate value objects according to
+ * Contains the subtemplates used to generate base value objects according to
  * database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public abstract class AbstractValueObjectTemplate
+public abstract class AbstractBaseValueObjectTemplate
     extends  AbstractTemplate
 {
     /**
@@ -122,24 +122,9 @@ public abstract class AbstractValueObjectTemplate
     private String m__strClassStart;
 
     /**
-     * The constructor.
+     * The field value getter method.
      */
-    private String m__strConstructor;
-
-    /**
-     * The constructor field javadoc.
-     */
-    private String m__strConstructorFieldJavadoc;
-
-    /**
-     * The constructor field definition.
-     */
-    private String m__strConstructorFieldDefinition;
-
-    /**
-     * The constructor field value setter.
-     */
-    private String m__strConstructorFieldValueSetter;
+    private String m__strFieldValueGetterMethod;
 
     /**
      * The class end.
@@ -147,8 +132,8 @@ public abstract class AbstractValueObjectTemplate
     private String m__strClassEnd;
 
     /**
-     * Builds an <code>AbstractValueObjectTemplate</code>
-     * using given information.
+     * Builds an <code>AbstractBaseValueObjectTemplate</code> using given
+     * information.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -159,15 +144,12 @@ public abstract class AbstractValueObjectTemplate
      * @param javadoc the class Javadoc.
      * @param classDefinition the class definition.
      * @param classStart the class start.
-     * @param constructor the constructor.
-     * @param constructorFieldJavadoc the constructor field Javadoc.
-     * @param constructorFieldDefinition the constructor field definition.
-     * @param constructorFieldValueSetter the constructor field value setter.
+     * @param fieldValueGetterMethod the field value getter method.
      * @param classEnd the class end.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      */
-    public AbstractValueObjectTemplate(
+    public AbstractBaseValueObjectTemplate(
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -178,10 +160,7 @@ public abstract class AbstractValueObjectTemplate
         final String javadoc,
         final String classDefinition,
         final String classStart,
-        final String constructor,
-        final String constructorFieldJavadoc,
-        final String constructorFieldDefinition,
-        final String constructorFieldValueSetter,
+        final String fieldValueGetterMethod,
         final String classEnd,
         final Project project,
         final Task task)
@@ -198,10 +177,7 @@ public abstract class AbstractValueObjectTemplate
         immutableSetJavadoc(javadoc);
         immutableSetClassDefinition(classDefinition);
         immutableSetClassStart(classStart);
-        immutableSetConstructor(constructor);
-        immutableSetConstructorFieldJavadoc(constructorFieldJavadoc);
-        immutableSetConstructorFieldDefinition(constructorFieldDefinition);
-        immutableSetConstructorFieldValueSetter(constructorFieldValueSetter);
+        immutableSetFieldValueGetterMethod(fieldValueGetterMethod);
         immutableSetClassEnd(classEnd);
     }
     /**
@@ -477,111 +453,30 @@ public abstract class AbstractValueObjectTemplate
     }
 
     /**
-     * Specifies the class constructor.
-     * @param constructor such source code.
+     * Specifies the field value getter method.
+     * @param method such method.
      */
-    private void immutableSetConstructor(final String constructor)
+    private void immutableSetFieldValueGetterMethod(final String method)
     {
-        m__strConstructor = constructor;
+        m__strFieldValueGetterMethod = method;
     }
 
     /**
-     * Specifies the class constructor.
-     * @param constructor such source code.
+     * Specifies the field value getter method.
+     * @param method such method.
      */
-    protected void setConstructor(final String constructor)
+    protected void setFieldValueGetterMethod(final String method)
     {
-        immutableSetConstructor(constructor);
+        immutableSetFieldValueGetterMethod(method);
     }
 
     /**
-     * Retrieves the class constructor.
-     * @return such source code.
+     * Retrieves the field value getter method.
+     * @return such method.
      */
-    public String getConstructor()
+    public String getFieldValueGetterMethod()
     {
-        return m__strConstructor;
-    }
-
-    /**
-     * Specifies the constructor field Javadoc.
-     * @param fieldJavadoc the new constructor field Javadoc.
-     */
-    private void immutableSetConstructorFieldJavadoc(final String fieldJavadoc)
-    {
-        m__strConstructorFieldJavadoc = fieldJavadoc;
-    }
-
-    /**
-     * Specifies the constructor field Javadoc.
-     * @param fieldJavadoc the new constructor field Javadoc.
-     */
-    protected void setConstructorFieldJavadoc(final String fieldJavadoc)
-    {
-        immutableSetConstructorFieldJavadoc(fieldJavadoc);
-    }
-
-    /**
-     * Retrieves the constructor field Javadoc.
-     * @return such information.
-     */
-    public String getConstructorFieldJavadoc() 
-    {
-        return m__strConstructorFieldJavadoc;
-    }
-
-    /**
-     * Specifies the constructor field definition.
-     * @param fieldDefinition the new constructor field definition.
-     */
-    private void immutableSetConstructorFieldDefinition(final String fieldDefinition)
-    {
-        m__strConstructorFieldDefinition = fieldDefinition;
-    }
-
-    /**
-     * Specifies the constructor field definition.
-     * @param fieldDefinition the new constructor field definition.
-     */
-    protected void setConstructorFieldDefinition(final String fieldDefinition)
-    {
-        immutableSetConstructorFieldDefinition(fieldDefinition);
-    }
-
-    /**
-     * Retrieves the constructor field definition.
-     * @return such information.
-     */
-    public String getConstructorFieldDefinition() 
-    {
-        return m__strConstructorFieldDefinition;
-    }
-
-    /**
-     * Specifies the constructor field value setter.
-     * @param fieldValueSetter the new constructor field value setter.
-     */
-    private void immutableSetConstructorFieldValueSetter(final String fieldValueSetter)
-    {
-        m__strConstructorFieldValueSetter = fieldValueSetter;
-    }
-
-    /**
-     * Specifies the constructor field value setter.
-     * @param fieldValueSetter the new constructor field value setter.
-     */
-    protected void setConstructorFieldValueSetter(final String fieldValueSetter)
-    {
-        immutableSetConstructorFieldValueSetter(fieldValueSetter);
-    }
-
-    /**
-     * Retrieves the constructor field value setter.
-     * @return such information.
-     */
-    public String getConstructorFieldValueSetter() 
-    {
-        return m__strConstructorFieldValueSetter;
+        return m__strFieldValueGetterMethod;
     }
 
     /**
@@ -611,6 +506,7 @@ public abstract class AbstractValueObjectTemplate
         return m__strClassEnd;
     }
 
+
     /**
      * Builds the header for logging purposes.
      * @return such header.
@@ -629,7 +525,7 @@ public abstract class AbstractValueObjectTemplate
     protected String buildHeader(final TableTemplate tableTemplate)
     {
         return
-              "Generating ValueObject for "
+              "Generating ValueObject interface for "
             + tableTemplate.getTableName() + ".";
     }
 }

@@ -33,7 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create value object templates.
+ * Description: Bundles a pair of BaseValueObject template build and writing
+ *              handlers.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,45 +45,35 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.tools.templates.valueobject;
+package org.acmsl.queryj.tools.templates.valueobject.handlers;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
-
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Is able to create value object templates.
- * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ * Bundles a pair of ValueObject template build and writing
+ * handlers.
+ * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
  * @version $Revision$
  */
-public interface ValueObjectTemplateFactory
+public class BaseValueObjectTemplateHandlerBundle
+    extends  TemplateHandlerBundle
 {
     /**
-     * Generates a value object template.
-     * @param packageName the package name.
-     * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
+     * Builds a bundle with given handlers.
+     * @param buildHandler the template build handler.
+     * @param writingHandler the writing handler.
+     * @precondition buildHandler != null
+     * @precondition writingHandler != null
      */
-    public ValueObjectTemplate createValueObjectTemplate(
-        final String packageName,
-        final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
-        final Project project,
-        final Task task)
-      throws  QueryJException;
+    public BaseValueObjectTemplateHandlerBundle()
+    {
+        super(
+            new BaseValueObjectTemplateBuildHandler(),
+            new BaseValueObjectTemplateWritingHandler());
+    }
 }

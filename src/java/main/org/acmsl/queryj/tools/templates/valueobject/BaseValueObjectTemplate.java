@@ -52,8 +52,8 @@ package org.acmsl.queryj.tools.templates.valueobject;
  */
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.MetaDataUtils;
-import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 
 /*
  * Importing some ACM-SL classes.
@@ -78,24 +78,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Is able to generate value objects according to database metadata.
+ * Is able to generate base value objects according to database metadata.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>
  * @version $Revision$
  */
-public class ValueObjectTemplate
-    extends  AbstractValueObjectTemplate
-    implements  ValueObjectTemplateDefaults
+public class BaseValueObjectTemplate
+    extends  AbstractBaseValueObjectTemplate
+    implements  BaseValueObjectTemplateDefaults
 {
     /**
-     * Builds a ValueObjectTemplate using given information.
+     * Builds a <code>BaseValueObjectTemplate</code> using given information.
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      */
-    public ValueObjectTemplate(
+    public BaseValueObjectTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
@@ -113,10 +113,7 @@ public class ValueObjectTemplate
             DEFAULT_JAVADOC,
             CLASS_DEFINITION,
             DEFAULT_CLASS_START,
-            DEFAULT_CONSTRUCTOR,
-            DEFAULT_CONSTRUCTOR_FIELD_JAVADOC,
-            DEFAULT_CONSTRUCTOR_FIELD_DECLARATION,
-            DEFAULT_CONSTRUCTOR_FIELD_VALUE_SETTER,
+            DEFAULT_FIELD_VALUE_GETTER_METHOD,
             DEFAULT_CLASS_END,
             project,
             task);
@@ -142,10 +139,7 @@ public class ValueObjectTemplate
                 getJavadoc(),
                 getClassDefinition(),
                 getClassStart(),
-                getConstructor(),
-                getConstructorFieldJavadoc(),
-                getConstructorFieldDefinition(),
-                getConstructorFieldValueSetter(),
+                getFieldValueGetterMethod(),
                 getClassEnd(),
                 MetaDataUtils.getInstance(),
                 EnglishGrammarUtils.getInstance(),
@@ -165,10 +159,7 @@ public class ValueObjectTemplate
      * @param javadoc the class javadoc.
      * @param classDefinition the class definition.
      * @param classStart the class start.
-     * @param constructor the constructor.
-     * @param constructorFieldJavadoc the constructor field javadoc.
-     * @param constructorFieldDefinition the constructor field definition.
-     * @param constructorFieldValueSetter the constructor field value setter.
+     * @param fieldValueGetterMethod the field value getter method.
      * @param classEnd the class end.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
@@ -186,10 +177,7 @@ public class ValueObjectTemplate
      * @precondition javadoc != null
      * @precondition classDefinition != null
      * @precondition classStart != null
-     * @precondition constructor != null
-     * @precondition constructorFieldJavadoc != null
-     * @precondition constructorFieldDefinition != null
-     * @precondition constructorFieldValueSetter != null
+     * @precondition fieldValueGetterMethod != null
      * @precondition classEnd != null
      * @precondition metaDataUtils != null
      * @precondition englishGrammarUtils != null
@@ -206,10 +194,7 @@ public class ValueObjectTemplate
         final String javadoc,
         final String classDefinition,
         final String classStart,
-        final String constructor,
-        final String constructorFieldJavadoc,
-        final String constructorFieldDefinition,
-        final String constructorFieldValueSetter,
+        final String fieldValueGetterMethod,
         final String classEnd,
         final MetaDataUtils metaDataUtils,
         final EnglishGrammarUtils englishGrammarUtils,
@@ -262,27 +247,14 @@ public class ValueObjectTemplate
 
         List t_lFields = tableTemplate.getFields();
 
-        MessageFormat t_ConstructorFormatter =
-            new MessageFormat(constructor);
-
         if  (t_lFields != null)
         {
             Iterator t_itFields = t_lFields.iterator();
 
-            StringBuffer t_sbConstructorFieldJavadoc = new StringBuffer();
+            StringBuffer t_sbFieldValueGetterMethod = new StringBuffer();
 
-            MessageFormat t_ConstructorFieldJavadocFormatter =
-                new MessageFormat(constructorFieldJavadoc);
-
-            StringBuffer t_sbConstructorFieldDefinition = new StringBuffer();
-
-            MessageFormat t_ConstructorFieldDefinitionFormatter =
-                new MessageFormat(constructorFieldDefinition);
-
-            StringBuffer t_sbConstructorFieldValueSetter = new StringBuffer();
-
-            MessageFormat t_ConstructorFieldValueSetterFormatter =
-                new MessageFormat(constructorFieldValueSetter);
+            MessageFormat t_FieldValueGetterMethodFormatter =
+                new MessageFormat(fieldValueGetterMethod);
 
             while  (t_itFields.hasNext()) 
             {
@@ -294,53 +266,19 @@ public class ValueObjectTemplate
                             tableTemplate.getTableName(),
                             t_strField));
 
-                t_sbConstructorFieldJavadoc.append(
-                    t_ConstructorFieldJavadocFormatter.format(
+                t_sbFieldValueGetterMethod.append(
+                    t_FieldValueGetterMethodFormatter.format(
                         new Object[]
                         {
                             t_strField.toLowerCase(),
-                            t_strField
-                        }));
-
-                t_sbConstructorFieldDefinition.append(
-                    t_ConstructorFieldDefinitionFormatter.format(
-                        new Object[]
-                        {
                             t_strFieldType,
-                            t_strField.toLowerCase()
+                            stringUtils.capitalize(
+                                t_strField.toLowerCase(),
+                                '_'),
                         }));
-
-                if  (t_itFields.hasNext())
-                {
-                    t_sbConstructorFieldDefinition.append(",");
-                }
-                    
-                t_sbConstructorFieldValueSetter.append(
-                    t_ConstructorFieldValueSetterFormatter.format(
-                        new Object[]
-                        {
-                            t_strField.toLowerCase()
-                        }));
-
-                if  (t_itFields.hasNext())
-                {
-                    t_sbConstructorFieldValueSetter.append(",");
-                }
-                    
             }
 
-            t_sbResult.append(
-                t_ConstructorFormatter.format(
-                    new Object[]
-                    {
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                tableTemplate.getTableName().toLowerCase()),
-                            '_'),
-                        t_sbConstructorFieldJavadoc.toString(),
-                        t_sbConstructorFieldDefinition.toString(),
-                        t_sbConstructorFieldValueSetter.toString()
-                    }));
+            t_sbResult.append(t_sbFieldValueGetterMethod);
         }
 
         t_sbResult.append(classEnd);

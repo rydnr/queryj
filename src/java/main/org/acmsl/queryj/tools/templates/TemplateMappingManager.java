@@ -378,6 +378,28 @@ public abstract class TemplateMappingManager
         "value-object.factory.";
 
     /**
+     * The base value object templates attribute name.
+     */
+    public static final String BASE_VALUE_OBJECT_TEMPLATES =
+        "base-value-object.templates";
+
+    /**
+     * The value object impl templates attribute name.
+     */
+    public static final String VALUE_OBJECT_IMPL_TEMPLATES =
+        "value-object-impl.templates";
+
+    /**
+     * The base value object template prefix.
+     */
+    public static final String BASE_VALUE_OBJECT_TEMPLATE_PREFIX = "base-value-object.";
+
+    /**
+     * The value object impl template prefix.
+     */
+    public static final String VALUE_OBJECT_IMPL_TEMPLATE_PREFIX = "value-object-impl.";
+
+    /**
      * The DAO test template prefix.
      */
     public static final String DAO_TEST_TEMPLATE_PREFIX = "dao.test.";

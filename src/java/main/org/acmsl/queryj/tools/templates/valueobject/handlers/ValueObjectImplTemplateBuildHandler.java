@@ -61,10 +61,10 @@ import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateFactory;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplateFactory;
 import org.acmsl.queryj.tools.templates.valueobject
-    .ValueObjectTemplateGenerator;
+    .ValueObjectImplTemplateGenerator;
 
 /*
  * Importing some Ant classes.
@@ -87,7 +87,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public class ValueObjectTemplateBuildHandler
+public class ValueObjectImplTemplateBuildHandler
     extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
@@ -98,9 +98,9 @@ public class ValueObjectTemplateBuildHandler
         new TableTemplate[0];
 
     /**
-     * Creates a <code>ValueObjectTemplateBuildHandler</code>.
+     * Creates a <code>ValueObjectImplTemplateBuildHandler</code>.
      */
-    public ValueObjectTemplateBuildHandler() {};
+    public ValueObjectImplTemplateBuildHandler() {};
 
     /**
      * Handles given command.
@@ -140,7 +140,7 @@ public class ValueObjectTemplateBuildHandler
                 retrieveDatabaseMetaData(attributes),
                 retrieveDatabaseMetaDataManager(attributes),
                 retrievePackage(attributes),
-                ValueObjectTemplateGenerator.getInstance(),
+                ValueObjectImplTemplateGenerator.getInstance(),
                 retrieveTableTemplates(attributes),
                 project,
                 task);
@@ -171,7 +171,7 @@ public class ValueObjectTemplateBuildHandler
         final DatabaseMetaData databaseMetaData,
         final DatabaseMetaDataManager databaseMetaDataManager,
         final String packageName,
-        final ValueObjectTemplateFactory templateFactory,
+        final ValueObjectImplTemplateFactory templateFactory,
         final TableTemplate[] tableTemplates,
         final Project project,
         final Task task)
@@ -181,12 +181,12 @@ public class ValueObjectTemplateBuildHandler
 
         try
         {
-            ValueObjectTemplate[] t_aValueObjectTemplates =
-                new ValueObjectTemplate[tableTemplates.length];
+            ValueObjectImplTemplate[] t_aValueObjectImplTemplates =
+                new ValueObjectImplTemplate[tableTemplates.length];
 
-            for  (int t_iValueObjectIndex = 0;
-                      t_iValueObjectIndex < t_aValueObjectTemplates.length;
-                      t_iValueObjectIndex++) 
+            for  (int t_iValueObjectImplIndex = 0;
+                      t_iValueObjectImplIndex < t_aValueObjectImplTemplates.length;
+                      t_iValueObjectImplIndex++) 
             {
                 String t_strQuote = databaseMetaData.getIdentifierQuoteString();
 
@@ -200,16 +200,16 @@ public class ValueObjectTemplateBuildHandler
                     t_strQuote = "\\\"";
                 }
 
-                t_aValueObjectTemplates[t_iValueObjectIndex] =
-                    templateFactory.createValueObjectTemplate(
+                t_aValueObjectImplTemplates[t_iValueObjectImplIndex] =
+                    templateFactory.createValueObjectImplTemplate(
                         packageName,
-                        tableTemplates[t_iValueObjectIndex],
+                        tableTemplates[t_iValueObjectImplIndex],
                         databaseMetaDataManager,
                         project,
                         task);
             }
 
-            storeValueObjectTemplates(t_aValueObjectTemplates, attributes);
+            storeValueObjectImplTemplates(t_aValueObjectImplTemplates, attributes);
         }
         catch  (final SQLException sqlException)
         {
@@ -285,27 +285,27 @@ public class ValueObjectTemplateBuildHandler
       throws  BuildException
     {
         return
-            packageUtils.retrieveValueObjectPackage(
+            packageUtils.retrieveValueObjectImplPackage(
                 (String)
                     parameters.get(ParameterValidationHandler.PACKAGE));
     }
 
     /**
      * Stores the value object template collection in given attribute map.
-     * @param valueObjectTemplates the value object templates.
+     * @param valueObjectImplTemplates the value object templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
-     * @precondition valueObjectTemplates != null
+     * @precondition valueObjectImplTemplates != null
      * @precondition parameters != null
      */
-    protected void storeValueObjectTemplates(
-        final ValueObjectTemplate[] valueObjectTemplates,
+    protected void storeValueObjectImplTemplates(
+        final ValueObjectImplTemplate[] valueObjectImplTemplates,
         final Map parameters)
       throws  BuildException
     {
         parameters.put(
-            TemplateMappingManager.VALUE_OBJECT_TEMPLATES,
-            valueObjectTemplates);
+            TemplateMappingManager.VALUE_OBJECT_IMPL_TEMPLATES,
+            valueObjectImplTemplates);
     }
 
     /**
