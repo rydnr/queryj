@@ -6,13 +6,13 @@ a {
   text-decoration: none;
 }
 a:link {
-  color:#36a;
+  color:#306C30;
 }
 a:visited  {
-  color:#47a;
+  color:#508C50;
 }
 a:active, a:hover {
-  color:#69c;
+  color:#508C50;
 }
 a.externalLink, a.externalLink:link, a.externalLink:visited, a.externalLink:active, a.externalLink:hover {
   background: url(../images/external.png) right center no-repeat;
@@ -24,17 +24,17 @@ a.newWindow, a.newWindow:link, a.newWindow:visited, a.newWindow:active, a.newWin
 }
 h2 {
   padding: 4px 4px 4px 6px;
-  border: 1px solid #909;
-  color: #900;
-  background-color: #d0d;
+  border: 1px solid #A0A0A0;
+  color: #E0E0E0;
+  background-color: #003D00;
   font-weight:900;
   font-size: x-large;
 }
 h3 {
   padding: 4px 4px 4px 6px;
-  border: 1px solid #a0a;
-  color: #900;
-  background-color: #e0e;
+  border: 1px solid #A0A0A0;
+  color: #E0E0E0;
+  background-color: #205D20;
   font-weight: normal;
   font-size: large;
 }
@@ -43,24 +43,53 @@ p {
   font-size: small;
 }
 #breadcrumbs {
-  border-top: 1px solid #a0a;
-  border-bottom: 1px solid #a0a;
-  background-color: #c0c;
+  border-top: 1px solid #A0A0A0;
+  border-bottom: 1px solid #A0A0A0;
+  background-color: #003D00;
+  color: #FFFFFF;
+}
+#breadcrumbs a:link {
+  color:#FFFFFF;
+}
+#breadcrumbs a:visited  {
+  color:#FFFFFF;
+}
+#breadcrumbs a:active, a:hover {
+  color:#FFFFFF;
 }
 #leftColumn {
   margin: 10px 0 0 5px;
-  border: 1px solid #909;
-  background-color: #e0e;
+  border: 1px solid #003D00;
+  background-color: #A0A0A0;
+  color: #FFFFFF;
+}
+#leftColumn a:link {
+  color:#003C00;
+}
+#leftColumn a:visited  {
+  color:#104C10;
+}
+#leftColumn a:active, a:hover {
+  color:#104C10;
 }
 #navcolumn h5 {
   font-size: smaller;
-  border-bottom: 1px solid #aa00aa;
+  border-bottom: 1px solid #A0A0A0;
   padding-top: 2px;
+}
+#navcolumn a:link {
+  color:#003C00;
+}
+#navcolumn a:visited  {
+  color:#104C10;
+}
+#navcolumn a:active, a:hover {
+  color:#104C10;
 }
 
 table.bodyTable th {
   color: white;
-  background-color: #b0b;
+  background-color: #003D00;
   text-align: left;
   font-weight: bold;
 }
@@ -70,13 +99,13 @@ table.bodyTable th, table.bodyTable td {
 }
 
 table.bodyTable tr.a {
-  background-color: #d0d;
+  background-color: #F0F0F0;
 }
 
 table.bodyTable tr.b {
-  background-color: #e0e;
+  background-color: #FFFFFF;
 }
 
 .source {
-  border: 1px solid #909;
+  border: 1px solid #F0FDF0;
 }
