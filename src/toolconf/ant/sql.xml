@@ -9,7 +9,7 @@
     dao CDATA #REQUIRED
     name CDATA #REQUIRED
     type (select | insert | update | delete | select-for-update) #REQUIRED
-    implementation (mysql | oracle | postgres | odbc | mock | xml | all) #REQUIRED>
+    implementation (mysql | oracle | postgres | odbc | all-jdbc | mock | xml | all) #REQUIRED>
 
   <!ELEMENT value (#PCDATA)>
   <!ELEMENT parameter-ref EMPTY>
