@@ -56,6 +56,7 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.TestSuiteTemplate;
+import org.acmsl.queryj.tools.templates.TestSuiteTemplateFactory;
 import org.acmsl.queryj.tools.templates.TestSuiteTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TestTemplate;
 
@@ -69,6 +70,8 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -81,7 +84,7 @@ import java.util.Map;
 /**
  * Builds a test suite template.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class TestSuiteTemplateBuildHandler
@@ -103,55 +106,72 @@ public class TestSuiteTemplateBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask(),
+                TestSuiteTemplateGenerator.getInstance(),
+                StringUtils.getInstance());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @param templateFactory the template factory.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition templateFactory != null
+     * @precondition stringUtils != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final Project project,
+        final Task task,
+        final TestSuiteTemplateFactory templateFactory,
+        final StringUtils stringUtils)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        String t_strPackage = retrievePackage(parameters);
+
+        TestSuiteTemplate t_TestSuiteTemplate =
+            templateFactory.createTestSuiteTemplate(
+                t_strPackage,
+                stringUtils.extractPackageName(t_strPackage),
+                project,
+                task);
+
+        Collection t_cTestTemplates = retrieveTestTemplates(parameters);
+
+        if  (t_cTestTemplates != null)
         {
-            Map attributes = command.getAttributeMap();
+            Iterator t_itTestTemplates = t_cTestTemplates.iterator();
 
-            String t_strPackage = retrievePackage(attributes);
-
-            TestSuiteTemplateGenerator t_TestSuiteTemplateGenerator =
-                TestSuiteTemplateGenerator.getInstance();
-
-            StringUtils t_StringUtils = StringUtils.getInstance();
-
-            if  (   (t_StringUtils                != null)
-                 && (t_TestSuiteTemplateGenerator != null))
+            while  (   (t_itTestTemplates != null)
+                    && (t_itTestTemplates.hasNext()))
             {
-                TestSuiteTemplate t_TestSuiteTemplate =
-                    t_TestSuiteTemplateGenerator.createTestSuiteTemplate(
-                        t_strPackage,
-                        t_StringUtils.extractPackageName(t_strPackage));
+                TestTemplate t_TestTemplate =
+                    (TestTemplate) t_itTestTemplates.next();
 
-                Collection t_cTestTemplates =
-                    retrieveTestTemplates(attributes);
-
-                if  (t_cTestTemplates != null)
+                if  (t_TestTemplate != null)
                 {
-                    Iterator t_itTestTemplates = t_cTestTemplates.iterator();
-
-                    while  (   (t_itTestTemplates != null)
-                            && (t_itTestTemplates.hasNext()))
-                    {
-                        TestTemplate t_TestTemplate =
-                            (TestTemplate) t_itTestTemplates.next();
-
-                        if  (t_TestTemplate != null)
-                        {
-                            t_TestSuiteTemplate.addTestCase(
-                                t_TestTemplate);
-                        }
-                    }
+                    t_TestSuiteTemplate.addTestCase(t_TestTemplate);
                 }
-                
-                storeTestSuiteTemplate(t_TestSuiteTemplate, attributes);
             }
         }
+                
+        storeTestSuiteTemplate(t_TestSuiteTemplate, parameters);
         
         return result;
     }
@@ -161,19 +181,12 @@ public class TestSuiteTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrievePackage(Map parameters)
+    protected String retrievePackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**
@@ -181,21 +194,14 @@ public class TestSuiteTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the test templates.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected Collection retrieveTestTemplates(Map parameters)
+    protected Collection retrieveTestTemplates(final Map  parameters)
         throws  BuildException
     {
-        Collection result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (Collection)
-                    parameters.get(
-                        TemplateMappingManager.TEST_TEMPLATES);
-        }
-        
-        return result;
+        return
+            (Collection)
+                parameters.get(TemplateMappingManager.TEST_TEMPLATES);
     }
 
     /**
@@ -203,14 +209,13 @@ public class TestSuiteTemplateBuildHandler
      * @param testSuiteTemplate the test suite template.
      * @param parameters the parameter map.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition testSuiteTemplate != null
+     * @precondition parameters != null
      */
-    protected void storeTestSuiteTemplate(TestSuiteTemplate testSuiteTemplate, Map parameters)
-        throws  BuildException
+    protected void storeTestSuiteTemplate(
+        final TestSuiteTemplate testSuiteTemplate, final Map parameters)
+      throws  BuildException
     {
-        if  (   (testSuiteTemplate != null)
-             && (parameters        != null))
-        {
-            parameters.put(TEST_SUITE_TEMPLATE, testSuiteTemplate);
-        }
+        parameters.put(TEST_SUITE_TEMPLATE, testSuiteTemplate);
     }
 }

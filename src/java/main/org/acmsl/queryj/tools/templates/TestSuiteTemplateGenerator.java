@@ -50,6 +50,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.TestSuiteTemplate;
 
 /*
@@ -57,6 +58,12 @@ import org.acmsl.queryj.tools.templates.TestSuiteTemplate;
  */
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -72,6 +79,7 @@ import java.lang.ref.WeakReference;
  * @version $Revision$
  */
 public class TestSuiteTemplateGenerator
+    implements  TestSuiteTemplateFactory
 {
     /**
      * Singleton implemented as a weak reference.
@@ -87,7 +95,8 @@ public class TestSuiteTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(TestSuiteTemplateGenerator generator)
+    protected static void setReference(
+        final TestSuiteTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -130,25 +139,53 @@ public class TestSuiteTemplateGenerator
      * Generates a test suite template.
      * @param packageName the package name.
      * @param suiteName the suite name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
      * @return a template.
+     * @precondition packageName != null
+     * @precondition suiteName != null
      */
     public TestSuiteTemplate createTestSuiteTemplate(
-        String packageName,
-        String suiteName)
+        final String packageName,
+        final String suiteName,
+        final Project project,
+        final Task task)
     {
-        TestSuiteTemplate result = null;
+        return
+            createTestSuiteTemplate(
+                packageName,
+                suiteName,
+                project,
+                task,
+                PackageUtils.getInstance());
+    }
 
-        if  (   (packageName     != null)
-             && (suiteName       != null))
-        {
-            result =
-                new TestSuiteTemplate(
-                    packageName,
-                    "unittests." + packageName,
-                    suiteName) {};
-        }
-
-        return result;
+    /**
+     * Generates a test suite template.
+     * @param packageName the package name.
+     * @param suiteName the suite name.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return a template.
+     * @precondition packageName != null
+     * @precondition suiteName != null
+     * @precondition packageUtils != null
+     */
+    protected TestSuiteTemplate createTestSuiteTemplate(
+        final String packageName,
+        final String suiteName,
+        final Project project,
+        final Task task,
+        final PackageUtils packageUtils)
+    {
+        return
+            new TestSuiteTemplate(
+                packageName,
+                packageUtils.retrieveBaseTestSuitePackage(packageName),
+                suiteName,
+                project,
+                task) {};
     }
 
     /**
@@ -156,30 +193,47 @@ public class TestSuiteTemplateGenerator
      * @param testSuiteTemplate the suite template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
+     * @precondition testSuiteTemplate != null
+     * @precondition outputDir != null
      */
     public void write(
-            TestSuiteTemplate  testSuiteTemplate,
-            File               outputDir)
-        throws  IOException
+        final TestSuiteTemplate testSuiteTemplate,
+        final File outputDir)
+      throws  IOException
     {
-        if  (   (testSuiteTemplate  != null)
-             && (outputDir          != null))
-        {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            testSuiteTemplate,
+            outputDir,
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a test suite template to disk.
+     * @param testSuiteTemplate the suite template to write.
+     * @param outputDir the output folder.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition testSuiteTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final TestSuiteTemplate testSuiteTemplate,
+        final File outputDir,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + testSuiteTemplate.getSuiteName()
-                    + "Suite.java",
-                    testSuiteTemplate.toString());
-            }
-        }
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + testSuiteTemplate.getSuiteName()
+            + "Suite.java",
+            testSuiteTemplate.generate());
     }
 }

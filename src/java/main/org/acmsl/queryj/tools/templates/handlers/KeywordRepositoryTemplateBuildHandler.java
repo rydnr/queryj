@@ -60,6 +60,7 @@ import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGenerator;
 
 /*
@@ -112,79 +113,100 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return
+            handle(
+                command.getAttributeMap(),
+                command.getProject(),
+                command.getTask(),
+                MetaDataUtils.getInstance(),
+                StringValidator.getInstance());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param project the project, for logging purposes.
+     * @param task the task, for logging purposes.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param stringValidator the <code>StringValidator</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition project != null
+     * @precondition task != null
+     * @precondition metaDataUtils != null
+     * @precondition stringValidator != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final Project project,
+        final Task task,
+        final MetaDataUtils metaDataUtils,
+        final StringValidator stringValidator)
+        throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        KeywordRepositoryTemplate t_KeywordRepositoryTemplate =
+            buildKeywordRepositoryTemplate(
+                parameters, project, task);
+
+        if  (t_KeywordRepositoryTemplate == null)
         {
-            Map t_mAttributes = command.getAttributeMap();
-
-            KeywordRepositoryTemplate t_KeywordRepositoryTemplate =
-                buildKeywordRepositoryTemplate(
-                    t_mAttributes, command.getProject(), command.getTask());
-
+            throw new BuildException("Cannot build keyword repository");
+        }
+        else 
+        {
             storeKeywordRepositoryTemplate(
-                t_KeywordRepositoryTemplate, t_mAttributes);
+                t_KeywordRepositoryTemplate, parameters);
 
-            if  (t_KeywordRepositoryTemplate == null)
+            Collection t_cFieldElements = null;
+
+            DatabaseMetaDataManager t_MetaDataManager =
+                retrieveDatabaseMetaDataManager(parameters);
+
+            AntExternallyManagedFieldsElement
+                t_ExternallyManagedFieldsElement =
+                retrieveExternallyManagedFieldsElement(parameters);
+
+            if  (t_MetaDataManager == null)
             {
-                throw new BuildException("Cannot build keyword repository");
+                throw new BuildException(
+                      "Cannot continue: "
+                    + "database metadata manager not available");
             }
-            else 
+            else if  (t_ExternallyManagedFieldsElement != null)
             {
-                Collection t_cFieldElements = null;
+                t_cFieldElements =
+                    t_ExternallyManagedFieldsElement.getFields();
 
-                DatabaseMetaDataManager t_MetaDataManager =
-                    retrieveDatabaseMetaDataManager(t_mAttributes);
-
-                MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
-
-                StringValidator t_StringValidator =
-                    StringValidator.getInstance();
-
-                AntExternallyManagedFieldsElement
-                    t_ExternallyManagedFieldsElement =
-                        retrieveExternallyManagedFieldsElement(t_mAttributes);
-
-                if  (t_MetaDataManager == null)
+                if  (   (t_cFieldElements != null)
+                     && (t_cFieldElements.size() > 0))
                 {
-                    throw new BuildException(
-                          "Cannot continue: "
-                        + "database metadata manager not available");
-                }
-                else if  (   (t_ExternallyManagedFieldsElement != null)
-                          && (t_MetaDataUtils != null)
-                          && (t_StringValidator != null))
-                {
-                    t_cFieldElements =
-                        t_ExternallyManagedFieldsElement.getFields();
+                    Iterator t_itFieldIterator =
+                        t_cFieldElements.iterator();
 
-                    if  (   (t_cFieldElements != null)
-                         && (t_cFieldElements.size() > 0))
+                    while  (   (t_itFieldIterator != null)
+                            && (t_itFieldIterator.hasNext()))
                     {
-                        Iterator t_itFieldIterator =
-                            t_cFieldElements.iterator();
+                        AntFieldElement t_Field =
+                            (AntFieldElement) t_itFieldIterator.next();
 
-                        while  (   (t_itFieldIterator != null)
-                                && (t_itFieldIterator.hasNext()))
+                        if  (t_Field != null)
                         {
-                            AntFieldElement t_Field =
-                                (AntFieldElement) t_itFieldIterator.next();
-
-                            if  (t_Field != null)
+                            if  (!stringValidator.isEmpty(t_Field.getKeyword()))
                             {
-                                if  (!t_StringValidator.isEmpty(t_Field.getKeyword()))
-                                {
-                                    t_KeywordRepositoryTemplate.addKeyword(
-                                        t_Field.getKeyword(),
-                                        t_MetaDataUtils.getQueryJFieldType(
-                                            t_MetaDataManager.getColumnType(
-                                                t_Field.getTableName(),
-                                                t_Field.getName())));
-                                }
+                                t_KeywordRepositoryTemplate.addKeyword(
+                                    t_Field.getKeyword(),
+                                    metaDataUtils.getQueryJFieldType(
+                                        t_MetaDataManager.getColumnType(
+                                            t_Field.getTableName(),
+                                            t_Field.getName())));
                             }
                         }
                     }
@@ -200,22 +222,16 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the manager instance.
      * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
         final Map parameters)
       throws  BuildException
     {
-        DatabaseMetaDataManager result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-        }
-        
-        return result;
+        return
+            (DatabaseMetaDataManager)
+                parameters.get(
+                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**
@@ -224,22 +240,16 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the externally-managed-fields information.
      * @throws BuildException if the retrieval process cannot be performed.
+     * @precondition parameters != null
      */
     protected AntExternallyManagedFieldsElement
         retrieveExternallyManagedFieldsElement(final Map parameters)
       throws  BuildException
     {
-        AntExternallyManagedFieldsElement result = null;
-
-        if  (parameters != null) 
-        {
-            result =
-                (AntExternallyManagedFieldsElement)
-                    parameters.get(
-                        ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS);
-        }
-
-        return result;
+        return
+            (AntExternallyManagedFieldsElement)
+                parameters.get(
+                    ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS);
     }
 
     /**
@@ -247,19 +257,12 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected String retrieveProjectPackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return(String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**
@@ -267,25 +270,30 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected String retrievePackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
+        return retrievePackage(parameters, PackageUtils.getInstance());
+    }
 
-        if  (parameters != null)
-        {
-            PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-            if  (t_PackageUtils != null)
-            {
-                result =
-                    t_PackageUtils.retrieveKeywordRepositoryPackage(
-                        retrieveProjectPackage(parameters));
-            }
-        }
-        
-        return result;
+    /**
+     * Retrieves the package name from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected String retrievePackage(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveKeywordRepositoryPackage(
+                retrieveProjectPackage(parameters));
     }
 
     /**
@@ -293,19 +301,12 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the repository name.
      * @throws BuildException if the repository retrieval process is faulty.
+     * @precondition parameters != null
      */
     protected String retrieveRepository(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.REPOSITORY);
-        }
-        
-        return result;
+        return (String) parameters.get(ParameterValidationHandler.REPOSITORY);
     }
 
     /**
@@ -316,24 +317,19 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param task the task, for logging purposes.
      * @return the ProcedureRepositoryTemplate instance.
      * @throws BuildException if the repository cannot be created.
+     * @precondition parameters != null
      */
     protected KeywordRepositoryTemplate buildKeywordRepositoryTemplate(
         final Map parameters, final Project project, final Task task)
       throws  BuildException
     {
-        KeywordRepositoryTemplate result = null;
-
-        if  (parameters != null) 
-        {
-            result =
-                buildKeywordRepositoryTemplate(
-                    retrievePackage(parameters),
-                    retrieveRepository(parameters),
-                    project,
-                    task);
-        }
-
-        return result;
+        return
+            buildKeywordRepositoryTemplate(
+                retrievePackage(parameters),
+                retrieveRepository(parameters),
+                project,
+                task,
+                KeywordRepositoryTemplateGenerator.getInstance());
     }
 
     /**
@@ -342,34 +338,25 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param repository the repository.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
+     * @param templateFactory the template factory.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
      * information is not valid.
+     * @precondition packageName != null
+     * @precondition repository != null
+     * @precondition templateFactory != null
      */
     protected KeywordRepositoryTemplate buildKeywordRepositoryTemplate(
         final String packageName,
         final String repository,
         final Project project,
-        final Task task)
+        final Task task,
+        final KeywordRepositoryTemplateFactory templateFactory)
       throws  BuildException
     {
-        KeywordRepositoryTemplate result = null;
-
-        if  (   (packageName != null)
-             && (repository  != null))
-        {
-            KeywordRepositoryTemplateGenerator t_KeywordRepositoryTemplateGenerator =
-                KeywordRepositoryTemplateGenerator.getInstance();
-
-            if  (t_KeywordRepositoryTemplateGenerator != null)
-            {
-                result =
-                    t_KeywordRepositoryTemplateGenerator.createKeywordRepositoryTemplate(
-                        packageName, repository, project, task);
-            }
-        }
-
-        return result;
+        return
+            templateFactory.createKeywordRepositoryTemplate(
+                packageName, repository, project, task);
     }
 
     /**
@@ -377,16 +364,14 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param keywordRepositoryTemplate the table repository template.
      * @param parameters the parameter map.
      * @throws BuildException if the repository cannot be stored for any reason.
+     * @precondition keywordRepositoryTemplate != null
+     * @precondition parameters != null
      */
     protected void storeKeywordRepositoryTemplate(
-            KeywordRepositoryTemplate keywordRepositoryTemplate,
-            Map                       parameters)
-        throws  BuildException
+        final KeywordRepositoryTemplate keywordRepositoryTemplate,
+        final Map parameters)
+      throws  BuildException
     {
-        if  (   (keywordRepositoryTemplate != null)
-             && (parameters                != null))
-        {
-            parameters.put(KEYWORD_REPOSITORY_TEMPLATE, keywordRepositoryTemplate);
-        }
+        parameters.put(KEYWORD_REPOSITORY_TEMPLATE, keywordRepositoryTemplate);
     }
 }

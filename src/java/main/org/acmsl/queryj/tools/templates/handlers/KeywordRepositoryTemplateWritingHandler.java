@@ -73,7 +73,7 @@ import java.util.Map;
 /**
  * Writes the keyword repository.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class KeywordRepositoryTemplateWritingHandler
@@ -90,38 +90,42 @@ public class KeywordRepositoryTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return
+            handle(
+                command.getAttributeMap(),
+                KeywordRepositoryTemplateGenerator.getInstance());
+    }
+                
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param templateGenerator the template generator.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition templateGenerator != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final KeywordRepositoryTemplateGenerator templateGenerator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
-            {
-                Map attributes = command.getAttributeMap();
-
-                KeywordRepositoryTemplateGenerator t_KeywordRepositoryTemplateGenerator =
-                    KeywordRepositoryTemplateGenerator.getInstance();
-
-                KeywordRepositoryTemplate t_KeywordRepositoryTemplate =
-                    retrieveKeywordRepositoryTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                          != null) 
-                     && (t_KeywordRepositoryTemplate          != null)
-                     && (t_KeywordRepositoryTemplateGenerator != null))
-                {
-                    t_KeywordRepositoryTemplateGenerator.write(
-                        t_KeywordRepositoryTemplate, t_OutputDir);
-                }
-            }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+            templateGenerator.write(
+                retrieveKeywordRepositoryTemplate(parameters),
+                retrieveOutputDir(parameters));
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -132,23 +136,17 @@ public class KeywordRepositoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the repository retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected KeywordRepositoryTemplate retrieveKeywordRepositoryTemplate(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
-        KeywordRepositoryTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (KeywordRepositoryTemplate)
-                    parameters.get(
-                        KeywordRepositoryTemplateBuildHandler
-                            .KEYWORD_REPOSITORY_TEMPLATE);
-        }
-        
-        return result;
+        return
+            (KeywordRepositoryTemplate)
+                parameters.get(
+                    KeywordRepositoryTemplateBuildHandler
+                        .KEYWORD_REPOSITORY_TEMPLATE);
     }
 
     /**
@@ -156,24 +154,31 @@ public class KeywordRepositoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
+    protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveKeywordRepositoryFolder(
-                    retrieveProjectOutputDir(parameters),
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveKeywordRepositoryFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters));
     }
 
     /**
@@ -181,19 +186,12 @@ public class KeywordRepositoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveProjectOutputDir(Map parameters)
+    protected File retrieveProjectOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-        }
-        
-        return result;
+        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
     }
 
     /**
@@ -201,18 +199,11 @@ public class KeywordRepositoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveProjectPackage(Map parameters)
+    protected String retrieveProjectPackage(final Map parameters)
         throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 }

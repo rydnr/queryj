@@ -684,8 +684,7 @@ public class PackageUtils
      */
     public String retrieveBaseTestSuitePackage(final String packageName)
     {
-        return
-            retrieveTestPackage(packageName);
+        return retrieveTestPackage(packageName);
     }
 
     /**
