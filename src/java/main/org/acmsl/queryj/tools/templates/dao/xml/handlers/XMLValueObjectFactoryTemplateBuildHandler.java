@@ -173,10 +173,6 @@ public class XMLValueObjectFactoryTemplateBuildHandler
             {
                 throw new BuildException(queryjException);
             }
-            catch  (final Throwable throwable)
-            {
-                throwable.printStackTrace(System.out);
-            }
         }
         
         return result;

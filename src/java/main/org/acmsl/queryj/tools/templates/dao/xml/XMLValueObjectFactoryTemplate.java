@@ -203,7 +203,7 @@ public abstract class XMLValueObjectFactoryTemplate
     public static final String CLASS_DEFINITION =
           "public class XML{0}ValueObjectFactory\n"
         + "    extends {0}ValueObjectFactory\n"
-        + "    implements ObjectCreationFactory;\n"; // table
+        + "    implements ObjectCreationFactory\n"; // table
 
     /**
      * The class start.
@@ -303,15 +303,19 @@ public abstract class XMLValueObjectFactoryTemplate
         + "     * @param attributes the attributes.\n"
         + "     * @param conversionUtils the ConversionUtils instance.\n"
         + "     * @return the {0} information.\n"
+        + "     * @throws SAXException if the attributes are not valid.\n"
         + "     * @precondition attributes != null\n"
         + "     * @precondition conversionUtils != null\n"
         + "     */\n"
-        + "    public Object createObject(final Attributes attributes)\n"
+        + "    public Object createObject(\n"
+        + "        final Attributes attributes, final ConversionUtils conversionUtils)\n"
+        + "      throws SAXException\n"
         + "    '{'\n"
-        + "        {0}ValueObject result = null;\n\n"
-        + "{1}" // attribute build
-        + "        result = create{0}(\n"
-        + "{2}) '{' '}';\n\n"  // factory method value object build.
+        + "        {0}ValueObject result = null;\n"
+        + "{1}\n" // attribute build
+        + "        result =\n"
+        + "            create{0}("
+        + "{2});\n\n"  // factory method value object build.
         + "        return result;\n"
         + "    '}'\n\n";
 
@@ -319,9 +323,9 @@ public abstract class XMLValueObjectFactoryTemplate
      * The default attribute build.
      */
     public static final String DEFAULT_FACTORY_METHOD_ATTRIBUTE_BUILD =
-          "\n    {0} {1} =\n" // field type, field name
-        + "        conversionUtils.to{0}(attributes.getValue(\"{2}\"));";
-        // field type, uncapitalized field name
+          "\n        {0} {1} =\n" // field type, field name
+        + "            conversionUtils.to{2}(attributes.getValue(\"{3}\"));\n";
+        // field type, capitalized field type, uncapitalized field name,
 
     /**
      * The default factory method value object build.
@@ -479,8 +483,8 @@ public abstract class XMLValueObjectFactoryTemplate
         immutableSetClassStart(classStart);
         immutableSetSingletonBody(singletonBody);
         immutableSetFactoryMethod(factoryMethod);
+        immutableSetFactoryMethodAttributeBuild(factoryMethodAttributeBuild);
         immutableSetFactoryMethodValueObjectBuild(factoryMethodValueObjectBuild);
-        immutableSetFactoryMethodValueObjectBuild(factoryMethodAttributeBuild);
         immutableSetExtraMethods(extraMethods);
         immutableSetClassEnd(classEnd);
     }
@@ -1059,7 +1063,9 @@ public abstract class XMLValueObjectFactoryTemplate
                             '_')
                     }));
 
+            t_sbResult.append(getAcmSlImports());
             t_sbResult.append(getJdkImports());
+            t_sbResult.append(getExtraImports());
 
             t_Formatter = new MessageFormat(getJavadoc());
             t_sbResult.append(
@@ -1130,6 +1136,8 @@ public abstract class XMLValueObjectFactoryTemplate
                             {
                                 t_strFieldType,
                                 t_strField.toLowerCase(),
+                                t_StringUtils.capitalize(
+                                    t_strFieldType.toLowerCase(), '_'),
                                 t_StringUtils.unCapitalize(
                                     t_strField.toLowerCase(), "-")
                             }));
