@@ -61,10 +61,6 @@
     -->
     <!--attainGoal name="jdiff"/-->
 
-    <!--
-     Creates the distribution release.
-    -->
-    <attainGoal name="dist"/>
 
   </preGoal>
 
