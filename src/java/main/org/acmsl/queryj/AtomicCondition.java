@@ -97,13 +97,13 @@ public abstract class AtomicCondition
      * @param rightSideField the right-side field.
      */
     public AtomicCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        Field              rightSideField)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final Field rightSideField)
     {
-        unmodifiableSetLeftSideField(leftSideField);
-        unmodifiableSetOperator(operator);
-        unmodifiableSetRightSideField(rightSideField);
+        immutableSetLeftSideField(leftSideField);
+        immutableSetOperator(operator);
+        immutableSetRightSideField(rightSideField);
     }
 
     /**
@@ -113,13 +113,13 @@ public abstract class AtomicCondition
      * @param rightSideValue the right-side value.
      */
     protected AtomicCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        String             rightSideValue)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final String rightSideValue)
     {
         this(leftSideField, operator, (Field) null);
 
-        unmodifiableSetRightSideValue(rightSideValue);
+        immutableSetRightSideValue(rightSideValue);
     }
 
     /**
@@ -129,12 +129,12 @@ public abstract class AtomicCondition
      * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        int                rightSideValue)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final int rightSideValue)
     {
         this(leftSideField, operator, (Field) null);
-        unmodifiableSetRightSideValue("" + rightSideValue);
+        immutableSetRightSideValue("" + rightSideValue);
     }
 
     /**
@@ -144,12 +144,12 @@ public abstract class AtomicCondition
      * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        long               rightSideValue)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final long rightSideValue)
     {
         this(leftSideField, operator, (Field) null);
-        unmodifiableSetRightSideValue("" + rightSideValue);
+        immutableSetRightSideValue("" + rightSideValue);
     }
 
     /**
@@ -159,12 +159,12 @@ public abstract class AtomicCondition
      * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        double             rightSideValue)
+        final Field leftSideField,
+        ConditionOperator operator,
+        final double rightSideValue)
     {
         this(leftSideField, operator, (Field) null);
-        unmodifiableSetRightSideValue("" + rightSideValue);
+        immutableSetRightSideValue("" + rightSideValue);
     }
 
     /**
@@ -174,12 +174,12 @@ public abstract class AtomicCondition
      * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        BigDecimal         rightSideValue)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final BigDecimal rightSideValue)
     {
         this(leftSideField, operator, (Field) null);
-        unmodifiableSetRightSideValue("" + rightSideValue);
+        immutableSetRightSideValue("" + rightSideValue);
     }
 
     /**
@@ -189,13 +189,13 @@ public abstract class AtomicCondition
      * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        Calendar           rightSideValue)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final Calendar rightSideValue)
     {
         this(leftSideField, operator, (Field) null);
         // This should use Functions.toDate or something...
-        unmodifiableSetRightSideValue("" + rightSideValue);
+        immutableSetRightSideValue("" + rightSideValue);
     }
 
     /**
@@ -205,20 +205,20 @@ public abstract class AtomicCondition
      * @param rightSideValue the right-side value.
      */
     public AtomicCondition(
-        Field              leftSideField,
-        ConditionOperator  operator,
-        Date               rightSideValue)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final Date rightSideValue)
     {
         this(leftSideField, operator, (Field) null);
         // This should use Functions.toDate or something...
-        unmodifiableSetRightSideValue("" + rightSideValue);
+        immutableSetRightSideValue("" + rightSideValue);
     }
 
     /**
      * Specifies the left-side field.
      * @param leftSideField such field.
      */
-    private void unmodifiableSetLeftSideField(Field leftSideField)
+    private void immutableSetLeftSideField(final Field leftSideField)
     {
         m__LeftSideField = leftSideField;
     }
@@ -227,9 +227,9 @@ public abstract class AtomicCondition
      * Specifies the left side field.
      * @param leftSideField such field.
      */
-    protected void setLeftSideField(Field leftSideField)
+    protected void setLeftSideField(final Field leftSideField)
     {
-        unmodifiableSetLeftSideField(leftSideField);
+        immutableSetLeftSideField(leftSideField);
     }
 
     /**
@@ -245,7 +245,7 @@ public abstract class AtomicCondition
      * Specifies the operator.
      * @param operator such operator.
      */
-    private void unmodifiableSetOperator(ConditionOperator operator)
+    private void immutableSetOperator(final ConditionOperator operator)
     {
         m__Operator = operator;
     }
@@ -254,9 +254,9 @@ public abstract class AtomicCondition
      * Specifies the operator.
      * @param operator such operator.
      */
-    protected void setOperator(ConditionOperator operator)
+    protected void setOperator(final ConditionOperator operator)
     {
-        unmodifiableSetOperator(operator);
+        immutableSetOperator(operator);
     }
 
     /**
@@ -272,7 +272,7 @@ public abstract class AtomicCondition
      * Specifies the right-side field.
      * @param rightSideField such field.
      */
-    private void unmodifiableSetRightSideField(Field rightSideField)
+    private void immutableSetRightSideField(final Field rightSideField)
     {
         m__RightSideField = rightSideField;
     }
@@ -281,9 +281,9 @@ public abstract class AtomicCondition
      * Specifies the right side field.
      * @param rightSideField such field.
      */
-    protected void setRightSideField(Field rightSideField)
+    protected void setRightSideField(final Field rightSideField)
     {
-        unmodifiableSetRightSideField(rightSideField);
+        immutableSetRightSideField(rightSideField);
     }
 
     /**
@@ -299,7 +299,7 @@ public abstract class AtomicCondition
      * Specifies the right-side value.
      * @param rightSideValue such value.
      */
-    private void unmodifiableSetRightSideValue(String rightSideValue)
+    private void immutableSetRightSideValue(final String rightSideValue)
     {
         m__strRightSideValue = rightSideValue;
     }
@@ -308,9 +308,9 @@ public abstract class AtomicCondition
      * Specifies the right side value.
      * @param rightSideValue such value.
      */
-    protected void setRightSideValue(String rightSideValue)
+    protected void setRightSideValue(final String rightSideValue)
     {
-        unmodifiableSetRightSideValue(rightSideValue);
+        immutableSetRightSideValue(rightSideValue);
     }
 
     /**
@@ -346,7 +346,7 @@ public abstract class AtomicCondition
      * without explicit table information.
      * @return the condition.
      */
-    protected String toString(boolean simplify)
+    protected String toString(final boolean simplify)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
@@ -393,7 +393,7 @@ public abstract class AtomicCondition
      * @param object the object to check.
      * @return <code>true</code> if both objects are semantically equal.
      */
-    public boolean equals(Object object)
+    public boolean equals(final Object object)
     {
         boolean result = false;
 

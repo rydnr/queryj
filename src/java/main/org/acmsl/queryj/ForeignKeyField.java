@@ -54,7 +54,7 @@ import org.acmsl.queryj.PrimaryKeyField;
 /**
  * Represents foreign keys.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public interface ForeignKeyField

@@ -49,7 +49,7 @@ package org.acmsl.queryj;
 /**
  * Represents abnormal situations regarding QueryJ processing.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class QueryJException
@@ -80,16 +80,25 @@ public class QueryJException
      */
     public String toString()
     {
+        return toString(getMessage(), getCause());
+    }
+
+    /**
+     * Outputs a text representation of this exception.
+     * @param message the message.
+     * @param cause the cause.
+     * @return the error description.
+     */
+    public String toString(final String message, final Throwable cause)
+    {
         StringBuffer t_sbResult = new StringBuffer();
 
-        t_sbResult.append(getMessage());
+        t_sbResult.append(message);
 
-        Throwable t_Cause = getCause();
-
-        if  (t_Cause != null) 
+        if  (cause != null) 
         {
             t_sbResult.append(" (");
-            t_sbResult.append(t_Cause.getMessage());
+            t_sbResult.append(cause.getMessage());
             t_sbResult.append(")");
         }
 

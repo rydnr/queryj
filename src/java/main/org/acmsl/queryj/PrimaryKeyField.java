@@ -49,7 +49,7 @@ package org.acmsl.queryj;
 /**
  * Marks primary keys.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public interface PrimaryKeyField

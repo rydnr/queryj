@@ -60,7 +60,7 @@ import java.util.Collection;
 /**
  * Represents conditions.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class Condition
@@ -84,7 +84,7 @@ public abstract class Condition
      * Specifies a new inner condition.
      * @param condition the new condition.
      */
-    protected void setInnerCondition(Condition condition)
+   protected void setInnerCondition(final Condition condition)
     {
         m__InnerCondition = condition;
     }
@@ -102,7 +102,7 @@ public abstract class Condition
      * Specifies the variable conditions.
      * @param collection the variable conditions.
      */
-    protected void setVariableConditionCollection(Collection collection)
+    protected void setVariableConditionCollection(final Collection collection)
     {
         m__cVariableConditions = collection;
     }
@@ -120,7 +120,7 @@ public abstract class Condition
      * Adds new variable conditions.
      * @param conditions the new conditions.
      */
-    protected void addVariableConditions(Collection conditions)
+    protected void addVariableConditions(final Collection conditions)
     {
         if  (   (conditions != null)
              && (conditions.size() > 0))
@@ -171,31 +171,50 @@ public abstract class Condition
      * @param condition the condition to evaluate.
      * @param operator the operator.
      * @return the resulting condition.
+     * @precondition condition != null
      */
-    public Condition operate(Condition condition, String operator)
+    public Condition operate(final Condition condition, final String operator)
     {
-        ConditionFactory t_ConditionFactory = ConditionFactory.getInstance();
+        return
+            operate(
+                condition,
+                operator,
+                getInnerCondition(),
+                ConditionFactory.getInstance());
+    }
 
-        if  (   (condition != null)
-             && (t_ConditionFactory != null))
+    /**
+     * Requests an operation with given condition.
+     * @param condition the condition to evaluate.
+     * @param operator the operator.
+     * @param innerCondition the inner condition.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @return the resulting condition.
+     * @precondition condition != null
+     * @precondition conditionFactory != null
+     */
+    protected Condition operate(
+        final Condition condition,
+        final String operator,
+        final Condition innerCondition,
+        final ConditionFactory conditionFactory)
+    {
+        Condition t_InnerCondition = innerCondition;
+
+        if  (t_InnerCondition != null)
         {
-            Condition t_InnerCondition = getInnerCondition();
-
-            if  (t_InnerCondition != null)
-            {
-                addVariableConditions(t_InnerCondition.getVariableConditions());
-            }
-            else 
-            {
-                t_InnerCondition = this; // Subclasses override toString()
-            }                            //            |
-                                         //            v
-            String t_strPrefix = "(" + t_InnerCondition.toString() + ") " + operator + " (";
-            String t_strSuffix = ")";
-
-            setInnerCondition(
-                t_ConditionFactory.wrap(condition, t_strPrefix, t_strSuffix));
+            addVariableConditions(innerCondition.getVariableConditions());
         }
+        else 
+        {
+            t_InnerCondition = this; // Subclasses override toString()
+        }                            //            |
+                                     //            v
+        String t_strPrefix = "(" + t_InnerCondition.toString() + ") " + operator + " (";
+        String t_strSuffix = ")";
+
+        setInnerCondition(
+            conditionFactory.wrap(condition, t_strPrefix, t_strSuffix));
 
         return this;
     }
@@ -204,8 +223,9 @@ public abstract class Condition
      * Requests AND evaluation with given condition.
      * @param condition the condition to evaluate.
      * @return the resulting condition.
+     * @precondition condition != null
      */
-    public Condition and(Condition condition)
+    public Condition and(final Condition condition)
     {
         return operate(condition, "AND");
     }
@@ -214,8 +234,9 @@ public abstract class Condition
      * Requests OR evaluation with given condition.
      * @param condition the condition to evaluate.
      * @return the resulting condition.
+     * @precondition condition != null
      */
-    public Condition or(Condition condition)
+    public Condition or(final Condition condition)
     {
         return operate(condition, "OR");
     }
@@ -228,7 +249,7 @@ public abstract class Condition
      * without explicit table information.
      * @return such text.
      */
-    protected String toString(Field field, boolean simplify)
+    protected String toString(final Field field, final boolean simplify)
     {
         String result = "null";
 
@@ -253,13 +274,21 @@ public abstract class Condition
      */
     public String toSimplifiedString()
     {
+        return toSimplifiedString(getInnerCondition());
+    }
+
+    /**
+     * Outputs a brief text version of the condition.
+     * @param innerCondition the inner condition.
+     * @return the condition.
+     */
+    public String toSimplifiedString(final Condition innerCondition)
+    {
         String result = "";
 
-        Condition t_InnerCondition = getInnerCondition();
-
-        if  (t_InnerCondition != null)
+        if  (innerCondition != null)
         {
-            result = t_InnerCondition.toSimplifiedString();
+            result = innerCondition.toSimplifiedString();
         }
 
         return result;
@@ -271,6 +300,16 @@ public abstract class Condition
      */
     public String toString()
     {
-        return "" + getInnerCondition();
+        return toString(getInnerCondition());
+    }
+
+    /**
+     * Outputs a text version of the condition.
+     * @param innerCondition the inner condition.
+     * @return the condition.
+     */
+    protected String toString(final Condition innerCondition)
+    {
+        return "" + innerCondition;
     }
 }

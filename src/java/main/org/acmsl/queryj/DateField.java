@@ -59,7 +59,7 @@ import java.util.Date;
 /**
  * Represents date fields.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class DateField
@@ -70,7 +70,7 @@ public abstract class DateField
      * @param name the field name.
      * @param table the table.
      */
-    public DateField(String name, Table table)
+    public DateField(final String name, final Table table)
     {
         super(name, table);
     }
@@ -80,27 +80,35 @@ public abstract class DateField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition equals(Date value)
+    public Condition equals(final Date value)
     {
-        Condition result = null;
+        return
+            equals(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getEquals(),
-                    value);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for equality.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition equals(
+        final Date value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getEquals(),
+                value);
     }
 
     /**
@@ -108,26 +116,34 @@ public abstract class DateField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition notEquals(Date value)
+    public Condition notEquals(final Date value)
     {
-        Condition result = null;
+        return
+            notEquals(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getNotEquals(),
-                    value);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for non-equality.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition notEquals(
+        final Date value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getNotEquals(),
+                value);
     }
 }

@@ -81,7 +81,7 @@ public abstract class QueryFactory
      * Specifies a new weak reference.
      * @param factory the factory instance to use.
      */
-    protected static void setReference(QueryFactory factory)
+    protected static void setReference(final QueryFactory factory)
     {
         singleton = new WeakReference(factory);
     }

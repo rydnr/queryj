@@ -65,7 +65,7 @@ public abstract class LongField
      * @param name the field name.
      * @param table the table.
      */
-    public LongField(String name, Table table)
+    public LongField(final String name, final Table table)
     {
         super(name, table);
     }
@@ -75,27 +75,35 @@ public abstract class LongField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition equals(long value)
+    public Condition equals(final long value)
     {
-        Condition result = null;
+        return
+            equals(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getEquals(),
-                    value);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for equality.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition equals(
+        final long value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getEquals(),
+                value);
     }
 
     /**
@@ -103,27 +111,35 @@ public abstract class LongField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition notEquals(long value)
+    public Condition notEquals(final long value)
     {
-        Condition result = null;
+        return
+            notEquals(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getNotEquals(),
-                    value);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for non-equality.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition notEquals(
+        final long value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getNotEquals(),
+                value);
     }
 
     /**
@@ -131,27 +147,35 @@ public abstract class LongField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition greaterThan(long value)
+    public Condition greaterThan(final long value)
     {
-        Condition result = null;
+        return
+            greaterThan(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getGreaterThan(),
-                    value);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for lower values.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition greaterThan(
+        final long value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getGreaterThan(),
+                value);
     }
 
     /**
@@ -159,26 +183,34 @@ public abstract class LongField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition lessThan(long value)
+    public Condition lessThan(final long value)
     {
-        Condition result = null;
+        return
+            lessThan(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getLessThan(),
-                    value);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for higher values.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition lessThan(
+        final long value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getLessThan(),
+                value);
     }
 }

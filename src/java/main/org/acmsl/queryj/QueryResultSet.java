@@ -76,7 +76,7 @@ import java.util.Map;
 /**
  * Represents standard SQL queries.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public class QueryResultSet
@@ -205,16 +205,25 @@ public class QueryResultSet
     public byte[] getBytes(final String columnName)
         throws  SQLException
     {
-        byte[] result = null;
+        return getBytes(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null)
-        {
-            result = t_ResultSet.getBytes(columnName);
-        }
-
-        return result;
+    /**
+     * See ResultSet.getBytes(String)
+     * @see java.sql.ResultSet#getBytes(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected byte[] getBytes(
+        final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getBytes(columnName);
     }
 
     /**
@@ -227,16 +236,22 @@ public class QueryResultSet
     public boolean next()
         throws  SQLException
     {
-        boolean result = false;
+        return next(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.next();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#next()
+     * @see java.sql.ResultSet#next()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if the
+     * new current row is valid; false if there are no more rows.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean next(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.next();
     }
 
     /**
@@ -249,16 +264,22 @@ public class QueryResultSet
     public boolean previous()
         throws  SQLException
     {
-        boolean result = false;
+        return previous(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.previous();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#previous()
+     * @see java.sql.ResultSet#previous()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if the
+     * cursor is on a valid row; false if it is off the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean previous(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.previous();
     }
 
     /**
@@ -273,16 +294,24 @@ public class QueryResultSet
     public boolean getBoolean(final int index)
         throws SQLException
     {
-        boolean result = false;
+        return getBoolean(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getBoolean(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getBoolean(int)
+     * @see java.sql.ResultSet#getBoolean(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is <code>false</code>.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean getBoolean(final int index, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getBoolean(index);
     }
 
     /**
@@ -297,16 +326,24 @@ public class QueryResultSet
     public boolean getBoolean(final String columnName)
         throws  SQLException
     {
-        boolean result = false;
+        return getBoolean(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getBoolean(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getBoolean(String)
+     * @see java.sql.ResultSet#getBoolean(String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is <code>false</code>.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean getBoolean(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getBoolean(columnName);
     }
 
     /**
@@ -319,16 +356,22 @@ public class QueryResultSet
     public int getType()
         throws  SQLException
     {
-        int result = -1;
+        return getType(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getType();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getType()
+     * @see java.sql.ResultSet#getType()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected int getType(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getType();
     }
 
     /**
@@ -343,16 +386,24 @@ public class QueryResultSet
     public long getLong(final int index)
         throws  SQLException
     {
-        long result = 0;
+        return getLong(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getLong(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getLong(int)
+     * @see java.sql.ResultSet#getLong(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected long getLong(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getLong(index);
     }
 
     /**
@@ -367,16 +418,24 @@ public class QueryResultSet
     public long getLong(final String columnName)
         throws  SQLException
     {
-        long result = 0;
+        return getLong(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getLong(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getLong(String)
+     * @see java.sql.ResultSet#getLong(String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected long getLong(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getLong(columnName);
     }
 
     /**
@@ -391,16 +450,24 @@ public class QueryResultSet
     public Object getObject(final int index)
         throws  SQLException
     {
-        Object result = null;
+        return getObject(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getObject(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getObject(int)
+     * @see java.sql.ResultSet#getObject(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Object getObject(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getObject(index);
     }
 
     /**
@@ -413,16 +480,22 @@ public class QueryResultSet
     public Object getObject(final String columnName)
         throws  SQLException
     {
-        Object result = null;
+        return getObject(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getObject(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getObject(String)
+     * @see java.sql.ResultSet#getObject(String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Object getObject(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getObject(columnName);
     }
 
     /**
@@ -440,16 +513,28 @@ public class QueryResultSet
     public Object getObject(final int index, final Map map)
         throws  SQLException
     {
-        Object result = null;
+        return getObject(index, map, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getObject(index, map);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getObject(int,Map)
+     * @see java.sql.ResultSet#getObject(int,java.util.Map)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param map (Taken from Sun's Javadoc) a java.util.Map object that
+     * contains the mapping from SQL type names to classes in the Java
+     * programming language.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Object getObject(
+        final int index, final Map map, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getObject(index, map);
     }
 
     /**
@@ -467,16 +552,29 @@ public class QueryResultSet
     public Object getObject(final String columnName, final Map map)
         throws  SQLException
     {
-        Object result = null;
+        return getObject(columnName, map, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getObject(columnName, map);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getObject(String,Map)
+     * @see java.sql.ResultSet#getObject(java.lang.String,java.util.Map)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param map (Taken from Sun's Javadoc) a java.util.Map object that
+     * contains the mapping from SQL type names to classes in the Java
+     * programming language.
+     * @param resultSet the result set.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Object getObject(
+        final String columnName, final Map map, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getObject(columnName, map);
     }
 
     /**
@@ -487,12 +585,19 @@ public class QueryResultSet
     public void close()
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        close(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.close();
-        }
+    /**
+     * See ResultSet#close()
+     * @see java.sql.ResultSet#close()
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void close(final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.close();
     }
 
     /**
@@ -507,16 +612,24 @@ public class QueryResultSet
     public Ref getRef(final int index)
         throws  SQLException
     {
-        Ref result = null;
+        return getRef(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getRef(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getRef(int)
+     * @see java.sql.ResultSet#getRef(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Ref getRef(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getRef(index);
     }
 
     /**
@@ -531,16 +644,24 @@ public class QueryResultSet
     public Ref getRef(final String columnName)
         throws  SQLException
     {
-        Ref result = null;
+        return getRef(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getRef(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getRef(String)
+     * @see java.sql.ResultSet#getRef(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Ref getRef(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getRef(columnName);
     }
 
     /**
@@ -555,16 +676,24 @@ public class QueryResultSet
     public Time getTime(final int index)
         throws  SQLException
     {
-        Time result = null;
+        return getTime(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getTime(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getTime(int)
+     * @see java.sql.ResultSet#getTime(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Time getTime(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getTime(index);
     }
 
     /**
@@ -579,16 +708,24 @@ public class QueryResultSet
     public Time getTime(final String columnName)
         throws  SQLException
     {
-        Time result = null;
+        return getTime(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getTime(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getTime(String)
+     * @see java.sql.ResultSet#getTime(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Time getTime(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getTime(columnName);
     }
 
     /**
@@ -605,16 +742,27 @@ public class QueryResultSet
     public Time getTime(final int index, final Calendar calendar)
         throws  SQLException
     {
-        Time result = null;
+        return getTime(index, calendar, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getTime(index, calendar);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getTime(int,Calendar)
+     * @see java.sql.ResultSet#getTime(int,java.util.Calendar)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param calendar (Taken from Sun's Javadoc) the java.util.Calendar
+     * object to use in constructing the time.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Time getTime(
+        final int index, final Calendar calendar, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getTime(index, calendar);
     }
 
     /**
@@ -631,16 +779,29 @@ public class QueryResultSet
     public Time getTime(final String columnName, final Calendar calendar)
         throws  SQLException
     {
-        Time result = null;
+        return getTime(columnName, calendar, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getTime(columnName, calendar);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getTime(String,Calendar)
+     * @see java.sql.ResultSet#getTime(java.lang.String,java.util.Calendar)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param calendar (Taken from Sun's Javadoc) the java.util.Calendar
+     * object to use in constructing the time.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Time getTime(
+        final String columnName,
+        final Calendar calendar,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getTime(columnName, calendar);
     }
 
 
@@ -656,16 +817,24 @@ public class QueryResultSet
     public Date getDate(final int index)
         throws  SQLException
     {
-        Date result = null;
+        return getDate(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getDate(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getDate(int)
+     * @see java.sql.ResultSet#getDate(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Date getDate(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getDate(index);
     }
 
     /**
@@ -678,16 +847,21 @@ public class QueryResultSet
     public Date getDate(final String columnName)
         throws  SQLException
     {
-        Date result = null;
+        return getDate(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getDate(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getDate(String)
+     * @see java.sql.ResultSet#getDate(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Date getDate(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getDate(columnName);
     }
 
     /**
@@ -704,16 +878,27 @@ public class QueryResultSet
     public Date getDate(final int index, final Calendar calendar)
         throws  SQLException
     {
-        Date result = null;
+        return getDate(index, calendar, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getDate(index, calendar);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getDate(int,Calendar)
+     * @see java.sql.ResultSet#getDate(int,java.util.Calendar)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param calendar (Taken from Sun's Javadoc) the java.util.Calendar
+     * object to use in constructing the time.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Date getDate(
+        final int index, final Calendar calendar, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getDate(index, calendar);
     }
 
     /**
@@ -730,16 +915,29 @@ public class QueryResultSet
     public Date getDate(final String columnName, final Calendar calendar)
         throws  SQLException
     {
-        Date result = null;
+        return getDate(columnName, calendar, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getDate(columnName, calendar);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getDate(String,Calendar)
+     * @see java.sql.ResultSet#getDate(java.lang.String,java.util.Calendar)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param calendar (Taken from Sun's Javadoc) the java.util.Calendar
+     * object to use in constructing the time.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Date getDate(
+        final String columnName,
+        final Calendar calendar,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getDate(columnName, calendar);
     }
 
     /**
@@ -751,16 +949,21 @@ public class QueryResultSet
     public boolean first()
         throws  SQLException
     {
-        boolean result = false;
+        return first(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.first();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#first()
+     * @see java.sql.ResultSet#first()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) 
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean first(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.first();
     }
 
     /**
@@ -775,16 +978,26 @@ public class QueryResultSet
     public byte getByte(final int index)
         throws  SQLException
     {
-        byte result = 0;
+        return getByte(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getByte(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getByte(int)
+     * @see java.sql.ResultSet#getByte(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @param resultSet the result set.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected byte getByte(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getByte(index);
     }
 
     /**
@@ -797,16 +1010,21 @@ public class QueryResultSet
     public byte getByte(final String columnName)
         throws  SQLException
     {
-        byte result = 0;
+        return getByte(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getByte(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getByte(String)
+     * @see java.sql.ResultSet#getByte(String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected byte getByte(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getByte(columnName);
     }
 
     /**
@@ -821,16 +1039,25 @@ public class QueryResultSet
     public short getShort(final int index)
         throws  SQLException
     {
-        short result = 0;
+        return getShort(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getShort(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getShort(int)
+     * @see java.sql.ResultSet#getShort(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected short getShort(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getShort(index);
     }
 
     /**
@@ -843,16 +1070,22 @@ public class QueryResultSet
     public short getShort(final String columnName)
         throws  SQLException
     {
-        short result = 0;
+        return getShort(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getShort(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getShort(String)
+     * @see java.sql.ResultSet#getShort(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected short getShort(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getShort(columnName);
     }
 
     /**
@@ -867,16 +1100,24 @@ public class QueryResultSet
     public int getInt(final int index)
         throws  SQLException
     {
-        int result = 0;
+        return getInt(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getInt(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getInt(int)
+     * @see java.sql.ResultSet#getInt(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected int getInt(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getInt(index);
     }
 
     /**
@@ -889,16 +1130,21 @@ public class QueryResultSet
     public int getInt(final String columnName)
         throws  SQLException
     {
-        int result = 0;
+        return getInt(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getInt(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getInt(String)
+     * @see java.sql.ResultSet#getInt(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected int getInt(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getInt(columnName);
     }
 
     /**
@@ -913,16 +1159,24 @@ public class QueryResultSet
     public float getFloat(final int index)
         throws  SQLException
     {
-        float result = 0;
+        return getFloat(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getFloat(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getFloat(int)
+     * @see java.sql.ResultSet#getFloat(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected float getFloat(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getFloat(index);
     }
 
     /**
@@ -935,16 +1189,21 @@ public class QueryResultSet
     public float getFloat(final String columnName)
         throws  SQLException
     {
-        float result = 0;
+        return getFloat(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getFloat(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getFloat(String)
+     * @see java.sql.ResultSet#getFloat(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected float getFloat(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getFloat(columnName);
     }
 
     /**
@@ -959,16 +1218,24 @@ public class QueryResultSet
     public double getDouble(final int index)
         throws  SQLException
     {
-        double result = 0;
+        return getDouble(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getDouble(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getDouble(int)
+     * @see java.sql.ResultSet#getDouble(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected double getDouble(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getDouble(index);
     }
 
     /**
@@ -983,16 +1250,25 @@ public class QueryResultSet
     public double getDouble(final String columnName)
         throws  SQLException
     {
-        double result = 0;
+        return getDouble(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getDouble(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getDouble(String)
+     * @see java.sql.ResultSet#getDouble(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is 0.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected double getDouble(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getDouble(columnName);
     }
 
     /**
@@ -1006,16 +1282,23 @@ public class QueryResultSet
     public ResultSetMetaData getMetaData()
         throws  SQLException
     {
-        ResultSetMetaData result = null;
+        return getMetaData(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getMetaData();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getMetaData()
+     * @see java.sql.ResultSet#getMetaData()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the description of a ResultSet
+     * object's columns or null if the driver cannot return a
+     * ResultSetMetaData object.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected ResultSetMetaData getMetaData(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getMetaData();
     }
 
     /**
@@ -1028,16 +1311,22 @@ public class QueryResultSet
     public SQLWarning getWarnings()
         throws  SQLException
     {
-        SQLWarning result = null;
+        return getWarnings(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getWarnings();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getWarnings()
+     * @see java.sql.ResultSet#getWarnings()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the first SQLWarning object
+     * reported or null if there are none.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected SQLWarning getWarnings(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getWarnings();
     }
 
     /**
@@ -1048,12 +1337,19 @@ public class QueryResultSet
     public void clearWarnings()
         throws SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        clearWarnings(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.clearWarnings();
-        }
+    /**
+     * See ResultSet#clearWarnings()
+     * @see java.sql.ResultSet#clearWarnings()
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void clearWarnings(final ResultSet resultSet)
+        throws SQLException
+    {
+        resultSet.clearWarnings();
     }
 
     /**
@@ -1067,11 +1363,24 @@ public class QueryResultSet
     public void setFetchDirection(final int direction)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        setFetchDirection(direction, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
+    /**
+     * See ResultSet#setFetchDirection(int)
+     * @see java.sql.ResultSet#setFetchDirection(int)
+     * @param direction (Taken from Sun's Javadoc) an integer specifying the
+     * suggested fetch direction; one of ResultSet.FETCH_FORWARD,
+     * ResultSet.FETCH_REVERSE, or ResultSet.FETCH_UNKNOWN.
+     * @exception SQLException if an error occurs.
+     */
+    protected void setFetchDirection(
+        final int direction, final ResultSet resultSet)
+      throws  SQLException
+    {
+        if  (resultSet != null) 
         {
-            t_ResultSet.setFetchDirection(direction);
+            resultSet.setFetchDirection(direction);
         }
         else
         {
@@ -1089,13 +1398,26 @@ public class QueryResultSet
     public int getFetchDirection()
         throws  SQLException
     {
+        return getFetchDirection(getResultSet());
+    }
+
+    /**
+     * See ResultSet#getFetchDirection()
+     * @see java.sql.ResultSet#getFetchDirection()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the current fetch direction for
+     * this ResultSet object.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected int getFetchDirection(final ResultSet resultSet)
+        throws  SQLException
+    {
         int result = m__iTempFetchDirection;
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
+        if  (resultSet != null) 
         {
-            result = t_ResultSet.getFetchDirection();
+            result = resultSet.getFetchDirection();
         }
         
         return result;
@@ -1110,11 +1432,22 @@ public class QueryResultSet
     public void setFetchSize(final int size)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        setFetchSize(size, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
+    /**
+     * See ResultSet#setFetchSize(int)
+     * @see java.sql.ResultSet#setFetchSize(int)
+     * @param size (Taken from Sun's Javadoc) the number of rows to fetch.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     */
+    protected void setFetchSize(final int size, final ResultSet resultSet)
+        throws  SQLException
+    {
+        if  (resultSet != null) 
         {
-            t_ResultSet.setFetchSize(size);
+            resultSet.setFetchSize(size);
         }
         else
         {
@@ -1132,13 +1465,25 @@ public class QueryResultSet
     public int getFetchSize()
         throws  SQLException
     {
+        return getFetchSize(getResultSet());
+    }
+
+    /**
+     * See ResultSet#getFetchSize()
+     * @see java.sql.ResultSet#getFetchSize()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the current fetch size for this
+     * ResultSet object.
+     * @exception SQLException if an error occurs.
+     */
+    protected int getFetchSize(final ResultSet resultSet)
+        throws  SQLException
+    {
         int result = m__iTempFetchSize;
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
+        if  (resultSet != null) 
         {
-            result = t_ResultSet.getFetchSize();
+            result = resultSet.getFetchSize();
         }
         
         return result;
@@ -1156,16 +1501,24 @@ public class QueryResultSet
     public String getString(final int index)
         throws  SQLException
     {
-        String result = null;
+        return getString(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getString(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getString(int)
+     * @see java.sql.ResultSet#getString(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected String getString(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getString(index);
     }
 
     /**
@@ -1178,16 +1531,23 @@ public class QueryResultSet
     public String getString(final String columnName)
         throws  SQLException
     {
-        String result = null;
+        return getString(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getString(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getString(String)
+     * @see java.sql.ResultSet#getString(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected String getString(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getString(columnName);
     }
 
     /**
@@ -1202,16 +1562,24 @@ public class QueryResultSet
     public Array getArray(final int index)
         throws  SQLException
     {
-        Array result = null;
+        return getArray(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getArray(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getArray(int)
+     * @see java.sql.ResultSet#getArray(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Array getArray(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getArray(index);
     }
 
     /**
@@ -1224,16 +1592,23 @@ public class QueryResultSet
     public Array getArray(final String columnName)
         throws  SQLException
     {
-        Array result = null;
+        return getArray(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getArray(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getArray(String)
+     * @see java.sql.ResultSet#getArray(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Array getArray(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getArray(columnName);
     }
 
     /**
@@ -1248,16 +1623,25 @@ public class QueryResultSet
     public InputStream getAsciiStream(final int index)
         throws  SQLException
     {
-        InputStream result = null;
+        return getAsciiStream(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getAsciiStream(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getAsciiStream(int)
+     * @see java.sql.ResultSet#getAsciiStream(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected InputStream getAsciiStream(
+        final int index, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getAsciiStream(index);
     }
 
     /**
@@ -1270,16 +1654,23 @@ public class QueryResultSet
     public InputStream getAsciiStream(final String columnName)
         throws  SQLException
     {
-        InputStream result = null;
+        return getAsciiStream(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getAsciiStream(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getAsciiStream(String)
+     * @see java.sql.ResultSet#getAsciiStream(String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected InputStream getAsciiStream(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getAsciiStream(columnName);
     }
 
     /**
@@ -1297,16 +1688,28 @@ public class QueryResultSet
     public BigDecimal getBigDecimal(final int index, final int scale)
         throws  SQLException
     {
-        BigDecimal result = null;
+        return getBigDecimal(index, scale, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getBigDecimal(index, scale);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getBigDecimal(int,int)
+     * @see java.sql.ResultSet#getBigDecimal(int,int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param scale (Taken from Sun's Javadoc) the number of digits to the
+     * right of the decimal point.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @deprecated since it's deprecated in JDK 1.4 as well.
+     * @precondition resultSet != null
+     */
+    protected BigDecimal getBigDecimal(
+        final int index, final int scale, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getBigDecimal(index, scale);
     }
 
     /**
@@ -1322,16 +1725,26 @@ public class QueryResultSet
     public BigDecimal getBigDecimal(final String columnName, final int scale)
         throws  SQLException
     {
-        BigDecimal result = null;
+        return getBigDecimal(columnName, scale, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getBigDecimal(columnName, scale);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getBigDecimal(String,int)
+     * @see java.sql.ResultSet#getBigDecimal(java.lang.String,int)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param scale (Taken from Sun's Javadoc) the number of digits to the
+     * right of the decimal point.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @deprecated since it's deprecated in JDK 1.4 as well.
+     * @precondition resultSet != null
+     */
+    protected BigDecimal getBigDecimal(
+        final String columnName, final int scale, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getBigDecimal(columnName, scale);
     }
 
     /**
@@ -1346,16 +1759,25 @@ public class QueryResultSet
     public BigDecimal getBigDecimal(final int index)
         throws  SQLException
     {
-        BigDecimal result = null;
+        return getBigDecimal(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getBigDecimal(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getBigDecimal(int)
+     * @see java.sql.ResultSet#getBigDecimal(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected BigDecimal getBigDecimal(
+        final int index, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getBigDecimal(index);
     }
 
     /**
@@ -1368,16 +1790,23 @@ public class QueryResultSet
     public BigDecimal getBigDecimal(final String columnName)
         throws  SQLException
     {
-        BigDecimal result = null;
+        return getBigDecimal(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getBigDecimal(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getBigDecimal(String)
+     * @see java.sql.ResultSet#getBigDecimal(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected BigDecimal getBigDecimal(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getBigDecimal(columnName);
     }
 
     /**
@@ -1392,16 +1821,25 @@ public class QueryResultSet
     public InputStream getBinaryStream(final int index)
         throws  SQLException
     {
-        InputStream result = null;
+        return getBinaryStream(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getBinaryStream(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getBinaryStream(int)
+     * @see java.sql.ResultSet#getBinaryStream(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected InputStream getBinaryStream(
+        final int index, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getBinaryStream(index);
     }
 
     /**
@@ -1414,16 +1852,23 @@ public class QueryResultSet
     public InputStream getBinaryStream(final String columnName)
         throws  SQLException
     {
-        InputStream result = null;
+        return getBinaryStream(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getBinaryStream(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getBinaryStream(String)
+     * @see java.sql.ResultSet#getBinaryStream(String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected InputStream getBinaryStream(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getBinaryStream(columnName);
     }
 
     /**
@@ -1438,16 +1883,24 @@ public class QueryResultSet
     public Blob getBlob(final int index)
         throws  SQLException
     {
-        Blob result = null;
+        return getBlob(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getBlob(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getBlob(int)
+     * @see java.sql.ResultSet#getBlob(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Blob getBlob(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getBlob(index);
     }
 
     /**
@@ -1462,16 +1915,24 @@ public class QueryResultSet
     public Blob getBlob(final String columnName)
         throws  SQLException
     {
-        Blob result = null;
+        return getBlob(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getBlob(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getBlob(String)
+     * @see java.sql.ResultSet#getBlob(String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Blob getBlob(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getBlob(columnName);
     }
 
     /**
@@ -1486,16 +1947,24 @@ public class QueryResultSet
     public Clob getClob(final int index)
         throws  SQLException
     {
-        Clob result = null;
+        return getClob(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getClob(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getClob(int)
+     * @see java.sql.ResultSet#getClob(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Clob getClob(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getClob(index);
     }
 
     /**
@@ -1510,16 +1979,24 @@ public class QueryResultSet
     public Clob getClob(final String columnName)
         throws  SQLException
     {
-        Clob result = null;
+        return getClob(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getClob(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getClob(String)
+     * @see java.sql.ResultSet#getClob(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Clob getClob(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getClob(columnName);
     }
 
     /**
@@ -1534,16 +2011,25 @@ public class QueryResultSet
     public Timestamp getTimestamp(final int index)
         throws  SQLException
     {
-        Timestamp result = null;
+        return getTimestamp(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getTimestamp(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getTimestamp(int)
+     * @see java.sql.ResultSet#getTimestamp(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Timestamp getTimestamp(
+        final int index, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getTimestamp(index);
     }
 
     /**
@@ -1558,16 +2044,25 @@ public class QueryResultSet
     public Timestamp getTimestamp(final String columnName)
         throws  SQLException
     {
-        Timestamp result = null;
+        return getTimestamp(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getTimestamp(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getTimestamp(String)
+     * @see java.sql.ResultSet#getTimestamp(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Timestamp getTimestamp(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getTimestamp(columnName);
     }
 
     /**
@@ -1584,16 +2079,27 @@ public class QueryResultSet
     public Timestamp getTimestamp(final int index, final Calendar calendar)
         throws  SQLException
     {
-        Timestamp result = null;
+        return getTimestamp(index, calendar, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getTimestamp(index, calendar);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getTimestamp(int,Calendar)
+     * @see java.sql.ResultSet#getTimestamp(int,java.util.Calendar)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param calendar (Taken from Sun's Javadoc) the java.util.Calendar
+     * object to use in constructing the time.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Timestamp getTimestamp(
+        final int index, final Calendar calendar, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getTimestamp(index, calendar);
     }
 
     /**
@@ -1610,16 +2116,29 @@ public class QueryResultSet
     public Timestamp getTimestamp(final String columnName, final Calendar calendar)
         throws  SQLException
     {
-        Timestamp result = null;
+        return getTimestamp(columnName, calendar, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getTimestamp(columnName, calendar);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getTimestamp(String,Calendar)
+     * @see java.sql.ResultSet#getTimestamp(java.lang.String,java.util.Calendar)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param calendar (Taken from Sun's Javadoc) the java.util.Calendar
+     * object to use in constructing the time.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Timestamp getTimestamp(
+        final String columnName,
+        final Calendar calendar,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getTimestamp(columnName, calendar);
     }
 
     /**
@@ -1635,16 +2154,26 @@ public class QueryResultSet
     public InputStream getUnicodeStream(final int index)
         throws  SQLException
     {
-        InputStream result = null;
+        return getUnicodeStream(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getUnicodeStream(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getUnicodeStream(int)
+     * @see java.sql.ResultSet#getUnicodeStream(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @deprecated since it's deprecated in JDK 1.4 as well.
+     * @precondition resultSet != null
+     */
+    protected InputStream getUnicodeStream(
+        final int index, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getUnicodeStream(index);
     }
 
     /**
@@ -1658,16 +2187,24 @@ public class QueryResultSet
     public InputStream getUnicodeStream(final String columnName)
         throws  SQLException
     {
-        InputStream result = null;
+        return getUnicodeStream(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getUnicodeStream(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getUnicodeStream(String)
+     * @see java.sql.ResultSet#getUnicodeStream(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @deprecated since it's deprecated in JDK 1.4 as well.
+     * @precondition resultSet != null
+     */
+    protected InputStream getUnicodeStream(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getUnicodeStream(columnName);
     }
 
     /**
@@ -1680,16 +2217,22 @@ public class QueryResultSet
     public boolean wasNull()
         throws  SQLException
     {
-        boolean result = false;
+        return wasNull(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.wasNull();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#wasNull()
+     * @see java.sql.ResultSet#wasNull()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if the last
+     * column value read was SQL NULL and <code>false</code> otherwise.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean wasNull(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.wasNull();
     }
 
     /**
@@ -1704,16 +2247,25 @@ public class QueryResultSet
     public Reader getCharacterStream(final int index)
         throws  SQLException
     {
-        Reader result = null;
+        return getCharacterStream(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getCharacterStream(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getCharacterStream(int)
+     * @see java.sql.ResultSet#getCharacterStream(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Reader getCharacterStream(
+        final int index, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getCharacterStream(index);
     }
 
     /**
@@ -1728,16 +2280,25 @@ public class QueryResultSet
     public Reader getCharacterStream(final String columnName)
         throws  SQLException
     {
-        Reader result = null;
+        return getCharacterStream(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getCharacterStream(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getCharacterStream(String)
+     * @see java.sql.ResultSet#getCharacterStream(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column value; if
+     * the value is SQL NULL, the value returned is null.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected Reader getCharacterStream(
+        final String columnName, final ResultSet resultSet)
+      throws  SQLException
+    {
+        return resultSet.getCharacterStream(columnName);
     }
 
     /**
@@ -1752,16 +2313,24 @@ public class QueryResultSet
     public boolean absolute(final int index)
         throws  SQLException
     {
-        boolean result = false;
+        return absolute(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.absolute(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#absolute(int)
+     * @see java.sql.ResultSet#absolute(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if the cursor
+     * is on the result set; <code>false</code> otherwise.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean absolute(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.absolute(index);
     }
 
     /**
@@ -1772,12 +2341,20 @@ public class QueryResultSet
     public void afterLast()
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        afterLast(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.afterLast();
-        }
+    /**
+     * See ResultSet#afterLast()
+     * @param resultSet the result set.
+     * @see java.sql.ResultSet#afterLast()
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void afterLast(final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.afterLast();
     }
 
     /**
@@ -1788,12 +2365,20 @@ public class QueryResultSet
     public void beforeFirst()
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        beforeFirst(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.beforeFirst();
-        }
+    /**
+     * See ResultSet#beforeFirst()
+     * @see java.sql.ResultSet#beforeFirst()
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void beforeFirst(final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.beforeFirst();
     }
 
     /**
@@ -1804,12 +2389,20 @@ public class QueryResultSet
     public void cancelRowUpdates()
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        cancelRowUpdates(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.cancelRowUpdates();
-        }
+    /**
+     * See ResultSet#cancelRowUpdates()
+     * @see java.sql.ResultSet#cancelRowUpdates()
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void cancelRowUpdates(final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.cancelRowUpdates();
     }
 
     /**
@@ -1820,12 +2413,20 @@ public class QueryResultSet
     public void deleteRow()
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        deleteRow(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.deleteRow();
-        }
+    /**
+     * See ResultSet#deleteRow()
+     * @see java.sql.ResultSet#deleteRow()
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void deleteRow(final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.deleteRow();
     }
 
     /**
@@ -1840,16 +2441,24 @@ public class QueryResultSet
     public int findColumn(final String columnName)
         throws  SQLException
     {
-        int result = -1;
+        return findColumn(columnName, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.findColumn(columnName);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#findColumn(String)
+     * @see java.sql.ResultSet#findColumn(java.lang.String)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the column index of the
+     * given column name.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected int findColumn(final String columnName, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.findColumn(columnName);
     }
 
     /**
@@ -1862,16 +2471,22 @@ public class QueryResultSet
     public int getConcurrency()
         throws  SQLException
     {
-        int result = -1;
+        return getConcurrency(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getConcurrency();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getConcurrency()
+     * @see java.sql.ResultSet#getConcurrency()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the concurrency type, either
+     * ResultSet.CONCUR_READ_ONLY or ResultSet.CONCUR_UPDATABLE.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected int getConcurrency(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getConcurrency();
     }
 
     /**
@@ -1884,16 +2499,22 @@ public class QueryResultSet
     public String getCursorName()
         throws  SQLException
     {
-        String result = null;
+        return getCursorName(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getCursorName();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getCursorName()
+     * @see java.sql.ResultSet#getCursorName()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the SQL name for this ResultSet
+     * object's cursor.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected String getCursorName(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getCursorName();
     }
 
     /**
@@ -1906,16 +2527,22 @@ public class QueryResultSet
     public int getRow()
         throws  SQLException
     {
-        int result = -1;
+        return getRow(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.getRow();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#getRow()
+     * @see java.sql.ResultSet#getRow()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the current row number;
+     * 0 if there is no current row.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected int getRow(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.getRow();
     }
 
     /**
@@ -1929,16 +2556,29 @@ public class QueryResultSet
     public Statement getStatement()
         throws SQLException
     {
-        Statement result = getQuery();
+        return getStatement(getQuery(), getResultSet());
+    }
+
+    /**
+     * See ResultSet#getStatement()
+     * @see java.sql.ResultSet#getStatement()
+     * @param query the query.
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) the Statement object that produced
+     * this ResultSet object or null if the result set was produced some
+     * other way.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    public Statement getStatement(
+        final Statement query, final ResultSet resultSet)
+      throws SQLException
+    {
+        Statement result = query;
 
         if  (result == null) 
         {
-            ResultSet t_ResultSet = getResultSet();
-
-            if  (t_ResultSet != null) 
-            {
-                result = t_ResultSet.getStatement();
-            }
+            result = resultSet.getStatement();
         }
         
         return result;
@@ -1952,12 +2592,20 @@ public class QueryResultSet
     public void insertRow()
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        insertRow(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-             t_ResultSet.insertRow();
-        }
+    /**
+     * See ResultSet#insertRow()
+     * @see java.sql.ResultSet#insertRow()
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void insertRow(final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.insertRow();
     }
 
     /**
@@ -1971,16 +2619,23 @@ public class QueryResultSet
     public boolean isAfterLast()
         throws  SQLException
     {
-        boolean result = false;
+        return isAfterLast(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.isAfterLast();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#isAfterLast()
+     * @see java.sql.ResultSet#isAfterLast()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if the cursor is
+     * after the last row; <code>false</code> if the cursor is at any other
+     * position or the result set contains no rows.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean isAfterLast(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.isAfterLast();
     }
 
     /**
@@ -1994,16 +2649,23 @@ public class QueryResultSet
     public boolean isBeforeFirst()
         throws  SQLException
     {
-        boolean result = false;
+        return isBeforeFirst(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.isBeforeFirst();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#isBeforeFirst()
+     * @see java.sql.ResultSet#isBeforeFirst()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if the cursor is
+     * before the first row; <code>false</code> if the cursor is at any other
+     * position or the result set contains no rows.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean isBeforeFirst(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.isBeforeFirst();
     }
 
     /**
@@ -2016,16 +2678,22 @@ public class QueryResultSet
     public boolean isFirst()
         throws  SQLException
     {
-        boolean result = false;
+        return isFirst(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.isFirst();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#isFirst()
+     * @see java.sql.ResultSet#isFirst()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if the cursor is
+     * on the first row; <code>false</code> otherwise.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean isFirst(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.isFirst();
     }
 
     /**
@@ -2038,16 +2706,22 @@ public class QueryResultSet
     public boolean isLast()
         throws  SQLException
     {
-        boolean result = false;
+        return isLast(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.isLast();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#isLast()
+     * @see java.sql.ResultSet#isLast()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if the cursor is
+     * on the last row; <code>false</code> otherwise.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean isLast(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.isLast();
     }
 
     /**
@@ -2061,16 +2735,23 @@ public class QueryResultSet
     public boolean last()
         throws  SQLException
     {
-        boolean result = false;
+        return last(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.last();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#last()
+     * @see java.sql.ResultSet#last()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if the cursor is
+     * on a valid row; <code>false</code> if there are no rows in the result
+     * set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean last(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.last();
     }
 
     /**
@@ -2081,12 +2762,20 @@ public class QueryResultSet
     public void moveToCurrentRow()
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        moveToCurrentRow(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.moveToCurrentRow();
-        }
+    /**
+     * See ResultSet#moveToCurrentRow()
+     * @see java.sql.ResultSet#moveToCurrentRow()
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void moveToCurrentRow(final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.moveToCurrentRow();
     }
 
     /**
@@ -2097,12 +2786,20 @@ public class QueryResultSet
     public void moveToInsertRow()
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        moveToInsertRow(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.moveToInsertRow();
-        }
+    /**
+     * See ResultSet#moveToInsertRow()
+     * @see java.sql.ResultSet#moveToInsertRow()
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void moveToInsertRow(final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.moveToInsertRow();
     }
 
     /**
@@ -2113,12 +2810,20 @@ public class QueryResultSet
     public void refreshRow()
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        refreshRow(getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.refreshRow();
-        }
+    /**
+     * See ResultSet#refreshRow()
+     * @see java.sql.ResultSet#refreshRow()
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void refreshRow(final ResultSet resultSet)
+        throws  SQLException
+    {
+        resultSet.refreshRow();
     }
 
     /**
@@ -2133,16 +2838,24 @@ public class QueryResultSet
     public boolean relative(final int index)
         throws  SQLException
     {
-        boolean result = false;
+        return relative(index, getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.relative(index);
-        }
-        
-        return result;
+    /**
+     * See ResultSet#relative(int)
+     * @see java.sql.ResultSet#relative(int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if the cursor is
+     * on a row; <code>false</code> otherwise.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean relative(final int index, final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.relative(index);
     }
 
     /**
@@ -2155,16 +2868,22 @@ public class QueryResultSet
     public boolean rowDeleted()
         throws  SQLException
     {
-        boolean result = false;
+        return rowDeleted(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.rowDeleted();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#rowDeleted()
+     * @see java.sql.ResultSet#rowDeleted()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if a row was
+     * deleted and deletions are detected; <code>false</code> otherwise.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean rowDeleted(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.rowDeleted();
     }
 
     /**
@@ -2177,16 +2896,22 @@ public class QueryResultSet
     public boolean rowInserted()
         throws  SQLException
     {
-        boolean result = false;
+        return rowInserted(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.rowInserted();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#rowInserted()
+     * @see java.sql.ResultSet#rowInserted()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if a row has had
+     * an insertion and insertions are detected; <code>false</code> otherwise.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean rowInserted(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.rowInserted();
     }
 
     /**
@@ -2200,16 +2925,23 @@ public class QueryResultSet
     public boolean rowUpdated()
         throws  SQLException
     {
-        boolean result = false;
+        return rowUpdated(getResultSet());
+    }
 
-        ResultSet t_ResultSet = getResultSet();
-
-        if  (t_ResultSet != null) 
-        {
-            result = t_ResultSet.rowUpdated();
-        }
-        
-        return result;
+    /**
+     * See ResultSet#rowUpdated()
+     * @see java.sql.ResultSet#rowUpdated()
+     * @param resultSet the result set.
+     * @return (Taken from Sun's Javadoc) <code>true</code> if both (1) the
+     * row has been visibly updated by the owner or another and (2) updates
+     * are detected.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected boolean rowUpdated(final ResultSet resultSet)
+        throws  SQLException
+    {
+        return resultSet.rowUpdated();
     }
 
     /**
@@ -2222,17 +2954,33 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      */
     public void updateAsciiStream(
-            int          index,
-            InputStream  value,
-            int          length)
-        throws  SQLException
+        final int index,
+        final InputStream value,
+        final int length)
+      throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateAsciiStream(index, value, length);
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateAsciiStream(index, value, length);
-        }
+    /**
+     * See ResultSet#updateAsciiStream(int,InputStream,int)
+     * @see java.sql.ResultSet#updateAsciiStream(int,java.io.InputStream,int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length (Taken from Sun's Javadoc) the length of the stream.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateAsciiStream(
+        final int index,
+        final InputStream value,
+        final int length,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateAsciiStream(index, value, length);
     }
 
     /**
@@ -2245,17 +2993,33 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      */
     public void updateAsciiStream(
-            String       columnName,
-            InputStream  value,
-            int          length)
-        throws  SQLException
+        final String columnName,
+        final InputStream value,
+        final int length)
+      throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateAsciiStream(columnName, value, length, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateAsciiStream(columnName, value, length);
-        }
+    /**
+     * See ResultSet#updateAsciiStream(String,InputStream,int)
+     * @see java.sql.ResultSet#updateAsciiStream(java.lang.String,java.io.InputStream,int)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length (Taken from Sun's Javadoc) the length of the stream.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateAsciiStream(
+        final String columnName,
+        final InputStream value,
+        final int length,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateAsciiStream(columnName, value, length);
     }
 
     /**
@@ -2269,12 +3033,24 @@ public class QueryResultSet
     public void updateBigDecimal(final int index, final BigDecimal value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateBigDecimal(index, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateBigDecimal(index, value);
-        }
+    /**
+     * See ResultSet#updateBigDecimal(int,BigDecimal)
+     * @see java.sql.ResultSet#updateBigDecimal(int,java.math.BigDecimal)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value a <code>BigDecimal</code> value
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBigDecimal(
+        final int index, final BigDecimal value, final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBigDecimal(index, value);
     }
 
     /**
@@ -2288,12 +3064,26 @@ public class QueryResultSet
     public void updateBigDecimal(final String columnName, final BigDecimal value)
         throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateBigDecimal(columnName, value, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateBigDecimal(columnName, value);
-        }
+    /**
+     * See ResultSet#updateBigDecimal(String,BigDecimal)
+     * @see java.sql.ResultSet#updateBigDecimal(java.lang.String,java.math.BigDecimal)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value a <code>BigDecimal</code> value
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBigDecimal(
+        final String columnName,
+        final BigDecimal value,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBigDecimal(columnName, value);
     }
 
     /**
@@ -2306,17 +3096,33 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      */
     public void updateBinaryStream(
-            int          index,
-            InputStream  value,
-            int          length)
-        throws  SQLException
+        final int index,
+        final InputStream value,
+        final int length)
+      throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateBinaryStream(index, value, length, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateBinaryStream(index, value, length);
-        }
+    /**
+     * See ResultSet#updateBinaryStream(int,InputStream,int)
+     * @see java.sql.ResultSet#updateBinaryStream(int,java.io.InputStream,int)
+     * @param index (Taken from Sun's Javadoc) the first column
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length (Taken from Sun's Javadoc) the length of the stream.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBinaryStream(
+        final int index,
+        final InputStream value,
+        final int length,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBinaryStream(index, value, length);
     }
 
     /**
@@ -2329,17 +3135,33 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      */
     public void updateBinaryStream(
-            String       columnName,
-            InputStream  value,
-            int          length)
-        throws  SQLException
+        final String columnName,
+        final InputStream value,
+        final int length)
+      throws  SQLException
     {
-        ResultSet t_ResultSet = getResultSet();
+        updateBinaryStream(columnName, value, length, getResultSet());
+    }
 
-        if  (t_ResultSet != null) 
-        {
-            t_ResultSet.updateBinaryStream(columnName, value, length);
-        }
+    /**
+     * See ResultSet#updateBinaryStream(String,InputStream,int)
+     * @see java.sql.ResultSet#updateBinaryStream(java.lang.String,java.io.InputStream,int)
+     * @param columnName (Taken from Sun's Javadoc) the SQL name of
+     * the column.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length (Taken from Sun's Javadoc) the length of the stream.
+     * @param resultSet the result set.
+     * @exception SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBinaryStream(
+        final String columnName,
+        final InputStream value,
+        final int length,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBinaryStream(columnName, value, length);
     }
 
     /**

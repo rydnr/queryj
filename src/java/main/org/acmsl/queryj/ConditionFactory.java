@@ -98,7 +98,7 @@ public class ConditionFactory
     }
 
     /**
-     * Retrieves a ConditionFactory instance.
+     * Retrieves a <code>ConditionFactory</code> instance.
      * @return such instance.
      */
     public static ConditionFactory getInstance()
@@ -123,29 +123,24 @@ public class ConditionFactory
     }
 
     /**
-     * Creates a condition
+     * Creates a condition.
+     * Note: Removed precondition rightSideField != null due
+     * to <code>isNull</code>.
      * @param leftSideField the left-side field.
      * @param operator the operator.
      * @param rightSideField the right-side field.
      * @return such type of instance.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public Condition createCondition(
-        final Field              leftSideField,
+        final Field leftSideField,
         final ConditionOperator  operator,
-        final Field              rightSideField)
+        final Field rightSideField)
     {
-        Condition result = null;
-
-        if  (   (leftSideField  != null)
-             && (operator       != null))
-            // && (rightSideField != null)) // Removed due to isNull()
-        {
-            result =
-                new AtomicCondition(
-                    leftSideField, operator, rightSideField) {};
-        }
-        
-        return result;
+        return
+            new AtomicCondition(
+                leftSideField, operator, rightSideField) {};
     }
 
     /**
@@ -154,21 +149,15 @@ public class ConditionFactory
      * @param operator the operator.
      * @param value the fixed value.
      * @return such type of instance.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public Condition createCondition(
-        final Field              leftSideField,
-        final ConditionOperator  operator,
-        final int                value)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final int value)
     {
-        Condition result = null;
-
-        if  (   (leftSideField  != null)
-             && (operator       != null))
-        {
-            result = new AtomicCondition(leftSideField, operator, value) {};
-        }
-        
-        return result;
+        return new AtomicCondition(leftSideField, operator, value) {};
     }
 
     /**
@@ -177,21 +166,15 @@ public class ConditionFactory
      * @param operator the operator.
      * @param value the fixed value.
      * @return such type of instance.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public Condition createCondition(
-        final Field              leftSideField,
-        final ConditionOperator  operator,
-        final long                value)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final long value)
     {
-        Condition result = null;
-
-        if  (   (leftSideField  != null)
-             && (operator       != null))
-        {
-            result = new AtomicCondition(leftSideField, operator, value) {};
-        }
-        
-        return result;
+        return new AtomicCondition(leftSideField, operator, value) {};
     }
 
     /**
@@ -200,21 +183,15 @@ public class ConditionFactory
      * @param operator the operator.
      * @param value the fixed value.
      * @return such type of instance.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public Condition createCondition(
-        final Field              leftSideField,
-        final ConditionOperator  operator,
-        final double             value)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final double value)
     {
-        Condition result = null;
-
-        if  (   (leftSideField  != null)
-             && (operator       != null))
-        {
-            result = new AtomicCondition(leftSideField, operator, value) {};
-        }
-        
-        return result;
+        return new AtomicCondition(leftSideField, operator, value) {};
     }
 
     /**
@@ -223,21 +200,15 @@ public class ConditionFactory
      * @param operator the operator.
      * @param value the fixed value.
      * @return such type of instance.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public Condition createCondition(
-        final Field              leftSideField,
-        final ConditionOperator  operator,
-        final BigDecimal         value)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final BigDecimal value)
     {
-        Condition result = null;
-
-        if  (   (leftSideField  != null)
-             && (operator       != null))
-        {
-            result = new AtomicCondition(leftSideField, operator, value) {};
-        }
-        
-        return result;
+        return new AtomicCondition(leftSideField, operator, value) {};
     }
 
     /**
@@ -246,21 +217,15 @@ public class ConditionFactory
      * @param operator the operator.
      * @param value the fixed value.
      * @return such type of instance.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public Condition createCondition(
-        final Field              leftSideField,
-        final ConditionOperator  operator,
-        final String             value)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final String value)
     {
-        Condition result = null;
-
-        if  (   (leftSideField  != null)
-             && (operator       != null))
-        {
-            result = new AtomicCondition(leftSideField, operator, value) {};
-        }
-        
-        return result;
+        return new AtomicCondition(leftSideField, operator, value) {};
     }
 
     /**
@@ -269,21 +234,15 @@ public class ConditionFactory
      * @param operator the operator.
      * @param value the fixed value.
      * @return such type of instance.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public Condition createCondition(
-        final Field              leftSideField,
-        final ConditionOperator  operator,
-        final Calendar           value)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final Calendar value)
     {
-        Condition result = null;
-
-        if  (   (leftSideField  != null)
-             && (operator       != null))
-        {
-            result = new AtomicCondition(leftSideField, operator, value) {};
-        }
-        
-        return result;
+        return new AtomicCondition(leftSideField, operator, value) {};
     }
 
     /**
@@ -292,21 +251,15 @@ public class ConditionFactory
      * @param operator the operator.
      * @param value the fixed value.
      * @return such type of instance.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public Condition createCondition(
-        final Field              leftSideField,
-        final ConditionOperator  operator,
-        final Date               value)
+        final Field leftSideField,
+        final ConditionOperator operator,
+        final Date value)
     {
-        Condition result = null;
-
-        if  (   (leftSideField  != null)
-             && (operator       != null))
-        {
-            result = new AtomicCondition(leftSideField, operator, value) {};
-        }
-        
-        return result;
+        return new AtomicCondition(leftSideField, operator, value) {};
     }
 
     /**
@@ -314,20 +267,14 @@ public class ConditionFactory
      * @param field the field.
      * @param operator the operator.
      * @return such type of instance.
+     * @precondition field != null
+     * @precondition operator != null
      */
     public VariableCondition createVariableCondition(
-        final Field              field,
-        final ConditionOperator  operator)
+        final Field field,
+        final ConditionOperator operator)
     {
-        VariableCondition result = null;
-
-        if  (   (field    != null)
-             && (operator != null))
-        {
-            result = new VariableCondition(field, operator) {};
-        }
-        
-        return result;
+        return new VariableCondition(field, operator) {};
     }
 
     /**
@@ -336,18 +283,12 @@ public class ConditionFactory
      * @param prefix the prefix.
      * @param suffix the suffix.
      * @return the wrapped condition.
+     * @precondition condition != null
      */
     public Condition wrap(
         final Condition condition, final String prefix, final String suffix)
     {
-        Condition result = condition;
-
-        if  (result != null) 
-        {
-            result = new _ConditionWrapper(condition, prefix, suffix) {};
-        }
-        
-        return result;
+        return new _ConditionWrapper(condition, prefix, suffix) {};
     }
 
     /**
@@ -356,20 +297,14 @@ public class ConditionFactory
      * @param prefix the prefix.
      * @param suffix the suffix.
      * @return the wrapped condition.
+     * @precondition condition != null
      */
     public Condition wrap(
         final AtomicCondition condition,
         final String prefix,
         final String suffix)
     {
-        Condition result = condition;
-
-        if  (result != null) 
-        {
-            result = new _AtomicConditionWrapper(condition, prefix, suffix) {};
-        }
-        
-        return result;
+        return new _AtomicConditionWrapper(condition, prefix, suffix) {};
     }
 
     /**
@@ -378,21 +313,14 @@ public class ConditionFactory
      * @param prefix the prefix.
      * @param suffix the suffix.
      * @return the wrapped condition.
+     * @precondition condition != null
      */
     public VariableCondition wrap(
         final VariableCondition condition,
         final String prefix,
         final String suffix)
     {
-        VariableCondition result = condition;
-
-        if  (result != null) 
-        {
-            result =
-                new _VariableConditionWrapper(condition, prefix, suffix) {};
-        }
-        
-        return result;
+        return new _VariableConditionWrapper(condition, prefix, suffix) {};
     }
 
     /**
@@ -525,14 +453,26 @@ public class ConditionFactory
          */
         public Collection getVariableConditions()
         {
-            Collection result = super.getVariableConditions();
+            return
+                getVariableConditions(
+                    super.getVariableConditions(),
+                    getCondition());
+        }
 
-            Condition t_Condition = getCondition();
+        /**
+         * Retrieves the variable conditions.
+         * @return such collection.
+         */
+        protected Collection getVariableConditions(
+            final Collection parentVariableConditions,
+            final Condition condition)
+        {
+            Collection result = parentVariableConditions;
 
-            if  (t_Condition != null) 
+            if  (condition != null) 
             {
                 Collection t_cVariableConditions =
-                    t_Condition.getVariableConditions();
+                    condition.getVariableConditions();
 
                 if  (   (t_cVariableConditions != null)
                      && (t_cVariableConditions.size() > 0))
@@ -555,16 +495,33 @@ public class ConditionFactory
          */
         public String toSimplifiedString()
         {
+            return
+                toSimplifiedString(
+                    getPrefix(),
+                    getCondition(),
+                    getSuffix());
+        }
+
+        /**
+         * Outputs a brief text version of the condition.
+         * @param prefix the prefix.
+         * @param condition the condition.
+         * @param suffix the suffix.
+         * @return such text.
+         */
+        protected String toSimplifiedString(
+            final String prefix,
+            final Condition condition,
+            final String suffix)
+        {
             String result = "";
 
-            Condition t_Condition = getCondition();
-
-            if  (t_Condition != null)
+            if  (condition != null)
             {
                 result =
-                      getPrefix()
-                    + getCondition().toSimplifiedString()
-                    + getSuffix();
+                      prefix
+                    + condition.toSimplifiedString()
+                    + suffix;
             }
 
             return result;
@@ -576,7 +533,22 @@ public class ConditionFactory
          */
         public String toString()
         {
-            return getPrefix() + getCondition() + getSuffix();
+            return toString(getPrefix(), getCondition(), getSuffix());
+        }
+
+        /**
+         * Outputs a text version of the condition.
+         * @param prefix the prefix.
+         * @param condition the condition.
+         * @param suffix the suffix.
+         * @return such text.
+         */
+        public String toString(
+            final String prefix,
+            final Condition condition,
+            final String suffix)
+        {
+            return prefix + condition + suffix;
         }
     }
 
@@ -713,13 +685,21 @@ public class ConditionFactory
          */
         public Field getLeftSideField()
         {
+            return getLeftSideField(getCondition());
+        }
+
+        /**
+         * Retrieves the left-side field.
+         * @param condition the condition.
+         * @return such reference.
+         */
+        protected Field getLeftSideField(final AtomicCondition condition)
+        {
             Field result = null;
 
-            AtomicCondition t_Condition = getCondition();
-
-            if  (t_Condition != null) 
+            if  (condition != null) 
             {
-                result = t_Condition.getLeftSideField();
+                result = condition.getLeftSideField();
             }
             
             return result;
@@ -731,13 +711,21 @@ public class ConditionFactory
          */
         public ConditionOperator getOperator()
         {
+            return getOperator(getCondition());
+        }
+
+        /**
+         * Retrieves the condition operator.
+         * @param condition the condition.
+         * @return such reference.
+         */
+        protected ConditionOperator getOperator(final AtomicCondition condition)
+        {
             ConditionOperator result = null;
 
-            AtomicCondition t_Condition = getCondition();
-
-            if  (t_Condition != null) 
+            if  (condition != null) 
             {
-                result = t_Condition.getOperator();
+                result = condition.getOperator();
             }
             
             return result;
@@ -749,13 +737,21 @@ public class ConditionFactory
          */
         public Field getRightSideField()
         {
+            return getRightSideField(getCondition());
+        }
+
+        /**
+         * Retrieves the right-side field.
+         * @param condition the condition.
+         * @return such reference.
+         */
+        protected Field getRightSideField(final AtomicCondition condition)
+        {
             Field result = null;
 
-            AtomicCondition t_Condition = getCondition();
-
-            if  (t_Condition != null) 
+            if  (condition != null) 
             {
-                result = t_Condition.getRightSideField();
+                result = condition.getRightSideField();
             }
             
             return result;
@@ -767,13 +763,21 @@ public class ConditionFactory
          */
         public String getRightSideValue()
         {
+            return getRightSideValue(getCondition());
+        }
+
+        /**
+         * Retrieves the right-side value.
+         * @param condition the condition.
+         * @return such reference.
+         */
+        protected String getRightSideValue(final AtomicCondition condition)
+        {
             String result = null;
 
-            AtomicCondition t_Condition = getCondition();
-
-            if  (t_Condition != null) 
+            if  (condition != null) 
             {
-                result = t_Condition.getRightSideValue();
+                result = condition.getRightSideValue();
             }
             
             return result;
@@ -785,14 +789,28 @@ public class ConditionFactory
          */
         public Collection getVariableConditions()
         {
-            Collection result = super.getVariableConditions();
+            return
+                getVariableConditions(
+                    super.getVariableConditions(),
+                    getCondition());
+        }
 
-            Condition t_Condition = getCondition();
+        /**
+         * Retrieves the variable conditions.
+         * @param parentVariableConditions the parent's variable conditions.
+         * @param condition the condition.
+         * @return such collection.
+         */
+        public Collection getVariableConditions(
+            final Collection parentVariableConditions,
+            final Condition condition)
+        {
+            Collection result = parentVariableConditions;
 
-            if  (t_Condition != null) 
+            if  (condition != null) 
             {
                 Collection t_cVariableConditions =
-                    t_Condition.getVariableConditions();
+                    condition.getVariableConditions();
 
                 if  (   (t_cVariableConditions != null)
                      && (t_cVariableConditions.size() > 0))
@@ -815,16 +833,30 @@ public class ConditionFactory
          */
         public String toSimplifiedString()
         {
+            return
+                toSimplifiedString(getPrefix(), getCondition(), getSuffix());
+        }
+
+        /**
+         * Outputs a brief text version of the condition.
+         * @param prefix the prefix.
+         * @param condition the condition.
+         * @param suffix the suffix.
+         * @return such text.
+         */
+        protected String toSimplifiedString(
+            final String prefix,
+            final Condition condition,
+            final String suffix)
+        {
             String result = "";
 
-            Condition t_Condition = getCondition();
-
-            if  (t_Condition != null)
+            if  (condition != null)
             {
                 result =
-                      getPrefix()
-                    + getCondition().toSimplifiedString()
-                    + getSuffix();
+                      prefix
+                    + condition.toSimplifiedString()
+                    + suffix;
             }
 
             return result;
@@ -836,7 +868,22 @@ public class ConditionFactory
          */
         public String toString()
         {
-            return getPrefix() + getCondition() + getSuffix();
+            return toString(getPrefix(), getCondition(), getSuffix());
+        }
+
+        /**
+         * Outputs a text version of the condition.
+         * @param prefix the prefix.
+         * @param condition the condition.
+         * @param suffix the suffix.
+         * @return such text.
+         */
+        protected String toString(
+            final String prefix,
+            final Condition condition,
+            final String suffix)
+        {
+            return prefix + condition + suffix;
         }
     }
 
@@ -975,13 +1022,21 @@ public class ConditionFactory
          */
         public Field getLeftSideField()
         {
+            return getLeftSideField(getCondition());
+        }
+
+        /**
+         * Retrieves the left-side field.
+         * @param condition the condition.
+         * @return such reference.
+         */
+        protected Field getLeftSideField(final VariableCondition condition)
+        {
             Field result = null;
 
-            VariableCondition t_Condition = getCondition();
-
-            if  (t_Condition != null) 
+            if  (condition != null) 
             {
-                result = t_Condition.getLeftSideField();
+                result = condition.getLeftSideField();
             }
             
             return result;
@@ -993,13 +1048,22 @@ public class ConditionFactory
          */
         public ConditionOperator getOperator()
         {
+            return getOperator(getCondition());
+        }
+
+        /**
+         * Retrieves the condition operator.
+         * @param condition the condition.
+         * @return such reference.
+         */
+        protected ConditionOperator getOperator(
+            final VariableCondition condition)
+        {
             ConditionOperator result = null;
 
-            VariableCondition t_Condition = getCondition();
-
-            if  (t_Condition != null) 
+            if  (condition != null) 
             {
-                result = t_Condition.getOperator();
+                result = condition.getOperator();
             }
             
             return result;
@@ -1011,13 +1075,21 @@ public class ConditionFactory
          */
         public Field getRightSideField()
         {
+            return getRightSideField(getCondition());
+        }
+
+        /**
+         * Retrieves the right-side field.
+         * @param condition the condition.
+         * @return such reference.
+         */
+        protected Field getRightSideField(final VariableCondition condition)
+        {
             Field result = null;
 
-            VariableCondition t_Condition = getCondition();
-
-            if  (t_Condition != null) 
+            if  (condition != null) 
             {
-                result = t_Condition.getRightSideField();
+                result = condition.getRightSideField();
             }
             
             return result;
@@ -1029,13 +1101,21 @@ public class ConditionFactory
          */
         public String getRightSideValue()
         {
+            return getRightSideValue(getCondition());
+        }
+
+        /**
+         * Retrieves the right-side value.
+         * @param condition the condition.
+         * @return such reference.
+         */
+        protected String getRightSideValue(final VariableCondition condition)
+        {
             String result = null;
 
-            VariableCondition t_Condition = getCondition();
-
-            if  (t_Condition != null) 
+            if  (condition != null) 
             {
-                result = t_Condition.getRightSideValue();
+                result = condition.getRightSideValue();
             }
             
             return result;
@@ -1047,16 +1127,33 @@ public class ConditionFactory
          */
         public String toSimplifiedString()
         {
+            return
+                toSimplifiedString(
+                    getPrefix(),
+                    getCondition(),
+                    getSuffix());
+        }
+
+        /**
+         * Outputs a brief text version of the condition.
+         * @param prefix the prefix.
+         * @param condition the condition.
+         * @param suffix the suffix.
+         * @return such text.
+         */
+        protected String toSimplifiedString(
+            final String prefix,
+            final VariableCondition condition,
+            final String suffix)
+        {
             String result = "";
 
-            VariableCondition t_Condition = getCondition();
-
-            if  (t_Condition != null)
+            if  (condition != null)
             {
                 result =
-                      getPrefix()
-                    + getCondition().toSimplifiedString()
-                    + getSuffix();
+                      prefix
+                    + condition.toSimplifiedString()
+                    + suffix;
             }
 
             return result;
@@ -1068,7 +1165,22 @@ public class ConditionFactory
          */
         public String toString()
         {
-            return getPrefix() + getCondition() + getSuffix();
+            return toString(getPrefix(), getCondition(), getSuffix());
+        }
+
+        /**
+         * Outputs a text version of the condition.
+         * @param prefix the prefix.
+         * @param condition the condition.
+         * @param suffix the suffix.
+         * @return such text.
+         */
+        protected String toString(
+            final String prefix,
+            final Condition condition,
+            final String suffix)
+        {
+            return prefix + condition + suffix;
         }
     }
 }

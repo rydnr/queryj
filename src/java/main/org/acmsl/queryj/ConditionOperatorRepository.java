@@ -78,7 +78,8 @@ public class ConditionOperatorRepository
      * Specifies a new weak reference.
      * @param repository the repository instance to use.
      */
-    protected static void setReference(ConditionOperatorRepository repository)
+    protected static void setReference(
+        final ConditionOperatorRepository repository)
     {
         singleton = new WeakReference(repository);
     }
@@ -167,7 +168,7 @@ public class ConditionOperatorRepository
      * @param query the query.
      * @return such operator.
      */
-    public ConditionOperator getBelongsTo(SelectQuery query)
+    public ConditionOperator getBelongsTo(final SelectQuery query)
     {
         return new NestedConditionOperator("in", query)  {};
     }
@@ -177,7 +178,7 @@ public class ConditionOperatorRepository
      * @param query the query.
      * @return such operator.
      */
-    public ConditionOperator getNotBelongsTo(SelectQuery query)
+    public ConditionOperator getNotBelongsTo(final SelectQuery query)
     {
         return new NestedConditionOperator("not in", query)  {};
     }

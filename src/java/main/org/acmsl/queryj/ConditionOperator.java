@@ -55,7 +55,7 @@ import org.acmsl.queryj.Field;
 /**
  * Represents operators used inside conditions.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class ConditionOperator
@@ -69,7 +69,7 @@ public abstract class ConditionOperator
      * Creates a operator using given information.
      * @param symbol the operator symbol.
      */
-    public ConditionOperator(String symbol)
+    public ConditionOperator(final String symbol)
     {
         unmodifiableSetSymbol(symbol);
     }
@@ -78,7 +78,7 @@ public abstract class ConditionOperator
      * Specifies the operator symbol.
      * @param symbol the symbol.
      */
-    private void unmodifiableSetSymbol(String symbol)
+    private void unmodifiableSetSymbol(final String symbol)
     {
         m__strSymbol = symbol;
     }
@@ -87,7 +87,7 @@ public abstract class ConditionOperator
      * Specifies the operator symbol.
      * @param symbol the symbol.
      */
-    protected void setSymbol(String symbol)
+    protected void setSymbol(final String symbol)
     {
         unmodifiableSetSymbol(symbol);
     }
@@ -115,7 +115,18 @@ public abstract class ConditionOperator
      * @param candidate the object to check.
      * @return <code>true</code> if both objects are logically equal.
      */
-    public boolean equals(Object candidate)
+    public boolean equals(final Object candidate)
+    {
+        return equals(candidate, getSymbol());
+    }
+
+    /**
+     * Checks if given object is logically equal to this one.
+     * @param candidate the object to check.
+     * @param symbol the symbol.
+     * @return <code>true</code> if both objects are logically equal.
+     */
+    protected boolean equals(final Object candidate, final String symbol)
     {
         boolean result = (candidate == null);
 
@@ -128,7 +139,7 @@ public abstract class ConditionOperator
         {
             ConditionOperator t_Candidate = (ConditionOperator) candidate;
 
-            result = (t_Candidate.getSymbol() == getSymbol());
+            result = (t_Candidate.getSymbol() == symbol);
 
             if  (!result)
             {
@@ -136,11 +147,11 @@ public abstract class ConditionOperator
 
                 if  (result) 
                 {
-                    result = (t_Candidate.getSymbol().equals(getSymbol()));
+                    result = (t_Candidate.getSymbol().equals(symbol));
                 }
                 else
                 {
-                    result = (getSymbol() == null);
+                    result = (symbol == null);
                 }
             }
         }

@@ -54,7 +54,7 @@ import org.acmsl.queryj.Table;
 /**
  * Represents fields.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class Field
@@ -74,17 +74,17 @@ public abstract class Field
      * @param name the field name.
      * @param table the table.
      */
-    public Field(String name, Table table)
+    public Field(final String name, final Table table)
     {
-        unmodifiableSetName(name);
-        unmodifiableSetTable(table);
+        immutableSetName(name);
+        immutableSetTable(table);
     }
 
     /**
      * Specifies the field name.
      * @param name the name.
      */
-    private void unmodifiableSetName(String name)
+    private void immutableSetName(final String name)
     {
         m__strName = name;
     }
@@ -93,9 +93,9 @@ public abstract class Field
      * Specifies the field name.
      * @param name the name.
      */
-    protected void setName(String name)
+    protected void setName(final String name)
     {
-        unmodifiableSetName(name);
+        immutableSetName(name);
     }
 
     /**
@@ -111,7 +111,7 @@ public abstract class Field
      * Specifies the field table.
      * @param table the table.
      */
-    private void unmodifiableSetTable(Table table)
+    private void immutableSetTable(final Table table)
     {
         m__Table = table;
     }
@@ -120,9 +120,9 @@ public abstract class Field
      * Specifies the field table.
      * @param table the table.
      */
-    protected void setTable(Table table)
+    protected void setTable(final Table table)
     {
-        unmodifiableSetTable(table);
+        immutableSetTable(table);
     }
 
     /**
@@ -139,25 +139,33 @@ public abstract class Field
      * @param field the field to filter with.
      * @return such kind of condition.
      */
-    public Condition equals(Field field)
+    public Condition equals(final Field field)
     {
-        Condition result = null;
+        return
+            equals(
+                field,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this, t_ConditionOperatorRepository.getEquals(), field);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for equality.
+     * @param field the field.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition equals(
+        final Field field,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this, conditionOperatorRepository.getEquals(), field);
     }
 
     /**
@@ -166,23 +174,28 @@ public abstract class Field
      */
     public VariableCondition equals()
     {
-        VariableCondition result = null;
+        return
+            equals(
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createVariableCondition(
-                    this, t_ConditionOperatorRepository.getEquals());
-        }
-
-        return result;
+    /**
+     * Retrieves the variable condition to be able to filter for non-equality.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition equals(
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this, conditionOperatorRepository.getEquals());
     }
 
     /**
@@ -191,23 +204,28 @@ public abstract class Field
      */
     public VariableCondition notEquals()
     {
-        VariableCondition result = null;
+        return
+            notEquals(
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createVariableCondition(
-                    this, t_ConditionOperatorRepository.getNotEquals());
-        }
-
-        return result;
+    /**
+     * Retrieves the variable condition to be able to filter for non-equality.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition notEquals(
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this, conditionOperatorRepository.getNotEquals());
     }
 
     /**
@@ -216,23 +234,28 @@ public abstract class Field
      */
     public VariableCondition greaterThan()
     {
-        VariableCondition result = null;
+        return
+            greaterThan(
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createVariableCondition(
-                    this, t_ConditionOperatorRepository.getGreaterThan());
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for lower values.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition greaterThan(
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this, conditionOperatorRepository.getGreaterThan());
     }
 
     /**
@@ -242,50 +265,65 @@ public abstract class Field
      */
     public VariableCondition lessThan()
     {
-        VariableCondition result = null;
+        return
+            lessThan(
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createVariableCondition(
-                    this, t_ConditionOperatorRepository.getLessThan());
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for higher values.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition lessThan(
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this, conditionOperatorRepository.getLessThan());
     }
 
     /**
      * Retrieves the variable condition to be able to filter for values using
      * belongs-to relationships.
      * @return such kind of condition.
+     * @precondition query != null
      */
-    public VariableCondition in(SelectQuery query)
+    public VariableCondition in(final SelectQuery query)
     {
-        VariableCondition result = null;
+        return
+            in(
+                query,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (query                         != null) 
-             && (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createVariableCondition(
-                    this, t_ConditionOperatorRepository.getBelongsTo(query));
-        }
-
-        return result;
+    /**
+     * Retrieves the variable condition to be able to filter for values using
+     * belongs-to relationships.
+     * @param query the query.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition query != null
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition in(
+        final SelectQuery query,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this, conditionOperatorRepository.getBelongsTo(query));
     }
 
     /**
@@ -293,27 +331,36 @@ public abstract class Field
      * not-belongs-to relationships.
      * @return such kind of condition.
      */
-    public VariableCondition notIn(SelectQuery query)
+    public VariableCondition notIn(final SelectQuery query)
     {
-        VariableCondition result = null;
+        return
+            notIn(
+                query,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (query                         != null) 
-             && (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createVariableCondition(
-                    this,
-                    t_ConditionOperatorRepository.getNotBelongsTo(query));
-        }
-
-        return result;
+    /**
+     * Retrieves the variable condition to be able to filter for values using
+     * not-belongs-to relationships.
+     * @param query the query.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition query != null
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition notIn(
+        final SelectQuery query,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this,
+                conditionOperatorRepository.getNotBelongsTo(query));
     }
 
     /**
@@ -322,25 +369,30 @@ public abstract class Field
      */
     public Condition isNull()
     {
-        Condition result = null;
+        return
+            isNull(
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getIsNull(),
-                    (Field) null);
-        }
-
-        return result;
+    /**
+     * Retrieves the variable condition to be able to filter for null values.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition isNull(
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getIsNull(),
+                (Field) null);
     }
 
     // Serialization methods //
@@ -351,17 +403,26 @@ public abstract class Field
      */
     public String toString()
     {
+        return toString(getTable(), getName());
+    }
+
+    /**
+     * Outputs a text version of the field.
+     * @param table the table.
+     * @param name the name.
+     * @return the field.
+     */
+    protected String toString(final Table table, final String name)
+    {
         StringBuffer result = new StringBuffer();
 
-        Table t_Table = getTable();
-
-        if  (t_Table != null) 
+        if  (table != null) 
         {
-            result.append(t_Table);
+            result.append(table);
             result.append(".");
         }
 
-        result.append(getName());
+        result.append(name);
 
         return result.toString();
     }

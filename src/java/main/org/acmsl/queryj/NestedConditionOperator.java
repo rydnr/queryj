@@ -73,17 +73,17 @@ public abstract class NestedConditionOperator
      * @param symbol the symbol.
      * @param query the operator query.
      */
-    public NestedConditionOperator(String symbol, SelectQuery query)
+    public NestedConditionOperator(final String symbol, final SelectQuery query)
     {
         super(symbol);
-        unmodifiableSetQuery(query);
+        immutableSetQuery(query);
     }
 
     /**
      * Specifies the operator query.
      * @param query the query.
      */
-    private void unmodifiableSetQuery(SelectQuery query)
+    private void immutableSetQuery(final SelectQuery query)
     {
         m__Query = query;
     }
@@ -92,9 +92,9 @@ public abstract class NestedConditionOperator
      * Specifies the operator query.
      * @param query the query.
      */
-    protected void setQuery(SelectQuery query)
+    protected void setQuery(final SelectQuery query)
     {
-        unmodifiableSetQuery(query);
+        immutableSetQuery(query);
     }
 
     /**
@@ -111,7 +111,18 @@ public abstract class NestedConditionOperator
      * @param candidate the object to check.
      * @return <code>true</code> if both objects are logically equal.
      */
-    public boolean equals(Object candidate)
+    public boolean equals(final Object candidate)
+    {
+        return equals(candidate, getQuery());
+    }
+
+    /**
+     * Checks if given object is logically equal to this one.
+     * @param candidate the object to check.
+     * @param query the query.
+     * @return <code>true</code> if both objects are logically equal.
+     */
+    public boolean equals(final Object candidate, final SelectQuery query)
     {
         boolean result = super.equals(candidate);
 
@@ -125,7 +136,7 @@ public abstract class NestedConditionOperator
             NestedConditionOperator t_Candidate =
                 (NestedConditionOperator) candidate;
 
-            result = (t_Candidate.getQuery() == getQuery());
+            result = (t_Candidate.getQuery() == query);
 
             if  (!result)
             {
@@ -133,11 +144,11 @@ public abstract class NestedConditionOperator
 
                 if  (result) 
                 {
-                    result = (t_Candidate.getQuery().equals(getQuery()));
+                    result = (t_Candidate.getQuery().equals(query));
                 }
                 else
                 {
-                    result = (getQuery() == null);
+                    result = (query == null);
                 }
             }
         }

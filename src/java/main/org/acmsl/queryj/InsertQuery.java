@@ -78,7 +78,7 @@ import java.util.Map;
 /**
  * Represents standard SQL insert queries.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class InsertQuery

@@ -54,7 +54,7 @@ import org.acmsl.queryj.Field;
 /**
  * Represents double fields.
  * @author <a href="mailto:jsanleandro@yahoo.es"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  * @version $Revision$
  */
 public abstract class DoubleField
@@ -65,7 +65,7 @@ public abstract class DoubleField
      * @param name the field name.
      * @param table the table.
      */
-    public DoubleField(String name, Table table)
+    public DoubleField(final String name, final Table table)
     {
         super(name, table);
     }
@@ -75,27 +75,35 @@ public abstract class DoubleField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition equals(double value)
+    public Condition equals(final double value)
     {
-        Condition result = null;
+        return
+            equals(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getEquals(),
-                    value);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for equality.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition equals(
+        final double value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getEquals(),
+                value);
     }
 
     /**
@@ -103,27 +111,35 @@ public abstract class DoubleField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition notEquals(double value)
+    public Condition notEquals(final double value)
     {
-        Condition result = null;
+        return
+            notEquals(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getNotEquals(),
-                    value);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for non-equality.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition notEquals(
+        final double value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getNotEquals(),
+                value);
     }
 
     /**
@@ -131,27 +147,35 @@ public abstract class DoubleField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition greaterThan(double value)
+    public Condition greaterThan(final double value)
     {
-        Condition result = null;
+        return
+            greaterThan(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getGreaterThan(),
-                    value);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for lower values.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition greaterThan(
+        final double value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getGreaterThan(),
+                value);
     }
 
     /**
@@ -159,26 +183,34 @@ public abstract class DoubleField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition lessThan(double value)
+    public Condition lessThan(final double value)
     {
-        Condition result = null;
+        return
+            lessThan(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getLessThan(),
-                    value);
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for higher values.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition lessThan(
+        final double value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getLessThan(),
+                value);
     }
 }
