@@ -475,6 +475,12 @@ public abstract class DAOTestTemplate
         StringBuffer t_sbRemoveFilterValues =
             new StringBuffer();
 
+        StringBuffer t_sbInsertTestParametersValues =
+            new StringBuffer();
+
+        StringBuffer t_sbInsertParametersTypes =
+            new StringBuffer();
+
         boolean t_bNotLastPk = false;
 
         boolean t_bHasNotOnlyPk =
@@ -528,6 +534,7 @@ public abstract class DAOTestTemplate
 
                 if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
                 {
+                    t_sbFindByPrimaryKeyTestParametersValues.append(",");
                     t_sbFindByPrimaryKeyParametersTypes.append(",");
                     t_sbRemoveFilterValues.append(",");
                     t_bNotLastPk = true;
@@ -548,12 +555,6 @@ public abstract class DAOTestTemplate
                 t_sbUpdateParametersTypes.append(",");
             }
         }
-
-        StringBuffer t_sbInsertTestParametersValues =
-            new StringBuffer();
-
-        StringBuffer t_sbInsertParametersTypes =
-            new StringBuffer();
 
         MessageFormat t_TestParametersUpdatedValuesFormatter =
             new MessageFormat(testParametersUpdatedValues);

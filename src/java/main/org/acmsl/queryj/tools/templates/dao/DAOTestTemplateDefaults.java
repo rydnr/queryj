@@ -521,7 +521,7 @@ public interface DAOTestTemplateDefaults
         + "         * Constructs a Insert{1}Test with given name.\n"
         + "         * @param name the test name.\n"
         + "         */\n"
-        + "        public Insert{2}Test(String name)\n"
+        + "        public Insert{2}Test(final String name)\n"
         + "        '{'\n"
         + "            super(name);\n"
         + "        '}'\n\n"

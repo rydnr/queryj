@@ -65,6 +65,7 @@ import org.acmsl.queryj.tools.MetaDataUtils;
  */
 import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.utils.ConversionUtils;
+import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some Ant classes.
@@ -87,8 +88,10 @@ import java.text.SimpleDateFormat;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -456,7 +459,7 @@ public class CustomSqlValidationHandler
 
         Method t_Method = null;
 
-        Collection t_cSetterParams = new ArrayList();
+        Collection t_cSetterParams = null;
 
         Class t_Type = null;
 
@@ -524,6 +527,11 @@ public class CustomSqlValidationHandler
                     }
                 }
 
+                if  (t_Type.equals(java.util.Date.class))
+                {
+                    t_Type = Timestamp.class;
+                }
+
                 t_cSetterParams.add(t_Type);
 
                 Object t_ParameterValue = null;
@@ -532,7 +540,7 @@ public class CustomSqlValidationHandler
                 {
                     t_Method =
                         statement.getClass().getDeclaredMethod(
-                            "set" + t_strType,
+                            getSetterMethod(t_strType),
                             (Class[]) t_cSetterParams.toArray(EMPTY_CLASS_ARRAY));
 
                 }
@@ -544,20 +552,30 @@ public class CustomSqlValidationHandler
 
                 try
                 {
-                    Method t_ParameterMethod =
-                        conversionUtils.getClass().getMethod(
-                            "to" + t_strType,
-                            CLASS_ARRAY_OF_ONE_STRING);
+                    Method t_ParameterMethod = null;
 
-                    if  (t_ParameterMethod != null)
+                    if  (   ("Date".equals(t_strType))
+                         && (t_Parameter.getValidationValue() != null))
                     {
-                        t_ParameterValue =
-                            t_ParameterMethod.invoke(
-                                conversionUtils,
-                                new Object[]
-                                {
-                                    t_Parameter.getValidationValue()
-                                });
+                        t_ParameterValue = new Timestamp(new Date().getTime());
+                    }
+                    else
+                    {
+                        t_ParameterMethod =
+                            conversionUtils.getClass().getMethod(
+                                "to" + t_strType,
+                                CLASS_ARRAY_OF_ONE_STRING);
+
+                        if  (t_ParameterMethod != null)
+                        {
+                            t_ParameterValue =
+                                t_ParameterMethod.invoke(
+                                    conversionUtils,
+                                    new Object[]
+                                    {
+                                        t_Parameter.getValidationValue()
+                                    });
+                        }
                     }
                 }
                 catch  (final NoSuchMethodException noSuchMethod)
@@ -728,4 +746,48 @@ public class CustomSqlValidationHandler
                     JdbcConnectionOpeningHandler.JDBC_CONNECTION);
     }
 
+    /**
+     * Retrieves the setter method name.
+     * @param type the data type.
+     * @return the associated setter method.
+     * @precondition type != null
+     */
+    protected String getSetterMethod(final String type)
+    {
+        return
+            getSetterMethod(
+                type, MetaDataUtils.getInstance(), StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the setter method name.
+     * @param type the data type.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the associated setter method.
+     * @precondition type != null
+     * @precondition metaDataUtils != null
+     * @precondition stringUtils != null
+     */
+    protected String getSetterMethod(
+        final String type,
+        final MetaDataUtils metaDataUtils,
+        final StringUtils stringUtils)
+    {
+        String result = "set";
+
+        if  ("Date".equals(type))
+        {
+            result += "Timestamp";
+        }
+        else
+        {
+            result +=
+                stringUtils.capitalize(
+                    metaDataUtils.getNativeType(
+                        metaDataUtils.getJavaType(type)), '|');
+        }
+
+        return result;
+    }
 }

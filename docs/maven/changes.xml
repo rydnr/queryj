@@ -6,11 +6,25 @@
   </properties>
   <body>
     <release
-      version="0.6b4"
+      version="0.6b6"
       date="$Date$"
-      description="Feature implemented">
+      description="Maintenance release">
       <action
         dev="$Author$"
+        type="fix">
+        Closed <a href="${issue.url}591">591</a>,
+        <a href="${issue.url}592">592</a>,
+        <a href="${issue.url}593">593</a>,
+        some work on <a href="${issue.url}594">594</a>,
+        and <a href="${issue.url}595">595</a>.
+      </action>
+    </release>
+    <release
+      version="0.6b5"
+      date="2005/03/09 07:26:24"
+      description="Feature implemented">
+      <action
+        dev="chous"
         type="add">
         Closed <a href="${issue.url}586">587</a>,
         and <a href="${issue.url}586">588</a>.

@@ -18,7 +18,7 @@
       </p>
       <subsection name="Status">
         <p>
-          <strong>QueryJ</strong> 0.6b5 supports:
+          <strong>QueryJ</strong> 0.6b8 supports:
           <ul>
             <li>Custom queries,</li>
             <li>Safe validation of custom queries at generation-time,</li>
@@ -73,6 +73,19 @@
         <tr>
           <td>
             $Date$
+          </td>
+          <td>
+            Closed <a href="${issue.url}591">591</a>,
+            <a href="${issue.url}592">592</a>,
+            <a href="${issue.url}593">593</a>,
+            some work on <a href="${issue.url}594">594</a>,
+            and <a href="${issue.url}595">595</a>.<br/>
+            Released <b>0.6b6</b>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/03/09 07:26:24
           </td>
           <td>
             Added support for weak, type-like <a href="${issue.url}587">entities</a>.<br/>

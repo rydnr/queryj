@@ -1521,15 +1521,25 @@ public class DAOTemplate
                                         metaDataUtils.getJavaType(
                                             t_Parameter.getType()))
                                 }));
-                        t_sbParameterValues.append(
-                            t_ParameterValuesFormatter.format(
-                                new Object[]
-                                {
-                                    metaDataUtils.getObjectType(
-                                        metaDataUtils.getJavaType(
-                                            t_Parameter.getType())),
-                                    t_strName
-                                }));
+
+                        if  (metaDataUtils.isObject(
+                                 metaDataUtils.getJavaType(
+                                     t_Parameter.getType())))
+                        {
+                            t_sbParameterValues.append(t_strName);
+                        }
+                        else
+                        {
+                            t_sbParameterValues.append(
+                                t_ParameterValuesFormatter.format(
+                                    new Object[]
+                                    {
+                                        metaDataUtils.getObjectType(
+                                            metaDataUtils.getJavaType(
+                                                t_Parameter.getType())),
+                                        t_strName
+                                    }));
+                        }
                         t_sbParameterSpecification.append(
                             t_ParameterSpecificationFormatter.format(
                                 new Object[]
@@ -1710,6 +1720,14 @@ public class DAOTemplate
             t_Result = provider.resolveReference(t_ResultRef);
         }
 
+        String t_strResultClass = t_Result.getClassValue();
+
+        if  (ResultElement.MULTIPLE.equalsIgnoreCase(
+                t_Result.getMatches()))
+        {
+            t_strResultClass = "List";
+        }
+
         result =
             t_CustomSelectFormatter.format(
                 new Object[]
@@ -1717,16 +1735,12 @@ public class DAOTemplate
                     sqlElement.getId(),
                     sqlElement.getDescription(),
                     parameterJavadoc,
-                    (   (t_Result != null)
-                     ?  t_Result.getClassValue()
-                     :  "-no-result-type-defined-"),
+                    t_strResultClass,
                     stringUtils.unCapitalizeStart(
                         stringUtils.capitalize(
                             sqlElement.getName(), '-')),
                     parameterDeclaration,
-                    stringUtils.replace(
-                        sqlElement.getValue(),
-                        "\"", "\\\""),
+                    processSql(sqlElement.getValue()),
                     parameterTypeSpecification,
                     parameterValues,
                     stringUtils.removeDuplicate(
@@ -1934,9 +1948,7 @@ public class DAOTemplate
                         stringUtils.capitalize(
                             sqlElement.getName(), '-')),
                     parameterDeclaration,
-                    stringUtils.replace(
-                        sqlElement.getValue(),
-                        "\"", "\\\""),
+                    processSql(sqlElement.getValue()),
                     parameterTypeSpecification,
                     parameterValues
                 });
@@ -2279,9 +2291,7 @@ public class DAOTemplate
                                     sqlElement.getName(), '_'),
                                 '-'),
                             '.'),
-                        stringUtils.replace(
-                            sqlElement.getValue(),
-                            "\"", "\\\""),
+                        processSql(sqlElement.getValue()),
                         t_strReturn),
                     t_strConditionalReturn
                 });
@@ -2503,5 +2513,38 @@ public class DAOTemplate
               RegexpPluginMisconfiguredException
     {
         return regexpEngine.createHelper();
+    }
+
+    /**
+     * Processes given SQL.
+     * @param sql the sql to process.
+     * @return the processed sql.
+     * @preocndition sql != null
+     */
+    protected String processSql(final String sql)
+    {
+        return
+            processSql(
+                sql,
+                StringUtils.getInstance());
+    }
+
+    /**
+     * Processes given SQL.
+     * @param sql the sql to process.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the processed sql.
+     * @preocndition sql != null
+     * @precondition stringUtils != null
+     */
+    protected String processSql(
+        final String sql, final StringUtils stringUtils)
+    {
+        String result = sql;
+
+        result = stringUtils.replace(result,  "\"", "\\\"");
+        result = stringUtils.replace(result, "\n", " ");
+
+        return result;
     }
 }

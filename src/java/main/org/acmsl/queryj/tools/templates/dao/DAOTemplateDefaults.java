@@ -197,7 +197,8 @@ public interface DAOTemplateDefaults
         + "import java.sql.SQLException;\n"
         + "import java.sql.Types;\n"
         + "import java.util.Calendar;\n"
-        + "import java.util.Date;\n\n";
+        + "import java.util.Date;\n"
+        + "import java.util.List;\n\n";
 
     /**
      * The JDK extension imports.

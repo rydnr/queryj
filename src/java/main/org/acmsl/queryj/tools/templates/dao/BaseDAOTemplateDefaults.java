@@ -118,7 +118,8 @@ public interface BaseDAOTemplateDefaults
         + " */\n"
         + "import java.math.BigDecimal;\n"
         + "import java.util.Calendar;\n"
-        + "import java.util.Date;\n\n";
+        + "import java.util.Date;\n"
+        + "import java.util.List;\n\n";
 
     /**
      * The default class Javadoc.

@@ -594,11 +594,12 @@ public class BaseDAOTemplate
 
                 t_sbPkJavadoc.append(t_strPkJavadoc);
 
+                t_sbPkDeclaration.append(t_strPkDeclaration);
+
                 if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
                 {
                     t_sbPkDeclaration.append(",");
                 }
-                t_sbPkDeclaration.append(t_strPkDeclaration);
 
                 if  (!metaDataManager.isManagedExternally(
                          tableTemplate.getTableName(),
@@ -606,6 +607,11 @@ public class BaseDAOTemplate
                 {
                     t_sbInsertPkJavadoc.append(t_strPkJavadoc);
                     t_sbInsertPkDeclaration.append(t_strPkDeclaration);
+                }
+
+                if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
+                {
+                    t_sbInsertPkDeclaration.append(",");
                 }
             }
 
@@ -635,6 +641,8 @@ public class BaseDAOTemplate
 
         if  (t_astrColumnNames != null)
         {
+            boolean t_bAnyNotPrimaryKey = false;
+
             StringBuffer t_sbBuildValueObjectRetrieval     =
                 new StringBuffer();
             StringBuffer t_sbInsertParametersJavadoc       =
@@ -662,6 +670,8 @@ public class BaseDAOTemplate
                              tableTemplate.getTableName(),
                              t_astrColumnNames[t_iColumnIndex]))
                     {
+                        t_bAnyNotPrimaryKey = true;
+
                         t_sbInsertParametersJavadoc.append(
                             t_InsertParametersJavadocFormatter.format(
                                 new Object[]
@@ -710,11 +720,13 @@ public class BaseDAOTemplate
                             t_sbInsertParametersDeclaration.append(",");
                         }
                     }
-                    else
-                    {
-                        t_sbInsertParametersDeclaration.append(",");
-                    }
                 }
+            }
+
+            if  (   (t_bAnyNotPrimaryKey)
+                 && (t_sbInsertPkDeclaration.length() > 0))
+            {
+                t_sbInsertPkDeclaration.append(",");
             }
 
             t_sbResult.append(
@@ -1221,6 +1233,29 @@ public class BaseDAOTemplate
         {
             t_Result = provider.resolveReference(t_ResultRef);
         }
+        else
+        {
+            throw
+                new InvalidTemplateException(
+                    "invalid.result",
+                    new Object[] { sqlElement.getId()});
+        }
+
+        if  (t_Result == null)
+        {
+            throw
+                new InvalidTemplateException(
+                    "invalid.result.reference",
+                    new Object[] { sqlElement.getId(), t_ResultRef.getId()});
+        }
+
+        String t_strResultClass = t_Result.getClassValue();
+
+        if  (ResultElement.MULTIPLE.equalsIgnoreCase(
+                t_Result.getMatches()))
+        {
+            t_strResultClass = "List";
+        }
 
         result =
             t_CustomSelectFormatter.format(
@@ -1229,9 +1264,7 @@ public class BaseDAOTemplate
                     sqlElement.getId(),
                     sqlElement.getDescription(),
                     parameterJavadoc,
-                    (   (t_Result != null)
-                     ?  t_Result.getClassValue()
-                     :  "-no-result-type-defined-"),
+                    t_strResultClass,
                     stringUtils.unCapitalizeStart(
                         stringUtils.capitalize(
                             sqlElement.getName(), '-')),

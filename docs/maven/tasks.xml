@@ -35,6 +35,14 @@
         <p>
           <ul>
             <li>
+              <b>0.6b6</b><br/>
+              Fix some bugs (<a href="${issue.url}591">591</a>, 
+              <a href="${issue.url}592">592</a>,
+              <a href="${issue.url}593">593</a>,
+              <a href="${issue.url}594">594</a>,
+              and <a href="${issue.url}595">595</a>).
+            </li>
+            <li>
               <b>0.6b5</b><br/>
               Support constant generation for weak, type-like entities (<a href="${issue.url}587">587</a>).<br/>
               Allow customizing the (<a href="${issue.url}588">headers</a>) of the generated source files.

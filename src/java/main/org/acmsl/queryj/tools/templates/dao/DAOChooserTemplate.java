@@ -235,7 +235,7 @@ public class DAOChooserTemplate
                 String t_strCapitalizedTable =
                     stringUtils.capitalize(
                         englishGrammarUtils.getSingular(
-                            t_strTable),
+                            t_strTable.toLowerCase()),
                         '_');
 
                 String t_strUpperCaseTable =
@@ -260,10 +260,7 @@ public class DAOChooserTemplate
                         {
                             t_strCapitalizedTable,
                             t_strUpperCaseTable,
-                            stringUtils.capitalize(
-                                englishGrammarUtils.getSingular(
-                                    t_strTable.toLowerCase()),
-                                '_')
+                            t_strCapitalizedTable
                         }));
             }
         }

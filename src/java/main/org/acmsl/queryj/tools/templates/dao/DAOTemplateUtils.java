@@ -724,11 +724,25 @@ public class DAOTemplateUtils
     {
         boolean result = false;
 
-        String t_strSingularName =
-            englishGrammarUtils.getSingular(
-                tableName.trim().toLowerCase());
+        String t_strTableInLowerCase = tableName.trim().toLowerCase();
 
-        result = daoId.equalsIgnoreCase(t_strSingularName);
+        result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
+
+        if  (!result)
+        {
+            String t_strSingularName =
+                englishGrammarUtils.getSingular(t_strTableInLowerCase);
+
+            result = daoId.equalsIgnoreCase(t_strSingularName);
+        }
+
+        if  (!result)
+        {
+            String t_strPluralName =
+                englishGrammarUtils.getPlural(t_strTableInLowerCase);
+
+            result = daoId.equalsIgnoreCase(t_strPluralName);
+        }
 
         return result;
     }
