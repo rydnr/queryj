@@ -112,7 +112,7 @@ public class SqlXmlParserFactory
      * Retrieves a SqlXmlParserFactory instance.
      * @return such instance.
      */
-    public static SqlXmlParserFactory getXMLInstance()
+    public static SqlXmlParserFactory getInstance()
     {
         SqlXmlParserFactory result = null;
 

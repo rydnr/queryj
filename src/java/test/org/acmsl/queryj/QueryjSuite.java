@@ -52,6 +52,7 @@ package unittests.org.acmsl.queryj;
 */
 
 import unittests.org.acmsl.queryj.dao.DaoSuite;
+import unittests.org.acmsl.queryj.sqlxml.SqlxmlSuite;
 import unittests.org.acmsl.queryj.tools.ToolsSuite;
 
 
@@ -113,6 +114,7 @@ public class QueryjSuite
     suite.addTestSuite(unittests.org.acmsl.queryj.ConditionOperatorRepositoryTest.class);
     
     suite.addTest(unittests.org.acmsl.queryj.dao.DaoSuite.suite());
+    suite.addTest(unittests.org.acmsl.queryj.sqlxml.SqlxmlSuite.suite());
     suite.addTest(unittests.org.acmsl.queryj.tools.ToolsSuite.suite());
     
     

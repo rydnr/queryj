@@ -385,4 +385,56 @@ public class SqlElement
     {
         return m__ResultRef;
     }
+
+    /**
+     * Provides a text information about this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            toString(
+                getId(),
+                getDao(),
+                getName(),
+                getType(),
+                getImplementation(),
+                getValue(),
+                getParameterRefs(),
+                getResultRef());
+    }
+
+    /**
+     * Provides a text information about this instance.
+     * @param id the <i>id</i> attribute.
+     * @param dao the <i>dao</i> attribute.
+     * @param name the <i>name</i> attribute.
+     * @param type the <i>type</i> attribute.
+     * @param implementation the <i>implementation</i> attribute.
+     * @param value the <i>value</i> element.
+     * @param parameterRefs the <i>parameter-ref</i> elements.
+     * @param resultRef the <i>result-ref</i> element.
+     * @return such information.
+     */
+    protected String toString(
+        final String id,
+        final String dao,
+        final String name,
+        final String type,
+        final String implementation,
+        final String value,
+        final Collection parameterRefs,
+        final ResultRefElement resultRef)
+    {
+        return
+              getClass().getName()
+            + "[" + "id=" + id + "]"
+            + "[" + "dao=" + dao + "]"
+            + "[" + "name=" + name + "]"
+            + "[" + "type=" + type + "]"
+            + "[" + "value=" + value + "]"
+            + "[" + "implementation=" + implementation + "]"
+            + "[" + "parameter-refs=" + parameterRefs + "]"
+            + "[" + "result-ref=" + resultRef + "]";
+    }
 }

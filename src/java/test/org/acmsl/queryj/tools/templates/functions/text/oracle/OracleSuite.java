@@ -106,8 +106,8 @@ public class OracleSuite
     suite =
     new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions.text.oracle");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.oracle.OracleTextFunctionsTemplateGeneratorTest.class);
     suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.oracle.OracleTextFunctionsTestTemplateGeneratorTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.text.oracle.OracleTextFunctionsTemplateGeneratorTest.class);
     
     
     

@@ -2682,7 +2682,7 @@
     -->
     <target
         name="unit.tests"
-        depends="junitdoclet"
+        depends="junitdoclet,compile"
         description="Executes all defined unit tests.">
 
         <!--

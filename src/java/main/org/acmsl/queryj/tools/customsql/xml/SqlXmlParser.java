@@ -124,7 +124,7 @@ public abstract class SqlXmlParser
      * Retrieves the map with sql.xml contents.
      * return such map.
      */
-    protected Map getMap()
+    public Map getMap()
     {
         return m__mSqlXmlContents;
     }
@@ -142,7 +142,7 @@ public abstract class SqlXmlParser
      * Retrieves the sql.xml element collection.
      * return such collection.
      */
-    protected Collection getCollection()
+    public Collection getCollection()
     {
         return m__cSqlXmlContents;
     }
@@ -236,10 +236,66 @@ public abstract class SqlXmlParser
         result.addFactoryCreate(
             "sql-list/sql",
             new SqlElementFactory());
+        result.addCallMethod("sql-list/sql/value", "setValue", 0);
+        result.addFactoryCreate(
+            "sql-list/sql/parameter-ref",
+            new ParameterRefElementFactory());
+        result.addSetNext(
+            "sql-list/sql/parameter-ref",
+            "add",
+            "org.acmsl.queryj.sqlxml.ParameterRefElement");
+        result.addFactoryCreate(
+            "sql-list/sql/result-ref",
+            new ResultRefElementFactory());
+        result.addSetNext(
+            "sql-list/sql/result-ref",
+            "add",
+            "org.acmsl.queryj.sqlxml.ResultRefElement");
         result.addSetNext(
             "sql-list/sql",
             "add",
-            "org.acmsl.queryj.sqlmap.SqlElement");
+            "org.acmsl.queryj.sqlxml.SqlElement");
+
+        result.addObjectCreate(
+            "sql-list/parameter-list",
+            "java.util.ArrayList");
+        result.addFactoryCreate(
+            "sql-list/parameter-list/parameter",
+            new ParameterElementFactory());
+        result.addSetNext(
+            "sql-list/parameter-list/parameter",
+            "add",
+            "org.acmsl.queryj.sqlxml.ParameterElement");
+
+        result.addObjectCreate(
+            "sql-list/result-list",
+            "java.util.ArrayList");
+        result.addFactoryCreate(
+            "sql-list/result-list/result",
+            new ParameterElementFactory());
+        result.addSetNext(
+            "sql-list/result-list/result",
+            "add",
+            "org.acmsl.queryj.sqlxml.ResultElement");
+
+        result.addFactoryCreate(
+            "sql-list/result-list/result/property-ref",
+            new PropertyRefElementFactory());
+        result.addSetNext(
+            "sql-list/result-list/result/property-ref",
+            "add",
+            "org.acmsl.queryj.sqlxml.PropertyRefElement");
+
+        result.addObjectCreate(
+            "sql-list/property-list",
+            "java.util.ArrayList");
+        result.addFactoryCreate(
+            "sql-list/property-list/property",
+            new PropertyElementFactory());
+        result.addSetNext(
+            "sql-list/property-list/property",
+            "add",
+            "org.acmsl.queryj.sqlxml.PropertyElement");
 
         return result;
     }
@@ -264,28 +320,30 @@ public abstract class SqlXmlParser
 
                 if  (t_Object != null)
                 {
-                    /*
-                    if  (t_Object instanceof SqlElement)
+                    if  (t_Object instanceof Collection)
+                    {
+                        processSqlXml((Collection) t_Object, map);
+                    }
+                    else if  (t_Object instanceof SqlElement)
                     {
                         map.put(
                             buildSqlKey(t_Object), t_Object);
                     }
-                    else if  (t_Object instanceof ParameterListElement)
+                    else if  (t_Object instanceof ParameterElement)
                     {
                         map.put(
-                            buildParameterListKey(t_Object), t_Object);
+                            buildParameterKey(t_Object), t_Object);
                     }
-                    else if  (t_Object instanceof ResultListElement)
+                    else if  (t_Object instanceof ResultElement)
                     {
                         map.put(
-                            buildResultListKey(t_Object), t_Object);
+                            buildResultKey(t_Object), t_Object);
                     }
-                    else if  (t_Object instanceof PropertyListElement)
+                    else if  (t_Object instanceof PropertyElement)
                     {
                         map.put(
-                            buildPropertyListKey(t_Object), t_Object);
+                            buildPropertyKey(t_Object), t_Object);
                     }
-                    */
                 }
             }
         }
@@ -302,6 +360,46 @@ public abstract class SqlXmlParser
         {
             t_mSqlXmlMap = load();
         }
+    }
+
+    /**
+     * Builds a key for &lt;sql&gt; elements.
+     * @param sqlElement such element.
+     * @return the key.
+     */
+    protected Object buildSqlKey(final Object sqlElement)
+    {
+        return "\\/sql\\::" + sqlElement;
+    }
+
+    /**
+     * Builds a key for &lt;parameter&gt; elements.
+     * @param parameterElement such element.
+     * @return the key.
+     */
+    protected Object buildParameterKey(final Object parameterElement)
+    {
+        return "\\/parameter\\::" + parameterElement;
+    }
+
+    /**
+     * Builds a key for &lt;result&gt; elements.
+     * @param resultElement such element.
+     * @return the key.
+     */
+    protected Object buildResultKey(final Object resultElement)
+    {
+        return "\\/result\\::" + resultElement;
+    }
+
+    /**
+     * Builds a key for &lt;property&gt; elements.
+     * @param propertyElement such element.
+     * @return the key.
+     */
+    protected Object buildPropertyKey(final Object propertyElement)
+    {
+        return "\\/property\\::" + propertyElement;
     }
 }
 

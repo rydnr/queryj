@@ -217,4 +217,44 @@ public class PropertyElement
     {
         return m__strType;
     }
+
+    /**
+     * Provides a text information about this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            toString(
+                getId(),
+                getColumnName(),
+                getIndex(),
+                getName(),
+                getType());
+    }
+
+    /**
+     * Provides a text information about this instance.
+     * @param id the <i>id</i> attribute.
+     * @param columnName the <i>column_name</i> attribute.
+     * @param index the <i>index</i> attribute.
+     * @param name the <i>name</i> attribute.
+     * @param type the <i>type</i> attribute.
+     * @return such information.
+     */
+    protected String toString(
+        final String id,
+        final String columnName,
+        final int index,
+        final String name,
+        final String type)
+    {
+        return
+              getClass().getName()
+            + "[" + "id=" + id + "]"
+            + "[" + "column_name=" + columnName + "]"
+            + "[" + "index=" + index + "]"
+            + "[" + "name=" + name + "]"
+            + "[" + "type=" + type + "]";
+    }
 }

@@ -213,4 +213,40 @@ public class ResultElement
 
         t_cPropertyRefs.add(propertyRef);
     }
+
+    /**
+     * Provides a text information about this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            toString(
+                getId(),
+                getClassValue(),
+                getMatches(),
+                getPropertyRefs());
+    }
+
+    /**
+     * Provides a text information about this instance.
+     * @param id the <i>id</i> attribute.
+     * @param classValue the <i>class</i> attribute.
+     * @param matches the <i>matches</i> attribute.
+     * @param propertyRefs the <i>property-ref</i> elements.
+     * @return such information.
+     */
+    protected String toString(
+        final String id,
+        final String classValue,
+        final String matches,
+        final Collection propertyRefs)
+    {
+        return
+              getClass().getName()
+            + "[" + "id=" + id + "]"
+            + "[" + "class=" + classValue + "]"
+            + "[" + "matches=" + matches + "]"
+            + "[" + "property-refs=" + propertyRefs + "]";
+    }
 }
