@@ -268,7 +268,7 @@ public abstract class SelectQuery
      */
     public void where(final VariableCondition variableCondition)
     {
-        addCondition(variableCondition);
+        addCondition(variableCondition, false);
         addVariableCondition(variableCondition);
     }
 

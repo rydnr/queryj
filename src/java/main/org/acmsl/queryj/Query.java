@@ -320,17 +320,36 @@ public abstract class Query
      */
     protected void addCondition(final Condition condition)
     {
-        addCondition(condition, getConditions(), getVariableConditions());
+        addCondition(condition, true);
+    }
+
+    /**
+     * Adds a new condition.
+     * @param condition the condition to add.
+     * @param processNestedVariableConditions <code>true</code> to include
+     * any nested variable conditions.
+     * @precondition condition != null
+     */
+    protected void addCondition(
+        final Condition condition,
+        final boolean processNestedVariableConditions)
+    {
+        addCondition(
+            condition,
+            getConditions(),
+            processNestedVariableConditions
+            ?  getVariableConditions()
+            :  null);
     }
 
     /**
      * Adds a new condition.
      * @param condition the condition to add.
      * @param conditions the conditions.
-     * @param variableConditions the variable conditions.
+     * @param variableConditions the variable conditions, or <code>null</code> if
+     * no nested conditions process is desired.
      * @precondition condition != null
      * @precondition conditions != null
-     * @precondition variableConditions != null
      */
     protected final void addCondition(
         final Condition condition,
@@ -339,12 +358,11 @@ public abstract class Query
     {
         conditions.add(condition);
 
-        Collection t_cNewVariableConditions =
-            condition.getVariableConditions();
-
-        if  (t_cNewVariableConditions != null)
+        if  (variableConditions != null)
         {
-            variableConditions.addAll(t_cNewVariableConditions);
+            addVariableConditions(
+                condition.getVariableConditions(),
+                variableConditions);
         }
     }
 
@@ -393,19 +411,56 @@ public abstract class Query
      * @precondition variableCondition != null
      * @precondition variableConditions != null
      */
-    protected final void addVariableCondition(
+    protected void addVariableCondition(
         final VariableCondition variableCondition,
         final List variableConditions)
     {
-        variableConditions.add(variableCondition);
+        addVariableConditions(
+            variableCondition,
+            variableCondition.getVariableConditions(),
+            variableConditions);
+    }
 
-        Collection t_cNewVariableConditions =
-            variableCondition.getVariableConditions();
+    /**
+     * Adds given new variable conditions.
+     * @param newVariableConditions the variable conditions to add.
+     * @param variableConditions the variable conditions.
+     * @precondition variableConditions != null
+     */
+    protected final void addVariableConditions(
+        final Collection newVariableConditions,
+        final List variableConditions)
+    {
+        addVariableConditions(null, newVariableConditions, variableConditions);
+    }
 
-        if  (   (t_cNewVariableConditions != null)
-             && (t_cNewVariableConditions.size() > 0))
+    /**
+     * Adds given new variable conditions.
+     * @param variableCondition the variable condition (optional).
+     * @param newVariableConditions the variable conditions to add.
+     * @param variableConditions the variable conditions.
+     * @precondition variableConditions != null
+     */
+    protected final void addVariableConditions(
+        final VariableCondition variableCondition,
+        final Collection newVariableConditions,
+        final List variableConditions)
+    {
+        int offset = 0;
+
+        if  (variableCondition != null)
         {
-            variableConditions.addAll(t_cNewVariableConditions);
+            offset = 1;
+        }
+
+        if  (   (newVariableConditions != null)
+             && (newVariableConditions.size() > offset))
+        {
+            variableConditions.addAll(newVariableConditions);
+        }
+        else if  (variableCondition != null)
+        {
+            variableConditions.add(variableCondition);
         }
     }
 
