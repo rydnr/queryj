@@ -44,12 +44,12 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.sqlxml;
+package org.acmsl.queryj.customsql.xml;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.sqlxml.SqlXmlParser;
+import org.acmsl.queryj.customsql.xml.SqlXmlParser;
 
 /*
  * Importing some JDK classes.

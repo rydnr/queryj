@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create sql.xml <property> element instances from their
- *              attributes, while being parsed by Digester.
+ * Description: Is able to create sql.xml <property> element instances from
+ *              their attributes, while being parsed by Digester.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -45,13 +45,13 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.sqlxml;
+package org.acmsl.queryj.customsql.xml;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.sqlxml.ElementFactory;
-import org.acmsl.queryj.sqlxml.PropertyElement;
+import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.xml.ElementFactory;
 
 /*
  * Importing some ACM-SL classes.

@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.
+*              unittests.org.acmsl.queryj.customsql.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,25 +44,19 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj;
-
+package unittests.org.acmsl.queryj.customsql;
 
 /*
 * Importing project classes.
 */
-
-import unittests.org.acmsl.queryj.customsql.CustomsqlSuite;
-import unittests.org.acmsl.queryj.dao.DaoSuite;
-import unittests.org.acmsl.queryj.tools.ToolsSuite;
-
+// JUnitDoclet begin import
+import org.acmsl.queryj.customsql.PropertyRefElement;
+// JUnitDoclet end import
 
 /*
-/* Importing JUnit classes.
+* Importing JUnit classes.
 */
-import junit.framework.TestSuite;
-
-// JUnitDoclet begin import
-// JUnitDoclet end import
+import junit.framework.TestCase;
 
 /*
 This file is part of  JUnitDoclet, a project to generate basic
@@ -90,50 +84,89 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Executes all tests defined for package
-* org.acmsl.queryj
+* Tests PropertyRefElementTest class.
 * @version $Revision$
-* @see org.acmsl.queryj
+* @see org.acmsl.queryj.customsql.PropertyRefElement
 */
-public class QueryjSuite
+public class PropertyRefElementTest
 // JUnitDoclet begin extends_implements
+extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
+  org.acmsl.queryj.customsql.PropertyRefElement propertyrefelement = null;
   // JUnitDoclet end class
   
-  public static TestSuite suite()
+  /**
+  * Creates a PropertyRefElementTest with given name.
+  * @param name such name.
+  */
+  public PropertyRefElementTest(String name)
   {
-    TestSuite suite;
-    
-    suite =
-    new TestSuite("unittests.org.acmsl.queryj");
-    
-    suite.addTestSuite(unittests.org.acmsl.queryj.ConditionFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.QueryResultSetTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.ConditionOperatorRepositoryTest.class);
-    
-    suite.addTest(unittests.org.acmsl.queryj.customsql.CustomsqlSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.dao.DaoSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.ToolsSuite.suite());
-    
-    
-    // JUnitDoclet begin method suite
-        suite.addTestSuite(SelectQueryTest.class);
-        suite.addTestSuite(ConditionTest.class);
-        suite.addTestSuite(VariableConditionTest.class);
-        suite.addTestSuite(InsertQueryTest.class);
-        suite.addTestSuite(UpdateQueryTest.class);
-        suite.addTestSuite(DeleteQueryTest.class);
-    // JUnitDoclet end method suite
-    
-    return suite;
+    // JUnitDoclet begin method PropertyRefElementTest
+    super(name);
+    // JUnitDoclet end method PropertyRefElementTest
+  }
+  
+  /**
+  * Creates an instance of the tested class.
+  * @return such instance.
+  
+  */
+  public org.acmsl.queryj.customsql.PropertyRefElement createInstance()
+  throws Exception
+  {
+    // JUnitDoclet begin method testcase.createInstance
+    return new org.acmsl.queryj.customsql.PropertyRefElement("pp1");
+    // JUnitDoclet end method testcase.createInstance
+  }
+  
+  /**
+  * Performs any required steps before each test.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  protected void setUp()
+  throws Exception
+  {
+    // JUnitDoclet begin method testcase.setUp
+    super.setUp();
+    propertyrefelement = createInstance();
+    // JUnitDoclet end method testcase.setUp
+  }
+  
+  /**
+  * Performs any required steps after each test.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  protected void tearDown()
+  throws Exception
+  {
+    // JUnitDoclet begin method testcase.tearDown
+    propertyrefelement = null;
+    super.tearDown();
+    // JUnitDoclet end method testcase.tearDown
+  }
+  
+  
+  
+  /**
+  * JUnitDoclet moves marker to this method, if there is not match
+  * for them in the regenerated code and if the marker is not empty.
+  * This way, no test gets lost when regenerating after renaming.
+  * Method testVault is supposed to be empty.
+  * @throws Exception if an unexpected situation occurs.
+  */
+  public void testVault()
+  throws Exception
+  {
+    // JUnitDoclet begin method testcase.testVault
+    // JUnitDoclet end method testcase.testVault
   }
   
   public static void main(String[] args)
   {
-    // JUnitDoclet begin method testsuite.main
-    junit.textui.TestRunner.run(suite());
-    // JUnitDoclet end method testsuite.main
+    // JUnitDoclet begin method testcase.main
+    junit.textui.TestRunner.run(PropertyRefElementTest.class);
+    // JUnitDoclet end method testcase.main
   }
 }

@@ -45,13 +45,13 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.sqlxml;
+package org.acmsl.queryj.customsql.xml;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.sqlxml.ElementFactory;
-import org.acmsl.queryj.sqlxml.SqlElement;
+import org.acmsl.queryj.customsql.SqlElement;
+import org.acmsl.queryj.customsql.xml.ElementFactory;
 
 /*
  * Importing some ACM-SL classes.

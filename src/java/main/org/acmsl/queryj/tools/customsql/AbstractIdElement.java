@@ -45,10 +45,10 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.sqlxml;
+package org.acmsl.queryj.customsql;
 
 /**
- * Common parent to all <b>sql.xml</b> elements with <i>id</i>
+ * Common parent to all <i>custom-sql</i> elements with <i>id</i>
  * attributes.
  * @author <a href="mailto:jsanleandro@yahoo.es"
  *         >Jose San Leandro</a>

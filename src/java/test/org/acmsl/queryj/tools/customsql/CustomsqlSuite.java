@@ -34,7 +34,7 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.
+*              unittests.org.acmsl.queryj.customsql.
 *
 * Last modified by: $Author$ at $Date$
 *
@@ -44,16 +44,14 @@ Spain
 *
 * $Id$
 */
-package unittests.org.acmsl.queryj;
+package unittests.org.acmsl.queryj.customsql;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.customsql.CustomsqlSuite;
-import unittests.org.acmsl.queryj.dao.DaoSuite;
-import unittests.org.acmsl.queryj.tools.ToolsSuite;
+import unittests.org.acmsl.queryj.customsql.xml.XmlSuite;
 
 
 /*
@@ -91,11 +89,11 @@ Boston, MA  02111-1307  USA
 
 /**
 * Executes all tests defined for package
-* org.acmsl.queryj
+* org.acmsl.queryj.customsql
 * @version $Revision$
-* @see org.acmsl.queryj
+* @see org.acmsl.queryj.customsql
 */
-public class QueryjSuite
+public class CustomsqlSuite
 // JUnitDoclet begin extends_implements
 // JUnitDoclet end extends_implements
 {
@@ -107,24 +105,20 @@ public class QueryjSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj");
+    new TestSuite("unittests.org.acmsl.queryj.customsql");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.ConditionFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.QueryResultSetTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.ConditionOperatorRepositoryTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.ResultRefElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.ResultElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.ParameterElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.SqlElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.ParameterRefElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.PropertyRefElementTest.class);
+    suite.addTestSuite(unittests.org.acmsl.queryj.customsql.PropertyElementTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.customsql.CustomsqlSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.dao.DaoSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.ToolsSuite.suite());
+    suite.addTest(unittests.org.acmsl.queryj.customsql.xml.XmlSuite.suite());
     
     
     // JUnitDoclet begin method suite
-        suite.addTestSuite(SelectQueryTest.class);
-        suite.addTestSuite(ConditionTest.class);
-        suite.addTestSuite(VariableConditionTest.class);
-        suite.addTestSuite(InsertQueryTest.class);
-        suite.addTestSuite(UpdateQueryTest.class);
-        suite.addTestSuite(DeleteQueryTest.class);
     // JUnitDoclet end method suite
     
     return suite;

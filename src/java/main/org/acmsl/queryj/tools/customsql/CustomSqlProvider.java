@@ -33,7 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to read the contents contained in QueryJ's sql.xml files.
+ * Description: Defines the common interfaces of all providers of
+ *              custom sql operations.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,50 +45,34 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.sqlxml;
+package org.acmsl.queryj.customsql;
 
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.sqlxml.SqlElement;
-import org.acmsl.queryj.sqlxml.ParameterElement;
-import org.acmsl.queryj.sqlxml.ParameterRefElement;
-import org.acmsl.queryj.sqlxml.PropertyElement;
-import org.acmsl.queryj.sqlxml.PropertyRefElement;
-import org.acmsl.queryj.sqlxml.ResultElement;
-import org.acmsl.queryj.sqlxml.ResultRefElement;
+import org.acmsl.queryj.customsql.ParameterElement;
+import org.acmsl.queryj.customsql.ParameterRefElement;
+import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.PropertyRefElement;
+import org.acmsl.queryj.customsql.ResultElement;
+import org.acmsl.queryj.customsql.ResultRefElement;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-
-/*
- * Importing Digester classes.
- */
-import org.apache.commons.digester.Digester;
-
-/*
- * Importing Jakarta Commons Logging classes
- */
-import org.apache.commons.logging.LogFactory;
 
 /**
- * Is able to read the contents contained in QueryJ's sql.xml files.
+ * Defines the common interfaces of all providers of
+ * custom sql operations.
  * @author <a href="mailto:jsanleandro@yahoo.es"
            >Jose San Leandro</a>
  * @version $Revision$
  */
-public interface SqlXmlParser
+public interface CustomSqlProvider
 {
     /**
-     * Retrieves the sql.xml element collection.
+     * Retrieves the custom sql element collection.
      * return such collection.
      */
     public Collection getCollection();
@@ -108,10 +93,7 @@ public interface SqlXmlParser
      * @precondition reference != null
      */
     public ResultElement resolveReference(
-        final ResultRefElement reference)
-    {
-        return resolveReference(reference, getMap());
-    }
+        final ResultRefElement reference);
 
     /**
      * Resolves the property reference.
@@ -120,9 +102,6 @@ public interface SqlXmlParser
      * @precondition reference != null
      */
     public PropertyElement resolveReference(
-        final PropertyRefElement reference)
-    {
-        return resolveReference(reference, getMap());
-    }
+        final PropertyRefElement reference);
 }
 

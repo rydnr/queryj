@@ -44,18 +44,26 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.sqlxml;
+package org.acmsl.queryj.customsql.xml;
 
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.sqlxml.SqlElement;
-import org.acmsl.queryj.sqlxml.ParameterElement;
-import org.acmsl.queryj.sqlxml.ParameterRefElement;
-import org.acmsl.queryj.sqlxml.PropertyElement;
-import org.acmsl.queryj.sqlxml.PropertyRefElement;
-import org.acmsl.queryj.sqlxml.ResultElement;
-import org.acmsl.queryj.sqlxml.ResultRefElement;
+import org.acmsl.queryj.customsql.AbstractIdElement;
+import org.acmsl.queryj.customsql.ParameterElement;
+import org.acmsl.queryj.customsql.ParameterRefElement;
+import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.PropertyRefElement;
+import org.acmsl.queryj.customsql.ResultElement;
+import org.acmsl.queryj.customsql.ResultRefElement;
+import org.acmsl.queryj.customsql.SqlElement;
+import org.acmsl.queryj.customsql.xml.SqlElementFactory;
+import org.acmsl.queryj.customsql.xml.ParameterElementFactory;
+import org.acmsl.queryj.customsql.xml.ParameterRefElementFactory;
+import org.acmsl.queryj.customsql.xml.PropertyElementFactory;
+import org.acmsl.queryj.customsql.xml.PropertyRefElementFactory;
+import org.acmsl.queryj.customsql.xml.ResultElementFactory;
+import org.acmsl.queryj.customsql.xml.ResultRefElementFactory;
 
 /*
  * Importing some JDK classes.

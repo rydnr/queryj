@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Models <result> elements in sql.xml files.
+ * Description: Models <result> elements in custom-sql models.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,13 +44,13 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.sqlxml;
+package org.acmsl.queryj.customsql;
 
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.sqlxml.AbstractIdElement;
-import org.acmsl.queryj.sqlxml.PropertyRefElement;
+import org.acmsl.queryj.customsql.AbstractIdElement;
+import org.acmsl.queryj.customsql.PropertyRefElement;
 
 /*
  * Importing JDK classes.
@@ -59,8 +59,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Models &lt;result&gt; elements in <b>sql.xml</b> files, which
- * satisfy the following DTD extract:
+ * Models &lt;result&gt; elements in <i>custom-sql</i> models, which
+ * satisfy the following DTD extract (to describe the model even in
+ * non-xml implementations):
  *  <!ELEMENT result (property-ref)+>
  *  <!ATTLIST result
  *    id ID #REQUIRED

@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Models <parameter-ref> elements in sql.xml files.
+ * Description: Models <parameter-ref> elements in custom-sql models.
  *
  * Last modified by: $Author$ at $Date$
  *
@@ -44,15 +44,17 @@
  * $Id$
  *
  */
-package org.acmsl.queryj.sqlxml;
+package org.acmsl.queryj.customsql;
 
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.sqlxml.AbstractIdElement;
+import org.acmsl.queryj.customsql.AbstractIdElement;
 
 /**
- * Models &lt;parameter-ref&gt; elements in <b>sql.xml</b> files, which
+ * Models &lt;parameter-ref&gt; elements in <i>custom-sql</i> models, which
+ * satisfy the following DTD extract (to describe the model even in
+ * non-xml implementations):
  *  <!ELEMENT parameter-ref EMPTY>
  *  <!ATTLIST parameter-ref
  *    id IDREF #REQUIRED>
