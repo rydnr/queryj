@@ -74,6 +74,25 @@
             $Date$
           </td>
           <td>
+            The design update has been continued, at the same time new templates have been developed
+            (ResultSetExtractor and AttributesStatementSetter).
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/12/22 10:45:45
+          </td>
+          <td>
+            Performed major design updates, in most templates, splitting
+            up them into three entities: AbstractTemplate, TemplateDefaults and the Template itself.<br/>
+            Also, a new template has been added, <i>QueryPreparedStatementCreatorTemplate</i>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2004/12/22 10:45:45
+          </td>
+          <td>
             Closed <a href="${issue.url}579">579</a>.
           </td>
         </tr>
