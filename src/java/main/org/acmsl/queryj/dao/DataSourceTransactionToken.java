@@ -33,7 +33,6 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: JDBC-related Transaction Token using DataSource class.
- *
  */
 package org.acmsl.queryj.dao;
 
@@ -41,6 +40,12 @@ package org.acmsl.queryj.dao;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.dao.TransactionToken;
+
+/*
+ * Importing Spring classes.
+ */
+import org.springframework.transaction.support.DefaultTransactionStatus;
+import org.springframework.transaction.TransactionStatus;
 
 /*
  * Importing some JDK1.3 classes.
@@ -62,49 +67,45 @@ import org.apache.commons.logging.LogFactory;
 /**
  * JDBC-related Transaction Token using DataSource class.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro Armendariz</a>
+ *         >Jose San Leandro Armendariz</a>
  */
-public abstract class DataSourceTransactionToken
+public class DataSourceTransactionToken
+    extends     DefaultTransactionStatus
     implements  TransactionToken
 {
-    /**
-     * Transaction aliveness.
-     */
-    private boolean m__bTransactionAlive;
-
-    /**
-     * Data source released.
-     */
-    private boolean m__bNotYetReleased;
-
-    /**
-     * Rollback pending.
-     */
-    private boolean m__bRollbackPending;
-
     /**
      * DataSource reference.
      */
     private _DataSourceWrapper m__DataSource;
 
     /**
-     * Creates a DataSourceTransactionToken using given connection.
-     * @param dataSource the data source to use inside the whole transaction.
+     * Creates a new <code>DataSourceTransactionToken</code> instance.
+     * @param transactionStatus the original transaction status.
+     * @param dataSource the data source.
+     * @precondition transactionStatus != null
+     * @precondition dataSource != null
      */
-    public DataSourceTransactionToken(DataSource dataSource)
+    public DataSourceTransactionToken(
+        final DefaultTransactionStatus transactionStatus,
+        final DataSource dataSource)
     {
-        setDataSource(dataSource);
-        setNotYetReleased(true);
-        setRollbackPending(false);
+        super(
+            transactionStatus.getTransaction(),
+            transactionStatus.isNewTransaction(),
+            transactionStatus.isNewSynchronization(),
+            transactionStatus.isReadOnly(),
+            transactionStatus.isDebug(),
+            transactionStatus.getSuspendedResources());
+        immutableSetDataSource(dataSource);
     }
 
     /**
      * Specifies the data source.
      * @param dataSource the connection to use inside the whole transaction.
      */
-    protected void setDataSource(DataSource dataSource)
+    protected final void immutableSetDataSource(final DataSource dataSource)
     {
-        DataSource t_DataSource = getDataSource();
+        DataSource t_DataSource = immutableGetDataSource();
 
         if  (t_DataSource != dataSource)
         {
@@ -113,28 +114,54 @@ public abstract class DataSourceTransactionToken
     }
 
     /**
+     * Specifies the data source.
+     * @param dataSource the connection to use inside the whole transaction.
+     */
+    protected void setDataSource(final DataSource dataSource)
+    {
+        immutableSetDataSource(dataSource);
+    }
+        
+    /**
      * Retrieves the data source.
      * @return the data source used inside the whole transaction.
      */
-    public DataSource getDataSource()
+    protected final DataSource immutableGetDataSource()
     {
         return m__DataSource;
     }
 
     /**
+     * Retrieves the data source.
+     * @return the data source used inside the whole transaction.
+     */
+    public DataSource getDataSource()
+    {
+        return immutableGetDataSource();
+    }
+
+    /**
      * Checks if this object is logically equal to given one.
      * @param object the object to compare to.
-     * @return true if both objects are equal logically.
+     * @return <code>true</code> if both objects are equal logically.
      */
-    public boolean equals(Object object)
+    public boolean equals(final Object object)
     {
-        boolean result = false;
+        return equals(object, getDataSource());
+    }
 
-        DataSource t_DataSource = getDataSource();
-
-        result =
-            (   (t_DataSource != null) 
-             && (t_DataSource.equals(object)));
+    /**
+     * Checks if this object is logically equal to given one.
+     * @param object the object to compare to.
+     * @param dataSource the wrapped data source.
+     * @return <code>true</code> if both objects are equal logically.
+     */
+    protected boolean equals(
+        final Object object, final DataSource dataSource)
+    {
+        boolean result =
+            (   (dataSource != null) 
+             && (dataSource.equals(object)));
 
         if  (!result) 
         {
@@ -145,98 +172,9 @@ public abstract class DataSourceTransactionToken
     }
 
     /**
-     * Checks if the transaction is alive.
-     * @return <code>true</code> if so.
-     */
-    public boolean isTransactionAlive()
-    {
-        return m__bTransactionAlive;
-    }
-
-    /**
-     * Checks if the transaction is alive.
-     * @return <code>true</code> if so.
-     */
-    protected void setTransactionAlive(boolean alive)
-    {
-        m__bTransactionAlive = alive;
-    }
-
-    /**
-     * Checks if the transaction has been released.
-     * @return <code>false</code> if so.
-     */
-    public boolean isNotYetReleased()
-    {
-        return m__bNotYetReleased;
-    }
-
-    /**
-     * Specifies if the transaction has been released.
-     * @param releaseState the release state.
-     */
-    protected void setNotYetReleased(boolean releaseState)
-    {
-        m__bNotYetReleased = releaseState;
-    }
-
-    /**
-     * Gets notified whenever the transaction starts.
-     */
-    public void beginTransaction()
-    {
-        setTransactionAlive(true);
-    }
-
-    /**
-     * Takes into account that the transaction is over.
-     */
-    public void endTransaction()
-    {
-        setTransactionAlive(false);
-    }
-    
-    /**
-     * Releases the transaction.
-     */
-    public void release()
-    {
-        if  (isNotYetReleased())
-        {
-            DataSource t_DataSource = getDataSource();
-
-            if  (t_DataSource != null) 
-            {
-//                t_DataSource.release();
-            }
-            
-            setNotYetReleased(false);
-        }
-    }
-
-    /**
-     * Sets the need for a rollback of the whole transaction.
-     * @param flag to indicate to rollback the transaction.
-     */
-    public void setRollbackPending(boolean flag)
-    {
-        m__bRollbackPending = flag;
-    }
-
-    /**
-     * Checks the need for a rollback of the whole transaction.
-     * @return such information.
-     */
-    public boolean isRollbackPending()
-    {
-        return m__bRollbackPending;
-    }
-
-    /**
-     * Private DataSource wrapper.
+     * Private <code>DataSource</code> wrapper.
      * @author <a href="mailto:chous@acm-sl.org"
-               >Jose San Leandro Armendariz</a>
-     * @version $Revision$
+     *         >Jose San Leandro Armendariz</a>
      */
     private static class _DataSourceWrapper
         implements  DataSource
@@ -255,16 +193,16 @@ public abstract class DataSourceTransactionToken
         * Creates a _DataSourceWrapper using given data source.
         * @param dataSource the data source to wrap.
         */
-        public _DataSourceWrapper(DataSource dataSource)
+        public _DataSourceWrapper(final DataSource dataSource)
         {
-            setDataSource(dataSource);
+            immutableSetDataSource(dataSource);
         }
 
         /**
          * Specifies the data source.
          * @param dataSource the data source.
          */
-        private void unmodifiableSetDataSource(DataSource dataSource)
+        private void immutableSetDataSource(final DataSource dataSource)
         {
             m__DataSource = dataSource;
         }
@@ -273,9 +211,9 @@ public abstract class DataSourceTransactionToken
          * Specifies the data source.
          * @param dataSource the data source.
          */
-        protected void setDataSource(DataSource dataSource)
+        protected void setDataSource(final DataSource dataSource)
         {
-            unmodifiableSetDataSource(dataSource);
+            immutableSetDataSource(dataSource);
         }
 
         /**
@@ -291,9 +229,18 @@ public abstract class DataSourceTransactionToken
          * Specifies the JDBC connection.
          * @param connection the connection.
          */
-        protected void setConnection(Connection connection)
+        protected final void immutableSetConnection(final Connection connection)
         {
             m__Connection = connection;
+        }
+
+        /**
+         * Specifies the JDBC connection.
+         * @param connection the connection.
+         */
+        protected void setConnection(final Connection connection)
+        {
+            immutableSetConnection(connection);
         }
 
         /**
@@ -308,48 +255,78 @@ public abstract class DataSourceTransactionToken
         /**
          * Attempts to establish a database connection.
          * @return the connection.
-        */
+         */
         public Connection getConnection()
             throws  SQLException
         {
-            Connection result = getInternalConnection();
+            return
+                getConnection(
+                    getInternalConnection(),
+                    getDataSource());
+        }
 
-            if  (result == null)
+        /**
+         * Attempts to establish a database connection.
+         * @param internalConnection the internal connection.
+         * @param dataSource the data source.
+         * @return the connection.
+         */
+        protected Connection getConnection(
+            final Connection internalConnection,
+            final DataSource dataSource)
+          throws  SQLException
+        {
+            Connection result = internalConnection;
+
+            if  (   (result == null)
+                 && (dataSource != null))
             {
-                DataSource t_DataSource = getDataSource();
-
-                if  (t_DataSource != null) 
-                {
-                    result = t_DataSource.getConnection();
-                    setConnection(result);
-                    result.setAutoCommit(false);
-                }
+                result = dataSource.getConnection();
+                setConnection(result);
+                result.setAutoCommit(false);
             }
 
             return m__Connection;
         }
 
         /**
-        * Attempts to establish a database connection.
-        * @param userName the user name connection settings.
-        * @param password the user password connection settings.
-        * @return the connection.
-        */
-        public Connection getConnection(String userName, String password)
+         * Attempts to establish a database connection.
+         * @param userName the user name connection settings.
+         * @param password the user password connection settings.
+         * @return the connection.
+         */
+        public Connection getConnection(
+            final String userName, final String password)
             throws  SQLException
         {
-            Connection result = getConnection();
+            return
+                getConnection(
+                    userName, password, getConnection(), getDataSource());
+        }
 
-            if  (result == null)
+        /**
+         * Attempts to establish a database connection.
+         * @param userName the user name connection settings.
+         * @param password the user password connection settings.
+         * @param connection the connection.
+         * @param dataSource the data source.
+         * @return the connection.
+         */
+        public Connection getConnection(
+            final String userName,
+            final String password,
+            final Connection connection,
+            final DataSource dataSource)
+          throws  SQLException
+        {
+            Connection result = connection;
+
+            if  (   (result == null)
+                 && (dataSource != null) )
             {
-                DataSource t_DataSource = getDataSource();
-
-                if  (t_DataSource != null) 
-                {
-                    result = t_DataSource.getConnection(userName, password);
-                    setConnection(result);
-                    result.setAutoCommit(false);
-                }
+                result = dataSource.getConnection(userName, password);
+                setConnection(result);
+                result.setAutoCommit(false);
             }
 
             return result;
@@ -363,13 +340,23 @@ public abstract class DataSourceTransactionToken
         public int getLoginTimeout()
             throws  SQLException
         {
+            return getLoginTimeout(getDataSource());
+        }
+
+        /**
+         * Retrieves the maximum time in seconds that this data source can
+         * wait while attempting to connect to a database.
+         * @param dataSource the data source.
+         * @return such timeout.
+         */
+        protected int getLoginTimeout(final DataSource dataSource)
+            throws  SQLException
+        {
             int result = 0;
 
-            DataSource t_DataSource = getDataSource();
-
-            if  (t_DataSource != null) 
+            if  (dataSource != null) 
             {
-                result = t_DataSource.getLoginTimeout();
+                result = dataSource.getLoginTimeout();
             }
             
             return result;
@@ -382,13 +369,21 @@ public abstract class DataSourceTransactionToken
         public PrintWriter getLogWriter()
             throws  SQLException
         {
+            return getLogWriter(getDataSource());
+        }
+
+        /**
+         * Retrieves the log writer for this data source.
+         * @return such log writer.
+         */
+        protected PrintWriter getLogWriter(final DataSource dataSource)
+            throws  SQLException
+        {
             PrintWriter result = null;
 
-            DataSource t_DataSource = getDataSource();
-
-            if  (t_DataSource != null) 
+            if  (dataSource != null) 
             {
-                result = t_DataSource.getLogWriter();
+                result = dataSource.getLogWriter();
             }
 
             return result;
@@ -399,14 +394,25 @@ public abstract class DataSourceTransactionToken
          * wait while attempting to connect to a database.
          * @param seconds the timeout.
          */
-        public void setLoginTimeout(int seconds)
+        public void setLoginTimeout(final int seconds)
             throws  SQLException
         {
-            DataSource t_DataSource = getDataSource();
+            setLoginTimeout(seconds, getDataSource());
+        }
 
-            if  (t_DataSource != null) 
+        /**
+         * Specifies the maximum time in seconds that this data source will
+         * wait while attempting to connect to a database.
+         * @param seconds the timeout.
+         * @param dataSource the data source.
+         */
+        protected void setLoginTimeout(
+            final int seconds, final DataSource dataSource)
+          throws  SQLException
+        {
+            if  (dataSource != null) 
             {
-                t_DataSource.setLoginTimeout(seconds);
+                dataSource.setLoginTimeout(seconds);
             }
         }
 
@@ -414,38 +420,24 @@ public abstract class DataSourceTransactionToken
          * Specifies the log writer for this data source.
          * @param out the log writer.
          */
-        public void setLogWriter(PrintWriter out)
+        public void setLogWriter(final PrintWriter out)
             throws  SQLException
         {
-            DataSource t_DataSource = getDataSource();
-
-            if  (t_DataSource != null) 
-            {
-                t_DataSource.setLogWriter(out);
-            }
+            setLogWriter(out, getDataSource());
         }
 
         /**
-         * Releases the transaction.
+         * Specifies the log writer for this data source.
+         * @param out the log writer.
+         * @param dataSource the data source.
          */
-        public void release()
+        protected void setLogWriter(
+            final PrintWriter out, final DataSource dataSource)
+          throws  SQLException
         {
-            Connection t_Connection = getInternalConnection();
-
-            if  (t_Connection != null)
+            if  (dataSource != null) 
             {
-                try
-                {                
-                    t_Connection.close();
-                } 
-                catch  (SQLException sqlException)
-                {
-                    LogFactory.getLog(getClass()).fatal(
-                        "Error releasing Connection.",
-                        sqlException);
-                }
-
-                setConnection(null);
+                dataSource.setLogWriter(out);
             }
         }
 
@@ -454,20 +446,60 @@ public abstract class DataSourceTransactionToken
          * @param object the object to compare to.
          * @return true if both data sources represents the same entity.
          */
-        public boolean equals(Object object)
+        public boolean equals(final Object object)
+        {
+            return equals(object, getDataSource());
+        }
+
+        /**
+         * Checks if the data source is equal logically to given object.
+         * @param object the object to compare to.
+         * @param dataSource the data source.
+         * @return true if both data sources represents the same entity.
+         */
+        protected boolean equals(
+            final Object object, final DataSource dataSource)
         {
             boolean result = false;
 
             if  (   (object != null)
                  && (object instanceof DataSource))
             {
-                DataSource t_InternalDataSource = getDataSource();
-
                 DataSource t_GivenDataSource = (DataSource) object;
 
                 result =
-                    (   (t_GivenDataSource == t_InternalDataSource)
-                     || (t_GivenDataSource.equals(t_InternalDataSource)));
+                    (   (t_GivenDataSource == dataSource)
+                     || (t_GivenDataSource.equals(dataSource)));
+            }
+
+            return result;
+        }
+
+        /**
+         * Retrieves the hash code.
+         * @return such value.
+         */
+        public int hashCode()
+        {
+            return hashCode(getDataSource());
+        }
+
+        /**
+         * Retrieves the hash code.
+         * @param dataSource the data source.
+         * @return such value.
+         */
+        protected int hashCode(final DataSource dataSource)
+        {
+            int result = 0;
+
+            if  (dataSource != null)
+            {
+                result = dataSource.hashCode();
+            }
+            else
+            {
+                result = super.hashCode();
             }
 
             return result;

@@ -34,9 +34,13 @@
  *
  * Description: Represents a transaction runtime environment. The one that
  *              created it manages the transaction.
- *
  */
 package org.acmsl.queryj.dao;
+
+/*
+ * Importing Spring classes.
+ */
+import org.springframework.transaction.TransactionStatus;
 
 /**
  * Represents a transaction runtime environment. The one that created it
@@ -45,37 +49,6 @@ package org.acmsl.queryj.dao;
            >Jose San Leandro Armendariz</a>
  */
 public interface TransactionToken
+    extends  TransactionStatus
 {
-    /**
-     * Checks if there's any active transaction.
-     * @return true if a transaction is active.
-     */
-    public boolean isTransactionAlive();
-
-    /**
-     * Gets notified whenever the transaction starts.
-     */
-    public void beginTransaction();
-
-    /**
-    * Releases the transaction.
-    */
-    public void release();
-
-    /**
-     * Takes into account that the transaction is over.
-     */
-    public void endTransaction();
-
-    /**
-     * Sets the need for a rollback of the whole transaction.
-     * @param flag to indicate to rollback the transaction.
-     */
-    public void setRollbackPending(boolean flag);
-
-    /**
-     * Checks the need for a rollback of the whole transaction.
-     * @return such information.
-     */
-    public boolean isRollbackPending();
 }

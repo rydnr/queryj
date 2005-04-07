@@ -41,6 +41,11 @@
 package org.acmsl.queryj.dao;
 
 /*
+ * Importing Spring classes.
+ */
+import org.springframework.transaction.support.DefaultTransactionStatus;
+
+/*
  * Importing some JDK classes.
  */
 import java.lang.ref.WeakReference;
@@ -73,7 +78,7 @@ public class TransactionTokenFactory
      * Specifies a new weak reference.
      * @param factory the factory instance to use.
      */
-    protected static void setReference(TransactionTokenFactory factory)
+    protected static void setReference(final TransactionTokenFactory factory)
     {
         singleton = new WeakReference(factory);
     }
@@ -113,18 +118,21 @@ public class TransactionTokenFactory
     }
 
     /**
-     * Creates a SingleConnectionTransactionToken using given connection.
+     * Creates a DataSourceTransactionToken using given connection.
      * @param dataSource the data source to use inside the same transaction.
      * @return the transaction token, or null if the connection is invalid.
      */
     public static DataSourceTransactionToken createTransactionToken(
-        DataSource dataSource)
+        final DefaultTransactionStatus transactionStatus,
+        final DataSource dataSource)
     {
         DataSourceTransactionToken result = null;
 
-        if  (dataSource != null)
+        if  (   (transactionStatus != null)
+             && (dataSource != null))
         {
-            result = new DataSourceTransactionToken(dataSource) {};
+            result =
+                new DataSourceTransactionToken(transactionStatus, dataSource);
         }
 
         return result;
