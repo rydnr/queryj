@@ -35,14 +35,6 @@
  * Description: Is able to create engine-specific DAO interfaces for each
  *              table in the persistence model.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -104,7 +96,6 @@ import org.apache.commons.logging.LogFactory;
  * table in the persistence model.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
- * @version $Revision$
  */
 public class DAOTemplate
     extends  AbstractDAOTemplate
@@ -660,6 +651,7 @@ public class DAOTemplate
         StringBuffer t_sbInsertParametersSpecification = new StringBuffer();
         StringBuffer t_sbExternallyManagedInsertParametersSpecification =
             new StringBuffer();
+        StringBuffer t_sbCreateParametersSpecification = new StringBuffer();
         StringBuffer t_sbUpdateParametersSpecification = new StringBuffer();
 
         boolean t_bForeignKeys = false;
@@ -1145,6 +1137,16 @@ public class DAOTemplate
                             t_astrColumnNames[t_iColumnIndex].toLowerCase()
                         }));
 
+                t_sbCreateParametersSpecification.append(
+                    t_InsertParametersSpecificationFormatter.format(
+                        new Object[]
+                        {
+                            t_strRepositoryName,
+                            tableTemplate.getTableName().toUpperCase(),
+                            t_astrColumnNames[t_iColumnIndex].toUpperCase(),
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                        }));
+
                 if  (t_iColumnIndex < t_astrColumnNames.length - 1)
                 {
                     t_sbUpdateAttributesDeclaration.append(",");
@@ -1318,7 +1320,7 @@ public class DAOTemplate
                         t_strCapitalizedValueObjectName,
                         t_strRepositoryName,
                         tableTemplate.getTableName().toUpperCase(),
-                        t_sbInsertParametersSpecification,
+                        t_sbCreateParametersSpecification,
                         t_sbAttributesJavadoc,
                         t_sbAttributesDeclaration,
                         t_sbCreateAttributesStatementSetterCall,
