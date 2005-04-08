@@ -79,6 +79,11 @@ public class DataSourceTransactionToken
     private _DataSourceWrapper m__DataSource;
 
     /**
+     * The wrapped transaction status.
+     */
+    private TransactionStatus m__TransactionStatus;
+
+    /**
      * Creates a new <code>DataSourceTransactionToken</code> instance.
      * @param transactionStatus the original transaction status.
      * @param dataSource the data source.
@@ -96,7 +101,35 @@ public class DataSourceTransactionToken
             transactionStatus.isReadOnly(),
             transactionStatus.isDebug(),
             transactionStatus.getSuspendedResources());
+        immutableSetTransactionStatus(transactionStatus);
         immutableSetDataSource(dataSource);
+    }
+
+    /**
+     * Specifies the transaction status.
+     * @param status such status.
+     */
+    private void immutableSetTransactionStatus(final TransactionStatus status)
+    {
+        m__TransactionStatus = status;
+    }
+
+    /**
+     * Specifies the transaction status.
+     * @param status such status.
+     */
+    protected void setTransactionStatus(final TransactionStatus status)
+    {
+        immutableSetTransactionStatus(status);
+    }
+
+    /**
+     * Retrieves the transaction status.
+     * @return such information.
+     */
+    protected TransactionStatus getTransactionStatus()
+    {
+        return m__TransactionStatus;
     }
 
     /**
@@ -147,21 +180,31 @@ public class DataSourceTransactionToken
      */
     public boolean equals(final Object object)
     {
-        return equals(object, getDataSource());
+        return equals(object, getTransactionStatus(), getDataSource());
     }
 
     /**
      * Checks if this object is logically equal to given one.
      * @param object the object to compare to.
+     * @param transactionStatus the transaction status.
      * @param dataSource the wrapped data source.
      * @return <code>true</code> if both objects are equal logically.
      */
     protected boolean equals(
-        final Object object, final DataSource dataSource)
+        final Object object,
+        final TransactionStatus transactionStatus,
+        final DataSource dataSource)
     {
         boolean result =
-            (   (dataSource != null) 
-             && (dataSource.equals(object)));
+            (   (transactionStatus != null) 
+             && (transactionStatus.equals(object)));
+
+        if  (!result)
+        {
+            result =
+                (   (dataSource != null) 
+                 && (dataSource.equals(object)));
+        }
 
         if  (!result) 
         {
@@ -169,6 +212,35 @@ public class DataSourceTransactionToken
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the hash code.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return hashCode(getDataSource());
+    }
+
+    /**
+     * Retrieves the hash code.
+     * @param dataSource the data source.
+     * @return such information.
+     * @precondition dataSource != null
+     */
+    protected int hashCode(final DataSource dataSource)
+    {
+        return dataSource.hashCode();
+    }
+
+    /**
+     * Retrieves a text version of the instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return super.toString();
     }
 
     /**
@@ -500,6 +572,36 @@ public class DataSourceTransactionToken
             else
             {
                 result = super.hashCode();
+            }
+
+            return result;
+        }
+
+        /**
+         * Retrieves the textual version of this instance.
+         * @return such information.
+         */
+        public String toString()
+        {
+            return toString(getDataSource());
+        }
+
+        /**
+         * Retrieves the textual version of this instance.
+         * @param dataSource the wrapped data source.
+         * @return such information.
+         */
+        protected String toString(final DataSource dataSource)
+        {
+            String result = null;
+
+            if  (dataSource == null)
+            {
+                result = super.toString();
+            }
+            else
+            {
+                result = dataSource.toString();
             }
 
             return result;

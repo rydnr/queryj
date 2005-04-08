@@ -53,7 +53,7 @@ import org.acmsl.queryj.tools.templates.dao.handlers.DAOTestTemplateHandlerBundl
 import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessContextLocalTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.FkStatementSetterTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateHandlerBundle;
+//import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.PkStatementSetterTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.ResultSetExtractorTemplateHandlerBundle;
@@ -90,7 +90,7 @@ public class DAOBundle
                 new DataAccessManagerTemplateHandlerBundle(),
                 new DataAccessContextLocalTemplateHandlerBundle(),
                 new FkStatementSetterTemplateHandlerBundle(),
-                new JdbcDAOTemplateHandlerBundle(),
+//                new JdbcDAOTemplateHandlerBundle(),
                 new PkStatementSetterTemplateHandlerBundle(),
                 new QueryPreparedStatementCreatorTemplateHandlerBundle(),
                 new ResultSetExtractorTemplateHandlerBundle(),

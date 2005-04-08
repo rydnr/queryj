@@ -92,8 +92,12 @@ public interface DAOFactoryTemplateDefaults
          // DAO package - Engine - Table
         + "import {2}.{1}DAOFactory;\n"
          // DAO factory package - Engine - Table
-        + "import {3}.{4}{1}DAO;\n\n";
+        + "import {3}.{4}{1}DAO;\n\n"
          // DAO implementation package - Engine - Table
+        + "/*\n"
+        + " * Importing some QueryJ classes.\n"
+        + " */\n"
+        + "import org.acmsl.queryj.dao.ThreadAwareDataSourceWrapper;\n\n";
 
     /**
      * The JDK imports.
@@ -113,6 +117,7 @@ public interface DAOFactoryTemplateDefaults
         + " */\n"
         + "import org.springframework.jdbc.CannotGetJdbcConnectionException;\n"
         + "import org.springframework.jdbc.datasource.DataSourceUtils;\n\n"
+        + "import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;\n"
         + "/*\n"
         + " * Importing some extension classes.\n"
         + " */\n"
@@ -229,25 +234,28 @@ public interface DAOFactoryTemplateDefaults
      * The default data source retrieval method.
      */
     public static final String DEFAULT_DATA_SOURCE_RETRIEVAL_METHOD =
-         "    /**\n"
-       + "     * Retrieves the data source.\n"
-       + "     * @return such data source.\n"
-       + "     */\n"
-       + "    protected DataSource getDataSource()\n"
-       + "    {\n"
-       + "        DataSource result = null;\n"
-       + "        try\n"
-       + "        {\n"
-       + "            result =\n"
-       + "                DataSourceUtils.getDataSourceFromJndi(JNDI_LOCATION);\n"
-       + "        }\n"
-       + "        catch  (final CannotGetJdbcConnectionException cannotGetJdbcConnectionException)\n"
-       + "        {\n"
-       + "            LogFactory.getLog(getClass()).error(\n"
-       + "                \"cannot.retrieve.data.source\", cannotGetJdbcConnectionException);\n"
-       + "        }\n\n"
-       + "        return result;\n"
-       + "   }\n";
+          "    /**\n"
+        + "     * Retrieves the data source.\n"
+        + "     * @return such data source.\n"
+        + "     */\n"
+        + "    protected DataSource getDataSource()\n"
+        + "    {\n"
+        + "        DataSource result = null;\n"
+        + "        try\n"
+        + "        {\n"
+        + "            result =\n"
+//        + "                new TransactionAwareDataSourceProxy(\n"
+        + "                new ThreadAwareDataSourceWrapper(\n"
+        + "                    DataSourceUtils.getDataSourceFromJndi(\n"
+        + "                        JNDI_LOCATION));\n"
+        + "        }\n"
+        + "        catch  (final CannotGetJdbcConnectionException cannotGetJdbcConnectionException)\n"
+        + "        {\n"
+        + "            LogFactory.getLog(getClass()).error(\n"
+        + "                \"cannot.retrieve.data.source\", cannotGetJdbcConnectionException);\n"
+        + "        }\n\n"
+        + "        return result;\n"
+        + "   }\n";
 
     /**
      * The default class end.

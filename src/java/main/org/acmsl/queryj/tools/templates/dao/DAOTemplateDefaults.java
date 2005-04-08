@@ -175,7 +175,7 @@ public interface DAOTemplateDefaults
         + "import org.springframework.jdbc.core.PreparedStatementCreatorFactory;\n"
         + "import org.springframework.jdbc.core.ResultSetExtractor;\n"
         + "import org.springframework.jdbc.core.SqlParameter;\n"
-        + "import org.springframework.jdbc.object.SqlQuery;\n";
+        + "import org.springframework.jdbc.object.SqlQuery;\n\n";
     
     /**
      * The JDK imports.

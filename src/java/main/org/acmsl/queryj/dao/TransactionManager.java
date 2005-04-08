@@ -48,6 +48,8 @@ import org.acmsl.queryj.dao.TransactionToken;
  */
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.DefaultTransactionStatus;
@@ -135,30 +137,12 @@ public class TransactionManager
      * some reason.
      * @precondition connection != null
      */
-    public TransactionToken beginTransaction(final Connection connection)
+    public TransactionToken begin(final Connection connection)
         throws  TransactionException
     {
-        return beginTransaction(connection, new DefaultTransactionDefinition());
-    }
-
-    /**
-     * Starts a transaction for given connection.
-     * @param connection the connection.
-     * @param transactionDefinition the transaction definition.
-     * @throws TransactionException if the transaction cannot be started for
-     * some reason.
-     * @precondition connection != null
-     * @precondition transactionDefinition != null
-     */
-    public TransactionToken beginTransaction(
-        final Connection connection,
-        final TransactionDefinition transactionDefinition)
-      throws  TransactionException
-    {
         return
-            beginTransaction(
-                new SingleConnectionDataSource(connection),
-                transactionDefinition);
+            begin(
+                new SingleConnectionDataSource(connection, true));
     }
 
     /**
@@ -170,12 +154,46 @@ public class TransactionManager
      * @precondition dataSource != null
      * @precondition transactionDefinition != null
      */
-    public TransactionToken beginTransaction(
-        final DataSource dataSource, final TransactionDefinition transactionDefinition)
+    public TransactionToken begin(
+        final Connection connection,
+        final TransactionDefinition transactionDefinition)
       throws  TransactionException
     {
         return
-            beginTransaction(
+            begin(
+                new SingleConnectionDataSource(connection, true),
+                transactionDefinition);
+    }
+
+    /**
+     * Starts a transaction for given connection.
+     * @param connection the connection.
+     * @throws TransactionException if the transaction cannot be started for
+     * some reason.
+     * @precondition connection != null
+     */
+    public TransactionToken begin(final DataSource dataSource)
+        throws  TransactionException
+    {
+        return begin(dataSource, new DefaultTransactionDefinition());
+    }
+
+    /**
+     * Starts a transaction for given data source.
+     * @param dataSource the data source.
+     * @param transactionDefinition the transaction definition.
+     * @throws TransactionException if the transaction cannot be started for
+     * some reason.
+     * @precondition dataSource != null
+     * @precondition transactionDefinition != null
+     */
+    public TransactionToken begin(
+        final DataSource dataSource,
+        final TransactionDefinition transactionDefinition)
+      throws  TransactionException
+    {
+        return
+            begin(
                 dataSource,
                 transactionDefinition,
                 TransactionTokenFactory.getInstance());
@@ -193,7 +211,7 @@ public class TransactionManager
      * @precondition transactionDefinition != null
      * @precondition transactionTokenFactory != null
      */
-    protected TransactionToken beginTransaction(
+    protected TransactionToken begin(
         final DataSource dataSource,
         final TransactionDefinition transactionDefinition,
         final TransactionTokenFactory transactionTokenFactory)
@@ -201,8 +219,16 @@ public class TransactionManager
     {
         TransactionToken result = null;
 
+        DataSource t_DataSource = dataSource;
+
+        if  (!(t_DataSource instanceof ThreadAwareDataSourceWrapper))
+        {
+            t_DataSource =
+                new ThreadAwareDataSourceWrapper(t_DataSource);
+        }
+
         PlatformTransactionManager t_TransactionManager =
-            createTransactionManager(dataSource, true);
+            createTransactionManager(t_DataSource, true);
 
         if  (t_TransactionManager != null)
         {
@@ -217,7 +243,7 @@ public class TransactionManager
                 result =
                     transactionTokenFactory.createTransactionToken(
                         (DefaultTransactionStatus) t_TransactionStatus,
-                        dataSource);
+                        t_DataSource);
             }
         }
 
@@ -235,7 +261,7 @@ public class TransactionManager
     {
         return
             createTransactionManager(
-                new SingleConnectionDataSource(connection),
+                new SingleConnectionDataSource(connection, true),
                 true);
     }
 
@@ -282,13 +308,12 @@ public class TransactionManager
      * anyway.
      * @precondition transactionManager != null
      */
-    protected void commit(
-        final TransactionToken transactionToken)
+    public void commit(final TransactionStatus transactionToken)
       throws  TransactionException
     {
         if   (transactionToken instanceof DataSourceTransactionToken)
         {
-            commit((DataSourceTransactionToken) transactionToken);
+            commitTransaction((DataSourceTransactionToken) transactionToken);
         }
         else
         {
@@ -307,13 +332,14 @@ public class TransactionManager
      * anyway.
      * @precondition transactionManager != null
      */
-    protected void commit(
+    protected void commitTransaction(
         final DataSourceTransactionToken transactionToken)
       throws  TransactionException
     {
-        commit(
+        commitTransaction(
             transactionToken,
-            createTransactionManager(transactionToken.getDataSource(), false));
+            createTransactionManager(
+                transactionToken.getDataSource(), false));
     }
 
     /**
@@ -325,7 +351,7 @@ public class TransactionManager
      * anyway.
      * @precondition transactionManager != null
      */
-    protected void commit(
+    protected void commitTransaction(
         final TransactionToken transactionToken,
         final PlatformTransactionManager transactionManager)
       throws  TransactionException
@@ -342,13 +368,12 @@ public class TransactionManager
      * anyway.
      * @precondition transactionManager != null
      */
-    protected void rollback(
-        final TransactionToken transactionToken)
+    public void rollback(final TransactionStatus transactionToken)
       throws  TransactionException
     {
         if   (transactionToken instanceof DataSourceTransactionToken)
         {
-            rollback((DataSourceTransactionToken) transactionToken);
+            rollbackTransaction((DataSourceTransactionToken) transactionToken);
         }
         else
         {
@@ -367,11 +392,11 @@ public class TransactionManager
      * anyway.
      * @precondition transactionManager != null
      */
-    protected void rollback(
+    protected void rollbackTransaction(
         final DataSourceTransactionToken transactionToken)
       throws  TransactionException
     {
-        rollback(
+        rollbackTransaction(
             transactionToken,
             createTransactionManager(transactionToken.getDataSource(), false));
     }
@@ -385,7 +410,7 @@ public class TransactionManager
      * anyway.
      * @precondition transactionManager != null
      */
-    protected void rollback(
+    protected void rollbackTransaction(
         final TransactionToken transactionToken,
         final PlatformTransactionManager transactionManager)
       throws  TransactionException
