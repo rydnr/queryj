@@ -441,6 +441,8 @@ public class BaseDAOTemplate
             metaDataManager.getTableComment(
                 tableTemplate.getTableName());
 
+        String t_strFieldType = null;
+
         if  (t_strTableComment != null)
         {
             int t_iKeyIndex = t_strTableComment.lastIndexOf("@static");
@@ -579,14 +581,20 @@ public class BaseDAOTemplate
                                     t_strDescriptionColumn
                                 });
 
+                        t_strFieldType =
+                            metaDataUtils.getNativeType(
+                                metaDataManager.getColumnType(
+                                    tableTemplate.getTableName(),
+                                    t_strDescriptionColumn),
+                                metaDataManager.allowsNull(
+                                    tableTemplate.getTableName(),
+                                    t_strDescriptionColumn));
+
                         String t_strFindByStaticFieldDeclaration =
                             t_FindByStaticFieldDeclarationFormatter.format(
                                 new Object[]
                                 {
-                                    metaDataUtils.getNativeType(
-                                        metaDataManager.getColumnType(
-                                            tableTemplate.getTableName(),
-                                            t_strDescriptionColumn)),
+                                    t_strFieldType,
                                     t_strDescriptionColumn.toLowerCase()
                                 });
 
@@ -677,6 +685,11 @@ public class BaseDAOTemplate
                       t_iPkIndex < t_astrPrimaryKeys.length;
                       t_iPkIndex++)
             {
+                t_strFieldType =
+                    metaDataUtils.getNativeType(
+                        metaDataManager.getColumnType(
+                            tableTemplate.getTableName(),
+                            t_astrPrimaryKeys[t_iPkIndex]));
                 String t_strPkJavadoc =
                     t_FindByPrimaryKeyPkJavadocFormatter.format(
                         new Object[]
@@ -689,10 +702,7 @@ public class BaseDAOTemplate
                     t_FindByPrimaryKeyPkDeclarationFormatter.format(
                         new Object[]
                         {
-                            metaDataUtils.getNativeType(
-                                metaDataManager.getColumnType(
-                                    tableTemplate.getTableName(),
-                                    t_astrPrimaryKeys[t_iPkIndex])),
+                            t_strFieldType,
                             t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
                         });
 
@@ -781,7 +791,7 @@ public class BaseDAOTemplate
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
-                String t_strType =
+                t_strFieldType =
                     metaDataUtils.getNativeType(t_iColumnType);
 
                 boolean t_bAllowsNull =
@@ -791,8 +801,17 @@ public class BaseDAOTemplate
 
                 if  (t_bAllowsNull)
                 {
-                    t_strType = metaDataUtils.getObjectType(t_iColumnType);
+                    t_strFieldType = metaDataUtils.getObjectType(t_iColumnType);
                 }
+
+                t_strFieldType =
+                    metaDataUtils.getNativeType(
+                        metaDataManager.getColumnType(
+                            tableTemplate.getTableName(),
+                            t_astrColumnNames[t_iColumnIndex]),
+                        metaDataManager.allowsNull(
+                            tableTemplate.getTableName(),
+                            t_astrColumnNames[t_iColumnIndex]));
 
                 if  (!metaDataManager.isManagedExternally(
                          tableTemplate.getTableName(),
@@ -834,7 +853,7 @@ public class BaseDAOTemplate
                             t_InsertParametersDeclarationFormatter.format(
                                 new Object[]
                                 {
-                                    t_strType,
+                                    t_strFieldType,
                                     t_astrColumnNames[t_iColumnIndex]
                                         .toLowerCase()
                                 }));
@@ -843,7 +862,7 @@ public class BaseDAOTemplate
                             t_CreateParametersDeclarationFormatter.format(
                                 new Object[]
                                 {
-                                    t_strType,
+                                    t_strFieldType,
                                     t_astrColumnNames[t_iColumnIndex]
                                         .toLowerCase()
                                 }));
@@ -852,7 +871,7 @@ public class BaseDAOTemplate
                             t_UpdateParametersDeclarationFormatter.format(
                                 new Object[]
                                 {
-                                    t_strType,
+                                    t_strFieldType,
                                     t_astrColumnNames[t_iColumnIndex]
                                         .toLowerCase()
                                 }));

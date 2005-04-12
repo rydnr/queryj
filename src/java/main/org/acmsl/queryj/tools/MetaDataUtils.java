@@ -685,6 +685,63 @@ public class MetaDataUtils
     }
 
     /**
+     * Retrieves the object type of given data type.
+     * @param dataType the data type.
+     * @return the associated object type.
+     */
+    public String getSmartObjectType(final int dataType)
+    {
+        String result = null;
+
+        switch (dataType)
+        {
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                result = "BigDecimal";
+                break;
+
+            case Types.BIT:
+                result = "Integer";
+                break;
+
+            case Types.TINYINT:
+            case Types.SMALLINT:
+            case Types.INTEGER:
+                result = "Integer";
+                break;
+
+            case Types.BIGINT:
+                result = "Long";
+                break;
+
+            case Types.REAL:
+            case Types.FLOAT:
+            case Types.DOUBLE:
+                result = "Double";
+                break;
+
+            case Types.TIME:
+            case Types.DATE:
+            case Types.TIMESTAMP:
+            case 11:
+                result = "Date";
+                break;
+
+            case Types.CHAR:
+            case Types.VARCHAR:
+            case Types.LONGVARCHAR:
+            case Types.BINARY:
+            case Types.VARBINARY:
+            case Types.LONGVARBINARY:
+            default:
+                result = "String";
+                break;
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the default value of given data type.
      * @param dataType the data type.
      * @return the associated default value.

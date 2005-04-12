@@ -388,7 +388,7 @@ public class AttributesStatementSetterTemplate
         {
             String t_strCapitalizedParameterName = "";
             String t_strParameterName = "";
-            String t_strParameterType = "";
+            String t_strFieldType = "";
             String t_strPropertyName = "";
             String t_strPropertyType = "";
 
@@ -401,21 +401,34 @@ public class AttributesStatementSetterTemplate
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
-                t_strParameterType =
+                t_strFieldType =
                     metaDataUtils.getFieldType(
                         t_iColumnType,
                         project,
                         task);
 
-                boolean t_bAllowsNull =
-                    metaDataManager.allowsNull(
+                boolean t_bAllowsNull = false;
+
+                boolean t_bIsPrimaryKey =
+                    metaDataManager.isPrimaryKey(
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
+                if  (!t_bIsPrimaryKey)
+                {
+                    t_bAllowsNull =
+                        metaDataManager.allowsNull(
+                            tableTemplate.getTableName(),
+                            t_astrColumnNames[t_iColumnIndex]);
+                }
+
+                t_strFieldType =
+                    metaDataUtils.getNativeType(t_iColumnType, t_bAllowsNull);
+
                 if  (t_bAllowsNull)
                 {
-                    t_strParameterType =
-                        metaDataUtils.getObjectType(t_iColumnType);
+                    t_strFieldType =
+                        metaDataUtils.getSmartObjectType(t_iColumnType);
                 }
 
                 boolean t_bManagedExternally =
@@ -461,7 +474,7 @@ public class AttributesStatementSetterTemplate
                 String t_strParameterDeclaration =
                     formatParameterDeclaration(
                         t_ParameterDeclarationFormatter,
-                        t_strParameterType,
+                        t_strFieldType,
                         t_strParameterName);
 
                 String t_strParameterSetterCall =
@@ -519,7 +532,7 @@ public class AttributesStatementSetterTemplate
                         new Object[]
                         {
                             t_strPropertyName,
-                            t_strParameterType,
+                            t_strFieldType,
                             t_strParameterName,
                             t_strCapitalizedParameterName
                         }));

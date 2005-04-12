@@ -656,6 +656,8 @@ public class DAOTemplate
 
         boolean t_bForeignKeys = false;
 
+        String t_strFieldType = null;
+
         String[] t_astrPrimaryKeys =
             metaDataManager.getPrimaryKeys(tableTemplate.getTableName());
 
@@ -726,7 +728,7 @@ public class DAOTemplate
                     MessageFormat t_PkExtractorFormatter =
                         t_PkExtractorParameterRetrievalFormatter;
 
-                    String t_strFieldType =
+                    t_strFieldType =
                         metaDataUtils.getFieldType(t_iType, false, null, null);
 
                     if  (t_strFieldType.equals(t_strNativeType))
@@ -1094,17 +1096,27 @@ public class DAOTemplate
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
-                String t_strType =
-                    metaDataUtils.getNativeType(t_iColumnType);
+                boolean t_bAllowsNull = false;
 
-                boolean t_bAllowsNull =
-                    metaDataManager.allowsNull(
+                boolean t_bIsPrimaryKey =
+                    metaDataManager.isPrimaryKey(
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
+                if  (!t_bIsPrimaryKey)
+                {
+                    t_bAllowsNull =
+                        metaDataManager.allowsNull(
+                            tableTemplate.getTableName(),
+                            t_astrColumnNames[t_iColumnIndex]);
+                }
+
+                t_strFieldType =
+                    metaDataUtils.getNativeType(t_iColumnType, t_bAllowsNull);
+
                 if  (t_bAllowsNull)
                 {
-                    t_strType = metaDataUtils.getObjectType(t_iColumnType);
+                    t_strFieldType = metaDataUtils.getSmartObjectType(t_iColumnType);
                 }
 
                 t_sbUpdateAttributesJavadoc.append(
@@ -1119,7 +1131,7 @@ public class DAOTemplate
                     t_AttributeDeclarationFormatter.format(
                         new Object[]
                         {
-                            t_strType,
+                            t_strFieldType,
                             t_astrColumnNames[t_iColumnIndex].toLowerCase()
                         }));
 
@@ -1204,7 +1216,7 @@ public class DAOTemplate
                         t_AttributeDeclarationFormatter.format(
                             new Object[]
                             {
-                                t_strType,
+                                t_strFieldType,
                                 t_astrColumnNames[t_iColumnIndex].toLowerCase()
                             }));
 
