@@ -1067,7 +1067,7 @@ public class DatabaseMetaDataManager
     protected boolean getAllowNull(
         final String tableName, final String allowName, final Map allowNulls)
     {
-        boolean result = true;
+        boolean result = false;
 
         Object t_Result = allowNulls.get(buildAllowNullKey(tableName, allowName));
 

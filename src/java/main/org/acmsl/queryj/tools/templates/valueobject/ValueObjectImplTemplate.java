@@ -307,14 +307,34 @@ public class ValueObjectImplTemplate
             {
                 String t_strField = (String) t_itFields.next();
 
-                String t_strFieldType =
-                    metaDataUtils.getNativeType(
-                        metaDataManager.getColumnType(
-                            tableTemplate.getTableName(),
-                            t_strField),
+                int t_iColumnType =
+                    metaDataManager.getColumnType(
+                        tableTemplate.getTableName(),
+                        t_strField);
+
+                boolean t_bAllowsNull = false;
+
+                boolean t_bIsPrimaryKey =
+                    metaDataManager.isPrimaryKey(
+                        tableTemplate.getTableName(),
+                        t_strField);
+
+                if  (!t_bIsPrimaryKey)
+                {
+                    t_bAllowsNull =
                         metaDataManager.allowsNull(
                             tableTemplate.getTableName(),
-                            t_strField));
+                            t_strField);
+                }
+
+                String t_strFieldType =
+                    metaDataUtils.getNativeType(t_iColumnType, t_bAllowsNull);
+
+                if  (t_bAllowsNull)
+                {
+                    t_strFieldType =
+                        metaDataUtils.getSmartObjectType(t_iColumnType);
+                }
 
                 t_sbResult.append(
                     t_DeclarationFormatter.format(

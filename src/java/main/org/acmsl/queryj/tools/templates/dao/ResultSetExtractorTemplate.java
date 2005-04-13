@@ -336,17 +336,34 @@ public class ResultSetExtractorTemplate
             {
                 int t_iColumnType =
                     metaDataManager.getColumnType(
-                        t_strTableName,
+                        tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
-                String t_strObjectType =
-                    metaDataUtils.getObjectType(t_iColumnType);
+                boolean t_bAllowsNull = false;
+
+                boolean t_bIsPrimaryKey =
+                    metaDataManager.isPrimaryKey(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
+                if  (!t_bIsPrimaryKey)
+                {
+                    t_bAllowsNull =
+                        metaDataManager.allowsNull(
+                            tableTemplate.getTableName(),
+                            t_astrColumnNames[t_iColumnIndex]);
+                }
 
                 String t_strFieldType =
-                    metaDataUtils.getFieldType(
-                        t_iColumnType,
-                        null,
-                        null);
+                    metaDataUtils.getNativeType(t_iColumnType, t_bAllowsNull);
+
+                String t_strObjectType =
+                    metaDataUtils.getSmartObjectType(t_iColumnType);
+
+                if  (t_bAllowsNull)
+                {
+                    t_strFieldType = t_strObjectType;
+                }
 
                 Object[] t_aParams =
                     new Object[]

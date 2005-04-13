@@ -34,10 +34,6 @@
  *
  * Description: Defines the default subtemplates to generate custom
  *              resultset extractors.
-<<<<<<< CustomResultSetExtractorTemplateDefaults.java
- *
-=======
->>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.dao;
 

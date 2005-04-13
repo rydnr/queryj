@@ -398,7 +398,7 @@ public class CustomResultSetExtractorTemplate
                         t_aProperties[t_iPropertyIndex].getType());
 
                 String t_strObjectType =
-                    metaDataUtils.getObjectType(t_iColumnType);
+                    metaDataUtils.getSmartObjectType(t_iColumnType);
 
                 String t_strFieldType =
                     metaDataUtils.getFieldType(
