@@ -34,17 +34,6 @@
  *
  * Description: Validates any custom sql queries.
  *
-<<<<<<< CustomSqlValidationHandler.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.customsql.handlers;
 
@@ -101,10 +90,6 @@ import java.util.Map;
  * Validates any custom sql queries.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< CustomSqlValidationHandler.java
-=======
- * @version $Revision$
->>>>>>> 1.3
  */
 public class CustomSqlValidationHandler
     extends  AbstractAntCommandHandler
@@ -476,48 +461,66 @@ public class CustomSqlValidationHandler
                   t_iParameterIndex < t_aParameters.length;
                   t_iParameterIndex++)
         {
+            t_Method = null;
+
+            t_Type = null;
+
+            t_strType = null;
+
             t_Parameter = t_aParameters[t_iParameterIndex];
 
             t_cSetterParams = new ArrayList();
 
             t_cSetterParams.add(Integer.TYPE);
 
-            t_strType =
-                metaDataUtils.getObjectType(
-                    metaDataUtils.getJavaType(
-                        t_Parameter.getType()));
+            if  (t_Parameter == null)
+            {
+                exceptionToThrow =
+                    new BuildException(
+                          "Invalid parameter at position " + t_iParameterIndex
+                        + " in sql element whose id is " + sqlElement.getId());
 
-            try
-            {
-                t_Type = Class.forName("java.lang." + t_strType);
+                break;
             }
-            catch  (final ClassNotFoundException firstClassNotFoundException)
+            else
             {
-                // Second try
+                t_strType =
+                    metaDataUtils.getObjectType(
+                        metaDataUtils.getJavaType(
+                            t_Parameter.getType()));
+
                 try
                 {
-                    t_Type = Class.forName("java.util." + t_strType);
+                    t_Type = Class.forName("java.lang." + t_strType);
                 }
-                catch  (final ClassNotFoundException secondClassNotFoundException)
+                catch  (final ClassNotFoundException firstClassNotFoundException)
                 {
-                    // third try
+                    // Second try
                     try
                     {
-                        t_Type = Class.forName("java.sql." + t_strType);
+                        t_Type = Class.forName("java.util." + t_strType);
                     }
-                    catch  (final ClassNotFoundException thirddClassNotFoundException)
+                    catch  (final ClassNotFoundException secondClassNotFoundException)
                     {
-                        // fourth try
+                        // third try
                         try
                         {
-                            t_Type = Class.forName(t_strType);
+                            t_Type = Class.forName("java.sql." + t_strType);
                         }
-                        catch  (final ClassNotFoundException fourthClassNotFoundException)
+                        catch  (final ClassNotFoundException thirddClassNotFoundException)
                         {
-                            project.log(
-                                task,
-                                "Cannot find parameter class: " + t_strType,
-                                Project.MSG_WARN);
+                            // fourth try
+                            try
+                            {
+                                t_Type = Class.forName(t_strType);
+                            }
+                            catch  (final ClassNotFoundException fourthClassNotFoundException)
+                            {
+                                project.log(
+                                    task,
+                                    "Cannot find parameter class: " + t_strType,
+                                    Project.MSG_WARN);
+                            }
                         }
                     }
                 }
@@ -621,9 +624,28 @@ public class CustomSqlValidationHandler
                     // let's try if it's a date.
                     try
                     {
+                        boolean t_bInvalidValidationValue = false;
+
+                        String t_strValidationValue = 
+                            t_Parameter.getValidationValue();
+
+                        if  (t_strValidationValue == null)
+                        {
+                            t_strValidationValue = DATE_FORMAT.format(new Date());
+                            t_bInvalidValidationValue = true;
+                        }
+
                         t_ParameterValue =
                             DATE_FORMAT.parse(
-                                t_Parameter.getValidationValue());
+                                t_strValidationValue);
+
+                        if  (t_bInvalidValidationValue)
+                        {
+                            exceptionToThrow =
+                                new BuildException(
+                                    "No validation value specified for "
+                                    + "date parameter [" + t_Parameter.getId() + "]");
+                        }
                     }
                     catch  (final ParseException parseException)
                     {
@@ -684,6 +706,15 @@ public class CustomSqlValidationHandler
                                     invocationTargetException);
                         }
                     }
+                }
+
+                if  (   (exceptionToThrow == null)
+                     && (t_Method == null))
+                {
+                    exceptionToThrow =
+                        new BuildException(
+                              "Cannot bind parameter [" + t_Parameter.getId()
+                            + "] in sql [" + sqlElement.getId() + "]");
                 }
 
                 if  (exceptionToThrow == null)

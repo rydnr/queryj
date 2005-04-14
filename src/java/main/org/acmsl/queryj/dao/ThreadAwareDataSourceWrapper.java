@@ -206,7 +206,8 @@ public class ThreadAwareDataSourceWrapper
     {
         Connection result = internalConnection;
 
-        if  (   (result == null)
+        if  (   (   (result == null)
+                 || (isClosed(result)))
              && (dataSource != null))
         {
             result = dataSource.getConnection();
@@ -249,7 +250,8 @@ public class ThreadAwareDataSourceWrapper
     {
         Connection result = connection;
 
-        if  (   (result == null)
+        if  (   (   (result == null)
+                 || (isClosed(result)))
              && (dataSource != null))
         {
             result = dataSource.getConnection(userName, password);
@@ -492,6 +494,30 @@ public class ThreadAwareDataSourceWrapper
         else
         {
             result = dataSource.toString();
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given connection is already closed.
+     * @param connection the connection.
+     * @return <code>true</code> in such case.
+     * @precondition connection != null
+     */
+    protected boolean isClosed(final Connection connection)
+    {
+        boolean result = false;
+
+        try
+        {
+            result = connection.isClosed();
+        }
+        catch  (final SQLException sqlException)
+        {
+            LogFactory.getLog(getClass()).warn(
+                "Error checking if connection is closed.",
+                sqlException);
         }
 
         return result;

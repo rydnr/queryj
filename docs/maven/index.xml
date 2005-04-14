@@ -75,6 +75,14 @@
             $Date$
           </td>
           <td>
+            Improved error messages and fully supporting inner and outer transactions.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/04/04 09:18:54
+          </td>
+          <td>
             Fixed source headers, and updated the code generated to explicitly support
             optional (nullable) table columns.
           </td>

@@ -607,13 +607,16 @@ public class DAOTemplate
             new MessageFormat(deleteFkDeclaration);
 
         MessageFormat t_PkResultSetExtractorFormatter =
-            new MessageFormat(pkResultSetExtractor);
+           new MessageFormat(pkResultSetExtractor);
 
         MessageFormat t_PkExtractorSimpleParameterRetrievalFormatter =
             new MessageFormat(pkExtractorSimpleParameterRetrieval);
 
         MessageFormat t_PkExtractorParameterRetrievalFormatter =
             new MessageFormat(pkExtractorParameterRetrieval);
+
+        MessageFormat t_ClassEndFormatter =
+            new MessageFormat(classEnd);
 
         StringBuffer t_sbForeignKeyStatementSetterImports =
             new StringBuffer();
@@ -1386,7 +1389,13 @@ public class DAOTemplate
                     t_sbPkExtractorParameterRetrieval
                 }));
 
-        t_sbResult.append(classEnd);
+        t_sbResult.append(
+            t_ClassEndFormatter.format(
+                new Object[]
+                {
+                    engineName,
+                    t_strCapitalizedValueObjectName
+                }));
 
         return t_sbResult.toString();
     }
