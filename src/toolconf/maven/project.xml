@@ -84,14 +84,14 @@
 
   <versions>
     <version>
-      <id>0.5.6</id>
-      <name>0.5.6</name>
-      <tag>queryj-0_5_6</tag>
+      <id>0.6b7-SNAPSHOT</id>
+      <name>0.6b7-SNAPSHOT</name>
+      <tag>HEAD</tag>
     </version>
     <version>
-      <id>0.5.6b3</id>
-      <name>0.5.6b3</name>
-      <tag>queryj-0_5_6b3</tag>
+      <id>0.6b5</id>
+      <name>0.6b5</name>
+      <tag>queryj-0_6b5</tag>
     </version>
   </versions>
 
