@@ -35,17 +35,6 @@
  * Description: Defines the default subtemplates used to generate value
  *              objects according to database metadata.
  *
-<<<<<<< ValueObjectTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.8
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -59,10 +48,6 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * to database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< ValueObjectTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.8
  */
 public interface ValueObjectTemplateDefaults
     extends  JavaTemplateDefaults
@@ -121,7 +106,10 @@ public interface ValueObjectTemplateDefaults
      */
     public static final String DEFAULT_JAVADOC =
           "/**\n"
-        + " * Represents the <i>{0}</i> information in the persistence domain.\n" // table
+        + " * Represents the <i>{0}</i>\n"
+        + " * information in the persistence domain.\n"
+        + " * Important note: Compile me with JavacExt or AntLang in order to "
+        + " * get complete equals(), hashCode() and toString() support.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " * @version $" + "Revision: $\n"
         + " */\n";
