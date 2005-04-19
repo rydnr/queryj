@@ -279,9 +279,6 @@ public interface CustomResultSetExtractorTemplateDefaults
         + "        Collection result = new ArrayList();\n\n"
         + "        while  (resultSet.next())\n"
         + "        '{'\n"
-        + "            Long t_LongAux = null;\n"
-        + "            Integer t_IntAux = null;\n"
-        + "            Double t_DoubleAux = null;\n"
         + "{1}"
         + "            result.add(\n"
         + "                factory.create{0}("
@@ -305,15 +302,16 @@ public interface CustomResultSetExtractorTemplateDefaults
      * @param 1 the table repository name.
      * @param 2 the table name.
      * @param 3 the property name.
+     * @param 5 the property name in lower-case.
      */
     public static final String DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_CHECK =
-          "            t_{0}Aux =\n"
+          "            {0} t_{0}{5} =\n"
         + "                new {0}(\n"
         + "                    resultSet.get{0}(\n"
         + "                        \"{3}\"));\n\n"
         + "            if  (resultSet.wasNull())\n"
         + "            '{'\n"
-        + "                t_{0}Aux = null;\n"
+        + "                t_{0}{5} = null;\n"
         + "            '}'\n\n";
 
 
@@ -321,9 +319,10 @@ public interface CustomResultSetExtractorTemplateDefaults
      * The value object nullable properties specification.
      * @param 0 the property type.
      * @param 4 the primitive type.
+     * @param 5 the property name in lower-case.
      */
     public static final String DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_SPECIFICATION =
-        "\n                    t_{0}Aux";
+        "\n                    t_{0}{5}";
 
     /**
      * The default class end.

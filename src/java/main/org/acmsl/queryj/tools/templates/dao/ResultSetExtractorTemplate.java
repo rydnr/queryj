@@ -358,7 +358,7 @@ public class ResultSetExtractorTemplate
                     metaDataUtils.getNativeType(t_iColumnType, t_bAllowsNull);
 
                 String t_strObjectType =
-                    metaDataUtils.getSmartObjectType(t_iColumnType);
+                    metaDataUtils.getSmartObjectRetrievalType(t_iColumnType);
 
                 if  (t_bAllowsNull)
                 {
@@ -372,7 +372,8 @@ public class ResultSetExtractorTemplate
                         t_strRepositoryName,
                         t_strTableName.toUpperCase(),
                         t_astrColumnNames[t_iColumnIndex].toUpperCase(),
-                        t_strFieldType
+                        t_strFieldType,
+                        t_astrColumnNames[t_iColumnIndex].toLowerCase(),
                     };
 
                 MessageFormat t_Formatter =

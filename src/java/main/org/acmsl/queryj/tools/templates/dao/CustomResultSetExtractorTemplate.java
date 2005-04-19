@@ -398,7 +398,7 @@ public class CustomResultSetExtractorTemplate
                         t_aProperties[t_iPropertyIndex].getType());
 
                 String t_strObjectType =
-                    metaDataUtils.getSmartObjectType(t_iColumnType);
+                    metaDataUtils.getSmartObjectRetrievalType(t_iColumnType);
 
                 String t_strFieldType =
                     metaDataUtils.getFieldType(
@@ -413,7 +413,8 @@ public class CustomResultSetExtractorTemplate
                         t_strRepositoryName,
                         t_strTableName.toUpperCase(),
                         t_aProperties[t_iPropertyIndex].getColumnName().toUpperCase(),
-                        t_strFieldType
+                        t_strFieldType,
+                        t_aProperties[t_iPropertyIndex].getColumnName().toLowerCase(),
                     };
 
                 MessageFormat t_Formatter =

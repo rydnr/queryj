@@ -34,10 +34,6 @@
  *
  * Description: Defines the default subtemplates to generate resultset
  *              extractors.
-<<<<<<< ResultSetExtractorTemplateDefaults.java
- *
-=======
->>>>>>> 1.7
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -229,9 +225,6 @@ public interface ResultSetExtractorTemplateDefaults
         + "        {0}ValueObject result = null;\n\n"
         + "        if  (resultSet.next())\n"
         + "        '{'\n"
-        + "            Long t_LongAux = null;\n"
-        + "            Integer t_IntAux = null;\n"
-        + "            Double t_DoubleAux = null;\n"
         + "{2}"
         + "            result =\n"
         + "                {1}Factory.create{0}ValueObject({3});\n"
@@ -256,15 +249,16 @@ public interface ResultSetExtractorTemplateDefaults
      * @param 1 the table repository name.
      * @param 2 the table name.
      * @param 3 the property name.
+     * @param 5 the property name in lower-case.
      */
     public static final String DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_CHECK =
-          "            t_{0}Aux =\n"
+          "            {0} t_{0}{5} =\n"
         + "                new {0}(\n"
         + "                    resultSet.get{0}(\n"
         + "                        {1}TableRepository.{2}.{3}));\n\n"
         + "            if  (resultSet.wasNull())\n"
         + "            '{'\n"
-        + "                t_{0}Aux = null;\n"
+        + "                t_{0}{5} = null;\n"
         + "            '}'\n\n";
 
 
@@ -272,9 +266,10 @@ public interface ResultSetExtractorTemplateDefaults
      * The value object nullable properties specification.
      * @param 0 the property type.
      * @param 4 the primitive type.
+     * @param 5 the property name in lower-case.
      */
     public static final String DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_SPECIFICATION =
-          "\n                    t_{0}Aux";
+          "\n                    t_{0}{5}";
 
     /**
      * The default class end.
