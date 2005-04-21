@@ -23,7 +23,7 @@
 
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsr000@terra.es
+    Contact info: jose.sanleandro@acm-sl.com
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecaba&ntilde;as
                     Boadilla del monte
@@ -43,7 +43,7 @@
   <name>QueryJ</name>
   <id>queryj</id>
   <groupId>org.acmsl.queryj</groupId>
-  <currentVersion>0.6b8</currentVersion>
+  <currentVersion>0.6b7</currentVersion>
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>
