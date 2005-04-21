@@ -3,7 +3,7 @@
  @license
                              QueryJ
 
-    Copyright (C) 2001-2004  Jose San Leandro Armend&aacute;riz
+    Copyright (C) 2001-2005  Jose San Leandro Armend&aacute;riz
                              jsanleandro@yahoo.es
                              chousz@yahoo.com
 
@@ -43,7 +43,7 @@
   <name>QueryJ</name>
   <id>queryj</id>
   <groupId>org.acmsl.queryj</groupId>
-  <currentVersion>0.6b7-SNAPSHOT</currentVersion>
+  <currentVersion>0.6b8</currentVersion>
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>

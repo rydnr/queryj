@@ -75,6 +75,14 @@
             $Date$
           </td>
           <td>
+            Released <b>0.6b8</b>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/04/14 15:25:18
+          </td>
+          <td>
             Improved error messages and fully supporting inner and outer transactions.
           </td>
         </tr>
