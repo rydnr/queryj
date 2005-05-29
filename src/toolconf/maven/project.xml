@@ -4,8 +4,7 @@
                              QueryJ
 
     Copyright (C) 2001-2005  Jose San Leandro Armend&aacute;riz
-                             jsanleandro@yahoo.es
-                             chousz@yahoo.com
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -157,6 +156,19 @@
         <required.to.run>true</required.to.run>
         <required.to.test>true</required.to.test>
         <required.to.build>false</required.to.build>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>antmake</groupId>
+      <artifactId>antmake</artifactId>
+      <version>0.1.9b2-SNAPSHOT</version>
+      <url>http://www.acm-sl.org/antmake</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>false</required.to.run>
+        <required.to.test>false</required.to.test>
+        <required.to.build>true</required.to.build>
       </properties>
     </dependency>
 

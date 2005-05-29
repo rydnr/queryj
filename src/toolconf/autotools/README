@@ -1,0 +1,15 @@
+QueryJ
+---------------
+
+QueryJ provides a way of ensuring error-free SQL statements,
+maintaining SQL simplicity, and allowing statement customization
+independent to the developer.
+The features include not only SQL handling, but also the generation
+of a complete persistence layer from a given deployed relational schema.
+
+The file NEWS summarizes recent changes.
+
+Kawa's copyright is described in the file COPYING.
+
+	--Jose San Leandro Armendáriz
+chous@acm-sl.org
