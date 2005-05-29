@@ -6,11 +6,21 @@
   </properties>
   <body>
     <release
-      version="0.6b6"
-      date="$Date$"
-      description="Maintenance release">
+      version="0.6"
+      date="2005/03/23 07:32:21"
+      description="Commercial release">
       <action
         dev="$Author$"
+        type="update">
+        Commercially-specific bundle for a concrete customer.
+      </action>
+    </release>
+    <release
+      version="0.6b6"
+      date="2005/03/23 07:32:21"
+      description="Maintenance release">
+      <action
+        dev="chous"
         type="fix">
         Closed <a href="${issue.url}591">591</a>,
         <a href="${issue.url}592">592</a>,

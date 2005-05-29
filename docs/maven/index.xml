@@ -18,7 +18,7 @@
       </p>
       <subsection name="Status">
         <p>
-          <strong>QueryJ</strong> 0.6b7 supports:
+          <strong>QueryJ</strong> 0.6 supports:
           <ul>
             <li>Custom queries,</li>
             <li>Safe validation of custom queries at generation-time,</li>
@@ -73,6 +73,14 @@
         <tr>
           <td>
             $Date$
+          </td>
+          <td>
+            Commercially-specific bundle for a concrete customer: <b>0.6</b>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/04/21 09:06:00
           </td>
           <td>
             Released <b>0.6b8</b>.
