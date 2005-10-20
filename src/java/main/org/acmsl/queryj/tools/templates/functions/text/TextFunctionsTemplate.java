@@ -44,12 +44,6 @@ package org.acmsl.queryj.tools.templates.functions.text;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.Map;
@@ -80,8 +74,6 @@ public abstract class TextFunctionsTemplate
      * @param classConstructor the class constructor.
      * @param innerClass the inner class.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public TextFunctionsTemplate(
         final String  header,
@@ -98,9 +90,7 @@ public abstract class TextFunctionsTemplate
         final String  singletonBody,
         final String  classConstructor,
         final String  innerClass,
-        final String  classEnd,
-        final Project project,
-        final Task    task)
+        final String  classEnd)
     {
         super(
             "text",
@@ -119,9 +109,7 @@ public abstract class TextFunctionsTemplate
             singletonBody,
             classConstructor,
             innerClass,
-            classEnd,
-            project,
-            task);
+            classEnd);
     }
 
     /**
@@ -130,16 +118,12 @@ public abstract class TextFunctionsTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public TextFunctionsTemplate(
         final String  packageName,
         final String  engineName,
         final String  engineVersion,
-        final String  quote,
-        final Project project,
-        final Task    task)
+        final String  quote)
     {
         super(
             "text",
@@ -147,8 +131,6 @@ public abstract class TextFunctionsTemplate
             packageName,
             engineName,
             engineVersion,
-            quote,
-            project,
-            task);
+            quote);
     }
 }

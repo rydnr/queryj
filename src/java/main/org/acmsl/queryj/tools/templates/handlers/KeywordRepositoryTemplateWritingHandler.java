@@ -87,21 +87,40 @@ public class KeywordRepositoryTemplateWritingHandler
     {
         return
             handle(
-                command.getAttributeMap(),
-                KeywordRepositoryTemplateGenerator.getInstance());
+                command.getAttributeMap());
     }
                 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param templateGenerator the template generator.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+      throws  BuildException
+    {
+        return
+            handle(
+                retrieveKeywordRepositoryTemplate(parameters),
+                retrieveOutputDir(parameters),
+                KeywordRepositoryTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Handles given information.
+     * @param template the template.
+     * @param outputDir the output dir.
+     * @param templateGenerator the template generator.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition template != null
+     * @precondition outputDir != null
      * @precondition templateGenerator != null
      */
     protected boolean handle(
-        final Map parameters,
+        final KeywordRepositoryTemplate template,
+        final File outputDir,
         final KeywordRepositoryTemplateGenerator templateGenerator)
       throws  BuildException
     {
@@ -109,9 +128,7 @@ public class KeywordRepositoryTemplateWritingHandler
 
         try 
         {
-            templateGenerator.write(
-                retrieveKeywordRepositoryTemplate(parameters),
-                retrieveOutputDir(parameters));
+            templateGenerator.write(template, outputDir);
         }
         catch  (final IOException ioException)
         {
@@ -168,32 +185,7 @@ public class KeywordRepositoryTemplateWritingHandler
         return
             packageUtils.retrieveKeywordRepositoryFolder(
                 retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters));
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveProjectOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

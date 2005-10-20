@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplate;
@@ -65,8 +66,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -98,26 +97,17 @@ public class XMLDAOTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters,
-        final Project project,
-        final Task task)
+    protected boolean handle(final Map parameters)
       throws  BuildException
     {
         return
@@ -128,9 +118,7 @@ public class XMLDAOTemplateBuildHandler
                 retrievePackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveTableTemplates(parameters),
-                XMLDAOTemplateGenerator.getInstance(),
-                project,
-                task);
+                XMLDAOTemplateGenerator.getInstance());
     }
 
     /**
@@ -142,8 +130,6 @@ public class XMLDAOTemplateBuildHandler
      * @param repositoryName the repository name.
      * @param tableTemplates the table templates.
      * @param templateFactory the template factory.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -161,20 +147,19 @@ public class XMLDAOTemplateBuildHandler
         final String packageName,
         final String repositoryName,
         final TableTemplate[] tableTemplates,
-        final XMLDAOTemplateFactory templateFactory,
-        final Project project,
-        final Task task)
+        final XMLDAOTemplateFactory templateFactory)
       throws  BuildException
     {
         boolean result = false;
 
+        int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
         try
         {
             XMLDAOTemplate[] t_aXMLDAOTemplates =
-                new XMLDAOTemplate[tableTemplates.length];
+                new XMLDAOTemplate[t_iLength];
 
             for  (int t_iXMLDAOIndex = 0;
-                      t_iXMLDAOIndex < t_aXMLDAOTemplates.length;
+                      t_iXMLDAOIndex < t_iLength;
                       t_iXMLDAOIndex++) 
             {
                 t_aXMLDAOTemplates[t_iXMLDAOIndex] =
@@ -183,9 +168,7 @@ public class XMLDAOTemplateBuildHandler
                         metaDataManager,
                         packageName,
                         basePackage,
-                        repositoryName,
-                        project,
-                        task);
+                        repositoryName);
             }
 
             storeXMLDAOTemplates(t_aXMLDAOTemplates, parameters);
@@ -213,19 +196,6 @@ public class XMLDAOTemplateBuildHandler
             (DatabaseMetaDataManager)
                 parameters.get(
                     DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**

@@ -54,12 +54,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
@@ -94,17 +88,13 @@ public class MockDAOTestTemplate
      * @param packageName the package name.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectsPackageName the value objects' package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public MockDAOTestTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String daoPackageName,
-        final String valueObjectsPackageName,
-        final Project project,
-        final Task task)
+        final String valueObjectsPackageName)
     {
         super(
             tableTemplate,
@@ -135,9 +125,7 @@ public class MockDAOTestTemplate
             DEFAULT_TEST_PARAMETERS_UPDATED_VALUES,
             DEFAULT_REMOVE_TEST,
             DEFAULT_REMOVE_FILTER_VALUES,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

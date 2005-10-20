@@ -61,12 +61,6 @@ import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -94,17 +88,13 @@ public class ResultSetExtractorTemplate
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public ResultSetExtractorTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String basePackageName,
-        final String repositoryName,
-        final Project project,
-        final Task task)
+        final String repositoryName)
     {
         super(
             tableTemplate,
@@ -127,9 +117,7 @@ public class ResultSetExtractorTemplate
             DEFAULT_VALUE_OBJECT_PROPERTIES_SPECIFICATION,
             DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_SPECIFICATION,
             DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_CHECK,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

@@ -33,18 +33,18 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.
+*              org.acmsl.queryj.
 *
 */
-package unittests.org.acmsl.queryj;
+package org.acmsl.queryj;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.dao.DaoSuite;
-import unittests.org.acmsl.queryj.tools.ToolsSuite;
+import org.acmsl.queryj.dao.DaoSuite;
+import org.acmsl.queryj.tools.ToolsSuite;
 
 
 /*
@@ -97,14 +97,14 @@ public class QueryjSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj");
+    new TestSuite("org.acmsl.queryj");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.ConditionFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.QueryResultSetTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.ConditionOperatorRepositoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.ConditionFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.QueryResultSetTest.class);
+    suite.addTestSuite(org.acmsl.queryj.ConditionOperatorRepositoryTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.dao.DaoSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.ToolsSuite.suite());
+    suite.addTest(org.acmsl.queryj.dao.DaoSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.ToolsSuite.suite());
     
     
     // JUnitDoclet begin method suite

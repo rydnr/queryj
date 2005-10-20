@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateGenerator;
@@ -61,8 +62,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -96,31 +95,24 @@ public class ConfigurationPropertiesTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters, final Project project, final Task task)
+    protected boolean handle(final Map parameters)
         throws  BuildException
     {
         return
             handle(
                 parameters,
                 buildConfigurationPropertiesTemplate(
-                    parameters, project, task));
+                    parameters));
     }
                 
     /**
@@ -145,22 +137,18 @@ public class ConfigurationPropertiesTemplateBuildHandler
      * Builds a ConfigurationProperties template using the information
      * stored in the attribute map.
      * @param parameters the parameter map.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the template instance.
      * @throws BuildException if the template cannot be created.
      * @precondition parameters != null
      */
     protected ConfigurationPropertiesTemplate buildConfigurationPropertiesTemplate(
-        final Map parameters, final Project project, final Task task)
+        final Map parameters)
       throws  BuildException
     {
         return
             buildConfigurationPropertiesTemplate(
                 parameters,
-                retrieveDatabaseMetaData(parameters),
-                project,
-                task);
+                retrieveDatabaseMetaData(parameters));
     }
 
     /**
@@ -169,8 +157,6 @@ public class ConfigurationPropertiesTemplateBuildHandler
      * @param parameters the parameter map.
      * @param metaData the database meta data.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the template instance.
      * @throws BuildException if the template cannot be created.
      * @precondition parameters != null
@@ -178,10 +164,7 @@ public class ConfigurationPropertiesTemplateBuildHandler
      * @preconditrion repository != null
      */
     protected ConfigurationPropertiesTemplate buildConfigurationPropertiesTemplate(
-        final Map parameters,
-        final DatabaseMetaData metaData,
-        final Project project,
-        final Task task)
+        final Map parameters, final DatabaseMetaData metaData)
       throws  BuildException
     {
         ConfigurationPropertiesTemplate result = null;
@@ -195,9 +178,7 @@ public class ConfigurationPropertiesTemplateBuildHandler
                     metaData.getDatabaseProductName(),
                     metaData.getDatabaseProductVersion(),
                     retrieveProjectPackage(parameters),
-                    retrieveTableNames(parameters),
-                    project,
-                    task);
+                    retrieveTableNames(parameters));
         }
         catch  (final SQLException sqlException)
         {
@@ -216,8 +197,6 @@ public class ConfigurationPropertiesTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param projectPackage the project package.
      * @param tableNames the table names.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the template instance.
      * @throws BuildException if the template cannot be created.
      * @precondition parameters != null
@@ -232,22 +211,20 @@ public class ConfigurationPropertiesTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String projectPackage,
-        final String[] tableNames,
-        final Project project,
-        final Task task)
+        final String[] tableNames)
       throws  BuildException
     {
+        int t_iLength = (tableNames != null) ? tableNames.length : 0;
+        
         ConfigurationPropertiesTemplate result =
             buildConfigurationPropertiesTemplate(
                 repository,
                 engineName,
                 engineVersion,
-                projectPackage,
-                project,
-                task);
+                projectPackage);
 
         for  (int t_iTableIndex = 0;
-                  t_iTableIndex < tableNames.length;
+                  t_iTableIndex < t_iLength;
                   t_iTableIndex++)
         {
             result.addTable(tableNames[t_iTableIndex]);
@@ -262,8 +239,6 @@ public class ConfigurationPropertiesTemplateBuildHandler
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws BuildException whenever the template
      * information is not valid.
      * @precondition repository != null
@@ -274,9 +249,7 @@ public class ConfigurationPropertiesTemplateBuildHandler
         final String repository,
         final String engineName,
         final String engineVersion,
-        final String basePackageName,
-        final Project project,
-        final Task task)
+        final String basePackageName)
       throws  BuildException
     {
         return
@@ -285,9 +258,7 @@ public class ConfigurationPropertiesTemplateBuildHandler
                 engineName,
                 engineVersion,
                 basePackageName,
-                ConfigurationPropertiesTemplateGenerator.getInstance(),
-                project,
-                task);
+                ConfigurationPropertiesTemplateGenerator.getInstance());
     }
 
     /**
@@ -297,8 +268,6 @@ public class ConfigurationPropertiesTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
      * @param templateFactory the template factory.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws BuildException whenever the template
      * information is not valid.
      * @precondition repository != null
@@ -311,9 +280,7 @@ public class ConfigurationPropertiesTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String basePackageName,
-        final ConfigurationPropertiesTemplateFactory templateFactory,
-        final Project project,
-        final Task task)
+        final ConfigurationPropertiesTemplateFactory templateFactory)
       throws  BuildException
     {
         ConfigurationPropertiesTemplate result = null;
@@ -325,9 +292,7 @@ public class ConfigurationPropertiesTemplateBuildHandler
                     repository,
                     engineName,
                     engineVersion,
-                    basePackageName,
-                    project,
-                    task);
+                    basePackageName);
         }
         catch  (final QueryJException queryjException)
         {
@@ -347,32 +312,6 @@ public class ConfigurationPropertiesTemplateBuildHandler
     {
         return
             (String) parameters.get(ParameterValidationHandler.REPOSITORY);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(final Map parameters)
-    {
-        return
-            (DatabaseMetaData)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
     }
 
     /**

@@ -61,8 +61,6 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -101,11 +99,25 @@ public class TestSuiteTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    public boolean handle(final Map parameters)
+        throws  BuildException
+    {
         return
             handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask(),
+                parameters,
+                retrieveTestTemplates(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters),
                 TestSuiteTemplateGenerator.getInstance(),
                 StringUtils.getInstance());
     }
@@ -113,40 +125,39 @@ public class TestSuiteTemplateBuildHandler
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param testTemplates the test templates.
+     * @param projectPackage the project package.
+     * @param subFolders whether to use subfolders or not.
      * @param templateFactory the template factory.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
+     * @precondition testTemplates != null
+     * @precondition projectPackage != null
      * @precondition templateFactory != null
      * @precondition stringUtils != null
      */
     protected boolean handle(
         final Map parameters,
-        final Project project,
-        final Task task,
+        final Collection testTemplates,
+        final String projectPackage,
+        final boolean subFolders,
         final TestSuiteTemplateFactory templateFactory,
         final StringUtils stringUtils)
       throws  BuildException
     {
         boolean result = false;
 
-        String t_strPackage = retrievePackage(parameters);
-
         TestSuiteTemplate t_TestSuiteTemplate =
             templateFactory.createTestSuiteTemplate(
-                t_strPackage,
-                stringUtils.extractPackageName(t_strPackage),
-                project,
-                task);
+                projectPackage,
+                stringUtils.extractPackageName(projectPackage),
+                subFolders);
 
-        Collection t_cTestTemplates = retrieveTestTemplates(parameters);
-
-        if  (t_cTestTemplates != null)
+        if  (testTemplates != null)
         {
-            Iterator t_itTestTemplates = t_cTestTemplates.iterator();
+            Iterator t_itTestTemplates = testTemplates.iterator();
 
             while  (   (t_itTestTemplates != null)
                     && (t_itTestTemplates.hasNext()))
@@ -165,20 +176,6 @@ public class TestSuiteTemplateBuildHandler
         
         return result;
     }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrievePackage(final Map parameters)
-        throws  BuildException
-    {
-        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
-    }
-
     /**
      * Retrieves the test template collection.
      * @param parameters the parameter map.

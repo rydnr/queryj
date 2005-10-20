@@ -91,53 +91,93 @@ public class DAOTestTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return handle(parameters, retrieveDatabaseMetaData(parameters));
+    }
+                
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param metadata the database metadata.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metadata != null
+     */
+    protected boolean handle(
+        final Map parameters, final DatabaseMetaData metadata)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try
         {
-            try 
+            result =
+                handle(
+                    retrieveDAOTestTemplates(parameters),
+                    retrieveOutputDir(
+                        metadata.getDatabaseProductName(),
+                        parameters),
+                    DAOTestTemplateGenerator.getInstance());
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw new BuildException(sqlException);
+        }
+
+        return result;
+    }
+                
+    /**
+     * Writes the DAO test templates.
+     * @param templates the templates.
+     * @param outputDir the output dir.
+     * @param generator the <code>DAOTestTemplateGenerator</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition templates != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final DAOTestTemplate[] templates,
+        final File outputDir,
+        final DAOTestTemplateGenerator generator)
+      throws  BuildException
+    {
+        boolean result = false;
+
+        try 
+        {
+            int t_iLength = (templates != null) ? templates.length : 0;
+
+            for  (int t_iDAOTestIndex = 0;
+                      t_iDAOTestIndex < t_iLength;
+                      t_iDAOTestIndex++)
             {
-                Map attributes = command.getAttributeMap();
-
-                DAOTestTemplateGenerator t_DAOTestTemplateGenerator =
-                    DAOTestTemplateGenerator.getInstance();
-
-                DAOTestTemplate[] t_aDAOTestTemplates =
-                    retrieveDAOTestTemplates(attributes);
-
-                DatabaseMetaData t_DatabaseMetaData =
-                    retrieveDatabaseMetaData(attributes);
-
-                if  (   (t_DatabaseMetaData         != null) 
-                     && (t_aDAOTestTemplates        != null)
-                     && (t_DAOTestTemplateGenerator != null))
-                {
-                    File t_OutputDir =
-                        retrieveOutputDir(
-                            t_DatabaseMetaData.getDatabaseProductName(),
-                            attributes);
-
-                    for  (int t_iDAOTestIndex = 0;
-                              t_iDAOTestIndex < t_aDAOTestTemplates.length;
-                              t_iDAOTestIndex++)
-                    {
-                        t_DAOTestTemplateGenerator.write(
-                            t_aDAOTestTemplates[t_iDAOTestIndex], t_OutputDir);
-                    }
-                }
+                generator.write(templates[t_iDAOTestIndex], outputDir);
             }
-            catch  (SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -148,84 +188,15 @@ public class DAOTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the templates.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected DAOTestTemplate[] retrieveDAOTestTemplates(Map parameters)
+    protected DAOTestTemplate[] retrieveDAOTestTemplates(final Map parameters)
         throws  BuildException
     {
-        DAOTestTemplate[] result = EMPTY_DAO_TEST_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (DAOTestTemplate[])
-                    parameters.get(
-                        TemplateMappingManager.DAO_TEST_TEMPLATES);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-            Map parameters)
-        throws  BuildException
-    {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return the output dir.
-     * @throws BuildException if the output dir retrieval process if faulty.
-     */
-    protected File retrieveProjectFolder(Map parameters)
-        throws  BuildException
-    {
-        File result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-        }
-        
-        return result;
+        return
+            (DAOTestTemplate[])
+                parameters.get(
+                    TemplateMappingManager.DAO_TEST_TEMPLATES);
     }
 
     /**
@@ -234,24 +205,40 @@ public class DAOTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition engineName != null
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(String engineName, Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final String engineName, final Map parameters)
+      throws  BuildException
     {
-        File result = null;
+        return
+            retrieveOutputDir(
+                engineName, parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveDAOTestFolder(
-                    retrieveProjectFolder(parameters),
-                    retrieveProjectPackage(parameters),
-                    engineName);
-        }
-        
-        return result;
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param engineName the engine name.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition engineName != null
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected File retrieveOutputDir(
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveDAOTestFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                engineName,
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

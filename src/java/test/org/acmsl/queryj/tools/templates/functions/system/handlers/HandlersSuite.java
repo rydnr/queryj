@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.functions.system.handlers.
+*              org.acmsl.queryj.tools.templates.functions.system.handlers.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.functions.system.handlers;
+package org.acmsl.queryj.tools.templates.functions.system.handlers;
 
 
 /*
@@ -95,15 +95,15 @@ public class HandlersSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions.system.handlers");
+    new TestSuite("org.acmsl.queryj.tools.templates.functions.system.handlers");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTestTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTestTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTestTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTestTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTestTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.handlers.SystemFunctionsTestTemplateBuildHandlerTest.class);
     
     
     

@@ -45,12 +45,6 @@ import org.acmsl.queryj.tools.templates.AbstractTestSuiteTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -72,15 +66,11 @@ public class TestSuiteTemplate
      * @param packageName the tested package name.
      * @param testPackageName the test package name.
      * @param suiteName the suite name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public TestSuiteTemplate(
         final String packageName,
         final String testPackageName,
-        final String suiteName,
-        final Project project,
-        final Task task)
+        final String suiteName)
     {
         super(
             packageName,
@@ -89,9 +79,7 @@ public class TestSuiteTemplate
             TEST_SUITE_TEMPLATE,
             TEST_CASE_IMPORT_STATEMENT,
             ADDING_TEST_CASE_TO_SUITE_STATEMENT,
-            ADDING_TEST_SUITE_TO_SUITE_STATEMENT,
-            project,
-            task);
+            ADDING_TEST_SUITE_TO_SUITE_STATEMENT);
     }
 
     /**

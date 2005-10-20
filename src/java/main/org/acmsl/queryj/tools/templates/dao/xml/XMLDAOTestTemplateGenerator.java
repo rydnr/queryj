@@ -56,12 +56,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -260,8 +254,6 @@ public class XMLDAOTestTemplateGenerator
      * @param quote the identifier quote string.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectPackageName the value object's package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
@@ -275,9 +267,7 @@ public class XMLDAOTestTemplateGenerator
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String daoPackageName,
-        final String valueObjectPackageName,
-        final Project project,
-        final Task task)
+        final String valueObjectPackageName)
       throws  QueryJException
     {
         XMLDAOTestTemplate result = null;
@@ -293,9 +283,7 @@ public class XMLDAOTestTemplateGenerator
                     metaDataManager,
                     packageName,
                     daoPackageName,
-                    valueObjectPackageName,
-                    project,
-                    task);
+                    valueObjectPackageName);
         }
         else 
         {
@@ -305,9 +293,7 @@ public class XMLDAOTestTemplateGenerator
                     metaDataManager,
                     packageName,
                     daoPackageName,
-                    valueObjectPackageName,
-                    project,
-                    task);
+                    valueObjectPackageName);
         }
 
         return result;
@@ -317,8 +303,6 @@ public class XMLDAOTestTemplateGenerator
      * Writes a XML DAO template to disk.
      * @param xmlDAOTestTemplate the XML DAO test template to write.
      * @param outputDir the output folder.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws IOException if the file cannot be created.
      * @precondition xmlDAOTemplate != null
      * @precondition outputDir != null

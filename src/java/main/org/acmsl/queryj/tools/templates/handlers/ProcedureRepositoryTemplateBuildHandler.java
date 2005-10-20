@@ -56,9 +56,6 @@ import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 
 /*
  * Importing some JDK classes.
@@ -118,8 +115,7 @@ public class ProcedureRepositoryTemplateBuildHandler
                     t_MetaDataManager.getProceduresMetaData();
 
                 ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate =
-                    buildProcedureRepositoryTemplate(
-                        attributes, command.getProject(), command.getTask());
+                    buildProcedureRepositoryTemplate(attributes);
 
                 if  (  (t_ProcedureRepositoryTemplate != null)
                     && (t_aProceduresMetaData         != null))
@@ -197,13 +193,11 @@ public class ProcedureRepositoryTemplateBuildHandler
      * Builds a procedure repository template using the information stored
      * in the attribute map.
      * @param parameters the parameter map.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the ProcedureRepositoryTemplate instance.
      * @throws BuildException if the repository cannot be created.
      */
     protected ProcedureRepositoryTemplate buildProcedureRepositoryTemplate(
-        final Map parameters, final Project project, final Task task)
+        final Map parameters)
         throws  BuildException
     {
         ProcedureRepositoryTemplate result = null;
@@ -217,9 +211,7 @@ public class ProcedureRepositoryTemplateBuildHandler
                             ParameterValidationHandler.PACKAGE),
                     (String)
                         parameters.get(
-                            ParameterValidationHandler.REPOSITORY),
-                    project,
-                    task);
+                            ParameterValidationHandler.REPOSITORY));
 
             if  (result != null) 
             {
@@ -250,17 +242,13 @@ public class ProcedureRepositoryTemplateBuildHandler
      * Builds a procedure repository template using given information.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
      * information is not valid.
      */
     protected ProcedureRepositoryTemplate buildProcedureRepositoryTemplate(
         final String packageName,
-        final String repository,
-        final Project project,
-        final Task task)
+        final String repository)
       throws  BuildException
     {
         ProcedureRepositoryTemplate result = null;
@@ -275,7 +263,7 @@ public class ProcedureRepositoryTemplateBuildHandler
             {
                 result =
                     t_ProcedureRepositoryTemplateGenerator.createProcedureRepositoryTemplate(
-                        packageName, repository, project, task);
+                        packageName, repository);
             }
         }
 

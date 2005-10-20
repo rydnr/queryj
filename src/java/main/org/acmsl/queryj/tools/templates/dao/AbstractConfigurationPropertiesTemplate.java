@@ -44,11 +44,6 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 /**
  * Importing some JDK classes.
  */
@@ -108,8 +103,6 @@ public abstract class AbstractConfigurationPropertiesTemplate
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
      * @param daoFactorySetting the DAO factory setting.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractConfigurationPropertiesTemplate(
         final String header,
@@ -117,11 +110,8 @@ public abstract class AbstractConfigurationPropertiesTemplate
         final String engineName,
         final String engineVersion,
         final String basePackageName,
-        final String daoFactorySetting,
-        final Project project,
-        final Task task)
+        final String daoFactorySetting)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetRepository(repository);
         immutableSetEngineName(engineName);

@@ -43,12 +43,6 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplate;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Represents entities able to create JdbcDAO templates.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -59,14 +53,10 @@ public interface JdbcDAOTemplateFactory
     /**
      * Generates a JdbcDAO template.
      * @param packageName the package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
     public JdbcDAOTemplate createJdbcDAOTemplate(
-        final String packageName,
-        final Project project,
-        final Task task)
+        final String packageName)
       throws  QueryJException;
 }

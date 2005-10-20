@@ -54,8 +54,6 @@ import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplateGener
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -88,33 +86,24 @@ public class BaseValueObjectTemplateWritingHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given command.
      * @param attributes the attributes.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition attributes != null
      */
-    protected boolean handle(
-        final Map attributes, final Project project, final Task task)
+    protected boolean handle(final Map attributes)
         throws  BuildException
     {
         return
             handle(
                 retrieveBaseValueObjectTemplates(attributes),
                 retrieveOutputDir(attributes),
-                BaseValueObjectTemplateGenerator.getInstance(),
-                project,
-                task);
+                BaseValueObjectTemplateGenerator.getInstance());
     }
 
     /**
@@ -123,8 +112,6 @@ public class BaseValueObjectTemplateWritingHandler
      * @param outputDir the output dir.
      * @param generator the <code>ValueObjectTemplateGenerator</code>
      * instance.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition templates != null
@@ -135,24 +122,24 @@ public class BaseValueObjectTemplateWritingHandler
     protected boolean handle(
         final BaseValueObjectTemplate[] templates,
         final File outputDir,
-        final BaseValueObjectTemplateGenerator generator,
-        final Project project,
-        final Task task)
+        final BaseValueObjectTemplateGenerator generator)
       throws  BuildException
     {
         boolean result = false;
 
         try 
         {
+            int t_iLength = (templates != null) ? templates.length : 0;
+
             for  (int t_iValueObjectIndex = 0;
-                      t_iValueObjectIndex < templates.length;
+                      t_iValueObjectIndex < t_iLength;
                       t_iValueObjectIndex++)
             {
                 generator.write(
                     templates[t_iValueObjectIndex], outputDir);
             }
         }
-        catch  (IOException ioException)
+        catch  (final IOException ioException)
         {
             throw new BuildException(ioException);
         }
@@ -188,56 +175,27 @@ public class BaseValueObjectTemplateWritingHandler
     {
         return
             retrieveOutputDir(
-                retrieveBaseDir(parameters),
-                retrieveProjectPackage(parameters),
-                PackageUtils.getInstance());
+                parameters, PackageUtils.getInstance());
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param baseDir the base dir.
-     * @param projectPackage the project package.
+     * @param parmaters the parameters.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition baseDir != null
-     * @precondition projectPackage != null
+     * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final File baseDir,
-        final String projectPackage,
+        final Map parameters,
         final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveBaseValueObjectFolder(
-                baseDir, projectPackage);
-    }
-
-    /**
-     * Retrieves the base dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return the base dir.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveBaseDir(final Map parameters)
-        throws  BuildException
-    {
-        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

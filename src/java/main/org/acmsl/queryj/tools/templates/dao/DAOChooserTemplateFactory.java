@@ -42,12 +42,6 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Represents entities able to create DAOChoosr templates.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -59,13 +53,9 @@ public interface DAOChooserTemplateFactory
      * Creates a DAOChooser template instance.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return such template.
      */
     public DAOChooserTemplate createDAOChooserTemplate(
         final String packageName,
-        final String repository,
-        final Project project,
-        final Task task);
+        final String repository);
 }

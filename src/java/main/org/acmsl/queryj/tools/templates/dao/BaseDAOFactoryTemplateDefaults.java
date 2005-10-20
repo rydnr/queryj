@@ -35,17 +35,6 @@
  * Description: Defines the default subtemplates used to generate base DAO
  *              factories according to database metadata.
  *
-<<<<<<< BaseDAOFactoryTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.4
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -59,10 +48,6 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< BaseDAOFactoryTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.4
  */
 public interface BaseDAOFactoryTemplateDefaults
     extends  JavaTemplateDefaults
@@ -81,14 +66,6 @@ public interface BaseDAOFactoryTemplateDefaults
         + " *\n"
         + " * Description: Is able to create \"{0}\" DAO instances.\n"
         + " *              (Abstract Factory pattern)\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
         + " *\n"
         + " */\n";
 
@@ -134,7 +111,6 @@ public interface BaseDAOFactoryTemplateDefaults
           "/**\n"
         + " * Is able to create <i>{0}</i> DAO instances (Abstract Factory pattern).\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**
@@ -184,27 +160,55 @@ public interface BaseDAOFactoryTemplateDefaults
         + "            '}'\n"
         + "            catch  (final ClassNotFoundException classNotFoundException)\n"
         + "            '{'\n"
-        + "                LogFactory.getLog({0}DAOFactory.class).error(\n"
-        + "                    \"Cannot find {0} DAO Factory implementation class\",\n"
-        + "                    classNotFoundException);\n"
+        + "                try\n"
+        + "                '{'\n"
+        + "                    LogFactory.getLog({0}DAOFactory.class).error(\n"
+        + "                        \"Cannot find {0} DAO Factory implementation class\",\n"
+        + "                        classNotFoundException);\n"
+        + "                '}'\n"
+        + "                catch  (final Throwable throwable)\n"
+        + "                '{'\n"
+        + "                    // class-loading problem.\n"
+        + "                '}'\n\n"
         + "            '}'\n"
         + "            catch  (final InstantiationException instantiationException)\n"
         + "            '{'\n"
-        + "                LogFactory.getLog({0}DAOFactory.class).error(\n"
-        + "                    \"Cannot instantiate {0} DAO Factory implementation\",\n"
-        + "                    instantiationException);\n"
+        + "                try\n"
+        + "                '{'\n"
+        + "                    LogFactory.getLog({0}DAOFactory.class).error(\n"
+        + "                        \"Cannot instantiate {0} DAO Factory implementation\",\n"
+        + "                        instantiationException);\n"
+        + "                '}'\n"
+        + "                catch  (final Throwable throwable)\n"
+        + "                '{'\n"
+        + "                    // class-loading problem.\n"
+        + "                '}'\n\n"
         + "            '}'\n"
         + "            catch  (final IllegalAccessException illegalAccessException)\n"
         + "            '{'\n"
-        + "                LogFactory.getLog({0}DAOFactory.class).error(\n"
-        + "                    \"Cannot access {0} DAO Factory implementation\",\n"
-        + "                    illegalAccessException);\n"
+        + "                try\n"
+        + "                '{'\n"
+        + "                    LogFactory.getLog({0}DAOFactory.class).error(\n"
+        + "                        \"Cannot access {0} DAO Factory implementation\",\n"
+        + "                        illegalAccessException);\n"
+        + "                '}'\n"
+        + "                catch  (final Throwable throwable)\n"
+        + "                '{'\n"
+        + "                    // class-loading problem.\n"
+        + "                '}'\n\n"
         + "            '}'\n"
         + "        '}'\n"
         + "        else\n"
         + "        '{'\n"
-        + "            LogFactory.getLog({0}DAOFactory.class).error(\n"
-        + "                \"{0} DAO Factory implementation not specified\");\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog({0}DAOFactory.class).error(\n"
+        + "                    \"{0} DAO Factory implementation not specified\");\n"
+        + "            '}'\n"
+        + "            catch  (final Throwable throwable)\n"
+        + "            '{'\n"
+        + "                // class-loading problem.\n"
+        + "            '}'\n\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n\n";

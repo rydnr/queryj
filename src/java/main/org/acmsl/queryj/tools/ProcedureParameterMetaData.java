@@ -42,6 +42,11 @@ package org.acmsl.queryj.tools;
  */
 import org.acmsl.queryj.tools.ProcedureMetaData;
 
+/*
+ * Importing Commons-Logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Represents procedure parameter metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
@@ -111,10 +116,17 @@ public class ProcedureParameterMetaData
         immutableSetLength(length);
         immutableSetNullable(nullable);
 
-        org.apache.commons.logging.LogFactory.getLog(getClass()).info(
-              "Parameter (name, type, comment, dataType, length, nullable) =\n"
-            + name + ", " + type + ", " + comment + ", " + dataType
-            + ", " + length + ", " + nullable);
+        try
+        {
+            org.apache.commons.logging.LogFactory.getLog(getClass()).info(
+                  "Parameter (name, type, comment, dataType, length, nullable) =\n"
+                + name + ", " + type + ", " + comment + ", " + dataType
+                + ", " + length + ", " + nullable);
+        }
+        catch  (final Throwable throwable)
+        {
+            // class-loading problem.
+        }
     }
 
     /**

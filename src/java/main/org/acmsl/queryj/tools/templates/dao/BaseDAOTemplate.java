@@ -54,8 +54,9 @@ import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.regexpplugin.Helper;
 import org.acmsl.commons.regexpplugin.RegexpEngine;
 import org.acmsl.commons.regexpplugin.RegexpEngineNotFoundException;
@@ -66,10 +67,9 @@ import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
 
 /*
- * Importing Ant classes.
+ * Importing some Commons-Logging classes.
  */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
@@ -110,17 +110,13 @@ public class BaseDAOTemplate
      * @param customSqlProvider the custom sql provider.
      * @param packageName the package name.
      * @param valueObjectPackageName the value object package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public BaseDAOTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String valueObjectPackageName,
-        final Project project,
-        final Task task)
+        final String valueObjectPackageName)
     {
         super(
             tableTemplate,
@@ -170,9 +166,7 @@ public class BaseDAOTemplate
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_JAVADOC,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RETURN_JAVADOC,
             DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_DECLARATION,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**
@@ -232,8 +226,6 @@ public class BaseDAOTemplate
                 getCustomSelectForUpdateReturnJavadoc(),
                 getCustomSelectForUpdateParameterDeclaration(),
                 getClassEnd(),
-                getProject(),
-                getTask(),
                 MetaDataUtils.getInstance(),
                 EnglishGrammarUtils.getInstance(),
                 StringUtils.getInstance());
@@ -300,8 +292,6 @@ public class BaseDAOTemplate
      * @param customSelectForUpdateParameterDeclaration the parameter
      * declaration of the custom-select-for-update operations.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
@@ -362,8 +352,6 @@ public class BaseDAOTemplate
         final String customSelectForUpdateReturnJavadoc,
         final String customSelectForUpdateParameterDeclaration,
         final String classEnd,
-        final Project project,
-        final Task task,
         final MetaDataUtils metaDataUtils,
         final EnglishGrammarUtils englishGrammarUtils,
         final StringUtils stringUtils)
@@ -479,9 +467,7 @@ public class BaseDAOTemplate
                         tableTemplate.getTableName(),
                         t_strDescriptionColumn,
                         t_astrColumnNames.length,
-                        metaDataManager.getMetaData(),
-                        project,
-                        task);
+                        metaDataManager.getMetaData());
 
                 if  (t_mProperties != null)
                 {
@@ -603,11 +589,11 @@ public class BaseDAOTemplate
                                 new Object[]
                                 {
                                     tableTemplate.getTableName(),
-                                    t_strDescriptionColumn,
+                                    t_strDescriptionColumn.toLowerCase(),
                                     t_strFindByStaticFieldJavadoc,
                                     t_strCapitalizedValueObjectName,
                                     stringUtils.capitalize(
-                                        t_strDescriptionColumn, '_'),
+                                        t_strDescriptionColumn.toLowerCase(), '_'),
                                     t_strFindByStaticFieldDeclaration
                                 }));
                     }
@@ -940,7 +926,7 @@ public class BaseDAOTemplate
 
         t_sbResult.append(t_sbDeleteMethod);
 
-        String t_strReferredColumn = null;
+        String[] t_astrReferredColumns = null;
 
         String[] t_astrReferredTables =
             metaDataManager.getReferredTables(
@@ -953,8 +939,8 @@ public class BaseDAOTemplate
                       t_iRefTableIndex < t_astrReferredTables.length;
                       t_iRefTableIndex++)
             {
-                t_strReferredColumn =
-                    metaDataManager.getForeignKey(
+                t_astrReferredColumns =
+                    metaDataManager.getForeignKeys(
                         tableTemplate.getTableName(),
                         t_astrReferredTables[t_iRefTableIndex]);
 
@@ -965,24 +951,40 @@ public class BaseDAOTemplate
                                 .toLowerCase()),
                         '_');
 
-                String t_strFkJavadoc =
-                    t_FkJavadocFormatter.format(
-                        new Object[]
-                        {
-                            t_strReferredColumn.toLowerCase(),
-                            t_strReferredColumn
-                        });
+                StringBuffer t_sbFkJavadoc = new StringBuffer();
+                StringBuffer t_sbFkDeclaration = new StringBuffer();
 
-                String t_strFkDeclaration =
-                    t_FkDeclarationFormatter.format(
-                        new Object[]
-                        {
-                            metaDataUtils.getNativeType(
-                                metaDataManager.getColumnType(
-                                    tableTemplate.getTableName(),
-                                    t_strReferredColumn)),
-                            t_strReferredColumn.toLowerCase()
-                        });
+                int t_iLength =
+                    (t_astrReferredColumns != null) ? t_astrReferredColumns.length : 0;
+
+                for  (int t_iColumnIndex = 0;
+                          t_iColumnIndex < t_iLength;
+                          t_iColumnIndex++)
+                {
+                    t_sbFkJavadoc.append(
+                        t_FkJavadocFormatter.format(
+                            new Object[]
+                            {
+                                t_astrReferredColumns[t_iColumnIndex].toLowerCase(),
+                                t_astrReferredColumns[t_iColumnIndex]
+                            }));
+
+                    t_sbFkDeclaration.append(
+                        t_FkDeclarationFormatter.format(
+                            new Object[]
+                            {
+                                metaDataUtils.getNativeType(
+                                    metaDataManager.getColumnType(
+                                        tableTemplate.getTableName(),
+                                        t_astrReferredColumns[t_iColumnIndex])),
+                                t_astrReferredColumns[t_iColumnIndex].toLowerCase()
+                            }));
+
+                    if  (t_iColumnIndex < t_iLength - 1)
+                    {
+                        t_sbFkDeclaration.append(",");
+                    }
+                }
 
                 t_sbDeleteByFkMethod.append(
                     t_DeleteByFkMethodFormatter.format(
@@ -993,9 +995,9 @@ public class BaseDAOTemplate
                                     t_astrReferredTables[t_iRefTableIndex]
                                         .toLowerCase()),
                                 '_'),
-                            t_strFkJavadoc,
+                            t_sbFkJavadoc,
                             t_strReferredTableName,
-                            t_strFkDeclaration
+                            t_sbFkDeclaration
                         }));
 
             }
@@ -1072,7 +1074,6 @@ public class BaseDAOTemplate
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
      * @return such generated code.
-     * @precondition customSqlProvider != null
      * @precondition tableName != null
      * @precondition customSelect != null
      * @precondition parameterJavadoc != null
@@ -1094,7 +1095,12 @@ public class BaseDAOTemplate
     {
         StringBuffer result = new StringBuffer();
 
-        Collection t_cContents = customSqlProvider.getCollection();
+        Collection t_cContents = null;
+
+        if  (customSqlProvider != null)
+        {
+            t_cContents = customSqlProvider.getCollection();
+        }
 
         if  (t_cContents != null)
         {
@@ -1206,9 +1212,16 @@ public class BaseDAOTemplate
 
                     if  (t_Parameter == null)
                     {
-                        LogFactory.getLog("custom-sql").warn(
-                              "Referenced parameter not found:"
-                            + t_ParameterRef.getId());
+                        try
+                        {
+                            LogFactory.getLog("custom-sql").warn(
+                                  "Referenced parameter not found:"
+                                + t_ParameterRef.getId());
+                        }
+                        catch  (final Throwable throwable)
+                        {
+                            // class-loading problem.
+                        }
                     }
                     else
                     {
@@ -1285,9 +1298,16 @@ public class BaseDAOTemplate
 
             if  (t_Result == null)
             {
-                LogFactory.getLog("custom-sql").warn(
-                    "Referenced result not found:"
-                    + resultRef.getId());
+                try
+                {
+                    LogFactory.getLog("custom-sql").warn(
+                          "Referenced result not found:"
+                        + resultRef.getId());
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
             }
             else
             {
@@ -1343,9 +1363,16 @@ public class BaseDAOTemplate
 
                     if  (t_Property == null)
                     {
-                        LogFactory.getLog("custom-sql").warn(
-                              "Referenced property not found:"
-                            + t_PropertyRef.getId());
+                        try
+                        {
+                            LogFactory.getLog("custom-sql").warn(
+                                  "Referenced property not found:"
+                                + t_PropertyRef.getId());
+                        }
+                        catch  (final Throwable throwable)
+                        {
+                            // class-loading problem.
+                        }
                     }
                     else
                     {
@@ -1503,7 +1530,6 @@ public class BaseDAOTemplate
      * @param stringValidator the <code>StringValidator</code> instance.
      * @param helper the Helper instance.
      * @return such generated code.
-     * @precondition customSqlProvider != null
      * @precondition tableName != null
      * @precondition type != null
      * @precondition customTemplate != null
@@ -1534,7 +1560,12 @@ public class BaseDAOTemplate
     {
         StringBuffer result = new StringBuffer();
 
-        Collection t_cContents = customSqlProvider.getCollection();
+        Collection t_cContents = null;
+
+        if  (customSqlProvider != null)
+        {
+            t_cContents = customSqlProvider.getCollection();
+        }
 
         if  (t_cContents != null)
         {
@@ -1746,7 +1777,6 @@ public class BaseDAOTemplate
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
      * @return such generated code.
-     * @precondition customSqlProvider != null
      * @precondition tableName != null
      * @precondition customSelectForUpdate != null
      * @precondition parameterJavadoc != null
@@ -1770,7 +1800,12 @@ public class BaseDAOTemplate
     {
         StringBuffer result = new StringBuffer();
 
-        Collection t_cContents = customSqlProvider.getCollection();
+        Collection t_cContents = null;
+
+        if  (customSqlProvider != null)
+        {
+            t_cContents = customSqlProvider.getCollection();
+        }
 
         if  (t_cContents != null)
         {
@@ -1964,8 +1999,6 @@ public class BaseDAOTemplate
      * @param descriptionColumn the description column.
      * @param columnCount the number of columns.
      * @param metaData the metadata.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return such contents.
      * @throws InvalidTemplateException if the template is invalid.
      * @precondition tableName != null
@@ -1977,9 +2010,7 @@ public class BaseDAOTemplate
         final String tableName,
         final String descriptionColumn,
         final int columnCount,
-        final DatabaseMetaData metaData,
-        final Project project,
-        final Task task)
+        final DatabaseMetaData metaData)
       throws  InvalidTemplateException
     {
         Map result = null;
@@ -1991,9 +2022,7 @@ public class BaseDAOTemplate
                     tableName,
                     descriptionColumn,
                     columnCount,
-                    metaData.getConnection(),
-                    project,
-                    task);
+                    metaData.getConnection());
         }
         catch  (final SQLException sqlException)
         {
@@ -2013,8 +2042,6 @@ public class BaseDAOTemplate
      * @param descriptionColumn the description column.
      * @param columnCount the number of columns.
      * @param connection the connection.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return such contents.
      * @throws InvalidTemplateException if the template is invalid.
      * @precondition tableName != null
@@ -2026,13 +2053,13 @@ public class BaseDAOTemplate
         final String tableName,
         final String descriptionColumn,
         final int columnCount,
-        final Connection connection,
-        final Project project,
-        final Task task)
+        final Connection connection)
       throws  InvalidTemplateException
     {
         Map result = new HashMap();
 
+        Log t_Log = UniqueLogFactory.getLog(getClass());
+        
         ResultSet t_rsResults = null;
 
         PreparedStatement t_PreparedStatement = null;
@@ -2110,10 +2137,12 @@ public class BaseDAOTemplate
             }
             catch  (final SQLException sqlException)
             {
-                project.log(
-                    task,
-                    "Cannot close the result set " + sqlException,
-                    Project.MSG_ERR);
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot close the result set.",
+                        sqlException);
+                }
             }
 
             try 
@@ -2125,10 +2154,12 @@ public class BaseDAOTemplate
             }
             catch  (final SQLException sqlException)
             {
-                project.log(
-                    task,
-                    "Cannot close the statement " + sqlException,
-                    Project.MSG_ERR);
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot close the statement.",
+                        sqlException);
+                }
             }
         }
 
@@ -2177,20 +2208,6 @@ public class BaseDAOTemplate
     protected String toJavaConstant(
         final String value, final Helper helper)
     {
-        return
-            helper.replaceAll(
-                helper.replaceAll(
-                    helper.replaceAll(
-                        helper.replaceAll(
-                            helper.replaceAll(
-                                helper.replaceAll(
-                                    helper.replaceAll(
-                                        value.trim().toUpperCase(), ",", "_"),
-                                    "\"", ""),
-                                "'", ""),
-                            "\\+", "_"),
-                        "\\.", "_"),
-                    "-", "_"),
-                "\\s", "_");
+        return helper.replaceAll(value, "\\W", "_").toUpperCase();
     }
 }

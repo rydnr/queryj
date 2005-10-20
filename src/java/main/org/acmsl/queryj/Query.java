@@ -70,11 +70,6 @@ import java.util.Collection;
 import java.util.Calendar;
 import java.util.List;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Represents queries to access persistent data.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -2748,6 +2743,7 @@ public abstract class Query
      * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
      * @throws SQLException if an error occurs.
      * @precondition variableCondition != null
+     * @precondition value != null
      */
     public void setTimestamp(
         final VariableCondition condition, final java.util.Date value)
@@ -2769,6 +2765,7 @@ public abstract class Query
      * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
      * @throws SQLException if an error occurs.
      * @precondition field != null
+     * @precondition value != null
      */
     public void setTimestamp(
         final Field field,
@@ -2789,6 +2786,7 @@ public abstract class Query
      * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
      * @throws SQLException if an error occurs.
      * @precondition variableCondition != null
+     * @precondition value != null
      */
     public void setTimestamp(
         final VariableCondition condition,

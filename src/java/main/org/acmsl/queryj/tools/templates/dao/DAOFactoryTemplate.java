@@ -53,12 +53,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -88,8 +82,6 @@ public class DAOFactoryTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public DAOFactoryTemplate(
         final TableTemplate tableTemplate,
@@ -99,13 +91,9 @@ public class DAOFactoryTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String jndiDataSource,
-        final Project project,
-        final Task task)
+        final String jndiDataSource)
     {
         super(
-            DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
             tableTemplate,
             metaDataManager,
             packageName,
@@ -113,20 +101,7 @@ public class DAOFactoryTemplate
             engineVersion,
             quote,
             basePackageName,
-            jndiDataSource,
-            DEFAULT_PROJECT_IMPORTS,
-            DEFAULT_JDK_IMPORTS,
-            DEFAULT_EXTENSION_IMPORTS,
-            DEFAULT_COMMONS_LOGGING_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            DEFAULT_SINGLETON_BODY,
-            DEFAULT_FACTORY_METHOD,
-            DEFAULT_DATA_SOURCE_RETRIEVAL_METHOD,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            jndiDataSource);
     }
 
     /**
@@ -137,8 +112,6 @@ public class DAOFactoryTemplate
     {
         return
             generateOutput(
-                getHeader(),
-                getPackageDeclaration(),
                 getTableTemplate(),
                 getMetaDataManager(),
                 getPackageName(),
@@ -147,17 +120,7 @@ public class DAOFactoryTemplate
                 getQuote(),
                 getBasePackageName(),
                 getJNDIDataSource(),
-                getProjectImports(),
-                getJdkImports(),
-                getExtensionImports(),
-                getCommonsLoggingImports(),
-                getJavadoc(),
-                getClassDefinition(),
-                getClassStart(),
-                getSingletonBody(),
-                getFactoryMethod(),
-                getDataSourceRetrievalMethod(),
-                getClassEnd(),
+                TemplateUtils.getInstance(),
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance(),
                 MetaDataUtils.getInstance(),
@@ -166,8 +129,6 @@ public class DAOFactoryTemplate
 
     /**
      * Retrieves the source code of the generated field tableName.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
@@ -176,17 +137,6 @@ public class DAOFactoryTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
-     * @param projectImports the project imports.
-     * @param jdkImports the JDK imports.
-     * @param extensionImports the extension imports.
-     * @param commonsLoggingImports the commons-logging imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param singletonBody the singleton body.
-     * @param factoryMethod the factory method.
-     * @param dataSourceRetrievalMethod the data source retrieval method.
-     * @param classEnd the class end.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
@@ -201,8 +151,6 @@ public class DAOFactoryTemplate
      * @precondition packageUtils != null
      */
     protected String generateOutput(
-        final String header,
-        final String packageDeclaration,
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
@@ -211,17 +159,6 @@ public class DAOFactoryTemplate
         final String quote,
         final String basePackageName,
         final String jndiDataSource,
-        final String projectImports,
-        final String jdkImports,
-        final String extensionImports,
-        final String commonsLoggingImports,
-        final String javadoc,
-        final String classDefinition,
-        final String classStart,
-        final String singletonBody,
-        final String factoryMethod,
-        final String dataSourceRetrievalMethod,
-        final String classEnd,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
         final MetaDataUtils metaDataUtils,
@@ -229,108 +166,26 @@ public class DAOFactoryTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
-        MessageFormat t_Formatter = new MessageFormat(header);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    tableTemplate.getTableName()
-                }));
+        String t_strTableName = tableTemplate.getTableName();
 
-        t_Formatter = new MessageFormat(packageDeclaration);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    packageName
-                }));
+        String t_strBaseDAOPackage =
+            packageUtils.retrieveBaseDAOPackage(basePackageName);
 
-        t_Formatter = new MessageFormat(projectImports);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    packageUtils.retrieveBaseDAOPackage(
-                        basePackageName),
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_'),
-                    packageUtils.retrieveBaseDAOFactoryPackage(
-                        basePackageName),
-                    packageUtils.retrieveDAOPackage(
-                        basePackageName,
-                        engineName),
-                    engineName
-                }));
+        String t_strValueObjectName =
+            stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    t_strTableName.toLowerCase()),
+                '_');
 
-        t_sbResult.append(jdkImports);
-        t_sbResult.append(extensionImports);
-        t_sbResult.append(commonsLoggingImports);
+        String t_strBaseDAOFactoryPackage =
+            packageUtils.retrieveBaseDAOFactoryPackage(
+                basePackageName);
 
-        t_Formatter = new MessageFormat(javadoc);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    engineName,
-                    tableTemplate.getTableName()
-                }));
-
-        t_Formatter = new MessageFormat(classDefinition);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    engineName,
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_')
-                }));
-
-        t_Formatter = new MessageFormat(classStart);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    jndiDataSource
-                }));
-
-
-        MessageFormat t_SingletonBodyFormatter =
-            new MessageFormat(singletonBody);
-
-        t_sbResult.append(
-            t_SingletonBodyFormatter.format(
-                new Object[]
-                {
-                    engineName,
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_')
-                }));
-
+        String t_strDAOPackage =
+            packageUtils.retrieveDAOPackage(
+                basePackageName, engineName);
+        
         List t_lFields = tableTemplate.getFields();
-
-        MessageFormat t_FactoryMethodFormatter =
-            new MessageFormat(factoryMethod);
-
-        t_sbResult.append(
-            t_FactoryMethodFormatter.format(
-                new Object[]
-                {
-                    engineName,
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_'),
-                }));
-
-        t_sbResult.append(dataSourceRetrievalMethod);
-
-        t_sbResult.append(classEnd);
 
         return t_sbResult.toString();
     }

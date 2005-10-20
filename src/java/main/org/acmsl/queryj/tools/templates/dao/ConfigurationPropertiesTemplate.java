@@ -50,12 +50,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -82,16 +76,12 @@ public class ConfigurationPropertiesTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public ConfigurationPropertiesTemplate(
         final String repository,
         final String engineName,
         final String engineVersion,
-        final String basePackageName,
-        final Project project,
-        final Task task)
+        final String basePackageName)
     {
         super(
             DEFAULT_HEADER,
@@ -99,9 +89,7 @@ public class ConfigurationPropertiesTemplate
             engineName,
             engineVersion,
             basePackageName,
-            DEFAULT_DAO_FACTORY_SETTING,
-            project,
-            task);
+            DEFAULT_DAO_FACTORY_SETTING);
     }
 
     /**

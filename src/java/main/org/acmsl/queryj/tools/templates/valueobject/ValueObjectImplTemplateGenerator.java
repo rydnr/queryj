@@ -58,12 +58,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -309,8 +303,6 @@ public class ValueObjectImplTemplateGenerator
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
@@ -320,18 +312,14 @@ public class ValueObjectImplTemplateGenerator
     public ValueObjectImplTemplate createValueObjectImplTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
-        final Project project,
-        final Task task)
+        final DatabaseMetaDataManager metaDataManager)
         throws  QueryJException
     {
         return
             new ValueObjectImplTemplate(
                 packageName,
                 tableTemplate,
-                metaDataManager,
-                project,
-                task);
+                metaDataManager);
     }
 
     /**

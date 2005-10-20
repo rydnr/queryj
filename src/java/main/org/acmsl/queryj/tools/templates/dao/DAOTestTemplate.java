@@ -53,12 +53,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
@@ -76,7 +70,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class DAOTestTemplate
+public class DAOTestTemplate
     extends  AbstractDAOTestTemplate
     implements  DAOTestTemplateDefaults
 {
@@ -94,8 +88,6 @@ public abstract class DAOTestTemplate
      * @param jdbcUrl the JDBC URL.
      * @param jdbcUsername the JDBC username.
      * @param jdbcPassword the JDBC password.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public DAOTestTemplate(
         final TableTemplate tableTemplate,
@@ -109,9 +101,7 @@ public abstract class DAOTestTemplate
         final String jdbcDriver,
         final String jdbcUrl,
         final String jdbcUsername,
-        final String jdbcPassword,
-        final Project project,
-        final Task task)
+        final String jdbcPassword)
     {
         super(
             tableTemplate,
@@ -152,9 +142,7 @@ public abstract class DAOTestTemplate
             DEFAULT_TEST_PARAMETERS_UPDATED_VALUES,
             DEFAULT_REMOVE_TEST,
             DEFAULT_REMOVE_FILTER_VALUES,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

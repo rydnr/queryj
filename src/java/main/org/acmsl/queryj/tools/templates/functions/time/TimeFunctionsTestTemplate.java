@@ -43,12 +43,6 @@ package org.acmsl.queryj.tools.templates.functions.time;
  */
 import org.acmsl.queryj.tools.templates.functions.FunctionsTestTemplate;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Is able to generate tests on Database's time functions.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -64,17 +58,13 @@ public abstract class TimeFunctionsTestTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public TimeFunctionsTestTemplate(
         final String  packageName,
         final String  testedPackageName,
         final String  engineName,
         final String  engineVersion,
-        final String  quote,
-        final Project project,
-        final Task    task)
+        final String  quote)
     {
         super(
             "Time/Date",
@@ -83,9 +73,7 @@ public abstract class TimeFunctionsTestTemplate
             testedPackageName,
             engineName,
             engineVersion,
-            quote,
-            project,
-            task);
+            quote);
     }
 
     /**

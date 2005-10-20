@@ -45,8 +45,10 @@ import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate;
+import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateFactory;
 import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 
@@ -95,7 +97,7 @@ public class NumericFunctionsTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    public boolean handle(AntCommand command)
+    public boolean handle(final AntCommand command)
         throws  BuildException
     {
         boolean result = false;
@@ -146,9 +148,7 @@ public class NumericFunctionsTemplateBuildHandler
                                         t_strPackage,
                                         t_MetaData.getDatabaseProductName(),
                                         t_MetaData.getDatabaseProductVersion(),
-                                        t_strQuote,
-                                        command.getProject(),
-                                        command.getTask());
+                                        t_strQuote);
 
                         Collection t_cFunctions =
                             t_StringUtils.tokenize(

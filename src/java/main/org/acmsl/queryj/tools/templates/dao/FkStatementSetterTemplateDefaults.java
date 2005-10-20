@@ -35,17 +35,6 @@
  * Description: Defines the default subtemplates to generate
  +              FkStatementSetter templates.
  *
-<<<<<<< FkStatementSetterTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -59,10 +48,6 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< FkStatementSetterTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.3
  */
 public interface FkStatementSetterTemplateDefaults
     extends  JavaTemplateDefaults
@@ -83,14 +68,6 @@ public interface FkStatementSetterTemplateDefaults
         + " * Description: Specifies the PreparedStatement values required\n"
         + " *              to perform any {0} operation expecting the\n"
         + " *              complete fk set.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
         + " *\n"
         + " */\n";
 
@@ -178,7 +155,7 @@ public interface FkStatementSetterTemplateDefaults
           "/**\n"
         + " * Specifies the <code>PreparedStatement</code> values required\n"
         + " * to perform any <i>{0}</i> operation using just {1}\n"
-        + " * foreign key.\n"
+        + " * foreign(s) key(s).\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " */\n";
 
@@ -204,8 +181,8 @@ public interface FkStatementSetterTemplateDefaults
      * @param 0 the value object name.
      * @param 1 the capitalized referred table.
      * @param 2 the parameters javadoc.
-     * @param 2 the parameters declaration.
-     * @param 3 the parameter setter call.
+     * @param 3 the parameters declaration.
+     * @param 4 the parameter setter call.
      */
     public static final String DEFAULT_CLASS_CONSTRUCTOR =
           "    /**\n"

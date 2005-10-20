@@ -50,20 +50,9 @@ import org.acmsl.queryj.tools.templates.functions.numeric
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.Map;
-
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Is able to generate numeric function repositories according to Oracle
@@ -71,7 +60,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class OracleNumericFunctionsTemplate
+public class OracleNumericFunctionsTemplate
     extends  NumericFunctionsTemplate
 {
     /**
@@ -120,24 +109,18 @@ public abstract class OracleNumericFunctionsTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public OracleNumericFunctionsTemplate(
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote,
-        final Project project,
-        final Task task)
+        final String quote)
     {
         super(
             packageName,
             engineName,
             engineVersion,
-            quote,
-            project,
-            task);
+            quote);
     }
 
     /**

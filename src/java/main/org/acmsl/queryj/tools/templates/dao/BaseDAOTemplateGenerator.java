@@ -57,12 +57,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -258,8 +252,6 @@ public class BaseDAOTemplateGenerator
      * @param customSqlProvider the custom sql provider.
      * @param packageName the package name.
      * @param valueObjectPackageName the value object package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      * @precondition tableTemplate != null
@@ -273,9 +265,7 @@ public class BaseDAOTemplateGenerator
         final DatabaseMetaDataManager metaDataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String valueObjectPackageName,
-        final Project project,
-        final Task task)
+        final String valueObjectPackageName)
       throws  QueryJException
     {
         BaseDAOTemplate result = null;
@@ -291,9 +281,7 @@ public class BaseDAOTemplateGenerator
                     metaDataManager,
                     customSqlProvider,
                     packageName,
-                    valueObjectPackageName,
-                    project,
-                    task);
+                    valueObjectPackageName);
         }
         else 
         {
@@ -303,9 +291,7 @@ public class BaseDAOTemplateGenerator
                     metaDataManager,
                     customSqlProvider,
                     packageName,
-                    valueObjectPackageName,
-                    project,
-                    task);
+                    valueObjectPackageName);
         }
 
         return result;

@@ -67,7 +67,8 @@ import java.lang.ref.WeakReference;
  * Is able to generate XML value object factories according to database
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * >Jose San Leandro</a>
+ * @version $Revision$ at $Date$ by $Author$
  */
 public class XMLValueObjectFactoryTemplateGenerator
     implements  XMLValueObjectFactoryTemplateFactory
@@ -243,29 +244,24 @@ public class XMLValueObjectFactoryTemplateGenerator
      * @param metaDataManager the metadata manager.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
+     * @precondition packageName != null
+     * @precondition valueObjectPackageName != null
+     * @precondition tableTemplate != null
+     * @precondition metaDataManager != null
      */
     public XMLValueObjectFactoryTemplate createXMLValueObjectFactoryTemplate(
-            final String                  packageName,
-            final String                  valueObjectPackageName,
-            final TableTemplate           tableTemplate,
-            final DatabaseMetaDataManager metaDataManager)
-        throws  QueryJException
+        final String packageName,
+        final String valueObjectPackageName,
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager)
+      throws  QueryJException
     {
-        XMLValueObjectFactoryTemplate result = null;
-
-        if  (   (tableTemplate   != null)
-             && (metaDataManager != null)
-             && (packageName     != null))
-        {
-            result =
-                new XMLValueObjectFactoryTemplate(
-                    packageName,
-                    valueObjectPackageName,
-                    tableTemplate,
-                    metaDataManager) {};
-        }
-
-        return result;
+        return
+            new XMLValueObjectFactoryTemplate(
+                packageName,
+                valueObjectPackageName,
+                tableTemplate,
+                metaDataManager);
     }
 
     /**
@@ -273,38 +269,55 @@ public class XMLValueObjectFactoryTemplateGenerator
      * @param template the value object factory template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
+     * @precondition template != null
+     * @precondition outputDir != null
      */
     public void write(
-            final XMLValueObjectFactoryTemplate template,
-            final File outputDir)
-        throws  IOException
+        final XMLValueObjectFactoryTemplate template,
+        final File outputDir)
+      throws  IOException
     {
-        if  (   (template  != null)
-             && (outputDir != null))
-        {
-            EnglishGrammarUtils t_EnglishGrammarUtils =
-                EnglishGrammarUtils.getInstance();
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            template,
+            outputDir,
+            EnglishGrammarUtils.getInstance(),
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a value object factory template to disk.
+     * @param template the value object factory template to write.
+     * @param outputDir the output folder.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition template != null
+     * @precondition outputDir != null
+     * @precondition englishGrammarUtils != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final XMLValueObjectFactoryTemplate template,
+        final File outputDir,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + "XML"
-                    + t_StringUtils.capitalize(
-                          t_EnglishGrammarUtils.getSingular(
-                              template
-                                  .getTableTemplate().getTableName()
-                                      .toLowerCase()),
-                          '_')
-                    + "ValueObjectFactory.java",
-                    template.toString());
-            }
-        }
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + "XML"
+            + stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    template.getTableTemplate().getTableName().toLowerCase()),
+                '_')
+            + "ValueObjectFactory.java",
+            template.generate());
     }
 }

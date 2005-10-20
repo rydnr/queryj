@@ -52,12 +52,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -81,15 +75,11 @@ public class ValueObjectTemplate
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public ValueObjectTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
-        final Project project,
-        final Task task)
+        final DatabaseMetaDataManager metaDataManager)
     {
         super(
             DEFAULT_HEADER,
@@ -106,9 +96,7 @@ public class ValueObjectTemplate
             DEFAULT_CONSTRUCTOR_FIELD_JAVADOC,
             DEFAULT_CONSTRUCTOR_FIELD_DECLARATION,
             DEFAULT_CONSTRUCTOR_FIELD_VALUE_SETTER,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

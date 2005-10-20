@@ -33,17 +33,17 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.valueobject.
+*              org.acmsl.queryj.tools.templates.valueobject.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.valueobject;
+package org.acmsl.queryj.tools.templates.valueobject;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.HandlersSuite;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.HandlersSuite;
 
 
 /*
@@ -96,14 +96,14 @@ public class ValueobjectSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.valueobject");
+    new TestSuite("org.acmsl.queryj.tools.templates.valueobject");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGeneratorTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.HandlersSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.valueobject.handlers.HandlersSuite.suite());
     
     
     // JUnitDoclet begin method suite

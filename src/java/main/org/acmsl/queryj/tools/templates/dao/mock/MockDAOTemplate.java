@@ -55,12 +55,6 @@ import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -87,17 +81,13 @@ public class MockDAOTemplate
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public MockDAOTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String basePackageName,
-        final String repositoryName,
-        final Project project,
-        final Task task)
+        final String repositoryName)
     {
         super(
             tableTemplate,
@@ -139,9 +129,7 @@ public class MockDAOTemplate
             DEFAULT_DELETE_WITH_FK_PK_DECLARATION,
             DEFAULT_DELETE_WITH_FK_DAO_DELETE_REQUEST,
             DEFAULT_DELETE_WITH_FK_PK_VALUES,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**
@@ -445,24 +433,28 @@ public class MockDAOTemplate
                         t_astrReferredTables[t_iRefTableIndex],
                         '_');
 
-                String t_strFkName =
-                    metaDataManager.getReferredKey(
+                String[] t_astrFkNames =
+                    metaDataManager.getReferredKeys(
                         t_strTableName,
                         t_astrReferredTables[t_iRefTableIndex]);
 
-                t_sbDeleteWithFkDAODeleteRequest.append(
-                    t_DeleteWithFkDAODeleteRequestFormatter.format(
-                        new Object[]
-                        {
-                            t_strReferredTableName,
-                            t_strTableName.toLowerCase(),
-                            stringUtils.capitalize(
-                                metaDataManager.getForeignKey(
-                                    t_strTableName,
-                                    t_astrReferredTables[t_iRefTableIndex])
-                                .toLowerCase(),
-                                '_')
+                int t_iLength = (t_astrFkNames != null) ? t_astrFkNames.length : 0;
+
+                for  (int t_iColumnIndex = 0;
+                          t_iColumnIndex < t_iLength;
+                          t_iColumnIndex++)
+                {
+                    t_sbDeleteWithFkDAODeleteRequest.append(
+                        t_DeleteWithFkDAODeleteRequestFormatter.format(
+                            new Object[]
+                            {
+                                t_strReferredTableName,
+                                t_strTableName.toLowerCase(),
+                                stringUtils.capitalize(
+                                    t_astrFkNames[t_iColumnIndex],
+                                    '_').toLowerCase()
                         }));
+                }
 
                 t_sbForeignDAOImports.append(
                     t_ForeignDAOImportsFormatter.format(
@@ -471,7 +463,6 @@ public class MockDAOTemplate
                             packageUtils.retrieveBaseDAOPackage(
                                 basePackageName),
                             t_strReferredTableName
-                                
                         }));
             }
         }

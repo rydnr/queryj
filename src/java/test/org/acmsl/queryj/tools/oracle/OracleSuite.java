@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.oracle.
+*              org.acmsl.queryj.tools.oracle.
 *
 */
-package unittests.org.acmsl.queryj.tools.oracle;
+package org.acmsl.queryj.tools.oracle;
 
 
 /*
@@ -95,9 +95,9 @@ public class OracleSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.oracle");
+    new TestSuite("org.acmsl.queryj.tools.oracle");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.oracle.OracleMetaDataManagerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.oracle.OracleMetaDataManagerTest.class);
     
     
     

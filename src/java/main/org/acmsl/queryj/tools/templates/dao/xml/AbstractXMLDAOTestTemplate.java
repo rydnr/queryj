@@ -54,12 +54,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
@@ -76,7 +70,8 @@ import java.util.Map;
  * DAOs are working correctly.
  * See <a href="bugzilla.acm-sl.org/show_bug.cgi?id=502">502</a>.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * >Jose San Leandro</a>
+ * @version: $Revision$ at $Date$ by $Author$
  */
 public abstract class AbstractXMLDAOTestTemplate
     extends  AbstractTestTemplate
@@ -192,6 +187,11 @@ public abstract class AbstractXMLDAOTestTemplate
     private String m__strTestParametersValues;
 
     /**
+     * The nullable inserted values conversion.
+     */
+    private String m__strNullableInsertedValuesConversion;
+
+    /**
      * The load test.
      */
     private String m__strLoadTest;
@@ -205,6 +205,11 @@ public abstract class AbstractXMLDAOTestTemplate
      * The update filter values subtemplate.
      */
     private String m__strUpdateFilterValues;
+
+    /**
+     * The nullable updated values conversion.
+     */
+    private String m__strNullableUpdatedValuesConversion;
 
     /**
      * The test updated values subtemplate.
@@ -251,18 +256,20 @@ public abstract class AbstractXMLDAOTestTemplate
      * @param storeTest the store test.
      * @param testParametersValues the test values
      * subtemplate.
+     * @param nullableInsertedValuesConversion the conversion
+     * for nullable values in <code>insert</code> method..
      * @param loadTest the load test.
      * @param updateTest the update test.
      * @param updateFilterValues the update filter values
      * subtemplate.
      * @param testParametersUpdatedValues the test updated
      * values subtemplate.
+     * @param nullableUpdatedValuesConversion the conversion
+     * for nullable values in <code>update</code> method..
      * @param removeTest the remove test.
      * @param removeFilterValues the remove filter values
      * subtemplate.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractXMLDAOTestTemplate(
         final TableTemplate tableTemplate,
@@ -287,17 +294,16 @@ public abstract class AbstractXMLDAOTestTemplate
         final String testSuite,
         final String storeTest,
         final String testParametersValues,
+        final String nullableInsertedValuesConversion,
         final String loadTest,
         final String updateTest,
         final String updateFilterValues,
         final String testParametersUpdatedValues,
+        final String nullableUpdatedValuesConversion,
         final String removeTest,
         final String removeFilterValues,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetTableTemplate(tableTemplate);
         immutableSetMetaDataManager(metaDataManager);
         immutableSetHeader(header);
@@ -320,10 +326,14 @@ public abstract class AbstractXMLDAOTestTemplate
         immutableSetTestSuite(testSuite);
         immutableSetStoreTest(storeTest);
         immutableSetTestParametersValues(testParametersValues);
+        immutableSetNullableInsertedValuesConversion(
+            nullableInsertedValuesConversion);
         immutableSetLoadTest(loadTest);
         immutableSetUpdateTest(updateTest);
         immutableSetUpdateFilterValues(updateFilterValues);
         immutableSetTestParametersUpdatedValues(testParametersUpdatedValues);
+        immutableSetNullableUpdatedValuesConversion(
+            nullableUpdatedValuesConversion);
         immutableSetRemoveTest(removeTest);
         immutableSetRemoveFilterValues(removeFilterValues);
         immutableSetClassEnd(classEnd);
@@ -926,6 +936,38 @@ public abstract class AbstractXMLDAOTestTemplate
     }
 
     /**
+     * Specifies the subtemplate to convert nullable values
+     * in <code>insert</code> method.
+     * @param subtemplate such subtemplate.
+     */
+    protected final void immutableSetNullableInsertedValuesConversion(
+        final String subtemplate)
+    {
+        m__strNullableInsertedValuesConversion = subtemplate;
+    }
+
+    /**
+     * Specifies the subtemplate to convert nullable values
+     * in <code>insert</code> method.
+     * @param subtemplate such subtemplate.
+     */
+    protected void setNullableInsertedValuesConversion(
+        final String subtemplate)
+    {
+        immutableSetNullableInsertedValuesConversion(subtemplate);
+    }
+
+    /**
+     * Retrieves the subtemplate to convert nullable values
+     * in <code>insert</code> method.
+     * @return such subtemplate.
+     */
+    public String getNullableInsertedValuesConversion()
+    {
+        return m__strNullableInsertedValuesConversion;
+    }
+
+    /**
      * Specifies the load test.
      * @param loadTest the new load test.
      */
@@ -1032,6 +1074,38 @@ public abstract class AbstractXMLDAOTestTemplate
     public String getUpdateFilterValues()
     {
         return m__strUpdateFilterValues;
+    }
+
+    /**
+     * Specifies the subtemplate to convert nullable values
+     * in <code>update</code> method.
+     * @param subtemplate such subtemplate.
+     */
+    protected final void immutableSetNullableUpdatedValuesConversion(
+        final String subtemplate)
+    {
+        m__strNullableUpdatedValuesConversion = subtemplate;
+    }
+
+    /**
+     * Specifies the subtemplate to convert nullable values
+     * in <code>update</code> method.
+     * @param subtemplate such subtemplate.
+     */
+    protected void setNullableUpdatedValuesConversion(
+        final String subtemplate)
+    {
+        immutableSetNullableUpdatedValuesConversion(subtemplate);
+    }
+
+    /**
+     * Retrieves the subtemplate to convert nullable values
+     * in <code>update</code> method.
+     * @return such subtemplate.
+     */
+    public String getNullableUpdatedValuesConversion()
+    {
+        return m__strNullableUpdatedValuesConversion;
     }
 
     /**

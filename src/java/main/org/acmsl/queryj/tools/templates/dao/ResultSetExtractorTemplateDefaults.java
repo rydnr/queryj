@@ -65,14 +65,6 @@ public interface ResultSetExtractorTemplateDefaults
         + " *\n"
         + " * Description: Extracts {0} objects from result sets.\n"
         + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**

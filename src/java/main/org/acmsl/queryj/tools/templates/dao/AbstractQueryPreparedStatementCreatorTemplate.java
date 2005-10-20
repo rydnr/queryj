@@ -43,12 +43,6 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the elements required to create the QueryPreparedStatementCreator
  * sources.
@@ -133,8 +127,6 @@ public abstract class AbstractQueryPreparedStatementCreatorTemplate
      * @param classConstructor the class constructor.
      * @param createPreparedStatementMethod such subtemplate.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractQueryPreparedStatementCreatorTemplate(
         final String header,
@@ -148,12 +140,8 @@ public abstract class AbstractQueryPreparedStatementCreatorTemplate
         final String classStart,
         final String classConstructor,
         final String createPreparedStatementMethod,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
-
         immutableSetHeader(
             header);
 

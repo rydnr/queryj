@@ -52,12 +52,6 @@ import org.acmsl.queryj.tools.ProcedureParameterMetaData;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -188,11 +182,8 @@ public abstract class AbstractKeywordRepositoryTemplate
         final String singletonBody,
         final String keywordRetrievalMethodJavadoc,
         final String keywordRetrievalMethodBody,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         inmutableSetHeader(header);
         inmutableSetPackageDeclaration(packageDeclaration);
         inmutableSetPackageName(packageName);

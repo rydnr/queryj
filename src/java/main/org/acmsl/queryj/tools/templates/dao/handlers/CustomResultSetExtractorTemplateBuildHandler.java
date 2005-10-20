@@ -68,8 +68,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -122,50 +120,36 @@ public class CustomResultSetExtractorTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters, final Project project, final Task task)
-      throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  BuildException
     {
         return
             handle(
                 parameters,
-                retrieveDatabaseMetaData(parameters),
-                project,
-                task);
+                retrieveDatabaseMetaData(parameters));
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
      * @param metaData the database metadata.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
      */
     protected boolean handle(
-        final Map parameters,
-        final DatabaseMetaData metaData,
-        final Project project,
-        final Task task)
+        final Map parameters, final DatabaseMetaData metaData)
       throws  BuildException
     {
         boolean result = false;
@@ -174,9 +158,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
         {
             handle(
                 parameters,
-                metaData.getDatabaseProductName(),
-                project,
-                task);
+                metaData.getDatabaseProductName());
         }
         catch  (final SQLException sqlException)
         {
@@ -190,18 +172,13 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      */
     protected boolean handle(
-        final Map parameters,
-        final String engineName,
-        final Project project,
-        final Task task)
+        final Map parameters, final String engineName)
       throws  BuildException
     {
         return
@@ -214,9 +191,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
                 CustomResultSetExtractorTemplateGenerator.getInstance(),
                 retrieveTableTemplates(parameters),
                 retrieveCustomSqlProvider(parameters),
-                DAOTemplateUtils.getInstance(),
-                project,
-                task);
+                DAOTemplateUtils.getInstance());
     }
 
     /**
@@ -230,8 +205,6 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @param tableTemplates the table templates.
      * @param customSqlProvider the <code>CustomSqlprovider</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -253,9 +226,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
         final CustomResultSetExtractorTemplateFactory templateFactory,
         final TableTemplate[] tableTemplates,
         final CustomSqlProvider customSqlProvider,
-        final DAOTemplateUtils daoTemplateUtils,
-        final Project project,
-        final Task task)
+        final DAOTemplateUtils daoTemplateUtils)
       throws  BuildException
     {
         boolean result = false;
@@ -308,9 +279,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
                                                     .getTableName(),
                                                 parameters),
                                             basePackageName,
-                                            repositoryName,
-                                            project,
-                                            task));
+                                            repositoryName));
                             }
                         }
                     }
@@ -329,43 +298,6 @@ public class CustomResultSetExtractorTemplateBuildHandler
         }
         
         return result;
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**

@@ -170,7 +170,8 @@ public class AttributesStatementSetterTemplateWritingHandler
                     retrieveOutputDir(
                         engineName,
                         templates[t_iIndex].getTableTemplate().getTableName(),
-                        parameters));
+                        parameters,
+                        retrieveUseSubfoldersFlag(parameters)));
             }
         }
         catch  (final IOException ioException)
@@ -201,6 +202,7 @@ public class AttributesStatementSetterTemplateWritingHandler
      * @param engineName the engine name.
      * @param tableName the table name.
      * @param parameters the parameter map.
+     * @param useSubfolders whether to use subfolders.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition engineName != null
@@ -208,7 +210,10 @@ public class AttributesStatementSetterTemplateWritingHandler
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(
-        final String engineName, final String tableName, final Map parameters)
+        final String engineName,
+        final String tableName,
+        final Map parameters,
+        final boolean useSubfolders)
       throws  BuildException
     {
         return
@@ -217,6 +222,7 @@ public class AttributesStatementSetterTemplateWritingHandler
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
                 tableName,
+                useSubfolders,
                 PackageUtils.getInstance());
     }
 
@@ -226,6 +232,7 @@ public class AttributesStatementSetterTemplateWritingHandler
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
      * @param tableName the table name.
+     * @param useSubfolders whether to use subfolders.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
@@ -240,6 +247,7 @@ public class AttributesStatementSetterTemplateWritingHandler
         final File projectOutputDir,
         final String projectPackage,
         final String tableName,
+        final boolean useSubfolders,
         final PackageUtils packageUtils)
       throws  BuildException
     {
@@ -248,51 +256,7 @@ public class AttributesStatementSetterTemplateWritingHandler
                 projectOutputDir,
                 projectPackage,
                 engineName,
-                tableName);
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveProjectOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaData)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
+                tableName,
+                useSubfolders);
     }
 }

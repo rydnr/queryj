@@ -44,12 +44,6 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -152,8 +146,6 @@ public abstract class AbstractTableRepositoryTemplate
      * @param tableJavadoc the table Javadoc.
      * @param tableDefinition the table definition.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public AbstractTableRepositoryTemplate(
         final String header,
@@ -168,11 +160,8 @@ public abstract class AbstractTableRepositoryTemplate
         final String classStart,
         final String tableJavadoc,
         final String tableDefinition,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

@@ -40,13 +40,13 @@ package org.acmsl.queryj.tools;
 /*
  * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
+ * Importing Commons-Logging classes.
  */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
@@ -55,11 +55,6 @@ import java.lang.ref.WeakReference;
 import java.sql.Types;
 import java.util.Map;
 import java.util.HashMap;
-
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Provides some useful methods when working with database metadata.
@@ -276,8 +271,8 @@ public class MetaDataUtils
         result.put("BIT"        , t_Integer);
         result.put("TINYINT"    , t_Integer);
         result.put("SMALLINT"   , t_Integer);
-        result.put("int"        , t_Integer);
-        result.put("Integer"    , t_Integer);
+        result.put("int"        , t_Long);
+        result.put("Integer"    , t_Long);
         result.put("INTEGER"    , t_Long);
         result.put("NUMERIC"    , t_Long);
         result.put("Number"     , t_Long);
@@ -310,51 +305,37 @@ public class MetaDataUtils
     /**
      * Retrieves the QueryJ type of given data type.
      * @param dataType the data type.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the QueryJ type.
      */
-    public String getQueryJFieldType(
-        final int dataType,
-        final Project project,
-        final Task task)
+    public String getQueryJFieldType(final int dataType)
     {
         return
             getQueryJFieldType(
-                dataType, project, task, StringUtils.getInstance());
+                dataType, StringUtils.getInstance());
     }
 
     /**
      * Retrieves the QueryJ type of given data type.
      * @param dataType the data type.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the QueryJ type.
      * @precondition stringUtils != null
      */
     protected String getQueryJFieldType(
-        final int dataType,
-        final Project project,
-        final Task task,
-        final StringUtils stringUtils)
+        final int dataType, final StringUtils stringUtils)
     {
         return
             stringUtils.capitalize(
-                getFieldType(dataType, project, task), '_')  + "Field";
+                getFieldType(dataType), '_')  + "Field";
     }
 
     /**
      * Retrieves the type of given data type.
      * @param dataType the data type.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the QueryJ type.
      */
     public String getStatementSetterFieldType(
-        final int dataType,
-        final Project project,
-        final Task task)
+        final int dataType)
     {
         String result = null;
 
@@ -368,7 +349,7 @@ public class MetaDataUtils
                 break;
 
             default:
-                result = getFieldType(dataType, project, task);
+                result = getFieldType(dataType);
                 break;
         }
 
@@ -378,31 +359,22 @@ public class MetaDataUtils
     /**
      * Retrieves the type of given data type.
      * @param dataType the data type.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the QueryJ type.
      */
-    public String getFieldType(
-        final int dataType,
-        final Project project,
-        final Task task)
+    public String getFieldType(final int dataType)
     {
-        return getFieldType(dataType, false, project, task);
+        return getFieldType(dataType, false);
     }
 
     /**
      * Retrieves the type of given data type.
      * @param dataType the data type.
      * @param allowsNull whether the field allows null or not.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the QueryJ type.
      */
     public String getFieldType(
         final int dataType,
-        final boolean allowsNull,
-        final Project project,
-        final Task task)
+        final boolean allowsNull)
     {
         String result = "";
 
@@ -448,13 +420,15 @@ public class MetaDataUtils
                 break;
 
             default:
-                if  (project != null)
+
+                Log t_Log = UniqueLogFactory.getLog(getClass());
+                
+                if  (t_Log != null)
                 {
-                    project.log(
-                        task,
-                        "Warning, column type unknown: " + dataType,
-                        Project.MSG_ERR);
+                    t_Log.warn(
+                        "Warning, column type unknown: " + dataType);
                 }
+
                 break;
         }
 

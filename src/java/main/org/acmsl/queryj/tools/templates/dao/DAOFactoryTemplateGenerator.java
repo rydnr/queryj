@@ -56,12 +56,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -309,8 +303,6 @@ public class DAOFactoryTemplateGenerator
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      * @precondition tableTemplate != null
@@ -326,9 +318,7 @@ public class DAOFactoryTemplateGenerator
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String jndiDataSource,
-        final Project project,
-        final Task task)
+        final String jndiDataSource)
       throws  QueryJException
     {
         return
@@ -340,9 +330,7 @@ public class DAOFactoryTemplateGenerator
                 engineVersion,
                 quote,
                 basePackageName,
-                jndiDataSource,
-                project,
-                task);
+                jndiDataSource);
     }
 
     /**

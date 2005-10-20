@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.
+*              org.acmsl.queryj.tools.
 *
 */
-package unittests.org.acmsl.queryj.tools;
+package org.acmsl.queryj.tools;
 
 /*
 * Importing project classes.
@@ -120,8 +120,6 @@ extends TestCase
                   true,
                   true,
                   true,
-                  null,
-                  null,
                   null,
                   null,
                   null);

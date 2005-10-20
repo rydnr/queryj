@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.dao.xml.
+*              org.acmsl.queryj.tools.templates.dao.xml.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.dao.xml;
+package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
 * Importing project classes.

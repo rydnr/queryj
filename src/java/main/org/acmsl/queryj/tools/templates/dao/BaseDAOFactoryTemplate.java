@@ -53,12 +53,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -84,16 +78,12 @@ public class BaseDAOFactoryTemplate
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param projectPackageName the project package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public BaseDAOFactoryTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
-        final String projectPackageName,
-        final Project project,
-        final Task task)
+        final String projectPackageName)
     {
         super(
             DEFAULT_HEADER,
@@ -110,9 +100,7 @@ public class BaseDAOFactoryTemplate
             DEFAULT_CLASS_START,
             DEFAULT_GET_INSTANCE_METHOD,
             DEFAULT_FACTORY_METHOD,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

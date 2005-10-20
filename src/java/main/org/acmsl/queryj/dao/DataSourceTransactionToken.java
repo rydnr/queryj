@@ -59,11 +59,6 @@ import java.io.PrintWriter;
  */
 import javax.sql.DataSource;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * JDBC-related Transaction Token using DataSource class.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -177,7 +172,7 @@ public class DataSourceTransactionToken
      * Checks if this object is logically equal to given one.
      * @param object the object to compare to.
      * @return <code>true</code> if both objects are equal logically.
-     */
+     *
     public boolean equals(final Object object)
     {
         return equals(object, getTransactionStatus(), getDataSource());
@@ -189,7 +184,7 @@ public class DataSourceTransactionToken
      * @param transactionStatus the transaction status.
      * @param dataSource the wrapped data source.
      * @return <code>true</code> if both objects are equal logically.
-     */
+     *
     protected boolean equals(
         final Object object,
         final TransactionStatus transactionStatus,
@@ -217,7 +212,7 @@ public class DataSourceTransactionToken
     /**
      * Retrieves the hash code.
      * @return such information.
-     */
+     *
     public int hashCode()
     {
         return hashCode(getDataSource());
@@ -228,11 +223,12 @@ public class DataSourceTransactionToken
      * @param dataSource the data source.
      * @return such information.
      * @precondition dataSource != null
-     */
+     *
     protected int hashCode(final DataSource dataSource)
     {
         return dataSource.hashCode();
     }
+    */
 
     /**
      * Retrieves a text version of the instance.

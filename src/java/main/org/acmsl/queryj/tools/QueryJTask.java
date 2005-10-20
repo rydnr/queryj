@@ -51,6 +51,7 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
+import org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.templates.dao.DAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateHandlerBundle;
@@ -145,6 +146,16 @@ public class QueryJTask
     private File m__Outputdir;
 
     /**
+     * The "outputdirsubfolders" value.
+     */
+    private String m__strOutputdirsubfolders;
+
+    /**
+     * Whether to use subfolders or not.
+     */
+    private boolean m__bOutputdirsubfolders = false;
+
+    /**
      * The "extract-tables" value.
      */
     private String m__strExtractTables;
@@ -202,14 +213,18 @@ public class QueryJTask
     /**
      * The "custom-sql-model" type.
      */
-    private String m__strCustomSqlModel =
-        ParameterValidationHandler.CUSTOM_SQL_MODEL_XML;
+    private String m__strCustomSqlModel = null;
 
     /**
      * The "sql-xml-file" path.
      */
     private File m__SqlXmlFile;
 
+    /**
+     * The "grammar-bundle" property.
+     */
+    private String m__strGrammarBundleName;
+    
     /**
      * The nested tables.
      */
@@ -229,9 +244,18 @@ public class QueryJTask
      * Specifies the driver.
      * @param driver the new driver.
      */
-    public void setDriver(final String driver)
+    protected final void immutableSetDriver(final String driver)
     {
         m__strDriver = driver;
+    }
+
+    /**
+     * Specifies the driver.
+     * @param driver the new driver.
+     */
+    public void setDriver(final String driver)
+    {
+        immutableSetDriver(driver);
     }
 
     /**
@@ -247,9 +271,18 @@ public class QueryJTask
      * Specifies the url.
      * @param url the new url.
      */
-    public void setUrl(final String url)
+    protected final void immutableSetUrl(final String url)
     {
         m__strUrl = url;
+    }
+
+    /**
+     * Specifies the url.
+     * @param url the new url.
+     */
+    public void setUrl(final String url)
+    {
+        immutableSetUrl(url);
     }
 
     /**
@@ -265,9 +298,18 @@ public class QueryJTask
      * Specifies the username.
      * @param username the new username.
      */
-    public void setUsername(final String username)
+    protected final void immutableSetUsername(final String username)
     {
         m__strUsername = username;
+    }
+
+    /**
+     * Specifies the username.
+     * @param username the new username.
+     */
+    public void setUsername(final String username)
+    {
+        immutableSetUsername(username);
     }
 
     /**
@@ -283,9 +325,18 @@ public class QueryJTask
      * Specifies the password.
      * @param password the new password.
      */
-    public void setPassword(final String password)
+    protected final void immutableSetPassword(final String password)
     {
         m__strPassword = password;
+    }
+
+    /**
+     * Specifies the password.
+     * @param password the new password.
+     */
+    public void setPassword(final String password)
+    {
+        immutableSetPassword(password);
     }
 
     /**
@@ -301,9 +352,18 @@ public class QueryJTask
      * Specifies the catalog.
      * @param catalog the new catalog.
      */
-    public void setCatalog(final String catalog)
+    protected final void immutableSetCatalog(final String catalog)
     {
         m__strCatalog = catalog;
+    }
+
+    /**
+     * Specifies the catalog.
+     * @param catalog the new catalog.
+     */
+    public void setCatalog(final String catalog)
+    {
+        immutableSetCatalog(catalog);
     }
 
     /**
@@ -319,9 +379,18 @@ public class QueryJTask
      * Specifies the schema.
      * @param schema the new schema.
      */
-    public void setSchema(final String schema)
+    protected final void immutableSetSchema(final String schema)
     {
         m__strSchema = schema;
+    }
+
+    /**
+     * Specifies the schema.
+     * @param schema the new schema.
+     */
+    public void setSchema(final String schema)
+    {
+        immutableSetSchema(schema);
     }
 
     /**
@@ -337,9 +406,18 @@ public class QueryJTask
      * Specifies the repository.
      * @param repository the new repository.
      */
-    public void setRepository(final String repository)
+    protected final void immutableSetRepository(final String repository)
     {
         m__strRepository = repository;
+    }
+
+    /**
+     * Specifies the repository.
+     * @param repository the new repository.
+     */
+    public void setRepository(final String repository)
+    {
+        immutableSetRepository(repository);
     }
 
     /**
@@ -355,9 +433,18 @@ public class QueryJTask
      * Specifies the package.
      * @param packageName the new package.
      */
-    public void setPackage(final String packageName)
+    protected final void immutableSetPackage(final String packageName)
     {
         m__strPackage = packageName;
+    }
+
+    /**
+     * Specifies the package.
+     * @param packageName the new package.
+     */
+    public void setPackage(final String packageName)
+    {
+        immutableSetPackage(packageName);
     }
 
     /**
@@ -373,9 +460,18 @@ public class QueryJTask
      * Specifies the classpath.
      * @param classpath the new classpath.
      */
-    public void setClasspath(final Path classpath)
+    protected final void immutableSetClasspath(final Path classpath)
     {
         m__Classpath = classpath;
+    }
+
+    /**
+     * Specifies the classpath.
+     * @param classpath the new classpath.
+     */
+    public void setClasspath(final Path classpath)
+    {
+        immutableSetClasspath(classpath);
     }
 
     /**
@@ -423,9 +519,18 @@ public class QueryJTask
      * Specifies the outputdir.
      * @param outputdir the new outputdir.
      */
-    public void setOutputdir(final File outputdir)
+    protected final void immutableSetOutputdir(final File outputdir)
     {
         m__Outputdir = outputdir;
+    }
+
+    /**
+     * Specifies the outputdir.
+     * @param outputdir the new outputdir.
+     */
+    public void setOutputdir(final File outputdir)
+    {
+        immutableSetOutputdir(outputdir);
     }
 
     /**
@@ -438,16 +543,77 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to use subfolders.
+     * @param outputDirSubFolders such setting.
+     */
+    protected final void immutableSetOutputdirsubfolders(
+        final String outputDirSubFolders)
+    {
+        m__strOutputdirsubfolders = outputDirSubFolders;
+    }
+    
+    /**
+     * Specifies whether to use subfolders.
+     * @param outputDirSubFolders such setting.
+     */
+    public void setOutputdirsubfolders(final String outputDirSubFolders)
+    {
+        immutableSetOutputdirsubfolders(outputDirSubFolders);
+
+        setOutputdirsubfoldersFlag(
+            (   (outputDirSubFolders == null)
+             || (outputDirSubFolders.trim().toLowerCase().equals("yes")
+             || (outputDirSubFolders.trim().toLowerCase().equals("true")))));
+    }
+
+    /**
+     * Retrieves whether to use subfolders.
+     * @return such setting.
+     */
+    public String getOutputdirsubfolders()
+    {
+        return m__strOutputdirsubfolders;
+    }
+
+    /**
+     * Specifies the "outputdirsubfolders" flag.
+     * @param flag such flag.
+     */
+    protected void setOutputdirsubfoldersFlag(final boolean flag)
+    {
+        m__bOutputdirsubfolders = flag;
+    }
+
+    /**
+     * Retrieves the "outputdirsubfolders" flag.
+     * @return such flag.
+     */
+    protected boolean getOutputdirsubfoldersFlag()
+    {
+        return m__bOutputdirsubfolders;
+    }
+
+    /**
+     * Specifies whether to extract the tables.
+     * @param extractTables the procedure extraction setting.
+     */
+    protected final void immutableSetExtractTables(final String extractTables)
+    {
+        m__strExtractTables = extractTables;
+    }
+
+    /**
      * Specifies whether to extract the tables.
      * @param extractTables the procedure extraction setting.
      */
     public void setExtractTables(final String extractTables)
     {
-        m__strExtractTables = extractTables;
+        immutableSetExtractTables(extractTables);
+
         setExtractTablesFlag(
             (   (extractTables == null)
-             || (   (extractTables.trim().toLowerCase().equals("yes"))
-                 || (extractTables.trim().toLowerCase().equals("true")))));
+             || (extractTables.trim().toLowerCase().equals("yes")
+             || (extractTables.trim().toLowerCase().equals("true")))));
     }
 
     /**
@@ -481,9 +647,20 @@ public class QueryJTask
      * Specifies whether to extract the procedures.
      * @param extractProcedures the procedure extraction setting.
      */
-    public void setExtractProcedures(final String extractProcedures)
+    protected final void immutableSetExtractProcedures(
+        final String extractProcedures)
     {
         m__strExtractProcedures = extractProcedures;
+    }
+
+    /**
+     * Specifies whether to extract the procedures.
+     * @param extractProcedures the procedure extraction setting.
+     */
+    public void setExtractProcedures(final String extractProcedures)
+    {
+        immutableSetExtractProcedures(extractProcedures);
+
         setExtractProceduresFlag(
             (   (extractProcedures == null)
              || (   (extractProcedures.trim().toLowerCase().equals("yes"))
@@ -521,9 +698,19 @@ public class QueryJTask
      * Specifies whether to extract the functions.
      * @param extractFunctions the function extraction setting.
      */
-    public void setExtractFunctions(final String extractFunctions)
+    protected final void immutableSetExtractFunctions(final String extractFunctions)
     {
         m__strExtractFunctions = extractFunctions;
+    }
+
+    /**
+     * Specifies whether to extract the functions.
+     * @param extractFunctions the function extraction setting.
+     */
+    public void setExtractFunctions(final String extractFunctions)
+    {
+        immutableSetExtractFunctions(extractFunctions);
+
         setExtractFunctionsFlag(
             (   (extractFunctions == null)
              || (   (extractFunctions.trim().toLowerCase().equals("yes"))
@@ -561,9 +748,18 @@ public class QueryJTask
      * Specifices the JNDI location for the data sources.
      * @param jndiLocation the JNDI location.
      */
-    public void setJndiDataSource(final String jndiLocation)
+    protected final void immutableSetJndiDataSource(final String jndiLocation)
     {
         m__strJNDIDataSources = jndiLocation;
+    }
+
+    /**
+     * Specifices the JNDI location for the data sources.
+     * @param jndiLocation the JNDI location.
+     */
+    public void setJndiDataSource(final String jndiLocation)
+    {
+        immutableSetJndiDataSource(jndiLocation);
     }
 
     /**
@@ -579,9 +775,19 @@ public class QueryJTask
      * Specifies whether to generate Mock DAO implementations.
      * @param generate such setting.
      */
-    public void setGenerateMockDAOImplementation(final String generate)
+    protected final void immutableSetGenerateMockDAOImplementation(
+        final String generate)
     {
         m__strGenerateMockDAOImplementation = generate;
+    }
+
+    /**
+     * Specifies whether to generate Mock DAO implementations.
+     * @param generate such setting.
+     */
+    public void setGenerateMockDAOImplementation(final String generate)
+    {
+        immutableSetGenerateMockDAOImplementation(generate);
 
         setGenerateMockDAOImplementationFlag(
             (   (generate == null)
@@ -620,9 +826,19 @@ public class QueryJTask
      * Specifies whether to generate XML DAO implementations.
      * @param generate such setting.
      */
-    public void setGenerateXMLDAOImplementation(final String generate)
+    protected final void immutableSetGenerateXMLDAOImplementation(
+        final String generate)
     {
         m__strGenerateXMLDAOImplementation = generate;
+    }
+
+    /**
+     * Specifies whether to generate XML DAO implementations.
+     * @param generate such setting.
+     */
+    public void setGenerateXMLDAOImplementation(final String generate)
+    {
+        immutableSetGenerateXMLDAOImplementation(generate);
 
         setGenerateXMLDAOImplementationFlag(
             (   (generate == null)
@@ -699,9 +915,18 @@ public class QueryJTask
      * Specifies the custom-sql model.
      * @param model the model.
      */
-    public void setCustomSqlModel(final String model)
+    protected final void immutableSetCustomSqlModel(final String model)
     {
         m__strCustomSqlModel = model;
+    }
+
+    /**
+     * Specifies the custom-sql model.
+     * @param model the model.
+     */
+    public void setCustomSqlModel(final String model)
+    {
+        immutableSetCustomSqlModel(model);
     }
 
     /**
@@ -717,9 +942,18 @@ public class QueryJTask
      * Specifies the sql.xml file.
      * @param file the new file.
      */
-    public void setSqlXmlFile(final File file)
+    protected final void immutableSetSqlXmlFile(final File file)
     {
         m__SqlXmlFile = file;
+    }
+
+    /**
+     * Specifies the sql.xml file.
+     * @param file the new file.
+     */
+    public void setSqlXmlFile(final File file)
+    {
+        immutableSetSqlXmlFile(file);
     }
 
     /**
@@ -729,6 +963,34 @@ public class QueryJTask
     public File getSqlXmlFile() 
     {
         return m__SqlXmlFile;
+    }
+
+    /**
+     * Specifies the grammarbundle.
+     * @param grammarbundle the new grammarbundle.
+     */
+    protected final void immutableSetGrammarbundle(
+        final String grammarBundle)
+    {
+        m__strGrammarBundleName = grammarBundle;
+    }
+
+    /**
+     * Specifies the grammarbundle.
+     * @param grammarbundle the new grammarbundle.
+     */
+    public void setGrammarbundle(final String grammarBundle)
+    {
+        immutableSetGrammarbundle(grammarBundle);
+    }
+
+    /**
+     * Retrieves the grammarbundle.
+     * @return such information.
+     */
+    public String getGrammarbundle() 
+    {
+        return m__strGrammarBundleName;
     }
 
     /**
@@ -764,10 +1026,11 @@ public class QueryJTask
             result.add(new ParameterValidationHandler());
 
             result.add(new JdbcConnectionOpeningHandler());
-//            result.add(new DatabaseMetaDataRetrievalHandler());
-            result.add(new OracleMetaDataRetrievalHandler());
-
             result.add(new CustomSqlProviderRetrievalHandler());
+
+            result.add(new OracleMetaDataRetrievalHandler());
+            result.add(new JdbcMetaDataRetrievalHandler());
+
             result.add(new CustomSqlValidationHandler());
 
             result.add(new DatabaseMetaDataLoggingHandler());
@@ -819,7 +1082,7 @@ public class QueryJTask
      * @param command the command to be initialized.
      * @return the initialized command.
      */
-    protected AntCommand buildCommand(AntCommand command)
+    protected AntCommand buildCommand(final AntCommand command)
     {
         AntCommand result = command;
 
@@ -838,6 +1101,7 @@ public class QueryJTask
             Path   t_Classpath     = getClasspath();
             File   t_Outputdir     = getOutputdir();
 
+            boolean t_bOutputdirsubfolders = getOutputdirsubfoldersFlag();
             boolean t_bExtractTables = getExtractTablesFlag();
             boolean t_bExtractProcedures = getExtractProceduresFlag();
             boolean t_bExtractFunctions = getExtractFunctionsFlag();
@@ -849,6 +1113,8 @@ public class QueryJTask
             String t_strCustomSqlModel = getCustomSqlModel();
             File t_SqlXmlFile = getSqlXmlFile();
 
+            String t_strGrammarBundle = getGrammarbundle();
+            
             AntTablesElement t_Tables = getTables();
 
             AntExternallyManagedFieldsElement t_ExternallyManagedFields =
@@ -927,6 +1193,12 @@ public class QueryJTask
                 }
 
                 t_mAttributes.put(
+                    ParameterValidationHandler.OUTPUT_DIR_SUBFOLDERS,
+                    (t_bOutputdirsubfolders
+                     ?  Boolean.TRUE
+                     :  Boolean.FALSE));
+
+                t_mAttributes.put(
                     ParameterValidationHandler.EXTRACT_TABLES,
                     (t_bExtractTables
                      ?  Boolean.TRUE
@@ -983,6 +1255,13 @@ public class QueryJTask
                     t_mAttributes.put(
                         ParameterValidationHandler.SQL_XML_FILE,
                         t_SqlXmlFile);
+                }
+
+                if  (t_strGrammarBundle != null)
+                {
+                    t_mAttributes.put(
+                        ParameterValidationHandler.GRAMMAR_BUNDLE_NAME,
+                        t_strGrammarBundle);
                 }
             }
         }

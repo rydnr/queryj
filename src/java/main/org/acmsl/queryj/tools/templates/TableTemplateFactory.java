@@ -43,12 +43,6 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Is able to generate Table repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -60,15 +54,8 @@ public interface TableTemplateFactory
      * Generates a table template.
      * @param packageName the package name.
      * @param tableName the table name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
-     * @precondition packageName != null
-     * @precondition tableName != null
      */
     public TableTemplate createTableTemplate(
-        final String packageName,
-        final String tableName,
-        final Project project,
-        final Task task);
+        final String packageName, final String tableName);
 }

@@ -53,8 +53,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -70,11 +68,30 @@ import java.util.Map;
 /**
  * Retrieves the Oracle metadata.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
+ * @version $Revision$ ($Author$ at $Date$)
  */
 public class OracleMetaDataRetrievalHandler
     extends  DatabaseMetaDataRetrievalHandler
 {
+    /**
+     * Checks whether the database vendor matches this handler.
+     * @param product the product name.
+     * @param version the product version.
+     * @param major the major version number.
+     * @param minor the minor version number.
+     * @return <code>true</code> in case it matches.
+     * @precondition product != null
+     */
+    protected boolean checkVendor(
+        final String productName,
+        final String productVersion,
+        final int majorVersion,
+        final int minorVersion)
+    {
+        return  (productName.indexOf("Oracle") > -1);
+    }
+
     /**
      * Builds a database metadata manager.
      * @param tableNames the table names.
@@ -90,8 +107,6 @@ public class OracleMetaDataRetrievalHandler
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the metadata manager instance.
      * @throws org.apache.tools.ant.BuildException whenever the required
      * parameters are not present or valid.
@@ -106,9 +121,7 @@ public class OracleMetaDataRetrievalHandler
         final boolean lazyProcedureExtraction,
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema,
-        final Project project,
-        final Task task)
+        final String schema)
         throws  BuildException
     {
         DatabaseMetaDataManager result = null;
@@ -125,9 +138,7 @@ public class OracleMetaDataRetrievalHandler
                     lazyProcedureExtraction,
                     metaData,
                     catalog,
-                    schema,
-                    project,
-                    task);
+                    schema);
         }
         catch  (final Exception exception)
         {

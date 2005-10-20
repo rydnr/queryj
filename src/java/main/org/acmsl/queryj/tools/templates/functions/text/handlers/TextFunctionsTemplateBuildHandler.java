@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
+import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateFactory;
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -146,9 +147,7 @@ public class TextFunctionsTemplateBuildHandler
                                     t_strPackage,
                                     t_MetaData.getDatabaseProductName(),
                                     t_MetaData.getDatabaseProductVersion(),
-                                    t_strQuote,
-                                    command.getProject(),
-                                    command.getTask());
+                                    t_strQuote);
 
                         Collection t_cFunctions =
                             t_StringUtils.tokenize(

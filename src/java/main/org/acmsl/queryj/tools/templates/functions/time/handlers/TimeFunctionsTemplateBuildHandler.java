@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate;
+import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateFactory;
 import org.acmsl.queryj.tools.templates.functions.time
     .TimeFunctionsTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -55,12 +56,18 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+
+/*
+ * Importing some Apache Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
@@ -104,6 +111,8 @@ public class TimeFunctionsTemplateBuildHandler
 
         if  (command != null) 
         {
+            Log t_Log = UniqueLogFactory.getLog(getClass());
+
             try 
             {
                 Map attributes = command.getAttributeMap();
@@ -145,9 +154,7 @@ public class TimeFunctionsTemplateBuildHandler
                                     t_strPackage,
                                     t_MetaData.getDatabaseProductName(),
                                     t_MetaData.getDatabaseProductVersion(),
-                                    t_strQuote,
-                                    command.getProject(),
-                                    command.getTask());
+                                    t_strQuote);
 
                         Collection t_cFunctions =
                             t_StringUtils.tokenize(
@@ -174,30 +181,24 @@ public class TimeFunctionsTemplateBuildHandler
                     }
                 }
             }
-            catch  (SQLException sqlException)
+            catch  (final SQLException sqlException)
             {
-                Project t_Project = command.getProject();
-
-                if  (t_Project != null)
+                if  (t_Log != null)
                 {
-                    t_Project.log(
-                        command.getTask(),
-                        sqlException.getMessage(),
-                        Project.MSG_WARN);
+                    t_Log.warn(
+                        "Cannot extract time functions.",
+                        sqlException);
                 }
                 
                 throw new BuildException(sqlException);
             }
-            catch  (QueryJException queryjException)
+            catch  (final QueryJException queryjException)
             {
-                Project t_Project = command.getProject();
-
-                if  (t_Project != null)
+                if  (t_Log != null)
                 {
-                    t_Project.log(
-                        command.getTask(),
-                        queryjException.getMessage(),
-                        Project.MSG_WARN);
+                    t_Log.warn(
+                        "Cannot extract time functions.",
+                        queryjException);
                 }
                 
                 throw new BuildException(queryjException);

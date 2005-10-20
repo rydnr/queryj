@@ -119,14 +119,6 @@ public abstract class MockDAOFactoryTemplate
         + " * Description: Is able to create Mock {0} DAOs according to\n"
         + " *              the information stored in the persistence domain.\n"
         + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -173,7 +165,6 @@ public abstract class MockDAOFactoryTemplate
           "/**\n"
         + " * Is able to create Mock {0} DAOs.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**

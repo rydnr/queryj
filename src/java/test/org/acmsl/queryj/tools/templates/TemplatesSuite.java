@@ -33,20 +33,20 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.
+*              org.acmsl.queryj.tools.templates.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates;
+package org.acmsl.queryj.tools.templates;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.tools.templates.dao.DaoSuite;
-import unittests.org.acmsl.queryj.tools.templates.functions.FunctionsSuite;
-import unittests.org.acmsl.queryj.tools.templates.handlers.HandlersSuite;
-import unittests.org.acmsl.queryj.tools.templates.valueobject.ValueobjectSuite;
+import org.acmsl.queryj.tools.templates.dao.DaoSuite;
+import org.acmsl.queryj.tools.templates.functions.FunctionsSuite;
+import org.acmsl.queryj.tools.templates.handlers.HandlersSuite;
+import org.acmsl.queryj.tools.templates.valueobject.ValueobjectSuite;
 
 
 /*
@@ -99,24 +99,24 @@ public class TemplatesSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates");
+    new TestSuite("org.acmsl.queryj.tools.templates");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableRepositoryTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TestSuiteTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtilsTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableRepositoryTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableTemplateUtilsTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtilsTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.TableTemplateTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.TableRepositoryTemplateTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.TestSuiteTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.TableTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtilsTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.TableRepositoryTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.TableTemplateUtilsTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtilsTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.TableTemplateTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.dao.DaoSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.FunctionsSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.handlers.HandlersSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.valueobject.ValueobjectSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.dao.DaoSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.functions.FunctionsSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.handlers.HandlersSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.valueobject.ValueobjectSuite.suite());
     
     
     // JUnitDoclet begin method suite

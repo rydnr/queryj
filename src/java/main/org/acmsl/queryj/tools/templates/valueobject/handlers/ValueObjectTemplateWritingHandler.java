@@ -34,17 +34,6 @@
  *
  * Description: Writes value object templates.
  *
-<<<<<<< ValueObjectTemplateWritingHandler.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.6
  */
 package org.acmsl.queryj.tools.templates.valueobject.handlers;
 
@@ -65,8 +54,6 @@ import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGenerator
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -79,10 +66,6 @@ import java.util.Map;
  * Writes DAO templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
-<<<<<<< ValueObjectTemplateWritingHandler.java
-=======
- * @version $Revision$
->>>>>>> 1.6
  */
 public class ValueObjectTemplateWritingHandler
     extends    AbstractAntCommandHandler
@@ -110,33 +93,24 @@ public class ValueObjectTemplateWritingHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given command.
      * @param attributes the attributes.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition attributes != null
      */
-    protected boolean handle(
-        final Map attributes, final Project project, final Task task)
+    protected boolean handle(final Map attributes)
         throws  BuildException
     {
         return
             handle(
                 retrieveValueObjectTemplates(attributes),
                 retrieveOutputDir(attributes),
-                ValueObjectTemplateGenerator.getInstance(),
-                project,
-                task);
+                ValueObjectTemplateGenerator.getInstance());
     }
 
     /**
@@ -145,8 +119,6 @@ public class ValueObjectTemplateWritingHandler
      * @param outputDir the output dir.
      * @param generator the <code>ValueObjectTemplateGenerator</code>
      * instance.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition templates != null
@@ -157,9 +129,7 @@ public class ValueObjectTemplateWritingHandler
     protected boolean handle(
         final ValueObjectTemplate[] templates,
         final File outputDir,
-        final ValueObjectTemplateGenerator generator,
-        final Project project,
-        final Task task)
+        final ValueObjectTemplateGenerator generator)
       throws  BuildException
     {
         boolean result = false;
@@ -212,6 +182,7 @@ public class ValueObjectTemplateWritingHandler
             retrieveOutputDir(
                 retrieveBaseDir(parameters),
                 retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters),
                 PackageUtils.getInstance());
     }
 
@@ -219,6 +190,7 @@ public class ValueObjectTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param baseDir the base dir.
      * @param projectPackage the project package.
+     * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
@@ -229,12 +201,13 @@ public class ValueObjectTemplateWritingHandler
     protected File retrieveOutputDir(
         final File baseDir,
         final String projectPackage,
+        final boolean subFolders,
         final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveValueObjectFolder(
-                baseDir, projectPackage);
+                baseDir, projectPackage, subFolders);
     }
 
     /**

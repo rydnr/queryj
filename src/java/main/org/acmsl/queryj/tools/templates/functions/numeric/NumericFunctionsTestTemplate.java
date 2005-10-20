@@ -52,12 +52,6 @@ import org.acmsl.queryj.tools.templates.functions.numeric
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -100,8 +94,6 @@ public abstract class NumericFunctionsTestTemplate
      * @param innerClass the inner class.
      * @param innerTable the inner table.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public NumericFunctionsTestTemplate(
         String  header,
@@ -125,9 +117,7 @@ public abstract class NumericFunctionsTestTemplate
         String  getInstanceTest,
         String  innerClass,
         String  innerTable,
-        String  classEnd,
-        Project project,
-        Task    task)
+        String  classEnd)
     {
         super(
             "numeric",
@@ -153,9 +143,7 @@ public abstract class NumericFunctionsTestTemplate
             getInstanceTest,
             innerClass,
             innerTable,
-            classEnd,
-            project,
-            task);
+            classEnd);
     }
 
     /**
@@ -165,17 +153,13 @@ public abstract class NumericFunctionsTestTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public NumericFunctionsTestTemplate(
         String packageName,
         String testedPackageName,
         String engineName,
         String engineVersion,
-        String quote,
-        Project project,
-        Task    task)
+        String quote)
     {
         super(
             "numeric",
@@ -184,9 +168,7 @@ public abstract class NumericFunctionsTestTemplate
             testedPackageName,
             engineName,
             engineVersion,
-            quote,
-            project,
-            task);
+            quote);
     }
 
     /**

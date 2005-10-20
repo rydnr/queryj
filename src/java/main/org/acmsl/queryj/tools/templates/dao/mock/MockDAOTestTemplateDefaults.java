@@ -98,14 +98,6 @@ public interface MockDAOTestTemplateDefaults
          // table
         + " *              expected.\n"
         + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -170,7 +162,6 @@ public interface MockDAOTestTemplateDefaults
          // table
         + " * expected and connections are correctly managed.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " * @see {0}.Mock{1}DAO\n"
         + " */\n";
 
@@ -390,7 +381,6 @@ public interface MockDAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests Mock{1}DAO.insert() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.Mock{1}DAO#insert({2},org.acmsl.queryj.dao.TransactionToken)\n"
          // method parameter type declaration
         + "     */\n"
@@ -433,7 +423,6 @@ public interface MockDAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests Mock{1}DAO.findByPrimaryKey()} method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.Mock{1}DAO#findByPrimaryKey({2},org.acmsl.queryj.dao.TransactionToken)\n"
         + "     */\n"
         + "    public static class FindByPrimaryKeyMock{1}Test\n"
@@ -472,7 +461,6 @@ public interface MockDAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests Mock{1}DAO.update() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.Mock{1}DAO#update({2},org.acmsl.queryj.dao.TransactionToken)\n"
          // method parameter type declaration
         + "     */\n"
@@ -524,7 +512,6 @@ public interface MockDAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests Mock{1}DAO.delete() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.Mock{1}DAO#delete({2},org.acmsl.queryj.dao.TransactionToken)\n"
         + "     */\n"
         + "    public static class DeleteMock{1}Test\n"

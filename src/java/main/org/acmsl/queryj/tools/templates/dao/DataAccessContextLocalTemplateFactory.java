@@ -44,12 +44,6 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Represents entities able to create dataAccessContext-local.xml templates.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -63,8 +57,6 @@ public interface DataAccessContextLocalTemplateFactory
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -72,8 +64,6 @@ public interface DataAccessContextLocalTemplateFactory
         final String jndiLocation,
         final String engineName,
         final String engineVersion,
-        final String basePackageName,
-        final Project project,
-        final Task task)
+        final String basePackageName)
       throws  QueryJException;
 }

@@ -51,12 +51,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -131,8 +125,6 @@ public class ConfigurationPropertiesTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return such template.
      * @precondition repository != null
      * @precondition engineName != null
@@ -142,18 +134,14 @@ public class ConfigurationPropertiesTemplateGenerator
         final String repository,
         final String engineName,
         final String engineVersion,
-        final String basePackageName,
-        final Project project,
-        final Task task)
+        final String basePackageName)
     {
         return
             new ConfigurationPropertiesTemplate(
                 repository,
                 engineName,
                 engineVersion,
-                basePackageName,
-                project,
-                task);
+                basePackageName);
     }
 
     /**

@@ -65,16 +65,7 @@ public interface ValueObjectImplTemplateDefaults
         + " * Author: QueryJ\n"
         + " *\n"
         + " * Description: Abstract representation of the \"{0}\"\n"
-        + " * information stored in the persistence domain.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
+        + " *              information stored in the persistence domain.\n"
         + " */\n";
 
     /**
@@ -109,7 +100,6 @@ public interface ValueObjectImplTemplateDefaults
         + " * Abstract implementation of the <i>{0}</i>\n"
         + " * information stored in the persistence domain.\n" // table
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**

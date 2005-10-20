@@ -46,12 +46,6 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the elements required to create the ResultSetExtractor sources.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -192,8 +186,6 @@ public abstract class AbstractResultSetExtractorTemplate
      * @param valueObjectNullablePropertiesCheck the value object
      * nullable properties check.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractResultSetExtractorTemplate(
         final TableTemplate tableTemplate,
@@ -204,7 +196,7 @@ public abstract class AbstractResultSetExtractorTemplate
         final String basePackageName,
         final String repositoryName,
         final String projectImports, 
-       final String additionalImports,
+        final String additionalImports,
         final String acmslImports,
         final String jdkImports,
         final String jdkExtensionImports,
@@ -216,12 +208,8 @@ public abstract class AbstractResultSetExtractorTemplate
         final String valueObjectPropertiesSpecification,
         final String valueObjectNullablePropertiesSpecification,
         final String valueObjectNullablePropertiesCheck,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
-
         immutableSetTableTemplate(
             tableTemplate);
 

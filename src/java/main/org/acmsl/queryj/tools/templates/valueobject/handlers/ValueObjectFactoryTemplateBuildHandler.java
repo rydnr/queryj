@@ -61,8 +61,6 @@ import org.acmsl.queryj.tools.templates.valueobject
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -102,24 +100,17 @@ public class ValueObjectFactoryTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given command.
      * @param attributes the attributes.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition command != null
      */
-    protected boolean handle(
-        final Map attributes, final Project project, final Task task)
+    protected boolean handle(final Map attributes)
         throws  BuildException
     {
         return
@@ -129,9 +120,7 @@ public class ValueObjectFactoryTemplateBuildHandler
                 retrieveDatabaseMetaDataManager(attributes),
                 retrievePackage(attributes),
                 retrieveTableTemplates(attributes),
-                ValueObjectFactoryTemplateGenerator.getInstance(),
-                project,
-                task);
+                ValueObjectFactoryTemplateGenerator.getInstance());
     }
 
     /**
@@ -142,8 +131,6 @@ public class ValueObjectFactoryTemplateBuildHandler
      * @param packageName the package name.
      * @param tableTemplates the table templates.
      * @param factory the template factory.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition attributes != null
@@ -159,10 +146,8 @@ public class ValueObjectFactoryTemplateBuildHandler
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final TableTemplate[] tableTemplates,
-        final ValueObjectFactoryTemplateFactory factory,
-        final Project project,
-        final Task task)
-        throws  BuildException
+        final ValueObjectFactoryTemplateFactory factory)
+      throws  BuildException
     {
         boolean result = false;
 
@@ -191,9 +176,7 @@ public class ValueObjectFactoryTemplateBuildHandler
                     factory.createValueObjectFactoryTemplate(
                         packageName,
                         tableTemplates[t_iValueObjectFactoryIndex],
-                        metaDataManager,
-                        project,
-                        task);
+                        metaDataManager);
             }
 
             storeValueObjectFactoryTemplates(t_aValueObjectFactoryTemplates, attributes);

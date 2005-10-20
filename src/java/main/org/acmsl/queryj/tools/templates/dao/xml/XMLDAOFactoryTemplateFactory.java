@@ -47,7 +47,8 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /**
  * Represents entities able to create XML DAO factory templates.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * >Jose San Leandro</a>
+ * @version $Revision$ at $Date$ by $Author$
  */
 public interface XMLDAOFactoryTemplateFactory
 {
@@ -61,7 +62,7 @@ public interface XMLDAOFactoryTemplateFactory
      */
     public XMLDAOFactoryTemplate createXMLDAOFactoryTemplate(
         final TableTemplate tableTemplate,
-        final String        packageName,
-        final String        basePackageName)
+        final String packageName,
+        final String basePackageName)
       throws  QueryJException;
 }

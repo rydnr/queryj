@@ -45,13 +45,13 @@ import org.acmsl.queryj.tools.templates.AbstractTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
+ * Importing some Apache Commons-Logging classes.
  */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
@@ -206,8 +206,6 @@ public abstract class FunctionsTemplate
      * @param classConstructor the class constructor.
      * @param innerClass the inner class.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected FunctionsTemplate(
         final String  classDescription,
@@ -226,11 +224,8 @@ public abstract class FunctionsTemplate
         final String  singletonBody,
         final String  classConstructor,
         final String  innerClass,
-        final String  classEnd,
-        final Project project,
-        final Task    task)
+        final String  classEnd)
     {
-        super(project, task);
         immutableSetClassDescription(classDescription);
         immutableSetClassPrefix(classPrefix);
         immutableSetHeader(header);
@@ -259,8 +254,6 @@ public abstract class FunctionsTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected FunctionsTemplate(
         final String classDescription,
@@ -268,9 +261,7 @@ public abstract class FunctionsTemplate
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote,
-        final Project project,
-        final Task task)
+        final String quote)
     {
         this(
             classDescription,
@@ -289,9 +280,7 @@ public abstract class FunctionsTemplate
             SINGLETON_BODY,
             CLASS_CONSTRUCTOR,
             INNER_CLASS,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**
@@ -1093,18 +1082,11 @@ public abstract class FunctionsTemplate
      */
     protected void logWarn(final String message)
     {
-        Project t_Project = getProject();
+        Log t_Log = UniqueLogFactory.getLog(getClass());
 
-        if  (t_Project != null)
+        if  (t_Log != null)
         {
-            t_Project.log(
-                getTask(),
-                message,
-                Project.MSG_WARN);
-        }
-        else 
-        {
-            LogFactory.getLog(getClass()).warn(message);
+            t_Log.warn(message);
         }
     }
 
@@ -1114,18 +1096,11 @@ public abstract class FunctionsTemplate
      */
     protected void logDebug(final String message)
     {
-        Project t_Project = getProject();
+        Log t_Log = UniqueLogFactory.getLog(getClass());
 
-        if  (t_Project != null)
+        if  (t_Log != null)
         {
-            t_Project.log(
-                getTask(),
-                message,
-                Project.MSG_DEBUG);
-        }
-        else 
-        {
-            LogFactory.getLog(getClass()).debug(message);
+            t_Log.debug(message);
         }
     }
 

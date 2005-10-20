@@ -132,8 +132,10 @@ public class MockDAOTemplateWritingHandler
 
         try 
         {
+            int t_iLength = (templates != null) ? templates.length : 0;
+
             for  (int t_iMockDAOIndex = 0;
-                      t_iMockDAOIndex < templates.length;
+                      t_iMockDAOIndex < t_iLength;
                       t_iMockDAOIndex++)
             {
                 templateGenerator.write(
@@ -193,32 +195,7 @@ public class MockDAOTemplateWritingHandler
         return
             packageUtils.retrieveMockDAOFolder(
                 retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters));
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveProjectOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

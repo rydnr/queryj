@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.system
+    .SystemFunctionsTemplateFactory;
+import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 
@@ -147,9 +149,7 @@ public class SystemFunctionsTemplateBuildHandler
                                     t_strPackage,
                                     t_MetaData.getDatabaseProductName(),
                                     t_MetaData.getDatabaseProductVersion(),
-                                    t_strQuote,
-                                    command.getProject(),
-                                    command.getTask());
+                                    t_strQuote);
 
                         Collection t_cFunctions =
                             t_StringUtils.tokenize(

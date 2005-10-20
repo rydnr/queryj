@@ -35,17 +35,6 @@
  * Description: Defines the default subtemplates used to generate procedure
  *              repositories according to database metadata.
  *
-<<<<<<< ProcedureRepositoryTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -54,10 +43,6 @@ package org.acmsl.queryj.tools.templates;
  * repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< ProcedureRepositoryTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.3
  */
 public interface ProcedureRepositoryTemplateDefaults
     extends  JavaTemplateDefaults
@@ -76,15 +61,6 @@ public interface ProcedureRepositoryTemplateDefaults
         + " *\n"
         + " * Description: Contains all procedures belonging to\n"
         + " *              \"{0}\" repository.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -138,7 +114,6 @@ public interface ProcedureRepositoryTemplateDefaults
         + " * Contains all procedures belonging to\n"
         + " * <i>{0}</i> repository.\n" // repository
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**

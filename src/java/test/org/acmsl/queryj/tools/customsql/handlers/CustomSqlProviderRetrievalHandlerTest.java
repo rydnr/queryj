@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.customsql.handlers.
+*              org.acmsl.queryj.tools.customsql.handlers.
 *
 */
-package unittests.org.acmsl.queryj.tools.customsql.handlers;
+package org.acmsl.queryj.tools.customsql.handlers;
 
 /*
 * Importing project classes.

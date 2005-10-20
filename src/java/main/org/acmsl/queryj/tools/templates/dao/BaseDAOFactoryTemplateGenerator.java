@@ -55,12 +55,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -303,8 +297,6 @@ public class BaseDAOFactoryTemplateGenerator
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param projectPackageName the project package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      * @precondition tableTemplate != null
@@ -316,9 +308,7 @@ public class BaseDAOFactoryTemplateGenerator
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
-        final String projectPackageName,
-        final Project project,
-        final Task task)
+        final String projectPackageName)
       throws  QueryJException
     {
         return
@@ -326,9 +316,7 @@ public class BaseDAOFactoryTemplateGenerator
                 tableTemplate,
                 metaDataManager,
                 packageName,
-                projectPackageName,
-                project,
-                task);
+                projectPackageName);
     }
 
     /**

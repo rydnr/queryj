@@ -45,12 +45,6 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the required subtemplates to create DAO interfaces.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -388,8 +382,6 @@ public abstract class AbstractBaseDAOTemplate
      * @param customSelectForUpdateParameterDeclaration the parameter
      * declaration of the custom-select-for-update operations.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractBaseDAOTemplate(
         final TableTemplate tableTemplate,
@@ -439,11 +431,8 @@ public abstract class AbstractBaseDAOTemplate
         final String customSelectForUpdateParameterJavadoc,
         final String customSelectForUpdateReturnJavadoc,
         final String customSelectForUpdateParameterDeclaration,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetTableTemplate(tableTemplate);
         immutableSetMetaDataManager(metaDataManager);
         immutableSetCustomSqlProvider(customSqlProvider);

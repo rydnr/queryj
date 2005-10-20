@@ -35,17 +35,6 @@
  * Description: Is able to generate DAOChooser class according
  *              to database metadata.
  *
-<<<<<<< DAOChooserTemplate.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.9
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -54,12 +43,6 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -74,10 +57,6 @@ import java.util.Collection;
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< DAOChooserTemplate.java
-=======
- * @version $Revision$
->>>>>>> 1.9
  */
 public class DAOChooserTemplate
     extends  AbstractDAOChooserTemplate
@@ -89,10 +68,7 @@ public class DAOChooserTemplate
      * @param repository the repository.
      */
     public DAOChooserTemplate(
-        final String packageName,
-        final String repository,
-        final Project project,
-        final Task task)
+        final String packageName, final String repository)
     {
         super(
             DEFAULT_HEADER,
@@ -110,9 +86,7 @@ public class DAOChooserTemplate
             DEFAULT_PROPERTIES_ACCESSORS,
             DEFAULT_HELPER_METHODS,
             DEFAULT_GETDAOFACTORY_METHOD,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

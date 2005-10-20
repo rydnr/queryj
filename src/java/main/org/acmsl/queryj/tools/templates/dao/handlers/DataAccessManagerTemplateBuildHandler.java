@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplate;
 import org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplateFactory;
@@ -55,8 +56,6 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -87,29 +86,22 @@ public class DataAccessManagerTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters, final Project project, final Task task)
+    protected boolean handle(final Map parameters)
       throws  BuildException
     {
         storeDataAccessManagerTemplate(
             buildDataAccessManagerTemplate(
-                parameters, project, task),
+                parameters),
             parameters);
         
         return false;
@@ -119,14 +111,12 @@ public class DataAccessManagerTemplateBuildHandler
      * Builds a data access manager template using the information
      * stored in the attribute map.
      * @param parameters the parameter map.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the TableRepository instance.
      * @throws BuildException if the template cannot be created.
      * @precondition parameters != null
      */
     protected DataAccessManagerTemplate buildDataAccessManagerTemplate(
-        final Map parameters, final Project project, final Task task)
+        final Map parameters)
       throws  BuildException
     {
         DataAccessManagerTemplate result =
@@ -134,9 +124,7 @@ public class DataAccessManagerTemplateBuildHandler
                 retrievePackage(parameters),
                 (String)
                     parameters.get(ParameterValidationHandler.REPOSITORY),
-                DataAccessManagerTemplateGenerator.getInstance(),
-                project,
-                task);
+                DataAccessManagerTemplateGenerator.getInstance());
 
         if  (result != null) 
         {
@@ -145,16 +133,15 @@ public class DataAccessManagerTemplateBuildHandler
                     parameters.get(
                         TableTemplateBuildHandler.TABLE_NAMES);
 
-            if  (t_astrTableNames != null)
+            int t_iLength =
+                (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+        
+            for  (int t_iTableIndex = 0;
+                      t_iTableIndex < t_iLength;
+                      t_iTableIndex++)
             {
-                for  (int t_iTableIndex = 0;
-                          t_iTableIndex < t_astrTableNames.length;
-                          t_iTableIndex++)
-                {
-                    result.addTable(t_astrTableNames[t_iTableIndex]);
-                }
+                result.addTable(t_astrTableNames[t_iTableIndex]);
             }
-            
         }
 
         return result;
@@ -165,8 +152,6 @@ public class DataAccessManagerTemplateBuildHandler
      * @param packageName the package name.
      * @param repository the repository.
      * @param templateFactory the template factory.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws org.apache.tools.ant.BuildException whenever the template
      * information is not valid.
      * @precondition packageName != null
@@ -176,14 +161,12 @@ public class DataAccessManagerTemplateBuildHandler
     protected DataAccessManagerTemplate buildDataAccessManagerTemplate(
         final String packageName,
         final String repository,
-        final DataAccessManagerTemplateFactory templateFactory,
-        final Project project,
-        final Task task)
+        final DataAccessManagerTemplateFactory templateFactory)
       throws  BuildException
     {
         return
             templateFactory.createDataAccessManagerTemplate(
-                packageName, repository, project, task);
+                packageName, repository);
     }
 
 
@@ -215,7 +198,7 @@ public class DataAccessManagerTemplateBuildHandler
     {
         return
             packageUtils.retrieveDataAccessManagerPackage(
-                (String) parameters.get(ParameterValidationHandler.PACKAGE));
+                retrieveProjectPackage(parameters));
     }
 
     /**

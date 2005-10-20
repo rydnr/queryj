@@ -49,12 +49,6 @@ import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -70,7 +64,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class OracleTimeFunctionsTemplate
+public class OracleTimeFunctionsTemplate
     extends  TimeFunctionsTemplate
 {
     /**
@@ -124,24 +118,18 @@ public abstract class OracleTimeFunctionsTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public OracleTimeFunctionsTemplate(
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote,
-        final Project project,
-        final Task    task)
+        final String quote)
     {
         super(
             packageName,
             engineName,
             engineVersion,
-            quote,
-            project,
-            task);
+            quote);
     }
 
     /**

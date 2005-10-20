@@ -35,17 +35,6 @@
  * Description: Contains the subtemplates used to generate value objects
  *              according to database metadata.
  *
-<<<<<<< AbstractValueObjectTemplate.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.2
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -57,22 +46,11 @@ import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the subtemplates used to generate value objects according to
  * database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
-<<<<<<< AbstractValueObjectTemplate.java
  *         >Jose San Leandro</a>
-=======
-           >Jose San Leandro</a>
- * @version $Revision$
->>>>>>> 1.2
  */
 public abstract class AbstractValueObjectTemplate
     extends  AbstractTemplate
@@ -170,8 +148,6 @@ public abstract class AbstractValueObjectTemplate
      * @param constructorFieldDefinition the constructor field definition.
      * @param constructorFieldValueSetter the constructor field value setter.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public AbstractValueObjectTemplate(
         final String header,
@@ -188,11 +164,8 @@ public abstract class AbstractValueObjectTemplate
         final String constructorFieldJavadoc,
         final String constructorFieldDefinition,
         final String constructorFieldValueSetter,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

@@ -34,10 +34,6 @@
  *
  * Description: Defines the default subtemplates for creating JUnit tests
  *              to ensure generated XML DAOs are working correctly.
-<<<<<<< XMLDAOTestTemplateDefaults.java
- *
-=======
->>>>>>> 1.4
  */
 package org.acmsl.queryj.tools.templates.dao.xml;
 
@@ -51,12 +47,7 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * ensure generated XML DAOs are working correctly.
  * See <a href="bugzilla.acm-sl.org/show_bug.cgi?id=502">502</a>.
  * @author <a href="mailto:chous@acm-sl.org"
-<<<<<<< XMLDAOTestTemplateDefaults.java
  *         >Jose San Leandro</a>
-=======
- *         >Jose San Leandro</a>
- * @version $Revision$
->>>>>>> 1.4
  */
 public interface XMLDAOTestTemplateDefaults
     extends  JavaTemplateDefaults
@@ -76,14 +67,6 @@ public interface XMLDAOTestTemplateDefaults
         + " * Description: Executes JUnit tests to ensure XML{0}DAO works as\n"
          // table
         + " *              expected.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
         + " *\n"
         + " */\n";
 
@@ -151,7 +134,6 @@ public interface XMLDAOTestTemplateDefaults
          // table
         + " * expected and connections are correctly managed.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " * @see {0}.XML{1}DAO\n"
         + " */\n";
 
@@ -381,8 +363,7 @@ public interface XMLDAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests XML{1}DAO.insert() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.XML{1}DAO#insert({2},org.acmsl.queryj.dao.TransactionToken)\n"
+        + "     * @see {0}.XML{1}DAO#insert({2})\n"
          // method parameter type declaration
         + "     */\n"
         + "    public static class InsertXML{1}Test\n"
@@ -404,9 +385,8 @@ public interface XMLDAOTestTemplateDefaults
         + "            assertNotNull(getTestedInstance());\n\n"
         + "            getTestedInstance()\n"
         + "                .insert("
-        + "{3}"
+        + "{3});\n"
          // store invokaton with test parameters
-        + "\n                        null); // transactionless\n"
         + "        '}'\n\n"
         + "    '}'\n\n";
 
@@ -414,7 +394,13 @@ public interface XMLDAOTestTemplateDefaults
      * Test parameters' values.
      */
     public static final String DEFAULT_TEST_PARAMETERS_VALUES =
-        "\n                        {0}_VALUE,";
+        "\n                        {0}_VALUE";
+
+    /**
+     * The nullable inserted values conversion.
+     */
+    public static final String DEFAULT_NULLABLE_INSERTED_VALUES_CONVERSION =
+        "\n                    new {0}({1}_VALUE)";
 
     /**
      * Load test.
@@ -424,8 +410,7 @@ public interface XMLDAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests XML{1}DAO.findByPrimaryKey()} method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.XML{1}DAO#findByPrimaryKey({2},org.acmsl.queryj.dao.TransactionToken)\n"
+        + "     * @see {0}.XML{1}DAO#findByPrimaryKey({2})\n"
         + "     */\n"
         + "    public static class FindByPrimaryKeyXML{1}Test\n"
         + "        extends  TestCase\n"
@@ -447,9 +432,8 @@ public interface XMLDAOTestTemplateDefaults
         + "            {1}ValueObject t_ValueObject =\n"
         + "                getTestedInstance()\n"
         + "                    .findByPrimaryKey("
-        + "{3}"
+        + "{3});\n"
          // load invokaton with test parameters
-        + "\n                        null); // transactionless\n"
         + "            assertNotNull(t_ValueObject);\n"
         + "            set{1}(t_ValueObject);\n"
         + "        '}'\n\n"
@@ -463,8 +447,7 @@ public interface XMLDAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests XML{1}DAO.update() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.XML{1}DAO#update({2},org.acmsl.queryj.dao.TransactionToken)\n"
+        + "     * @see {0}.XML{1}DAO#update({2})\n"
          // method parameter type declaration
         + "     */\n"
         + "    public static class UpdateXML{1}Test\n"
@@ -489,9 +472,8 @@ public interface XMLDAOTestTemplateDefaults
         + "                .update("
         + "{3}"
          // primary key values.
-        + "{4}"
+        + "{4});\n"
          // update test parameters.
-        + "\n                    null);  // no transactions\n"
         + "        '}'\n\n"
         + "    '}'\n\n";
 
@@ -499,13 +481,19 @@ public interface XMLDAOTestTemplateDefaults
      * Update filter values.
      */
     public static final String DEFAULT_UPDATE_FILTER_VALUES =
-        "\n                    get{0}().get{1}(),";
+        "\n                    get{0}().get{1}()";
         
     /**
      * Test parameters' updated values.
      */
     public static final String DEFAULT_TEST_PARAMETERS_UPDATED_VALUES =
-        "\n                    UPDATED_{0}_VALUE,";
+        "\n                    UPDATED_{0}_VALUE";
+
+    /**
+     * The nullable updated values conversion.
+     */
+    public static final String DEFAULT_NULLABLE_UPDATED_VALUES_CONVERSION =
+        "\n                    new {0}(UPDATED_{1}_VALUE)";
 
     /**
      * Remove test.
@@ -515,8 +503,7 @@ public interface XMLDAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests XML{1}DAO.delete() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
-        + "     * @see {0}.XML{1}DAO#delete({2},org.acmsl.queryj.dao.TransactionToken)\n"
+        + "     * @see {0}.XML{1}DAO#delete({2})\n"
         + "     */\n"
         + "    public static class DeleteXML{1}Test\n"
         + "        extends  TestCase\n"
@@ -536,11 +523,9 @@ public interface XMLDAOTestTemplateDefaults
         + "        '{'\n"
         + "            assertNotNull(getTestedInstance());\n\n"
         + "            assertNotNull(get{1}());\n\n"
-        + "            assertTrue(\n"
-        + "                getTestedInstance()\n"
-        + "                    .delete("
-        + "{3}"
-        + "\n                        null));  // no transactions\n"
+        + "            getTestedInstance()\n"
+        + "                .delete("
+        + "{3});\n"
          // remove invokaton with test pks.
         + "        '}'\n\n"
         + "    '}'\n";
@@ -549,7 +534,7 @@ public interface XMLDAOTestTemplateDefaults
      * Remove filter values.
      */
     public static final String DEFAULT_REMOVE_FILTER_VALUES =
-        "\n                        get{0}().get{1}(),";
+        "\n                    get{0}().get{1}()";
         
     /**
      * The default class end.

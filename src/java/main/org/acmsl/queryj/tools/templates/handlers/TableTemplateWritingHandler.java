@@ -54,6 +54,8 @@ import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -81,44 +83,65 @@ public class TableTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                retrieveTableTemplates(parameters),
+                retrieveOutputDir(parameters),
+                TableTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Writes the Table templates.
+     * @param templates the templates to write.
+     * @param outputDir the output dir.
+     * @param generator the <code>TableTemplateGenerator</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition templates != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final TableTemplate[] templates,
+        final File outputDir,
+        final TableTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
+            int t_iLength = (templates != null) ? templates.length : 0;
+
+            for  (int t_iTableIndex = 0;
+                      t_iTableIndex < t_iLength;
+                      t_iTableIndex++) 
             {
-                Map attributes = command.getAttributeMap();
-
-                TableTemplateGenerator t_TableTemplateGenerator =
-                    TableTemplateGenerator.getInstance();
-
-                TableTemplate[] t_aTableTemplates =
-                    retrieveTableTemplates(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir              != null) 
-                     && (t_aTableTemplates        != null)
-                     && (t_TableTemplateGenerator != null))
-                {
-                    for  (int t_iTableIndex = 0;
-                              t_iTableIndex < t_aTableTemplates.length;
-                              t_iTableIndex++) 
-                    {
-                        t_TableTemplateGenerator.write(
-                            t_aTableTemplates[t_iTableIndex],
-                            t_OutputDir);
-                    }
-                }
+                generator.write(
+                    templates[t_iTableIndex], outputDir);
             }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -129,41 +152,15 @@ public class TableTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template array.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(Map parameters)
+    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
         throws  BuildException
     {
-        TableTemplate[] result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (TableTemplate[])
-                    parameters.get(
-                        TableTemplateBuildHandler.TABLE_TEMPLATES);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            (TableTemplate[])
+                parameters.get(
+                    TableTemplateBuildHandler.TABLE_TEMPLATES);
     }
 
     /**
@@ -171,25 +168,31 @@ public class TableTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
+    protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveTableFolder(
-                    (File)
-                        parameters.get(
-                            ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveTableFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

@@ -67,8 +67,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -100,27 +98,19 @@ public class BaseDAOTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
+        
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters,
-        final Project project,
-        final Task task)
-      throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  BuildException
     {
         return
             handle(
@@ -130,9 +120,7 @@ public class BaseDAOTemplateBuildHandler
                 retrievePackage(parameters),
                 retrieveValueObjectPackageName(parameters),
                 retrieveTableTemplates(parameters),
-                BaseDAOTemplateGenerator.getInstance(),
-                project,
-                task);
+                BaseDAOTemplateGenerator.getInstance());
     }
 
     /**
@@ -145,8 +133,6 @@ public class BaseDAOTemplateBuildHandler
      * @param valueObjectPackageName the value object package name.
      * @param tableTemplates the table templates.
      * @param templateFactory the template factory.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -164,20 +150,21 @@ public class BaseDAOTemplateBuildHandler
         final String packageName,
         final String valueObjectPackageName,
         final TableTemplate[] tableTemplates,
-        final BaseDAOTemplateFactory templateFactory,
-        final Project project,
-        final Task task)
+        final BaseDAOTemplateFactory templateFactory)
       throws  BuildException
     {
         boolean result = false;
 
+        int t_iLength =
+            (tableTemplates != null) ? tableTemplates.length : 0;
+        
         BaseDAOTemplate[] t_aBaseDAOTemplates =
-            new BaseDAOTemplate[tableTemplates.length];
+            new BaseDAOTemplate[t_iLength];
 
         try
         {
             for  (int t_iBaseDAOIndex = 0;
-                      t_iBaseDAOIndex < t_aBaseDAOTemplates.length;
+                      t_iBaseDAOIndex < t_iLength;
                       t_iBaseDAOIndex++) 
             {
                 t_aBaseDAOTemplates[t_iBaseDAOIndex] =
@@ -186,9 +173,7 @@ public class BaseDAOTemplateBuildHandler
                         databaseMetaDataManager,
                         customSqlProvider,
                         packageName,
-                        valueObjectPackageName,
-                        project,
-                        task);
+                        valueObjectPackageName);
             }
 
             storeBaseDAOTemplates(t_aBaseDAOTemplates, parameters);

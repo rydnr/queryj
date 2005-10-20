@@ -51,12 +51,6 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the elements required to create the FkStatementSetter sources.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -71,9 +65,9 @@ public abstract class AbstractFkStatementSetterTemplate
     private TableTemplate m__TableTemplate;
 
     /**
-     * The foreign key.
+     * The foreign keys.
      */
-    private String m__strForeignKey;
+    private String[] m__astrForeignKeys;
 
     /**
      * The database metadata manager.
@@ -199,7 +193,7 @@ public abstract class AbstractFkStatementSetterTemplate
      * Builds an <code>AbstractFkStatementSetterTemplate</code> using
      * given information.
      * @param tableTemplate the table template.
-     * @param foreignKey the foreign key.
+     * @param foreignKeys the foreign keys.
      * @param metaDataManager the database metadata manager.
      * @param header the header.
      * @param packageDeclaration the package declaration.
@@ -224,12 +218,10 @@ public abstract class AbstractFkStatementSetterTemplate
      * @param parameterDeclaration the parameter declaration.
      * @param parameterSpecification the parameter specification.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractFkStatementSetterTemplate(
         final TableTemplate tableTemplate,
-        final String foreignKey,
+        final String[] foreignKeys,
         final DatabaseMetaDataManager metaDataManager,
         final String header,
         final String packageDeclaration,
@@ -253,17 +245,13 @@ public abstract class AbstractFkStatementSetterTemplate
         final String parameterJavadoc,
         final String parameterDeclaration,
         final String parameterSpecification,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
-
         immutableSetTableTemplate(
             tableTemplate);
 
-        immutableSetForeignKey(
-            foreignKey);
+        immutableSetForeignKeys(
+            foreignKeys);
 
         immutableSetMetaDataManager(
             metaDataManager);
@@ -359,30 +347,30 @@ public abstract class AbstractFkStatementSetterTemplate
     }
 
     /**
-     * Specifies the foreign key.
-     * @param foreignKey the foreign key.
+     * Specifies the foreign keys.
+     * @param foreignKeys the foreign keys.
      */
-    private void immutableSetForeignKey(final String foreignKey)
+    private void immutableSetForeignKeys(final String[] foreignKeys)
     {
-        m__strForeignKey = foreignKey;
+        m__astrForeignKeys = foreignKeys;
     }
 
     /**
-     * Specifies the foreign key.
-     * @param foreignKey the foreign key.
+     * Specifies the foreign keys.
+     * @param foreignKeys the foreign keys.
      */
-    protected void setForeignKey(final String foreignKey)
+    protected void setForeignKeys(final String[] foreignKeys)
     {
-        immutableSetForeignKey(foreignKey);
+        immutableSetForeignKeys(foreignKeys);
     }
 
     /**
-     * Retrieves the foreign key.
+     * Retrieves the foreign keys.
      * @return such key.
      */
-    public String getForeignKey()
+    public String[] getForeignKeys()
     {
-        return m__strForeignKey;
+        return m__astrForeignKeys;
     }
 
     /**
@@ -1047,7 +1035,8 @@ public abstract class AbstractFkStatementSetterTemplate
         return
             buildHeader(
                 getTableTemplate(),
-                getForeignKey(),
+                getForeignKeys(),
+                getMetaDataManager(),
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance());
     }
@@ -1055,19 +1044,22 @@ public abstract class AbstractFkStatementSetterTemplate
     /**
      * Builds the header for logging purposes.
      * @param tableTemplate the table template.
-     * @param foreignKey the foreign key.
+     * @param foreignKeys the foreign keys.
+     * @param metaDataManager the <code>DatabaseMetaDataManager</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @return such header.
      * @precondition tableTemplate != null
-     * @precondition foreignKey != null
+     * @precondition foreignKeys != null
+     * @precondition metaDataManager != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      */
     protected String buildHeader(
         final TableTemplate tableTemplate,
-        final String foreignKey,
+        final String[] foreignKeys,
+        final DatabaseMetaDataManager metaDataManager,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils)
     {
@@ -1080,7 +1072,9 @@ public abstract class AbstractFkStatementSetterTemplate
             + "By"
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    foreignKey.toLowerCase()),
+                    metaDataManager.getReferredTable(
+                        tableTemplate.getTableName(),
+                        foreignKeys[0]).toLowerCase()),
                 '_')
             + "StatementSetter.";
     }

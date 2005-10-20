@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.valueobject.
+*              org.acmsl.queryj.tools.templates.valueobject.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.valueobject;
+package org.acmsl.queryj.tools.templates.valueobject;
 
 /*
 * Importing project classes.
@@ -112,9 +112,7 @@ extends TestCase
         new org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate(
             "com.foo.bar", // package name
             null, // table template
-            null, // database metadata manager
-            null, // project
-            null);// task
+            null); // database metadata manager
     // JUnitDoclet end method testcase.createInstance
   }
   

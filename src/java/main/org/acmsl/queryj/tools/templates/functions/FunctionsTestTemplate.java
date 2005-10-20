@@ -50,12 +50,6 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -64,11 +58,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Template for creating JUnit tests associated to Database's
@@ -152,8 +141,6 @@ public abstract class FunctionsTestTemplate
      * @param innerClass the inner class.
      * @param innerTable the inner table.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public FunctionsTestTemplate(
         final String classDescription,
@@ -179,9 +166,7 @@ public abstract class FunctionsTestTemplate
         final String getInstanceTest,
         final String innerClass,
         final String innerTable,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
         super(
             classDescription,
@@ -200,9 +185,7 @@ public abstract class FunctionsTestTemplate
             null, // singleton body
             classConstructor,
             innerClass,
-            classEnd,
-            project,
-            task);
+            classEnd);
 
         immutableSetTestedPackageName(testedPackageName);
         immutableSetProjectImports(projectImports);
@@ -223,8 +206,6 @@ public abstract class FunctionsTestTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public FunctionsTestTemplate(
         final String classDescription,
@@ -233,9 +214,7 @@ public abstract class FunctionsTestTemplate
         final String testedPackageName,
         final String engineName,
         final String engineVersion,
-        final String quote,
-        final Project project,
-        final Task task)
+        final String quote)
     {
         this(
             classDescription,
@@ -261,9 +240,7 @@ public abstract class FunctionsTestTemplate
             FunctionsTestTemplateDefaults.GET_INSTANCE_TEST,
             FunctionsTestTemplateDefaults.INNER_CLASS,
             FunctionsTestTemplateDefaults.INNER_TABLE,
-            FunctionsTestTemplateDefaults.DEFAULT_CLASS_END,
-            project,
-            task);
+            FunctionsTestTemplateDefaults.DEFAULT_CLASS_END);
     }
 
     /**

@@ -33,10 +33,6 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Defines the basic pieces to build function templates.
-<<<<<<< FunctionsTemplateDefaults.java
- *
-=======
->>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.functions;
 
@@ -69,15 +65,6 @@ public interface FunctionsTemplateDefaults
          // function description
         + "{0} {1}.\n"
          // engine name - driver version
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -122,7 +109,6 @@ public interface FunctionsTemplateDefaults
         + " * Contains the {2} functions supported by {0} {1}.\n"
        // function description - engine name - driver version
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**
@@ -681,7 +667,7 @@ public interface FunctionsTemplateDefaults
           "    /**\n"
         + "     * Creates the field represented by the usage of {0}''s {1} "
         + "function.\n" // driver - function
-        + "     * @param firstIield the first int field.\n"
+        + "     * @param firstField the first int field.\n"
         + "     * @param secondField the second int field.\n"
         + "     * @return the corresponding function call.\n"
         + "     */\n"
@@ -778,7 +764,7 @@ public interface FunctionsTemplateDefaults
           "    /**\n"
         + "     * Creates the field represented by the usage of {0}''s {1} "
         + "function.\n" // driver - function
-        + "     * @param firstIield the first long field.\n"
+        + "     * @param firstField the first long field.\n"
         + "     * @param secondField the second long field.\n"
         + "     * @return the corresponding function call.\n"
         + "     */\n"
@@ -2766,7 +2752,6 @@ public interface FunctionsTemplateDefaults
           "    /**\n"
         + "     * Wraps a field to call a function.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     */\n"
         + "    private final class _{0}FieldWrapper\n" // field type
         + "        extends  {0}Field\n" // field type

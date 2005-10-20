@@ -66,14 +66,6 @@ public interface BaseDAOTemplateDefaults
         + " *              \"{0}\" structures from persistence layers.\n"
          // Table name
         + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -119,7 +111,6 @@ public interface BaseDAOTemplateDefaults
         + " * to manage <i>{0}</i> structures from persistence layers.\n"
          // Table name
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**
@@ -419,7 +410,7 @@ public interface BaseDAOTemplateDefaults
         + "     */\n"
         + "    public {3} {4}("
          // result class - sql name
-        + "{5});\n";
+        + "{5});\n\n";
          // CUSTOM_SELECT_PARAMETER_DECLARATION
 
     /**
@@ -454,7 +445,7 @@ public interface BaseDAOTemplateDefaults
         + "     */\n"
         + "    public void {3}("
          // sql name
-        + "{4});\n";
+        + "{4});\n\n";
          // CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION
 
     /**
@@ -493,7 +484,7 @@ public interface BaseDAOTemplateDefaults
         + "     */\n"
         + "    public {4} {5}("
          // result class - method name
-        + "{6});\n";
+        + "{6});\n\n";
          // parameter declaration
 
     /**

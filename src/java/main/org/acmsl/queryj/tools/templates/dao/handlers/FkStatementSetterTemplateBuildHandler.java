@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateFactory;
@@ -64,8 +65,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -75,6 +74,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -86,6 +86,11 @@ public class FkStatementSetterTemplateBuildHandler
     extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
+    /**
+     * A cached empty String array.
+     */
+    protected final String[] EMPTY_STRING_ARRAY = new String[0];
+
     /**
      * A cached empty template array.
      */
@@ -108,50 +113,36 @@ public class FkStatementSetterTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters, final Project project, final Task task)
-      throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  BuildException
     {
         return
             handle(
                 parameters,
-                retrieveDatabaseMetaData(parameters),
-                project,
-                task);
+                retrieveDatabaseMetaData(parameters));
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
      * @param metaData the database metadata.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
      */
     protected boolean handle(
-        final Map parameters,
-        final DatabaseMetaData metaData,
-        final Project project,
-        final Task task)
+        final Map parameters, final DatabaseMetaData metaData)
       throws  BuildException
     {
         boolean result = false;
@@ -160,9 +151,7 @@ public class FkStatementSetterTemplateBuildHandler
         {
             handle(
                 parameters,
-                metaData.getDatabaseProductName(),
-                project,
-                task);
+                metaData.getDatabaseProductName());
         }
         catch  (final SQLException sqlException)
         {
@@ -176,18 +165,13 @@ public class FkStatementSetterTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      */
     protected boolean handle(
-        final Map parameters,
-        final String engineName,
-        final Project project,
-        final Task task)
+        final Map parameters, final String engineName)
       throws  BuildException
     {
         return
@@ -198,9 +182,7 @@ public class FkStatementSetterTemplateBuildHandler
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 FkStatementSetterTemplateGenerator.getInstance(),
-                retrieveTableTemplates(parameters),
-                project,
-                task);
+                retrieveTableTemplates(parameters));
     }
 
     /**
@@ -212,8 +194,6 @@ public class FkStatementSetterTemplateBuildHandler
      * @param repository the repository.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -232,42 +212,75 @@ public class FkStatementSetterTemplateBuildHandler
         final String basePackageName,
         final String repositoryName,
         final FkStatementSetterTemplateFactory templateFactory,
-        final TableTemplate[] tableTemplates,
-        final Project project,
-        final Task task)
+        final TableTemplate[] tableTemplates)
       throws  BuildException
     {
         boolean result = false;
 
         Collection t_cTemplates = new ArrayList();
 
+        int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
+        
         try
         {
             for  (int t_iIndex = 0;
-                      t_iIndex < tableTemplates.length;
+                      t_iIndex < t_iLength;
                       t_iIndex++) 
             {
                 String[] t_astrFks =
                     metaDataManager.getForeignKeys(
                         tableTemplates[t_iIndex].getTableName());
 
+                String[] t_astrSimpleFks =
+                    retrieveSimpleFks(
+                        t_astrFks,
+                        tableTemplates[t_iIndex].getTableName(),
+                        metaDataManager);
+
                 for  (int t_iFkIndex = 0;
-                          t_iFkIndex < t_astrFks.length;
+                          t_iFkIndex < t_astrSimpleFks.length;
                           t_iFkIndex++)
                 {
                     t_cTemplates.add(
                         templateFactory.createFkStatementSetterTemplate(
                             tableTemplates[t_iIndex],
-                            t_astrFks[t_iFkIndex],
+                            new String[] {t_astrFks[t_iFkIndex]},
                             metaDataManager,
                             retrievePackage(
                                 engineName,
                                 tableTemplates[t_iIndex].getTableName(),
                                 parameters),
                             basePackageName,
-                            repositoryName,
-                            project,
-                            task));
+                            repositoryName));
+                }
+
+                String[] t_astrReferredTables =
+                    retrieveReferredTablesByCompoundFks(
+                        tableTemplates[t_iIndex].getTableName(),
+                        metaDataManager);
+
+                int t_iReferredTablesLength =
+                    (t_astrReferredTables != null)
+                    ?  t_astrReferredTables.length
+                    :  0;
+
+                for  (int t_iReferredTableIndex = 0;
+                          t_iReferredTableIndex < t_iReferredTablesLength;
+                          t_iReferredTableIndex++)
+                {
+                    t_cTemplates.add(
+                        templateFactory.createFkStatementSetterTemplate(
+                            tableTemplates[t_iIndex],
+                            metaDataManager.getForeignKeys(
+                                tableTemplates[t_iIndex].getTableName(),
+                                t_astrReferredTables[t_iReferredTableIndex]),
+                            metaDataManager,
+                            retrievePackage(
+                                engineName,
+                                tableTemplates[t_iIndex].getTableName(),
+                                parameters),
+                            basePackageName,
+                            repositoryName));
                 }
             }
 
@@ -283,43 +296,6 @@ public class FkStatementSetterTemplateBuildHandler
         }
         
         return result;
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**
@@ -449,5 +425,78 @@ public class FkStatementSetterTemplateBuildHandler
         final DatabaseMetaDataManager metaDataManager)
     {
         return metaDataManager.containsForeignKeys(tableTemplate.getTableName());
+    }
+
+    /**
+     * Retrieves the simple foreign keys.
+     * @param allFks the complete list of foreign keys.
+     * @param tableName the table name.
+     * @param metaDataManager the <code>DatabaseMetaDataManager</code> instance.
+     * @precondition allFks != null
+     * @precondition tableName != null
+     * @precondition metaDataManager != null
+     */
+    protected String[] retrieveSimpleFks(
+        final String[] allFks,
+        final String tableName,
+        final DatabaseMetaDataManager metaDataManager)
+    {
+        Collection t_cResult = new ArrayList();
+
+        Map t_mAux = new HashMap();
+
+        int t_iLength = (allFks != null) ? allFks.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            String t_strReferredTable =
+                metaDataManager.getReferredTable(tableName, allFks[t_iIndex]);
+
+            if  (t_mAux.containsKey(t_strReferredTable))
+            {
+                t_mAux.remove(t_strReferredTable);
+            }
+            else
+            {
+                t_mAux.put(t_strReferredTable, allFks[t_iIndex]);
+            }
+        }
+
+        t_cResult = t_mAux.values();
+
+        return (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
+    }
+
+    /**
+     * Retrieves the tables referred by compound foreign keys.
+     * @param tableName the table name.
+     * @param metaDataManager the <code>DatabaseMetaDataManager</code> instance.
+     * @precondition tableName != null
+     * @precondition metaDataManager != null
+     */
+    protected String[] retrieveReferredTablesByCompoundFks(
+        final String tableName,
+        final DatabaseMetaDataManager metaDataManager)
+    {
+        Collection t_cResult = new ArrayList();
+
+        String[] t_astrReferredTables = metaDataManager.getReferredTables(tableName);
+
+        int t_iLength =
+            (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            String[] t_astrForeignKeys =
+                metaDataManager.getForeignKeys(tableName, t_astrReferredTables[t_iIndex]);
+
+            if  (   (t_astrForeignKeys != null)
+                 && (t_astrForeignKeys.length > 0))
+            {
+                t_cResult.add(t_astrReferredTables[t_iIndex]);
+            }
+        }
+
+        return (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
     }
 }

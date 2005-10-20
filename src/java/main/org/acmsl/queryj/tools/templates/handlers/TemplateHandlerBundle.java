@@ -82,7 +82,9 @@ public class TemplateHandlerBundle
      */
     public TemplateHandlerBundle(final TemplateHandlerBundle[] bundles)
     {
-        for  (int t_iIndex = 0; t_iIndex < bundles.length; t_iIndex++)
+        int t_iLength = (bundles != null) ? bundles.length : 0;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
             if  (bundles[t_iIndex] != null)
             {

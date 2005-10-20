@@ -37,6 +37,12 @@
 package org.acmsl.queryj.dao;
 
 /*
+ * Importing Spring classes.
+ */
+import org.springframework.jdbc.datasource.SmartDataSource;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+
+/*
  * Importing some JDK1.3 classes.
  */
 import java.sql.Connection;
@@ -59,13 +65,10 @@ import org.apache.commons.logging.LogFactory;
  *         >Jose San Leandro Armendariz</a>
  */
 public class ThreadAwareDataSourceWrapper
+    extends     TransactionAwareDataSourceProxy
+//    implements  SmartDataSource
     implements  DataSource
 {
-    /**
-     * Concrete wrapped data source.
-     */
-    private DataSource m__DataSource;
-
     /**
      * The connection used in the transaction.
      */
@@ -77,81 +80,19 @@ public class ThreadAwareDataSourceWrapper
     private int m__iThreadBasedHashCode;
 
     /**
-     * Creates a ThreadAwareDataSourceWrapper using given data source.
+     * Creates a <code>ThreadAwareDataSourceWrapper</code> using
+     * given data source.
      * @param dataSource the data source to wrap.
      */
     public ThreadAwareDataSourceWrapper(final DataSource dataSource)
     {
-        immutableSetDataSource(dataSource);
-        immutableSetThreadBasedHashCode(
-            buildThreadBasedHashCode(Thread.currentThread()));
+        super(dataSource);
     }
 
     /**
-     * Specifies the data source.
-     * @param dataSource the data source.
+     * Creates a <code>ThreadAwareDataSourceWrapper</code>.
      */
-    private void immutableSetDataSource(final DataSource dataSource)
-    {
-        m__DataSource = dataSource;
-    }
-
-    /**
-     * Specifies the data source.
-     * @param dataSource the data source.
-     */
-    protected void setDataSource(final DataSource dataSource)
-    {
-        immutableSetDataSource(dataSource);
-    }
-
-    /**
-     * Retrieves the data source.
-     * @return the data source.
-     */
-    public DataSource getDataSource()
-    {
-        return m__DataSource;
-    }
-
-    /**
-     * Specifies the thread-based hash code.
-     * @param hashCode such hash code.
-     */
-    private void immutableSetThreadBasedHashCode(final int hashCode)
-    {
-        m__iThreadBasedHashCode = hashCode;
-    }
-
-    /**
-     * Specifies the thread-based hash code.
-     * @param hashCode such hash code.
-     */
-    protected final void setThreadBasedHashCode(final int hashCode)
-    {
-        immutableSetThreadBasedHashCode(hashCode);
-    }
-
-    /**
-     * Retrieves the thread-based hash code.
-     * @return such hash code.
-     */
-    public int getThreadBasedHashCode()
-    {
-        return m__iThreadBasedHashCode;
-    }
-
-    /**
-     * Builds a hash code depending on given thread.
-     * @param thread the thread.
-     * @return the custom hash code.
-     * @precondition thread != null
-     */
-    protected int buildThreadBasedHashCode(final Thread thread)
-    {
-        return
-            getClass().hashCode() + ".queryj.".hashCode() + thread.hashCode();
-    }
+    public ThreadAwareDataSourceWrapper() {};
 
     /**
      * Specifies the JDBC connection.
@@ -190,7 +131,7 @@ public class ThreadAwareDataSourceWrapper
         return
             getConnection(
                 getInternalConnection(),
-                getDataSource());
+                getTargetDataSource());
     }
 
     /**
@@ -210,155 +151,61 @@ public class ThreadAwareDataSourceWrapper
                  || (isClosed(result)))
              && (dataSource != null))
         {
-            result = dataSource.getConnection();
-            setConnection(result);
-            result.setAutoCommit(false);
-        }
+            result = super.getConnection();
 
-        return m__Connection;
-    }
-
-    /**
-     * Attempts to establish a database connection.
-     * @param userName the user name connection settings.
-     * @param password the user password connection settings.
-     * @return the connection.
-     */
-    public Connection getConnection(
-        final String userName, final String password)
-      throws  SQLException
-    {
-        return
-            getConnection(
-                userName, password, getConnection(), getDataSource());
-    }
-
-    /**
-     * Attempts to establish a database connection.
-     * @param userName the user name connection settings.
-     * @param password the user password connection settings.
-     * @param connection the connection.
-     * @param dataSource the data source.
-     * @return the connection.
-     */
-    public Connection getConnection(
-        final String userName,
-        final String password,
-        final Connection connection,
-        final DataSource dataSource)
-      throws  SQLException
-    {
-        Connection result = connection;
-
-        if  (   (   (result == null)
-                 || (isClosed(result)))
-             && (dataSource != null))
-        {
-            result = dataSource.getConnection(userName, password);
-            setConnection(result);
-            result.setAutoCommit(false);
+            synchronized (this)
+            {
+                setConnection(result);
+                setThreadBasedHashCode(
+                    buildThreadBasedHashCode(
+                        Thread.currentThread()));
+            }
         }
 
         return result;
     }
 
     /**
-     * Retrieves the maximum time in seconds that this data source can
-     * wait while attempting to connect to a database.
-     * @return such timeout.
+     * Specifies the thread-based hash code.
+     * @param hashCode such hash code.
      */
-    public int getLoginTimeout()
-        throws  SQLException
+    private void immutableSetThreadBasedHashCode(final int hashCode)
     {
-        return getLoginTimeout(getDataSource());
+        m__iThreadBasedHashCode = hashCode;
     }
 
     /**
-     * Retrieves the maximum time in seconds that this data source can
-     * wait while attempting to connect to a database.
-     * @param dataSource the data source.
-     * @return such timeout.
-     * @precondition dataSource != null
+     * Specifies the thread-based hash code.
+     * @param hashCode such hash code.
      */
-    protected int getLoginTimeout(final DataSource dataSource)
-        throws  SQLException
+    protected final void setThreadBasedHashCode(final int hashCode)
     {
-        return dataSource.getLoginTimeout();
+        immutableSetThreadBasedHashCode(hashCode);
     }
 
     /**
-     * Retrieves the log writer for this data source.
-     * @return such log writer.
+     * Retrieves the thread-based hash code.
+     * @return such hash code.
      */
-    public PrintWriter getLogWriter()
-        throws  SQLException
+    public int getThreadBasedHashCode()
     {
-        return getLogWriter(getDataSource());
+        return m__iThreadBasedHashCode;
     }
 
     /**
-     * Retrieves the log writer for this data source.
-     * @return such log writer.
+     * Builds a hash code depending on given thread.
+     * @param thread the thread.
+     * @return the custom hash code.
+     * @precondition thread != null
      */
-    protected PrintWriter getLogWriter(final DataSource dataSource)
-        throws  SQLException
+    protected int buildThreadBasedHashCode(final Thread thread)
     {
-        PrintWriter result = null;
-
-        if  (dataSource != null) 
-        {
-            result = dataSource.getLogWriter();
-        }
+        int result =
+            (  getClass().getName()
+             + ".queryj."
+             + thread).hashCode();
 
         return result;
-    }
-
-    /**
-     * Specifies the maximum time in seconds that this data source will
-     * wait while attempting to connect to a database.
-     * @param seconds the timeout.
-     */
-    public void setLoginTimeout(final int seconds)
-        throws  SQLException
-    {
-        setLoginTimeout(seconds, getDataSource());
-    }
-
-    /**
-     * Specifies the maximum time in seconds that this data source will
-     * wait while attempting to connect to a database.
-     * @param seconds the timeout.
-     * @param dataSource the data source.
-     * @precondition dataSource != null
-     */
-    protected void setLoginTimeout(
-        final int seconds, final DataSource dataSource)
-      throws  SQLException
-    {
-        dataSource.setLoginTimeout(seconds);
-    }
-
-    /**
-     * Specifies the log writer for this data source.
-     * @param out the log writer.
-     */
-    public void setLogWriter(final PrintWriter out)
-        throws  SQLException
-    {
-        setLogWriter(out, getDataSource());
-    }
-
-    /**
-     * Specifies the log writer for this data source.
-     * @param out the log writer.
-     * @param dataSource the data source.
-     * @precondition dataSource != null
-     */
-    protected void setLogWriter(
-        final PrintWriter out, final DataSource dataSource)
-      throws  SQLException
-    {
-        dataSource.setLogWriter(out);
     }
 
     /**
@@ -368,12 +215,15 @@ public class ThreadAwareDataSourceWrapper
      */
     public boolean equals(final Object object)
     {
-        return
+        boolean result =
             equals(
                 object,
                 getThreadBasedHashCode(),
-                buildThreadBasedHashCode(Thread.currentThread()),
-                getDataSource());
+                buildThreadBasedHashCode(
+                    Thread.currentThread()),
+                getTargetDataSource());
+
+        return result;
     }
 
     /**
@@ -393,7 +243,9 @@ public class ThreadAwareDataSourceWrapper
     {
         boolean result = (object == this);
 
-        if  (threadBasedHashCode == currentThreadBasedHashCode)
+        if  (   (threadBasedHashCode == 0) // data source not used yet
+                                           // -> let's try to take the thread's
+             || (threadBasedHashCode == currentThreadBasedHashCode))
         {
             // same thread -> assuming only one instance per thread.
             result = true;
@@ -438,11 +290,14 @@ public class ThreadAwareDataSourceWrapper
      */
     public int hashCode()
     {
-        return
+        int result =
             hashCode(
                 getThreadBasedHashCode(),
-                buildThreadBasedHashCode(Thread.currentThread()),
-                getDataSource());
+                buildThreadBasedHashCode(
+                    Thread.currentThread()),
+                getTargetDataSource());
+
+        return result;
     }
 
     /**
@@ -458,9 +313,11 @@ public class ThreadAwareDataSourceWrapper
         final int currentThreadBasedHashCode,
         final DataSource dataSource)
     {
-        int result = threadBasedHashCode;
+        int result = currentThreadBasedHashCode;
 
-        if  (result != currentThreadBasedHashCode)
+        if  (   (threadBasedHashCode != 0) // data source not used yet
+                                           // -> we'll take the thread's
+             && (result != currentThreadBasedHashCode))
         {
             // Different threads -> wrapper behaviour
             result = dataSource.hashCode();
@@ -475,7 +332,7 @@ public class ThreadAwareDataSourceWrapper
      */
     public String toString()
     {
-        return toString(getDataSource());
+        return toString(getTargetDataSource());
     }
 
     /**
@@ -515,11 +372,33 @@ public class ThreadAwareDataSourceWrapper
         }
         catch  (final SQLException sqlException)
         {
-            LogFactory.getLog(getClass()).warn(
-                "Error checking if connection is closed.",
-                sqlException);
+            try
+            {
+                LogFactory.getLog(getClass()).warn(
+                    "Error checking if connection is closed.",
+                    sqlException);
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
         }
 
         return result;
+    }
+
+    /** 
+     * Should we close this connection, obtained from this DataSource?
+     * <p>Code that uses connections from a SmartDataSource should always
+     * perform a check via this method before invoking <code>close()</code>.
+     * <p>However, the JdbcTemplate class in the core package should take care of
+     * closing JDBC connections, freeing application code of this responsibility.
+     * @param con connection, which should have been obtained
+     * from this data source, to check closure status of.
+     * @return whether the given connection should be closed.
+     */
+    public boolean shouldClose(final Connection connection)
+    {
+        return false;
     }
 }

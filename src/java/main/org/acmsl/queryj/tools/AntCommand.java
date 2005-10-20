@@ -38,6 +38,12 @@
 package org.acmsl.queryj.tools;
 
 /*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.logging.QueryJAntLog;
+import org.acmsl.queryj.tools.logging.QueryJLog;
+
+/*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
@@ -46,7 +52,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -67,14 +72,9 @@ public class AntCommand
     private Map m__mAttributes;
 
     /**
-     * The reference to the project, for logging purposes.
+     * The reference to the log instance.
      */
-    private Project m__Project;
-
-    /**
-     * The reference to the task, for logging purposes.
-     */
-    private Task m__Task;
+    private QueryJLog m__Log;
 
     /**
      * Constructs an empty map command.
@@ -86,22 +86,30 @@ public class AntCommand
 
     /**
      * Constructs an empty map command.
+     * @param log the log instance.
+     */
+    public AntCommand(final QueryJLog log)
+    {
+        this();
+        immutableSetLog(log);
+    }
+
+    /**
+     * Constructs an empty map command.
      * @param project the project, for logging purposes
      * (optional).
      * @param task the task, for logging purposes (optional).
      */
-    public AntCommand(final Project project, final Task task)
+    public AntCommand(final Project project)
     {
-        this();
-        immutableSetProject(project);
-        immutableSetTask(task);
+        this(new QueryJAntLog(project));
     }
 
     /**
      * Specifies the attribute map.
      * @param map such map.
      */
-    private void immutableSetAttributeMap(final Map map)
+    protected final void immutableSetAttributeMap(final Map map)
     {
         m__mAttributes = map;
     }
@@ -128,18 +136,28 @@ public class AntCommand
      * Adds a new attribute.
      * @param name the attribute name.
      * @param value the attribute value.
+     * @precondition name != null
+     * @precondition value != null
      */
     public void setAttribute(final String name, final Object value)
     {
-        if  (   (name  != null)
-             && (value != null))
+        setAttribute(name, value, getAttributeMap());
+    }
+    
+    /**
+     * Adds a new attribute.
+     * @param name the attribute name.
+     * @param value the attribute value.
+     * @param map the actual attribute map.
+     * @precondition name != null
+     * @precondition value != null
+     */
+    protected void setAttribute(
+        final String name, final Object value, final Map map)
+    {
+        if  (map != null) 
         {
-            Map t_mAttributes = getAttributeMap();
-
-            if  (t_mAttributes != null) 
-            {
-                t_mAttributes.put(name, value);
-            }            
+            map.put(name, value);
         }
     }
 
@@ -147,19 +165,27 @@ public class AntCommand
      * Retrieves the attribute value.
      * @param name the attribute name.
      * @return the value or <code>null</code> if it wasn't found.
+     * @precondition name != null
      */
     public Object getAttribute(final String name)
     {
+        return getAttribute(name, getAttributeMap());
+    }
+    
+    /**
+     * Retrieves the attribute value.
+     * @param name the attribute name.
+     * @param map the attribute map.
+     * @return the value or <code>null</code> if it wasn't found.
+     * @precondition name != null
+     */
+    protected Object getAttribute(final String name, final Map map)
+    {
         Object result = null;
 
-        if  (name != null) 
+        if  (map != null) 
         {
-            Map t_mAttributes = getAttributeMap();
-
-            if  (t_mAttributes != null) 
-            {
-                result = t_mAttributes.get(name);
-            }
+            result = map.get(name);
         }
         
         return result;
@@ -169,75 +195,57 @@ public class AntCommand
      * Retrieves if a concrete attribute exists.
      * @param name the attribute name.
      * @return <code>true</code> if the attribute is already defined.
+     * @precondition name != null
      */
     public boolean contains(final String name)
     {
+        return contains(name, getAttributeMap());
+    }
+    
+    /**
+     * Retrieves if a concrete attribute exists.
+     * @param name the attribute name.
+     * @param map the attribute map.
+     * @return <code>true</code> if the attribute is already defined.
+     * @precondition name != null
+     */
+    protected boolean contains(final String name, final Map map)
+    {
         boolean result = false;
 
-        if  (name != null) 
+        if  (map != null) 
         {
-            Map t_mAttributes = getAttributeMap();
-
-            if  (t_mAttributes != null) 
-            {
-                result = t_mAttributes.containsKey(name);
-            }
+            result = map.containsKey(name);
         }
 
         return result;
     }
 
     /**
-     * Specifies the project.
-     * @param project the project.
+     * Specifies the log instance.
+     * @param log the log instance.
      */
-    private void immutableSetProject(final Project project)
+    protected final void immutableSetLog(final QueryJLog log)
     {
-        m__Project = project;
+        m__Log = log;
     }
 
     /**
-     * Specifies the project.
-     * @param project the project.
+     * Specifies the log instance.
+     * @param log the log instance.
      */
-    protected void setProject(final Project project)
+    protected void setLog(final QueryJLog log)
     {
-        immutableSetProject(project);
+        immutableSetLog(log);
     }
 
     /**
-     * Retrieves the project.
+     * Retrieves the log instance.
      * @return such instance.
      */
-    public Project getProject()
+    public QueryJLog getLog()
     {
-        return m__Project;
+        return m__Log;
     }
 
-    /**
-     * Specifies the task.
-     * @param task the task.
-     */
-    private void immutableSetTask(final Task task)
-    {
-        m__Task = task;
-    }
-
-    /**
-     * Specifies the task.
-     * @param task the task.
-     */
-    protected void setTask(final Task task)
-    {
-        immutableSetTask(task);
-    }
-
-    /**
-     * Retrieves the task.
-     * @return such instance.
-     */
-    public Task getTask()
-    {
-        return m__Task;
-    }
 }

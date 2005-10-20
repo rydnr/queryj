@@ -34,14 +34,6 @@
  *
  * Description: Is able to create DAO test templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -53,17 +45,10 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Is able to create DAO test templates.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
- * @version $Revision$
+ *         >Jose San Leandro</a>
  */
 public interface DAOTestTemplateFactory
 {
@@ -81,8 +66,6 @@ public interface DAOTestTemplateFactory
      * @param jdbcUrl the JDBC URL.
      * @param jdbcUsername the JDBC username.
      * @param jdbcPassword the JDBC password.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
@@ -98,8 +81,6 @@ public interface DAOTestTemplateFactory
         final String jdbcDriver,
         final String jdbcUrl,
         final String jdbcUsername,
-        final String jdbcPassword,
-        final Project project,
-        final Task task)
+        final String jdbcPassword)
       throws QueryJException;
 } 

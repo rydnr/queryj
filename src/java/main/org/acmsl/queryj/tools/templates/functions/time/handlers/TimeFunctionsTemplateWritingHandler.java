@@ -80,40 +80,62 @@ public class TimeFunctionsTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    public boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                retrieveTimeFunctionsTemplate(parameters),
+                retrieveOutputDir(parameters),
+                TimeFunctionsTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param template the template.
+     * @param outputDir the output dir.
+     * @param generator the <code>TimeFunctionsTemplateGenerator</code>
+     * instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    public boolean handle(
+        final TimeFunctionsTemplate template,
+        final File outputDir,
+        final TimeFunctionsTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        if  (template != null)
         {
             try 
             {
-                Map attributes = command.getAttributeMap();
-
-                TimeFunctionsTemplateGenerator t_TimeFunctionsTemplateGenerator =
-                    TimeFunctionsTemplateGenerator.getInstance();
-
-                TimeFunctionsTemplate t_TimeFunctionsTemplate =
-                    retrieveTimeFunctionsTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                      != null) 
-                     && (t_TimeFunctionsTemplate          != null)
-                     && (t_TimeFunctionsTemplateGenerator != null))
-                {
-                    t_TimeFunctionsTemplateGenerator.write(
-                        t_TimeFunctionsTemplate, t_OutputDir);
-                }
+                generator.write(template, outputDir);
             }
-            catch  (IOException ioException)
+            catch  (final IOException ioException)
             {
                 throw new BuildException(ioException);
             }
         }
-        
+
         return result;
     }
 
@@ -122,22 +144,16 @@ public class TimeFunctionsTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected TimeFunctionsTemplate retrieveTimeFunctionsTemplate(
-            Map parameters)
-        throws  BuildException
+        final Map parameters)
+      throws  BuildException
     {
-        TimeFunctionsTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (TimeFunctionsTemplate)
-                    parameters.get(
-                        TimeFunctionsTemplateBuildHandler.TIME_FUNCTIONS_TEMPLATE);
-        }
-        
-        return result;
+        return
+            (TimeFunctionsTemplate)
+                parameters.get(
+                    TimeFunctionsTemplateBuildHandler.TIME_FUNCTIONS_TEMPLATE);
     }
 
     /**
@@ -145,63 +161,31 @@ public class TimeFunctionsTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
+    protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveFunctionsFolder(
-                    retrieveProjectOutputDir(parameters),
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
 
     /**
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
      */
-    protected File retrieveProjectOutputDir(Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
     {
-        File result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveFunctionsFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

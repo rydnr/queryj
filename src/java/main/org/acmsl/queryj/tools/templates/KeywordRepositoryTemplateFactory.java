@@ -42,12 +42,6 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Is able to create keyword repository templates.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -64,8 +58,5 @@ public interface KeywordRepositoryTemplateFactory
      * @return such template.
      */
     public KeywordRepositoryTemplate createKeywordRepositoryTemplate(
-        final String packageName,
-        final String repository,
-        final Project project,
-        final Task task);
+        final String packageName, final String repository);
 }

@@ -65,16 +65,7 @@ public interface BaseValueObjectTemplateDefaults
         + " * Author: QueryJ\n"
         + " *\n"
         + " * Description: Represents the public interface associated to\n"
-        + " * \"{0}\" information.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
+        + " *              \"{0}\" information.\n"
         + " */\n";
 
     /**
@@ -109,7 +100,6 @@ public interface BaseValueObjectTemplateDefaults
         + " * Represents the public interface associated to\n"
         + " * <i>{0}</i> information in the persistence domain.\n" // table
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**

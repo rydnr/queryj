@@ -49,7 +49,8 @@ import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
 /**
  * Represents entities able to create XML value object templates.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * >Jose San Leandro</a>
+ * @version $Revision$ at $Date$ by $Author$
  */
 public interface XMLValueObjectFactoryTemplateFactory
 {
@@ -63,9 +64,9 @@ public interface XMLValueObjectFactoryTemplateFactory
      * @throws QueryJException if the factory class is invalid.
      */
     public XMLValueObjectFactoryTemplate createXMLValueObjectFactoryTemplate(
-            final String                  packageName,
-            final String                  valueObjectPackageName,
-            final TableTemplate           tableTemplate,
-            final DatabaseMetaDataManager metaDataManager)
-        throws  QueryJException;
+        final String packageName,
+        final String valueObjectPackageName,
+        final TableTemplate tableTemplate,
+        final DatabaseMetaDataManager metaDataManager)
+      throws  QueryJException;
 }

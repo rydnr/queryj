@@ -95,49 +95,91 @@ public class DAOFactoryTemplateWritingHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveDatabaseMetaData(parameters));
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param metadata the database metadata.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(
+        final Map parameters, final DatabaseMetaData metadata)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try
         {
-            try 
+            result =
+                handle(
+                    retrieveDAOFactoryTemplates(parameters),
+                    retrieveOutputDir(
+                        metadata.getDatabaseProductName().toLowerCase(),
+                        parameters),
+                    DAOFactoryTemplateGenerator.getInstance());
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw new BuildException(sqlException);
+        }
+
+        return result;
+    }
+
+    /**
+     * Writes the DAO Factory templates.
+     * @param templates the templates.
+     * @param outputDir the output dir.
+     * @param generator the <code>DAOFactoryTemplateGenerator</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition templates != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final DAOFactoryTemplate[] templates,
+        final File outputDir,
+        final DAOFactoryTemplateGenerator generator)
+      throws  BuildException
+    {
+        boolean result = false;
+
+        try 
+        {
+            int t_iLength = (templates != null) ? templates.length : 0;
+
+            for  (int t_iDAOFactoryIndex = 0;
+                      t_iDAOFactoryIndex < t_iLength;
+                      t_iDAOFactoryIndex++)
             {
-                Map attributes = command.getAttributeMap();
-
-                DAOFactoryTemplateGenerator t_DAOFactoryTemplateGenerator =
-                    DAOFactoryTemplateGenerator.getInstance();
-
-                DAOFactoryTemplate[] t_aDAOFactoryTemplates =
-                    retrieveDAOFactoryTemplates(attributes);
-
-                DatabaseMetaData t_MetaData =
-                    retrieveDatabaseMetaData(attributes);
-
-                if  (   (t_MetaData                    != null) 
-                     && (t_aDAOFactoryTemplates        != null)
-                     && (t_DAOFactoryTemplateGenerator != null))
-                {
-                    File t_OutputDir =
-                        retrieveOutputDir(
-                            t_MetaData.getDatabaseProductName().toLowerCase(),
-                        attributes);
-
-                    for  (int t_iDAOFactoryIndex = 0;
-                              t_iDAOFactoryIndex < t_aDAOFactoryTemplates.length;
-                              t_iDAOFactoryIndex++)
-                    {
-                        t_DAOFactoryTemplateGenerator.write(
-                            t_aDAOFactoryTemplates[t_iDAOFactoryIndex], t_OutputDir);
-                    }
-                }
+                generator.write(
+                    templates[t_iDAOFactoryIndex], outputDir);
             }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
-            catch  (SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -148,44 +190,16 @@ public class DAOFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected DAOFactoryTemplate[] retrieveDAOFactoryTemplates(Map parameters)
-        throws  BuildException
+    protected DAOFactoryTemplate[] retrieveDAOFactoryTemplates(
+        final Map parameters)
+      throws  BuildException
     {
-        DAOFactoryTemplate[] result = EMPTY_DAO_FACTORY_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (DAOFactoryTemplate[])
-                    parameters.get(
-                        TemplateMappingManager.DAO_FACTORY_TEMPLATES);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-            Map parameters)
-        throws  BuildException
-    {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
+        return
+            (DAOFactoryTemplate[])
+                parameters.get(
+                    TemplateMappingManager.DAO_FACTORY_TEMPLATES);
     }
 
     /**
@@ -194,45 +208,40 @@ public class DAOFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition engineName != null
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(String engineName, Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final String engineName, final Map parameters)
+      throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveDAOFactoryFolder(
-                    (File)
-                        parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters),
-                    engineName);
-        }
-        
-        return result;
+        return
+            retrieveOutputDir(
+                engineName, parameters, PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the package name from the attribute map.
+     * Retrieves the output dir from the attribute map.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition engineName != null
+     * @precondition parameters != null
+     * @precondition packageUtils != null
      */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
+      throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveDAOFactoryFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                engineName,
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

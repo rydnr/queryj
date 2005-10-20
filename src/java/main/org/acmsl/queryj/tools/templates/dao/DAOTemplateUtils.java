@@ -741,7 +741,6 @@ public class DAOTemplateUtils
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param type the type.
      * @return such elements.
-     * @precondition sqlProvider != null
      * @precondition type != null
      */
     public SqlElement[] retrieveSqlElementsByType(
@@ -750,7 +749,12 @@ public class DAOTemplateUtils
     {
         Collection t_cResult = new ArrayList();
 
-        Collection t_cElements = customSqlProvider.getCollection();
+        Collection t_cElements = null;
+
+        if  (customSqlProvider != null)
+        {
+            t_cElements = customSqlProvider.getCollection();
+        }
 
         if  (t_cElements != null)
         {

@@ -44,12 +44,6 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -72,14 +66,9 @@ public class TableTemplate
      * Builds a <code>TableTemplate</code> using given information.
      * @param packageName the package name.
      * @param tableName the table name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public TableTemplate(
-        final String packageName,
-        final String tableName,
-        final Project project,
-        final Task task)
+        final String packageName, final String tableName)
     {
         super(
             DEFAULT_HEADER,
@@ -100,9 +89,7 @@ public class TableTemplate
             DEFAULT_GETALL_METHOD_START,
             DEFAULT_GETALL_METHOD_FIELD_SEPARATOR,
             DEFAULT_GETALL_METHOD_END,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

@@ -46,12 +46,6 @@ import org.acmsl.queryj.tools.templates.TemplateFactory;
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTestTemplate;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Is able to generate JUnit templates test the Database's
  * numeric functions.
@@ -116,70 +110,11 @@ public interface NumericFunctionsTestTemplateFactory
 
     /**
      * Generates a numeric functions template.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param projectImports the JDK imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param junitImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param testFunctionMethod the test function method.
-     * @param classConstructor the class constructor.
-     * @param memberAccessors the member accessors.
-     * @param setUpTearDownMethods the setUp and tearDown methods.
-     * @param mainMethod the main method.
-     * @param getInstanceTest the getInstance test.
-     * @param innerClass the inner class.
-     * @param innerTable the inner table.
-     * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return a template.
-     * @throws QueryJException if the template factory is invalid.
-     */
-    public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
-        String  header,
-        String  packageDeclaration,
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        String  projectImports,
-        String  acmslImports,
-        String  jdkImports,
-        String  junitImports,
-        String  javadoc,
-        String  classDefinition,
-        String  classStart,
-        String  classConstructor,
-        String  memberAccessors,
-        String  setUpTearDownMethods,
-        String  mainMethod,
-        String  getInstanceTest,
-        String  innerClass,
-        String  innerTable,
-        String  classEnd,
-        Project project,
-        Task    task)
-      throws  QueryJException;
-
-    /**
-     * Generates a numeric functions template.
-     * @param packageName the package name.
-     * @param testedPackageName the tested package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the template factory is invalid.
      */
@@ -188,8 +123,6 @@ public interface NumericFunctionsTestTemplateFactory
         String  testedPackageName,
         String  engineName,
         String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
+        String  quote)
       throws  QueryJException;
 }

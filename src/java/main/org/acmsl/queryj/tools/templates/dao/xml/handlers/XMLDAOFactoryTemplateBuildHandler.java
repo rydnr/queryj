@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -72,26 +73,16 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Builds a XML DAO factory template.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * >Jose San Leandro</a>
+ * @version $Revision$ at $Date$ by $Author$
  */
 public class XMLDAOFactoryTemplateBuildHandler
     extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
-    /**
-     * A cached empty table template array.
-     */
-    public static final TableTemplate[] EMPTY_TABLE_TEMPLATE_ARRAY =
-        new TableTemplate[0];
-
     /**
      * Creates a XMLDAOFactoryTemplateBuildHandler.
      */
@@ -102,76 +93,105 @@ public class XMLDAOFactoryTemplateBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            try
-            {
-                Map attributes = command.getAttributeMap();
-
-                String t_strBasePackage = retrieveProjectPackage(attributes);
-
-                String t_strPackage = retrievePackage(t_strBasePackage);
-
-                XMLDAOFactoryTemplateGenerator
-                    t_XMLDAOFactoryTemplateGenerator =
-                        XMLDAOFactoryTemplateGenerator.getInstance();
-
-                if  (t_XMLDAOFactoryTemplateGenerator != null)
-                {
-                    TableTemplate[] t_aTableTemplates =
-                        retrieveTableTemplates(attributes);
-
-                    if  (t_aTableTemplates != null)
-                    {
-                        XMLDAOFactoryTemplate[] t_aXMLDAOFactoryTemplates =
-                            new XMLDAOFactoryTemplate[t_aTableTemplates.length];
-
-                        for  (int t_iXMLDAOFactoryIndex = 0;
-                                    t_iXMLDAOFactoryIndex
-                                  < t_aXMLDAOFactoryTemplates.length;
-                                  t_iXMLDAOFactoryIndex++) 
-                        {
-                            t_aXMLDAOFactoryTemplates[t_iXMLDAOFactoryIndex] =
-                                t_XMLDAOFactoryTemplateGenerator.createXMLDAOFactoryTemplate(
-                                    t_aTableTemplates[t_iXMLDAOFactoryIndex],
-                                    t_strPackage,
-                                    t_strBasePackage);
-                        }
-
-                        storeXMLDAOFactoryTemplates(t_aXMLDAOFactoryTemplates, attributes);
-                    }
-                }
-            }
-            catch  (final QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
-        }
-        
-        return result;
+        return handle(command.getAttributeMap());
     }
 
     /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    protected String retrieveProjectPackage(final Map parameters)
+    protected boolean handle(final Map parameters)
         throws  BuildException
     {
-        String result = null;
+        return
+            handle(
+                parameters,
+                retrieveProjectPackage(parameters),
+                retrieveTableTemplates(parameters));
+    }
+                
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param projectPackageName the project package.
+     * @param tableTemplates the table templates.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition projectPackageName != null
+     * @precondition tableTemplates != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final String projectPackageName,
+        final TableTemplate[] tableTemplates)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrievePackage(projectPackageName),
+                projectPackageName,
+                tableTemplates,
+                XMLDAOFactoryTemplateGenerator.getInstance());
+    }
 
-        if  (parameters != null)
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param packageName the package name.
+     * @param projectPackageName the project package name.
+     * @param tableTemplates the table templates.
+     * @param templateFactory the template factory.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition packageName != null
+     * @precondition projectPackageName != null
+     * @precondition tableTemplates != null
+     * @precondition templateFactory != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final String packageName,
+        final String projectPackageName,
+        final TableTemplate[] tableTemplates,
+        final XMLDAOFactoryTemplateFactory templateFactory)
+      throws  BuildException
+    {
+        boolean result = false;
+
+        try
         {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
+            int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
+
+            XMLDAOFactoryTemplate[] t_aXMLDAOFactoryTemplates =
+                new XMLDAOFactoryTemplate[t_iLength];
+
+            for  (int t_iXMLDAOFactoryIndex = 0;
+                      t_iXMLDAOFactoryIndex < t_iLength;
+                      t_iXMLDAOFactoryIndex++) 
+            {
+                t_aXMLDAOFactoryTemplates[t_iXMLDAOFactoryIndex] =
+                    templateFactory.createXMLDAOFactoryTemplate(
+                        tableTemplates[t_iXMLDAOFactoryIndex],
+                        packageName,
+                        projectPackageName);
+            }
+
+            storeXMLDAOFactoryTemplates(t_aXMLDAOFactoryTemplates, parameters);
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw new BuildException(queryjException);
         }
         
         return result;
@@ -182,43 +202,48 @@ public class XMLDAOFactoryTemplateBuildHandler
      * @param basePackage the base package.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition basePackage != null
      */
     protected String retrievePackage(final String basePackage)
         throws  BuildException
     {
-        String result = null;
+        return retrievePackage(basePackage, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (basePackage    != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveXMLDAOFactoryPackage(
-                    basePackage);
-        }
-        
-        return result;
+    /**
+     * Retrieves the package name from the attribute map.
+     * @param basePackage the base package.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition basePackage != null
+     * @precondition packageUtils != null
+     */
+    protected String retrievePackage(
+        final String basePackage, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveXMLDAOFactoryPackage(
+                basePackage);
     }
 
     /**
      * Stores the XML DAO factory template collection in given attribute map.
-     * @param xmlDAOFactoryTemplates the XML DAO factory templates.
+     * @param templates the XML DAO factory templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition templates != null
+     * @precondition parameters != null
      */
     protected void storeXMLDAOFactoryTemplates(
-        final XMLDAOFactoryTemplate[] xmlDAOFactoryTemplates,
-        final Map                      parameters)
+        final XMLDAOFactoryTemplate[] templates,
+        final Map parameters)
       throws  BuildException
     {
-        if  (   (xmlDAOFactoryTemplates != null)
-             && (parameters              != null))
-        {
-            parameters.put(
-                TemplateMappingManager.XML_DAO_FACTORY_TEMPLATES,
-                xmlDAOFactoryTemplates);
-        }
+        parameters.put(
+            TemplateMappingManager.XML_DAO_FACTORY_TEMPLATES,
+            templates);
     }
 
     /**
@@ -226,20 +251,14 @@ public class XMLDAOFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return such templates.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition parameters != null
      */
     protected TableTemplate[] retrieveTableTemplates(
         final Map parameters)
       throws  BuildException
     {
-        TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (TableTemplate[])
-                    parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-        }
-
-        return result;
+        return
+            (TableTemplate[])
+                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
     }
 }

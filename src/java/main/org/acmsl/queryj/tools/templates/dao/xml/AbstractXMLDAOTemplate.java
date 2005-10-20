@@ -45,17 +45,12 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the subtemplates used to create xml DAO implementations for each
  * table in the persistence model.
  * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * >Jose San Leandro</a>
+ * @version $Revision$ at $Date$ by $Author$
  */
 public abstract class AbstractXMLDAOTemplate
     extends  AbstractTemplate
@@ -166,6 +161,21 @@ public abstract class AbstractXMLDAOTemplate
     private String m__strProcessPkAttributes;
 
     /**
+     * The find-by-static-field method.
+     */
+    private String m__strFindByStaticFieldMethod;
+
+    /**
+     * The find-by-static-field  javadoc.
+     */
+    private String m__strFindByStaticFieldJavadoc;
+
+    /**
+     * The find-by-static-field  declaration.
+     */
+    private String m__strFindByStaticFieldDeclaration;
+
+    /**
      * The find-by-primary-key method.
      */
     private String m__strFindByPrimaryKeyMethod;
@@ -189,6 +199,11 @@ public abstract class AbstractXMLDAOTemplate
      * The build-value-object method.
      */
     private String m__strBuildValueObjectMethod;
+
+    /**
+     * The build-value-object value retrieval.
+     */
+    private String m__strBuildValueObjectValueRetrieval;
 
     /**
      * The insert method.
@@ -221,9 +236,9 @@ public abstract class AbstractXMLDAOTemplate
     private String m__strUpdateParametersDeclaration;
 
     /**
-     * The delete method.
+     * The delete method subtemplate.
      */
-    private String m__strDeleteMethod;
+    private String m__strDeleteMethodSubtemplate;
 
     /**
      * The delete PK javadoc.
@@ -243,7 +258,7 @@ public abstract class AbstractXMLDAOTemplate
     /**
      * The delete with FK method.
      */
-    private String m__strDeleteWithFkMethod;
+    private String m__strDeleteNoFkMethod;
 
     /**
      * The delete with FK PK javadoc.
@@ -264,6 +279,11 @@ public abstract class AbstractXMLDAOTemplate
      * The delete with FK DAO FK values.
      */
     private String m__strDeleteWithFkPkValues;
+
+    /**
+     * The delete by fk method.
+     */
+    private String m__strDeleteByFkMethod;
 
     /**
      * The persist method.
@@ -303,6 +323,11 @@ public abstract class AbstractXMLDAOTemplate
      * @param buildKeyPkDeclaration the <i>buildKey</i> pk declaration.
      * @param buildKeyPkValues the <i>buildKey</i>  values.
      * @param processPkAttributes the <i>process</i> pk attributes.
+     * @param findByStaticFieldMethod the find-by-static-field method.
+     * @param findByStaticFieldJavadoc the field javadoc for
+     * find-by-static-field method.
+     * @param findByStaticFieldDeclaration the field declaration for
+     * find-by-static-field method.
      * @param findByPrimaryKeyMethod the find by primary key method.
      * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
      * @param findByPrimaryKeyPkDeclaration the find by primary key pk
@@ -310,26 +335,27 @@ public abstract class AbstractXMLDAOTemplate
      * @param findByPrimaryKeyPkFilterValues the find by primary key pk
      * filter values.
      * @param buildValueObjectMethod the build value object method.
+     * @param buildValueObjectValueRetrieval the value retrieval in
+     * buildValueObject method.
      * @param insertMethod the insert method.
      * @param insertParametersJavadoc the javadoc of the insert method's parameters.
      * @param insertParametersDeclaration the declaration of the insert method's parameters.
      * @param updateMethod the update method.
      * @param updateParametersJavadoc the javadoc of the update method's parameters.
      * @param updateParametersDeclaration the declaration of the update method's parameters.
-     * @param deleteMethod the delete method.
+     * @param deleteMethodSubtemplate the delete method subtemplate.
      * @param deletePkJavadoc the delete PK javadoc.
      * @param deletePkDeclaration the delete PK declaration.
      * @param deleteFilterDeclaration the delete filter declaration.
-     * @param deleteWithFkMethod the delete method.
+     * @param deleteNoFkMethod the delete method with no foreign keys.
      * @param deleteWithFkPkJavadoc the delete with FK PK javadoc.
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
      * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete request.
      * @param deleteWithFkPkValues the delete with FK PK values.
+     * @param deleteByFkMethod the deleteByFk method.
      * @param persistMethod the persist method.
      * @param undigesterPropertyRules the Undigester property rules.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractXMLDAOTemplate(
         final TableTemplate tableTemplate,
@@ -353,33 +379,34 @@ public abstract class AbstractXMLDAOTemplate
         final String buildKeyPkDeclaration,
         final String buildKeyPkValues,
         final String processPkAttributes,
+        final String findByStaticFieldMethod,
+        final String findByStaticFieldJavadoc,
+        final String findByStaticFieldDeclaration,
         final String findByPrimaryKeyMethod,
         final String findByPrimaryKeyPkJavadoc,
         final String findByPrimaryKeyPkDeclaration,
         final String findByPrimaryKeyPkFilterValues,
         final String buildValueObjectMethod,
+        final String buildValueObjectValueRetrieval,
         final String insertMethod,
         final String insertParametersJavadoc,
         final String insertParametersDeclaration,
         final String updateMethod,
         final String updateParametersJavadoc,
         final String updateParametersDeclaration,
-        final String deleteMethod,
+        final String deleteMethodSubtemplate,
         final String deletePkJavadoc,
         final String deletePkDeclaration,
-        final String deleteWithFkMethod,
+        final String deleteNoFkMethod,
         final String deleteWithFkPkJavadoc,
         final String deleteWithFkPkDeclaration,
         final String deleteWithFkDAODeleteRequest,
         final String deleteWithFkPkValues,
+        final String deleteByFkMethod,
         final String persistMethod,
         final String undigesterPropertyRules,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
-
         immutableSetTableTemplate(
             tableTemplate);
 
@@ -443,6 +470,10 @@ public abstract class AbstractXMLDAOTemplate
         immutableSetProcessPkAttributes(
             processPkAttributes);
 
+        immutableSetFindByStaticFieldMethod(findByStaticFieldMethod);
+        immutableSetFindByStaticFieldJavadoc(findByStaticFieldJavadoc);
+        immutableSetFindByStaticFieldDeclaration(findByStaticFieldDeclaration);
+
         immutableSetFindByPrimaryKeyMethod(
             findByPrimaryKeyMethod);
 
@@ -457,6 +488,9 @@ public abstract class AbstractXMLDAOTemplate
 
         immutableSetBuildValueObjectMethod(
             buildValueObjectMethod);
+
+        immutableSetBuildValueObjectValueRetrieval(
+            buildValueObjectValueRetrieval);
 
         immutableSetInsertMethod(
             insertMethod);
@@ -476,8 +510,8 @@ public abstract class AbstractXMLDAOTemplate
         immutableSetUpdateParametersDeclaration(
             updateParametersDeclaration);
 
-        immutableSetDeleteMethod(
-            deleteMethod);
+        immutableSetDeleteMethodSubtemplate(
+            deleteMethodSubtemplate);
 
         immutableSetDeletePkJavadoc(
             deletePkJavadoc);
@@ -485,8 +519,8 @@ public abstract class AbstractXMLDAOTemplate
         immutableSetDeletePkDeclaration(
             deletePkDeclaration);
 
-        immutableSetDeleteWithFkMethod(
-            deleteWithFkMethod);
+        immutableSetDeleteNoFkMethod(
+            deleteNoFkMethod);
 
         immutableSetDeleteWithFkPkJavadoc(
             deleteWithFkPkJavadoc);
@@ -499,6 +533,9 @@ public abstract class AbstractXMLDAOTemplate
 
         immutableSetDeleteWithFkPkValues(
             deleteWithFkPkValues);
+
+        immutableSetDeleteByFkMethod(
+            deleteByFkMethod);
 
         immutableSetPersistMethod(
             persistMethod);
@@ -1094,6 +1131,97 @@ public abstract class AbstractXMLDAOTemplate
     }
 
     /**
+     * Specifies the find-by-static-field method.
+     * @param findByStaticFieldMethod such method.
+     */
+    private void immutableSetFindByStaticFieldMethod(
+        final String findByStaticFieldMethod)
+    {
+        m__strFindByStaticFieldMethod = findByStaticFieldMethod;
+    }
+
+    /**
+     * Specifies the find-by-static-field method.
+     * @param findByStaticFieldMethod such method.
+     */
+    protected void setFindByStaticFieldMethod(
+        final String findByStaticFieldMethod)
+    {
+        immutableSetFindByStaticFieldMethod(
+            findByStaticFieldMethod);
+    }
+
+    /**
+     * Retrieves the find-by-static-field method.
+     * @return such method.
+     */
+    public String getFindByStaticFieldMethod()
+    {
+        return m__strFindByStaticFieldMethod;
+    }
+
+    /**
+     * Specifies the find-by-static-field  Javadoc.
+     * @param findByStaticFieldJavadoc such Javadoc.
+     */
+    private void immutableSetFindByStaticFieldJavadoc(
+        final String findByStaticFieldJavadoc)
+    {
+        m__strFindByStaticFieldJavadoc = findByStaticFieldJavadoc;
+    }
+
+    /**
+     * Specifies the find-by-static-field  Javadoc.
+     * @param findByStaticFieldJavadoc such Javadoc.
+     */
+    protected void setFindByStaticFieldJavadoc(
+        final String findByStaticFieldJavadoc)
+    {
+        immutableSetFindByStaticFieldJavadoc(
+            findByStaticFieldJavadoc);
+    }
+
+    /**
+     * Retrieves the find-by-static-field  Javadoc.
+     * @return such Javadoc.
+     */
+    public String getFindByStaticFieldJavadoc()
+    {
+        return m__strFindByStaticFieldJavadoc;
+    }
+    
+    /**
+     * Specifies the find-by-static-field  declaration.
+     * @param findByStaticFieldDeclaration such declaration.
+     */
+    private void immutableSetFindByStaticFieldDeclaration(
+        final String findByStaticFieldDeclaration)
+    {
+        m__strFindByStaticFieldDeclaration =
+            findByStaticFieldDeclaration;
+    }
+
+    /**
+     * Specifies the find-by-static-field  declaration.
+     * @param findByStaticFieldDeclaration such declaration.
+     */
+    protected void setFindByStaticFielddeclaration(
+        final String findByStaticFieldDeclaration)
+    {
+        immutableSetFindByStaticFieldDeclaration(
+            findByStaticFieldDeclaration);
+    }
+
+    /**
+     * Retrieves the find-by-static-field  declaration.
+     * @return such declaration.
+     */
+    public String getFindByStaticFieldDeclaration()
+    {
+        return m__strFindByStaticFieldDeclaration;
+    }
+
+    /**
      * Specifies the find-by-primary-key method.
      * @param findByPrimaryKeyMethod such method.
      */
@@ -1244,6 +1372,36 @@ public abstract class AbstractXMLDAOTemplate
     public String getBuildValueObjectMethod()
     {
         return m__strBuildValueObjectMethod;
+    }
+
+    /**
+     * Specifies the value retrieval in build-value-object method.
+     * @param buildValueObjectValueRetrieval such value.
+     */
+    private void immutableSetBuildValueObjectValueRetrieval(
+        String buildValueObjectValueRetrieval)
+    {
+        m__strBuildValueObjectValueRetrieval = buildValueObjectValueRetrieval;
+    }
+
+    /**
+     * Specifies the value retrieval in build-value-object method.
+     * @param buildValueObjectValueRetrieval such value.
+     */
+    protected void setBuildValueObjectValueRetrieval(
+        String buildValueObjectValueRetrieval)
+    {
+        immutableSetBuildValueObjectValueRetrieval(
+            buildValueObjectValueRetrieval);
+    }
+
+    /**
+     * Retrieves the value retrieval in build-value-object method.
+     * @return such value.
+     */
+    public String getBuildValueObjectValueRetrieval()
+    {
+        return m__strBuildValueObjectValueRetrieval;
     }
 
     /**
@@ -1409,33 +1567,33 @@ public abstract class AbstractXMLDAOTemplate
     }
 
     /**
-     * Specifies the delete method.
+     * Specifies the delete method subtemplate.
      * @param deleteMethod such method.
      */
-    private void immutableSetDeleteMethod(
+    private void immutableSetDeleteMethodSubtemplate(
         String deleteMethod)
     {
-        m__strDeleteMethod = deleteMethod;
+        m__strDeleteMethodSubtemplate = deleteMethod;
     }
 
     /**
-     * Specifies the delete method.
+     * Specifies the delete method subtemplate.
      * @param deleteMethod such method.
      */
-    protected void setDeleteMethod(
+    protected void setDeleteMethodSubtemplate(
         String deleteMethod)
     {
-        immutableSetDeleteMethod(
+        immutableSetDeleteMethodSubtemplate(
             deleteMethod);
     }
 
     /**
-     * Retrieves the delete method.
+     * Retrieves the delete method subtemplate.
      * @return such method.
      */
-    public String getDeleteMethod()
+    public String getDeleteMethodSubtemplate()
     {
-        return m__strDeleteMethod;
+        return m__strDeleteMethodSubtemplate;
     }
 
     /**
@@ -1500,33 +1658,33 @@ public abstract class AbstractXMLDAOTemplate
     }
 
     /**
-     * Specifies the delete with FK method.
-     * @param deleteWithFkMethod such method.
+     * Specifies the delete no FK method.
+     * @param deleteNoFkMethod such method.
      */
-    private void immutableSetDeleteWithFkMethod(
-        String deleteWithFkMethod)
+    private void immutableSetDeleteNoFkMethod(
+        String deleteNoFkMethod)
     {
-        m__strDeleteWithFkMethod = deleteWithFkMethod;
+        m__strDeleteNoFkMethod = deleteNoFkMethod;
     }
 
     /**
-     * Specifies the delete with FK method.
-     * @param deleteWithFkMethod such method.
+     * Specifies the delete no FK method.
+     * @param deleteNoFkMethod such method.
      */
-    protected void setDeleteWithFkMethod(
-        String deleteWithFkMethod)
+    protected void setDeleteNoFkMethod(
+        String deleteNoFkMethod)
     {
-        immutableSetDeleteWithFkMethod(
-            deleteWithFkMethod);
+        immutableSetDeleteNoFkMethod(
+            deleteNoFkMethod);
     }
 
     /**
-     * Retrieves the delete with FK method.
+     * Retrieves the delete no FK method.
      * @return such method.
      */
-    public String getDeleteWithFkMethod()
+    public String getDeleteNoFkMethod()
     {
-        return m__strDeleteWithFkMethod;
+        return m__strDeleteNoFkMethod;
     }
 
     /**
@@ -1650,6 +1808,35 @@ public abstract class AbstractXMLDAOTemplate
     public String getDeleteWithFkPkValues()
     {
         return m__strDeleteWithFkPkValues;
+    }
+
+    /**
+     * Specifies the delete-by-fk method.
+     * @param method such method.
+     */
+    protected final void immutableSetDeleteByFkMethod(
+        final String method)
+    {
+        m__strDeleteByFkMethod = method;
+    }
+
+    /**
+     * Specifies the delete-by-fk method.
+     * @param method such method.
+     */
+    protected void setDeleteByFkMethod(
+        final String method)
+    {
+        immutableSetDeleteByFkMethod(method);
+    }
+
+    /**
+     * Retrieves the delete-by-fk method.
+     * @return such method.
+     */
+    public String getDeleteByFkMethod()
+    {
+        return m__strDeleteByFkMethod;
     }
 
     /**

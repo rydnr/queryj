@@ -45,16 +45,20 @@ import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Command;
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+
+/*
+ * Importing some Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
@@ -68,7 +72,7 @@ import java.util.Map;
 /**
  * Prints trace messages with some database metadata information.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  */
 public class DatabaseMetaDataLoggingHandler
     extends  AbstractAntCommandHandler
@@ -97,14 +101,13 @@ public class DatabaseMetaDataLoggingHandler
             }
             catch  (final BuildException buildException)
             {
-                Project project = t_AntCommand.getProject();
-
-                if  (project != null)
+                Log t_Log = UniqueLogFactory.getLog(getClass());
+                
+                if  (t_Log != null)
                 {
-                    project.log(
-                        t_AntCommand.getTask(),
-                        buildException.getMessage(),
-                        Project.MSG_ERR);
+                    t_Log.error(
+                        "Cannot log database metadata.",
+                        buildException);
                 }
             }
         }
@@ -121,914 +124,662 @@ public class DatabaseMetaDataLoggingHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition project != null
      * @precondition task != null
      */
-    protected boolean handle(
-        final Map parameters, final Project project, final Task task)
+    protected boolean handle(final Map parameters)
         throws  BuildException
     {
         return
             handle(
-                retrieveDatabaseMetaData(parameters),
-                project,
-                task);
+                retrieveDatabaseMetaData(parameters));
     }
 
     /**
      * Handles given information.
      * @param metaData the database metadata.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition metaData != null
-     * @precondition project != null
-     * @precondition task != null
      */
-    protected boolean handle(
-        final DatabaseMetaData metaData,
-        final Project project,
-        final Task task)
-      throws  BuildException
+    protected boolean handle(final DatabaseMetaData metaData)
+        throws  BuildException
     {
         boolean result = false;
 
+        Log t_Log = null;
+        
         try 
         {
-            project.log(
-                task,
-                "Numeric functions:"
-                + metaData.getNumericFunctions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "String functions:"
-                + metaData.getStringFunctions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "System functions:"
-                + metaData.getSystemFunctions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "Time functions:" + metaData.getTimeDateFunctions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "insertsAreDetected("
-                +     "TYPE_FORWARD_ONLY):"
-                + metaData.insertsAreDetected(
-                    ResultSet.TYPE_FORWARD_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "insertsAreDetected("
-                +     "TYPE_SCROLL_INSENSITIVE):"
-                + metaData.insertsAreDetected(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "insertsAreDetected("
-                +     "TYPE_SCROLL_SENS):"
-                + metaData.insertsAreDetected(
-                    ResultSet.TYPE_SCROLL_SENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "isCatalogAtStart():"
-                + metaData.isCatalogAtStart(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "isReadOnly():"
-                + metaData.isReadOnly(),
-                Project.MSG_VERBOSE);
-
-            /*
-             * Fails for MySQL with a java.lang.AbstractMethodError 
-             * com.mysql.jdbc.jdbc2.DatabaseMetaData.locatorsUpdateCopy()
-             project.log(
-             task,
-             "locatorsUpdateCopy():"
-             + metaData.locatorsUpdateCopy(),
-             Project.MSG_VERBOSE);
-            */
-
-            project.log(
-                task,
-                "nullPlusNonNullIsNull():"
-                + metaData.nullPlusNonNullIsNull(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "nullsAreSortedAtEnd():"
-                + metaData.nullsAreSortedAtEnd(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "nullsAreSortedAtStart():"
-                + metaData.nullsAreSortedAtStart(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "nullsAreSortedHigh():"
-                + metaData.nullsAreSortedHigh(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "nullsAreSortedLow():"
-                + metaData.nullsAreSortedLow(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "othersDeletesAreVisible("
-                +     "ResultSet.TYPE_FORWARD_ONLY):"
-                + metaData.othersDeletesAreVisible(
-                    ResultSet.TYPE_FORWARD_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "othersDeletesAreVisible("
-                +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
-                + metaData.othersDeletesAreVisible(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "othersDeletesAreVisible("
-                +     "ResultSet.TYPE_SCROLL_SENS):"
-                + metaData.othersDeletesAreVisible(
-                    ResultSet.TYPE_SCROLL_SENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "othersInsertsAreVisible("
-                +     "ResultSet.TYPE_FORWARD_ONLY):"
-                + metaData.othersInsertsAreVisible(
-                    ResultSet.TYPE_FORWARD_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "othersInsertsAreVisible("
-                +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
-                + metaData.othersInsertsAreVisible(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "othersInsertsAreVisible("
-                +     "ResultSet.TYPE_SCROLL_SENS):"
-                + metaData.othersInsertsAreVisible(
-                    ResultSet.TYPE_SCROLL_SENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "othersUpdatesAreVisible("
-                +     "ResultSet.TYPE_FORWARD_ONLY):"
-                + metaData.othersUpdatesAreVisible(
-                    ResultSet.TYPE_FORWARD_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "othersUpdatesAreVisible("
-                +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
-                + metaData.othersUpdatesAreVisible(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "othersUpdatesAreVisible("
-                +     "ResultSet.TYPE_SCROLL_SENS):"
-                + metaData.othersUpdatesAreVisible(
-                    ResultSet.TYPE_SCROLL_SENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "ownDeletesAreVisible("
-                +     "ResultSet.TYPE_FORWARD_ONLY):"
-                + metaData.ownDeletesAreVisible(
-                    ResultSet.TYPE_FORWARD_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "ownDeletesAreVisible("
-                +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
-                + metaData.ownDeletesAreVisible(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "ownDeletesAreVisible("
-                +     "ResultSet.TYPE_SCROLL_SENS):"
-                + metaData.ownDeletesAreVisible(
-                    ResultSet.TYPE_SCROLL_SENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "ownInsertsAreVisible("
-                +     "ResultSet.TYPE_FORWARD_ONLY):"
-                + metaData.ownInsertsAreVisible(
-                    ResultSet.TYPE_FORWARD_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "ownInsertsAreVisible("
-                +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
-                + metaData.ownInsertsAreVisible(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "ownInsertsAreVisible("
-                +     "ResultSet.TYPE_SCROLL_SENS):"
-                + metaData.ownInsertsAreVisible(
-                    ResultSet.TYPE_SCROLL_SENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "ownUpdatesAreVisible("
-                +     "ResultSet.TYPE_FORWARD_ONLY):"
-                + metaData.ownUpdatesAreVisible(
-                    ResultSet.TYPE_FORWARD_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "ownUpdatesAreVisible("
-                +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
-                + metaData.ownUpdatesAreVisible(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "ownUpdatesAreVisible("
-                +     "ResultSet.TYPE_SCROLL_SENS):"
-                + metaData.ownUpdatesAreVisible(
-                    ResultSet.TYPE_SCROLL_SENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "storesLowerCaseIdentifiers():"
-                + metaData.storesLowerCaseIdentifiers(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "storesLowerCaseQuotedIdentifiers():"
-                + metaData.storesLowerCaseQuotedIdentifiers(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "storesMixedCaseIdentifiers():"
-                + metaData.storesMixedCaseIdentifiers(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "storesMixedCaseQuotedIdentifiers():"
-                + metaData.storesMixedCaseQuotedIdentifiers(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "storesUpperCaseIdentifiers():"
-                + metaData.storesUpperCaseIdentifiers(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "storesUpperCaseQuotedIdentifiers():"
-                + metaData.storesUpperCaseQuotedIdentifiers(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsAlterTableWithAddColumn():"
-                + metaData.supportsAlterTableWithAddColumn(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsAlterTableWithDropColumn():"
-                + metaData.supportsAlterTableWithDropColumn(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsANSI92EntryLevelSQL():"
-                + metaData.supportsANSI92EntryLevelSQL(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsANSI92FullSQL():"
-                + metaData.supportsANSI92FullSQL(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsANSI92IntermediateSQL():"
-                + metaData.supportsANSI92IntermediateSQL(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsBatchUpdates():"
-                + metaData.supportsBatchUpdates(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsCatalogsInDataManipulation():"
-                + metaData.supportsCatalogsInDataManipulation(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsCatalogsInIndexDefinitions():"
-                + metaData.supportsCatalogsInIndexDefinitions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsCatalogsInPrivilegeDefinitions():"
-                + metaData.supportsCatalogsInPrivilegeDefinitions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsCatalogsInProcedureCalls():"
-                + metaData.supportsCatalogsInProcedureCalls(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsCatalogsInTableDefinitions():"
-                + metaData.supportsCatalogsInTableDefinitions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsColumnAliasing():"
-                + metaData.supportsColumnAliasing(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsConvert():"
-                + metaData.supportsConvert(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsCoreSQLGrammar():"
-                + metaData.supportsCoreSQLGrammar(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsCorrelatedSubqueries():"
-                + metaData.supportsCorrelatedSubqueries(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsDataDefinitionAndDataManipulationTransactions():"
-                + metaData.supportsDataDefinitionAndDataManipulationTransactions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsDataManipulationTransactionsOnly():"
-                + metaData.supportsDataManipulationTransactionsOnly(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsDifferentTableCorrelationNames():"
-                + metaData.supportsDifferentTableCorrelationNames(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsExpressionsInOrderBy():"
-                + metaData.supportsExpressionsInOrderBy(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsExtendedSQLGrammar():"
-                + metaData.supportsExtendedSQLGrammar(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsFullOuterJoins():"
-                + metaData.supportsFullOuterJoins(),
-                Project.MSG_VERBOSE);
-
-            String t_strSupportsGetGeneratedKeys = "false";
-
-            try
+            t_Log = UniqueLogFactory.getLog(getClass());
+            
+            if  (t_Log != null)
             {
-                t_strSupportsGetGeneratedKeys =
-                    "" + metaData.supportsGetGeneratedKeys();
+                t_Log.trace(
+                      "Numeric functions:"
+                    + metaData.getNumericFunctions());
+
+                t_Log.trace(
+                      "String functions:"
+                    + metaData.getStringFunctions());
+
+                t_Log.trace(
+                      "System functions:"
+                    + metaData.getSystemFunctions());
+
+                t_Log.trace(
+                      "Time functions:"
+                    + metaData.getTimeDateFunctions());
+
+                t_Log.trace(
+                      "insertsAreDetected("
+                    +     "TYPE_FORWARD_ONLY):"
+                    + metaData.insertsAreDetected(
+                          ResultSet.TYPE_FORWARD_ONLY));
+
+                t_Log.trace(
+                     "insertsAreDetected("
+                    +     "TYPE_SCROLL_INSENSITIVE):"
+                    + metaData.insertsAreDetected(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE));
+
+                t_Log.trace(
+                     "insertsAreDetected("
+                    +     "TYPE_SCROLL_SENS):"
+                    + metaData.insertsAreDetected(
+                        ResultSet.TYPE_SCROLL_SENSITIVE));
+
+                t_Log.trace(
+                    "isCatalogAtStart():"
+                    + metaData.isCatalogAtStart());
+
+                t_Log.trace(
+                      "isReadOnly():"
+                    + metaData.isReadOnly());
+
+                /*
+                 * Fails for MySQL with a java.lang.AbstractMethodError 
+                 * com.mysql.jdbc.jdbc2.DatabaseMetaData.locatorsUpdateCopy()
+                 t_Log.trace(
+                       "locatorsUpdateCopy():"
+                     + metaData.locatorsUpdateCopy());
+                 */
+
+                t_Log.trace(
+                      "nullPlusNonNullIsNull():"
+                    + metaData.nullPlusNonNullIsNull());
+
+                t_Log.trace(
+                      "nullsAreSortedAtEnd():"
+                    + metaData.nullsAreSortedAtEnd());
+                
+                t_Log.trace(
+                      "nullsAreSortedAtStart():"
+                    + metaData.nullsAreSortedAtStart());
+                
+                t_Log.trace(
+                      "nullsAreSortedHigh():"
+                    + metaData.nullsAreSortedHigh());
+                
+                t_Log.trace(
+                      "nullsAreSortedLow():"
+                    + metaData.nullsAreSortedLow());
+                
+                t_Log.trace(
+                      "othersDeletesAreVisible("
+                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                    + metaData.othersDeletesAreVisible(
+                        ResultSet.TYPE_FORWARD_ONLY));
+
+                t_Log.trace(
+                      "othersDeletesAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                    + metaData.othersDeletesAreVisible(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE));
+
+                t_Log.trace(
+                      "othersDeletesAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                    + metaData.othersDeletesAreVisible(
+                        ResultSet.TYPE_SCROLL_SENSITIVE));
+
+                t_Log.trace(
+                      "othersInsertsAreVisible("
+                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                    + metaData.othersInsertsAreVisible(
+                        ResultSet.TYPE_FORWARD_ONLY));
+
+                t_Log.trace(
+                      "othersInsertsAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                    + metaData.othersInsertsAreVisible(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE));
+
+                t_Log.trace(
+                      "othersInsertsAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                    + metaData.othersInsertsAreVisible(
+                        ResultSet.TYPE_SCROLL_SENSITIVE));
+
+                t_Log.trace(
+                      "othersUpdatesAreVisible("
+                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                    + metaData.othersUpdatesAreVisible(
+                        ResultSet.TYPE_FORWARD_ONLY));
+
+                t_Log.trace(
+                      "othersUpdatesAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                    + metaData.othersUpdatesAreVisible(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE));
+
+                t_Log.trace(
+                      "othersUpdatesAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                    + metaData.othersUpdatesAreVisible(
+                        ResultSet.TYPE_SCROLL_SENSITIVE));
+
+                t_Log.trace(
+                      "ownDeletesAreVisible("
+                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                    + metaData.ownDeletesAreVisible(
+                        ResultSet.TYPE_FORWARD_ONLY));
+
+                t_Log.trace(
+                      "ownDeletesAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                    + metaData.ownDeletesAreVisible(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE));
+
+                t_Log.trace(
+                      "ownDeletesAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                    + metaData.ownDeletesAreVisible(
+                        ResultSet.TYPE_SCROLL_SENSITIVE));
+
+                t_Log.trace(
+                      "ownInsertsAreVisible("
+                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                    + metaData.ownInsertsAreVisible(
+                        ResultSet.TYPE_FORWARD_ONLY));
+
+                t_Log.trace(
+                      "ownInsertsAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                    + metaData.ownInsertsAreVisible(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE));
+
+                t_Log.trace(
+                      "ownInsertsAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                    + metaData.ownInsertsAreVisible(
+                        ResultSet.TYPE_SCROLL_SENSITIVE));
+
+                t_Log.trace(
+                      "ownUpdatesAreVisible("
+                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                    + metaData.ownUpdatesAreVisible(
+                        ResultSet.TYPE_FORWARD_ONLY));
+
+                t_Log.trace(
+                      "ownUpdatesAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                    + metaData.ownUpdatesAreVisible(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE));
+
+                t_Log.trace(
+                      "ownUpdatesAreVisible("
+                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                    + metaData.ownUpdatesAreVisible(
+                        ResultSet.TYPE_SCROLL_SENSITIVE));
+
+                t_Log.trace(
+                      "storesLowerCaseIdentifiers():"
+                    + metaData.storesLowerCaseIdentifiers());
+            
+                t_Log.trace(
+                      "storesLowerCaseQuotedIdentifiers():"
+                    + metaData.storesLowerCaseQuotedIdentifiers());
+            
+                t_Log.trace(
+                      "storesMixedCaseIdentifiers():"
+                    + metaData.storesMixedCaseIdentifiers());
+            
+                t_Log.trace(
+                      "storesMixedCaseQuotedIdentifiers():"
+                    + metaData.storesMixedCaseQuotedIdentifiers());
+            
+                t_Log.trace(
+                      "storesUpperCaseIdentifiers():"
+                    + metaData.storesUpperCaseIdentifiers());
+            
+                t_Log.trace(
+                      "storesUpperCaseQuotedIdentifiers():"
+                    + metaData.storesUpperCaseQuotedIdentifiers());
+            
+                t_Log.trace(
+                      "supportsAlterTableWithAddColumn():"
+                    + metaData.supportsAlterTableWithAddColumn());
+            
+                t_Log.trace(
+                      "supportsAlterTableWithDropColumn():"
+                    + metaData.supportsAlterTableWithDropColumn());
+            
+                t_Log.trace(
+                      "supportsANSI92EntryLevelSQL():"
+                    + metaData.supportsANSI92EntryLevelSQL());
+            
+                t_Log.trace(
+                      "supportsANSI92FullSQL():"
+                    + metaData.supportsANSI92FullSQL());
+            
+                t_Log.trace(
+                      "supportsANSI92IntermediateSQL():"
+                    + metaData.supportsANSI92IntermediateSQL());
+            
+                t_Log.trace(
+                      "supportsBatchUpdates():"
+                    + metaData.supportsBatchUpdates());
+            
+                t_Log.trace(
+                      "supportsCatalogsInDataManipulation():"
+                    + metaData.supportsCatalogsInDataManipulation());
+            
+                t_Log.trace(
+                      "supportsCatalogsInIndexDefinitions():"
+                    + metaData.supportsCatalogsInIndexDefinitions());
+            
+                t_Log.trace(
+                      "supportsCatalogsInPrivilegeDefinitions():"
+                    + metaData.supportsCatalogsInPrivilegeDefinitions());
+            
+                t_Log.trace(
+                      "supportsCatalogsInProcedureCalls():"
+                    + metaData.supportsCatalogsInProcedureCalls());
+            
+                t_Log.trace(
+                      "supportsCatalogsInTableDefinitions():"
+                    + metaData.supportsCatalogsInTableDefinitions());
+            
+                t_Log.trace(
+                      "supportsColumnAliasing():"
+                    + metaData.supportsColumnAliasing());
+            
+                t_Log.trace(
+                      "supportsConvert():"
+                    + metaData.supportsConvert());
+            
+                t_Log.trace(
+                      "supportsCoreSQLGrammar():"
+                    + metaData.supportsCoreSQLGrammar());
+            
+                t_Log.trace(
+                      "supportsCorrelatedSubqueries():"
+                    + metaData.supportsCorrelatedSubqueries());
+            
+                t_Log.trace(
+                      "supportsDataDefinitionAndDataManipulationTransactions():"
+                    + metaData.supportsDataDefinitionAndDataManipulationTransactions());
+            
+                t_Log.trace(
+                      "supportsDataManipulationTransactionsOnly():"
+                    + metaData.supportsDataManipulationTransactionsOnly());
+            
+                t_Log.trace(
+                      "supportsDifferentTableCorrelationNames():"
+                    + metaData.supportsDifferentTableCorrelationNames());
+            
+                t_Log.trace(
+                      "supportsExpressionsInOrderBy():"
+                    + metaData.supportsExpressionsInOrderBy());
+            
+                t_Log.trace(
+                      "supportsExtendedSQLGrammar():"
+                    + metaData.supportsExtendedSQLGrammar());
+            
+                t_Log.trace(
+                      "supportsFullOuterJoins():"
+                    + metaData.supportsFullOuterJoins());
+            
+                String t_strSupportsGetGeneratedKeys = "false";
+
+                try
+                {
+                    t_strSupportsGetGeneratedKeys =
+                            "" + metaData.supportsGetGeneratedKeys();
+                }
+                catch  (final SQLException sqlException)
+                {
+                    t_strSupportsGetGeneratedKeys +=
+                        sqlException.getMessage();
+                }
+
+                t_Log.trace(
+                      "supportsGetGeneratedKeys():"
+                    + t_strSupportsGetGeneratedKeys);
+            
+                t_Log.trace(
+                      "supportsGroupBy():"
+                    + metaData.supportsGroupBy());
+            
+                t_Log.trace(
+                      "supportsGroupByBeyondSelect():"
+                    + metaData.supportsGroupByBeyondSelect());
+            
+                t_Log.trace(
+                      "supportsGroupByUnrelated():"
+                    + metaData.supportsGroupByUnrelated());
+            
+                t_Log.trace(
+                      "supportsIntegrityEnhancementFacility():"
+                    + metaData.supportsIntegrityEnhancementFacility());
+            
+                t_Log.trace(
+                      "supportsLikeEscapeClause():"
+                    + metaData.supportsLikeEscapeClause());
+            
+                t_Log.trace(
+                      "supportsLimitedOuterJoins():"
+                    + metaData.supportsLimitedOuterJoins());
+            
+                t_Log.trace(
+                      "supportsMinimumSQLGrammar():"
+                    + metaData.supportsMinimumSQLGrammar());
+            
+                t_Log.trace(
+                      "supportsMixedCaseIdentifiers():"
+                    + metaData.supportsMixedCaseIdentifiers());
+            
+                t_Log.trace(
+                      "supportsMixedCaseQuotedIdentifiers():"
+                    + metaData.supportsMixedCaseQuotedIdentifiers());
+            
+                /*
+                 * Fails in MySQL 3.23.53 with a java.lang.AbstractMethodError
+                 * com.mysql.jdbc.jdbc2.DatabaseMetaData.supportsMultipleOpenResults()
+                 t_Log.trace(
+                       "supportsMultipleOpenResults():"
+                     + metaData.supportsMultipleOpenResults());
+                 */
+
+                t_Log.trace(
+                      "supportsMultipleResultSets():"
+                    + metaData.supportsMultipleResultSets());
+            
+                t_Log.trace(
+                      "supportsMultipleTransactions():"
+                    + metaData.supportsMultipleTransactions());
+            
+                /*
+                 * Fails in MySQL 3.23.53 with a java.lang.AbstractMethodError
+                 * com.mysql.jdbc.jdbc2.DatabaseMetaData.supportsNamedParameters()
+                 t_Log.trace(
+                       "supportsNamedParameters():"
+                     + metaData.supportsNamedParameters());
+                 */
+
+                t_Log.trace(
+                      "supportsNonNullableColumns():"
+                    + metaData.supportsNonNullableColumns());
+            
+                t_Log.trace(
+                      "supportsOpenCursorsAcrossCommit():"
+                    + metaData.supportsOpenCursorsAcrossCommit());
+            
+                t_Log.trace(
+                      "supportsOpenCursorsAcrossRollback():"
+                    + metaData.supportsOpenCursorsAcrossRollback());
+            
+                t_Log.trace(
+                      "supportsOpenStatementsAcrossCommit():"
+                    + metaData.supportsOpenStatementsAcrossCommit());
+            
+                t_Log.trace(
+                      "supportsOpenStatementsAcrossRollback():"
+                    + metaData.supportsOpenStatementsAcrossRollback());
+            
+                t_Log.trace(
+                      "supportsOrderByUnrelated():"
+                    + metaData.supportsOrderByUnrelated());
+            
+                t_Log.trace(
+                      "supportsOuterJoins():"
+                    + metaData.supportsOuterJoins());
+            
+                t_Log.trace(
+                      "supportsPositionedDelete():"
+                    + metaData.supportsPositionedDelete());
+            
+                t_Log.trace(
+                      "supportsPositionedUpdate():"
+                    + metaData.supportsPositionedUpdate());
+            
+                t_Log.trace(
+                      "supportsResultSetConcurrency("
+                    +     "TYPE_FORWARD_ONLY,CONCUR_READ_ONLY):"
+                    + metaData.supportsResultSetConcurrency(
+                        ResultSet.TYPE_FORWARD_ONLY,
+                        ResultSet.CONCUR_READ_ONLY));
+
+                t_Log.trace(
+                      "supportsResultSetConcurrency("
+                    +     "TYPE_FORWARD_ONLY,CONCUR_UPDATABLE):"
+                    + metaData.supportsResultSetConcurrency(
+                        ResultSet.TYPE_FORWARD_ONLY,
+                        ResultSet.CONCUR_UPDATABLE));
+
+                t_Log.trace(
+                      "supportsResultSetConcurrency("
+                    +     "TYPE_SCROLL_INSENSITIVE,CONCUR_READ_ONLY):"
+                    + metaData.supportsResultSetConcurrency(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_READ_ONLY));
+
+                t_Log.trace(
+                      "supportsResultSetConcurrency("
+                    +     "TYPE_SCROLL_INSENSITIVE,CONCUR_UPDATABLE):"
+                    + metaData.supportsResultSetConcurrency(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE));
+
+                t_Log.trace(
+                      "supportsResultSetConcurrency("
+                    +     "TYPE_SCROLL_SENSITIVE,CONCUR_READ_ONLY):"
+                    + metaData.supportsResultSetConcurrency(
+                        ResultSet.TYPE_SCROLL_SENSITIVE,
+                        ResultSet.CONCUR_READ_ONLY));
+
+                t_Log.trace(
+                      "supportsResultSetConcurrency("
+                    +     "TYPE_SCROLL_SENSITIVE,CONCUR_UPDATABLE):"
+                    + metaData.supportsResultSetConcurrency(
+                        ResultSet.TYPE_SCROLL_SENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE));
+
+                /*
+                 * Fails in MySQL 3.23.53 with a java.lang.AbstractMethodError
+                 * com.mysql.jdbc.jdbc2.DatabaseMetaData.supportsResultSetHoldability()
+                 t_Log.trace(
+                       "supportsResultSetHoldability("
+                 +     "HOLD_CURSORS_OVER_COMMIT):"
+                 + metaData.supportsResultSetHoldability(
+                     ResultSet.HOLD_CURSORS_OVER_COMMIT));
+
+                 t_Log.trace(
+                       "supportsResultSetHoldability("
+                 +     "CLOSE_CURSORS_AT_COMMIT):"
+                 + metaData.supportsResultSetHoldability(
+                     ResultSet.CLOSE_CURSORS_AT_COMMIT));
+                 */
+
+                t_Log.trace(
+                      "supportsResultSetType("
+                    +     "TYPE_FORWARD_ONLY):"
+                    + metaData.supportsResultSetType(
+                        ResultSet.TYPE_FORWARD_ONLY));
+
+                t_Log.trace(
+                      "supportsResultSetType("
+                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                    + metaData.supportsResultSetType(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE));
+
+                t_Log.trace(
+                      "supportsResultSetType("
+                    +     "TYPE_SCROLL_SENSITIVE):"
+                    + metaData.supportsResultSetType(
+                        ResultSet.TYPE_SCROLL_SENSITIVE));
+
+                /*
+                 * Fails in MySQL 3.23.53 with a java.lang.AbstractMethodError
+                 * com.mysql.jdbc.jdbc2.DatabaseMetaData.supportsSavePoints()
+                 t_Log.trace(
+                       "supportsSavepoints():"
+                     + metaData.supportsSavepoints());
+                 */
+
+                t_Log.trace(
+                      "supportsSchemasInDataManipulation():"
+                    + metaData.supportsSchemasInDataManipulation());
+            
+                t_Log.trace(
+                      "supportsSchemasInIndexDefinitions():"
+                    + metaData.supportsSchemasInIndexDefinitions());
+            
+                t_Log.trace(
+                      "supportsSchemasInPrivilegeDefinitions():"
+                    + metaData.supportsSchemasInPrivilegeDefinitions());
+            
+                t_Log.trace(
+                      "supportsSchemasInProcedureCalls():"
+                    + metaData.supportsSchemasInProcedureCalls());
+            
+                t_Log.trace(
+                      "supportsSchemasInTableDefinitions():"
+                    + metaData.supportsSchemasInTableDefinitions());
+            
+                t_Log.trace(
+                      "supportsSelectForUpdate():"
+                    + metaData.supportsSelectForUpdate());
+
+                /*
+                 * Fails in MySQL 3.23.53 with a java.lang.AbstractMethodError
+                 * com.mysql.jdbc.jdbc2.DatabaseMetaData.supportsStatementPooling()
+                 t_Log.trace(
+                       "supportsStatementPooling():"
+                     + metaData.supportsStatementPooling());
+                */
+
+                t_Log.trace(
+                      "supportsStoredProcedures():"
+                    + metaData.supportsStoredProcedures());
+            
+                t_Log.trace(
+                      "supportsSubqueriesInComparisons():"
+                    + metaData.supportsSubqueriesInComparisons());
+            
+                t_Log.trace(
+                      "supportsSubqueriesInExists():"
+                    + metaData.supportsSubqueriesInExists());
+            
+                t_Log.trace(
+                      "supportsSubqueriesInIns():"
+                    + metaData.supportsSubqueriesInIns());
+            
+                t_Log.trace(
+                      "supportsSubqueriesInQuantifieds():"
+                    + metaData.supportsSubqueriesInQuantifieds());
+            
+                t_Log.trace(
+                      "supportsTableCorrelationNames():"
+                    + metaData.supportsTableCorrelationNames());
+            
+                t_Log.trace(
+                      "supportsTransactionIsolationLevel("
+                    +     "TRANSACTION_NONE):"
+                    + metaData.supportsTransactionIsolationLevel(
+                        Connection.TRANSACTION_NONE));
+
+                t_Log.trace(
+                      "supportsTransactionIsolationLevel("
+                    +     "TRANSACTION_READ_COMMITTED):"
+                    + metaData.supportsTransactionIsolationLevel(
+                        Connection.TRANSACTION_READ_COMMITTED));
+
+                t_Log.trace(
+                      "supportsTransactionIsolationLevel("
+                    +     "TRANSACTION_READ_UNCOMMITTED):"
+                    + metaData.supportsTransactionIsolationLevel(
+                        Connection.TRANSACTION_READ_UNCOMMITTED));
+
+                t_Log.trace(
+                      "supportsTransactionIsolationLevel("
+                    +     "TRANSACTION_REPEATABLE_READ):"
+                    + metaData.supportsTransactionIsolationLevel(
+                        Connection.TRANSACTION_REPEATABLE_READ));
+
+                t_Log.trace(
+                      "supportsTransactionIsolationLevel("
+                    +     "TRANSACTION_SERIALIZABLE):"
+                    + metaData.supportsTransactionIsolationLevel(
+                        Connection.TRANSACTION_SERIALIZABLE));
+
+                t_Log.trace(
+                      "supportsTransactions():"
+                    + metaData.supportsTransactions());
+            
+                t_Log.trace(
+                      "supportsUnion():"
+                    + metaData.supportsUnion());
+            
+                t_Log.trace(
+                      "supportsUnionAll():"
+                    + metaData.supportsUnionAll());
+
+                t_Log.trace(
+                      "updatesAreDetected("
+                    +     "TYPE_FORWARD_ONLY):"
+                    + metaData.updatesAreDetected(
+                        ResultSet.TYPE_FORWARD_ONLY));
+
+                t_Log.trace(
+                      "updatesAreDetected("
+                    +     "TYPE_SCROLL_INSENSITIVE):"
+                    + metaData.updatesAreDetected(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE));
+
+                t_Log.trace(
+                      "updatesAreDetected("
+                    +     "TYPE_SCROLL_SENS):"
+                    + metaData.updatesAreDetected(
+                        ResultSet.TYPE_SCROLL_SENSITIVE));
+
+                t_Log.trace(
+                      "usesLocalFilePerTable():"
+                    + metaData.usesLocalFilePerTable());
+            
+                t_Log.trace(
+                      "usesLocalFiles():"
+                    + metaData.usesLocalFiles());
             }
-            catch  (final SQLException sqlException)
-            {
-                t_strSupportsGetGeneratedKeys +=
-                    sqlException.getMessage();
-            }
-
-            project.log(
-                task,
-                "supportsGetGeneratedKeys():"
-                + t_strSupportsGetGeneratedKeys,
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsGroupBy():"
-                + metaData.supportsGroupBy(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsGroupByBeyondSelect():"
-                + metaData.supportsGroupByBeyondSelect(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsGroupByUnrelated():"
-                + metaData.supportsGroupByUnrelated(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsIntegrityEnhancementFacility():"
-                + metaData.supportsIntegrityEnhancementFacility(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsLikeEscapeClause():"
-                + metaData.supportsLikeEscapeClause(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsLimitedOuterJoins():"
-                + metaData.supportsLimitedOuterJoins(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsMinimumSQLGrammar():"
-                + metaData.supportsMinimumSQLGrammar(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsMixedCaseIdentifiers():"
-                + metaData.supportsMixedCaseIdentifiers(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsMixedCaseQuotedIdentifiers():"
-                + metaData.supportsMixedCaseQuotedIdentifiers(),
-                Project.MSG_VERBOSE);
-
-            /*
-             * Fails in MySQL 3.23.53 with a java.lang.AbstractMethodError
-             * com.mysql.jdbc.jdbc2.DatabaseMetaData.supportsMultipleOpenResults()
-             project.log(
-             task,
-             "supportsMultipleOpenResults():"
-             + metaData.supportsMultipleOpenResults(),
-             Project.MSG_VERBOSE);
-            */
-
-            project.log(
-                task,
-                "supportsMultipleResultSets():"
-                + metaData.supportsMultipleResultSets(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsMultipleTransactions():"
-                + metaData.supportsMultipleTransactions(),
-                Project.MSG_VERBOSE);
-
-            /*
-             * Fails in MySQL 3.23.53 with a java.lang.AbstractMethodError
-             * com.mysql.jdbc.jdbc2.DatabaseMetaData.supportsNamedParameters()
-             project.log(
-             task,
-             "supportsNamedParameters():"
-             + metaData.supportsNamedParameters(),
-             Project.MSG_VERBOSE);
-            */
-
-            project.log(
-                task,
-                "supportsNonNullableColumns():"
-                + metaData.supportsNonNullableColumns(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsOpenCursorsAcrossCommit():"
-                + metaData.supportsOpenCursorsAcrossCommit(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsOpenCursorsAcrossRollback():"
-                + metaData.supportsOpenCursorsAcrossRollback(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsOpenStatementsAcrossCommit():"
-                + metaData.supportsOpenStatementsAcrossCommit(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsOpenStatementsAcrossRollback():"
-                + metaData.supportsOpenStatementsAcrossRollback(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsOrderByUnrelated():"
-                + metaData.supportsOrderByUnrelated(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsOuterJoins():"
-                + metaData.supportsOuterJoins(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsPositionedDelete():"
-                + metaData.supportsPositionedDelete(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsPositionedUpdate():"
-                + metaData.supportsPositionedUpdate(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsResultSetConcurrency("
-                +     "TYPE_FORWARD_ONLY,CONCUR_READ_ONLY):"
-                + metaData.supportsResultSetConcurrency(
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsResultSetConcurrency("
-                +     "TYPE_FORWARD_ONLY,CONCUR_UPDATABLE):"
-                + metaData.supportsResultSetConcurrency(
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_UPDATABLE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsResultSetConcurrency("
-                +     "TYPE_SCROLL_INSENSITIVE,CONCUR_READ_ONLY):"
-                + metaData.supportsResultSetConcurrency(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsResultSetConcurrency("
-                +     "TYPE_SCROLL_INSENSITIVE,CONCUR_UPDATABLE):"
-                + metaData.supportsResultSetConcurrency(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsResultSetConcurrency("
-                +     "TYPE_SCROLL_SENSITIVE,CONCUR_READ_ONLY):"
-                + metaData.supportsResultSetConcurrency(
-                    ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsResultSetConcurrency("
-                +     "TYPE_SCROLL_SENSITIVE,CONCUR_UPDATABLE):"
-                + metaData.supportsResultSetConcurrency(
-                    ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE),
-                Project.MSG_VERBOSE);
-
-            /*
-             * Fails in MySQL 3.23.53 with a java.lang.AbstractMethodError
-             * com.mysql.jdbc.jdbc2.DatabaseMetaData.supportsResultSetHoldability()
-             project.log(
-             task,
-             "supportsResultSetHoldability("
-             +     "HOLD_CURSORS_OVER_COMMIT):"
-             + metaData.supportsResultSetHoldability(
-             ResultSet.HOLD_CURSORS_OVER_COMMIT),
-             Project.MSG_VERBOSE);
-
-             project.log(
-             task,
-             "supportsResultSetHoldability("
-             +     "CLOSE_CURSORS_AT_COMMIT):"
-             + metaData.supportsResultSetHoldability(
-             ResultSet.CLOSE_CURSORS_AT_COMMIT),
-             Project.MSG_VERBOSE);
-            */
-
-            project.log(
-                task,
-                "supportsResultSetType("
-                +     "TYPE_FORWARD_ONLY):"
-                + metaData.supportsResultSetType(
-                    ResultSet.TYPE_FORWARD_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsResultSetType("
-                +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
-                + metaData.supportsResultSetType(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsResultSetType("
-                +     "TYPE_SCROLL_SENSITIVE):"
-                + metaData.supportsResultSetType(
-                    ResultSet.TYPE_SCROLL_SENSITIVE),
-                Project.MSG_VERBOSE);
-
-            /*
-             * Fails in MySQL 3.23.53 with a java.lang.AbstractMethodError
-             * com.mysql.jdbc.jdbc2.DatabaseMetaData.supportsSavePoints()
-             project.log(
-             task,
-             "supportsSavepoints():"
-             + metaData.supportsSavepoints(),
-             Project.MSG_VERBOSE);
-            */
-
-            project.log(
-                task,
-                "supportsSchemasInDataManipulation():"
-                + metaData.supportsSchemasInDataManipulation(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsSchemasInIndexDefinitions():"
-                + metaData.supportsSchemasInIndexDefinitions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsSchemasInPrivilegeDefinitions():"
-                + metaData.supportsSchemasInPrivilegeDefinitions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsSchemasInProcedureCalls():"
-                + metaData.supportsSchemasInProcedureCalls(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsSchemasInTableDefinitions():"
-                + metaData.supportsSchemasInTableDefinitions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsSelectForUpdate():"
-                + metaData.supportsSelectForUpdate(),
-                Project.MSG_VERBOSE);
-
-            /*
-             * Fails in MySQL 3.23.53 with a java.lang.AbstractMethodError
-             * com.mysql.jdbc.jdbc2.DatabaseMetaData.supportsStatementPooling()
-             project.log(
-             task,
-             "supportsStatementPooling():"
-             + metaData.supportsStatementPooling(),
-             Project.MSG_VERBOSE);
-            */
-
-            project.log(
-                task,
-                "supportsStoredProcedures():"
-                + metaData.supportsStoredProcedures(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsSubqueriesInComparisons():"
-                + metaData.supportsSubqueriesInComparisons(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsSubqueriesInExists():"
-                + metaData.supportsSubqueriesInExists(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsSubqueriesInIns():"
-                + metaData.supportsSubqueriesInIns(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsSubqueriesInQuantifieds():"
-                + metaData.supportsSubqueriesInQuantifieds(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsTableCorrelationNames():"
-                + metaData.supportsTableCorrelationNames(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsTransactionIsolationLevel("
-                +     "TRANSACTION_NONE):"
-                + metaData.supportsTransactionIsolationLevel(
-                    Connection.TRANSACTION_NONE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsTransactionIsolationLevel("
-                +     "TRANSACTION_READ_COMMITTED):"
-                + metaData.supportsTransactionIsolationLevel(
-                    Connection.TRANSACTION_READ_COMMITTED),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsTransactionIsolationLevel("
-                +     "TRANSACTION_READ_UNCOMMITTED):"
-                + metaData.supportsTransactionIsolationLevel(
-                    Connection.TRANSACTION_READ_UNCOMMITTED),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsTransactionIsolationLevel("
-                +     "TRANSACTION_REPEATABLE_READ):"
-                + metaData.supportsTransactionIsolationLevel(
-                    Connection.TRANSACTION_REPEATABLE_READ),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsTransactionIsolationLevel("
-                +     "TRANSACTION_SERIALIZABLE):"
-                + metaData.supportsTransactionIsolationLevel(
-                    Connection.TRANSACTION_SERIALIZABLE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsTransactions():"
-                + metaData.supportsTransactions(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsUnion():"
-                + metaData.supportsUnion(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "supportsUnionAll():"
-                + metaData.supportsUnionAll(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "updatesAreDetected("
-                +     "TYPE_FORWARD_ONLY):"
-                + metaData.updatesAreDetected(
-                    ResultSet.TYPE_FORWARD_ONLY),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "updatesAreDetected("
-                +     "TYPE_SCROLL_INSENSITIVE):"
-                + metaData.updatesAreDetected(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "updatesAreDetected("
-                +     "TYPE_SCROLL_SENS):"
-                + metaData.updatesAreDetected(
-                    ResultSet.TYPE_SCROLL_SENSITIVE),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "usesLocalFilePerTable():"
-                + metaData.usesLocalFilePerTable(),
-                Project.MSG_VERBOSE);
-
-            project.log(
-                task,
-                "usesLocalFiles():"
-                + metaData.usesLocalFiles(),
-                Project.MSG_VERBOSE);
         }
         catch  (final SQLException sqlException)
         {
-            project.log(
-                task,
-                "Database metadata request failed ("
-                + sqlException
-                + ")",
-                Project.MSG_ERR);
-
-            sqlException.printStackTrace(System.out);
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Database metadata request failed.",
+                    sqlException);
+            }
         }
 
         return result;

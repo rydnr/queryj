@@ -43,12 +43,6 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Represents generic templates.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -59,13 +53,9 @@ public abstract class AbstractTestTemplate
     implements  TestTemplate
 {
     /**
-     * Builds an <code>AbstractTestTemplate</code> using
-     * given information.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * Builds an empty <code>AbstractTestTemplate</code>.
      */
-    protected AbstractTestTemplate(final Project project, final Task task)
+    protected AbstractTestTemplate()
     {
-        super(project, task);
     }
 }

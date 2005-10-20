@@ -51,12 +51,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -129,41 +123,31 @@ public class TableRepositoryTemplateGenerator
      * Generates a table repository template.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return such template.
      * @precondition packageName != null
      * @precondition repository != null
      */
     public TableRepositoryTemplate createTableRepositoryTemplate(
         final String packageName,
-        final String repository,
-        final Project project,
-        final Task task)
+        final String repository)
     {
-        return new TableRepositoryTemplate(packageName, repository, project, task);
+        return new TableRepositoryTemplate(packageName, repository);
     }
 
     /**
      * Writes a table repository template to disk.
      * @param tableRepositoryTemplate the table repository template to write.
      * @param outputDir the output folder.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws IOException if the file cannot be created.
      */
     public void write(
         final TableRepositoryTemplate tableRepositoryTemplate,
-        final File outputDir,
-        final Project project,
-        final Task task)
+        final File outputDir)
       throws  IOException
     {
         write(
             tableRepositoryTemplate,
             outputDir,
-            project,
-            task,
             FileUtils.getInstance(),
             TableRepositoryTemplateUtils.getInstance());
     }
@@ -172,8 +156,6 @@ public class TableRepositoryTemplateGenerator
      * Writes a table repository template to disk.
      * @param tableRepositoryTemplate the table repository template to write.
      * @param outputDir the output folder.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @param tableRepositoryTemplateUtils the
      * <code>TableRepositoryTemplateUtils</code> instance.
@@ -186,8 +168,6 @@ public class TableRepositoryTemplateGenerator
     public void write(
         final TableRepositoryTemplate tableRepositoryTemplate,
         final File outputDir,
-        final Project project,
-        final Task task,
         final FileUtils fileUtils,
         final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
       throws  IOException

@@ -46,12 +46,6 @@ import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTestTemplate;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Is able to generate JUnit templates test the Database's
  * system functions.
@@ -68,8 +62,6 @@ public interface SystemFunctionsTestTemplateFactory
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the template factory is invalid.
      */
@@ -78,8 +70,6 @@ public interface SystemFunctionsTestTemplateFactory
         final String  testedPackageName,
         final String  engineName,
         final String  engineVersion,
-        final String  quote,
-        final Project project,
-        final Task    task)
+        final String  quote)
       throws  QueryJException;
 }

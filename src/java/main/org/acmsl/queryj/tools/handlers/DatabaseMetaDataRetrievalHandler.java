@@ -51,39 +51,40 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+
+/*
+ * Importing some Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
  */
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Retrieves the database metadata instance.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
+ * @version $Revision$ ($Author$ at $Date$)
  */
-public class DatabaseMetaDataRetrievalHandler
+public abstract class DatabaseMetaDataRetrievalHandler
     extends  AbstractAntCommandHandler
 {
     /**
@@ -112,6 +113,12 @@ public class DatabaseMetaDataRetrievalHandler
     public static final String TABLE_FIELDS = "table.fields";
 
     /**
+     * The flag indicating whether the extraction has already been done.
+     */
+    public static final String METADATA_EXTRACTION_ALREADY_DONE =
+        "metadata.extraction.already.done";
+
+    /**
      * Creates a DatabaseMetaDataRetrievalHandler.
      */
     public DatabaseMetaDataRetrievalHandler() {};
@@ -120,29 +127,349 @@ public class DatabaseMetaDataRetrievalHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
-    public boolean handle(final Command command)
+    public boolean handle(final AntCommand command)
+    {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+    {
+        return
+            handle(
+                parameters,
+                retrieveAlreadyDoneFlag(parameters),
+                retrieveMetaData(parameters));
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param alreadyDone the flag indicating whether the metadata
+     * extraction has already been done.
+     * @param metaData the database metadata.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final boolean alreadyDone,
+        final DatabaseMetaData metaData)
+      throws  BuildException
     {
         boolean result = false;
 
-        if  (command instanceof AntCommand) 
+        if  (    (!alreadyDone)
+              && (checkVendor(metaData)))
         {
-            AntCommand t_AntCommand = (AntCommand) command;
+            result =
+                /*
+                handle(
+                    parameters,
+                    metaData,
+                    retrieveExtractTables(parameters),
+                    retrieveExtractProcedures(parameters),
+                    MetaDataUtils.getInstance());
+                */
+                oldHandle(parameters);
 
-            try 
-            {
-                result = handle(t_AntCommand);
-            }
-            catch  (final BuildException buildException)
-            {
-                Project t_Project = t_AntCommand.getProject();
+            storeAlreadyDoneFlag(parameters);
+        }
 
-                if  (t_Project != null)
+        return result;
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     */
+    protected boolean oldHandle(final Map parameters)
+        throws  BuildException
+    {
+        boolean result = false;
+
+        storeMetaData(retrieveMetaData(parameters), parameters);
+
+        DatabaseMetaDataManager t_MetaDataManager = null;
+
+        boolean t_bDisableTableExtraction =
+            !retrieveExtractTables(parameters);
+
+        boolean t_bDisableProcedureExtraction =
+            !retrieveExtractProcedures(parameters);
+
+        Collection t_cTableElements = null;
+
+        Iterator t_itTableElements = null;
+
+        String[] t_astrTableNames = null;
+
+        Collection t_cFieldElements = null;
+
+        int t_iTableIndex = 0;
+
+        Map t_mKeys = new HashMap();
+
+        Collection t_cTables = null;
+
+        if  (!t_bDisableTableExtraction)
+        {
+            AntTablesElement t_TablesElement =
+                retrieveTablesElement(parameters);
+
+            if  (t_TablesElement != null)
+            {
+                t_cTableElements = t_TablesElement.getTables();
+
+                if  (   (t_cTableElements != null)
+                        && (t_cTableElements.size() > 0))
                 {
-                    t_Project.log(
-                        t_AntCommand.getTask(),
-                        buildException.getMessage(),
-                        Project.MSG_ERR);
+                    t_astrTableNames = new String[t_cTableElements.size()];
+
+                    t_itTableElements = t_cTableElements.iterator();
+
+                    while  (   (t_itTableElements != null)
+                               && (t_itTableElements.hasNext()))
+                    {
+                        AntTableElement t_Table =
+                            (AntTableElement) t_itTableElements.next();
+
+                        if  (t_Table != null)
+                        {
+                            t_astrTableNames[t_iTableIndex] = t_Table.getName();
+                        }
+
+                        t_iTableIndex++;
+                    }
+
+                    storeTableNames(t_astrTableNames, parameters);
+
+                    t_itTableElements = t_cTableElements.iterator();
+
+                    t_iTableIndex = 0;
+
+                    while  (   (t_itTableElements != null)
+                               && (t_itTableElements.hasNext()))
+                    {
+                        AntTableElement t_Table =
+                            (AntTableElement) t_itTableElements.next();
+
+                        if  (t_Table != null)
+                        {
+                            t_cFieldElements = t_Table.getFields();
+
+                            if  (   (t_cFieldElements != null)
+                                    && (t_cFieldElements.size() > 0))
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        t_MetaDataManager =
+            buildMetaDataManager(
+                t_bDisableTableExtraction,
+                (   (t_cFieldElements != null)
+                    && (t_cFieldElements.size() > 0)),
+                t_bDisableProcedureExtraction,
+                false,
+                parameters);
+
+        storeMetaDataManager(t_MetaDataManager, parameters);
+
+        MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
+
+        if  (t_cTableElements != null)
+        {
+            t_itTableElements = t_cTableElements.iterator();
+        }
+
+        if  (   (t_itTableElements != null)
+             && (t_MetaDataUtils   != null)
+             && (t_MetaDataManager != null))
+        {
+            while  (t_itTableElements.hasNext())
+            {
+                AntTableElement t_Table =
+                    (AntTableElement) t_itTableElements.next();
+
+                if  (t_Table != null)
+                {
+                    t_cTables = (Collection) t_mKeys.get(buildTableKey());
+
+                    if  (t_cTables == null)
+                    {
+                        t_cTables = new ArrayList();
+                        t_mKeys.put(buildTableKey(), t_cTables);
+                    }
+
+                    t_cTables.add(t_Table.getName());
+
+                    t_cFieldElements = t_Table.getFields();
+
+                    if  (   (t_cFieldElements  != null)
+                            && (t_cFieldElements.size() > 0))
+                    {
+                        String[] t_astrTableFieldNames =
+                            new String[t_cFieldElements.size()];
+
+                        Iterator t_itFieldElements = t_cFieldElements.iterator();
+
+                        int t_iFieldIndex = 0;
+
+                        while  (   (t_itFieldElements != null)
+                                   && (t_itFieldElements.hasNext()))
+                        {
+                            AntFieldElement t_Field =
+                                (AntFieldElement) t_itFieldElements.next();
+
+                            if  (t_Field != null)
+                            {
+                                t_astrTableFieldNames[t_iFieldIndex] =
+                                    t_Field.getName();
+
+                                t_MetaDataManager.addColumnType(
+                                    t_Table.getName(),
+                                    t_Field.getName(),
+                                    t_MetaDataUtils.getJavaType(t_Field.getType()));
+
+                                Collection t_cFields =
+                                    (Collection)
+                                    t_mKeys.get(buildTableFieldsKey(t_Table.getName()));
+
+                                if  (t_cFields == null)
+                                {
+                                    t_cFields = new ArrayList();
+                                    t_mKeys.put(buildTableFieldsKey(t_Table.getName()), t_cFields);
+                                }
+
+                                t_cFields.add(t_Field.getName());
+
+                                if  (t_Field.isPk())
+                                {
+                                    t_MetaDataManager.addPrimaryKey(
+                                        t_Table.getName(),
+                                        t_Field.getName());
+
+                                    Collection t_cPks =
+                                        (Collection) t_mKeys.get(buildPkKey(t_Table.getName()));
+
+                                    if  (t_cPks == null)
+                                    {
+                                        t_cPks = new ArrayList();
+                                        t_mKeys.put(buildPkKey(t_Table.getName()), t_cPks);
+                                    }
+
+                                    t_cPks.add(t_Field.getName());
+
+                                    t_mKeys.put(
+                                        buildPkKey(
+                                            t_Table.getName(),
+                                            t_Field.getName()),
+                                        t_Field.getName());
+                                }
+
+                                Collection t_cFieldFks =
+                                    t_Field.getFieldFks();
+
+                                if  (t_cFieldFks != null)
+                                {
+                                    t_mKeys.put(
+                                        buildFkKey(
+                                            t_Table.getName(),
+                                            t_Field.getName()),
+                                        t_cFieldFks);
+                                }
+                            }
+
+                            t_iFieldIndex++;
+                        }
+
+                        t_MetaDataManager.addColumnNames(
+                            t_Table.getName(),
+                            t_astrTableFieldNames);
+                    }
+                }
+            }
+
+            storeMetaDataManager(t_MetaDataManager, parameters);
+        }
+
+        t_cTables = (Collection) t_mKeys.get(buildTableKey());
+
+        if  (t_cTables != null)
+        {
+            Iterator t_itTables = t_cTables.iterator();
+
+            while  (   (t_itTables != null)
+                       && (t_itTables.hasNext()))
+            {
+                String t_strTableName = (String) t_itTables.next();
+
+                if  (t_strTableName != null)
+                {
+                    Collection t_cFields =
+                        (Collection)
+                        t_mKeys.get(
+                            buildTableFieldsKey(
+                                t_strTableName));
+
+                    if  (t_cFields != null)
+                    {
+                        Iterator t_itFields = t_cFields.iterator();
+
+                        while  (   (t_itFields != null)
+                                   && (t_itFields.hasNext()))
+                        {
+                            String t_strFieldName =
+                                (String) t_itFields.next();
+
+                            Collection t_cFieldFks =
+                                (Collection)
+                                t_mKeys.get(
+                                    buildFkKey(
+                                        t_strTableName,
+                                        t_strFieldName));
+
+                            if  (t_cFieldFks != null)
+                            {
+                                Iterator t_itFieldFks = t_cFieldFks.iterator();
+
+                                while  (   (t_itFieldFks != null)
+                                           && (t_itFieldFks.hasNext()))
+                                {
+                                    AntFieldFkElement t_FieldFk =
+                                        (AntFieldFkElement)
+                                        t_itFieldFks.next();
+
+                                    if  (t_FieldFk != null)
+                                    {
+                                        t_MetaDataManager.addForeignKey(
+                                            t_strTableName,
+                                            t_strFieldName,
+                                            t_FieldFk.getTable(),
+                                            t_FieldFk.getField());
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -151,124 +478,113 @@ public class DatabaseMetaDataRetrievalHandler
     }
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param metaData the database metadata.
+     * @param enableTableExtraction whether to extract tables.
+     * @param enableProcedureExtractor whether to extract procedures.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     * @precondition metaDataUtils != null
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaData metaData,
+        final boolean enableTableExtraction,
+        final boolean enableProcedureExtraction,
+        final MetaDataUtils metaDataUtils)
     {
         boolean result = false;
 
-        if  (command != null) 
+        storeMetaData(metaData, parameters);
+
+        AntTablesElement t_TablesElement = null;
+
+        if  (enableTableExtraction)
         {
-            Map t_mAttributes = command.getAttributeMap();
+            t_TablesElement = retrieveTablesElement(parameters);
 
-            storeMetaData(retrieveMetaData(t_mAttributes), t_mAttributes);
+            String[] t_astrTableNames =
+                extractTableNames(parameters, t_TablesElement);
 
-            DatabaseMetaDataManager t_MetaDataManager = null;
+            storeTableNames(t_astrTableNames, parameters);
+        }
 
-            boolean t_bDisableTableExtraction =
-                !retrieveExtractTables(t_mAttributes);
+        DatabaseMetaDataManager t_MetaDataManager =
+            buildMetaDataManager(
+                !enableTableExtraction,
+                lazyTableExtraction(t_TablesElement),
+                !enableProcedureExtraction,
+                false,
+                parameters);
 
-            boolean t_bDisableProcedureExtraction =
-                !retrieveExtractProcedures(t_mAttributes);
+        storeMetaDataManager(t_MetaDataManager, parameters);
 
-            Collection t_cTableElements = null;
-
-            Iterator t_itTableElements = null;
-
-            String[] t_astrTableNames = null;
-
-            Collection t_cFieldElements = null;
-
-            int t_iTableIndex = 0;
-
-            Map t_mKeys = new HashMap();
-
-            Collection t_cTables = null;
-
-            if  (!t_bDisableTableExtraction)
+        if  (enableProcedureExtraction)
+        {
+            if  (t_TablesElement == null)
             {
-                AntTablesElement t_TablesElement =
-                    retrieveTablesElement(t_mAttributes);
-
-                if  (t_TablesElement != null)
-                {
-                    t_cTableElements = t_TablesElement.getTables();
-
-                    if  (   (t_cTableElements != null)
-                         && (t_cTableElements.size() > 0))
-                    {
-                        t_astrTableNames = new String[t_cTableElements.size()];
-
-                        t_itTableElements = t_cTableElements.iterator();
-
-                        while  (   (t_itTableElements != null)
-                                && (t_itTableElements.hasNext()))
-                        {
-                            AntTableElement t_Table =
-                                (AntTableElement) t_itTableElements.next();
-
-                            if  (t_Table != null)
-                            {
-                                t_astrTableNames[t_iTableIndex] = t_Table.getName();
-                            }
-
-                            t_iTableIndex++;
-                        }
-
-                        storeTableNames(t_astrTableNames, t_mAttributes);
-
-                        t_itTableElements = t_cTableElements.iterator();
-
-                        t_iTableIndex = 0;
-
-                        while  (   (t_itTableElements != null)
-                                && (t_itTableElements.hasNext()))
-                        {
-                            AntTableElement t_Table =
-                                (AntTableElement) t_itTableElements.next();
-
-                            if  (t_Table != null)
-                            {
-                                t_cFieldElements = t_Table.getFields();
-
-                                if  (   (t_cFieldElements != null)
-                                     && (t_cFieldElements.size() > 0))
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
+                t_TablesElement = retrieveTablesElement(parameters);
             }
 
-            t_MetaDataManager =
-                buildMetaDataManager(
-                    t_bDisableTableExtraction,
-                    (   (t_cFieldElements != null)
-                     && (t_cFieldElements.size() > 0)),
-                    t_bDisableProcedureExtraction,
-                    false,
-                    t_mAttributes,
-                    command.getProject(),
-                    command.getTask());
+            extractProcedures(
+                parameters,
+                metaData,
+                t_MetaDataManager,
+                t_TablesElement,
+                metaDataUtils);
+        }
 
-            storeMetaDataManager(t_MetaDataManager, t_mAttributes);
+        return result;
+    }
 
-            MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
 
-            if  (t_cTableElements != null)
-            {
-                t_itTableElements = t_cTableElements.iterator();
-            }
+    /**
+     * Retrieves the names of the user-defined tables.
+     * @param parameters the command parameters.
+     * @param tablesElement the &lt;tables&gt; element.
+     * @return such table names.
+     * @throws BuildException if the process fails.
+     * @precondition parameters != null
+     */
+    protected String[] extractTableNames(
+        final Map parameters, final AntTablesElement tablesElement)
+    {
+        String[] result = new String[0];
 
-            if  (   (t_itTableElements != null)
-                 && (t_MetaDataUtils   != null)
-                 && (t_MetaDataManager != null))
+        if  (tablesElement != null)
+        {
+            result = extractTableNames(tablesElement.getTables());
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the fields of the user-defined tables.
+     * @param tables the table definitions.
+     * @return such fields.
+     * @throws BuildException if the process fails.
+     * @precondition tables != null
+     */
+    protected String[] extractTableNames(final Collection tables)
+    {
+        String[] result = null;
+
+        int t_iLength = (tables != null) ? tables.size() : 0;
+
+        result = new String[t_iLength];
+
+        int t_iTableIndex = 0;
+
+        if  (t_iLength > 0)
+        {
+            Iterator t_itTableElements = tables.iterator();
+
+            if  (t_itTableElements != null)
             {
                 while  (t_itTableElements.hasNext())
                 {
@@ -277,32 +593,215 @@ public class DatabaseMetaDataRetrievalHandler
 
                     if  (t_Table != null)
                     {
-                        t_cTables = (Collection) t_mKeys.get(buildTableKey());
+                        result[t_iTableIndex] = t_Table.getName();
+                    }
 
-                        if  (t_cTables == null)
+                    t_iTableIndex++;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether the tables should be extracted on demand.
+     * @param tablesElement the tables element.
+     * @return the result of such analysis..
+     * @throws BuildException if the process fails.
+     * @precondition tablesElement != null
+     */
+    protected boolean lazyTableExtraction(final AntTablesElement tablesElement)
+    {
+        boolean result = false;
+
+        if  (tablesElement != null)
+        {
+            result = lazyTableExtraction(tablesElement.getTables());
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether the tables should be extracted on demand.
+     * @param tables the table definitions.
+     * @return the result of such analysis..
+     * @throws BuildException if the process fails.
+     * @precondition tables != null
+     */
+    protected boolean lazyTableExtraction(final Collection tables)
+    {
+        boolean result = false;
+
+        int t_iLength = (tables != null) ? tables.size() : 0;
+
+        if  (t_iLength > 0)
+        {
+            Iterator t_itTableElements = tables.iterator();
+
+            if  (t_itTableElements != null)
+            {
+                while  (t_itTableElements.hasNext())
+                {
+                    AntTableElement t_Table =
+                        (AntTableElement) t_itTableElements.next();
+
+                    if  (t_Table != null)
+                    {
+                        Collection t_cFields = t_Table.getFields();
+
+                        if  (   (t_cFields != null)
+                             && (t_cFields.size()> 0))
                         {
-                            t_cTables = new ArrayList();
-                            t_mKeys.put(buildTableKey(), t_cTables);
+                            result = true;
+
+                            break;
                         }
+                    }
+                }
+            }
+        }
 
-                        t_cTables.add(t_Table.getName());
+        return result;
+    }
 
-                        t_cFieldElements = t_Table.getFields();
+    /**
+     * Extracts the procedures..
+     * @param parameters the parameters to handle.
+     * @param metaData the database metadata.
+     * @param metaDataManager the database metadata manager.
+     * @param tablesElement the tables element.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     * @precondition metaDataManager != null
+     * @precondition tableElements != null
+     * @precondition metaDataUtils != null
+     */
+    protected boolean extractProcedures(
+        final Map parameters,
+        final DatabaseMetaData metaData,
+        final DatabaseMetaDataManager metaDataManager,
+        final AntTablesElement tablesElement,
+        final MetaDataUtils metaDataUtils)
+    {
+        return
+            extractProcedures(
+                parameters,
+                metaData,
+                metaDataManager,
+                tablesElement.getTables(),
+                buildTableKey(),
+                metaDataUtils);
+    }
 
-                        if  (   (t_cFieldElements  != null)
-                             && (t_cFieldElements.size() > 0))
+    /**
+     * Extracts the procedures..
+     * @param parameters the parameters to handle.
+     * @param metaData the database metadata.
+     * @param metaDataManager the database metadata manager.
+     * @param tableElements the table elements.
+     * @param tableKey the key to store the tables.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     * @precondition metaDataManager != null
+     * @precondition tableElements != null
+     * @precondition tableKey != null
+     * @precondition metaDataUtils != null
+     */
+    protected boolean extractProcedures(
+        final Map parameters,
+        final DatabaseMetaData metaData,
+        final DatabaseMetaDataManager metaDataManager,
+        final Collection tableElements,
+        final Object tableKey,
+        final MetaDataUtils metaDataUtils)
+    {
+        boolean result = false;
+
+        Iterator t_itTableElements = null;
+
+        String[] t_astrTableNames = null;
+
+        int t_iTableIndex = 0;
+
+        Map t_mKeys = new HashMap();
+
+        Collection t_cTables = null;
+
+        Collection t_cFields = null;
+
+        Object t_TableFieldsKey = null;
+
+        Object t_TablePkKey = null;
+
+        Collection t_cPks = null;
+
+        int t_iLength = 0;
+
+        AntTableElement t_Table = null;
+
+        Collection t_cFieldElements = null;
+
+        AntFieldElement t_Field = null;
+
+        String[] t_astrTableFieldNames = null;
+
+        Collection t_cFieldFks = null;
+
+        Iterator t_itFieldElements = null;
+
+        int t_iFieldIndex = 0;
+
+        if  (tableElements != null)
+        {
+            t_itTableElements = tableElements.iterator();
+        }
+
+        if  (t_itTableElements != null)
+        {
+            while  (t_itTableElements.hasNext())
+            {
+                t_Table = (AntTableElement) t_itTableElements.next();
+
+                if  (t_Table != null)
+                {
+                    t_cTables = (Collection) t_mKeys.get(tableKey);
+
+                    if  (t_cTables == null)
+                    {
+                        t_cTables = new ArrayList();
+                        t_mKeys.put(tableKey, t_cTables);
+                    }
+
+                    t_cTables.add(t_Table.getName());
+
+                    t_cFieldElements = t_Table.getFields();
+
+                    t_iLength =
+                        (t_cFieldElements != null)
+                        ?  t_cFieldElements.size()
+                        :  0;
+
+                    if  (t_iLength > 0)
+                    {
+                        t_astrTableFieldNames = new String[t_iLength];
+
+                        t_itFieldElements = t_cFieldElements.iterator();
+
+                        t_iFieldIndex = 0;
+
+                        if  (t_itFieldElements != null)
                         {
-                            String[] t_astrTableFieldNames =
-                                new String[t_cFieldElements.size()];
-
-                            Iterator t_itFieldElements = t_cFieldElements.iterator();
-
-                            int t_iFieldIndex = 0;
-
-                            while  (   (t_itFieldElements != null)
-                                    && (t_itFieldElements.hasNext()))
+                            while  (t_itFieldElements.hasNext())
                             {
-                                AntFieldElement t_Field =
+                                t_Field =
                                     (AntFieldElement) t_itFieldElements.next();
 
                                 if  (t_Field != null)
@@ -310,36 +809,41 @@ public class DatabaseMetaDataRetrievalHandler
                                     t_astrTableFieldNames[t_iFieldIndex] =
                                         t_Field.getName();
 
-                                    t_MetaDataManager.addColumnType(
+                                    metaDataManager.addColumnType(
                                         t_Table.getName(),
                                         t_Field.getName(),
-                                        t_MetaDataUtils.getJavaType(t_Field.getType()));
+                                        metaDataUtils.getJavaType(t_Field.getType()));
 
-                                    Collection t_cFields =
-                                        (Collection)
-                                            t_mKeys.get(buildTableFieldsKey(t_Table.getName()));
+                                    t_TableFieldsKey =
+                                        buildTableFieldsKey(t_Table.getName());
+
+                                    t_cFields =
+                                        (Collection) t_mKeys.get(t_TableFieldsKey);
 
                                     if  (t_cFields == null)
                                     {
                                         t_cFields = new ArrayList();
-                                        t_mKeys.put(buildTableFieldsKey(t_Table.getName()), t_cFields);
+                                        t_mKeys.put(t_TableFieldsKey, t_cFields);
                                     }
 
                                     t_cFields.add(t_Field.getName());
 
                                     if  (t_Field.isPk())
                                     {
-                                        t_MetaDataManager.addPrimaryKey(
+                                        metaDataManager.addPrimaryKey(
                                             t_Table.getName(),
                                             t_Field.getName());
 
-                                        Collection t_cPks =
-                                            (Collection) t_mKeys.get(buildPkKey(t_Table.getName()));
+                                        t_TablePkKey =
+                                            buildPkKey(t_Table.getName());
+
+                                        t_cPks =
+                                            (Collection) t_mKeys.get(t_TablePkKey);
 
                                         if  (t_cPks == null)
                                         {
                                             t_cPks = new ArrayList();
-                                            t_mKeys.put(buildPkKey(t_Table.getName()), t_cPks);
+                                            t_mKeys.put(t_TablePkKey, t_cPks);
                                         }
 
                                         t_cPks.add(t_Field.getName());
@@ -351,8 +855,7 @@ public class DatabaseMetaDataRetrievalHandler
                                             t_Field.getName());
                                     }
 
-                                    Collection t_cFieldFks =
-                                        t_Field.getFieldFks();
+                                    t_cFieldFks = t_Field.getFieldFks();
 
                                     if  (t_cFieldFks != null)
                                     {
@@ -367,58 +870,85 @@ public class DatabaseMetaDataRetrievalHandler
                                 t_iFieldIndex++;
                             }
 
-                            t_MetaDataManager.addColumnNames(
+                            metaDataManager.addColumnNames(
                                 t_Table.getName(),
                                 t_astrTableFieldNames);
                         }
                     }
                 }
-
-                storeMetaDataManager(t_MetaDataManager, t_mAttributes);
             }
+        }
 
-            t_cTables = (Collection) t_mKeys.get(buildTableKey());
+        if  (t_cTables != null)
+        {
+            extractForeignKeys(
+                t_cTables, t_mKeys, metaDataManager, tableKey);
+        }
 
-            if  (t_cTables != null)
+        return result;
+    }
+
+    /**
+     * Extracts the procedures..
+     * @param extractedMap the already-extracted information.
+     * @param metaDataManager the database metadata manager.
+     * @param tableKey the key to store the tables.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition tables != null
+     * @precondition extractedMap != null
+     * @precondition metaDataManager != null
+     * @precondition tableKey != null
+     */
+    protected void extractForeignKeys(
+        final Collection tables,
+        final Map extractedMap,
+        final DatabaseMetaDataManager metaDataManager,
+        final Object tableKey)
+    {
+        Iterator t_itTables = tables.iterator();
+
+        if  (t_itTables != null)
+        {
+            while  (t_itTables.hasNext())
             {
-                Iterator t_itTables = t_cTables.iterator();
+                String t_strTableName = (String) t_itTables.next();
 
-                while  (   (t_itTables != null)
-                        && (t_itTables.hasNext()))
+                if  (t_strTableName != null)
                 {
-                    String t_strTableName = (String) t_itTables.next();
+                    Collection t_cFields =
+                        (Collection)
+                            extractedMap.get(
+                                buildTableFieldsKey(t_strTableName));
 
-                    if  (t_strTableName != null)
+                    if  (t_cFields != null)
                     {
-                        Collection t_cFields =
-                            (Collection)
-                                t_mKeys.get(
-                                    buildTableFieldsKey(
-                                        t_strTableName));
+                        Iterator t_itFields = t_cFields.iterator();
 
-                        if  (t_cFields != null)
+                        if  (t_itFields != null)
                         {
-                            Iterator t_itFields = t_cFields.iterator();
-
-                            while  (   (t_itFields != null)
-                                    && (t_itFields.hasNext()))
+                            while  (t_itFields.hasNext())
                             {
                                 String t_strFieldName =
                                     (String) t_itFields.next();
 
                                 Collection t_cFieldFks =
                                     (Collection)
-                                        t_mKeys.get(
+                                        extractedMap.get(
                                             buildFkKey(
                                                 t_strTableName,
                                                 t_strFieldName));
 
+                                Iterator t_itFieldFks = null;
+
                                 if  (t_cFieldFks != null)
                                 {
-                                    Iterator t_itFieldFks = t_cFieldFks.iterator();
+                                    t_itFieldFks =
+                                        t_cFieldFks.iterator();
+                                }
 
-                                    while  (   (t_itFieldFks != null)
-                                            && (t_itFieldFks.hasNext()))
+                                if  (t_itFieldFks != null)
+                                {
+                                    while  (t_itFieldFks.hasNext())
                                     {
                                         AntFieldFkElement t_FieldFk =
                                             (AntFieldFkElement)
@@ -426,7 +956,7 @@ public class DatabaseMetaDataRetrievalHandler
 
                                         if  (t_FieldFk != null)
                                         {
-                                            t_MetaDataManager.addForeignKey(
+                                            metaDataManager.addForeignKey(
                                                 t_strTableName,
                                                 t_strFieldName,
                                                 t_FieldFk.getTable(),
@@ -440,8 +970,6 @@ public class DatabaseMetaDataRetrievalHandler
                 }
             }
         }
-        
-        return result;
     }
 
     /**
@@ -486,7 +1014,7 @@ public class DatabaseMetaDataRetrievalHandler
             {
                 result = connection.getMetaData();
             }
-            catch  (Exception exception)
+            catch  (final SQLException exception)
             {
                 throw new BuildException(exception);
             }
@@ -501,21 +1029,14 @@ public class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameter map.
      * @return the table information.
      * @throws BuildException if the retrieval process cannot be performed.
+     * @precondition parameters != null
      */
     protected AntTablesElement retrieveTablesElement(final Map parameters)
         throws  BuildException
     {
-        AntTablesElement result = null;
-
-        if  (parameters != null) 
-        {
-            result =
-                (AntTablesElement)
-                    parameters.get(
-                        ParameterValidationHandler.TABLES);
-        }
-
-        return result;
+        return
+            (AntTablesElement)
+                parameters.get(ParameterValidationHandler.TABLES);
     }
 
     /**
@@ -552,19 +1073,22 @@ public class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameter map.
      * @return the boolean value.
      * @throws BuildException if the retrieval process cannot be performed.
+     * @precondition parameters != null
      */
     protected boolean retrieveBoolean(final String name, final Map parameters)
         throws  BuildException
     {
-        Boolean t_Result = null;
+        boolean result = false;
 
-        if  (parameters != null) 
+        Object t_Flag = parameters.get(name);
+
+        if  (   (t_Flag != null)
+             && (t_Flag instanceof Boolean))
         {
-            t_Result = (Boolean) parameters.get(name);
+            result = ((Boolean) t_Flag).booleanValue();
         }
 
-        return (   (t_Result != null)
-                && (t_Result.booleanValue()));
+        return result;
     }
 
     /**
@@ -579,28 +1103,23 @@ public class DatabaseMetaDataRetrievalHandler
      * @param lazyProcedureExtraction if the procedure metadata should not be
      * extracted inmediately.
      * @param parameters the parameter map.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the metadata manager instance.
      * @throws BuildException if the retrieval process cannot be performed.
+     * @precondition parameters != null
      */
     protected DatabaseMetaDataManager buildMetaDataManager(
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        final Map     parameters,
-        final Project project,
-        final Task    task)
+        final Map parameters)
       throws  BuildException
     {
         DatabaseMetaDataManager result = null;
 
         if  (parameters != null) 
         {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(DATABASE_METADATA_MANAGER);
+            result = retrieveDatabaseMetaDataManager(parameters);
 
             if  (result == null) 
             {
@@ -612,11 +1131,9 @@ public class DatabaseMetaDataRetrievalHandler
                         lazyTableExtraction,
                         disableProcedureExtraction,
                         lazyProcedureExtraction,
-                        (DatabaseMetaData) parameters.get(DATABASE_METADATA),
+                        retrieveDatabaseMetaData(parameters),
                         (String) parameters.get(ParameterValidationHandler.JDBC_CATALOG),
-                        (String) parameters.get(ParameterValidationHandler.JDBC_SCHEMA),
-                        project,
-                        task);
+                        (String) parameters.get(ParameterValidationHandler.JDBC_SCHEMA));
             }
         }
 
@@ -638,60 +1155,51 @@ public class DatabaseMetaDataRetrievalHandler
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the metadata manager instance.
      * @throws org.apache.tools.ant.BuildException whenever the required
      * parameters are not present or valid.
+     * @precondition metaData != null
      */
     protected DatabaseMetaDataManager buildMetaDataManager(
-        final String[]         tableNames,
-        final String[]         procedureNames,
-        final boolean          disableTableExtraction,
-        final boolean          lazyTableExtraction,
-        final boolean          disableProcedureExtraction,
-        final boolean          lazyProcedureExtraction,
+        final String[] tableNames,
+        final String[] procedureNames,
+        final boolean disableTableExtraction,
+        final boolean lazyTableExtraction,
+        final boolean disableProcedureExtraction,
+        final boolean lazyProcedureExtraction,
         final DatabaseMetaData metaData,
-        final String           catalog,
-        final String           schema,
-        final Project          project,
-        final Task             task)
+        final String catalog,
+        final String schema)
       throws  BuildException
     {
         DatabaseMetaDataManager result = null;
 
-        if  (metaData != null)
+        try 
         {
-            try 
+            result =
+                new DatabaseMetaDataManager(
+                    tableNames,
+                    procedureNames,
+                    disableTableExtraction,
+                    lazyTableExtraction,
+                    disableProcedureExtraction,
+                    lazyProcedureExtraction,
+                    metaData,
+                    catalog,
+                    schema);
+        }
+        catch  (final Exception exception)
+        {
+            Log t_Log = UniqueLogFactory.getLog(getClass());
+                
+            if  (t_Log != null)
             {
-                result =
-                    new DatabaseMetaDataManager(
-                        tableNames,
-                        procedureNames,
-                        disableTableExtraction,
-                        lazyTableExtraction,
-                        disableProcedureExtraction,
-                        lazyProcedureExtraction,
-                        metaData,
-                        catalog,
-                        schema,
-                        project,
-                        task);
+                t_Log.error(
+                    "Cannot build a database metadata manager.",
+                    exception);
             }
-            catch  (final Exception exception)
-            {
-                if  (project != null)
-                {
-                    project.log(
-                        task,
-                        "Cannot build a database metadata manager ("
-                        + exception
-                        + ")",
-                        Project.MSG_ERR);
-                }
 
-                throw new BuildException(exception);
-            }
+            throw new BuildException(exception);
         }
 
         return result;
@@ -702,36 +1210,61 @@ public class DatabaseMetaDataRetrievalHandler
      * @param metaData the database metadata.
      * @param parameters the parameter map.
      * @throws BuildException if the metadata cannot be stored for any reason.
+     * @precondition metaData != null
+     * @precondition parameters != null
      */
     protected void storeMetaData(
-        final DatabaseMetaData metaData,
-        final Map              parameters)
+        final DatabaseMetaData metaData, final Map parameters)
       throws  BuildException
     {
-        if  (   (metaData   != null)
-             && (parameters != null))
-        {
-            parameters.put(DATABASE_METADATA, metaData);
-        }
+        parameters.put(DATABASE_METADATA, metaData);
     }
 
+    /**
+     * Stores a flag indicating the metadata extraction has already been done.
+     * @param parameters the parameter map.
+     * @precondition parameters != null
+     */
+    protected void storeAlreadyDoneFlag(final Map parameters)
+    {
+        parameters.put(METADATA_EXTRACTION_ALREADY_DONE, Boolean.TRUE);
+    }
+
+    /**
+     * Retrieves the flag which indicates whether the metadata extraction
+     * has been done already.
+     * @param parameters the parameter map.
+     * @precondition metaData != null
+     */
+    protected boolean retrieveAlreadyDoneFlag(final Map parameters)
+    {
+        boolean result = false;
+
+        Object t_Flag = parameters.get(METADATA_EXTRACTION_ALREADY_DONE);
+
+        if  (   (t_Flag  != null)
+             && (t_Flag instanceof Boolean))
+        {
+            result = ((Boolean) t_Flag).booleanValue();
+        }
+
+        return result;
+    }
 
     /**
      * Stores the table names in the attribute map.
      * @param tableNames the table names.
      * @param parameters the parameter map.
      * @throws BuildException if the table names cannot be stored for any reason.
+     * @precondition tableNames != null
+     * @precondition parameters != null
      */
     protected void storeTableNames(
         final String[] tableNames,
-        final Map      parameters)
+        final Map parameters)
       throws  BuildException
     {
-        if  (   (tableNames != null)
-             && (parameters != null))
-        {
-            parameters.put(TABLE_NAMES, tableNames);
-        }
+        parameters.put(TABLE_NAMES, tableNames);
     }
 
     /**
@@ -739,17 +1272,15 @@ public class DatabaseMetaDataRetrievalHandler
      * @param metaDataManager the database metadata manager.
      * @param parameters the parameter map.
      * @throws BuildException if the manager cannot be stored for any reason.
+     * @precondition metaDataManager != null
+     * @precondition parameters != null
      */
     protected void storeMetaDataManager(
         final DatabaseMetaDataManager metaDataManager,
-        final Map                    parameters)
+        final Map parameters)
       throws  BuildException
     {
-        if  (   (metaDataManager != null)
-             && (parameters      != null))
-        {
-            parameters.put(DATABASE_METADATA_MANAGER, metaDataManager);
-        }
+        parameters.put(DATABASE_METADATA_MANAGER, metaDataManager);
     }
 
     /**
@@ -813,4 +1344,120 @@ public class DatabaseMetaDataRetrievalHandler
     {
         return buildFkKey(firstKey) + ".,.," + secondKey;
     }
+
+    /**
+     * Checks whether the database vendor matches this handler.
+     * @param metaData the database metadata.
+     * @return <code>true</code> in case it matches.
+     * @throws BuildException if the check fails.
+     * @precondition metaData != null
+     */
+    protected boolean checkVendor(final DatabaseMetaData metaData)
+        throws  BuildException
+    {
+        boolean result = false;
+
+        BuildException t_ExceptionToThrow = null;
+
+        Log t_Log = UniqueLogFactory.getLog(getClass());
+
+        String t_strProduct = null;
+        String t_strVersion = null;
+        int t_iMajorVersion = 0;
+        int t_iMinorVersion = 0;
+
+        try
+        {
+            t_strProduct = metaData.getDatabaseProductName();
+        }
+        catch  (final SQLException sqlException)
+        {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve database vendor's product name.",
+                    sqlException);
+            }
+
+            t_ExceptionToThrow =
+                new BuildException(
+                    "cannot.retrieve.vendor.product.name",
+                    sqlException);
+        }
+
+        if  (t_ExceptionToThrow == null)
+        {
+            try
+            {
+                t_strVersion = metaData.getDatabaseProductVersion();
+            }
+            catch  (final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Cannot retrieve database vendor's product version.",
+                        sqlException);
+                }
+            }
+
+            try
+            {
+                t_iMajorVersion = metaData.getDatabaseMajorVersion();
+            }
+            catch  (final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                          "Cannot retrieve database vendor's major version "
+                        + "number.",
+                        sqlException);
+                }
+            }
+
+            try
+            {
+                t_iMinorVersion = metaData.getDatabaseMinorVersion();
+            }
+            catch  (final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                          "Cannot retrieve database vendor's major version "
+                        + "number.",
+                        sqlException);
+                }
+            }
+
+            result =
+                checkVendor(
+                    t_strProduct,
+                    t_strVersion,
+                    t_iMajorVersion,
+                    t_iMinorVersion);
+        }
+        else
+        {
+            throw t_ExceptionToThrow;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether the database vendor matches this handler.
+     * @param product the product name.
+     * @param version the product version.
+     * @param major the major version number.
+     * @param minor the minor version number.
+     * @return <code>true</code> in case it matches.
+     * @precondition product != null
+     */
+    protected abstract boolean checkVendor(
+        final String productName,
+        final String productVersion,
+        final int majorVersion,
+        final int minorVersion);
 }

@@ -45,12 +45,6 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Represents entities able to create base DAO factory templates.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -64,8 +58,6 @@ public interface BaseDAOFactoryTemplateFactory
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param projectPackageName the project package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -73,8 +65,6 @@ public interface BaseDAOFactoryTemplateFactory
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
-        final String projectPackageName,
-        final Project project,
-        final Task task)
+        final String projectPackageName)
       throws  QueryJException;
 }

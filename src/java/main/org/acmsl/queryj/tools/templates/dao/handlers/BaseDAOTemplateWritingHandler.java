@@ -87,43 +87,63 @@ public class BaseDAOTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                retrieveBaseDAOTemplates(parameters),
+                retrieveOutputDir(parameters),
+                BaseDAOTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Writes the BaseDAO templates.
+     * @param templates the templates to write.
+     * @param outputDir the output dir.
+     * @param generator the <code>BaseDAOTemplateGenerator</code>
+     * instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition templates != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final BaseDAOTemplate[] templates,
+        final File outputDir,
+        final BaseDAOTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
+            int t_iLength = (templates != null) ? templates.length : 0;
+
+            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
             {
-                Map attributes = command.getAttributeMap();
-
-                BaseDAOTemplateGenerator t_BaseDAOTemplateGenerator =
-                    BaseDAOTemplateGenerator.getInstance();
-
-                BaseDAOTemplate[] t_aBaseDAOTemplates =
-                    retrieveBaseDAOTemplates(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                != null) 
-                     && (t_aBaseDAOTemplates        != null)
-                     && (t_BaseDAOTemplateGenerator != null))
-                {
-                    for  (int t_iBaseDAOIndex = 0;
-                              t_iBaseDAOIndex < t_aBaseDAOTemplates.length;
-                              t_iBaseDAOIndex++)
-                    {
-                        t_BaseDAOTemplateGenerator.write(
-                            t_aBaseDAOTemplates[t_iBaseDAOIndex], t_OutputDir);
-                    }
-                }
+                generator.write(templates[t_iIndex], outputDir);
             }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -134,21 +154,16 @@ public class BaseDAOTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected BaseDAOTemplate[] retrieveBaseDAOTemplates(Map parameters)
-        throws  BuildException
+    protected BaseDAOTemplate[] retrieveBaseDAOTemplates(
+        final Map parameters)
+      throws  BuildException
     {
-        BaseDAOTemplate[] result = EMPTY_BASE_DAO_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (BaseDAOTemplate[])
-                    parameters.get(
-                        TemplateMappingManager.BASE_DAO_TEMPLATES);
-        }
-        
-        return result;
+        return
+            (BaseDAOTemplate[])
+                parameters.get(
+                    TemplateMappingManager.BASE_DAO_TEMPLATES);
     }
 
     /**
@@ -156,43 +171,30 @@ public class BaseDAOTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
+    protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveBaseDAOFolder(
-                    (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters));
-        }
-
-        return result;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the package name from the attribute map.
+     * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
      */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveBaseDAOFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

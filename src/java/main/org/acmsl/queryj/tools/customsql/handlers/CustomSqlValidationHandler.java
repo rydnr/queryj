@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.MetaDataUtils;
 
 /*
@@ -62,8 +63,6 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -140,14 +139,13 @@ public class CustomSqlValidationHandler
             }
             catch  (final BuildException buildException)
             {
-                Project t_Project = t_AntCommand.getProject();
+                QueryJLog t_Log = t_AntCommand.getLog();
 
-                if  (t_Project != null)
+                if  (t_Log != null)
                 {
-                    t_Project.log(
-                        t_AntCommand.getTask(),
-                        buildException.getMessage(),
-                        Project.MSG_ERR);
+                    t_Log.error(
+                        "Cannot validate custom SQL information.",
+                        buildException);
                 }
             }
         }
@@ -169,8 +167,7 @@ public class CustomSqlValidationHandler
 
         handle(
             command.getAttributeMap(),
-            command.getProject(),
-            command.getTask());
+            command.getLog());
 
         return result;
     }
@@ -178,22 +175,19 @@ public class CustomSqlValidationHandler
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param log the log instance.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected void handle(
         final Map parameters,
-        final Project project,
-        final Task task)
+        final QueryJLog log)
       throws  BuildException
     {
         handle(
             retrieveCustomSqlProvider(parameters),
             retrieveConnection(parameters),
-            project,
-            task);
+            log);
     }
 
 
@@ -201,20 +195,22 @@ public class CustomSqlValidationHandler
      * Handles given information.
      * @param customSqlProvider the custom sql provider.
      * @param connection the connection.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param log the log instance.
      * @throws BuildException if the build process cannot be performed.
-     * @precondition customSqlProvider != null
      * @precondition connection != null
      */
     protected void handle(
         final CustomSqlProvider customSqlProvider,
         final Connection connection,
-        final Project project,
-        final Task task)
+        final QueryJLog log)
       throws  BuildException
     {
-        Collection t_cElements = customSqlProvider.getCollection();
+        Collection t_cElements = null;
+
+        if  (customSqlProvider != null)
+        {
+            t_cElements = customSqlProvider.getCollection();
+        }
 
         if  (t_cElements != null)
         {
@@ -241,8 +237,7 @@ public class CustomSqlValidationHandler
                                 t_SqlElement,
                                 customSqlProvider,
                                 connection,
-                                project,
-                                task);
+                                log);
                         }
                     }
                 }
@@ -255,8 +250,7 @@ public class CustomSqlValidationHandler
      * @param sqlElement such element.
      * @param customSqlProvider the custom sql provider.
      * @param connection the connection.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param log the log instance.
      * @throws BuildException if the sql is not valid.
      * @precondition sqlElement != null
      * @precondition customSqlProvider != null
@@ -266,8 +260,7 @@ public class CustomSqlValidationHandler
         final SqlElement sqlElement,
         final CustomSqlProvider customSqlProvider,
         final Connection connection,
-        final Project project,
-        final Task task)
+        final QueryJLog log)
       throws  BuildException
     {
         String t_strSql = sqlElement.getValue();
@@ -276,11 +269,12 @@ public class CustomSqlValidationHandler
 
         BuildException t_ExceptionToThrow = null;
 
-        project.log(
-            task,
-            "Validating [" + t_strSql + "]",
-            Project.MSG_VERBOSE);
-
+        if  (log != null)
+        {
+            log.trace(
+                "Validating [" + t_strSql + "]");
+        }
+        
         PreparedStatement t_PreparedStatement = null;
 
         // The standard is true, but we assume false.
@@ -292,11 +286,12 @@ public class CustomSqlValidationHandler
         }
         catch  (final SQLException sqlException)
         {
-            project.log(
-                task,
-                  "Cannot retrieve auto-commit flag: "
-                + sqlException.getMessage(),
-                Project.MSG_WARN);
+            if  (log != null)
+            {
+                log.warn(
+                    "Cannot retrieve auto-commit flag.",
+                    sqlException);
+            }
         }
 
         try
@@ -305,11 +300,12 @@ public class CustomSqlValidationHandler
         }
         catch  (final SQLException sqlException)
         {
-            project.log(
-                task,
-                  "Cannot set auto-commit flag to false: "
-                + sqlException.getMessage(),
-                Project.MSG_WARN);
+            if  (log != null)
+            {
+                log.warn(
+                    "Cannot set auto-commit flag to false.",
+                    sqlException);
+            }
         }
 
         try
@@ -332,8 +328,7 @@ public class CustomSqlValidationHandler
                     customSqlProvider,
                     ConversionUtils.getInstance(),
                     MetaDataUtils.getInstance(),
-                    project,
-                    task);
+                    log);
 
                 if  (   (SqlElement.INSERT.equals(sqlElement.getType()))
                      || (SqlElement.DELETE.equals(sqlElement.getType())))
@@ -360,11 +355,12 @@ public class CustomSqlValidationHandler
             }
             catch  (final SQLException anotherSqlException)
             {
-                project.log(
-                    task,
-                      "Cannot close prepared statement: "
-                    + anotherSqlException.getMessage(),
-                    Project.MSG_WARN);
+                if  (log != null)
+                {
+                    log.warn(
+                        "Cannot close prepared statement.",
+                        anotherSqlException);
+                }
             }
 
             try
@@ -373,11 +369,12 @@ public class CustomSqlValidationHandler
             }
             catch  (final SQLException sqlException)
             {
-                project.log(
-                    task,
-                      "Cannot restore auto-commit flag: "
-                    + sqlException.getMessage(),
-                    Project.MSG_WARN);
+                if  (log != null)
+                {
+                    log.warn(
+                        "Cannot restore auto-commit flag.",
+                        sqlException);
+                }
             }
 
             try
@@ -386,17 +383,11 @@ public class CustomSqlValidationHandler
             }
             catch  (final SQLException sqlException)
             {
-                if  (t_ExceptionToWrap == null)
+                if  (log != null)
                 {
-                    t_ExceptionToWrap = sqlException;
-                }
-                else
-                {
-                    project.log(
-                        task,
-                          "Cannot close prepared statement: "
-                        + sqlException.getMessage(),
-                        Project.MSG_WARN);
+                    log.warn(
+                        "Cannot rollback connection.",
+                        sqlException);
                 }
             }                
         }
@@ -420,8 +411,7 @@ public class CustomSqlValidationHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param conversionUtils the <code>ConversionUtils</code> instance.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param log the log instance.
      * @throws SQLException if the binding process fails.
      * @throws BuildException if some problem occurs.
      * @precondition sqlElement != null
@@ -429,7 +419,6 @@ public class CustomSqlValidationHandler
      * @precondition customSqlProvider != null
      * @precondition conversionUtils != null
      * @precondition metaDataUtils != null
-     * @precondition project != null
      */
     protected void bindParameters(
         final SqlElement sqlElement,
@@ -437,8 +426,7 @@ public class CustomSqlValidationHandler
         final CustomSqlProvider customSqlProvider,
         final ConversionUtils conversionUtils,
         final MetaDataUtils metaDataUtils,
-        final Project project,
-        final Task task)
+        final QueryJLog log)
      throws  SQLException,
              BuildException
     {
@@ -457,8 +445,10 @@ public class CustomSqlValidationHandler
 
         String t_strType = null;
 
+        int t_iLength = (t_aParameters != null) ? t_aParameters.length : 0;
+        
         for  (int t_iParameterIndex = 0;
-                  t_iParameterIndex < t_aParameters.length;
+                  t_iParameterIndex < t_iLength;
                   t_iParameterIndex++)
         {
             t_Method = null;
@@ -516,10 +506,12 @@ public class CustomSqlValidationHandler
                             }
                             catch  (final ClassNotFoundException fourthClassNotFoundException)
                             {
-                                project.log(
-                                    task,
-                                    "Cannot find parameter class: " + t_strType,
-                                    Project.MSG_WARN);
+                                if  (log != null)
+                                {
+                                    log.warn(
+                                        "Cannot find parameter class: " + t_strType,
+                                        fourthClassNotFoundException);
+                                }
                             }
                         }
                     }
@@ -732,11 +724,14 @@ public class CustomSqlValidationHandler
                     }
                     catch  (final IllegalAccessException illegalAccessException)
                     {
-                        project.log(
-                            task,
-                            "Could not bind parameter via PreparedStatement.set"
-                            + t_strType + "(int, " + t_Type.getName() + ")",
-                            Project.MSG_WARN);
+                        if  (log != null)
+                        {
+                            log.warn(
+                                  "Could not bind parameter via "
+                                + "PreparedStatement.set" + t_strType
+                                + "(int, " + t_Type.getName() + ")",
+                                illegalAccessException);
+                        }
 
                         exceptionToThrow =
                             new BuildException(
@@ -746,11 +741,14 @@ public class CustomSqlValidationHandler
                     }
                     catch  (final InvocationTargetException invocationTargetException)
                     {
-                        project.log(
-                            task,
-                            "Could not bind parameter via PreparedStatement.set"
-                            + t_strType + "(int, " + t_Type.getName() + ")",
-                            Project.MSG_WARN);
+                        if  (log != null)
+                        {
+                            log.warn(
+                                  "Could not bind parameter via "
+                                + "PreparedStatement.set" + t_strType
+                                + "(int, " + t_Type.getName() + ")",
+                                invocationTargetException);
+                        }
 
                         exceptionToThrow =
                             new BuildException(

@@ -46,12 +46,6 @@ import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the subtemplates used to generate base value objects according to
  * database metadata.
@@ -136,8 +130,6 @@ public abstract class AbstractBaseValueObjectTemplate
      * @param classStart the class start.
      * @param fieldValueGetterMethod the field value getter method.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public AbstractBaseValueObjectTemplate(
         final String header,
@@ -151,11 +143,8 @@ public abstract class AbstractBaseValueObjectTemplate
         final String classDefinition,
         final String classStart,
         final String fieldValueGetterMethod,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

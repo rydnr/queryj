@@ -111,8 +111,6 @@ public class KeywordRepositoryTemplateBuildHandler
         return
             handle(
                 command.getAttributeMap(),
-                command.getProject(),
-                command.getTask(),
                 MetaDataUtils.getInstance(),
                 StringValidator.getInstance());
     }
@@ -120,22 +118,16 @@ public class KeywordRepositoryTemplateBuildHandler
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
-     * @precondition project != null
-     * @precondition task != null
      * @precondition metaDataUtils != null
      * @precondition stringValidator != null
      */
     protected boolean handle(
         final Map parameters,
-        final Project project,
-        final Task task,
         final MetaDataUtils metaDataUtils,
         final StringValidator stringValidator)
         throws  BuildException
@@ -144,7 +136,7 @@ public class KeywordRepositoryTemplateBuildHandler
 
         KeywordRepositoryTemplate t_KeywordRepositoryTemplate =
             buildKeywordRepositoryTemplate(
-                parameters, project, task);
+                parameters);
 
         if  (t_KeywordRepositoryTemplate == null)
         {
@@ -196,9 +188,7 @@ public class KeywordRepositoryTemplateBuildHandler
                                     metaDataUtils.getQueryJFieldType(
                                         t_MetaDataManager.getColumnType(
                                             t_Field.getTableName(),
-                                            t_Field.getName()),
-                                        project,
-                                        task));
+                                            t_Field.getName())));
                             }
                         }
                     }
@@ -305,22 +295,18 @@ public class KeywordRepositoryTemplateBuildHandler
      * Builds a procedure repository template using the information stored
      * in the attribute map.
      * @param parameters the parameter map.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the ProcedureRepositoryTemplate instance.
      * @throws BuildException if the repository cannot be created.
      * @precondition parameters != null
      */
     protected KeywordRepositoryTemplate buildKeywordRepositoryTemplate(
-        final Map parameters, final Project project, final Task task)
+        final Map parameters)
       throws  BuildException
     {
         return
             buildKeywordRepositoryTemplate(
                 retrievePackage(parameters),
                 retrieveRepository(parameters),
-                project,
-                task,
                 KeywordRepositoryTemplateGenerator.getInstance());
     }
 
@@ -328,8 +314,6 @@ public class KeywordRepositoryTemplateBuildHandler
      * Builds a procedure repository template using given information.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @param templateFactory the template factory.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
@@ -341,14 +325,12 @@ public class KeywordRepositoryTemplateBuildHandler
     protected KeywordRepositoryTemplate buildKeywordRepositoryTemplate(
         final String packageName,
         final String repository,
-        final Project project,
-        final Task task,
         final KeywordRepositoryTemplateFactory templateFactory)
       throws  BuildException
     {
         return
             templateFactory.createKeywordRepositoryTemplate(
-                packageName, repository, project, task);
+                packageName, repository);
     }
 
     /**

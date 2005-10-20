@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.handlers.
+*              org.acmsl.queryj.tools.templates.handlers.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.handlers;
+package org.acmsl.queryj.tools.templates.handlers;
 
 
 /*
@@ -95,24 +95,24 @@ public class HandlersSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.handlers");
+    new TestSuite("org.acmsl.queryj.tools.templates.handlers");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TableTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateHandlerBundleTest.class);
     
     
     

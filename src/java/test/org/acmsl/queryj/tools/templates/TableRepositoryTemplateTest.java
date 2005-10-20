@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.
+*              org.acmsl.queryj.tools.templates.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates;
+package org.acmsl.queryj.tools.templates;
 
 /*
 * Importing project classes.
@@ -111,9 +111,7 @@ extends TestCase
     return
         new org.acmsl.queryj.tools.templates.TableRepositoryTemplate(
             "com.foo.bar", // package name
-            "query",
-            null,
-            null); // repository
+            "query"); // repository
     // JUnitDoclet end method testcase.createInstance
   }
   

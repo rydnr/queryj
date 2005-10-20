@@ -48,16 +48,25 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.TableRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+
+/*
+ * Importing some Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
@@ -118,20 +127,14 @@ public class TableRepositoryTemplateBuildHandler
 
         Map t_mAttributes = command.getAttributeMap();
 
-        String t_strEngine =
-            retrieveEngine(
-                t_mAttributes, command.getProject(), command.getTask());
+        String t_strEngine = retrieveEngine(t_mAttributes);
 
-        String t_strEngineVersion =
-            retrieveEngineVersion(
-                t_mAttributes, command.getProject(), command.getTask());
+        String t_strEngineVersion = retrieveEngineVersion(t_mAttributes);
 
         TableRepositoryTemplateBuildHandler t_ActualHandler =
             retrieveActualHandler(
                 t_strEngine,
-                t_strEngineVersion,
-                command.getProject(),
-                command.getTask());
+                t_strEngineVersion);
 
         if  (t_ActualHandler != null)
         {
@@ -146,18 +149,16 @@ public class TableRepositoryTemplateBuildHandler
         }
         else 
         {
-            Project t_Project = command.getProject();
+            Log t_Log = UniqueLogFactory.getLog(getClass());
 
-            if  (t_Project != null)
+            if  (t_Log != null)
             {
-                t_Project.log(
-                    command.getTask(), 
+                t_Log.error(
                       "Cannot retrieve handler for generating "
                     + "the table repository for "
                     + t_strEngine
                     + ", "
-                    + t_strEngineVersion,
-                    Project.MSG_ERR);
+                    + t_strEngineVersion);
             }
 
             result = true;
@@ -178,9 +179,7 @@ public class TableRepositoryTemplateBuildHandler
     {
         storeTableRepositoryTemplate(
             buildTableRepositoryTemplate(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask()),
+                command.getAttributeMap()),
             command.getAttributeMap());
 
         return false;
@@ -189,14 +188,11 @@ public class TableRepositoryTemplateBuildHandler
     /**
      * Retrieves the engine from given attributes.
      * @param attributes the command attributes.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the engine information.
      * @throws BuildException if the engine cannot be retrieved.
      * @precondition attributes != null
      */
-    protected String retrieveEngine(
-        final Map attributes, final Project project, final Task task)
+    protected String retrieveEngine(final Map attributes)
       throws  BuildException
     {
         String result = "";
@@ -212,15 +208,15 @@ public class TableRepositoryTemplateBuildHandler
             {
                 result = t_DatabaseMetaData.getDatabaseProductName();
             }
-            catch  (SQLException sqlException)
+            catch  (final SQLException sqlException)
             {
-                if  (project != null)
+                Log t_Log = UniqueLogFactory.getLog(getClass());
+                
+                if  (t_Log != null)
                 {
-                    project.log(
-                        task,
-                          "Cannot retrieve engine's name"
-                        + sqlException,
-                        Project.MSG_ERR);
+                    t_Log.error(
+                        "Cannot retrieve engine's name.",
+                        sqlException);
                 }
 
                 throw
@@ -233,19 +229,15 @@ public class TableRepositoryTemplateBuildHandler
         return result;
     }
 
-
     /**
      * Retrieves the engine version from given attributes.
      * @param attributes the command attributes.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the engine version information.
      * @throws BuildException if the engine cannot be retrieved.
      * @precondition attributes != null
      */
-    protected String retrieveEngineVersion(
-        final Map attributes, final Project project, final Task task)
-      throws  BuildException
+    protected String retrieveEngineVersion(final Map attributes)
+        throws  BuildException
     {
         String result = "";
 
@@ -260,15 +252,15 @@ public class TableRepositoryTemplateBuildHandler
             {
                 result = t_DatabaseMetaData.getDatabaseProductVersion();
             }
-            catch  (SQLException sqlException)
+            catch  (final SQLException sqlException)
             {
-                if  (project != null)
+                Log t_Log = UniqueLogFactory.getLog(getClass());
+                
+                if  (t_Log != null)
                 {
-                    project.log(
-                        task,
-                          "Cannot retrieve engine's version"
-                        + sqlException,
-                        Project.MSG_ERR);
+                    t_Log.error(
+                        "Cannot retrieve engine's version.",
+                        sqlException);
                 }
 
                 throw
@@ -285,16 +277,11 @@ public class TableRepositoryTemplateBuildHandler
      * Retrieves the actual handler.
      * @param engine the engine.
      * @param engineVersion the engine version.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the concrete handler.
      * @precondition engine != null
      */
     protected TableRepositoryTemplateBuildHandler retrieveActualHandler(
-        final String  engine,
-        final String  engineVersion,
-        final Project project,
-        final Task    task)
+        final String engine, final String engineVersion)
     {
         TableRepositoryTemplateBuildHandler result = null;
 
@@ -308,6 +295,8 @@ public class TableRepositoryTemplateBuildHandler
 
         if  (t_mMappings != null)
         {
+            Log t_Log = UniqueLogFactory.getLog(getClass());
+                        
             Object t_Key = buildKey(engine, engineVersion);
             Object t_Value = t_mMappings.get(t_Key);
 
@@ -348,32 +337,28 @@ public class TableRepositoryTemplateBuildHandler
                             t_mMappings.put(t_Key, result);
                         }
                     }
-                    catch  (ClassNotFoundException classNotFoundException)
+                    catch  (final ClassNotFoundException classNotFoundException)
                     {
-                        if  (project != null)
+                        if  (t_Log != null)
                         {
-                            project.log(
-                                task,
-                                "Invalid table repository handler: "
-                                + classNotFoundException,
-                                Project.MSG_ERR);
+                            t_Log.error(
+                                "Invalid table repository handler.",
+                                classNotFoundException);
                         }
 
                         throw
                             new BuildException(
-                                "unknown.table.repository.build."
+                                  "unknown.table.repository.build."
                                 + "handler.class",
                                 classNotFoundException);
                     }
-                    catch  (InstantiationException instantiationException)
+                    catch  (final InstantiationException instantiationException)
                     {
-                        if  (project != null)
+                        if  (t_Log != null)
                         {
-                            project.log(
-                                task,
-                                "Invalid table repository handler: "
-                                + instantiationException,
-                                Project.MSG_ERR);
+                            t_Log.error(
+                                "Invalid table repository handler.",
+                                instantiationException);
                         }
 
                         throw
@@ -381,16 +366,14 @@ public class TableRepositoryTemplateBuildHandler
                                 "invalid.table.repository.build.handler.class",
                                 instantiationException);
                     }
-                    catch  (IllegalAccessException illegalAccessException)
+                    catch  (final IllegalAccessException illegalAccessException)
                     {
-                        if  (project != null)
+                        if  (t_Log != null)
                         {
-                            project.log(
-                                task,
-                                "Forbidden access to table repository "
-                                + "build handler: "
-                                + illegalAccessException,
-                                Project.MSG_ERR);
+                            t_Log.error(
+                                  "Forbidden access to table repository "
+                                + "build handler.",
+                                illegalAccessException);
                         }
 
                         throw
@@ -474,17 +457,13 @@ public class TableRepositoryTemplateBuildHandler
      * Builds a table repository template using the information stored in the
      * attribute map.
      * @param parameters the parameter map.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the TableRepositoryTemplate instance.
      * @throws BuildException if the repository cannot be created.
      * @precondition parameters != null
      * @precondition PackageUtils.getInstance() != null
      */
     protected TableRepositoryTemplate buildTableRepositoryTemplate(
-        final Map parameters,
-        final Project project,
-        final Task task)
+        final Map parameters)
       throws  BuildException
     {
         TableRepositoryTemplate result = null;
@@ -499,9 +478,7 @@ public class TableRepositoryTemplateBuildHandler
                             ParameterValidationHandler.PACKAGE)),
                 (String)
                     parameters.get(
-                        ParameterValidationHandler.REPOSITORY),
-                project,
-                task);
+                        ParameterValidationHandler.REPOSITORY));
 
         if  (result != null) 
         {
@@ -529,8 +506,6 @@ public class TableRepositoryTemplateBuildHandler
      * Builds a table repository template using given information.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
      * information is not valid.
@@ -539,16 +514,37 @@ public class TableRepositoryTemplateBuildHandler
      * @precondition TableRepositoryTemplateGenerator.getInstance() != null
      */
     protected TableRepositoryTemplate buildTableRepositoryTemplate(
-        final String packageName,
-        final String repository,
-        final Project project,
-        final Task task)
+        final String packageName, final String repository)
       throws  BuildException
     {
         return
-            TableRepositoryTemplateGenerator.getInstance()
-                .createTableRepositoryTemplate(
-                    packageName, repository, project, task);
+            buildTableRepositoryTemplate(
+                packageName,
+                repository,
+                TableRepositoryTemplateGenerator.getInstance());
+    }
+    
+    /**
+     * Builds a table repository template using given information.
+     * @param packageName the package name.
+     * @param repository the repository.
+     * @param factory the template factory.
+     * @return such template.
+     * @throws org.apache.tools.ant.BuildException whenever the repository
+     * information is not valid.
+     * @precondition packageName != null
+     * @precondition repository != null
+     * @precondition factory != null
+     */
+    protected TableRepositoryTemplate buildTableRepositoryTemplate(
+        final String packageName,
+        final String repository,
+        final TableRepositoryTemplateFactory factory)
+      throws  BuildException
+    {
+        return
+            factory.createTableRepositoryTemplate(
+                packageName, repository);
     }
 
     /**
@@ -560,9 +556,9 @@ public class TableRepositoryTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTableRepositoryTemplate(
-            TableRepositoryTemplate tableRepositoryTemplate,
-            Map                     parameters)
-        throws  BuildException
+        final TableRepositoryTemplate tableRepositoryTemplate,
+        final Map parameters)
+      throws  BuildException
     {
         parameters.put(
             TemplateMappingManager.TABLE_REPOSITORY_TEMPLATE,

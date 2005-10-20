@@ -45,16 +45,11 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the elements required to create the DAO sources.
  * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * >Jose San Leandro</a>
+ * @version $Revision$ at $Date$ by $Author$
  */
 public abstract class AbstractDAOTemplate
     extends  AbstractTemplate
@@ -546,8 +541,6 @@ public abstract class AbstractDAOTemplate
      * @param pkExtractorParameterRetrieval the PK extractor parameter
      * retrieval subtemplate.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractDAOTemplate(
         final TableTemplate tableTemplate,
@@ -625,11 +618,8 @@ public abstract class AbstractDAOTemplate
         final String pkResultSetExtractor,
         final String pkExtractorSimpleParameterRetrieval,
         final String pkExtractorParameterRetrieval,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetTableTemplate(
             tableTemplate);
 

@@ -56,8 +56,6 @@ import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -98,35 +96,24 @@ public class TableTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
-    protected boolean handle(
-        final Map parameters,
-        final Project project,
-        final Task task)
-      throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  BuildException
     {
         handle(
             parameters,
             retrieveDatabaseMetaDataManager(parameters),
             retrieveTablePackage(parameters),
             TableTemplateGenerator.getInstance(),
-            MetaDataUtils.getInstance(),
-            project,
-            task);
+            MetaDataUtils.getInstance());
 
         return false;
     }
@@ -138,8 +125,6 @@ public class TableTemplateBuildHandler
      * @param tablePackage the table package.
      * @param templateFactory the template factory.
      * @param metaDataUtils the <code>MetaDataUtils</code> instance.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -153,9 +138,7 @@ public class TableTemplateBuildHandler
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final TableTemplateFactory templateFactory,
-        final MetaDataUtils metaDataUtils,
-        final Project project,
-        final Task task)
+        final MetaDataUtils metaDataUtils)
       throws  BuildException
     {
         String[] t_astrTableNames = metaDataManager.getTableNames();
@@ -176,9 +159,7 @@ public class TableTemplateBuildHandler
                 t_aTableTemplates[t_iTableIndex] =
                     templateFactory.createTableTemplate(
                         packageName,
-                        t_astrTableNames[t_iTableIndex],
-                        project,
-                        task);
+                        t_astrTableNames[t_iTableIndex]);
 
                 t_astrColumnNames =
                     metaDataManager.getColumnNames(
@@ -201,9 +182,7 @@ public class TableTemplateBuildHandler
                         t_aTableTemplates[t_iTableIndex].addFieldType(
                             t_astrColumnNames[t_iColumnIndex],
                             metaDataUtils.getQueryJFieldType(
-                                t_iColumnType,
-                                project,
-                                task));
+                                t_iColumnType));
                     }
                 }
             }

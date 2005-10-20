@@ -63,7 +63,8 @@ import java.lang.ref.WeakReference;
 /**
  * Is able to generate XML DAO factories.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * >Jose San Leandro</a>
+ * @version $Revision$ at $Date$ by $Author$
  */
 public class XMLDAOFactoryTemplateGenerator
     implements  XMLDAOFactoryTemplateFactory
@@ -114,7 +115,7 @@ public class XMLDAOFactoryTemplateGenerator
 
         if  (result == null) 
         {
-            result = new XMLDAOFactoryTemplateGenerator() {};
+            result = new XMLDAOFactoryTemplateGenerator();
 
             setReference(result);
         }
@@ -215,27 +216,21 @@ public class XMLDAOFactoryTemplateGenerator
      * @param basePackageName the base package name.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
+     * @precondition tableTemplate != null
+     * @precondition packageName != null
+     * @precondition basePackageName != null
      */
     public XMLDAOFactoryTemplate createXMLDAOFactoryTemplate(
         final TableTemplate tableTemplate,
-        final String        packageName,
-        final String        basePackageName)
+        final String packageName,
+        final String basePackageName)
       throws  QueryJException
     {
-        XMLDAOFactoryTemplate result = null;
-
-        if  (   (tableTemplate   != null)
-             && (packageName     != null)
-             && (basePackageName != null))
-        {
-            result =
-                new XMLDAOFactoryTemplate(
-                    tableTemplate,
-                    packageName,
-                    basePackageName) {};
-        }
-
-        return result;
+        return
+            new XMLDAOFactoryTemplate(
+                tableTemplate,
+                packageName,
+                basePackageName);
     }
 
     /**
@@ -243,38 +238,55 @@ public class XMLDAOFactoryTemplateGenerator
      * @param template the XML DAO factory template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
+     * @precondition template != null
+     * @precondition outputDir != null
      */
     public void write(
         final XMLDAOFactoryTemplate template,
-        final File                   outputDir)
+        final File outputDir)
       throws  IOException
     {
-        if  (   (template  != null)
-             && (outputDir != null))
-        {
-            EnglishGrammarUtils t_EnglishGrammarUtils =
-                EnglishGrammarUtils.getInstance();
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
+        write(
+            template,
+            outputDir,
+            EnglishGrammarUtils.getInstance(),
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
 
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
+    /**
+     * Writes a XML DAO factory template to disk.
+     * @param template the XML DAO factory template to write.
+     * @param outputDir the output folder.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition template != null
+     * @precondition outputDir != null
+     * @precondition englishGrammarUtils != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final XMLDAOFactoryTemplate template,
+        final File outputDir,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        outputDir.mkdirs();
 
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + "XML"
-                    + t_StringUtils.capitalize(
-                          t_EnglishGrammarUtils.getSingular(
-                              template
-                                  .getTableTemplate().getTableName()
-                                      .toLowerCase()),
-                          '_')
-                    + "DAOFactory.java",
-                    template.toString());
-            }
-        }
+        fileUtils.writeFile(
+              outputDir.getAbsolutePath()
+            + File.separator
+            + "XML"
+            + stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    template.getTableTemplate().getTableName().toLowerCase()),
+                '_')
+            + "DAOFactory.java",
+            template.generate());
     }
 }

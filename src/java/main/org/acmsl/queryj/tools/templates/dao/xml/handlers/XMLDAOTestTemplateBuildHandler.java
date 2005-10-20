@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplate;
+import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -96,143 +97,122 @@ public class XMLDAOTestTemplateBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            try
-            {
-                Map attributes = command.getAttributeMap();
-
-                DatabaseMetaData t_MetaData =
-                    retrieveDatabaseMetaData(attributes);
-
-                DatabaseMetaDataManager t_MetaDataManager =
-                    retrieveDatabaseMetaDataManager(attributes);
-
-                String t_strPackage =
-                    retrieveXMLDAOTestPackage(attributes);
-
-                XMLDAOTestTemplateGenerator t_XMLDAOTestTemplateGenerator =
-                    XMLDAOTestTemplateGenerator.getInstance();
-
-                if  (   (t_MetaData                     != null)
-                     && (t_MetaDataManager              != null)
-                     && (t_XMLDAOTestTemplateGenerator != null))
-                {
-                    TableTemplate[] t_aTableTemplates =
-                        retrieveTableTemplates(attributes);
-
-                    if  (t_aTableTemplates != null)
-                    {
-                        XMLDAOTestTemplate[] t_aXMLDAOTestTemplates =
-                            new XMLDAOTestTemplate[t_aTableTemplates.length];
-
-                        for  (int t_iXMLDAOTestIndex = 0;
-                                  t_iXMLDAOTestIndex < t_aXMLDAOTestTemplates.length;
-                                  t_iXMLDAOTestIndex++) 
-                        {
-                            t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex] =
-                                t_XMLDAOTestTemplateGenerator
-                                    .createXMLDAOTestTemplate(
-                                        t_aTableTemplates[t_iXMLDAOTestIndex],
-                                        t_MetaDataManager,
-                                        t_strPackage,
-                                        retrieveXMLDAOPackage(
-                                            t_MetaData
-                                                .getDatabaseProductName(),
-                                            attributes),
-                                        retrieveValueObjectPackage(attributes),
-                                        command.getProject(),
-                                        command.getTask());
-
-                            storeTestTemplate(
-                                t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex],
-                                attributes);
-                        }
-
-                        storeXMLDAOTestTemplates(t_aXMLDAOTestTemplates, attributes);
-                    }
-                }
-            }
-            catch  (SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-            catch  (QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
-        }
-        
-        return result;
+        return handle(command.getAttributeMap());
     }
 
     /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaDataManager result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     */
-    protected String retrieveProjectPackage(final Map parameters)
+    protected boolean handle(final Map parameters)
         throws  BuildException
     {
-        String result = null;
+        return
+            handle(
+                parameters,
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
+    }
 
-        if  (parameters != null)
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param projectPackage the project package.
+     * @param useSubfolders whether to use subfolders or not.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition projectPackage != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final String projectPackage,
+        final boolean useSubfolders)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveDatabaseMetaData(parameters),
+                retrieveDatabaseMetaDataManager(parameters),
+                retrieveXMLDAOTestPackage(projectPackage, useSubfolders),
+                retrieveValueObjectPackage(projectPackage),
+                retrieveXMLDAOPackage(projectPackage),
+                retrieveTableTemplates(parameters),
+                XMLDAOTestTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param metaData the database metadata.
+     * @param metaDataManager the database metadata manager.
+     * @param packageName the package name.
+     * @param voPackageName the value-object package name.
+     * @param xmlDAOPackageName the package name of the XML DAOs.
+     * @param tableTemplates the table templates.
+     * @param templateFactory the template factory.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     * @precondition metaDataManager != null
+     * @precondition packageName != null
+     * @precondition voPackageName != null
+     * @precondition xmlDAOPackageName != null
+     * @precondition tableTemplates != null
+     * @precondition templateFactory != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaData metaData,
+        final DatabaseMetaDataManager metaDataManager,
+        final String packageName,
+        final String voPackageName,
+        final String xmlDAOPackageName,
+        final TableTemplate[] tableTemplates,
+        final XMLDAOTestTemplateFactory templateFactory)
+      throws  BuildException
+    {
+        boolean result = false;
+
+        try
         {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
+            int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
+
+            XMLDAOTestTemplate[] t_aXMLDAOTestTemplates =
+                new XMLDAOTestTemplate[t_iLength];
+
+            for  (int t_iXMLDAOTestIndex = 0;
+                      t_iXMLDAOTestIndex < t_iLength;
+                      t_iXMLDAOTestIndex++) 
+            {
+                t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex] =
+                    templateFactory.createXMLDAOTestTemplate(
+                        tableTemplates[t_iXMLDAOTestIndex],
+                        metaDataManager,
+                        packageName,
+                        xmlDAOPackageName,
+                        voPackageName);
+
+                storeTestTemplate(
+                    t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex],
+                    parameters);
+            }
+
+            storeXMLDAOTestTemplates(t_aXMLDAOTestTemplates, parameters);
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw new BuildException(queryjException);
         }
         
         return result;
@@ -243,73 +223,97 @@ public class XMLDAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected String retrieveXMLDAOTestPackage(final Map parameters)
+    protected String retrieveXMLDAOTestPackage(
+        final String projectPackage, final boolean useSubfolders)
       throws  BuildException
     {
-        String result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveXMLDAOTestPackage(
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+        return
+            retrieveXMLDAOTestPackage(
+                projectPackage, useSubfolders, PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the XML DAO's package name from the attribute map.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
+     * Retrieves the XML DAO Test's package name from given information.
+     * @param projectPackage the project package.
+     * @param useSubfolders whether to use subfolders.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
      */
-    protected String retrieveXMLDAOPackage(
-        final String engineName, final Map parameters)
+    protected String retrieveXMLDAOTestPackage(
+        final String projectPackage,
+        final boolean useSubfolders,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
-        String result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveXMLDAOPackage(
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveXMLDAOTestPackage(
+                projectPackage, useSubfolders);
     }
 
     /**
-     * Retrieves the value object's package name from the attribute map.
-     * @param parameters the parameter map.
+     * Retrieves the XML DAO's package name from the project package.
+     * @param projectPackage the project package.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition projectPackage != null
      */
-    protected String retrieveValueObjectPackage(final Map parameters)
+    protected String retrieveXMLDAOPackage(final String projectPackage)
         throws  BuildException
     {
-        String result = null;
+        return retrieveXMLDAOPackage(projectPackage, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+    /**
+     * Retrieves the XML DAO's package name from the project package.
+     * @param projectPackage the project package.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
+     */
+    protected String retrieveXMLDAOPackage(
+        final String projectPackage, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return packageUtils.retrieveXMLDAOPackage(projectPackage);
+    }
 
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveValueObjectPackage(
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+    /**
+     * Retrieves the value object's package name from the project package.
+     * @param projectPackage the project package.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition projectPackage != null
+     */
+    protected String retrieveValueObjectPackage(final String projectPackage)
+        throws  BuildException
+    {
+        return
+            retrieveValueObjectPackage(
+                projectPackage, PackageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the value object's package name from the project package.
+     * @param projectPackage the project package.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
+     */
+    protected String retrieveValueObjectPackage(
+        final String projectPackage, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveValueObjectPackage(projectPackage);
     }
 
     /**
@@ -317,19 +321,12 @@ public class XMLDAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the test templates.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected Collection retrieveTestTemplates(final Map parameters)
         throws  BuildException
     {
-        Collection result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
-        }
-        
-        return result;
+        return (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
     }
 
     /**
@@ -337,19 +334,17 @@ public class XMLDAOTestTemplateBuildHandler
      * @param xmlDAOTestTemplates the XML DAO templates.
      * @param parameters the parameter map.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition xmlDAOTestTemplates != null
+     * @precondition parameters != null
      */
     protected void storeXMLDAOTestTemplates(
         final XMLDAOTestTemplate[] xmlDAOTestTemplates,
         final Map parameters)
       throws  BuildException
     {
-        if  (   (xmlDAOTestTemplates != null)
-             && (parameters       != null))
-        {
-            parameters.put(
-                TemplateMappingManager.XML_DAO_TEST_TEMPLATES,
-                xmlDAOTestTemplates);
-        }
+        parameters.put(
+            TemplateMappingManager.XML_DAO_TEST_TEMPLATES,
+            xmlDAOTestTemplates);
     }
 
     /**
@@ -357,21 +352,14 @@ public class XMLDAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return such templates.
      * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(
-        final Map parameters)
+    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
       throws  BuildException
     {
-        TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (TableTemplate[])
-                    parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-        }
-
-        return result;
+        return
+            (TableTemplate[])
+                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
     }
 
     /**
@@ -380,16 +368,14 @@ public class XMLDAOTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the test templates.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition templates != null
+     * @precondition parameters != null
      */
     protected void storeTestTemplates(
         final Collection templates, final Map parameters)
       throws  BuildException
     {
-        if  (   (templates  != null)
-             && (parameters != null))
-        {
-            parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
-        }
+        parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
     }
 
     /**
@@ -397,23 +383,21 @@ public class XMLDAOTestTemplateBuildHandler
      * @param testTemplate the test template.
      * @param parameters the parameter map.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition template != null
+     * @precondition parameters != null
      */
     protected void storeTestTemplate(
         final TestTemplate template, final Map parameters)
       throws  BuildException
     {
-        if  (   (template   != null)
-             && (parameters != null))
+        Collection t_cTestTemplates = retrieveTestTemplates(parameters);
+
+        if  (t_cTestTemplates == null) 
         {
-            Collection t_cTestTemplates = retrieveTestTemplates(parameters);
-
-            if  (t_cTestTemplates == null) 
-            {
-                t_cTestTemplates = new ArrayList();
-                storeTestTemplates(t_cTestTemplates, parameters);
-            }
-
-            t_cTestTemplates.add(template);
+            t_cTestTemplates = new ArrayList();
+            storeTestTemplates(t_cTestTemplates, parameters);
         }
+
+        t_cTestTemplates.add(template);
     }
 }

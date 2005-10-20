@@ -65,12 +65,6 @@ import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -101,8 +95,6 @@ public class CustomResultSetExtractorTemplate
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public CustomResultSetExtractorTemplate(
         final ResultElement resultElement,
@@ -111,9 +103,7 @@ public class CustomResultSetExtractorTemplate
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String basePackageName,
-        final String repositoryName,
-        final Project project,
-        final Task task)
+        final String repositoryName)
     {
         super(
             resultElement,
@@ -139,9 +129,7 @@ public class CustomResultSetExtractorTemplate
             DEFAULT_VALUE_OBJECT_PROPERTIES_SPECIFICATION,
             DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_SPECIFICATION,
             DEFAULT_VALUE_OBJECT_NULLABLE_PROPERTIES_CHECK,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**
@@ -401,10 +389,7 @@ public class CustomResultSetExtractorTemplate
                     metaDataUtils.getSmartObjectRetrievalType(t_iColumnType);
 
                 String t_strFieldType =
-                    metaDataUtils.getFieldType(
-                        t_iColumnType,
-                        null,
-                        null);
+                    metaDataUtils.getFieldType(t_iColumnType);
 
                 Object[] t_aParams =
                     new Object[]

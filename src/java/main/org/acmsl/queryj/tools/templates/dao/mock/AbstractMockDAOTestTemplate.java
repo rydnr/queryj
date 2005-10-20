@@ -55,12 +55,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
@@ -262,8 +256,6 @@ public abstract class AbstractMockDAOTestTemplate
      * @param removeFilterValues the remove filter values
      * subtemplate.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractMockDAOTestTemplate(
         final TableTemplate tableTemplate,
@@ -294,11 +286,8 @@ public abstract class AbstractMockDAOTestTemplate
         final String testParametersUpdatedValues,
         final String removeTest,
         final String removeFilterValues,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetTableTemplate(tableTemplate);
         immutableSetMetaDataManager(metaDataManager);
         immutableSetHeader(header);

@@ -60,8 +60,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -97,24 +95,19 @@ public class DAOChooserTemplateBuildHandler
     {
         return
             handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+                command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters, final Project project, final Task task)
+    protected boolean handle(final Map parameters)
     {
         storeDAOChooserTemplate(
-            buildDAOChooserTemplate(parameters, project, task),
+            buildDAOChooserTemplate(parameters),
             parameters);
         
         return false;
@@ -124,22 +117,18 @@ public class DAOChooserTemplateBuildHandler
      * Builds a DAOChooser template using the information
      * stored in the attribute map.
      * @param parameters the parameter map.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the <code>DAOChooserTemplate</code> instance.
      * @precondition parameters != null
      */
     protected DAOChooserTemplate buildDAOChooserTemplate(
-        final Map parameters, final Project project, final Task task)
+        final Map parameters)
     {
         return
             buildDAOChooserTemplate(
                 parameters,
                 retrievePackage(parameters),
                 retrieveRepository(parameters),
-                retrieveTableNames(parameters),
-                project,
-                task);
+                retrieveTableNames(parameters));
     }
 
     /**
@@ -149,8 +138,6 @@ public class DAOChooserTemplateBuildHandler
      * @param packageName the package name.
      * @param repository the repository.
      * @param tableNames the table names.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the <code>DAOChooserTemplate</code> instance.
      * @precondition parameters != null
      * @precondition packageName != null
@@ -161,19 +148,16 @@ public class DAOChooserTemplateBuildHandler
         final Map parameters,
         final String packageName,
         final String repository,
-        final String[] tableNames,
-        final Project project,
-        final Task task)
+        final String[] tableNames)
     {
         DAOChooserTemplate result =
             buildDAOChooserTemplate(
-                packageName,
-                repository,
-                project,
-                task);
+                packageName, repository);
 
+        int t_iLength = (tableNames != null) ? tableNames.length : 0;
+        
         for  (int t_iTableIndex = 0;
-                  t_iTableIndex < tableNames.length;
+                  t_iTableIndex < t_iLength;
                   t_iTableIndex++)
         {
             result.addTable(tableNames[t_iTableIndex]);
@@ -186,33 +170,24 @@ public class DAOChooserTemplateBuildHandler
      * Builds a DAOChooser template using given information.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the template.
      * @precondition packageName != null
      * @precondition repository != null
      */
     protected DAOChooserTemplate buildDAOChooserTemplate(
-        final String packageName,
-        final String repository,
-        final Project project,
-        final Task task)
+        final String packageName, final String repository)
     {
         return
             buildDAOChooserTemplate(
                 packageName,
                 repository,
-                DAOChooserTemplateGenerator.getInstance(),
-                project,
-                task);
+                DAOChooserTemplateGenerator.getInstance());
     }
 
     /**
      * Builds a DAOChooser template using given information.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the template.
      * @precondition packageName != null
      * @precondition repository != null
@@ -221,13 +196,11 @@ public class DAOChooserTemplateBuildHandler
     protected DAOChooserTemplate buildDAOChooserTemplate(
         final String packageName,
         final String repository,
-        final DAOChooserTemplateFactory templateFactory,
-        final Project project,
-        final Task task)
+        final DAOChooserTemplateFactory templateFactory)
     {
         return
             templateFactory.createDAOChooserTemplate(
-                packageName, repository, project, task);
+                packageName, repository);
     }
 
     /**
@@ -254,7 +227,7 @@ public class DAOChooserTemplateBuildHandler
     {
         return
             packageUtils.retrieveDAOChooserPackage(
-                (String) parameters.get(ParameterValidationHandler.PACKAGE));
+                retrieveProjectPackage(parameters));
     }
 
     /**

@@ -35,17 +35,6 @@
  * Description: Defines the default subtemplates used to generate value object
  *              factories according to database metadata.
  *
-<<<<<<< ValueObjectFactoryTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.4
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -59,10 +48,6 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * factories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< ValueObjectFactoryTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.4
  */
 public interface ValueObjectFactoryTemplateDefaults
     extends  JavaTemplateDefaults
@@ -82,15 +67,6 @@ public interface ValueObjectFactoryTemplateDefaults
         + " * Description: Is able to create \"{0}\" value objects\n"
         + " *              according to the information stored in the\n"
         + " *              persistence domain.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -127,7 +103,6 @@ public interface ValueObjectFactoryTemplateDefaults
         + " * Is able to create <i>{0}</i> value objects according to\n"
         + " * information in the persistence domain.\n" // table
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**

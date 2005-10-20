@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.customsql.handlers.
+*              org.acmsl.queryj.tools.customsql.handlers.
 *
 */
-package unittests.org.acmsl.queryj.tools.customsql.handlers;
+package org.acmsl.queryj.tools.customsql.handlers;
 
 
 /*
@@ -95,9 +95,9 @@ public class HandlersSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.customsql.handlers");
+    new TestSuite("org.acmsl.queryj.tools.customsql.handlers");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandlerTest.class);
     
     
     

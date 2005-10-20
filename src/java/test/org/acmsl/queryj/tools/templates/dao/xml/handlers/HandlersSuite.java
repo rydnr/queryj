@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.
+*              org.acmsl.queryj.tools.templates.dao.xml.handlers.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers;
+package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 
 
 /*
@@ -95,20 +95,20 @@ public class HandlersSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers");
+    new TestSuite("org.acmsl.queryj.tools.templates.dao.xml.handlers");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateWritingHandlerTest.class);
     
     
     

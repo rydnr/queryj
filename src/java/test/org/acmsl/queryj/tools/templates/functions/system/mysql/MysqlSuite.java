@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.functions.system.mysql.
+*              org.acmsl.queryj.tools.templates.functions.system.mysql.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.functions.system.mysql;
+package org.acmsl.queryj.tools.templates.functions.system.mysql;
 
 
 /*
@@ -95,10 +95,10 @@ public class MysqlSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions.system.mysql");
+    new TestSuite("org.acmsl.queryj.tools.templates.functions.system.mysql");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.mysql.MySQLSystemFunctionsTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.system.mysql.MySQLSystemFunctionsTestTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.mysql.MySQLSystemFunctionsTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.mysql.MySQLSystemFunctionsTestTemplateGeneratorTest.class);
     
     
     

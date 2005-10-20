@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.functions.numeric.oracle.
+*              org.acmsl.queryj.tools.templates.functions.numeric.oracle.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.functions.numeric.oracle;
+package org.acmsl.queryj.tools.templates.functions.numeric.oracle;
 
 
 /*
@@ -95,10 +95,10 @@ public class OracleSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions.numeric.oracle");
+    new TestSuite("org.acmsl.queryj.tools.templates.functions.numeric.oracle");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTestTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTestTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleNumericFunctionsTemplateGeneratorTest.class);
     
     
     

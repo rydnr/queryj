@@ -91,34 +91,25 @@ public class MockDAOTestTemplateWritingHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters, final Project project, final Task task)
-      throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  BuildException
     {
         return
             handle(
                 parameters,
                 retrieveMockDAOTestTemplates(parameters),
                 MockDAOTestTemplateGenerator.getInstance(),
-                retrieveOutputDir(parameters),
-                project,
-                task);
+                retrieveOutputDir(parameters));
     }
 
     /**
@@ -127,8 +118,6 @@ public class MockDAOTestTemplateWritingHandler
      * @param templates the templates.
      * @param generator the generator.
      * @param outputDir the output dir.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -140,24 +129,22 @@ public class MockDAOTestTemplateWritingHandler
         final Map parameters,
         final MockDAOTestTemplate[] templates,
         final MockDAOTestTemplateGenerator generator,
-        final File outputDir,
-        final Project project,
-        final Task task)
+        final File outputDir)
       throws  BuildException
     {
         boolean result = false;
 
         try 
         {
+            int t_iLength = (templates != null) ? templates.length : 0;
+
             for  (int t_iMockDAOTestIndex = 0;
-                      t_iMockDAOTestIndex < templates.length;
+                      t_iMockDAOTestIndex < t_iLength;
                       t_iMockDAOTestIndex++)
             {
                 generator.write(
                     templates[t_iMockDAOTestIndex],
-                    outputDir,
-                    project,
-                    task);
+                    outputDir);
             }
         }
         catch  (final IOException ioException)
@@ -183,49 +170,6 @@ public class MockDAOTestTemplateWritingHandler
             (MockDAOTestTemplate[])
                 parameters.get(
                     TemplateMappingManager.MOCK_DAO_TEST_TEMPLATES);
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaData)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return the output dir.
-     * @throws BuildException if the output dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveProjectFolder(final Map parameters)
-        throws  BuildException
-    {
-        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
     }
 
     /**
@@ -256,7 +200,8 @@ public class MockDAOTestTemplateWritingHandler
     {
         return
             packageUtils.retrieveMockDAOTestFolder(
-                retrieveProjectFolder(parameters),
-                retrieveProjectPackage(parameters));
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

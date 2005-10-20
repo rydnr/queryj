@@ -34,17 +34,6 @@
  *
  * Description: Builds a value object template using database metadata.
  *
-<<<<<<< ValueObjectTemplateBuildHandler.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.10
  */
 package org.acmsl.queryj.tools.templates.valueobject.handlers;
 
@@ -72,8 +61,6 @@ import org.acmsl.queryj.tools.templates.valueobject
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -86,11 +73,7 @@ import java.util.Map;
 /**
  * Builds a value object template using database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
-<<<<<<< ValueObjectTemplateBuildHandler.java
-=======
- * @version $Revision$
->>>>>>> 1.10
+ *         >Jose San Leandro</a>
  */
 public class ValueObjectTemplateBuildHandler
     extends    AbstractAntCommandHandler
@@ -117,27 +100,18 @@ public class ValueObjectTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given command.
      * @param attributes the attributes.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition attributes != null
      */
-    public boolean handle(
-        final Map attributes,
-        final Project project,
-        final Task task)
-      throws  BuildException
+    public boolean handle(final Map attributes)
+        throws  BuildException
     {
         return
             handle(
@@ -146,9 +120,7 @@ public class ValueObjectTemplateBuildHandler
                 retrieveDatabaseMetaDataManager(attributes),
                 retrievePackage(attributes),
                 ValueObjectTemplateGenerator.getInstance(),
-                retrieveTableTemplates(attributes),
-                project,
-                task);
+                retrieveTableTemplates(attributes));
     }
 
     /**
@@ -160,8 +132,6 @@ public class ValueObjectTemplateBuildHandler
      * @param packageName the package name.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition attributes != null
@@ -177,9 +147,7 @@ public class ValueObjectTemplateBuildHandler
         final DatabaseMetaDataManager databaseMetaDataManager,
         final String packageName,
         final ValueObjectTemplateFactory templateFactory,
-        final TableTemplate[] tableTemplates,
-        final Project project,
-        final Task task)
+        final TableTemplate[] tableTemplates)
       throws  BuildException
     {
         boolean result = false;
@@ -209,9 +177,7 @@ public class ValueObjectTemplateBuildHandler
                     templateFactory.createValueObjectTemplate(
                         packageName,
                         tableTemplates[t_iValueObjectIndex],
-                        databaseMetaDataManager,
-                        project,
-                        task);
+                        databaseMetaDataManager);
             }
 
             storeValueObjectTemplates(t_aValueObjectTemplates, attributes);

@@ -54,12 +54,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
@@ -76,7 +70,8 @@ import java.util.Map;
  * are working correctly.
  * See <a href="bugzilla.acm-sl.org/show_bug.cgi?id=502">502</a>.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * >Jose San Leandro</a>
+ * @version $Revision$ at $Date$ by $Author$
  */
 public class XMLDAOTestTemplate
     extends  AbstractXMLDAOTestTemplate
@@ -89,17 +84,13 @@ public class XMLDAOTestTemplate
      * @param packageName the package name.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectsPackageName the value objects' package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public XMLDAOTestTemplate(
         final TableTemplate tableTemplate,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String daoPackageName,
-        final String valueObjectsPackageName,
-        final Project project,
-        final Task task)
+        final String valueObjectsPackageName)
     {
         super(
             tableTemplate,
@@ -124,15 +115,15 @@ public class XMLDAOTestTemplate
             DEFAULT_TEST_SUITE,
             DEFAULT_STORE_TEST,
             DEFAULT_TEST_PARAMETERS_VALUES,
+            DEFAULT_NULLABLE_INSERTED_VALUES_CONVERSION,
             DEFAULT_LOAD_TEST,
             DEFAULT_UPDATE_TEST,
             DEFAULT_UPDATE_FILTER_VALUES,
             DEFAULT_TEST_PARAMETERS_UPDATED_VALUES,
+            DEFAULT_NULLABLE_UPDATED_VALUES_CONVERSION,
             DEFAULT_REMOVE_TEST,
             DEFAULT_REMOVE_FILTER_VALUES,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**
@@ -166,10 +157,12 @@ public class XMLDAOTestTemplate
                 getTestSuite(),
                 getStoreTest(),
                 getTestParametersValues(),
+                getNullableInsertedValuesConversion(),
                 getLoadTest(),
                 getUpdateTest(),
                 getUpdateFilterValues(),
                 getTestParametersUpdatedValues(),
+                getNullableUpdatedValuesConversion(),
                 getRemoveTest(),
                 getRemoveFilterValues(),
                 getClassEnd(),
@@ -204,12 +197,16 @@ public class XMLDAOTestTemplate
      * @param storeTest the store test.
      * @param testParametersValues the test values
      * subtemplate.
+     * @param nullableInsertedValuesConversion the conversion
+     * for nullable values in <code>insert</code> method..
      * @param loadTest the load test.
      * @param updateTest the update test.
      * @param updateFilterValues the update filter values
      * subtemplate.
      * @param testParametersUpdatedValues the test updated
      * values subtemplate.
+     * @param nullableUpdatedValuesConversion the conversion
+     * for nullable values in <code>update</code> method..
      * @param removeTest the remove test.
      * @param removeFilterValues the remove filter values
      * subtemplate.
@@ -246,10 +243,12 @@ public class XMLDAOTestTemplate
         final String testSuite,
         final String storeTest,
         final String testParametersValues,
+        final String nullableInsertedValuesConversion,
         final String loadTest,
         final String updateTest,
         final String updateFilterValues,
         final String testParametersUpdatedValues,
+        final String nullableUpdatedValuesConversion,
         final String removeTest,
         final String removeFilterValues,
         final String classEnd,
@@ -264,26 +263,25 @@ public class XMLDAOTestTemplate
                 englishGrammarUtils.getSingular(
                     tableTemplate.getTableName().toLowerCase()),
                 '_');
-        /*
-        try 
-        {
-        */
-        MessageFormat t_Formatter = new MessageFormat(header);
+
+        MessageFormat t_HeaderFormatter = new MessageFormat(header);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_HeaderFormatter.format(
                 new Object[] { tableTemplate.getTableName() }));
 
-        t_Formatter = new MessageFormat(packageDeclaration);
+        MessageFormat t_PackageDeclarationFormatter =
+            new MessageFormat(packageDeclaration);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_PackageDeclarationFormatter.format(
                 new Object[]{packageName}));
 
-        t_Formatter = new MessageFormat(projectImports);
+        MessageFormat t_ProjectImportsFormatter =
+            new MessageFormat(projectImports);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_ProjectImportsFormatter.format(
                 new Object[]
                 {
                     daoPackageName,
@@ -295,29 +293,30 @@ public class XMLDAOTestTemplate
         t_sbResult.append(jdkImports);
         t_sbResult.append(junitImports);
 
-        t_Formatter = new MessageFormat(javadoc);
+        MessageFormat t_JavadocFormatter = new MessageFormat(javadoc);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_JavadocFormatter.format(
                 new Object[]
                 {
                     daoPackageName,
                     t_strCapitalizedTableName
                 }));
 
-        t_Formatter = new MessageFormat(classDefinition);
+        MessageFormat t_ClassDefinitionFormatter =
+            new MessageFormat(classDefinition);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_ClassDefinitionFormatter.format(
                 new Object[]
                 {
                     t_strCapitalizedTableName
                 }));
 
-        t_Formatter = new MessageFormat(classStart);
+        MessageFormat t_ClassStartFormatter = new MessageFormat(classStart);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_ClassStartFormatter.format(
                 new Object[]
                 {
                     t_strCapitalizedTableName
@@ -327,10 +326,10 @@ public class XMLDAOTestTemplate
 
         t_sbResult.append(testUpdatedValues);
 
-        t_Formatter = new MessageFormat(constructor);
+        MessageFormat t_ConstructorFormatter = new MessageFormat(constructor);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_ConstructorFormatter.format(
                 new Object[]
                 {
                     t_strCapitalizedTableName
@@ -338,31 +337,37 @@ public class XMLDAOTestTemplate
 
         t_sbResult.append(innerMethods);
 
-        t_Formatter = new MessageFormat(initMethods);
+        MessageFormat t_InitMethodsFormatter = new MessageFormat(initMethods);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_InitMethodsFormatter.format(
                 new Object[]
                 {
                     t_strCapitalizedTableName,
-                    t_strCapitalizedTableName
-                    .substring(0,1).toLowerCase()
+                    t_strCapitalizedTableName.substring(0,1).toLowerCase()
                     + t_strCapitalizedTableName.substring(1)
                 }));
 
-        t_Formatter = new MessageFormat(testSuite);
+        MessageFormat t_TestSuiteFormatter = new MessageFormat(testSuite);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_TestSuiteFormatter.format(
                 new Object[]
                 {
                     t_strCapitalizedTableName
                 }));
 
-        t_Formatter = new MessageFormat(testParametersValues);
+        MessageFormat t_TestParametersValuesFormatter =
+            new MessageFormat(testParametersValues);
+
+        MessageFormat t_NullableInsertedValuesConversionFormatter =
+            new MessageFormat(nullableInsertedValuesConversion);
 
         MessageFormat t_UpdateFilterValuesFormatter =
             new MessageFormat(updateFilterValues);
+
+        MessageFormat t_NullableUpdatedValuesConversionFormatter =
+            new MessageFormat(nullableUpdatedValuesConversion);
 
         StringBuffer t_sbUpdateFilterValues =
             new StringBuffer();
@@ -386,68 +391,68 @@ public class XMLDAOTestTemplate
         StringBuffer t_sbRemoveFilterValues =
             new StringBuffer();
 
-        if  (t_astrPrimaryKeys != null)
-        {
+        int t_iColumnType;
 
-            for  (int t_iPkIndex = 0;
-                  t_iPkIndex < t_astrPrimaryKeys.length;
+        int t_iLength = (t_astrPrimaryKeys != null) ? t_astrPrimaryKeys.length : 0;
+
+        for  (int t_iPkIndex = 0;
+                  t_iPkIndex < t_iLength;
                   t_iPkIndex++) 
+        {
+            t_iColumnType =
+                metaDataManager.getColumnType(
+                    tableTemplate.getTableName(),
+                    t_astrPrimaryKeys[t_iPkIndex]);
+
+            t_sbFindByPrimaryKeyTestParametersValues.append(
+                t_TestParametersValuesFormatter.format(
+                    new Object[]
+                    {
+                        metaDataUtils.getNativeType(t_iColumnType).toUpperCase()
+                    }));
+
+            t_sbUpdateFilterValues.append(
+                t_UpdateFilterValuesFormatter.format(
+                    new Object[]
+                    {
+                        t_strCapitalizedTableName,
+                        stringUtils.capitalize(
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                            '_')
+                    }));
+
+            t_sbRemoveFilterValues.append(
+                t_RemoveFilterValuesFormatter.format(
+                    new Object[]
+                    {
+                        t_strCapitalizedTableName,
+                        stringUtils.capitalize(
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                            '_')
+                    }));
+
+            t_sbFindByPrimaryKeyParametersTypes.append(
+                metaDataUtils.getNativeType(t_iColumnType));
+
+            if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
             {
-                t_sbFindByPrimaryKeyTestParametersValues.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            metaDataUtils.getNativeType(
-                                metaDataManager.getColumnType(
-                                    tableTemplate.getTableName(),
-                                    t_astrPrimaryKeys[t_iPkIndex]))
-                            .toUpperCase()
-                        }));
-
-                t_sbUpdateFilterValues.append(
-                    t_UpdateFilterValuesFormatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedTableName,
-                            stringUtils.capitalize(
-                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
-                                '_')
-                        }));
-
-                t_sbRemoveFilterValues.append(
-                    t_RemoveFilterValuesFormatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedTableName,
-                            stringUtils.capitalize(
-                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
-                                '_')
-                        }));
-
-                t_sbFindByPrimaryKeyParametersTypes.append(
-                    metaDataUtils.getNativeType(
-                        metaDataManager.getColumnType(
-                            tableTemplate.getTableName(),
-                            t_astrPrimaryKeys[t_iPkIndex])));
-
-                if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
-                {
-                    t_sbFindByPrimaryKeyParametersTypes.append(",");
-                }
-
-                t_sbUpdateParametersTypes.append(
-                    metaDataUtils.getNativeType(
-                        metaDataManager.getColumnType(
-                            tableTemplate.getTableName(),
-                            t_astrPrimaryKeys[t_iPkIndex])));
-
-                t_sbUpdateParametersTypes.append(",");
+                t_sbFindByPrimaryKeyParametersTypes.append(",");
+                t_sbFindByPrimaryKeyTestParametersValues.append(",");
+                t_sbRemoveFilterValues.append(",");
+                t_sbUpdateFilterValues.append(",");
             }
+
+            t_sbUpdateParametersTypes.append(
+                metaDataUtils.getNativeType(t_iColumnType));
+
+            t_sbUpdateParametersTypes.append(",");
         }
 
         String[] t_astrColumnNames =
             metaDataManager.getColumnNames(
                 tableTemplate.getTableName());
+
+        t_iLength = (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
 
         StringBuffer t_sbInsertTestParametersValues =
             new StringBuffer();
@@ -461,75 +466,115 @@ public class XMLDAOTestTemplate
         StringBuffer t_sbTestParametersUpdatedValues =
             new StringBuffer();
 
-        if  (t_astrColumnNames != null)
-        {
-            for  (int t_iColumnIndex = 0;
-                  t_iColumnIndex < t_astrColumnNames.length;
+        boolean t_bFirstNonPkColumn = true;
+
+        for  (int t_iColumnIndex = 0;
+                  t_iColumnIndex < t_iLength;
                   t_iColumnIndex++)
+        {
+            t_iColumnType =
+                metaDataManager.getColumnType(
+                    tableTemplate.getTableName(),
+                    t_astrColumnNames[t_iColumnIndex]);
+
+            boolean t_bAllowsNull = false;
+
+            boolean t_bIsPrimaryKey =
+                metaDataManager.isPrimaryKey(
+                    tableTemplate.getTableName(),
+                    t_astrColumnNames[t_iColumnIndex]);
+
+            t_bAllowsNull =
+                metaDataManager.allowsNull(
+                    tableTemplate.getTableName(),
+                    t_astrColumnNames[t_iColumnIndex]);
+
+            if  (!metaDataManager.isManagedExternally(
+                     tableTemplate.getTableName(),
+                     t_astrColumnNames[t_iColumnIndex]))
             {
-                if  (!metaDataManager.isManagedExternally(
+                String t_strTestValue =
+                    metaDataUtils.getNativeType(t_iColumnType);
+
+                String t_strFieldType =
+                    metaDataUtils.getNativeType(
+                        t_iColumnType, t_bAllowsNull);
+
+                Object[] t_aParams =
+                    new Object[] { t_strTestValue.toUpperCase() };
+
+                MessageFormat t_Formatter = t_TestParametersValuesFormatter;
+
+                if  (   (t_bAllowsNull)
+                     && (metaDataUtils.isPrimitive(t_iColumnType)))
+                {
+                    t_strFieldType =
+                        metaDataUtils.getSmartObjectType(t_iColumnType);
+
+                    t_Formatter =
+                        t_NullableInsertedValuesConversionFormatter;
+
+                    t_aParams =
+                        new Object[]
+                        {
+                            t_strFieldType,
+                            t_strTestValue.toUpperCase()
+                        };
+                }
+
+                t_sbInsertTestParametersValues.append(
+                    t_Formatter.format(t_aParams));
+
+                t_sbInsertParametersTypes.append(t_strTestValue);
+
+                if  (!metaDataManager.isPrimaryKey(
                          tableTemplate.getTableName(),
                          t_astrColumnNames[t_iColumnIndex]))
                 {
-                    t_sbInsertTestParametersValues.append(
-                        t_Formatter.format(
-                            new Object[]
-                            {
-                                metaDataUtils.getNativeType(
-                                    metaDataManager.getColumnType(
-                                        tableTemplate.getTableName(),
-                                        t_astrColumnNames[
-                                            t_iColumnIndex]))
-                                .toUpperCase()
-                            }));
+                    if  (t_bFirstNonPkColumn)
+                    {
+                        t_sbUpdateFilterValues.append(",");
+                        t_bFirstNonPkColumn = false;
+                    }
 
-                    t_sbInsertParametersTypes.append(
-                        metaDataUtils.getNativeType(
-                            metaDataManager.getColumnType(
-                                tableTemplate.getTableName(),
-                                t_astrColumnNames[t_iColumnIndex])));
-
-                    if  (!metaDataManager.isPrimaryKey(
-                             tableTemplate.getTableName(),
-                             t_astrColumnNames[t_iColumnIndex]))
+                    if  (   (t_bAllowsNull)
+                         && (metaDataUtils.isPrimitive(t_iColumnType)))
+                    {
+                        t_sbTestParametersUpdatedValues.append(
+                            t_NullableUpdatedValuesConversionFormatter.format(
+                                t_aParams));
+                    }
+                    else
                     {
                         t_sbTestParametersUpdatedValues.append(
                             t_TestParametersUpdatedValuesFormatter.format(
                                 new Object[]
                                 {
-                                    metaDataUtils.getNativeType(
-                                        metaDataManager.getColumnType(
-                                            tableTemplate.getTableName(),
-                                            t_astrColumnNames[
-                                                t_iColumnIndex]))
-                                    .toUpperCase()
+                                    t_strTestValue.toUpperCase()
                                 }));
-
-                        t_sbUpdateParametersTypes.append(
-                            metaDataUtils.getNativeType(
-                                metaDataManager.getColumnType(
-                                    tableTemplate.getTableName(),
-                                    t_astrColumnNames[
-                                        t_iColumnIndex])));
-
-                        if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-                        {
-                            t_sbUpdateParametersTypes.append(",");
-                        }
                     }
+
+                    t_sbUpdateParametersTypes.append(t_strTestValue);
 
                     if  (t_iColumnIndex < t_astrColumnNames.length - 1)
                     {
-                        t_sbInsertParametersTypes.append(",");
+                        t_sbUpdateParametersTypes.append(",");
+                        t_sbTestParametersUpdatedValues.append(",");
                     }
+                }
+
+                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                {
+                    t_sbInsertParametersTypes.append(",");
+                    t_sbInsertTestParametersValues.append(",");
                 }
             }
         }
 
-        t_Formatter = new MessageFormat(storeTest);
+        MessageFormat t_StoreTestFormatter = new MessageFormat(storeTest);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_StoreTestFormatter.format(
                 new Object[]
                 {
                     daoPackageName,
@@ -538,10 +583,10 @@ public class XMLDAOTestTemplate
                     t_sbInsertTestParametersValues
                 }));
 
-        t_Formatter = new MessageFormat(loadTest);
+        MessageFormat t_LoadTestFormatter = new MessageFormat(loadTest);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_LoadTestFormatter.format(
                 new Object[]
                 {
                     daoPackageName,
@@ -550,10 +595,10 @@ public class XMLDAOTestTemplate
                     t_sbFindByPrimaryKeyTestParametersValues
                 }));
 
-        t_Formatter = new MessageFormat(updateTest);
+        MessageFormat t_UpdateTestFormatter = new MessageFormat(updateTest);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_UpdateTestFormatter.format(
                 new Object[]
                 {
                     daoPackageName,
@@ -563,10 +608,10 @@ public class XMLDAOTestTemplate
                     t_sbTestParametersUpdatedValues
                 }));
 
-        t_Formatter = new MessageFormat(removeTest);
+        MessageFormat t_RemoveTestFormatter = new MessageFormat(removeTest);
 
         t_sbResult.append(
-            t_Formatter.format(
+            t_RemoveTestFormatter.format(
                 new Object[]
                 {
                     daoPackageName,
@@ -576,15 +621,6 @@ public class XMLDAOTestTemplate
                 }));
 
         t_sbResult.append(classEnd);
-        /*
-        }
-        catch  (final SQLException sqlException)
-        {
-            LogFactory.getLog(getClass()).error(
-                "database.meta.data.error",
-                sqlException);
-        }
-        */
 
         return t_sbResult.toString();
     }

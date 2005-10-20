@@ -56,12 +56,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -207,8 +201,6 @@ public class MockDAOTemplateGenerator
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
@@ -220,9 +212,7 @@ public class MockDAOTemplateGenerator
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String basePackageName,
-        final String repositoryName,
-        final Project project,
-        final Task task)
+        final String repositoryName)
       throws  QueryJException
     {
         MockDAOTemplate result = null;
@@ -239,9 +229,7 @@ public class MockDAOTemplateGenerator
                     metaDataManager,
                     packageName,
                     basePackageName,
-                    repositoryName,
-                    project,
-                    task);
+                    repositoryName);
         }
         else 
         {
@@ -251,9 +239,7 @@ public class MockDAOTemplateGenerator
                     metaDataManager,
                     packageName,
                     basePackageName,
-                    repositoryName,
-                    project,
-                    task);
+                    repositoryName);
         }
 
         return result;

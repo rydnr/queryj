@@ -45,12 +45,6 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the required subtemplates used to generate value object factories
  * according to database metadata.
@@ -164,8 +158,6 @@ public abstract class AbstractValueObjectFactoryTemplate
      * @param factoryMethodValueObjectBuild the factory method value object build.
      * @param factoryAliasMethod the factory alias method.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public AbstractValueObjectFactoryTemplate(
         final String header,
@@ -184,11 +176,8 @@ public abstract class AbstractValueObjectFactoryTemplate
         final String factoryMethodFieldDefinition,
         final String factoryMethodValueObjectBuild,
         final String factoryAliasMethod,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

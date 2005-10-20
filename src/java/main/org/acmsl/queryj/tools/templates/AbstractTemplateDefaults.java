@@ -35,28 +35,13 @@
  * Description: Contains the common subtemplates used in all template
  *              defaults.
  *
-<<<<<<< AbstractTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates;
 
 /**
  * Contains the common subtemplates used in all template defaults.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
-<<<<<<< AbstractTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.3
+ *         >Jose San Leandro</a>
  */
 public interface AbstractTemplateDefaults
     extends  JavaTemplateDefaults
@@ -75,15 +60,6 @@ public interface AbstractTemplateDefaults
         + " * Author: QueryJ\n"
         + " *\n"
         + " * Description: {0}\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**

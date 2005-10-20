@@ -67,22 +67,16 @@ public class MetaDataBasedTableRepositoryBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            storeTableRepositoryTemplate(
-                buildTableRepositoryTemplate(
-                    command.getAttributeMap(),
-                    command.getProject(),
-                    command.getTask()),
-                command.getAttributeMap());
-        }
+        storeTableRepositoryTemplate(
+            buildTableRepositoryTemplate(
+                command.getAttributeMap()),
+            command.getAttributeMap());
         
-        return result;
+        return false;
     }
 }

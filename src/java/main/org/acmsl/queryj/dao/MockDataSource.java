@@ -380,10 +380,17 @@ public class MockDataSource
         {
             t_Driver = DriverManager.getDriver(getURL());
         }
-        catch  (SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
-            LogFactory.getLog(getClass()).info(
-                "Driver not yet registered. Performing registration.");
+            try
+            {
+                LogFactory.getLog(getClass()).info(
+                    "Driver not yet registered. Performing registration.");
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
         }
 
         if  (t_Driver == null)

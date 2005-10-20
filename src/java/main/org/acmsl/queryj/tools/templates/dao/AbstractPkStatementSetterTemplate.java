@@ -45,12 +45,6 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the elements required to create the PkStatementSetter sources.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -212,8 +206,6 @@ public abstract class AbstractPkStatementSetterTemplate
      * @param parameterDeclaration the parameter declaration.
      * @param parameterSpecification the parameter specification.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractPkStatementSetterTemplate(
         final TableTemplate tableTemplate,
@@ -240,12 +232,8 @@ public abstract class AbstractPkStatementSetterTemplate
         final String parameterJavadoc,
         final String parameterDeclaration,
         final String parameterSpecification,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
-
         immutableSetTableTemplate(
             tableTemplate);
 

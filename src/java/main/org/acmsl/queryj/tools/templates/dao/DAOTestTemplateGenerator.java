@@ -56,12 +56,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -305,8 +299,6 @@ public class DAOTestTemplateGenerator
      * @param jdbcUrl the JDBC URL.
      * @param jdbcUsername the JDBC username.
      * @param jdbcPassword the JDBC password.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
@@ -334,9 +326,7 @@ public class DAOTestTemplateGenerator
         final String jdbcDriver,
         final String jdbcUrl,
         final String jdbcUsername,
-        final String jdbcPassword,
-        final Project project,
-        final Task task)
+        final String jdbcPassword)
       throws  QueryJException
     {
         DAOTestTemplate result = null;
@@ -360,9 +350,7 @@ public class DAOTestTemplateGenerator
                     jdbcDriver,
                     jdbcUrl,
                     jdbcUsername,
-                    jdbcPassword,
-                    project,
-                    task);
+                    jdbcPassword);
         }
         else 
         {
@@ -379,9 +367,7 @@ public class DAOTestTemplateGenerator
                     jdbcDriver,
                     jdbcUrl,
                     jdbcUsername,
-                    jdbcPassword,
-                    project,
-                    task) {};
+                    jdbcPassword);
         }
 
         return result;

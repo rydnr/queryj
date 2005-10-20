@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplate;
+import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
@@ -58,25 +59,24 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
+
+/*
+ * Importing some Apache Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
 import java.util.Map;
-
-
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Builds a mock DAO template using database metadata.
@@ -102,68 +102,92 @@ public class MockDAOTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveDatabaseMetaDataManager(parameters),
+                retrieveProjectPackage(parameters),
+                retrievePackage(parameters),
+                retrieveTableRepositoryName(parameters),
+                retrieveTableTemplates(parameters),
+                MockDAOTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Builds the Mock DAO templates.
+     * @param parameters the parameters.
+     * @param metaDataManager the database metadata manager.
+     * @param basePackageName the base package name.
+     * @param packageName the package name.
+     * @param tableRepositoryName the name of the table repository.
+     * @param tableTemplates the table templates.
+     * @param templateFactory the template factory.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaDataManager != null
+     * @precondition basePackageName != null
+     * @precondition packageName != null
+     * @precondition tableRepositoryName != null
+     * @precondition tableTemplates != null
+     * @precondition templateFactory != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaDataManager metaDataManager,
+        final String basePackageName,
+        final String packageName,
+        final String tableRepositoryName,
+        final TableTemplate[] tableTemplates,
+        final MockDAOTemplateFactory templateFactory)
+      throws  BuildException
+    {
         boolean result = false;
+
+        int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
 
         try
         {
-            Map attributes = command.getAttributeMap();
+            MockDAOTemplate[] t_aMockDAOTemplates =
+                new MockDAOTemplate[t_iLength];
 
-            DatabaseMetaDataManager t_MetaDataManager =
-                retrieveDatabaseMetaDataManager(attributes);
-
-            MockDAOTemplateGenerator t_MockDAOTemplateGenerator =
-                MockDAOTemplateGenerator.getInstance();
-
-            if  (t_MockDAOTemplateGenerator != null)
+            for  (int t_iMockDAOIndex = 0;
+                      t_iMockDAOIndex < t_iLength;
+                      t_iMockDAOIndex++) 
             {
-                String t_strBasePackage =
-                    retrieveProjectPackage(attributes);
-
-                String t_strPackage =
-                    retrievePackage(attributes);
-
-                String t_strRepositoryName =
-                    retrieveTableRepositoryName(attributes);
-
-                TableTemplate[] t_aTableTemplates =
-                    retrieveTableTemplates(attributes);
-
-                if  (t_aTableTemplates != null)
-                {
-                    MockDAOTemplate[] t_aMockDAOTemplates =
-                        new MockDAOTemplate[t_aTableTemplates.length];
-
-                    for  (int t_iMockDAOIndex = 0;
-                              t_iMockDAOIndex < t_aMockDAOTemplates.length;
-                              t_iMockDAOIndex++) 
-                    {
-                        t_aMockDAOTemplates[t_iMockDAOIndex] =
-                            t_MockDAOTemplateGenerator.createMockDAOTemplate(
-                                t_aTableTemplates[t_iMockDAOIndex],
-                                t_MetaDataManager,
-                                t_strPackage,
-                                t_strBasePackage,
-                                t_strRepositoryName,
-                                command.getProject(),
-                                command.getTask());
-                    }
-
-                    storeMockDAOTemplates(t_aMockDAOTemplates, attributes);
-                }
+                t_aMockDAOTemplates[t_iMockDAOIndex] =
+                    templateFactory.createMockDAOTemplate(
+                        tableTemplates[t_iMockDAOIndex],
+                        metaDataManager,
+                        packageName,
+                        basePackageName,
+                        tableRepositoryName);
             }
+
+            storeMockDAOTemplates(t_aMockDAOTemplates, parameters);
         }
         catch  (final QueryJException queryjException)
         {
-            Project t_Project = command.getProject();
+            Log t_Log = UniqueLogFactory.getLog(getClass());
 
-            if  (t_Project != null)
+            if  (t_Log != null)
             {
-                t_Project.log(
-                    command.getTask(),
-                      "Error building Mock DAO ("
-                    + queryjException.getMessage()
-                    + ")",
-                    Project.MSG_WARN);
+                t_Log.warn(
+                    "Cannot build Mock DAO.",
+                    queryjException);
             }
 
             throw new BuildException(queryjException);

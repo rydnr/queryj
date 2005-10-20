@@ -51,12 +51,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -85,9 +79,7 @@ public class ValueObjectFactoryTemplate
     public ValueObjectFactoryTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
-        final Project project,
-        final Task task)
+        final DatabaseMetaDataManager metaDataManager)
     {
         super(
             DEFAULT_HEADER,
@@ -106,9 +98,7 @@ public class ValueObjectFactoryTemplate
             DEFAULT_FACTORY_METHOD_FIELD_DECLARATION,
             DEFAULT_FACTORY_METHOD_VALUE_OBJECT_BUILD,
             DEFAULT_FACTORY_ALIAS_METHOD,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

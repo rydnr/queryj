@@ -35,10 +35,6 @@
  * Description: Defines the default subTemplates for creating JUnit tests to
  *              ensure generated DAOs are working fine and the connection
  *              correctly managed.
-<<<<<<< DAOTestTemplateDefaults.java
- *
-=======
->>>>>>> 1.6
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -71,14 +67,6 @@ public interface DAOTestTemplateDefaults
         + " * Description: Executes JUnit tests to ensure {0}DAO works as\n"
          // table
         + " *              expected and connections are correctly managed.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
         + " *\n"
         + " */\n";
 
@@ -142,7 +130,6 @@ public interface DAOTestTemplateDefaults
          // table
         + " * expected and connections are correctly managed.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " * @see {0}.{1}{2}DAO\n"
         + " */\n";
 
@@ -418,7 +405,6 @@ public interface DAOTestTemplateDefaults
         + "     * Tests {0}{1}DAO constructor.\n"
          // engine name - DAO name.
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     */\n"
         + "    public static class ConstructorTest\n"
         + "        extends  TestCase\n"
@@ -453,7 +439,6 @@ public interface DAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests whether the connection is managed correctly.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     */\n"
         + "    public static class ConnectionTest\n"
         + "        extends  TestCase\n"
@@ -503,7 +488,6 @@ public interface DAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests {1}{2}DAO.insert() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.{1}{2}DAO#insert({3},org.acmsl.queryj.dao.TransactionToken)\n"
          // method parameter type declaration
         + "     */\n"
@@ -550,7 +534,6 @@ public interface DAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests {1}{2}DAO.findByPrimaryKey()} method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.{1}{2}DAO#findByPrimaryKey({3},org.acmsl.queryj.dao.TransactionToken)\n"
         + "     */\n"
         + "    public static class FindByPrimaryKey{2}Test\n"
@@ -587,7 +570,6 @@ public interface DAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests {1}{2}DAO.update() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.{1}{2}DAO#update({3},org.acmsl.queryj.dao.TransactionToken)\n"
          // method parameter type declaration
         + "     */\n"
@@ -639,7 +621,6 @@ public interface DAOTestTemplateDefaults
           "    /**\n"
         + "     * Tests {1}{2}DAO.delete() method.\n"
         + "     * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     * @see {0}.{1}{2}DAO#delete({3},org.acmsl.queryj.dao.TransactionToken)\n"
         + "     */\n"
         + "    public static class Delete{2}Test\n"

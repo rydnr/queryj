@@ -177,9 +177,7 @@ public class DAOTemplateWritingHandler
     {
         try 
         {
-            for  (int t_iIndex = 0;
-                      t_iIndex < templates.length;
-                      t_iIndex++)
+            for  (int t_iIndex = 0; t_iIndex < templates.length; t_iIndex++)
             {
                 templateGenerator.write(
                     templates[t_iIndex], outputDir);
@@ -245,50 +243,7 @@ public class DAOTemplateWritingHandler
             packageUtils.retrieveDAOFolder(
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
-                engineName);
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveProjectOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaData)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
+                engineName,
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

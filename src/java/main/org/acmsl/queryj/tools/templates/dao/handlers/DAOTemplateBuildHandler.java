@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
@@ -67,8 +68,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -107,50 +106,36 @@ public class DAOTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters, final Project project, final Task task)
-      throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  BuildException
     {
         return
             handle(
                 parameters,
-                retrieveDatabaseMetaData(parameters),
-                project,
-                task);
+                retrieveDatabaseMetaData(parameters));
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
      * @param metaData the database metadata.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
      */
     protected boolean handle(
-        final Map parameters,
-        final DatabaseMetaData metaData,
-        final Project project,
-        final Task task)
+        final Map parameters, final DatabaseMetaData metaData)
       throws  BuildException
     {
         boolean result = false;
@@ -162,9 +147,7 @@ public class DAOTemplateBuildHandler
                     parameters,
                     metaData.getDatabaseProductName(),
                     metaData.getDatabaseProductVersion(),
-                    fixQuote(metaData.getIdentifierQuoteString()),
-                    project,
-                    task);
+                    fixQuote(metaData.getIdentifierQuoteString()));
         }
         catch  (final SQLException sqlException)
         {
@@ -180,8 +163,6 @@ public class DAOTemplateBuildHandler
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the quote character.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -192,9 +173,7 @@ public class DAOTemplateBuildHandler
         final Map parameters,
         final String engineName,
         final String engineVersion,
-        final String quote,
-        final Project project,
-        final Task task)
+        final String quote)
       throws  BuildException
     {
         return
@@ -209,9 +188,7 @@ public class DAOTemplateBuildHandler
                 retrieveProjectPackage(parameters),
                 retrievePackage(engineName, parameters),
                 retrieveTableRepositoryName(parameters),
-                retrieveTableTemplates(parameters),
-                project,
-                task);
+                retrieveTableTemplates(parameters));
     }
 
     /**
@@ -227,8 +204,6 @@ public class DAOTemplateBuildHandler
      * @param packageName the package name.
      * @param repository the repository.
      * @param tableTemplates the table templates.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -252,19 +227,19 @@ public class DAOTemplateBuildHandler
         final String projectPackage,
         final String packageName,
         final String repository,
-        final TableTemplate[] tableTemplates,
-        final Project project,
-        final Task task)
+        final TableTemplate[] tableTemplates)
       throws  BuildException
     {
         boolean result = false;
 
-        DAOTemplate[] t_aDAOTemplates = new DAOTemplate[tableTemplates.length];
+        int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
+        
+        DAOTemplate[] t_aDAOTemplates = new DAOTemplate[t_iLength];
 
         try
         {
             for  (int t_iDAOIndex = 0;
-                      t_iDAOIndex < t_aDAOTemplates.length;
+                      t_iDAOIndex < t_iLength;
                       t_iDAOIndex++) 
             {
                 t_aDAOTemplates[t_iDAOIndex] =
@@ -277,9 +252,7 @@ public class DAOTemplateBuildHandler
                         engineVersion,
                         quote,
                         projectPackage,
-                        repository,
-                        project,
-                        task);
+                        repository);
             }
 
             storeDAOTemplates(t_aDAOTemplates, parameters);
@@ -315,29 +288,6 @@ public class DAOTemplateBuildHandler
     }
 
     /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
-    }
-
-    /**
      * Retrieves the database metadata manager from the attribute map.
      * @param parameters the parameter map.
      * @return the manager.
@@ -369,20 +319,6 @@ public class DAOTemplateBuildHandler
             (CustomSqlProvider)
                 parameters.get(
                     CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**

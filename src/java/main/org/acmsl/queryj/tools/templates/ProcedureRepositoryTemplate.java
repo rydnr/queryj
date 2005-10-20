@@ -52,12 +52,6 @@ import org.acmsl.queryj.tools.ProcedureParameterMetaData;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -82,14 +76,9 @@ public class ProcedureRepositoryTemplate
      * information.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public ProcedureRepositoryTemplate(
-        final String packageName,
-        final String repository,
-        final Project project,
-        final Task task)
+        final String packageName, final String repository)
     {
         super(
             DEFAULT_HEADER,
@@ -112,9 +101,7 @@ public class ProcedureRepositoryTemplate
             DEFAULT_IN_PARAMETER_SPECIFICATION,
             DEFAULT_OUT_PARAMETER_RETRIEVAL,
             DEFAULT_VALUE_OBJECT_CONSTRUCTION,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

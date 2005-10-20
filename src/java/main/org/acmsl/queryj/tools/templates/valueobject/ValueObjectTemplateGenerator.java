@@ -35,17 +35,6 @@
  * Description: Is able to generate ValueObject implementations according to
  *              database metadata.
  *
-<<<<<<< ValueObjectTemplateGenerator.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -69,12 +58,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -85,11 +68,7 @@ import java.lang.ref.WeakReference;
  * Is able to generate value object implementations according to database
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
-<<<<<<< ValueObjectTemplateGenerator.java
-=======
- * @version $Revision$
->>>>>>> 1.5
+ *         >Jose San Leandro</a>
  */
 public class ValueObjectTemplateGenerator
     implements  ValueObjectTemplateFactory
@@ -324,8 +303,6 @@ public class ValueObjectTemplateGenerator
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metaDataManager the metadata manager.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
@@ -335,18 +312,14 @@ public class ValueObjectTemplateGenerator
     public ValueObjectTemplate createValueObjectTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
-        final Project project,
-        final Task task)
+        final DatabaseMetaDataManager metaDataManager)
         throws  QueryJException
     {
         return
             new ValueObjectTemplate(
                 packageName,
                 tableTemplate,
-                metaDataManager,
-                project,
-                task);
+                metaDataManager);
     }
 
     /**

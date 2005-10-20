@@ -38,54 +38,26 @@
  */
 package org.acmsl.queryj.tools.templates.dao.xml;
 
+/*
+ * Importing some project-specific classes.
+ */
+import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
+
 /**
  * Defines the default subtemplates used to create xml DAO implementations
  * for each table in the persistence model.
  * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * >Jose San Leandro</a>
+ * @version $Revision$ at $Date$ by $Author$
  */
 public interface XMLDAOTemplateDefaults
+    extends  JavaTemplateDefaults
 {
     /**
      * The default header.
      */
     public static final String DEFAULT_HEADER =
-          "/*\n"
-        + "                        QueryJ\n"
-        + "\n"
-        + "    Copyright (C) 2002-2005  Jose San Leandro Armendariz\n"
-        + "                        chous@acm-sl.org\n"
-        + "                        chousz@yahoo.com\n"
-        + "\n"
-        + "    This library is free software; you can redistribute it and/or\n"
-        + "    modify it under the terms of the GNU General Public\n"
-        + "    License as published by the Free Software Foundation; either\n"
-        + "    version 2 of the License, or any later "
-        + "version.\n"
-        + "\n"
-        + "    This library is distributed in the hope that it will be "
-        + "useful,\n"
-        + "    but WITHOUT ANY WARRANTY; without even the implied warranty "
-        + "of\n"
-        + "    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
-        + "GNU\n"
-        + "    General Public License for more details.\n"
-        + "\n"
-        + "    You should have received a copy of the GNU General Public\n"
-        + "    License along with this library; if not, write to the Free "
-        + "Software\n"
-        + "    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  "
-        + "02111-1307  USA\n"
-        + "\n"
-        + "    Thanks to ACM S.L. for distributing this library under the GPL "
-        + "license.\n"
-        + "    Contact info: chous@acm-sl.org\n"
-        + "    Postal Address: c/Playa de Lagoa, 1\n"
-        + "                    Urb. Valdecabanas\n"
-        + "                    Boadilla del monte\n"
-        + "                    28660 Madrid\n"
-        + "                    Spain\n"
-        + "\n"
+          HEADER
         + " *****************************************************************"
         + "*************\n"
         + " *\n"
@@ -96,20 +68,13 @@ public interface XMLDAOTemplateDefaults
         + " * Description: XML-based DAO layer responsible of simulating a persistence\n"
         + " *              layer for {0} structures.\n"
         + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
      * The package declaration.
      */
-    public static final String PACKAGE_DECLARATION = "package {0};\n\n"; // package
+    public static final String DEFAULT_PACKAGE_DECLARATION =
+        "package {0};\n\n"; // package
 
     /**
      * The project imports.
@@ -141,13 +106,8 @@ public interface XMLDAOTemplateDefaults
     /**
      * The ACM-SL imports.
      */
-    public static final String ACMSL_IMPORTS =
+    public static final String DEFAULT_ACMSL_IMPORTS =
           "\n/*\n"
-        + " * Importing some ACM-SL classes.\n"
-        + " */\n"
-        + "import org.acmsl.queryj.dao.TransactionToken;\n\n"
-        + "\n"
-        + "/*\n"
         + " * Importing ACM-SL Commons classes.\n"
         + " */\n"
         + "import org.acmsl.commons.patterns.dao.DataAccessException;\n"
@@ -156,7 +116,7 @@ public interface XMLDAOTemplateDefaults
     /**
      * The JDK imports.
      */
-    public static final String JDK_IMPORTS =
+    public static final String DEFAULT_JDK_IMPORTS =
           "/*\n"
         + " * Importing some JDK classes.\n"
         + " */\n"
@@ -175,14 +135,14 @@ public interface XMLDAOTemplateDefaults
     /**
      * The extra imports.
      */
-    public static final String EXTRA_IMPORTS =
+    public static final String DEFAULT_EXTRA_IMPORTS =
           "/*\n"
         + " * Importing Undigester classes.\n"
         + " */\n"
         + "import org.acmsl.undigester.GetNameRule;\n"
         + "import org.acmsl.undigester.GetNextRule;\n"
         + "import org.acmsl.undigester.GetPropertyRule;\n"
-        + "import org.acmsl.undigester.Undigester;\n\n"
+        + "import org.acmsl.undigester.Undigester;\n"
         + "import org.acmsl.undigester.UndigesterException;\n\n"
         + "/*\n"
         + " * Importing Digester classes.\n"
@@ -201,13 +161,12 @@ public interface XMLDAOTemplateDefaults
         + " * XML-based DAO class responsible of simulating a persistence layer \n"
         + " * for {0} structures.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**
      * The class definition.
      */
-    public static final String CLASS_DEFINITION =
+    public static final String DEFAULT_CLASS_DEFINITION =
           "public abstract class XML{0}DAO\n"
         + "    implements  {0}DAO\n";
         // table name
@@ -241,7 +200,7 @@ public interface XMLDAOTemplateDefaults
     /**
      * The class constructor.
      */
-    public static final String CLASS_CONSTRUCTOR =
+    public static final String DEFAULT_CLASS_CONSTRUCTOR =
           "    /**\n"
         + "     * Creates a XML{0}DAO with given input stream.\n"
         // table name
@@ -355,10 +314,8 @@ public interface XMLDAOTemplateDefaults
         + "    /**\n"
         + "     * Loads the information from the XML resource.\n"
         + "     * @return the {0} information.\n"
-        + "     * @throws DataAccessException if the data can not be parsed.\n"
         + "     */\n"
         + "    protected Map load()\n"
-        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        return load(configureDigester(), getInput());\n"
         + "    '}'\n\n"
@@ -367,13 +324,11 @@ public interface XMLDAOTemplateDefaults
         + "     * @param digester the Digester instance.\n"
         + "     * @param stream the input stream.\n"
         + "     * @return the {0} information.\n"
-        + "     * @throws DataAccessException if the data can not be parsed.\n"
         + "     * @precondition (stream != null)\n"
         + "     */\n"
         + "    protected synchronized Map load(\n"
         + "        final Digester digester,\n"
         + "        final InputStream input)\n"
-        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        Map result = null;\n\n"
         + "        if  (digester != null)\n"
@@ -391,16 +346,22 @@ public interface XMLDAOTemplateDefaults
         + "                    set{0}Map(result);\n"
         + "                '}'\n"
         + "            '}'\n"
-        + "            catch (final Exception exception)\n"
+        + "            catch  (final Exception exception)\n"
         + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).error(\n"
-        + "                    \"Cannot read XML {0} information.\",\n"
-        + "                    exception);\n\n"
-        + "                throw\n"
-        + "                    new DataAccessException(\n"
-        + "                        \"Cannot.read.xml.{0}.information\",\n"
-        + "                        exception,\n"
-        + "                        this);\n"
+        + "                try\n"
+        + "                '{'\n"
+        + "                    LogFactory.getLog(getClass()).error(\n"
+        + "                        \"Cannot read XML {0} information.\",\n"
+        + "                        exception);\n\n"
+        + "                '}'\n"
+        + "                catch  (final Throwable throwable)\n"
+        + "                '{'\n"
+        + "                    // class-loading problem.\n"
+        + "                '}'\n\n"
+        + "                //throw\n"
+        + "                //    new DataAccessException(\n"
+        + "                //        \"Cannot.read.xml.{0}.information\",\n"
+        + "                //        exception);\n"
         + "            '}'\n"
         + "        '}'\n\n"
         + "        return result;\n"
@@ -439,10 +400,13 @@ public interface XMLDAOTemplateDefaults
         + "            while  (t_Iterator.hasNext())\n"
         + "            '{'\n"
         + "                {0}ValueObject t_ValueObject =\n"
-        + "                    ({0}ValueObject) t_Iterator.next();\n"
+        + "                    ({0}ValueObject) t_Iterator.next();\n\n"
         + "                if  (t_ValueObject != null)\n"
         + "                '{'\n"
-        + "                    map.put(buildKey({6}), t_ValueObject);\n"
+        + "                    map.put(\n"
+        + "                        buildKey("
+        + "{6}),\n"
+        + "                        t_ValueObject);\n"
          // PROCESS_PK_ATTRIBUTES
         + "                '}'\n"
         + "            '}'\n"
@@ -474,8 +438,57 @@ public interface XMLDAOTemplateDefaults
      * The process method's pk attributes.
      */
     public static final String DEFAULT_PROCESS_PK_ATTRIBUTES =
-          "t_ValueObject.get{0}()";
+          "\n                            t_ValueObject.get{0}()";
          // value
+
+    /**
+     * The find by static field method.
+     * @param 0 the table name.
+     * @param 1 the static field.
+     * @param 2 the static field javadoc.
+     * @param 3 the capitalized table name.
+     * @param 4 the capitalized static column.
+     * @param 5 the static field declaration.
+     */
+    public static final String DEFAULT_FIND_BY_STATIC_FIELD_METHOD =
+          "    /**\n"
+        + "     * Loads <i>{0}</i> information from the persistence layer filtering\n"
+        + "     * by {1}."
+        + "{2}\n"
+        + "     * @return the information extracted from the persistence layer.\n"
+        + "     * @precondition {1} != null\n"
+        + "     */\n"
+        + "    public {3}ValueObject findConstantBy{4}("
+        + "{5})\n"
+        + "    '{'\n"
+        + "        {3}ValueObject result = null;\n\n"
+        + "        for  (int t_iIndex = 0; t_iIndex < _ALL_QUERYJ_CONSTANTS_.length; t_iIndex++)\n"
+        + "        '{'\n"
+        + "            {3}ValueObject t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];\n\n"
+        + "            if  (   (t_CurrentItem != null)\n"
+        + "                 && ({1}.equals(t_CurrentItem.get{4}())))\n"
+        + "            '{'\n"
+        + "                result = t_CurrentItem;\n"
+        + "            '}'\n"
+        + "        '}'\n\n"
+        + "        return result;\n"
+        + "    '}'\n\n";
+
+    /**
+     * The find-by-static-field method's field javadoc.
+     * @param 0 the field name (Java valid).
+     * @param 1 the field name.
+     */
+    public static final String DEFAULT_FIND_BY_STATIC_FIELD_JAVADOC =
+        "\n     * @param {0} the <i>{1}</i> value to filter.";
+
+    /**
+     * The find-by-primary-key method's primary keys declaration.
+     * @param 0 the field type.
+     * @param 1 the field name (Java valid).
+     */
+    public static final String DEFAULT_FIND_BY_STATIC_FIELD_DECLARATION =
+        "\n        final {0} {1}";
 
     /**
      * The find by primary key method.
@@ -487,17 +500,13 @@ public interface XMLDAOTemplateDefaults
         + "     * layer filtering by its primary keys."
         + "{1}\n"
          // FIND_BY_PRIMARY_KEY_PK_JAVADOC
-        + "     * @param transactionToken <i>not used in this implementation</i>.\n"
         + "     * @return the information extracted from the simulated\n"
         + "     * persistence layer.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public {2}ValueObject findByPrimaryKey(\n"
+        + "    public {2}ValueObject findByPrimaryKey("
          // java table name
-        + "{3}"
+        + "{3})\n"
          // FIND_BY_PRIMARY_KEY_PK_DECLARATION
-        + "        final TransactionToken transactionToken)\n"
-        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        {2}ValueObject result = null;\n\n"
          // java table name
@@ -534,7 +543,7 @@ public interface XMLDAOTemplateDefaults
      * The find-by-primary-key method's primary keys declaration.
      */
     public static final String DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION =
-        "        {0} {1},\n";
+        "\n        final {0} {1}";
          // pk type - java pk
 
     /**
@@ -547,7 +556,7 @@ public interface XMLDAOTemplateDefaults
     /**
      * The build-value-object method.
      */
-    public static final String BUILD_VALUE_OBJECT_METHOD =
+    public static final String DEFAULT_BUILD_VALUE_OBJECT_METHOD =
           "    /**\n"
         + "     * Fills up a {0} with the information provided."
          // table name
@@ -566,32 +575,48 @@ public interface XMLDAOTemplateDefaults
         + "        if  (t_{1}Factory != null) \n"
         + "        '{'\n"
         + "            result =\n"
-        + "                t_{1}Factory.create{1}(\n"
-        + "                    {5});\n"
+        + "                t_{1}Factory.create{1}({5});\n"
          // BUILD_VALUE_OBJECT_VALUE_RETRIEVAL
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n\n";
 
     /**
+     * The build value object value retrieval.
+     */
+    public static final String DEFAULT_BUILD_VALUE_OBJECT_VALUE_RETRIEVAL =
+        "\n                    {0}";
+
+    /**
      * The store method.
      */
     public static final String DEFAULT_INSERT_METHOD =
           "    /**\n"
+        + "     * Persists given {0}\n"
+        + "     * information, retrieving the new instance.\n"
+         // table name
+        + "{2}"
+         // (optional) pk javadoc
+        + "{3}\n"
+         // insert parameters javadoc
+        + "     */\n"
+        + "    public {1}ValueObject create("
+        + "{4})\n"
+         // insert parameters declaration
+        + "    '{'\n"
+        + "        return null;\n"
+        + "    '}'\n\n"
+        + "    /**\n"
         + "     * Persists given {0} information."
          // table name
         + "{2}"
          // (optional) pk javadoc
         + "{3}\n"
          // insert parameters javadoc
-        + "     * @param transactionToken <i>not used in this implementation</i>.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
         + "    public void insert("
-        + "{4}\n"
+        + "{4})\n"
          // insert parameters declaration
-        + "        final TransactionToken transactionToken)\n"
-        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        Map t_m{1}Map = null;\n\n"
         + "        synchronized (LOCK)\n"
@@ -610,8 +635,7 @@ public interface XMLDAOTemplateDefaults
         + "        t_m{1}Map.put(\n"
         + "            buildKey({5}),\n"
          // FIND_BY_PRIMARY_KEY_PK_FILTER_VALUES
-        + "            build{1}(\n"
-        + "                {6}));\n"
+        + "            build{1}({6}));\n"
          // BUILD_VALUE_OBJECT_VALUE_RETRIEVAL
         + "    '}'\n\n";
 
@@ -626,7 +650,7 @@ public interface XMLDAOTemplateDefaults
      * The insert parameters declaration.
      */
     public static final String DEFAULT_INSERT_PARAMETERS_DECLARATION =
-        "\n        {0} {1}";
+        "\n        final {0} {1}";
     // field type - field name
 
     /**
@@ -641,27 +665,21 @@ public interface XMLDAOTemplateDefaults
          // (optional) pk javadoc
         + "{2}\n"
          // update parameters javadoc
-        + "     * @param transactionToken <i>not used in this implementation</i>.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public void update(\n"
+        + "    public void update("
         + "{3}"
          // pk declaration
-        + "{4}"
+        + "{4})\n"
          // update parameters declaration
-        + "        final TransactionToken transactionToken)\n"
-        + "      throws  DataAccessException\n"
         + "    '{'\n"
         + "        {0}ValueObject t_{0}ValueObject =\n"
         + "            findByPrimaryKey(\n"
-        + "                {5},\n"
-        + "                transactionToken);\n\n"
+        + "                {5});\n\n"
          // pk values
         + "        if  (t_{0}ValueObject != null)\n"
         + "        '{'\n"
         + "            t_{0}ValueObject =\n"
-        + "                build{0}(\n"
-        + "                    {6});\n"
+        + "                build{0}({6});\n"
         + "        '}'\n\n"
         + "        synchronized (LOCK)\n"
         + "        '{'\n"
@@ -695,52 +713,43 @@ public interface XMLDAOTemplateDefaults
      * The update parameters declaration.
      */
     public static final String DEFAULT_UPDATE_PARAMETERS_DECLARATION =
-        "        final {0} {1},\n";
+        "\n        final {0} {1}";
     // field type - field name
 
     /**
      * The delete method.
      */
-    public static final String DEFAULT_DELETE_METHOD =
+    public static final String DEFAULT_DELETE_METHOD_SUBTEMPLATE =
           "    /**\n"
         + "     * Deletes {0} information from the persistence layer filtering\n"
          // table name
         + "     * by its primary keys."
-        + "{2}\n"
+        + "{1}\n"
          // DELETE_PK_JAVADOC
-        + "     * @param transactionToken the transaction token.\n"
-        + "     * @return <code>true</code> if the information has been deleted\n"
-        + "     * successfully.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    {4} boolean delete{5}(\n"
+        + "    protected void deleteNoFk("
          // java table name
-        + "{3}"
+        + "{4})\n"
          // DELETE_PK_DECLARATION
-        + "        final TransactionToken transactionToken)\n"
-        + "      throws  DataAccessException\n"
         + "    '{'\n"
-        + "        boolean result = false;\n\n"
         + "        synchronized (LOCK)\n"
         + "        '{'\n"
-        + "            Map t_m{1}Map = get{1}Map();\n\n"
-        + "            if  (t_m{1}Map == null)\n"
+        + "            Map t_m{5}Map = get{5}Map();\n\n"
+        + "            if  (t_m{5}Map == null)\n"
         + "            '{'\n"
-        + "                t_m{1}Map = load();\n"
+        + "                t_m{5}Map = load();\n"
         + "            '}'\n\n"
-        + "            if  (t_m{1}Map == null)\n"
+        + "            if  (t_m{5}Map == null)\n"
         + "            '{'\n"
-        + "                t_m{1}Map = new Hashtable();\n"
-        + "                set{1}Map(t_m{1}Map);\n"
+        + "                t_m{5}Map = new Hashtable();\n"
+        + "                set{5}Map(t_m{5}Map);\n"
         + "            '}'\n"
-        + "            if  (t_m{1}Map != null)\n"
+        + "            if  (t_m{5}Map != null)\n"
         + "            '{'\n"
-        + "                t_m{1}Map.remove(\n"
+        + "                t_m{5}Map.remove(\n"
         + "                    buildKey({6}));\n\n"
-        + "                result = true;\n"
         + "            '}'\n"
         + "        '}'\n\n"
-        + "        return result;\n"
         + "    '}'\n\n";
 
     /**
@@ -754,33 +763,25 @@ public interface XMLDAOTemplateDefaults
      * The delete method's primary keys declaration.
      */
     public static final String DEFAULT_DELETE_PK_DECLARATION =
-        "        final {0} {1},\n";
+        "\n        final {0} {1}";
          // pk type - java pk
 
     /**
-     * The delete with fk method.
+     * The delete no fk method.
      */
-    public static final String DEFAULT_DELETE_WITH_FK_METHOD =
+    public static final String DEFAULT_DELETE_NO_FK_METHOD =
           "    /**\n"
         + "     * Deletes {0} information from the persistence layer filtering\n"
          // table name
         + "     * by its primary keys."
         + "{1}\n"
          // DELETE_PK_JAVADOC
-        + "     * @param transactionToken <i>not used in this implementation</i>.\n"
-        + "     * @return <code>true</code> if the information has been deleted\n"
-        + "     * successfully.\n"
-        + "     * @throws DataAccessException if the access to the information fails.\n"
         + "     */\n"
-        + "    public boolean delete(\n"
-        + "{2}"
+        + "    public void delete("
+        + "{4})\n"
          // DELETE_PK_DECLARATION
-        + "        final TransactionToken  transactionToken)\n"
-        + "      throws  DataAccessException\n"
         + "    '{'\n"
-        + "        return\n"
-        + "        // delete with fk, comparing for xml implementations.\n"
-        + "        return result;\n"
+        + "        deleteNoFk({7});\n"
         + "    '}'\n\n";
 
     /**
@@ -794,7 +795,7 @@ public interface XMLDAOTemplateDefaults
      * The delete with fk method's primary keys declaration.
      */
     public static final String DEFAULT_DELETE_WITH_FK_PK_DECLARATION =
-        "        final {0} {1},\n";
+        "\n        final {0} {1}";
          // pk type - java pk
 
     /**
@@ -806,26 +807,39 @@ public interface XMLDAOTemplateDefaults
         + "                    {0}DAO t_{0}DAO = t_DataAccessManager.get{0}DAO();\n\n"
         + "                    if  (t_{0}DAO != null)\n"
         + "                    '{'\n"
-        + "                        result =\n"
-        + "                            t_{0}DAO.delete(\n"
-        + "                                {1}.get{2}(),\n"
-        + "                                t_DeleteTransactionToken);\n"
+        + "                        t_{0}DAO.delete(\n"
+        + "                            {1}.get{2}());\n"
         + "                    '}'\n"
-        + "                    else\n"
-        + "                    '{'\n"
-        + "                        result = false;\n"
-        + "                    '}'\n"
-        + "                '}'\n"
-        + "                else\n"
-        + "                '{'\n"
-        + "                    result = false;\n"
         + "                '}'\n";
 
     /**
      * The delete with fk methods' FK values.
      */
     public static final String DEFAULT_DELETE_WITH_FK_PK_VALUES =
-        "\n                    {0},";
+        "\n                    {0}";
+
+    /**
+     * The delete by fk method.
+     * @param 0 the value object name.
+     * @param 1 the fk javadoc
+     * @param 2 the fk value object name.
+     * @param 3 the fk declaration.
+     * @param 4 the fk attribute filter.
+     * @param 5 the fk statement setter call.
+     * @param 6 the repository name.
+     * @param 7 the table name.
+     */
+    public static final String DEFAULT_DELETE_BY_FK_METHOD =
+          "    /**\n"
+        + "     * Deletes {0} information from the persistence layer filtering\n"
+        + "     * by given foreign keys."
+        + "{11}\n"
+        + "     */\n"
+        + "    public void deleteBy{14}("
+        + "{13})\n"
+        + "    '{'\n"
+        + "        throw new IllegalArgumentException(\"Not implemented\");\n"
+        + "    '}'\n";
 
     /**
      * The persist method.
@@ -855,13 +869,27 @@ public interface XMLDAOTemplateDefaults
         + "    '{'\n"
         + "        if  (collection == null)\n"
         + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).warn(\n"
-        + "                \"No {0} information to serialize.\");\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).warn(\n"
+        + "                    \"No {0} information to serialize.\");\n"
+        + "            '}'\n"
+        + "            catch  (final Throwable throwable)\n"
+        + "            '{'\n"
+        + "                // class-loading problem.\n"
+        + "            '}'\n\n"
         + "        '}'\n"
         + "        else if  (output == null)\n"
         + "        '{'\n"
-        + "            LogFactory.getLog(getClass()).warn(\n"
-        + "                \"No output stream to serialize the information through.\");\n"
+        + "            try\n"
+        + "            '{'\n"
+        + "                LogFactory.getLog(getClass()).warn(\n"
+        + "                    \"No output stream to serialize the information through.\");\n"
+        + "            '}'\n"
+        + "            catch  (final Throwable throwable)\n"
+        + "            '{'\n"
+        + "                // class-loading problem.\n"
+        + "            '}'\n\n"
         + "        '}'\n"
         + "        else\n"
         + "        '{'\n"
@@ -873,12 +901,19 @@ public interface XMLDAOTemplateDefaults
         + "            '}'\n"
         + "            catch  (final UndigesterException undigesterException)\n"
         + "            '{'\n"
-        + "                LogFactory.getLog(getClass()).fatal(\n"
-        + "                      \"Cannot serialize {0} information. This could be \"\n"
-        + "                    + \"a bug in QueryJ-based generated code. \"\n"
-        + "                    + \"Please provide us information about this issue\"\n"
-        + "                    + \"though http://bugzilla.acm-sl.org\",\n"
-        + "                    undigesterException);\n"
+        + "                try\n"
+        + "                '{'\n"
+        + "                    LogFactory.getLog(getClass()).fatal(\n"
+        + "                          \"Cannot serialize {0} information. This could be \"\n"
+        + "                        + \"a bug in QueryJ-based generated code. \"\n"
+        + "                        + \"Please provide us information about this issue\"\n"
+        + "                        + \"though http://bugzilla.acm-sl.org\",\n"
+        + "                        undigesterException);\n"
+        + "                '}'\n"
+        + "                catch  (final Throwable throwable)\n"
+        + "                '{'\n"
+        + "                    // class-loading problem.\n"
+        + "                '}'\n\n"
         + "            '}'\n"
         + "        '}'\n"
         + "    '}'\n\n"

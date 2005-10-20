@@ -51,12 +51,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -130,21 +124,16 @@ public class DataAccessManagerTemplateGenerator
      * Creates a data access manager template instance.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return such template.
      * @precondition packageName != null
      * @precondition repository != null
      */
     public DataAccessManagerTemplate createDataAccessManagerTemplate(
-        final String packageName,
-        final String repository,
-        final Project project,
-        final Task task)
+        final String packageName, final String repository)
     {
         return
             new DataAccessManagerTemplate(
-                packageName, repository, project, task);
+                packageName, repository);
     }
 
     /**

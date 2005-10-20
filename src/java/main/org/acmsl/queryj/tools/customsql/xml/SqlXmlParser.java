@@ -65,6 +65,7 @@ import org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.SqlElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.StatementFlagsElementFactory;
+import org.acmsl.queryj.QueryJException;
 
 /*
  * Importing some JDK classes.
@@ -209,8 +210,10 @@ public abstract class SqlXmlParser
     /**
      * Loads the information from the XML resource.
      * @return the Customer information.
+     * @throws QueryJException if the information cannot be read.
      */
     protected Map load()
+      throws  QueryJException
     {
         return load(configureDigester(getClassLoader()), getInput());
     }
@@ -219,12 +222,13 @@ public abstract class SqlXmlParser
      * Loads the information from the XML resource.
      * @param digester the Digester instance.
      * @param stream the input stream.
-     * @return the Customer information.
+     * @return the information.
+     * @throws QueryJException if the information cannot be read.
      * @precondition (stream != null)
      */
     protected synchronized Map load(
-        final Digester digester,
-        final InputStream input)
+        final Digester digester, final InputStream input)
+      throws  QueryJException
     {
         Map result = null;
 
@@ -246,11 +250,23 @@ public abstract class SqlXmlParser
                     setMap(result);
                 }
             }
-            catch (final Exception exception)
+            catch  (final Exception exception)
             {
-                LogFactory.getLog(getClass()).error(
-                    "Cannot read sql.xml information.",
-                    exception);
+                try
+                {
+                    LogFactory.getLog(getClass()).error(
+                        "Cannot read sql.xml information.",
+                        exception);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+
+                throw
+                    new QueryJException(
+                        "cannot.read.custom.sql.xml",
+                        exception);
             }
         }
 
@@ -480,8 +496,10 @@ public abstract class SqlXmlParser
 
     /**
      * Parses the sql.xml associated to this instance.
+     * @throws QueryJException if the information cannot be read.
      */
     public void parse()
+        throws  QueryJException
     {
         Map t_mSqlXmlMap = getMap();
 

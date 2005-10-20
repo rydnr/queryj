@@ -45,12 +45,6 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Contains the required subtemplates to generate base DAO factories
  * according to database metadata.
@@ -168,8 +162,6 @@ public abstract class AbstractBaseDAOFactoryTemplate
      * @param getInstanceMethod the getInstance method.
      * @param factoryMethod the factory method.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractBaseDAOFactoryTemplate(
         final String header,
@@ -186,11 +178,8 @@ public abstract class AbstractBaseDAOFactoryTemplate
         final String classStart,
         final String getInstanceMethod,
         final String factoryMethod,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetTableTemplate(tableTemplate);
