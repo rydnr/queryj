@@ -38,10 +38,6 @@
  */
 package org.acmsl.queryj.tools.templates.dao;
 
-/*
- * Importing some project-specific classes.
- */
-
 /**
  * Defines the default subtemplates to generate PkStatementSetter
  * templates.
@@ -101,14 +97,6 @@ public interface PkStatementSetterTemplateDefaults
         + " * Description: Specifies the PreparedStatement values required\n"
         + " *              to perform any {0} operation expecting the\n"
         + " *              complete pk set.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
         + " *\n"
         + " */\n";
 

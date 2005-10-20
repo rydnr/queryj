@@ -3,8 +3,7 @@
                  ACM-SL Ant-based build script
 
     Copyright (C) 2001-2004  Jose San Leandro Armend&aacute;riz
-                             jsanleandro@yahoo.es
-                             chousz@yahoo.com
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,9 +19,8 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsr000@terra.es
+    Contact info: jose.sanleandro@acm-sl.com
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecaba&ntilde;as
                     Boadilla del monte
@@ -38,15 +36,6 @@
    Description: Defines the steps and options available for building the
                 project using Ant. Additional specific properties can be
                 specified in the <i>build.properties</i> file.
-
-   Last modified by: $Author$ at $Date$
-
-   File version: $Revision$
-
-   Project version: $Name$
-                    ("Name" means no concrete version has been checked out)
-
-   $Id$
 
 -->
 
@@ -166,7 +155,6 @@
  @requires AspectJ libraries and Ant tasks.
  @requires JUnit libraries and Ant tasks.
  @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro Armendariz</a>
- @version $Revision$
  @default description
 -->
 <project name="${project.name}" default="description" basedir="../../..">
@@ -2468,11 +2456,11 @@
           resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
           link="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}.jar"/>
 
-        <symlink
+        <!--symlink
           action="single"
           overwrite="true"
           resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
-          link="${basedir}/${build.dir}/${project.name}.jar"/>
+          link="${basedir}/${build.dir}/${project.name}.jar"/-->
 
         <condition property="maven.available.locally">
           <available type="dir" file="${env.MAVEN_HOME}/repository"/>

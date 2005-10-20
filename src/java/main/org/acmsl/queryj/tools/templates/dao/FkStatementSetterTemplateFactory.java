@@ -62,7 +62,7 @@ public interface FkStatementSetterTemplateFactory
     /**
      * Generates a FkStatementSetter template.
      * @param tableTemplate the table template.
-     * @param foreignKey the foreign key.
+     * @param foreignKeys the foreign keys.
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
@@ -74,7 +74,7 @@ public interface FkStatementSetterTemplateFactory
      */
     public FkStatementSetterTemplate createFkStatementSetterTemplate(
         final TableTemplate tableTemplate,
-        final String foreignKey,
+        final String[] foreignKeys,
         final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String basePackageName,

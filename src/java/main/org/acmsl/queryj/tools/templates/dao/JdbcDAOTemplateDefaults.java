@@ -66,14 +66,6 @@ public interface JdbcDAOTemplateDefaults
         + " * Description: Abstract DAO with common methods to all\n"
         + " *              JDBC-based DAO implementations.\n"
         + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -135,7 +127,6 @@ public interface JdbcDAOTemplateDefaults
         + " * Abstract DAO with common methods to all\n"
         + " * JDBC-based DAO implementations.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**

@@ -34,17 +34,6 @@
  *
  * Description: Writes value object templates.
  *
-<<<<<<< ValueObjectTemplateWritingHandler.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.6
  */
 package org.acmsl.queryj.tools.templates.valueobject.handlers;
 
@@ -79,10 +68,6 @@ import java.util.Map;
  * Writes DAO templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
-<<<<<<< ValueObjectTemplateWritingHandler.java
-=======
- * @version $Revision$
->>>>>>> 1.6
  */
 public class ValueObjectTemplateWritingHandler
     extends    AbstractAntCommandHandler

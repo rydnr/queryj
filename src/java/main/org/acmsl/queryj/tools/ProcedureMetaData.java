@@ -171,7 +171,6 @@ public class ProcedureMetaData
     /**
      * Represents procedure parameter metadata.
      * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
-     * @version $Revision$
      */
     private static class ProcedureParameterMetaData
         extends  ProcedureMetaData

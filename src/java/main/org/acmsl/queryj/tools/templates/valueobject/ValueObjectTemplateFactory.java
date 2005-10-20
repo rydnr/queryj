@@ -34,17 +34,6 @@
  *
  * Description: Is able to create value object templates.
  *
-<<<<<<< ValueObjectTemplateFactory.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.4
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -65,11 +54,7 @@ import org.apache.tools.ant.Task;
 /**
  * Is able to create value object templates.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
-<<<<<<< ValueObjectTemplateFactory.java
-=======
- * @version $Revision$
->>>>>>> 1.4
+ *         >Jose San Leandro</a>
  */
 public interface ValueObjectTemplateFactory
 {

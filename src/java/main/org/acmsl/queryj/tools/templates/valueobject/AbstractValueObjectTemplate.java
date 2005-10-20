@@ -35,17 +35,6 @@
  * Description: Contains the subtemplates used to generate value objects
  *              according to database metadata.
  *
-<<<<<<< AbstractValueObjectTemplate.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.2
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -67,12 +56,7 @@ import org.apache.tools.ant.Task;
  * Contains the subtemplates used to generate value objects according to
  * database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
-<<<<<<< AbstractValueObjectTemplate.java
  *         >Jose San Leandro</a>
-=======
-           >Jose San Leandro</a>
- * @version $Revision$
->>>>>>> 1.2
  */
 public abstract class AbstractValueObjectTemplate
     extends  AbstractTemplate

@@ -57,11 +57,6 @@ import org.acmsl.commons.patterns.CommandHandler;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Inside a Chain Of Responsibility, these are the chain links.
  * This means they perform specific actions when receiving the command.

@@ -1,0 +1,24 @@
+# rcfile for tedia2sql
+#
+# format is VARIABLE = VALUE or VARIABLE = "VALUE" if you
+# like quotes... but I don't recommend them
+#
+# Once inside tedia2sql, you retrieve these via
+# $cfg->{VARIABLE} which holds the value
+
+# Set this to the version of Dia you're using
+diaVersion = 0.90
+
+# Your preferred database output
+# The database version isn't used yet... 
+defaultDatabase = postgres
+defaultDatabaseVersion = 7.2.1
+
+# If you like to have "drop statements" in your SQL
+# output, set this to "true"
+dropStatements = true
+
+# If you want to have multiple SQL files output each
+# time, set this to "true"
+separateSQLFiles = false
+

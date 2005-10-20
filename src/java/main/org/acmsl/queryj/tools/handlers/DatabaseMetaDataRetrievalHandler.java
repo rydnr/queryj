@@ -73,11 +73,6 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Retrieves the database metadata instance.
  * @author <a href="mailto:chous@acm-sl.org"

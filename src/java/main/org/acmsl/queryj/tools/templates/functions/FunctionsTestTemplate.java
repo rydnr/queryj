@@ -65,11 +65,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Template for creating JUnit tests associated to Database's
  * functions.

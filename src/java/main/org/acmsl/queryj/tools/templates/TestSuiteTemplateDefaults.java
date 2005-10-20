@@ -35,17 +35,6 @@
  * Description: Defines the default subtemplates used to generate a JUnit
  *              suite for a set of test cases.
  *
-<<<<<<< TestSuiteTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -54,10 +43,6 @@ package org.acmsl.queryj.tools.templates;
  * suite for a set of test cases.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< TestSuiteTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.3
  */
 public interface TestSuiteTemplateDefaults
     extends  JavaTemplateDefaults
@@ -77,15 +62,6 @@ public interface TestSuiteTemplateDefaults
         + " * Description: Executes all defined test cases for\n"
         + "                {0} package.\n"
           // package.
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n"
         + "package {1};\n\n" // test package.
         + "/*\n"
@@ -104,7 +80,6 @@ public interface TestSuiteTemplateDefaults
         + " * Executes all defined test cases for\n"
         + " * {0} package.\n" // package
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n"
         + "public class {3}Suite\n"
         + "    extends  TestSuite\n"

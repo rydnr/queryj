@@ -62,11 +62,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Opens a JDBC connection.
  * @author <a href="mailto:chous@acm-sl.org"

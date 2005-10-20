@@ -1104,7 +1104,14 @@ public abstract class FunctionsTemplate
         }
         else 
         {
-            LogFactory.getLog(getClass()).warn(message);
+            try
+            {
+                LogFactory.getLog(getClass()).warn(message);
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
         }
     }
 
@@ -1125,7 +1132,14 @@ public abstract class FunctionsTemplate
         }
         else 
         {
-            LogFactory.getLog(getClass()).debug(message);
+            try
+            {
+                LogFactory.getLog(getClass()).debug(message);
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
         }
     }
 

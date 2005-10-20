@@ -445,24 +445,28 @@ public class MockDAOTemplate
                         t_astrReferredTables[t_iRefTableIndex],
                         '_');
 
-                String t_strFkName =
-                    metaDataManager.getReferredKey(
+                String[] t_astrFkNames =
+                    metaDataManager.getReferredKeys(
                         t_strTableName,
                         t_astrReferredTables[t_iRefTableIndex]);
 
-                t_sbDeleteWithFkDAODeleteRequest.append(
-                    t_DeleteWithFkDAODeleteRequestFormatter.format(
-                        new Object[]
-                        {
-                            t_strReferredTableName,
-                            t_strTableName.toLowerCase(),
-                            stringUtils.capitalize(
-                                metaDataManager.getForeignKey(
-                                    t_strTableName,
-                                    t_astrReferredTables[t_iRefTableIndex])
-                                .toLowerCase(),
-                                '_')
+                int t_iLength = (t_astrFkNames != null) ? t_astrFkNames.length : 0;
+
+                for  (int t_iColumnIndex = 0;
+                          t_iColumnIndex < t_iLength;
+                          t_iColumnIndex++)
+                {
+                    t_sbDeleteWithFkDAODeleteRequest.append(
+                        t_DeleteWithFkDAODeleteRequestFormatter.format(
+                            new Object[]
+                            {
+                                t_strReferredTableName,
+                                t_strTableName.toLowerCase(),
+                                stringUtils.capitalize(
+                                    t_astrFkNames[t_iColumnIndex],
+                                    '_').toLowerCase()
                         }));
+                }
 
                 t_sbForeignDAOImports.append(
                     t_ForeignDAOImportsFormatter.format(
@@ -471,7 +475,6 @@ public class MockDAOTemplate
                             packageUtils.retrieveBaseDAOPackage(
                                 basePackageName),
                             t_strReferredTableName
-                                
                         }));
             }
         }

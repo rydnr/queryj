@@ -1,0 +1,384 @@
+<!--
+ @license
+                        QueryJ
+
+    Copyright (C) 2004  Jose San Leandro Armend&aacute;riz
+                        chous@acm-sl.org
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+    Thanks to ACM S.L. for distributing this library under the GPL license.
+    Contact info: jose.sanleandro@acm-sl.com
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecaba&ntilde;as
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
+
+ @header
+  
+   Filename: $RCSfile$
+
+   Author: Jose San Leandro Armendariz
+
+   Description: Builds QueryJ using AntMake.
+
+-->
+
+<!--
+ Builds QueryJ using AntMake.
+ @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro Armendariz</a>
+ @default description
+-->
+<project name="${project.name}" default="description" basedir="../../..">
+
+    <!--
+     Displays the build script purpose, and the folder structure required.
+     @return the output of the described message.
+    -->
+    <target
+      name="description"
+      description="Displays the build script purpose.">
+
+      <echo>
+        This script builds QueryJ using AntMake.
+      </echo>
+    </target>
+
+    <!--
+     Defines the required variables in all tasks.
+     @calls property to initialize the required properties.
+     @calls path to define each one of the class and source paths.
+     @return the asignment of correct values to the required properties.
+    -->
+    <target name="init.properties">
+
+      <!--
+       Dependencies base folder.
+      -->
+      <property name="dependencies.dir" value="dependencies"/>
+
+      <!--
+       Libraries base folder.
+      -->
+      <property name="lib.dir" value="${dependencies.dir}/lib"/>
+
+      <!--
+       Compilation and distribution base folder.
+      -->
+      <property name="dist.dir" value="dist"/>
+
+      <!--
+       Classes folder.
+      -->
+      <property name="classes.dir" value="${dist.dir}/classes"/>
+
+      <!--
+       Base folder for all kind of source files.
+      -->
+      <property name="src.dir" value="src"/>
+
+      <!--
+       Java source folder.
+      -->
+      <property name="java.src.dir" value="${src.dir}/java"/>
+
+      <!--
+       Base folder for all kind of Autotools source files.
+      -->
+      <property name="autotools.dir" value="${src.dir}/toolconf/autotools"/>
+
+      <!--
+       Java source path.
+      -->
+      <path id="java.source.path">
+
+        <!--
+         Source files.
+        -->
+        <pathelement location="${java.src.dir}"/>
+
+      </path>
+
+      <!--
+       Compilation and distribution base folder.
+      -->
+      <property name="dist.dir" value="${project.base.folder}/dist"/>
+
+      <!--
+       Where the .class files are created while compiling.
+      -->
+      <property name="classes.dir" value="${dist.dir}/classes"/>
+
+      <!--
+       Defines where to look for M4 macro files: acinclude.m4, ...
+      -->
+      <property name="macros.dir" value="${autotools.dir}"/>
+
+      <!--
+       Java libraries folder. Files under this folder are needed for
+       compiling the Java sources and also at runtime.
+      -->
+      <property name="java.lib.dir" value="${lib.dir}/java"/>
+
+      <!--
+       Java libraries needed ONLY for building the project, not required
+       at runtime.
+      -->
+      <property
+        name="java.build.lib.dir"
+        value="${java.lib.dir}/development"/>
+
+      <!--
+       Java libraries needed ONLY at runtime, not required for building
+       the project.
+      -->   
+      <property
+          name="java.runtime.lib.dir"
+          value="${java.lib.dir}/runtime"/>
+
+      <!--
+       Java libraries needed ONLY for unit tests, not required
+       for building the project.
+      -->   
+      <property
+          name="java.unit.test.lib.dir"
+          value="${java.lib.dir}/unittest"/>
+
+      <!--
+       Java compilation classpath.
+      -->
+      <path id="java.compile.class.path">
+
+        <!--
+         Project own classes.
+        -->
+        <pathelement location="${classes.dir}"/>
+
+        <!--
+         Java libraries needed for compilation and at runtime.
+        -->
+        <fileset dir="${java.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <!--
+         Java libraries needed only for compilation.
+        -->
+        <fileset dir="${java.build.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <!--
+         Java libraries needed compiling the unit tests.
+        -->
+        <fileset dir="${java.unit.test.lib.dir}">
+
+            <include name="*.jar"/>
+
+        </fileset>
+
+        <!-- In order to find macros to copy -->
+        <pathelement location="${macros.dir}"/>
+
+      </path>
+
+      <!--
+       Using externally-defined properties.
+      -->
+      <property file="src/toolconf/ant/version.properties"/>
+      <property file="src/toolconf/ant/project.properties"/>
+      <property file="src/toolconf/ant/antmake.properties"/>
+
+      <!--
+       Defines where to store the GNU Autotools-enabled folder structure.
+      -->
+      <property name="antmake.outputdir" value="antmake-output"/>
+
+      <!--
+       Defines where to find the licenses for required libraries.
+      -->
+      <path id="library.licenses.path">
+
+        <fileset dir="${java.lib.dir}">
+
+          <include name="**/*LICENSE*"/>
+
+          <include name="**/COPYING"/>
+
+          <include name="**/*.txt"/>
+
+        </fileset>
+
+      </path>
+
+      <!--
+       Defines the README location.
+      -->
+      <property name="readme.file" value="src/toolconf/autotools/README"/>
+
+      <!--
+       Defines the AUTHORS location.
+      -->
+      <property name="authors.file" value="src/toolconf/autotools/AUTHORS"/>
+
+      <!--
+       Defines the license location.
+      -->
+      <property name="copying.file" value="src/toolconf/autotools/COPYING"/>
+
+      <!--
+       Defines the classpath to use for executing AntMake.
+      -->
+      <path id="antmake.classpath">
+
+        <pathelement location="${classes.dir}"/>
+
+        <fileset dir="${java.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <fileset dir="${java.runtime.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <fileset dir="${java.build.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+      </path>
+
+      <!--
+        Defines the classpath to use for declaring AntMake.
+      -->
+      <path id="antmake.declaration.classpath">
+
+        <path refid="antmake.classpath"/>
+
+      </path>
+
+    </target>
+
+    <!--
+     Declares AntMake task.
+     @return the correctly declared AntMake task.
+    -->
+    <target name="declare.antmake.task">
+
+      <description>Declares AntMake task</description>
+
+      <!--
+       Defines the <i>AntMake</i> task.
+      -->
+      <taskdef
+        name="antmake"
+        classname="org.acmsl.antmake.AntMakeTask"
+        classpathref="antmake.classpath"/>
+
+    </target>
+
+    <!--
+     Executes AntMake.
+     @return the result of executing ContractChecker.
+    -->
+    <target
+      name="antmake"
+      depends="init.properties, declare.antmake.task, clean"
+      description="Executes AntMake">
+
+      <!--
+       Executes AntMake defining all its attributes and
+       content.
+      -->
+      <antmake
+        sourcepathref="java.source.path"
+        classpathref="java.compile.class.path"
+        liblicensepathref="lib.licenses.path"
+        destinationfolder="${antmake.outputdir}"
+        projectname="${project.beautified.name}"
+        projectversion="${project.version}"
+        readmefile="${readme.file}"
+        authorsfile="${authors.file}"
+        copyingfile="${copying.file}"/>
+
+      <echo>Now execute</echo>
+      <echo>cd ${basedir}/${antmake.outputdir}</echo>
+      <echo>aclocal</echo>
+      <echo>touch NEWS</echo>
+      <echo>automake --gnu --add-missing</echo>
+      <echo>autoconf</echo>
+      <echo>./configure</echo>
+      <echo>In case it complains about ltmain.m4 and ltmain.sh version mismatch, run 'libtoolize --copy --force' and retry</echo>
+      <echo>make</echo>
+      <echo>make install</echo>
+    </target>
+
+    <!--
+     Cleans any previously generated stuff.
+     @param antmake.outputdir the folder where the files are generated
+     or copied.
+     @return the confidence that antmake.outputdir is empty.
+    -->
+    <target
+      name="clean"
+      depends="init.properties"
+      description="Cleans any previously stuff.">
+
+      <!--
+       Delete the output folder.
+      -->
+      <delete dir="${antmake.outputdir}"/>
+
+      <!--
+       Create it again.
+      -->
+      <mkdir dir="${antmake.outputdir}"/>
+
+    </target>
+
+
+    <!--
+     Debugs AntMake execution.
+     @depends init.properties to make sure the environment is defined.
+     @calls ant to invoke AntMake via Ant.
+     @return the debugging environment.
+    -->
+    <target
+      name="debug.antmake"
+      depends="init.properties"
+      description="Debugs AntMake execution.">
+
+      <!--
+       Debug AntMake.
+      -->
+      <exec executable="ant" dir="${basedir}/src/toolconf/ant">
+        <env key="ANT_OPTS" value="-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y"/>
+        <arg line="-f ${basedir}/src/toolconf/ant/antmake.xml antmake"/>
+      </exec>
+
+    </target>
+
+</project>

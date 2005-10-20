@@ -195,11 +195,18 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
-                    "Wrapped connection null");
+                try
+                {
+                    LogFactory.getLog(getClass()).fatal(
+                        "Wrapped connection null");
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
             }
         }
-        catch  (SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 

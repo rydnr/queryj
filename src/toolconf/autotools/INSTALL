@@ -1,0 +1,4 @@
+QueryJ can be built using Ant, the well-known build tool
+for Java. Additionally, it supports starndard GNU Autotools support.
+For details please consult the documentation provided.
+

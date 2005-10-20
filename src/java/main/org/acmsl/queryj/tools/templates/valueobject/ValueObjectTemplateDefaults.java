@@ -66,15 +66,6 @@ public interface ValueObjectTemplateDefaults
         + " *\n"
         + " * Description: Represents the \"{0}\" information stored in the\n"
         + " *              persistence domain.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -111,7 +102,6 @@ public interface ValueObjectTemplateDefaults
         + " * Important note: Compile me with JavacExt or AntLang in order to "
         + " * get complete equals(), hashCode() and toString() support.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**

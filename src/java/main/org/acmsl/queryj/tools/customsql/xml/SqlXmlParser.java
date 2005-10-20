@@ -246,11 +246,18 @@ public abstract class SqlXmlParser
                     setMap(result);
                 }
             }
-            catch (final Exception exception)
+            catch  (final Exception exception)
             {
-                LogFactory.getLog(getClass()).error(
-                    "Cannot read sql.xml information.",
-                    exception);
+                try
+                {
+                    LogFactory.getLog(getClass()).error(
+                        "Cannot read sql.xml information.",
+                        exception);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
             }
         }
 

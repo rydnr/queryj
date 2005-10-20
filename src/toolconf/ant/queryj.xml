@@ -2,9 +2,8 @@
  @license
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armend&aacute;riz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+    Copyright (C) 2001-2005  Jose San Leandro Armend&aacute;riz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -22,7 +21,7 @@
 
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsr000@terra.es
+    Contact info: jose.sanleandro@acm-sl.com
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecaba&ntilde;as
                     Boadilla del monte
@@ -42,15 +41,6 @@
 
    Description: Describes the design of QueryJ task, that is,
                 how it's designed to be used from within an Ant build file.
-
-   Last modified by: $Author$ at $Date$
-
-   File version: $Revision$
-
-   Project version: $Name$
-                    ("Name" means no concrete version has been checked out)
-
-   $Id$
 
 -->
 

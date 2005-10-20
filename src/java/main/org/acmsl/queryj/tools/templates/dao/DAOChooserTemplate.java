@@ -35,17 +35,6 @@
  * Description: Is able to generate DAOChooser class according
  *              to database metadata.
  *
-<<<<<<< DAOChooserTemplate.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.9
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -74,10 +63,6 @@ import java.util.Collection;
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< DAOChooserTemplate.java
-=======
- * @version $Revision$
->>>>>>> 1.9
  */
 public class DAOChooserTemplate
     extends  AbstractDAOChooserTemplate

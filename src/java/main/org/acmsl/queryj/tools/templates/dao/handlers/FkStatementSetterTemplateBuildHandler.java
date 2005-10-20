@@ -75,6 +75,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -86,6 +87,11 @@ public class FkStatementSetterTemplateBuildHandler
     extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
+    /**
+     * A cached empty String array.
+     */
+    protected final String[] EMPTY_STRING_ARRAY = new String[0];
+
     /**
      * A cached empty template array.
      */
@@ -251,14 +257,48 @@ public class FkStatementSetterTemplateBuildHandler
                     metaDataManager.getForeignKeys(
                         tableTemplates[t_iIndex].getTableName());
 
+                String[] t_astrSimpleFks =
+                    retrieveSimpleFks(
+                        t_astrFks,
+                        tableTemplates[t_iIndex].getTableName(),
+                        metaDataManager);
+
                 for  (int t_iFkIndex = 0;
-                          t_iFkIndex < t_astrFks.length;
+                          t_iFkIndex < t_astrSimpleFks.length;
                           t_iFkIndex++)
                 {
                     t_cTemplates.add(
                         templateFactory.createFkStatementSetterTemplate(
                             tableTemplates[t_iIndex],
-                            t_astrFks[t_iFkIndex],
+                            new String[] {t_astrFks[t_iFkIndex]},
+                            metaDataManager,
+                            retrievePackage(
+                                engineName,
+                                tableTemplates[t_iIndex].getTableName(),
+                                parameters),
+                            basePackageName,
+                            repositoryName,
+                            project,
+                            task));
+                }
+
+                String[] t_astrReferredTables =
+                    retrieveReferredTablesByCompoundFks(
+                        tableTemplates[t_iIndex].getTableName(),
+                        metaDataManager);
+
+                int t_iLength = (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
+
+                for  (int t_iReferredTableIndex = 0;
+                          t_iReferredTableIndex < t_iLength;
+                          t_iReferredTableIndex++)
+                {
+                    t_cTemplates.add(
+                        templateFactory.createFkStatementSetterTemplate(
+                            tableTemplates[t_iIndex],
+                            metaDataManager.getForeignKeys(
+                                tableTemplates[t_iIndex].getTableName(),
+                                t_astrReferredTables[t_iReferredTableIndex]),
                             metaDataManager,
                             retrievePackage(
                                 engineName,
@@ -449,5 +489,78 @@ public class FkStatementSetterTemplateBuildHandler
         final DatabaseMetaDataManager metaDataManager)
     {
         return metaDataManager.containsForeignKeys(tableTemplate.getTableName());
+    }
+
+    /**
+     * Retrieves the simple foreign keys.
+     * @param allFks the complete list of foreign keys.
+     * @param tableName the table name.
+     * @param metaDataManager the <code>DatabaseMetaDataManager</code> instance.
+     * @precondition allFks != null
+     * @precondition tableName != null
+     * @precondition metaDataManager != null
+     */
+    protected String[] retrieveSimpleFks(
+        final String[] allFks,
+        final String tableName,
+        final DatabaseMetaDataManager metaDataManager)
+    {
+        Collection t_cResult = new ArrayList();
+
+        Map t_mAux = new HashMap();
+
+        int t_iLength = (allFks != null) ? allFks.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            String t_strReferredTable =
+                metaDataManager.getReferredTable(tableName, allFks[t_iIndex]);
+
+            if  (t_mAux.containsKey(t_strReferredTable))
+            {
+                t_mAux.remove(t_strReferredTable);
+            }
+            else
+            {
+                t_mAux.put(t_strReferredTable, allFks[t_iIndex]);
+            }
+        }
+
+        t_cResult = t_mAux.values();
+
+        return (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
+    }
+
+    /**
+     * Retrieves the tables referred by compound foreign keys.
+     * @param tableName the table name.
+     * @param metaDataManager the <code>DatabaseMetaDataManager</code> instance.
+     * @precondition tableName != null
+     * @precondition metaDataManager != null
+     */
+    protected String[] retrieveReferredTablesByCompoundFks(
+        final String tableName,
+        final DatabaseMetaDataManager metaDataManager)
+    {
+        Collection t_cResult = new ArrayList();
+
+        String[] t_astrReferredTables = metaDataManager.getReferredTables(tableName);
+
+        int t_iLength =
+            (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            String[] t_astrForeignKeys =
+                metaDataManager.getForeignKeys(tableName, t_astrReferredTables[t_iIndex]);
+
+            if  (   (t_astrForeignKeys != null)
+                 && (t_astrForeignKeys.length > 0))
+            {
+                t_cResult.add(t_astrReferredTables[t_iIndex]);
+            }
+        }
+
+        return (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
     }
 }

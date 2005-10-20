@@ -603,11 +603,11 @@ public class BaseDAOTemplate
                                 new Object[]
                                 {
                                     tableTemplate.getTableName(),
-                                    t_strDescriptionColumn,
+                                    t_strDescriptionColumn.toLowerCase(),
                                     t_strFindByStaticFieldJavadoc,
                                     t_strCapitalizedValueObjectName,
                                     stringUtils.capitalize(
-                                        t_strDescriptionColumn, '_'),
+                                        t_strDescriptionColumn.toLowerCase(), '_'),
                                     t_strFindByStaticFieldDeclaration
                                 }));
                     }
@@ -940,7 +940,7 @@ public class BaseDAOTemplate
 
         t_sbResult.append(t_sbDeleteMethod);
 
-        String t_strReferredColumn = null;
+        String[] t_astrReferredColumns = null;
 
         String[] t_astrReferredTables =
             metaDataManager.getReferredTables(
@@ -953,8 +953,8 @@ public class BaseDAOTemplate
                       t_iRefTableIndex < t_astrReferredTables.length;
                       t_iRefTableIndex++)
             {
-                t_strReferredColumn =
-                    metaDataManager.getForeignKey(
+                t_astrReferredColumns =
+                    metaDataManager.getForeignKeys(
                         tableTemplate.getTableName(),
                         t_astrReferredTables[t_iRefTableIndex]);
 
@@ -965,24 +965,40 @@ public class BaseDAOTemplate
                                 .toLowerCase()),
                         '_');
 
-                String t_strFkJavadoc =
-                    t_FkJavadocFormatter.format(
-                        new Object[]
-                        {
-                            t_strReferredColumn.toLowerCase(),
-                            t_strReferredColumn
-                        });
+                StringBuffer t_sbFkJavadoc = new StringBuffer();
+                StringBuffer t_sbFkDeclaration = new StringBuffer();
 
-                String t_strFkDeclaration =
-                    t_FkDeclarationFormatter.format(
-                        new Object[]
-                        {
-                            metaDataUtils.getNativeType(
-                                metaDataManager.getColumnType(
-                                    tableTemplate.getTableName(),
-                                    t_strReferredColumn)),
-                            t_strReferredColumn.toLowerCase()
-                        });
+                int t_iLength =
+                    (t_astrReferredColumns != null) ? t_astrReferredColumns.length : 0;
+
+                for  (int t_iColumnIndex = 0;
+                          t_iColumnIndex < t_iLength;
+                          t_iColumnIndex++)
+                {
+                    t_sbFkJavadoc.append(
+                        t_FkJavadocFormatter.format(
+                            new Object[]
+                            {
+                                t_astrReferredColumns[t_iColumnIndex].toLowerCase(),
+                                t_astrReferredColumns[t_iColumnIndex]
+                            }));
+
+                    t_sbFkDeclaration.append(
+                        t_FkDeclarationFormatter.format(
+                            new Object[]
+                            {
+                                metaDataUtils.getNativeType(
+                                    metaDataManager.getColumnType(
+                                        tableTemplate.getTableName(),
+                                        t_astrReferredColumns[t_iColumnIndex])),
+                                t_astrReferredColumns[t_iColumnIndex].toLowerCase()
+                            }));
+
+                    if  (t_iColumnIndex < t_iLength - 1)
+                    {
+                        t_sbFkDeclaration.append(",");
+                    }
+                }
 
                 t_sbDeleteByFkMethod.append(
                     t_DeleteByFkMethodFormatter.format(
@@ -993,9 +1009,9 @@ public class BaseDAOTemplate
                                     t_astrReferredTables[t_iRefTableIndex]
                                         .toLowerCase()),
                                 '_'),
-                            t_strFkJavadoc,
+                            t_sbFkJavadoc,
                             t_strReferredTableName,
-                            t_strFkDeclaration
+                            t_sbFkDeclaration
                         }));
 
             }
@@ -1206,9 +1222,16 @@ public class BaseDAOTemplate
 
                     if  (t_Parameter == null)
                     {
-                        LogFactory.getLog("custom-sql").warn(
-                              "Referenced parameter not found:"
-                            + t_ParameterRef.getId());
+                        try
+                        {
+                            LogFactory.getLog("custom-sql").warn(
+                                  "Referenced parameter not found:"
+                                + t_ParameterRef.getId());
+                        }
+                        catch  (final Throwable throwable)
+                        {
+                            // class-loading problem.
+                        }
                     }
                     else
                     {
@@ -1285,9 +1308,16 @@ public class BaseDAOTemplate
 
             if  (t_Result == null)
             {
-                LogFactory.getLog("custom-sql").warn(
-                    "Referenced result not found:"
-                    + resultRef.getId());
+                try
+                {
+                    LogFactory.getLog("custom-sql").warn(
+                          "Referenced result not found:"
+                        + resultRef.getId());
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
             }
             else
             {
@@ -1343,9 +1373,16 @@ public class BaseDAOTemplate
 
                     if  (t_Property == null)
                     {
-                        LogFactory.getLog("custom-sql").warn(
-                              "Referenced property not found:"
-                            + t_PropertyRef.getId());
+                        try
+                        {
+                            LogFactory.getLog("custom-sql").warn(
+                                  "Referenced property not found:"
+                                + t_PropertyRef.getId());
+                        }
+                        catch  (final Throwable throwable)
+                        {
+                            // class-loading problem.
+                        }
                     }
                     else
                     {
@@ -2177,20 +2214,6 @@ public class BaseDAOTemplate
     protected String toJavaConstant(
         final String value, final Helper helper)
     {
-        return
-            helper.replaceAll(
-                helper.replaceAll(
-                    helper.replaceAll(
-                        helper.replaceAll(
-                            helper.replaceAll(
-                                helper.replaceAll(
-                                    helper.replaceAll(
-                                        value.trim().toUpperCase(), ",", "_"),
-                                    "\"", ""),
-                                "'", ""),
-                            "\\+", "_"),
-                        "\\.", "_"),
-                    "-", "_"),
-                "\\s", "_");
+        return helper.replaceAll(value, "\\W", "_").toUpperCase();
     }
 }

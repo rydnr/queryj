@@ -631,9 +631,9 @@ public class DAOTemplate
         StringBuffer t_sbNonPkDeclaration = new StringBuffer();
         StringBuffer t_sbPkFilter = new StringBuffer();
         StringBuffer t_sbNonPkFilter = new StringBuffer();
-        StringBuffer t_sbFkFilter = new StringBuffer();
+        String t_strFkFilter = null;
         StringBuffer t_sbPkStatementSetterCall = new StringBuffer();
-        String t_strFkStatementSetterCall = "";
+        StringBuffer t_sbFkStatementSetterCall = new StringBuffer();
         StringBuffer t_sbInsertAttributesStatementSetterCall = new StringBuffer();
         StringBuffer t_sbUpdateAttributesStatementSetterCall = new StringBuffer();
         StringBuffer t_sbCreateMethod = new StringBuffer();
@@ -780,7 +780,7 @@ public class DAOTemplate
             t_ForeignDAOUpdateCallFormatter =
                 new MessageFormat(foreignDAOUpdateCall);
 
-            String t_strReferingColumn = null;
+            String[] t_astrReferingColumns = null;
 
             StringBuffer t_sbCall = null;
 
@@ -792,14 +792,14 @@ public class DAOTemplate
             {
                 t_bForeignKeys = true;
 
-                t_strReferingColumn =
-                    metaDataManager.getForeignKey(
+                t_astrReferingColumns =
+                    metaDataManager.getForeignKeys(
                         t_astrReferingTables[t_iRefTableIndex],
                         tableTemplate.getTableName());
 
                 if  (metaDataManager.allowsNull(
                          t_astrReferingTables[t_iRefTableIndex],
-                         t_strReferingColumn))
+                         t_astrReferingColumns))
                 {
                     t_sbCall = t_sbForeignDAOUpdateCall;
                     t_CallFormatter = t_ForeignDAOUpdateCallFormatter;
@@ -839,7 +839,7 @@ public class DAOTemplate
             }
         }
 
-        String t_strReferredColumn = null;
+        String[] t_astrReferredColumns = null;
 
         String[] t_astrReferredTables =
             metaDataManager.getReferredTables(
@@ -852,8 +852,8 @@ public class DAOTemplate
                       t_iRefTableIndex < t_astrReferredTables.length;
                       t_iRefTableIndex++)
             {
-                t_strReferredColumn =
-                    metaDataManager.getForeignKey(
+                t_astrReferredColumns =
+                    metaDataManager.getForeignKeys(
                         tableTemplate.getTableName(),
                         t_astrReferredTables[t_iRefTableIndex]);
 
@@ -864,40 +864,60 @@ public class DAOTemplate
                                 .toLowerCase()),
                         '_');
 
-                String t_strFkJavadoc =
-                    t_FkJavadocFormatter.format(
-                        new Object[]
-                        {
-                            t_strReferredColumn.toLowerCase(),
-                            t_strReferredColumn
-                        });
+                StringBuffer t_sbFkJavadoc = new StringBuffer();
+                StringBuffer t_sbFkDeclaration = new StringBuffer();
 
-                String t_strFkDeclaration =
-                    t_FkDeclarationFormatter.format(
-                        new Object[]
-                        {
-                            metaDataUtils.getNativeType(
-                                metaDataManager.getColumnType(
-                                    tableTemplate.getTableName(),
-                                    t_strReferredColumn)),
-                            t_strReferredColumn.toLowerCase()
-                        });
+                int t_iLength = (t_astrReferredColumns != null) ? t_astrReferredColumns.length : 0;
 
-                t_sbFkFilter.append(
-                    t_AttributeFilterFormatter.format(
-                        new Object[]
-                        {
-                            t_strRepositoryName,
-                            tableTemplate.getTableName().toUpperCase(),
-                            t_strReferredColumn.toUpperCase()
-                        }));
+                t_sbFkJavadoc = new StringBuffer();
+                t_sbFkDeclaration = new StringBuffer();
+                t_sbFkStatementSetterCall = new StringBuffer();
 
-                t_strFkStatementSetterCall =
-                    t_StatementSetterCallFormatter.format(
-                        new Object[]
-                        {
-                            t_strReferredColumn.toLowerCase()
-                        });
+                for  (int t_iColumnIndex = 0;
+                          t_iColumnIndex < t_iLength;
+                          t_iColumnIndex++)
+                {
+                    t_sbFkJavadoc.append(
+                        t_FkJavadocFormatter.format(
+                            new Object[]
+                            {
+                                t_astrReferredColumns[t_iColumnIndex].toLowerCase(),
+                                t_astrReferredColumns[t_iColumnIndex]
+                            }));
+
+                    t_sbFkDeclaration.append(
+                        t_FkDeclarationFormatter.format(
+                            new Object[]
+                            {
+                                metaDataUtils.getNativeType(
+                                    metaDataManager.getColumnType(
+                                        tableTemplate.getTableName(),
+                                        t_astrReferredColumns[t_iColumnIndex])),
+                                t_astrReferredColumns[t_iColumnIndex].toLowerCase()
+                            }));
+
+                    t_strFkFilter =
+                        t_AttributeFilterFormatter.format(
+                            new Object[]
+                            {
+                                t_strRepositoryName,
+                                tableTemplate.getTableName().toUpperCase(),
+                                t_astrReferredColumns[t_iColumnIndex].toUpperCase()
+                            });
+
+                    t_sbFkStatementSetterCall.append(
+                        t_StatementSetterCallFormatter.format(
+                            new Object[]
+                            {
+                                t_astrReferredColumns[t_iColumnIndex].toLowerCase()
+                            }));
+
+                    if  (t_iColumnIndex < t_iLength - 1)
+                    {
+                        t_sbFkDeclaration.append(",");
+                        t_sbFkStatementSetterCall.append(",");
+                    }
+                }
 
                 t_sbForeignKeyStatementSetterImports.append(
                     t_ForeignKeyStatementSetterImportFormatter.format(
@@ -922,11 +942,11 @@ public class DAOTemplate
                                 englishGrammarUtils.getSingular(
                                     tableTemplate.getTableName().toLowerCase()),
                                 '_'),
-                            t_strFkJavadoc,
+                            t_sbFkJavadoc,
                             t_strReferredTableName,
-                            t_strFkDeclaration,
-                            t_sbFkFilter,
-                            t_strFkStatementSetterCall,
+                            t_sbFkDeclaration,
+                            t_strFkFilter,
+                            t_sbFkStatementSetterCall,
                             t_strRepositoryName,
                             tableTemplate.getTableName().toUpperCase(),
                         }));
@@ -1079,11 +1099,11 @@ public class DAOTemplate
                         new Object[]
                         {
                             tableTemplate.getTableName(),
-                            t_strDescriptionColumn,
+                            t_strDescriptionColumn.toLowerCase(),
                             t_strFindByStaticFieldJavadoc,
                             t_strCapitalizedValueObjectName,
                             stringUtils.capitalize(
-                                t_strDescriptionColumn, '_'),
+                                t_strDescriptionColumn.toLowerCase(), '_'),
                             t_strFindByStaticFieldDeclaration
                         }));
             }
@@ -1766,9 +1786,16 @@ public class DAOTemplate
 
                     if  (t_Parameter == null)
                     {
-                        LogFactory.getLog("custom-sql").warn(
-                              "Referenced parameter not found:"
-                            + t_ParameterRef.getId());
+                        try
+                        {
+                            LogFactory.getLog("custom-sql").warn(
+                                  "Referenced parameter not found:"
+                                + t_ParameterRef.getId());
+                        }
+                        catch  (final Throwable throwable)
+                        {
+                            // class-loading problem.
+                        }
                     }
                     else
                     {
@@ -1872,9 +1899,16 @@ public class DAOTemplate
 
             if  (t_Result == null)
             {
-                LogFactory.getLog("custom-sql").warn(
-                    "Referenced result not found:"
-                    + resultRef.getId());
+                try
+                {
+                    LogFactory.getLog("custom-sql").warn(
+                          "Referenced result not found:"
+                        + resultRef.getId());
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
             }
             else
             {
@@ -1930,9 +1964,16 @@ public class DAOTemplate
 
                     if  (t_Property == null)
                     {
-                        LogFactory.getLog("custom-sql").warn(
-                              "Referenced property not found:"
-                            + t_PropertyRef.getId());
+                        try
+                        {
+                            LogFactory.getLog("custom-sql").warn(
+                                  "Referenced property not found:"
+                                + t_PropertyRef.getId());
+                        }
+                        catch  (final Throwable throwable)
+                        {
+                            // class-loading problem.
+                        }
                     }
                     else
                     {

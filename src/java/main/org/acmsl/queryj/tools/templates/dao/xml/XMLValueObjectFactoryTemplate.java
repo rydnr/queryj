@@ -118,14 +118,6 @@ public abstract class XMLValueObjectFactoryTemplate
         + " * Description: Is able to create {0} value objects according to\n"
         + " *              the information stored in the persistence domain.\n"
         + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -184,7 +176,6 @@ public abstract class XMLValueObjectFactoryTemplate
         + " * Adds support for creating {0} value objects from\n" // table
         + " * SAX attributes (as required by Digester-based parsing).\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**

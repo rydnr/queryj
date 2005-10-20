@@ -64,11 +64,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Is able to generate time function repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org"

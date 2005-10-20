@@ -90,13 +90,6 @@ public interface DataAccessContextLocalTemplateDefaults
         + "\n"
         + "  Description: Specifies the transactional behaviour of the DAO layer.\n"
         + "\n"
-        + "  Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + "\n"
-        + "  File version: $" + "Revision: $\n"
-        + " \n"
-        + "  Project version: $" + "Name: $\n"
-        + "\n"
-        + " $" + "Id: $\n"
         + "-->\n";
 
     /**

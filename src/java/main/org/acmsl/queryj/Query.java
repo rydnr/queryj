@@ -70,11 +70,6 @@ import java.util.Collection;
 import java.util.Calendar;
 import java.util.List;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Represents queries to access persistent data.
  * @author <a href="mailto:chous@acm-sl.org"

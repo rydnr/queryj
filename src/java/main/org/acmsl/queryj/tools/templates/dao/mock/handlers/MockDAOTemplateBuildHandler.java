@@ -72,12 +72,6 @@ import org.apache.tools.ant.Project;
 import java.io.File;
 import java.util.Map;
 
-
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Builds a mock DAO template using database metadata.
  * @author <a href="mailto:chous@acm-sl.org"

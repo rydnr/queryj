@@ -54,11 +54,6 @@ import org.apache.tools.ant.Task;
  */
 import java.util.Map;
 
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Is able to generate system function repositories according to Oracle
  * database metadata.

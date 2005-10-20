@@ -35,17 +35,6 @@
  * Description: Defines the default subtemplates used to generate DAOChooser
  *              class according to database metadata.
  *
-<<<<<<< DAOChooserTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.4
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -59,10 +48,6 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * class according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< DAOChooserTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.4
  */
 public interface DAOChooserTemplateDefaults
     extends  JavaTemplateDefaults
@@ -84,13 +69,6 @@ public interface DAOChooserTemplateDefaults
         + " *              retrieving DAO instances via DataAccessManager\n"
         + " *              or DAO factory interfaces.\n"
         + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
         + " */\n";
 
     /**
@@ -129,7 +107,6 @@ public interface DAOChooserTemplateDefaults
         + " * retrieving DAO instances via <code>DataAccessManager</code>\n"
         + " * or DAO factory interfaces.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**
@@ -265,63 +242,84 @@ public interface DAOChooserTemplateDefaults
      * The helper methods.
      */
     public static final String DEFAULT_HELPER_METHODS =
-         "    /**\n"
-       + "     * Retrieves a concrete property.\n"
-       + "     * @param key the property key.\n"
-       + "     * @return the configuration value associated to such setting.\n"
-       + "     */\n"
-       + "    private String getProperty(final String key)\n"
-       + "    {\n"
-       + "        // This is safe since immutableGetProperties() is private and ensures\n"
-       + "        // a new object if the instance's is null.\n"
-       + "        return immutableGetProperties().getProperty(key);\n"
-       + "    }\n\n"
-       + "    /**\n"
-       + "     * Loads the configuration from a property file.\n"
-       + "     * @param properties where to store the settings.\n"
-       + "     */\n"
-       + "    private synchronized void loadProperties(final Properties properties)\n"
-       + "    {\n"
-       + "        if  (properties != null)\n"
-       + "        {\n"
-       + "            InputStream t_isProperties = null;\n\n"
-       + "            // Loading properties\n"
-       + "            try\n"
-       + "            {\n"
-       + "                // try classpath\n"
-       + "                t_isProperties =\n"
-       + "                    getClass().getResourceAsStream(\"/\" + PROPERTIES_FILE);\n\n"
-       + "                if  (t_isProperties == null)\n"
-       + "                {\n"
-       + "                    // try local\n"
-       + "                    t_isProperties =\n"
-       + "                        getClass().getResourceAsStream(PROPERTIES_FILE);\n"
-       + "                }\n\n"
-       + "                if  (t_isProperties != null)\n"
-       + "                {\n"
-       + "                    properties.load(t_isProperties);\n"
-       + "                }\n"
-       + "                else\n"
-       + "                {\n"
-       + "                     LogFactory.getLog(getClass()).warn(\n"
-       + "                           \"Couldn't find the property file: \"\n"
-       + "                         + PROPERTIES_FILE);\n"
-       + "                }\n"
-       + "            }\n"
-       + "            catch  (final Exception exception)\n"
-       + "            {\n"
-       + "                LogFactory.getLog(getClass()).warn(\n"
-       + "                      \"Couldn't find the property file: \"\n"
-       + "                    + PROPERTIES_FILE,\n"
-       + "                    exception);\n"
-       + "            }\n"
-       + "        }\n"
-       + "        else\n"
-       + "        {\n"
-       + "            LogFactory.getLog(getClass()).fatal(\n"
-       + "                \"Properties object not valid!\");\n"
-       + "        }\n"
-       + "    }\n\n";
+          "    /**\n"
+        + "     * Retrieves a concrete property.\n"
+        + "     * @param key the property key.\n"
+        + "     * @return the configuration value associated to such setting.\n"
+        + "     */\n"
+        + "    private String getProperty(final String key)\n"
+        + "    {\n"
+        + "        // This is safe since immutableGetProperties() is private and ensures\n"
+        + "        // a new object if the instance's is null.\n"
+        + "        return immutableGetProperties().getProperty(key);\n"
+        + "    }\n\n"
+        + "    /**\n"
+        + "     * Loads the configuration from a property file.\n"
+        + "     * @param properties where to store the settings.\n"
+        + "     */\n"
+        + "    private synchronized void loadProperties(final Properties properties)\n"
+        + "    {\n"
+        + "        if  (properties != null)\n"
+        + "        {\n"
+        + "            InputStream t_isProperties = null;\n\n"
+        + "            // Loading properties\n"
+        + "            try\n"
+        + "            {\n"
+        + "                // try classpath\n"
+        + "                t_isProperties =\n"
+        + "                    getClass().getResourceAsStream(\"/\" + PROPERTIES_FILE);\n\n"
+        + "                if  (t_isProperties == null)\n"
+        + "                {\n"
+        + "                    // try local\n"
+        + "                    t_isProperties =\n"
+        + "                        getClass().getResourceAsStream(PROPERTIES_FILE);\n"
+        + "                }\n\n"
+        + "                if  (t_isProperties != null)\n"
+        + "                {\n"
+        + "                    properties.load(t_isProperties);\n"
+        + "                }\n"
+        + "                else\n"
+        + "                {\n"
+        + "                     try\n"
+        + "                     {\n"
+        + "                         LogFactory.getLog(getClass()).warn(\n"
+        + "                               \"Couldn't find the property file: \"\n"
+        + "                             + PROPERTIES_FILE);\n"
+        + "                     }\n"
+        + "                     catch  (final Throwable throwable)\n"
+        + "                     {\n"
+        + "                         // class-loading problem.\n"
+        + "                     }\n"
+        + "                }\n"
+        + "            }\n"
+        + "            catch  (final Exception exception)\n"
+        + "            {\n"
+        + "                try\n"
+        + "                {\n"
+        + "                    LogFactory.getLog(getClass()).warn(\n"
+        + "                          \"Couldn't find the property file: \"\n"
+        + "                        + PROPERTIES_FILE,\n"
+        + "                        exception);\n"
+        + "                }\n"
+        + "                catch  (final Throwable throwable)\n"
+        + "                {\n"
+        + "                    // class-loading problem.\n"
+        + "                }\n"
+        + "            }\n"
+        + "        }\n"
+        + "        else\n"
+        + "        {\n"
+        + "            try\n"
+        + "            {\n"
+        + "                LogFactory.getLog(getClass()).fatal(\n"
+        + "                    \"Properties object not valid!\");\n"
+        + "            }\n"
+        + "            catch  (final Throwable throwable)\n"
+        + "            {\n"
+        + "                // class-loading problem.\n"
+        + "            }\n"
+        + "        }\n"
+        + "    }\n\n";
 
     /**
      * The DAO methods.

@@ -35,17 +35,6 @@
  * Description: Defines the default subtemplates to generate
  +              AttributesStatementSetter templates.
  *
-<<<<<<< AttributesStatementSetterTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.5
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -59,10 +48,6 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< AttributesStatementSetterTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.5
  */
 public interface AttributesStatementSetterTemplateDefaults
     extends  JavaTemplateDefaults
@@ -83,14 +68,6 @@ public interface AttributesStatementSetterTemplateDefaults
         + " * Description: Specifies the PreparedStatement values required\n"
         + " *              to perform any {0} operation expecting the\n"
         + " *              complete attribute set.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
         + " *\n"
         + " */\n";
 

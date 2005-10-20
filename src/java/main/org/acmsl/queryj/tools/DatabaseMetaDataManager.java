@@ -1,8 +1,7 @@
-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+    Copyright (C) 2001-2005  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -54,6 +53,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1035,7 +1035,22 @@ public class DatabaseMetaDataManager
     public boolean allowsNull(
         final String tableName, final String allowName)
     {
-        return getAllowNull(tableName, allowName);
+        return getAllowNull(tableName, new String[] {allowName});
+    }
+
+    /**
+     * Retrieves the allow null.
+     * @param tableName the table name.
+     * @param allowNames the allow names.
+     * @return the allow null.
+     * @see java.sql.Nulls
+     * @precondition tableName != null
+     * @precondition allowNames != null
+     */
+    public boolean allowsNull(
+        final String tableName, final String[] allowNames)
+    {
+        return getAllowNull(tableName, allowNames);
     }
 
     /**
@@ -1050,31 +1065,58 @@ public class DatabaseMetaDataManager
     public boolean getAllowNull(
         final String tableName, final String allowName)
     {
-        return getAllowNull(tableName, allowName, getAllowNulls());
+        return getAllowNull(tableName, new String[] {allowName});
     }
 
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowName the allow name.
+     * @param allowNames the allow names.
+     * @return the allow null.
+     * @see java.sql.Nulls
+     * @precondition tableName != null
+     * @precondition allowNames != null
+     */
+    public boolean getAllowNull(
+        final String tableName, final String[] allowNames)
+    {
+        return getAllowNull(tableName, allowNames, getAllowNulls());
+    }
+
+    /**
+     * Retrieves the allow null.
+     * @param tableName the table name.
+     * @param allowNames the allow names.
      * @param allowNulls the allow nulls.
      * @return the allow null.
      * @see java.sql.Nulls
      * @precondition tableName != null
-     * @precondition allowName != null
+     * @precondition allowNames != null
      * @precondition allowNulls != null
      */
     protected boolean getAllowNull(
-        final String tableName, final String allowName, final Map allowNulls)
+        final String tableName, final String[] allowNames, final Map allowNulls)
     {
         boolean result = false;
 
-        Object t_Result = allowNulls.get(buildAllowNullKey(tableName, allowName));
+        int t_iLength = (allowNames != null) ? allowNames.length : 0;
 
-        if  (   (t_Result != null)
-             && (t_Result instanceof Boolean))
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            result = ((Boolean) t_Result).booleanValue();
+            Object t_Result =
+                allowNulls.get(
+                    buildAllowNullKey(tableName, allowNames[t_iIndex]));
+
+            if  (   (t_Result != null)
+                 && (t_Result instanceof Boolean))
+            {
+                result = ((Boolean) t_Result).booleanValue();
+
+                if  (!result)
+                {
+                    break;
+                }
+            }
         }
         
         return result;
@@ -1173,7 +1215,7 @@ public class DatabaseMetaDataManager
         final Map primaryKeys)
     {
         logVerbose(
-            "Adding pk:" + tableName + "." + columnName);
+            "Adding primary key: (" + tableName + "." + columnName + ")");
 
         primaryKeys.put(
             buildPkKey(tableName, columnName),
@@ -1348,17 +1390,18 @@ public class DatabaseMetaDataManager
                 buildFkKey(tableName, columnName, refTableName),
                 refColumnName);
 
-            t_mForeignKeys.put(
+            annotateForeignKey(
                 buildFkKey(tableName, refTableName),
-                columnName);
-
-            t_mForeignKeys.put(
-                buildRefFkKey(tableName, refTableName),
-                refColumnName);
+                columnName,
+                t_mForeignKeys);
 
             t_mForeignKeys.put(
                 buildRefTableKey(tableName, columnName),
                 refTableName);
+
+            t_mForeignKeys.put(
+                buildRefFkKey(tableName, refTableName),
+                refColumnName);
 
             Collection t_ReferredTables =
                 (Collection) t_mForeignKeys.get(buildFkKey(tableName));
@@ -1368,11 +1411,56 @@ public class DatabaseMetaDataManager
                 t_ReferredTables = new ArrayList();
             }
 
-            t_ReferredTables.add(refTableName);
+            if  (!t_ReferredTables.contains(refTableName))
+            {
+                t_ReferredTables.add(refTableName);
+            }
 
             t_mForeignKeys.put(
                 buildFkKey(tableName),
                 t_ReferredTables);
+        }
+    }
+
+    /**
+     * Annotates the foreign key in given map.
+     * @param key the key.
+     * @param value the value.
+     * @param map the map.
+     * @precondition key != null
+     * @precondition value != null
+     * @precondition map != null
+     */
+    protected void annotateForeignKey(
+        final Object key, final String value, final Map map)
+    {
+        Object t_Fks = map.get(key);
+
+        Collection t_cFks = null;
+
+        if  (t_Fks == null)
+        {
+            t_Fks = value;
+        }
+        else if  (t_Fks instanceof String)
+        {
+            t_cFks = new ArrayList();
+            t_cFks.add(t_Fks);
+            t_cFks.add(value);
+        }
+        else if  (t_Fks instanceof Collection)
+        {
+            t_cFks = (Collection) t_Fks;
+            t_cFks.add(value);
+        }
+
+        if  (t_cFks != null)
+        {
+            map.put(key, t_cFks);
+        }
+        else
+        {
+            map.put(key, t_Fks);
         }
     }
 
@@ -1460,13 +1548,16 @@ public class DatabaseMetaDataManager
                 t_cResult = new ArrayList();
             }
 
-            t_cResult.add(
-                getForeignKey(tableName, t_astrReferredTables[t_iIndex]));
+            t_cResult.addAll(
+                Arrays.asList(
+                    getForeignKeys(
+                        tableName, t_astrReferredTables[t_iIndex])));
         }
 
-        if  (t_cResult != null)
+        if  (   (t_cResult != null)
+             && (t_cResult.size() > 0))
         {
-            result = (String[]) t_cResult.toArray(result);
+            result = (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
         }
 
         return result;
@@ -1525,17 +1616,25 @@ public class DatabaseMetaDataManager
      * @precondition tableName != null
      * @precondition refTableName != null
      */
-    public String getForeignKey(final String tableName, String refTableName)
+    public String[] getForeignKeys(final String tableName, String refTableName)
     {
-        String result = null;
+        String[] result = EMPTY_STRING_ARRAY;
 
         Map t_mForeignKeys = getForeignKeys();
 
         if  (t_mForeignKeys != null) 
         {
-            result =
-                (String)
-                    t_mForeignKeys.get(buildFkKey(tableName, refTableName));
+            Object t_ForeignKeys = 
+                t_mForeignKeys.get(buildFkKey(tableName, refTableName));
+
+            if  (t_ForeignKeys instanceof String)
+            {
+                result = new String[] { (String) t_ForeignKeys };
+            }
+            else if  (t_ForeignKeys instanceof Collection)
+            {
+                result = (String[]) ((Collection) t_ForeignKeys).toArray(EMPTY_STRING_ARRAY);
+            }
         }
         
         return result;
@@ -1573,17 +1672,25 @@ public class DatabaseMetaDataManager
      * @precondition tableName != null
      * @precondition refTableName != null
      */
-    public String getReferredKey(final String tableName, String refTableName)
+    public String[] getReferredKeys(final String tableName, String refTableName)
     {
-        String result = null;
+        String[] result = EMPTY_STRING_ARRAY;
 
         Map t_mForeignKeys = getForeignKeys();
 
         if  (t_mForeignKeys != null) 
         {
-            result =
-                (String)
-                    t_mForeignKeys.get(buildRefFkKey(tableName, refTableName));
+            Object t_ForeignKeys = 
+                t_mForeignKeys.get(buildFkKey(tableName, refTableName));
+
+            if  (t_ForeignKeys instanceof String)
+            {
+                result = new String[] { (String) t_ForeignKeys };
+            }
+            else if  (t_ForeignKeys instanceof Collection)
+            {
+                result = (String[]) ((Collection) t_ForeignKeys).toArray(EMPTY_STRING_ARRAY);
+            }
         }
         
         return result;
@@ -1593,7 +1700,7 @@ public class DatabaseMetaDataManager
      * Specifies the externally managed fields.
      * @param map the externally managed fields map.
      */
-    private void immutableSetExternallyManagedFields(Map map)
+    private void immutableSetExternallyManagedFields(final Map map)
     {
         m__mExternallyManagedFields = map;
     }
@@ -1602,7 +1709,7 @@ public class DatabaseMetaDataManager
      * Specifies the externally managed fields.
      * @param map the externally managed fields map.
      */
-    protected void setExternallyManagedFields(Map map)
+    protected void setExternallyManagedFields(final Map map)
     {
         immutableSetExternallyManagedFields(map);
     }

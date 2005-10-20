@@ -1,0 +1,1813 @@
+#!/usr/bin/perl
+
+use strict;
+
+# -----------------------------------------------------------------------------
+#                tedia2sql -- Copyright (c)2002 by Tim Ellis
+# -----------------------------------------------------------------------------
+# Author Info:
+# 	Name:     Tim Ellis
+# 	URL:      http://faemalia.net/tedia2sql.tar.gz
+# 	email:    tim.ellis [at] gamet [dot] com
+# 	Initials: drTAE
+#
+#	Name:     Martin Gebert
+#	Name:     Andrew S. Halper
+#	Name:     Greg Copeland
+#
+# ------------------------ LICENSE SUMMARY ------------------------------------
+#  This script is released under the terms of the GNU Public License. You must
+#  agree to the GNU Public License terms before you modify, copy, or re-release
+#  this script. Please see http://www.gnu.org/philosophy/free-sw.html. I will
+#  be explicit here: because this is a Perl script and there isn't any
+#  compilation per se, this means that the script *MUST* be distributed in
+#  human-readable form with all comments, variable names, and stylistic
+#  formatting left in place! Running this script through a scrambler or
+#  tokenizer of any sort requires distributing the original script in its
+#  currently readable form!
+#
+#  This program is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU General Public License as published by the Free
+#  Software Foundation; version 2. This program is copyrighted!
+#
+#  This program is distributed in the hope that it will be useful, but WITHOUT
+#  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+#  more details.
+#
+#  You should have received a copy of the GNU General Public License along with
+#  this program, in a file named LICENSE; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA or
+#  go to http://www.gnu.org/philosophy/free-sw.html and do some reading. The
+#  actual license is at http://www.gnu.org/licenses/gpl.txt as well.
+# ------------------------ LICENSE SUMMARY ------------------------------------
+#
+#
+# This is a complete rewrite of the dia2sql.pl script that used SAX XML parsing
+# to generate a SQL script from a Dia output XML file. I've rewritten it using
+# a DOM model and also it does things differently. The original author was
+# Alexander Troppman.
+#
+#
+# Similarities to the original dia2sql.pl:
+# ----------------------------------------
+# 0. A UML Class and its attributes are the SQL table
+#
+# 1. UML Attributes are columns
+#
+#
+# Differences from dia2sql.pl:
+# ----------------------------
+# 0. Foreign keys are implemented using associations. Whichever side of the
+# association is the aggregate side is the many side of the foreign key
+# relationship. So if you have an association from ClassA to ClassB and ClassB
+# has the 'aggregate' set, then the foreign key will be created as a
+# one-to-many relationship from ClassA to classB.
+#
+# 1. Class Operations are used to implement indexes, the Operation name is the
+# index name, and the Operation Parameters are index columns and the Operation
+# Type is the index type.
+#
+# 2. Primary key is implemented as a "class scope" checkbox
+#
+# . . . time passes . . .
+#
+# 3. Now the differences are too numerous to enumerate. It supports far more
+# RDBMSs, it supports 1-1 relationships, it supports indexes, permissions,
+# special RDBMS constructs like sequences, and is quite simply completely
+# different than the original dia2sql!
+
+# prepare to parse the XML file into DOM
+my $doc;
+my $parser;
+
+# schema, constraint, and insert output file handles
+my (
+	$sout,
+	$sdout,
+	$spreout,
+	$spostout,
+	$pout,
+	$pdout,
+	$cout,
+	$cdout,
+	$iout,
+	$vout,
+	$vdout
+);
+
+# global structures for passing around and partying
+my %umlClass;
+my $sqlCommentString = "--";
+my $goCommand = ";";
+my $sqlIndent = "  ";
+my $versionInfo = "tedia2sql -- v1.2.8";
+my $authorInfo = "Copyright (c)2002 by Tim Ellis <ttiimmeelleessss[at]tigris[dot]org> et al. See AUTHORS";
+my $verbose = undef;
+my $veryverbose = undef;
+# filenames for output
+my $specialPreFileName = undef;
+my $specialPostFileName = undef;
+my $viewFileName = undef;
+my $viewDropsFileName = undef;
+my $schemaDropsFileName = undef;
+my $schemaFileName = undef;
+my $permissionsDropsFileName = undef;
+my $permissionsFileName = undef;
+my $insertFileName = undef;
+my $constraintDropsFileName = undef;
+my $constraintFileName = undef;
+# output file dir/base/ext
+my $outputFileDir;
+my $outputFileBase;
+my $outputFileExt;
+
+
+# these are the required Perl modules
+use XML::DOM;
+use Digest::MD5 qw(md5_base64);
+#require 'getopts.pl';
+use Getopt::Std;
+use POSIX qw(strftime);
+
+#Getopts ('i:o:t:v:gcsdh');
+my %opts = ();
+getopts('i:o:t:v:gsdh', \%opts);
+my $opt_i = $opts{'i'};
+my $opt_o = $opts{'o'};
+my $opt_t = $opts{'t'};
+my $opt_v = $opts{'v'};
+my $opt_g = $opts{'g'};
+my $opt_s = $opts{'s'};
+my $opt_d = $opts{'d'};
+my $opt_h = $opts{'h'};
+
+# Don't put a username or password in this script! Put such a thing
+# into the rcfile! Read the rcfile and do a sanity check on it
+my $rcFileName = undef;
+if ($0 =~ /(.*?)\.\w+$/) { $rcFileName = "$1rc"; } else { $rcFileName = "$0rc"; }
+my $cfg = parseRCFile ($rcFileName);
+
+# if they don't pass -s commandline arg, get pref from RCfile
+if (!$opt_s) {
+	if ($cfg->{separateSQLFiles} eq 'true') { $opt_s = "-s" }
+}
+
+# if they don't pass -d commandline arg, get pref from RCfile
+if (!$opt_d) {
+	if ($cfg->{dropStatements} eq 'true') { $opt_d = "-d" }
+}
+
+# build the $parser object
+$parser = XML::DOM::Parser->new();
+
+# -v set verbosity level
+# the $opt_v && bit is because "-w" was complaining this was an
+# uninitialised value... I don't see that, but okay. I fix it
+# in this fashion
+if ($opt_v && $opt_v > 0) { $verbose = 1; print "Verbosity!\n"; }
+if ($opt_v && $opt_v > 1) { $veryverbose = 1; print "Wow! Ultraverbosity!\n"; }
+
+# -h help
+if ($opt_h) {
+	printHelp();
+	exit 0;
+}
+
+# -i input filename
+if ($opt_i) {
+	# gunzip the file
+	my $inputFile;
+
+	# get the filename of input sans preceding path
+	if ($opt_i =~ /^.+?\/([^\/]+)$/) {
+		$inputFile = $1;
+	} else {
+		$inputFile = $opt_i;
+	}
+
+	# cyb: ugly work-around for Win32 machines not have gunzip
+	my $gunzipExists = `gunzip -V 2>&1`;
+	if (!$gunzipExists && $^O =~ /Win32/) {
+		print "\nWINDOWS USERS ALERT: Do not worry about error messages regarding 'gunzip' if you are running this script on a Windows machine. \nJust be sure you have uncompressed your Dia file prior to running tedia2sql. \nYour output should have been created correctly if you did so prior to running this script.";
+	}
+
+	if ($gunzipExists && system ("gunzip -dc $opt_i > .$inputFile.tmpfile 2>/dev/null") == 0) {
+		if ($opt_g) {
+			print "Option -g is deprecated -- I already know $opt_i is compressed.\n";
+		}
+		$doc = $parser->parsefile(".".$inputFile.".tmpfile");
+		unlink (".$inputFile.tmpfile");
+	} else {
+		# file isn't gzipped
+		if ($opt_g) {
+			print "Option -g is deprecated -- I already know $opt_i is uncompressed.\n";
+		}
+		$doc = $parser->parsefile($opt_i);
+	}
+} else { 
+	printHelp();
+	die "ERROR: Must pass -i option";
+}
+
+
+# -o is the prefix for the script to write
+if ($opt_o) {
+	# pull the directory off the front, if it's there
+	if ($opt_o =~ /^(.+)\/(.+)$/) {
+		# directory/file.ext
+		if ($verbose) { print "opt_o: includes directory\n"; }
+		$outputFileDir = $1."/";
+		$opt_o = $2;
+	} else {
+		if ($verbose) { print "opt_o: does not include directory\n"; }
+		$outputFileDir = "./";
+	}
+
+	# find out file NAME and file EXT
+	if ($opt_o =~ /^(.+)\.(.+)$/) {
+		# file.ext
+		if ($verbose) { print "opt_o: includes extension\n"; }
+		$outputFileBase = $1;
+		$outputFileExt = $2;
+	} else {
+		# file only, no directory or ext
+		$outputFileBase = $opt_o;
+		$outputFileExt = 'sql';
+	}
+
+	if ($verbose) { print "output files are of form: $outputFileDir : $outputFileBase : $outputFileExt\n"; }
+
+	$constraintDropsFileName = $outputFileDir.$outputFileBase."-10-constraintDrops.$outputFileExt";
+	$permissionsDropsFileName = $outputFileDir.$outputFileBase."-20-permissionsDrops.$outputFileExt";
+	$specialPreFileName = $outputFileDir.$outputFileBase."-30-specialPreStatements.$outputFileExt";
+	$viewDropsFileName = $outputFileDir.$outputFileBase."-40-viewDrops.$outputFileExt";
+	$schemaDropsFileName = $outputFileDir.$outputFileBase."-45-schemaDrops.$outputFileExt";
+	$schemaFileName = $outputFileDir.$outputFileBase."-50-schemaCreate.$outputFileExt";
+	$viewFileName = $outputFileDir.$outputFileBase."-55-viewCreate.$outputFileExt";
+	$specialPostFileName = $outputFileDir.$outputFileBase."-60-specialPostStatements.$outputFileExt";
+	$permissionsFileName = $outputFileDir.$outputFileBase."-70-permissionsCreate.$outputFileExt";
+	$insertFileName = $outputFileDir.$outputFileBase."-80-tableInserts.$outputFileExt";
+	$constraintFileName = $outputFileDir.$outputFileBase."-90-constraintsCreate.$outputFileExt";
+
+	if ($verbose) { print "$constraintDropsFileName\n"; }
+	if ($verbose) { print "$permissionsDropsFileName\n"; }
+	if ($verbose) { print "$specialPreFileName\n"; }
+	if ($verbose) { print "$viewDropsFileName\n"; }
+	if ($verbose) { print "$schemaDropsFileName\n"; }
+	if ($verbose) { print "$schemaFileName\n"; }
+	if ($verbose) { print "$viewFileName\n"; }
+	if ($verbose) { print "$specialPostFileName\n"; }
+	if ($verbose) { print "$permissionsFileName\n"; }
+	if ($verbose) { print "$insertFileName\n"; }
+	if ($verbose) { print "$constraintFileName\n"; }
+
+	open ($cdout, "> $constraintDropsFileName") || die "Can't open $constraintDropsFileName for write!";
+	open ($spreout, "> $specialPreFileName " ) || die "Can't open $specialPreFileName for write!";
+	open ($vdout, "> $viewDropsFileName") || die "Can't open $viewDropsFileName for write!";
+	open ($sdout, "> $schemaDropsFileName") || die "Can't open $schemaDropsFileName for write!";
+	open ($pdout, "> $permissionsDropsFileName") || die "Can't open $permissionsDropsFileName for write!";
+	open ($pout, "> $permissionsFileName") || die "Can't open $permissionsFileName for write!";
+	open ($sout, "> $schemaFileName") || die "Can't open $schemaFileName for write!";
+	open ($vout, "> $viewFileName") || die "Can't open $viewFileName for write!";
+	open ($spostout, "> $specialPostFileName " ) || die "Can't open $specialPostFileName for write!";
+	open ($iout, "> $insertFileName") || die "Can't open $insertFileName for write!";
+	open ($cout, "> $constraintFileName") || die "Can't open $constraintFileName for write!";
+} else {
+	printHelp();
+	die "ERROR: Must pass -o option with filename prefix";
+}
+
+# make the dbType lowercase and default as 'postgres'
+# unless it's in the config file
+if ($opt_t) {
+	$opt_t =~ tr/A-Z/a-z/;
+
+	# check if it's a database we know
+	if (
+		$opt_t ne 'db2' and
+		$opt_t ne 'informix' and
+		$opt_t ne 'ingres' and
+		$opt_t ne 'mssql' and
+		$opt_t ne 'mysql' and
+		$opt_t ne 'oracle' and
+		$opt_t ne 'postgres' and
+		$opt_t ne 'sybase' and
+		$opt_t ne 'innodb'
+	) {
+		printHelp();
+		print "Sorry, I support only DB/2, Informix, Ingres, MSSQL, MySQL, Oracle, Postgres, Sybase, and InnoDB...\n";
+		die "I died";
+	}
+} elsif ($cfg->{defaultDatabase}) {
+	$opt_t = $cfg->{defaultDatabase};
+} else { $opt_t = 'postgres'; }
+
+
+# setup the "go" command -- most RDBMSs, especially ANSI SQL'92-compliant
+# ones, will take ";" as the SQL submit command. Some others want something
+# else.
+if ($opt_t eq 'sybase') {
+	$goCommand = "\ngo";
+} elsif ($opt_t eq 'ingres') {
+	$goCommand = "\n\\g";
+} else {
+	$goCommand = ";";
+}
+
+
+# drTAE: I want this comment to easily show a separation of major sections
+# within the SQL script. It should have a little useful information and
+# identify that this is a generated script
+my $genericInformativeComment = "";
+my $localTime = localtime();
+$genericInformativeComment .= "$sqlCommentString --------------------------------------------------------------------\n";
+$genericInformativeComment .= "$sqlCommentString     Target Database:   $opt_t\n";
+$genericInformativeComment .= "$sqlCommentString     SQL Generator:     $versionInfo\n";
+$genericInformativeComment .= "$sqlCommentString     Generated at:      $localTime\n";
+$genericInformativeComment .= "$sqlCommentString     Input File:        $opt_i\n";
+
+# add some information at the top of the Constraints Drops
+print $cdout "\n$sqlCommentString Generated SQL Constraints Drop statements\n";
+print $cdout $genericInformativeComment;
+print $cdout "\n";
+
+# add some information at the top of the SQL Schema Drops
+print $sdout "\n$sqlCommentString Generated SQL Schema Drop statements\n";
+print $sdout $genericInformativeComment;
+print $sdout "\n";
+
+# add some information at the top of the SQL Schema
+print $sout "\n$sqlCommentString Generated SQL Schema\n";
+print $sout $genericInformativeComment;
+print $sout "\n";
+
+# add some information at the top of the SQL Views
+print $vdout "\n$sqlCommentString Generated SQL View Drop Statements\n";
+print $vdout $genericInformativeComment;
+print $vdout "\n";
+
+# add some information at the top of the SQL Views
+print $vout "\n$sqlCommentString Generated SQL Views\n";
+print $vout $genericInformativeComment;
+print $vout "\n";
+
+# add some information at the top of the Inserts
+print $iout "\n$sqlCommentString Generated SQL Insert statements\n";
+print $iout $genericInformativeComment;
+print $iout "\n";
+
+# add some information at the top of the Constraints
+print $cout "\n$sqlCommentString Generated SQL Constraints\n";
+print $cout $genericInformativeComment;
+print $cout "\n";
+
+# add some information at the top of the Permissions Drops
+print $pdout "\n$sqlCommentString Generated Permissions Drops\n";
+print $pdout $genericInformativeComment;
+print $pdout "\n";
+
+# add some information at the top of the Permissions
+print $pout "\n$sqlCommentString Generated Permissions\n";
+print $pout $genericInformativeComment;
+print $pout "\n";
+
+# we will output some SQL for each dia:object -- we're uninterested
+# in any other thing... for example, dia:diagram does nothing for us
+#
+# drTAE: in the future we might be interested in dia:layer tags perhaps
+# as schemas?
+my $nodeList = $doc->getElementsByTagName ('dia:object');
+generateSqlFromNodeList ($nodeList);
+
+print $vout "\n";
+print $vdout "\n";
+print $sout "\n";
+print $sdout "\n";
+print $spreout "\n";
+print $spostout "\n";
+print $pout "\n";
+print $pdout "\n";
+print $cout "\n";
+print $cdout "\n";
+print $iout "\n";
+
+# close our files
+close ($vout);
+close ($vdout);
+close ($sout);
+close ($sdout);
+close ($spreout);
+close ($spostout);
+close ($pout);
+close ($pdout);
+close ($cout);
+close ($cdout);
+close ($iout);
+
+# only want one file? merge them together!!!
+if (!$opt_s) {
+	# add some useful header
+	#
+	# drTAE: I want this header to very clearly demarcate the top of the
+	# SQL script, it should clearly identify this script is generated, the
+	# generator, the authors of the generator, copyright information for
+	# the generator, target database, and a timestamp of generation time.
+	# Other stuff might be considered useful to be shown once at the top of
+	# the script... when those things are identified, they'll be put here.
+	my $localTime = localtime();
+	my $tmphandle;
+	open ($tmphandle, "> .tedia-tmpSQLfile");
+	print $tmphandle "$sqlCommentString ================================================================================\n";
+	print $tmphandle "$sqlCommentString   $opt_t SQL DDL Script File\n";
+	print $tmphandle "$sqlCommentString ================================================================================\n";
+	print $tmphandle "\n";
+	print $tmphandle "\n";
+	print $tmphandle "$sqlCommentString ================================================================================\n";
+	print $tmphandle "$sqlCommentString \n";
+	print $tmphandle "$sqlCommentString   Generated by:      $versionInfo\n";
+	print $tmphandle "$sqlCommentString                      $authorInfo\n";
+	print $tmphandle "$sqlCommentString \n";
+	print $tmphandle "$sqlCommentString   Target Database:   $opt_t\n";
+	print $tmphandle "$sqlCommentString   Generated at:      $localTime\n";
+	print $tmphandle "$sqlCommentString   Input File:        $opt_i\n";
+	print $tmphandle "$sqlCommentString \n";
+	print $tmphandle "$sqlCommentString ================================================================================\n";
+	print $tmphandle "\n";
+
+	# for innodb, disable autocommit for this script
+	if ($opt_t eq 'innodb') {
+		print $tmphandle "set autocommit = 0 $goCommand";
+	}
+
+	print $tmphandle "\n";
+	close ($tmphandle);
+
+	# put the four bits together into one big file
+	#
+	# drTAE: TODO make this OS-generic -- looks pretty *NIXy now, doesn't it?
+	#system ("cat $constraintDropsFileName $permissionsDropsFileName $specialPreFileName $viewDropsFileName $schemaDropsFileName $schemaFileName $viewFileName $specialPostFileName $permissionsFileName $insertFileName $constraintFileName >> .tedia-tmpSQLfile");
+
+	# cyb: putting the four bits together into one big file in now OS-generic
+	# new array plus new subroutine replaces the "system" call above
+	my @names = qw ($constraintDropsFileName $permissionsDropsFileName $specialPreFileName $viewDropsFileName $schemaDropsFileName $schemaFileName $viewFileName $specialPostFileName $permissionsFileName $insertFileName $constraintFileName);
+	&catToTemp(".tedia-tmpSQLfile", @names);
+
+	unlink ($constraintDropsFileName);
+	unlink ($permissionsDropsFileName);
+	unlink ($specialPreFileName);
+	unlink ($viewDropsFileName);
+	unlink ($schemaDropsFileName);
+	unlink ($schemaFileName);
+	unlink ($viewFileName);
+	unlink ($specialPostFileName);
+	unlink ($permissionsFileName);
+	unlink ($insertFileName);
+	unlink ($constraintFileName);
+
+	# "quit" commands for RDBMSs that are too lame to quit
+	# after taking a file as input (Oracle and Ingres, at least)
+	if ($opt_t eq 'ingres' || $opt_t eq 'oracle' || $opt_t eq 'innodb') {
+		open ($sout, ">> .tedia-tmpSQLfile") || die "Cannot open temp sqlfile for append!?!?";
+
+		print $sout "$sqlCommentString $opt_t requires a special 'quit' command\n";
+		if ($opt_t eq 'ingres') {
+			print $sout "\\q\n\n";
+		} elsif ($opt_t eq 'oracle') {
+			print $sout "quit\n\n";
+		} elsif ($opt_t eq 'innodb') {
+			# now commit to innodb
+			# (required due to disabled autocommit)
+			print $sout "commit $goCommand\n\n";
+		}
+	}
+	close $sout;
+
+	#system ("mv .tedia-tmpSQLfile $outputFileDir$outputFileBase.$outputFileExt");
+
+	# cyb: use the rename function to make more OS-agnostic instead of system call
+	rename ".tedia-tmpSQLfile", "$outputFileDir$outputFileBase.$outputFileExt";
+
+}
+
+exit 0;
+
+# -------------------------------------------------------------------------------------------
+#  subroutines
+# -------------------------------------------------------------------------------------------
+
+sub printHelp {
+	# drTAE: I want to be very explicit that this program is copyrighted
+	# and is distributed under the terms of the GPL. Too many people seem
+	# to assume GPL code isn't copyrighted. Notice therefore that I've
+	# beat this into the ground.
+	print "$versionInfo $authorInfo\n";
+	print "\n";
+	print "This program is free software; you can redistribute it and/or modify it\n";
+	print "under the terms of the GNU General Public License version 2 as published by\n";
+	print "the Free Software Foundation. THIS PROGRAM IS COPYRIGHTED AND LICENSED TO\n";
+	print "YOU UNDER VERY SPECIFIC CONDITIONS. If you have not read and agreed to the\n";
+	print "terms of the GPL, stop now and read/agree!\n";
+	print "\n";
+	print "This program is distributed in the hope that it will be useful, but WITHOUT\n";
+	print "ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or\n";
+	print "FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for\n";
+	print "more details.\n";
+	print "\n";
+	print "Usage: $0 -i <xmlIn> -o <sqlOut> [-t <dbType>] [-g] [-s] [-d] [-v {1 | 2}] [-h]\n";
+	print "\n";
+	print "\t  -i <xmlIn>      XML File to parse, should be created by Dia\n";
+	print "\t  -g              (Deprecated, gzip status now autodeteced) Dia XML savefile *NOT* gzipped\n";
+	print "\t  -o <sqlOut>     Name of output\n";
+	print "\t  -t <dbType>     Type of database to gen SQL for (postgres, mysql, sybase, oracle, db2, innodb)\n";
+	print "\t  -s              Separate constraint drops, constraints, table drops, tables into\n";
+	print "\t                  separate SQL output files\n";
+	print "\t  -d              Add 'drop' syntax to SQL output file\n";
+	print "\t  -v {1 | 2}      Verbosity level, 1=verbose, 2=very verbose\n";
+	print "\t  -h              This help, copyright, and licensing information\n";
+	print "\n\n";
+}
+
+
+# This is the top-level routine. Given this nodelist, build the SQL.
+# We're interested in all nodes (because we were passed only dia:object
+# nodes anyway) and we're looking for Classes or Associations. For now,
+# those are the only two objects we look for.
+#
+# I'm unsure what other UML objects might be useful for generating SQL DDL...
+sub generateSqlFromNodeList {
+	my $nodeList = shift;
+	my ($i,$nodeType, $nodeAttrType, $nodeAttrId);
+
+	# start with smallPackages, which should be generated before Classes,
+	# until I figure out a way to specify WHEN they should be parsed
+	for ($i = 0; $i < $nodeList->getLength; $i++) {
+		$nodeType = $nodeList->item($i)->getNodeType;
+
+		# sanity check -- a dia:object should be an element_node
+		if ($nodeType == ELEMENT_NODE) {
+			$nodeAttrType = $nodeList->item($i)->getAttribute ('type');
+			$nodeAttrId = $nodeList->item($i)->getAttribute ('id');
+			
+			if ($veryverbose) { print "generateSqlFromNodeList(): Node $i -- type=$nodeAttrType  id=$nodeAttrId\n"; }
+
+			if ($nodeAttrType eq 'UML - SmallPackage') {
+				# generic database statements
+				generateSmallPackageSQL ($nodeList->item($i), $nodeAttrId);
+			} else {
+				if ($veryverbose) { print "Pass1: Parse only UML SmallPackages\n"; }
+			}
+		}
+	}
+
+	# cycle through the Classes and Components next -- I think these mainly
+	# stand alone and don't need to be done in any particular order
+	for ($i = 0; $i < $nodeList->getLength; $i++) {
+		$nodeType = $nodeList->item($i)->getNodeType;
+
+		# sanity check -- a dia:object should be an element_node
+		if ($nodeType == ELEMENT_NODE) {
+			$nodeAttrType = $nodeList->item($i)->getAttribute ('type');
+			$nodeAttrId = $nodeList->item($i)->getAttribute ('id');
+			
+			if ($veryverbose) { print "generateSqlFromNodeList(): Node $i -- type=$nodeAttrType  id=$nodeAttrId\n"; }
+
+			if ($nodeAttrType eq 'UML - Class') {
+				# table or view create
+				parseClass ($nodeList->item($i), $nodeAttrId);
+			} elsif ($nodeAttrType eq 'UML - Component') {
+				# insert statements
+				generateComponentSQL ($nodeList->item($i), $nodeAttrId);
+			} else {
+				if ($veryverbose) { print "Pass2: Parse only UML Classes & Components\n"; }
+			}
+		}
+	}
+
+	# then cycle through the associations -- we *MUST* do all the classes
+	# before we do associations!!! (notice we're building a special
+	# %umlClass when we create a Class SQL DDL -- that's a KEY observation)
+	for ($i = 0; $i < $nodeList->getLength; $i++) {
+		$nodeType = $nodeList->item($i)->getNodeType;
+
+		# sanity check -- a dia:object should be an element_node
+		if ($nodeType == ELEMENT_NODE) {
+			$nodeAttrType = $nodeList->item($i)->getAttribute ('type');
+			$nodeAttrId = $nodeList->item($i)->getAttribute ('id');
+			
+			if ($veryverbose) { print "generateSqlFromNodeList(): Node $i -- type=$nodeAttrType  id=$nodeAttrId\n"; }
+
+			if ($nodeAttrType eq 'UML - Association') {
+				generateAssociationSQL ($nodeList->item($i), $nodeAttrId);
+			} else {
+				if ($veryverbose) { print "Pass3: Parse only UML Associations\n"; }
+			}
+		}
+	}
+}
+
+
+# parse a CLASS
+sub parseClass {
+	my $class = shift;
+	my $id = shift;
+
+	# Class Attributes
+	my (@attribList, $singleAttrib);
+	# Class Operations
+	my (@operationList, $singleOperation);
+
+	if ($verbose) { print "parseClass(): Parsing UML Class id=$id\n"; }
+
+	# get the Class name
+	my $className = getValueFromObject ($class, "dia:attribute", "name", "name", "string");
+	if ($verbose) { print "Class NAME=$className\n"; }
+	# Associations will need this associative array to understand
+	# what their endpoints are connected to
+	$umlClass {$id} = $className;
+
+	# determine if this Class is a Table or View
+	my $classAbstract = getValueFromObject ($class, "dia:attribute", "name", "abstract", "boolean");
+	my $classType;
+	if ($classAbstract eq 'true') {
+		$classType = 'view';
+	} else {
+		$classType = 'table';
+	}
+
+	# get the Class attributes
+	my $attribStrings = "";
+	my $attribNode = getNodeFromObject ($class, "dia:attribute", "name", "attributes");
+	@attribList = $attribNode->getElementsByTagName ("dia:composite");
+	# need name, type, value, and visibility for each
+	foreach $singleAttrib (@attribList) {
+		my $attribName = getValueFromObject ($singleAttrib, "dia:attribute", "name", "name", "string");
+		my $attribType = getValueFromObject ($singleAttrib, "dia:attribute", "name", "type", "string");
+		my $attribVal = getValueFromObject ($singleAttrib, "dia:attribute", "name", "value", "string");
+		my $attribVisibility = getValueFromObject ($singleAttrib, "dia:attribute", "name", "visibility", "number");
+
+		if ($verbose) { print " * Got attribute: $attribName / $attribType / $attribVal / $attribVisibility\n"; }
+		$attribStrings .= "$attribName\n$attribType\n$attribVal\n$attribVisibility\n--nextattr--\n";
+	}
+
+	# get the Class operations
+	my $operationStrings = "";
+	my $operNode = getNodeFromObject ($class, "dia:attribute", "name", "operations");
+	my @operList = $operNode->getElementsByTagName ("dia:composite");
+	# need name, type, (parameters...)	
+	foreach $singleOperation (@operList) {
+		my $paramString = "";
+
+		# only parse umloperation dia:composites
+		if ($singleOperation->getAttributes->item(0)->toString eq 'type="umloperation"') {
+			my $operName = getValueFromObject ($singleOperation, "dia:attribute", "name", "name", "string");
+			my $operType = getValueFromObject ($singleOperation, "dia:attribute", "name", "type", "string");
+			my $operParams = getNodeFromObject ($singleOperation, "dia:attribute", "name", "parameters");
+			my @paramList = $singleOperation->getElementsByTagName ("dia:composite");
+			foreach my $singleParam (@paramList) {
+				my $paramName = getValueFromObject ($singleParam, "dia:attribute", "name", "name", "string");
+				$paramString .= "$paramName\t";
+			}
+			$paramString =~ s/\t$//;
+
+			if ($verbose) { print " * Got operation: $operName / $operType / ($paramString)\n"; }
+			$operationStrings .= "$operName\n$operType\n$paramString\n--nextop--\n";
+		}
+	}
+
+	if ($verbose) { print "Creating SQL for $className as a $classType\n"; }
+	genTableViewSQL ($className, $classType, $attribStrings, $operationStrings);
+
+	return 1;
+}
+
+
+# given an object, node name, attribute name, and attribute value, return
+# the node that has all these things
+sub getNodeFromObject {
+	my $object = shift;
+	my $getNodeName = shift;
+	my $getNodeAttribute = shift;
+	my $getNodeAttributeVal = shift;
+
+	my $currNode;
+	my $k;
+	my $doneParsing;
+	my $parsedValue;
+
+	my @nodeList = $object->getElementsByTagName($getNodeName);
+
+	# search @nodeList for a getNodeAttribute="getNodeAttributeVal"
+	foreach $currNode (@nodeList) {
+		if ($currNode->getNodeName eq $getNodeName) {
+			my $attrPtr = $currNode->getAttributes;
+
+			$k=0;
+			while ($k < $attrPtr->getLength and !$doneParsing) {
+				$parsedValue = $attrPtr->item($k)->toString;
+				if ($parsedValue =~ /$getNodeAttribute="$getNodeAttributeVal"/) {
+					if ($veryverbose) { print " * getNodeFromObject(): got $parsedValue!\n"; }
+					return $currNode;
+				}
+				$k++;
+			}
+		}
+	}
+
+	# should have already returned some $currNode by now...
+	print "ERROR: getNodeFromObject(): failed to get $getNodeAttribute=$getNodeAttributeVal\n";
+	return undef;
+}
+		
+
+# given an object, node name, attribute name, attribute value, and value
+# to retrieve type, find the info and return it
+sub getValueFromObject {
+	my $object = shift;
+	my $getNodeName = shift;
+	my $getNodeAttribute = shift;
+	my $getNodeAttributeVal = shift;
+	my $infoToRetrieveType = shift;
+
+	my $parsedValue;
+
+	my $currNode;
+
+	if ($currNode = getNodeFromObject ($object, $getNodeName, $getNodeAttribute, $getNodeAttributeVal)) {
+		if ($infoToRetrieveType eq 'string') {
+			$parsedValue = getStringFromNode ($currNode);
+		} elsif ($infoToRetrieveType eq 'number') {
+			$parsedValue = getNumFromNode ($currNode);
+		} elsif ($infoToRetrieveType eq 'boolean') {
+			$parsedValue = getBooleanFromNode ($currNode);
+		}
+
+		return $parsedValue;
+	} else {
+		print "ERROR: getValueFromObject(): failed to getNodeFromObject()\n";
+		return undef;
+	}
+}
+
+
+# generate Table or View SQL based on an object we're given
+sub genTableViewSQL {
+	my $objectName = shift;
+	my $objectType = shift;
+	my $objectAttributes = shift;
+	my $objectOperations = shift; 
+
+	my $singleColumn;
+
+	my $createFileHandle;
+	my $dropFileHandle;
+	if ($objectType eq 'view') {
+		$createFileHandle = $vout;
+		$dropFileHandle = $vdout;
+	} else {
+		$createFileHandle = $sout;
+		$dropFileHandle = $sdout;
+	}
+
+	#my $objectQuoted = addQuotes ($objectName);
+	my $objectQuoted = $objectName;
+
+	if ($verbose) { print "genTableViewSQL(): Generating $objectName as $objectType\n"; }
+
+	# output the table/view definition
+	print $createFileHandle "\n";
+	print $createFileHandle "$sqlCommentString $objectName\n";
+
+	# output the optional drop table/view syntax
+	if ($opt_d) {
+		print $dropFileHandle &genDropTableViewSQL ($objectQuoted, $objectType) . "\n";
+	}
+
+	# as-yet untested RDBMSs
+	if ($opt_t eq 'mssql') {
+		print $createFileHandle "$sqlCommentString TEST!!! the following create table $objectName for MS SQL Server\n";
+		print $createFileHandle "$sqlCommentString MS SQL Server SQL output hasn't been checked and may be invalid.\n";
+	}
+
+	if (($opt_t eq 'mysql' || $opt_t eq 'innodb') && $objectType eq 'view') {
+		print $createFileHandle "$sqlCommentString WARNING! tedia2sql currently believes MySQL does not support\n";
+		print $createFileHandle "$sqlCommentString views, but you're trying to create a view here. Expect errors.\n";
+	}
+
+	# the create part
+	print $createFileHandle "create $objectType $objectQuoted ";
+
+	# depending on table/view, which is syntactically-correct
+	if ($objectType eq 'table') {
+		print $createFileHandle "(\n";
+		print $createFileHandle &buildTableColumns ($objectName, $objectAttributes);
+		print $createFileHandle ") ";
+
+		if ($opt_t eq 'innodb') {
+			print $createFileHandle "type = InnoDB ";
+		}
+		
+		if ($opt_d) {
+			print $pdout &dropTablePermissions ($objectName, $objectOperations);
+			print $cdout &dropTableConstraints ($objectName, $objectOperations);
+		}
+		print $pout &createTablePermissions ($objectName, $objectOperations);
+		print $cout &createTableConstraints ($objectName, $objectOperations);
+	} elsif ($objectType eq 'view') {
+		print $createFileHandle "as\n";
+		print $createFileHandle $sqlIndent . "select " . &buildViewColumns ($objectAttributes) . "\n";
+		print $createFileHandle &buildViewOperations ($objectOperations);
+	}
+
+	print $createFileHandle "$goCommand\n";
+
+	return 0;
+}
+
+
+# table permissions (grant, revoke) statements
+sub dropTableConstraints {
+	my $objectName = shift;
+	my $objectOperations = shift;
+
+	my $return = "";
+	my @opList = split ("\n--nextop--\n", $objectOperations);
+
+	my $oneOp;
+	foreach $oneOp (@opList) {
+		my ($opName, $opType, $opParams) = split ("\n", $oneOp);
+		if ($opType =~ /index/) {
+			$return .= dropIndex ($opName, $objectName) . "\n";
+		}
+	}
+	return $return;
+}
+sub createTableConstraints {
+	my $objectName = shift;
+	my $objectOperations = shift;
+
+	my $return = "";
+	my @opList = split ("\n--nextop--\n", $objectOperations);
+
+	my $oneOp;
+	foreach $oneOp (@opList) {
+		my ($opName, $opType, $opParams) = split ("\n", $oneOp);
+		$opParams =~ s/\t/,/g;
+		if ($opType =~ /index/) {
+			$return .= createIndex ($opName, $opType, $objectName, $opParams) . "\n";
+		}
+	}
+	return $return;
+}
+
+
+# table permissions (grant, revoke) statements
+sub dropTablePermissions {
+	my $objectName = shift;
+	my $objectOperations = shift;
+
+	my $return = "";
+	my @opList = split ("\n--nextop--\n", $objectOperations);
+
+	my $oneOp;
+	foreach $oneOp (@opList) {
+		my ($opName, $opType, $opParams) = split ("\n", $oneOp);
+		if ($opType eq 'grant') {
+			$return .= revokeGrant ($opName, $objectName, split ("\t", $opParams)) . "\n";
+		}
+	}
+	return $return;
+}
+sub createTablePermissions {
+	my $objectName = shift;
+	my $objectOperations = shift;
+
+	my $return = "";
+	my @opList = split ("\n--nextop--\n", $objectOperations);
+
+	my $oneOp;
+	foreach $oneOp (@opList) {
+		my ($opName, $opType, $opParams) = split ("\n", $oneOp);
+		if ($opType eq 'grant') {
+			$return .= createGrant ($opName, $objectName, split ("\t", $opParams)) . "\n";
+		}
+	}
+	return $return;
+}
+
+
+# given a list of attributes separated by the special column
+# separator string, parse the stuff out and build a view column
+# list
+sub buildViewColumns {
+	my $objectAttributes = shift;
+
+	my $return = "";
+	my $singleCol;
+
+	foreach $singleCol (split ("\n--nextattr--\n", $objectAttributes)) {
+		my ($colName,$colType,$colVal,$colVis) = split ("\n", $singleCol);
+
+		#$return .= &addQuotes ($colName) . ", ";
+		$return .= $colName . ", ";
+	}
+
+	$return =~ s/, $//s;
+
+	return $return;
+}
+
+
+sub buildViewOperations {
+	my $objectOperations = shift;
+
+	my $singleOp;
+	my $return = "";
+
+	my $currentOpType = "";
+	foreach $singleOp (split ("\n--nextop--\n", $objectOperations)) {
+		my ($opName,$opType,$opParams) = split ("\n", $singleOp);
+
+		if ($opType ne $currentOpType) {
+			$return =~ s/\,\n$/\n/s;
+			$return .= $sqlIndent . "$opType $opName";
+			$currentOpType = $opType;
+		} else {
+			$return .= $sqlIndent . $sqlIndent . "$opName";
+		}
+
+		# check what the optype is and add appropriate separators
+		$opType =~ tr/A-Z/a-z/;
+		if ($opType eq 'from' || $opType eq 'having' || $opType eq 'group by' || $opType eq 'order by') { $return .= ","; }
+		$return .= "\n";
+	}
+
+	# yes, again there might be extraneous comma
+	$return =~ s/\,\n$/\n/s;
+	return $return;
+}
+
+
+# given a list of attributes separated by the special column
+# separator string, parse the stuff out and build a table column
+# list
+sub buildTableColumns {
+	my $objectName = shift;
+	my $objectAttributes = shift;
+
+	my $return = "";
+	my $pkString = "";
+	my $singleCol;
+
+	foreach $singleCol (split ("\n--nextattr--\n", $objectAttributes)) {
+		my ($colName,$colType,$colVal,$colVis) = split (/\n/,$singleCol);
+
+		# replace ANSI92 datatypes with lame-ass RDBMS-specific datatypes,
+		# supposing the RDBMS is a lame-ass one
+		$colType =~ tr/A-Z/a-z/;
+		if ($colType eq 'timestamp') {
+			if ($opt_t eq 'sybase') { $colType = 'datetime'; }
+			elsif ($opt_t eq 'oracle' || $opt_t eq 'ingres') { $colType = 'date'; }
+		}
+
+		#$colName = addQuotes ($colName);
+
+		if (length ($colName) < 26) {
+			# make column types line up nice 'n' neat
+			$return .= $sqlIndent . pack ("A26", $colName) . $colType;
+		} else {
+			# the name is too long, just put it and a space
+			$return .= $sqlIndent . "$colName $colType";
+		}
+
+		# 1. $colVal being null or not null should just add that at the
+		#    end of the column
+		# 2. $colVal being something else should make the column be
+		#    "default $colVal", being the default of the column
+		if ($colVal =~ /^(not )?null$/ || $colVal =~ /^(NOT )?NULL$/) {
+			if ($colVis != 2) { $return .= " $colVal"; }
+		} elsif ($colVal) {
+			$return .= " default $colVal";
+		}
+
+		# sanity check... an identity column cannot be NULL
+		if (($colVal eq 'null' || $colVal eq 'NULL') && $colVis == 2) {
+			print STDERR "\nERROR: You've set Attribute=$colName in Class=$objectName to be NULL!\n";
+			print STDERR "ERROR: It is a primary key column!\n";
+			print STDERR "ERROR: This violates fundamental laws of the universe. Please fix your diagram.\n";
+			exit 1;
+		}
+
+		# primary key column
+		if ($colVis == 2) {
+			$return .= " not null";
+			$pkString .= "$colName,";
+		}
+
+		$return .= ",\n";
+	}
+
+	# print PKstring if necessary
+	if ($pkString) {
+		# get rid of an extraneous comma at the end
+		$pkString =~ s/,$//s;
+
+		if ($opt_t eq 'postgres' || $opt_t eq 'oracle' || $opt_t eq 'sybase' || $opt_t eq 'mysql' || $opt_t eq 'mssql' || $opt_t eq 'ingres' || $opt_t eq 'innodb') {
+			#my $constraintTableName = addQuotes ("pk_" . $objectName);
+			my $constraintTableName = "pk_" . $objectName;
+			$return .= $sqlIndent . "constraint $constraintTableName primary key ($pkString)\n"
+		} elsif ($opt_t eq 'db2') {
+			# DB2 has a constraint-name length limit of 18 chars, so mangle
+			# the name down to 14 characters and prepend pk_
+			#my $constraintTableName = addQuotes ("pk_" . &mangleName ($objectName, 14));
+			my $constraintTableName = "pk_" . &mangleName ($objectName, 14);
+			$return .= $sqlIndent . "constraint $constraintTableName primary key ($pkString)\n"
+		}
+	} else {
+		# eliminate last comma
+		$return =~ s/,\n$/\n/s;
+	}
+
+	return $return;
+}
+
+
+# now we need to generate the foreign key relationship betwixt two tables
+sub generateAssociationSQL {
+	my $association = shift;
+	my $id = shift;
+
+	my ($i, $currentNode, $assocName, $assocDirection, $nodeType, $nodeAttrName, $nodeAttrId, $nodeList);
+	my (%leftEnd, %rightEnd, $connectionNode, $leftConnectionHandle, $rightConnectionHandle);
+
+	if ($verbose) { print "generateAssociationSQL(): Parsing UML Association id=$id\n"; }
+
+	$nodeList = $association->getElementsByTagName ('dia:attribute');
+
+	# parse out the name, direction, and ends
+	undef ($assocName);
+	$i=0;
+	while ($i < $nodeList->getLength) {
+		$currentNode = $nodeList->item($i);
+		$nodeAttrName = $currentNode->getAttribute ('name');
+	
+		if ($nodeAttrName eq 'name') {
+			$assocName = getStringFromNode ($currentNode);
+			if ($verbose) { print "Got NAME=$assocName\n"; }
+		} elsif ($nodeAttrName eq 'direction') {
+			$assocDirection = getNumFromNode ($currentNode);
+		} elsif ($nodeAttrName eq 'ends') {
+			# cycle through dia:composite entries looking for string role & numeric aggregate values
+			# get the attributes for this association -- each is a dia:composite
+			#
+			# there should only be one dia:composite within the association
+			%leftEnd = getNodeAttributeValues ($association->getElementsByTagName ('dia:composite')->item(0),
+				('arole','9aggregate','bclass_scope'));
+			%rightEnd = getNodeAttributeValues ($association->getElementsByTagName ('dia:composite')->item(1),
+				('arole','9aggregate','bclass_scope'));
+		}
+
+		$i++;
+	}
+
+	# parse out the 'connections', that is, the classes on either end
+	$connectionNode = $association->getElementsByTagName ('dia:connections')->item(0);
+	$leftConnectionHandle = $connectionNode->getElementsByTagName ('dia:connection')->item(0)->getAttribute ('to');
+	$rightConnectionHandle = $connectionNode->getElementsByTagName ('dia:connection')->item(1)->getAttribute ('to');
+
+	if ($verbose) {
+		print "  * (UNUSED) direction=$assocDirection (aggregate determines many end)\n";
+		print "  * leftEnd=".$leftEnd{'role'}." agg=".$leftEnd{'aggregate'}." classId=".$leftConnectionHandle."\n";
+		print "  * rightEnd=".$rightEnd{'role'}." agg=".$rightEnd{'aggregate'}." classId=".$rightConnectionHandle."\n";
+		print "\n";
+	}
+
+	# depending on which end is the 'many' bit of the one-to-many relationship,
+	# output that kind of foreign key
+	if ($leftEnd{'aggregate'}) {
+		# drop the constraint
+		if ($opt_d) {
+			print $cdout &dropForeignKey ($umlClass {$leftConnectionHandle}, $assocName) . "\n";
+		}
+		# create the constraint many-to-one
+		print $cout &createForeignKey ($umlClass {$leftConnectionHandle},
+			$assocName,
+			$leftEnd{'role'},
+			$umlClass {$rightConnectionHandle},
+			$rightEnd{'role'}
+		);
+	} elsif ($rightEnd{'aggregate'}) {
+		# drop the constraint
+		if ($opt_d) {
+			print $cdout &dropForeignKey ($umlClass {$rightConnectionHandle}, $assocName) . "\n";
+		}
+		# create the constraint one-to-many
+		print $cout &createForeignKey ($umlClass {$rightConnectionHandle},
+			$assocName,
+			$rightEnd{'role'},
+			$umlClass {$leftConnectionHandle},
+			$leftEnd{'role'}
+		);
+	} elsif ($assocDirection eq 1) {
+		# Here follows the part to handle one-to-one connections
+		# drop the constraint
+		if ($opt_d) {
+			print $cdout &dropForeignKey ($umlClass {$leftConnectionHandle}, $assocName) . "\n";
+		}
+		# create the constraint one-to-one: foreign key -> referenced attribute
+		print $cout &createForeignKey ($umlClass {$leftConnectionHandle},
+			$assocName,
+			$leftEnd{'role'},
+			$umlClass {$rightConnectionHandle},
+			$rightEnd{'role'}
+		);
+	} elsif ($assocDirection eq 2) {
+		# drop the constraint
+		if ($opt_d) {
+			print $cdout &dropForeignKey ($umlClass {$rightConnectionHandle}, $assocName) . "\n";
+		}
+		# create the constraint one-to-one: referenced attribute <- foreign key 
+		print $cout &createForeignKey ($umlClass {$rightConnectionHandle},
+			$assocName,
+			$rightEnd{'role'},
+			$umlClass {$leftConnectionHandle},
+			$leftEnd{'role'}
+		);
+	}
+
+	print $cout "\n";
+
+	if ($verbose) { print "\n"; }
+}
+
+
+# generate insert statements to fill tables with some values
+sub generateComponentSQL {
+	my $component = shift;
+	my $id = shift;
+
+	my ($i, $currentNode, $compName, $compText, $nodeType, $nodeAttrName, $nodeAttrId, $nodeList);
+	my @insertTexts;
+
+	if ($verbose) { print "generateComponentSQL(): Parsing UML Component id=$id\n"; }
+
+	$nodeList = $component->getElementsByTagName ('dia:attribute');
+
+	# parse out the 'stereotype' -- which in this case will
+	# be its name
+	undef ($compName);
+	$i=0;
+
+	# pass 1 to get $compName
+	while ($i < $nodeList->getLength && (!$compName || !$compText)) {
+		$currentNode = $nodeList->item($i);
+		$nodeAttrName = $currentNode->getAttribute ('name');
+	
+		if ($nodeAttrName eq 'stereotype') {
+			$compName = getStringFromNode ($currentNode);
+			if ($verbose) { print "Got NAME=$compName\n"; }
+
+			# Dia <0.9 puts strange characters before & after
+			# the component stereotype
+			if ($cfg->{diaVersion} && $cfg->{diaVersion} < 0.9) {
+				$compName =~ s/^&#[0-9]+;//s;
+				$compName =~ s/&#[0-9]+;$//s;
+			}
+		} elsif ($nodeAttrName eq 'text') {
+			$compText = getStringFromNode ($currentNode);
+			if ($verbose) { print "Got text from node... (probably multiline)\n"; }
+
+			# first, get rid of the # starting and ending the text
+			$compText =~ s/^#//s;
+			$compText =~ s/#$//s;
+
+		}
+
+		$i++;
+	}
+
+	# build the INSERT statements
+	if (!$compName || !$compText) {
+		print STDERR "ERROR: Component doesn't have both name & text, not generating SQL\n";
+	} else {
+		print $iout &createInsertStatements ($compName, $compText);
+	}
+}
+
+# generate generic database statements
+#
+# drTAE -- question... sometimes this will want to be done BEFORE tables are
+# created (ie: we're creating sequences for later tables) and sometimes after
+# (ie: we're doing something that depends on knowledge of table layout) --
+# so how do we indicate this in the SmallPackage??? For now, I will create
+# these statements PRE-schema creates
+sub generateSmallPackageSQL {
+	my $smallpackage = shift;
+	my $id = shift;
+
+	my ($i, $currentNode, $packName, $packText, $nodeType, $nodeAttrName, $nodeAttrId, $nodeList);
+	my @insertTexts;
+
+	if ($verbose) { print "generateSmallPackageSQL(): Parsing UML SmallPackage id=$id\n"; }
+
+	$nodeList = $smallpackage->getElementsByTagName ('dia:attribute');
+
+	# parse out the 'stereotype' -- which in this case will
+	# be its name
+	undef ($packName);
+	$i=0;
+	while ($i < $nodeList->getLength || !$packName) {
+		$currentNode = $nodeList->item($i);
+		$nodeAttrName = $currentNode->getAttribute ('name');
+	
+		if ($nodeAttrName eq 'stereotype') {
+			$packName = getStringFromNode ($currentNode);
+			if ($verbose) { print "Got databaseType=$packName\n"; }
+		} elsif ($nodeAttrName eq 'text') {
+			$packText = getStringFromNode ($currentNode);
+			if ($verbose) { print "Got text from node... creating generic Database statements.\n"; }
+
+			# first, get rid of the # starting and ending the text
+			$packText =~ s/^#//s;
+			$packText =~ s/#$//s;
+
+			# build the INSERT statements if the database is the
+			# right one (ie: sometimes this routine returns an
+			# empty string
+			if ($packName =~ /:pre/) {
+				print $spreout &createDatabaseStatements ($packName, $packText);
+			} elsif ($packName =~ /:post/) {
+				print $spostout &createDatabaseStatements ($packName, $packText);
+			}
+		}
+
+		$i++;
+	}
+}
+
+# given a node with dia:attribute nodes inside it, go through
+# the dia:attribute nodes with attribute "name='...'" and
+# return the string values
+#
+# @infosToGet is an array of strings, where the first character is
+# the data type to get, and the remaining characters are the name
+# to parse for. first character legal values are:
+#    a = alpha
+#    9 = numeric
+#    b = boolean
+#
+# example:   aname, 9dollars, bkillOrNot
+sub getNodeAttributeValues {
+	my $nodeList = shift;
+	my @infosToGet = @_;
+
+	my ($currentNode, $nodeAttrName, $i);
+	my %return;
+
+	# drTAE: hopefully Dia will never use this string as an actual value in its XML
+	# document save format, 'cuz I'm using it as a special "undef/NULL" construct
+	my $emptyValueString = "__this_is_a_very_very_empty_STRING_value_that_i_hope_no-one_will_ever_use (it's like NULL or 'undef')__";
+	my $emptyValueNumber = "__this_is_a_very_very_empty_NUMERIC_value_that_i_hope_no-one_will_ever_use (it's like NULL or 'undef')__";
+	my $emptyValueBoolean = "__this_is_a_very_very_empty_BOOLEAN_value_that_i_hope_no-one_will_ever_use (it's like NULL or 'undef')__";
+
+	# initialise it to a bunch of empty values, this will also allow
+	# us to know which attribute name values to parse out of the
+	# dia:attribute nodelist
+	foreach my $singleInfo (@infosToGet) {
+		if ($singleInfo =~ /^a(.+)/) {
+			$return {$1} = $emptyValueString;
+		} elsif ($singleInfo =~ /^9(.+)/) {
+			$return {$1} = $emptyValueNumber;
+		} elsif ($singleInfo =~ /^b(.+)/) {
+			$return {$1} = $emptyValueBoolean;
+		}
+	}
+
+	# we're interested in everything that's a dia:attribute
+	my $attrNodeList = $nodeList->getElementsByTagName ('dia:attribute');
+
+	for ($i=0; $i < $attrNodeList->getLength; $i++) {
+		$currentNode = $attrNodeList->item($i);
+		$nodeAttrName = $currentNode->getAttribute ('name');
+
+		# test if this is a value we're interested in and if it's currently empty
+		if ($return {$nodeAttrName} eq $emptyValueString) {
+			# a text node gives us text
+			$return {$nodeAttrName} = getStringFromNode ($currentNode);
+			if ($veryverbose) { print "\tgetNodeAttributeValues(): Got string $nodeAttrName\n"; }
+		} elsif ($return {$nodeAttrName} eq $emptyValueNumber) {
+			$return {$nodeAttrName} = getNumFromNode ($currentNode);
+			if ($veryverbose) { print "\tgetNodeAttributeValues(): Got numeric $nodeAttrName\n"; }
+		} elsif ($return {$nodeAttrName} eq $emptyValueBoolean) {
+			$return {$nodeAttrName} = getBooleanFromNode ($currentNode);
+			if ($veryverbose) { print "\tgetNodeAttributeValues(): Got boolean $nodeAttrName\n"; }
+		}
+	}
+
+	# don't return some fake value for bits we didn't parse,
+	# return undef which means it wasn't there
+	foreach my $singleInfo (@infosToGet) {
+		if ($return {$singleInfo} eq $emptyValueString ||
+		    $return {$singleInfo} eq $emptyValueNumber || 
+		    $return {$singleInfo} eq $emptyValueBoolean) {
+			$return {$singleInfo} = undef;
+		}
+	}
+
+	return %return;
+}
+
+
+# if it looks like <thingy><dia:string>value</dia:string></thingy> then we
+# will get the 'value' part out given the node is 'thingy'
+sub getStringFromNode {
+	my $node = shift;
+	my $return;
+
+	my ($stringNode, $stringVal);
+
+	# drTAE: there should be only one dia:string, so this foreach is a little
+	# extraneous... if you want to convert it to item(0) to see if it
+	# works, be my guest. but TEST TEST TEST TEST TEST TEST TEST.
+	foreach $stringNode ($node->getElementsByTagName ('dia:string')) {
+		# if there's a string between the <dia:string> tags, then return it,
+		# but if there's nothing (ie: no text node) then return the empty
+		# string, but *NOT* undef!!!
+		if ($stringVal = $stringNode->getFirstChild) {
+			$return = $stringVal->toString;
+		} else {
+			$return = "";
+		}
+	}
+
+	# drTAE: hmmmm. dia puts pounds around these values...? why? But pragmatists
+	# we are, we just remove the pound signs and move on with our lives
+	$return =~ s/^#//;
+	$return =~ s/#$//;
+
+	# drTAE: also, XML files must escape certain sequences...
+	$return =~ s/&lt;/</g;
+	$return =~ s/&amp;/&/g;
+	$return =~ s/&gt;/>/g;
+
+	return $return;
+}
+
+
+# if it looks like <thingy><dia:enum val="value"></thingy> then we
+# will get the 'value' part out given the node is 'thingy'
+sub getNumFromNode {
+	my $node = shift;
+	my $return;
+
+	my ($enumNode, $enumVal);
+
+	# drTAE: yeh, I know it's odd to have a return inside the foreach
+	# loop, but I don't know how to deal correctly
+	foreach $enumNode ($node->getElementsByTagName ('dia:enum')) {
+		return $enumNode->getAttribute ('val');
+	}
+}
+
+
+# if it looks like <thingy><dia:boolean val="value"></thingy> then we
+# will get the 'value' part out given the node is 'thingy'
+sub getBooleanFromNode {
+	my $node = shift;
+	my $return;
+
+	my ($enumNode, $enumVal);
+
+	# drTAE: yeh, I know it's odd to have a return inside the foreach
+	# loop, but I don't know how to deal correctly
+	foreach $enumNode ($node->getElementsByTagName ('dia:boolean')) {
+		return $enumNode->getAttribute ('val');
+	}
+}
+
+
+# create an index
+sub createIndex {
+	my $indexName = shift;
+	my $indexType = shift;
+	my $className = shift;
+	my $columnList = shift;
+
+	my $return;
+
+	# to fix any of these, change the syntax to the proper syntax and
+	# remove the $sqlCommentString from the front
+	if ($opt_t eq 'postgres' || $opt_t eq 'oracle' || $opt_t eq 'db2' || $opt_t eq 'sybase' || $opt_t eq 'mssql' || $opt_t eq 'innodb') {
+		$return  = "create $indexType $indexName on $className ($columnList) $goCommand";
+	} elsif ($opt_t eq 'mysql' || $opt_t eq 'ingres') {
+		$return  = "create $indexType $indexName on $className ($columnList);";
+	}
+
+	return $return;
+}
+
+
+# drop an index
+sub dropIndex {
+	my $indexName = shift;
+	my $className = shift;
+
+	my $return;
+
+	# to fix any of these, change the syntax to the proper syntax and
+	# remove the $sqlCommentString from the front
+	if ($opt_t eq 'postgres' || $opt_t eq 'oracle' || $opt_t eq 'db2') {
+		$return  = "drop index $indexName";
+		$return .= $goCommand;
+	} elsif ($opt_t eq 'sybase' || $opt_t eq 'mssql') {
+		$return  = "drop index $className.$indexName";
+		$return .= $goCommand;
+	} elsif ($opt_t eq 'mysql' || $opt_t eq 'innodb' || $opt_t eq 'ingres') {
+		$return = "drop index $indexName on $className;";
+	}
+
+	return $return;
+}
+
+
+# grant some permissions on some table to some set of roles
+sub createGrant {
+	my $grantName = shift;
+	my $className = shift;
+	my @roleList = @_;
+
+	my $return = "";
+	my $singleRole;
+
+	foreach $singleRole (@roleList) {
+		# to fix any of these, change the syntax to the proper syntax and
+		# remove the $sqlCommentString from the front
+		if ($opt_t eq 'postgres' || $opt_t eq 'oracle' || $opt_t eq 'db2' || $opt_t eq 'innodb') {
+			$return .= "grant $grantName on $className to $singleRole $goCommand\n";
+		} elsif ($opt_t eq 'sybase' || $opt_t eq 'mssql') {
+			$return .= "grant $grantName on $className to $singleRole $goCommand\n";
+		} elsif ($opt_t eq 'mysql' || $opt_t eq 'ingres') {
+			$return .= "grant $grantName on $className to $singleRole\n";
+		}
+	}
+
+	$return =~ s/\n$//;
+	return $return;
+}
+
+
+# revoke permissions from everyone on some table
+sub revokeGrant {
+	my $grantName = shift;
+	my $className = shift;
+	my @roleList = @_;
+
+	my $return = "";
+	my $singleRole;
+
+	foreach $singleRole (@roleList) {
+		# to fix any of these, change the syntax to the proper syntax and
+		# remove the $sqlCommentString from the front
+		if ($opt_t eq 'postgres' || $opt_t eq 'oracle' || $opt_t eq 'db2' || $opt_t eq 'sybase' || $opt_t eq 'mssql' || $opt_t eq 'innodb') {
+			$return .= "revoke $grantName on $className from $singleRole $goCommand\n";
+		} elsif ($opt_t eq 'mysql' || $opt_t eq 'ingres') {
+			$return .= "revoke $grantName on $className from $singleRole\n";
+		}
+	}
+
+	$return =~ s/\n$//;
+	return $return;
+}
+
+
+# create a foreign key
+sub createForeignKey {
+	my $className = shift;
+	my $constraintName = shift;
+	my $keyColumns = shift;
+	my $refTable = shift;
+	my $refColumns = shift;
+
+	my $return;
+
+	# to fix any of these, change the syntax to the proper syntax and
+	# remove the $sqlCommentString from the front
+	if ($opt_t eq 'postgres' || $opt_t eq 'oracle' || $opt_t eq 'innodb') {
+		$return  = "alter table $className add constraint $constraintName ";
+		$return .= "foreign key ($keyColumns) references $refTable ($refColumns) $goCommand";
+	} elsif ($opt_t eq 'sybase') {
+		# here we also need to create triggers
+		$return  = "\n$sqlCommentString constraint $constraintName plus related triggers\n";
+		$return .= "alter table $className add constraint $constraintName ";
+		$return .= "foreign key ($keyColumns) references $refTable ($refColumns) $goCommand\n";
+		$return .= "$sqlCommentString create trigger ri_one . . . .\n";
+		$return .= "$sqlCommentString create trigger ri_two . . . .\n";
+		$return .= "$sqlCommentString $goCommand";
+	} elsif ($opt_t eq 'mssql') {
+		$return .= "alter table $className add constraint $constraintName ";
+		$return .= "foreign key ($keyColumns) references $refTable ($refColumns) $goCommand";
+	} elsif ($opt_t eq 'db2') {
+		# drTAE: Wow! DB/2 has this nifty on delete set null thingy
+		# which I assume is good. If any DB/2 DBAs have some
+		# advice on this, please be letting me know.
+		#
+		# My ERD won't compile because of this, my PKs can't be null,
+		# so they can't be set null. If you are a DB2 guru and really
+		# want this, contact me to let me know how it's done
+		$return  = "alter table $className add constraint $constraintName ";
+		$return .= "foreign key ($keyColumns) references $refTable ($refColumns) $goCommand";
+	} elsif ($opt_t eq 'innodb') {
+		$return  = "alter table $className add constraint $constraintName foreign key ($keyColumns) references $refTable ($refColumns);";
+	} elsif ($opt_t eq 'mysql' || $opt_t eq 'ingres') {
+		$return  = "$sqlCommentString alter table $className add constraint $constraintName foreign key ($keyColumns) references $refTable ($refColumns);";
+	}
+
+	return $return;
+}
+
+
+# drop a foreign key (constraint)
+sub dropForeignKey {
+	my $className = shift;
+	my $constraintName = shift;
+
+	my $return;
+
+	# to fix any of these, change the syntax to the proper syntax and
+	# remove the $sqlCommentString from the front
+	if ($opt_t eq 'postgres' || $opt_t eq 'ingres' || $opt_t eq 'innodb') {
+		# postgres doesn't drop foreign key constraints at 7.2
+		# just drop the table and let the RI_ triggers disappear
+		# automagically
+		$return  =  "$sqlCommentString alter table $className drop constraint $constraintName $sqlCommentString(is implicitly done)";
+	} elsif ($opt_t eq 'oracle') {
+		$return = "alter table $className drop constraint $constraintName $goCommand";
+	} elsif ($opt_t eq 'sybase' || $opt_t eq 'mssql') {
+		$return  = "alter table $className drop constraint $constraintName $goCommand";
+	} elsif ($opt_t eq 'db2') {
+		$return = "alter table $className drop constraint $constraintName $goCommand";
+	} elsif ($opt_t eq 'innodb') {
+		$return = "drop constraint $constraintName;";
+	} elsif ($opt_t eq 'mysql') {
+		$return = "$sqlCommentString drop constraint $constraintName";
+	}
+
+	return $return;
+}
+
+
+# drop the table
+# most RDBMSs seem to have similar drop table syntax
+sub genDropTableViewSQL {
+	my $objectName = shift;
+	my $objectType = shift;
+
+	my $return;
+
+	# it appears Postgres, Oracle, and DB/2 can all handle the same syntax
+	if ($opt_t eq 'postgres' || $opt_t eq 'db2' || $opt_t eq 'ingres') {
+		$return = "drop $objectType $objectName $goCommand";
+	} elsif ($opt_t eq 'oracle') {
+		$return = "drop $objectType $objectName cascade constraints $goCommand";
+	} elsif ($opt_t eq 'sybase' || $opt_t eq 'mssql') {
+		my $sybaseType;
+
+		# what sort of column in sysobjects is this?
+		if ($objectType eq 'table') { $sybaseType = 'U'; }
+		if ($objectType eq 'view') { $sybaseType = 'V'; }
+
+		$return  = "\n$sqlCommentString drop $objectName\n";
+		$return .= "if exists (select 1 from sysobjects where type = '$sybaseType' and name = '$objectName')\n";
+		$return .= "begin\n";
+		$return .= "  drop $objectType $objectName\n";
+		$return .= "end $goCommand";
+	} elsif ($opt_t eq 'mysql' || $opt_t eq 'innodb') {
+		my $toComment;
+		if ($objectType eq 'view') {
+			$toComment  = "$sqlCommentString MySQL doesn't support views yet\n";
+			$toComment .= "$sqlCommentString ";
+		} else {
+			$toComment = '';
+		}
+		$return = "$toComment drop $objectType if exists $objectName $goCommand";
+	}
+
+	return $return;
+}
+
+
+# create insert statements for default values in tables
+sub createInsertStatements {
+	my $tableName = shift;
+	my $valuesText = shift;
+
+	my $singleValuesList;
+	my $return = "\n$sqlCommentString inserts for $tableName\n";
+
+	my @valuesListList = split ("\n", $valuesText);
+
+	#$tableName = addQuotes ($tableName);
+
+	foreach $singleValuesList (@valuesListList) {
+		if ($opt_t eq 'postgres' || $opt_t eq 'oracle' || $opt_t eq 'db2' || $opt_t eq 'sybase' || $opt_t eq 'mssql' || $opt_t eq 'innodb') {
+			$return .= "insert into $tableName values ( $singleValuesList ) $goCommand\n";
+		} elsif ($opt_t eq 'mysql' || $opt_t eq 'ingres') {
+			$return .= "insert into $tableName values ( $singleValuesList );";
+			$return .= "\n";
+			#$return .= "$goCommand";
+		}
+	}
+
+	return $return;
+}
+
+
+# if the type of database we're generating is in the list of
+# databases passed in, then return the dbText (ie: this is
+# valid SQL for this database)
+sub createDatabaseStatements {
+	my $dbNames = shift;
+	my $dbText = shift;
+
+	my $return = "";
+
+	if ($dbNames =~ /$opt_t/) {
+		$return  = "\n";
+		$return .= "$sqlCommentString Special statements for $dbNames databases\n";
+		$return .= $dbText . "\n";
+	}
+
+	return $return;
+}
+
+
+# get a name to mangle and mangle it to the length
+# specified -- avoid too much manglification if the
+# name is only slightly long, but mangle lots if it's
+# a lot longer than the specified length.
+sub mangleName {
+	my $nameToMangle = shift;
+	my $sizeToMangleTo = shift;
+
+	# if it's already okay, just return it
+	if (length ($nameToMangle) <= $sizeToMangleTo) {
+		if ($veryverbose) { print "mangleName(): not mangling $nameToMangle\n"; }
+		return $nameToMangle;
+	}
+
+	my $newName;
+	my $base64;
+
+	if ($veryverbose) { print "mangleName(): mangling $nameToMangle --> "; }
+
+	# if it's a real long name, then we mangle it plenty
+	if (length ($nameToMangle) > $sizeToMangleTo + 6) {
+		$base64  = md5_base64 ($nameToMangle);
+
+		# ensure we have enough garbage
+		while (length ($base64) < $sizeToMangleTo) {
+			$base64 .= md5_base64 ($nameToMangle . $base64);
+		}
+		
+	        $base64 =~ s/\+/-/g;
+	        $base64 =~ s/\//_/g;
+
+		$newName = substr ($base64, 0, $sizeToMangleTo);
+	} elsif (length ($nameToMangle) > $sizeToMangleTo) {
+		# if it's just a little bit long, then mangle it less
+		# (remove some chars from the middle)
+		my $sizeDiv2 = $sizeToMangleTo / 2;
+		my $mangleLen = length ($nameToMangle);
+
+		$newName  = substr ($nameToMangle, 0, $sizeDiv2);
+		$newName .= substr ($nameToMangle, $mangleLen - $sizeDiv2, $sizeDiv2);
+	}
+
+	if ($veryverbose) { print "$newName\n"; }
+
+	return $newName;
+}
+
+
+# some databases (sybase) don't need quotes for mixed-case
+# object names. others (the rest) do.
+# 
+# All instances of calling this sub are commented out, because
+# views are defined using column aliases and table aliases
+# and so I can't parse for them and properly add quotes. Thus,
+# until I can make view definition more generic, I must not
+# attempt to add quotes for the user.
+sub addQuotes {
+	my $objectName = shift;
+
+	# mixed-case object names may need quotes
+	if ($objectName =~ /[a-z]+/ && $objectName =~ /[A-Z]+/) {
+		if ($opt_t ne 'sybase') {
+			$objectName = "\"$objectName\"";
+		}
+	}
+
+	return $objectName;
+}
+
+##---------------------
+# sub proc parseRCFile
+#
+# parses the rcfile passed in and sets whatever variables should
+# be set because of that
+sub parseRCFile
+{
+	my $rcFileName = shift;
+	my $cfg = shift || {};
+
+	my $rcline;
+	my $variablename;
+	my $variablevalue;
+
+	# open/parse the .rc file -- if the rcfile has
+	# PARAM = VAL, then $PARAM will exist with a value of VAL.
+	#
+	# if rcfile has PARAM .= VAL then @PARAM will exist with
+	# each successive element of VAL being PUSHed onto the array
+	if (open (RCFILE, "< $rcFileName")) {
+		# all is cool
+	} elsif ($rcFileName =~ /.*?\/(\w+)$/) {
+		my $systemFile = "/etc/$1";
+#		my $privateFile = "$ENV{HOME}/.$1";
+		my $privateFile = "$1";
+
+		open (RCFILE, "< $systemFile") || 
+		open (RCFILE, "< $privateFile") || 
+		die "Can't open $rcFileName or $systemFile or $privateFile";
+	} else {
+		die "Can't open $rcFileName and can't determine what the rcfile should be...";
+	}
+
+	push (@{$cfg->{_rcFileName}}, {file=>$rcFileName,date=>scalar (localtime())});
+	while ($rcline = <RCFILE>)
+	{
+		if ($rcline =~ /^\#/)
+		{
+			# do nothing, comment line!
+		}
+		elsif ($rcline =~ /^\s*(\w+)\s*=\s*(\d+)\s*$/)
+		{
+			# numeric value
+			$cfg->{$1}=$2;
+		}
+		elsif ($rcline =~ /^\s*(\w+)\s*=\s*(.+?)\s*$/)
+		{
+			$cfg->{$1}=$2;
+		}
+		elsif ($rcline =~ /^\s*(\w+)\s*\.=\s*(.+?)\s*$/)
+		{
+			# string value
+			$variablename = $1;
+			$variablevalue = $2;
+
+			push (@{$cfg->{$1}}, $2);
+		}
+		elsif ($rcline =~ /^\s*(\w+)\s*\.=\s*(\d+)\s*$/)
+		{
+			# numeric value
+			$variablename = $1;
+			$variablevalue = $2;
+
+			push (@{$cfg->{$1}}, $2);
+		}
+	}
+	close (RCFILE);
+
+	return $cfg;
+}
+
+# cyb: this subroutine replaces the unix cat function
+# which does not work on a windows machine not running
+# cygwin (maybe using ActiveState Perl instead)
+#
+# first param is the temp file into which the data is copied
+# second param is an array of variables containing the names
+# of files whose data will be copied into the temp file
+sub catToTemp {
+	my $tempFile = shift;
+	my @filenames = @_;
+
+	my $infile;
+	my $outfile;
+	my $singleInputFile;
+
+	open ($outfile, ">>$tempFile") || die "Cannot open temp file $tempFile for append!?!?";
+	foreach $singleInputFile (@filenames) {
+		my $inFileName = eval ($singleInputFile);
+		open ($infile, $inFileName) || die "Cannot open filename: $inFileName!\n";;
+		while (<$infile>) {
+			print $outfile $_;
+		}
+		close ($infile);
+	}
+	close ($outfile);
+}
+
+
+# that's all, folks!
+

@@ -158,16 +158,30 @@ public class SqlXmlParserFactory
             }
             catch  (final FileNotFoundException fileNotFoundException)
             {
-                LogFactory.getLog(getClass()).error(
-                    "Specified sql.xml file does not exist " + inputFilePath,
-                    fileNotFoundException);
+                try
+                {
+                    LogFactory.getLog(getClass()).error(
+                        "Specified sql.xml file does not exist " + inputFilePath,
+                        fileNotFoundException);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
             }
         }
 
         if  (t_isInput == null)
         {
-            LogFactory.getLog(getClass()).error(
-                "No sql.xml information found at " + inputFilePath);
+            try
+            {
+                LogFactory.getLog(getClass()).error(
+                    "No sql.xml information found at " + inputFilePath);
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
         }
         else
         {
@@ -193,9 +207,16 @@ public class SqlXmlParserFactory
         }
         catch  (final FileNotFoundException fileNotFoundException)
         {
-            LogFactory.getLog(getClass()).error(
-                "no sql.xml information found at " + file,
-                fileNotFoundException);
+            try
+            {
+                LogFactory.getLog(getClass()).error(
+                    "no sql.xml information found at " + file,
+                    fileNotFoundException);
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
         }
 
         return result;

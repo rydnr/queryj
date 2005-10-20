@@ -34,17 +34,6 @@
  *
  * Description: Builds a value object template using database metadata.
  *
-<<<<<<< ValueObjectTemplateBuildHandler.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.10
  */
 package org.acmsl.queryj.tools.templates.valueobject.handlers;
 
@@ -86,11 +75,7 @@ import java.util.Map;
 /**
  * Builds a value object template using database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
-<<<<<<< ValueObjectTemplateBuildHandler.java
-=======
- * @version $Revision$
->>>>>>> 1.10
+ *         >Jose San Leandro</a>
  */
 public class ValueObjectTemplateBuildHandler
     extends    AbstractAntCommandHandler

@@ -34,14 +34,6 @@
  *
  * Description: Is able to create DAO test templates.
  *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -62,8 +54,7 @@ import org.apache.tools.ant.Task;
 /**
  * Is able to create DAO test templates.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
- * @version $Revision$
+ *         >Jose San Leandro</a>
  */
 public interface DAOTestTemplateFactory
 {

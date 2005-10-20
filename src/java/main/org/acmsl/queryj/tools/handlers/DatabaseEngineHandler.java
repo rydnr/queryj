@@ -62,11 +62,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Defines which classes take part on the process depending on
  * the database engine.

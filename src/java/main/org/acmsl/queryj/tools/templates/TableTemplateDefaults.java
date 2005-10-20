@@ -35,17 +35,6 @@
  * Description: Is able to generate tables according to database
  *              metadata.
  *
-<<<<<<< TableTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.6
  */
 package org.acmsl.queryj.tools.templates;
 
@@ -69,10 +58,6 @@ import java.util.Map;
  * database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
-<<<<<<< TableTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.6
  */
 public interface TableTemplateDefaults
     extends  JavaTemplateDefaults
@@ -91,15 +76,6 @@ public interface TableTemplateDefaults
         + " *\n"
         + " * Description: Represents the \"{0}\" table\n"
         + " *              in the persistence domain.\n"
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -141,7 +117,6 @@ public interface TableTemplateDefaults
         + " * Represents the <i>{0}</i> table in\n"
         + " * the persistence domain.\n" // table
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**

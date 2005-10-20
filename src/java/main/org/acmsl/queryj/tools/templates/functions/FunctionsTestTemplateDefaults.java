@@ -34,17 +34,6 @@
  *
  * Description: Contains the basic pieces to build functions test templates.
  *
-<<<<<<< FunctionsTestTemplateDefaults.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.3
  */
 package org.acmsl.queryj.tools.templates.functions;
 
@@ -57,11 +46,7 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
 /**
  * Contains the basic pieces to build functions test templates.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
-<<<<<<< FunctionsTestTemplateDefaults.java
-=======
- * @version $Revision$
->>>>>>> 1.3
+ *         >Jose San Leandro</a>
  */
 public interface FunctionsTestTemplateDefaults
     extends  TestTemplate,
@@ -83,14 +68,6 @@ public interface FunctionsTestTemplateDefaults
          // function description
         + "supported by {0} {1}.\n"
          // engine name - engine version
-        + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
         + " */\n";
 
     /**
@@ -122,7 +99,6 @@ public interface FunctionsTestTemplateDefaults
         + "supported by {0} {1}.\n"
          // engine name - engine version
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**
@@ -2535,7 +2511,6 @@ public interface FunctionsTestTemplateDefaults
           "    /**\n"
         + "     * A test table.\n"
         + "     * @author <a href=\"maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + "     * @version $" + "Revision: $\n"
         + "     */\n"
         + "    public static final class UsersTable\n"
         + "        extends  Table\n"

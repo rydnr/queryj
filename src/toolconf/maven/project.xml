@@ -3,9 +3,8 @@
  @license
                              QueryJ
 
-    Copyright (C) 2001-2004  Jose San Leandro Armend&aacute;riz
-                             jsanleandro@yahoo.es
-                             chousz@yahoo.com
+    Copyright (C) 2001-2005  Jose San Leandro Armend&aacute;riz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -21,9 +20,8 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsr000@terra.es
+    Contact info: jose.sanleandro@acm-sl.com
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecaba&ntilde;as
                     Boadilla del monte
@@ -37,13 +35,14 @@
    Author: Jose San Leandro Armendariz
 
    Description: Maven project descriptor for QueryJ.
+
 -->
 <project>
   <pomVersion>3</pomVersion>
   <name>QueryJ</name>
   <id>queryj</id>
   <groupId>org.acmsl.queryj</groupId>
-  <currentVersion>0.6b7-SNAPSHOT</currentVersion>
+  <currentVersion>v24-1.9</currentVersion>
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>
@@ -84,14 +83,14 @@
 
   <versions>
     <version>
-      <id>0.6b7-SNAPSHOT</id>
-      <name>0.6b7-SNAPSHOT</name>
-      <tag>HEAD</tag>
+      <id>v24-1.4</id>
+      <name>v24-1.4</name>
+      <tag>br-0_6--ventura24-1_4</tag>
     </version>
     <version>
-      <id>0.6b5</id>
-      <name>0.6b5</name>
-      <tag>queryj-0_6b5</tag>
+      <id>0.6</id>
+      <name>0.6</name>
+      <tag>br-0_6--ventura24-1_0</tag>
     </version>
   </versions>
 
@@ -127,7 +126,7 @@
     <developer>
       <name>Jose San Leandro</name>
       <id>chous</id>
-      <email>jsanleandro@yahoo.es</email>
+      <email>chous@acm-sl.org</email>
       <organization>ACM-SL</organization>
     </developer>
   </developers>
@@ -137,7 +136,7 @@
     <dependency>
       <groupId>acmsl-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>0.5.7b3</version>
+      <version>0.5.7b4</version>
       <url>http://maven.acm-sl.com/commons</url>
       <properties>
         <required.to.compile>true</required.to.compile>
@@ -169,7 +168,7 @@
         <required.to.compile>false</required.to.compile>
         <required.to.run>true</required.to.run>
         <required.to.test>false</required.to.test>
-        <required.to.build>false</required.to.build>
+        <required.to.build>true</required.to.build>
       </properties>
     </dependency>
 
@@ -234,7 +233,7 @@
         <required.to.compile>false</required.to.compile>
         <required.to.run>true</required.to.run>
         <required.to.test>true</required.to.test>
-        <required.to.build>false</required.to.build>
+        <required.to.build>true</required.to.build>
       </properties>
     </dependency>
 
@@ -369,6 +368,20 @@
         <injected.by>spring/spring-dao</injected.by>
       </properties>
     </dependency>
+
+    <dependency>
+      <groupId>antmake</groupId>
+      <artifactId>antmake</artifactId>
+      <version>0.1.9</version>
+      <url>http://www.acm-sl.org/antmake</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>false</required.to.run>
+        <required.to.test>false</required.to.test>
+        <required.to.build>true</required.to.build>
+      </properties>
+    </dependency>
+
   </dependencies>
 
   <build>

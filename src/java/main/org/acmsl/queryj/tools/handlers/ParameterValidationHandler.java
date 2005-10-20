@@ -64,11 +64,6 @@ import org.apache.tools.ant.types.Reference;
 import java.io.File;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Validates the parameters of an Ant task.
  * @author <a href="mailto:chous@acm-sl.org"

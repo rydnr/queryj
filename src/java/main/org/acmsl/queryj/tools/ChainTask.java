@@ -73,11 +73,6 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Manages a sequential chain of Ant actions.
  * @author <a href="mailto:chous@acm-sl.org"

@@ -56,11 +56,6 @@ import java.sql.Types;
 import java.util.Map;
 import java.util.HashMap;
 
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Provides some useful methods when working with database metadata.
  * @author <a href="mailto:chous@acm-sl.org"

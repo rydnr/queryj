@@ -96,14 +96,6 @@ public interface MockDAOTemplateDefaults
         + " * Description: DAO layer responsible of simulating a persistence\n"
         + "                layer for {2} structures.\n"
         + " *\n"
-        + " * Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + " *\n"
-        + " * File version: $" + "Revision: $\n"
-        + " *\n"
-        + " * Project version: $" + "Name: $\n"
-        + " *\n"
-        + " * $" + "Id: $\n"
-        + " *\n"
         + " */\n";
 
     /**
@@ -175,7 +167,6 @@ public interface MockDAOTemplateDefaults
         + " * DAO class responsible of simulating a persistence layer \n"
         + " * for {0} structures.\n"
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
-        + " * @version $" + "Revision: $\n"
         + " */\n";
 
     /**

@@ -96,13 +96,6 @@ public interface ConfigurationPropertiesTemplateDefaults
         + "#\n"
         + "#  Description: Specifies which DAO implementations are used.\n"
         + "#\n"
-        + "#  Last modified by: $" + "Author: $ at $" + "Date: $\n"
-        + "#\n"
-        + "#  File version: $" + "Revision: $\n"
-        + "# \n"
-        + "#  Project version: $" + "Name: $\n"
-        + "#\n"
-        + "# $" + "Id: $\n"
         + "#";
 
     /**

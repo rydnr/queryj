@@ -72,11 +72,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Map;
 
-/*
- * Importing Jakarta Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Builds a XML DAO factory template.
  * @author <a href="mailto:chous@acm-sl.org"

@@ -580,12 +580,18 @@ public class XMLDAOTestTemplate
         }
         catch  (final SQLException sqlException)
         {
-            LogFactory.getLog(getClass()).error(
-                "database.meta.data.error",
-                sqlException);
+            try
+            {
+                LogFactory.getLog(getClass()).error(
+                    "database.meta.data.error",
+                    sqlException);
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
         }
         */
-
         return t_sbResult.toString();
     }
 }

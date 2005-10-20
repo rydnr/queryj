@@ -35,17 +35,6 @@
  * Description: Provides some useful methods for retrieving package
  *              information about the generated code.
  *
-<<<<<<< PackageUtils.java
-=======
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
- *
->>>>>>> 1.20
  */
 package org.acmsl.queryj.tools;
 
@@ -66,11 +55,7 @@ import java.lang.ref.WeakReference;
  * Provides some useful methods for retrieving package information about
  * the generated code.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
-<<<<<<< PackageUtils.java
-=======
- * @version $Revision$
->>>>>>> 1.20
+ *         >Jose San Leandro</a>
  */
 public class PackageUtils
 {
