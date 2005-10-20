@@ -288,23 +288,6 @@ public class DAOTemplateBuildHandler
     }
 
     /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-    }
-
-    /**
      * Retrieves the custom-sql provider from the attribute map.
      * @param parameters the parameter map.
      * @return the provider.
@@ -336,18 +319,18 @@ public class DAOTemplateBuildHandler
         return
             retrievePackage(
                 engineName,
-                parameters,
+                retrieveProjectPackage(parameters),
                 PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the package name from the attribute map.
+     * Retrieves the package name.
      * @param engineName the engine name.
-     * @param parameters the parameter map.
+     * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
+     * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
@@ -358,8 +341,7 @@ public class DAOTemplateBuildHandler
     {
         return
             packageUtils.retrieveDAOPackage(
-                retrieveProjectPackage(parameters),
-                engineName);
+                projectPackage, engineName);
     }
 
     /**
