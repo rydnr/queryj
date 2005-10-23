@@ -335,7 +335,7 @@ public class DAOTemplateBuildHandler
      */
     protected String retrievePackage(
         final String engineName,
-        final Map parameters,
+        final String projectPackage,
         final PackageUtils packageUtils)
       throws  BuildException
     {

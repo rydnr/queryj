@@ -57,13 +57,6 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some TemplateJ classes.
- */
-import org.acmsl.templatej.dao.DataAccessManager;
-import org.acmsl.templatej.dao.TemplateDAO;
-import org.acmsl.templatej.vo.Template;
-
-/*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
@@ -170,7 +163,6 @@ public class DAOFactoryTemplateBuildHandler
                 DAOTemplateBuildHandler.fixQuote(
                     metaData.getIdentifierQuoteString()),
                 retrieveTableTemplates(parameters),
-                DataAccessManager.getInstance(),
                 DAOFactoryTemplateGenerator.getInstance());
         }
         catch  (final SQLException sqlException)
@@ -192,7 +184,6 @@ public class DAOFactoryTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param quote the quote.
      * @param tableTemplates the table templates.
-     * @param dataAccessManager the <code>DataAccessManager</code> instance.
      * @param templateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -203,7 +194,6 @@ public class DAOFactoryTemplateBuildHandler
      * @precondition engineName != null
      * @precondition quote != null
      * @precondition tableTemplates != null
-     * @precondition dataAccessManager != null
      * @precondition templateFactory != null
      */
     protected void handle(
@@ -216,60 +206,6 @@ public class DAOFactoryTemplateBuildHandler
         final String engineVersion,
         final String quote,
         final TableTemplate[] tableTemplates,
-        final DataAccessManager dataAccessManager,
-        final DAOFactoryTemplateFactory templateFactory)
-      throws  BuildException
-    {
-        handle(
-            parameters,
-            metaDataManager,
-            jndiDataSource,
-            packageName,
-            basePackage,
-            engineName,
-            engineVersion,
-            quote,
-            tableTemplates,
-            dataAccessManager.getTemplateDAO(),
-            templateFactory);
-    }
-    
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param metaDataManager the database metadata manager.
-     * @param jndiDataSource the JNDI location of the data source.
-     * @param packageName the package name.
-     * @param basePackage the base package.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote.
-     * @param tableTemplates the table templates.
-     * @param templateDAO the <code>TemplateDAO</code> instance.
-     * @param templateFactory the template factory.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaDataManager != null
-     * @precondition jndiDataSource != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition quote != null
-     * @precondition tableTemplates != null
-     * @precondition templateDAO != null
-     * @precondition templateFactory != null
-     */
-    protected void handle(
-        final Map parameters,
-        final DatabaseMetaDataManager metaDataManager,
-        final String jndiDataSource,
-        final String packageName,
-        final String basePackage,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final TableTemplate[] tableTemplates,
-        final TemplateDAO templateDAO,
         final DAOFactoryTemplateFactory templateFactory)
       throws  BuildException
     {

@@ -108,7 +108,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler();
+    return new org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandler();
     // JUnitDoclet end method testcase.createInstance
   }
   

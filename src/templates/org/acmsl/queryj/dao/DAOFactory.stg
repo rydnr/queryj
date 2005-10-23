@@ -108,7 +108,7 @@ project_imports(
   daoClassName,
   daoFactoryPackageName,
   daoFactoryClassName,
- daoImplementationPackageName,
+  daoImplementationPackageName,
   daoImplementationClassName) ::= <<
 <!
   Generates the import statements for the project classes.

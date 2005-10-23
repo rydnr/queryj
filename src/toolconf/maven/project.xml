@@ -42,7 +42,7 @@
   <name>QueryJ</name>
   <id>queryj</id>
   <groupId>org.acmsl.queryj</groupId>
-  <currentVersion>0.6</currentVersion>
+  <currentVersion>0.7-SNAPSHOT</currentVersion>
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>
@@ -136,7 +136,7 @@
     <dependency>
       <groupId>acmsl-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>0.5.7b3</version>
+      <version>0.5.7b5-SNAPSHOT</version>
       <url>http://maven.acm-sl.com/commons</url>
       <properties>
         <required.to.compile>true</required.to.compile>
@@ -162,13 +162,26 @@
     <dependency>
       <groupId>antmake</groupId>
       <artifactId>antmake</artifactId>
-      <version>0.1.9b2-SNAPSHOT</version>
+      <version>0.1.9b1</version>
       <url>http://www.acm-sl.org/antmake</url>
       <properties>
         <required.to.compile>false</required.to.compile>
         <required.to.run>false</required.to.run>
         <required.to.test>false</required.to.test>
         <required.to.build>true</required.to.build>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>stringtemplate</groupId>
+      <artifactId>stringtemplate</artifactId>
+      <version>2.2</version>
+      <url>http://www.stringtemplate.org</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
       </properties>
     </dependency>
 
@@ -238,7 +251,7 @@
     </dependency>
 
     <dependency>
-      <groupId>mysql-connector-java</groupId>
+      <groupId>mysql-driver</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>2.0.14-bin</version>
       <url>http://www.mysql.com</url>
