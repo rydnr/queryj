@@ -42,7 +42,6 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -69,7 +68,7 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class DAOFactoryTemplateGenerator
-    implements  DAOFactoryTemplateFactory
+  implements DAOFactoryTemplateFactory
 {
     /**
      * Singleton implemented as a weak reference.
@@ -296,27 +295,20 @@ public class DAOFactoryTemplateGenerator
     /**
      * Generates a DAO factory template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
      * @precondition packageName != null
      * @precondition engineName != null
      */
     public DAOFactoryTemplate createDAOFactoryTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String engineName,
-        final String engineVersion,
-        final String quote,
         final String basePackageName,
         final String jndiDataSource)
       throws  QueryJException
@@ -324,11 +316,8 @@ public class DAOFactoryTemplateGenerator
         return
             new DAOFactoryTemplate(
                 tableTemplate,
-                metaDataManager,
                 packageName,
                 engineName,
-                engineVersion,
-                quote,
                 basePackageName,
                 jndiDataSource);
     }

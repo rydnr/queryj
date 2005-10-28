@@ -32,43 +32,37 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create DAO factory templates.
+ * Description: Defines some constants for the default theme.
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing JDK classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplate;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
- * Represents entities able to create DAO factory templates.
+ * Defines some constants for the default theme.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface DAOFactoryTemplateFactory
+public interface DefaultThemeConstants
 {
     /**
-     * Generates a DAO factory template.
-     * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param jndiDataSource the JNDI location of the data source.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
+     * The starting year.
      */
-    public DAOFactoryTemplate createDAOFactoryTemplate(
-        final TableTemplate tableTemplate,
-        final String packageName,
-        final String engineName,
-        final String basePackageName,
-        final String jndiDataSource)
-      throws  QueryJException;
+    public static final Integer STARTING_YEAR = new Integer(2002);
+
+    /**
+     * The timestamp formatter.
+     */
+    public static final DateFormat TIMESTAMP_FORMATTER =
+        new SimpleDateFormat("HH:ss yyyy/MM/dd");
+
+    /**
+     * The template name.
+     */
+    public static final String TEMPLATE_NAME = "source";
 }

@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.templates.DefaultThemeConstants;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.Template;
 
@@ -53,19 +54,154 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  */
 import org.apache.commons.logging.Log;
 
+/*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
+import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Represents generic templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public abstract class AbstractTemplate
-    implements  Template
+    implements  Template,
+                DefaultThemeConstants
 {
     /**
      * Builds an empty <code>AbstractTemplate</code>.
      */
     protected AbstractTemplate()
     {
+    }
+
+    /**
+     * Retrieves the string template group.
+     * @param path the path.
+     * @return such instance.
+     * @precondition path != null
+     */
+    protected StringTemplateGroup retrieveGroup(final String path)
+    {
+        return retrieveGroup(path, "/org/acmsl/queryj/queryj.stg");
+    }
+    
+    /**
+     * Retrieves the string template group.
+     * @param path the path.
+     * @param theme the theme.
+     * @return such instance.
+     * @precondition path != null
+     * @precondition theme != null
+     */
+    protected StringTemplateGroup retrieveGroup(
+        final String path, final String theme)
+    {
+        StringTemplateGroup result = null;
+        
+        InputStream themeInput =
+            getClass().getResourceAsStream(theme);
+
+        InputStream groupInput =
+            getClass().getResourceAsStream(path);
+
+        StringTemplateGroup themeGroup =
+            new StringTemplateGroup(
+                new InputStreamReader(themeInput),
+                AngleBracketTemplateLexer.class);
+
+        result =
+            new StringTemplateGroup(
+                new InputStreamReader(groupInput),
+                AngleBracketTemplateLexer.class);
+
+        result.setSuperGroup(themeGroup);
+
+        return result;
+    }
+
+    /**
+     * Configures given <code>StringTemplate</code> instance.
+     * @param stringTemplate such template.
+     * @precondition stringTemplate != null
+     */
+    protected void configure(final StringTemplate stringTemplate)
+    {
+        stringTemplate.setPassThroughAttributes(true);
+        stringTemplate.setLintMode(true);
+    }
+
+    /**
+     * Retrieves the template in given group.
+     * @param group the StringTemplate group.
+     * @return the template.
+     * @precondition group != null
+     */
+    protected StringTemplate retrieveTemplate(final StringTemplateGroup group)
+    {
+        StringTemplate result = null;
+        
+        if  (group != null)
+        {
+            result = group.getInstanceOf(TEMPLATE_NAME);
+        }
+
+        return result;
+    }
+    
+    /**
+     * Retrieves the current year.
+     * @return such value.
+     */
+    protected int retrieveCurrentYear()
+    {
+        return retrieveYear(Calendar.getInstance());
+    }
+    
+    /**
+     * Retrieves the year defined in given date.
+     * @param calendar the calendar.
+     * @return such value.
+     * @precondition calendar != null
+     */
+    protected int retrieveYear(final Calendar calendar)
+    {
+        return calendar.get(Calendar.YEAR);
+    }
+
+    /**
+     * Creates a timestamp.
+     * @return such timestamp.
+     */
+    protected String createTimestamp()
+    {
+        return createTimestamp(new Date(), TIMESTAMP_FORMATTER);
+    }
+    
+    /**
+     * Formats given date.
+     * @param date the date.
+     * @param formatter the formatter.
+     * @return the formatted date.
+     * @precondition date != null
+     * @precondition formatter != null
+     */
+    protected String createTimestamp(
+        final Date date, final DateFormat formatter)
+    {
+        return formatter.format(date);
     }
 
     /**

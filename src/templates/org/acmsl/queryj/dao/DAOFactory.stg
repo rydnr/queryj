@@ -46,7 +46,7 @@ source(input) ::= <<
   Generates a DAOFactory source file.
   @param input.copyright_years the copyright's years.
   @param input.table_name the table name.
-  @param input.package the package.
+  @param input.package_name the package.
   @param input.dao_class_name the DAO class name.
   @param input.dao_factory_class_name the DAO factory class name.
   @param input.dao_implementation_class_name the DAO implementation class name.
@@ -59,10 +59,10 @@ source(input) ::= <<
       daoImplementationClassName=input.dao_implementation_class_name,
       engineName=input.engine_name),
     timestamp=input.timestamp)>
-<package_declaration(input.package)>
+<package_declaration(input.package_name)>
 
 <project_imports(
-  daoClassName=input.dao_package_name,
+  daoPackageName=input.dao_package_name,
   daoClassName=input.dao_class_name,
   daoFactoryPackageName=input.dao_factory_package_name,
   daoFactoryClassName=input.dao_factory_class_name,
@@ -136,7 +136,7 @@ import org.acmsl.queryj.dao.ThreadAwareDataSourceWrapper;
 class(input) ::= <<
 <!
   Generates the class body.
-  @param input.dao_implementation_class_name the class name.
+  @param input.dao_factory_implementation_class_name the class name.
   @param input.engine_name the engine name.
   @param input.timestamp the timestamp.
   @param input.dao_factory_implementation_class_name the DAO factory
@@ -153,7 +153,7 @@ class(input) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.dao_factory_implementation_class_name>
+public class <input.class_name>
     extends  <input.dao_factory_class_name>
 {
     /**
@@ -169,7 +169,7 @@ public class <input.dao_factory_implementation_class_name>
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public <input.dao_factory_implementation_class_name>() {};
+    public <input.class_name>() {};
 
     /**
      * Specifies a new weak reference.
@@ -177,7 +177,7 @@ public class <input.dao_factory_implementation_class_name>
      * instance.
      */
     protected static void setReference(
-        final <input.dao_factory_implementation_class_name> factory)
+        final <input.dao_class_name> factory)
     {
         singleton = new WeakReference(factory);
     }
@@ -196,20 +196,20 @@ public class <input.dao_factory_implementation_class_name>
      * instance.
      * @return such instance.
      */
-    public static <input.dao_factory_implementation_class_name> get<input.engine_name>Instance()
+    public static <input.class_name> get<input.engine_name>Instance()
     {
-        <input.dao_factory_implementation_class_name>DAOFactory result = null;
+        <input.class_name> result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (<input.dao_factory_implementation_class_name>) reference.get();
+            result = (<input.class_name>) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new <input.dao_factory_implementation_class_name>();
+            result = new <input.class_name>();
 
             setReference(result);
         }
@@ -231,16 +231,15 @@ public class <input.dao_factory_implementation_class_name>
      * using given data source.
      * @param dataSource the data source.
      * @return such DAO.
+     * @precondition dataSource != null
      */
-    protected <input.dao_class_name> create<input.dao_class_name>(
-        final DataSource dataSource)
+    protected <input.dao_class_name> create<input.dao_class_name>(final DataSource dataSource)
     {
         <input.dao_implementation_class_name> result = null;
 
         if  (dataSource != null)
         {
-            result =
-                new <input.dao_implementation_class_name>(dataSource);
+            result = new <input.dao_implementation_class_name>(dataSource);
         }
 
         return result;
@@ -267,9 +266,7 @@ public class <input.dao_factory_implementation_class_name>
 
         try
         {
-            result =
-                jndiUtils.getDataSourceFromJndi(
-                    JNDI_LOCATION);
+            result = jndiUtils.getDataSourceFromJndi(JNDI_LOCATION);
         }
         catch  (final CannotGetJdbcConnectionException cannotGetJdbcConnection)
         {
@@ -296,15 +293,14 @@ public class <input.dao_factory_implementation_class_name>
         {
             try
             {
-                result =
-                    new ThreadAwareDataSourceWrapper(result);
+                result = new ThreadAwareDataSourceWrapper(result);
             }
-            catch  (final CannotGetJdbcConnectionException cannotGetJdbcConnection)
+            catch  (final CannotGetJdbcConnectionException exception)
             {
                 try
                 {
                     LogFactory.getLog(getClass()).error(
-                        "Cannot retrieve data source", cannotGetJdbcConnection);
+                        "Cannot retrieve connection", exception);
                 }
                 catch  (final Throwable throwable)
                 {
