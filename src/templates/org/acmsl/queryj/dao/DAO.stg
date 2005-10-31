@@ -62,23 +62,23 @@ source(input) ::= <<
       engineName=input.engine_name,
       engineVersion=input.engine_version),
     timestamp=input.timestamp)>
-<package_declaration(input.package_name)>
+<package_declaration(input.base_package_name, input.subpackage)>
 
 <project_imports(
   basePackageName=input.base_package_name,
+  subpackage=input.subpackage,
   tableName=input.table_name,
   jdbcOperationsSubpackage=typeInitMap.jdbcOperationsSubpackage,
   customResults=input.custom_results,
-  voPackageName=typeInitMap.voSubpackage,
+  voSubpackage=typeInitMap.voSubpackage,
   voName=input.vo_name,
-  voFactorySubpackageName=typeInitMap.voFactorySubpackage,
-  subpackageName=input.subpackage_name,
+  voFactorySubpackage=typeInitMap.voFactorySubpackage,
   rdbSubpackage=typeInitMap.rdbSubpackage,
   trSubpackage=typeInitMap.tableRepositorySubpackage,
   damSubpackage=typeInitMap.dataAccessManagerSubpackage,
-  fkssSubpackageName=typeInitMap.foreignKeyStatementSetterSubpackage,
+  fkssSubpackage=typeInitMap.foreignKeyStatementSetterSubpackage,
   fkAttributes=input.fk_attributes,
-  baseDaoSubpackage=typeInitMap.baseDaoSubpackage)>
+  baseDAOSubpackage=typeInitMap.baseDAOSubpackage)>
 
 /*
  * Importing some ACM-SL classes.
@@ -147,104 +147,110 @@ structures from <engineName> (<engineVersion>) persistence layer.
 >>
 
 project_imports(
+  basePackageName,
+  subpackageName,
   tableName,
-  jdbcOperationsPackageName,
+  jdbcOperationsSubpackage,
   customResults,
-  voPackageName,
-  voClassName,
-  voFactoryPackageName,
-  voFactoryClassName,
-  daoPackageName,
-  daoClassName,
-  rdbPackageName,
-  trPackageName,
-  damPackageName,
-  fkssPackageName,
+  voSubpackage,
+  voName,
+  voFactorySubpackage,
+  rdbSubpackage,
+  trSubpackage,
+  damSubpackage,
+  fkssSubpackage,
   fkAttributes,
-  baseDAOPackageName) ::= <<
+  baseDAOSubpackage) ::= <<
 <!
   Generates the project imports
+  @param basePackageName the base package name.
+  @param subpackage the subpackage name.
   @param tableName the table name.
-  @param jdbcOperationsPackageName, the package name for the JDBC operations.
+  @param jdbcOperationsSubpackage the subpackage for the JDBC operations.
   @param customResults the results of the custom queries.
-  @param voPackageName, the package name for the value-object.
-  @param voClassName, the class name of the value-object.
-  @param voFactoryPackageName, the package name of the value-object factory.
-  @param voFactoryClassName, the class name of the value-object factory.
-  @param daoPackageName, the package name of the DAO.
-  @param daoClassName, the class name of the DAO.
-  @param rdbPackageName, the package name common of all RDBMs implementations.
-  @param trPackageName, the package name of the table repository.
-  @param damPackageName the package name of the DataAccessManager.
-  @param fkssPackageName the package name of the foreign key attribute
+  @param voSubpackage the subpackage for the value 
+  @param voName the class name of the value-object.
+  @param voFactorySubpackage the subpackage of the value object factories.
+  @param rdbSubpackage the subpackage common of all RDBMs implementations.
+  @param trSubpackage the subpackage of the table repository.
+  @param damSubpackage the subpackage of the DataAccessManager.
+  @param fkssSubpackage the subpackage of the foreign key attribute
   statement setter.
   @param fkAttributes the foreign key attributes.
-  @param baseDAOPackageName the package name of the base DAO interface.
+  @param baseDAOSubpackage the subpackage of the base DAO interface.
 !>
 /*
  * Importing project-specific classes.
  */
-import <jdbcOperationsPackageName>.<tableName>AttributesStatementSetter;
-import <jdbcOperationsPackageName>.<tableName>PkStatementSetter;
-import <jdbcOperationsPackageName>.<tableName>ResultSetExtractor;
+import <basePackageName>.<jdbcOperationsSubpackage>.<tableName>AttributesStatementSetter;
+import <basePackageName>.<jdbcOperationsSubpackage>.<tableName>PkStatementSetter;
+import <basePackageName>.<jdbcOperationsSubpackage>.<tableName>ResultSetExtractor;
 <customResults:resultset_extractor_import(
-  jdbcOperationsPackageName=jdbcOperationsPackageName,
+  basePackageName=basePackageName,
+  jdbcOperationsSubpackage=jdbcOperationsSubpackage,
   crseId=it.id); separator="\n">
-import <voPackageName>.<voClassName>;
-import <voFactoryPackageName>.<voFactoryClassName>;
-import <daoPackageName>.<daoClassName>;
-import <rdbPackageName>.QueryPreparedStatementCreator;
-import <trPackageName>.TableRepository;
-import <damPackageName>.DataAccessManager;
+import <basePackageName>.<voSubpackage>.<voName>;
+import <basePackageName>.<voFactorySubpackage>.<voName>Factory;
+import <basePackageName>.<baseDAOSubpackage>.<voName>DAO;
+import <basePackageName>.<rdbSubpackage>.QueryPreparedStatementCreator;
+import <basePackageName>.<trSubpackage>.TableRepository;
+import <basePackageName>.<damSubpackage>.DataAccessManager;
 <fkAttributes:foreignkey_statementsetter_import(
-  fkssPackageName=fkssPackageName,
-  tableName=tableName,
-  referredTableName=it.tableName); separator="\n">
+  basePackageName=basePackageName,
+  fkssSubpackage=fkssSubpackage,
+  voName=voName,
+  referredVOName=it.voName); separator="\n">
 <fkAttributes:foreignkey_dao_import(
-  baseDAOPackageName=baseDAOPackageName,
-  referredTableName=it.tableName); separator="\n">
+  basePackageName=basePackageName,
+  baseDAOSubpackage=baseDAOSubpackage,
+  referredVOName=it.voName); separator="\n">
 >>
 
 resultset_extractor_import(
-  jdbcOperationsPackageName,
+  basePackageName,
+  jdbcOperationsSubpackage,
   crseId) ::= <<
 <!
   Generates the import statement of a custom resultset extractor.
-  @param jdbcOperationsPackageName the jdbc operations package name.
+  @param basePackageName the base package.
+  @param jdbcOperationsSubpackage the jdbc operations subpackage.
   @param crseId the custom resultset extractor identifier.
 !>
-import <jdbcOperationsPackageName>.<crseId>Extractor;
+import <basePackageName>.<jdbcOperationsSubpackage>.<crseId>Extractor;
 >>
 
 foreignkey_statementsetter_import(
-  fkssPackageName,
-  tableName,
-  referredTableName) ::= <<
+  basePackageName,
+  fkssSubpackage,
+  voName,
+  referredVOName) ::= <<
 <!
   Generates the import statement of a foreign key statement setter.
-  @param fkssPackageName the package name of the foreign key attribute 
+  @param basePackageName the base package.
+  @param fkssSubpackage the subpackage of the foreign key attribute 
   statement setter.
-  @param tableName the table name.
-  @param referredTableName the referred table name.
+  @param voName the value object name.
+  @param referredVOName the referred value object name.
 !>
-import <fkssPackageName>.<tableName>By<referredTableName>StatementSetter;
+import <basePackageName>.<fkssSubpackage>.<voName>By<referredVOName>StatementSetter;
 >>
 
 foreignkey_dao_import(
-  baseDAOPackageName,
-  referredTableName) ::= <<
+  basePackageName,
+  baseDAOSubpackage,
+  referredVOName) ::= <<
 <!
   Generates the import statement of a foreign key DAO.
-  @param baseDAOPackageName the package name of the base DAO interface.
-  @param referredTableName the referred table name.
+  @param baseDAOSubpackage the subpackage of the base DAO interface.
+  @param referredVOName the referred value object name.
 !>
-import <baseDAOPackageName>.<referredTableName>DAO;
+import <baseDAOPackageName>.<referredVOName>DAO;
 >>
 
 class(input) ::= <<
 <!
   Generates the class body.
-  @param input.table_name the table name.
+  @param input.vo_name the value object name.
   @param input.engine_name the engine name.
   @param input.engine_version the engine version.
   @param input.timestamp the timestamp.
@@ -252,32 +258,32 @@ class(input) ::= <<
 !>
 /**
  * <description(
-      tableName=input.table_name,
+      voName=input.vo_name,
       engineName=input.engine_name,
       engineVersion=input.engine_version)>
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.engine_name><input.table_name>DAO
+public class <input.engine_name><input.vo_name>DAO
   extends     QueryjJdbcTemplate
-  implements  <input.table_name>DAO
+  implements  <input.vo_name>DAO
 {
     /**
-     * The result set extractor for \<i><input.table_name>\</i>
+     * The result set extractor for \<i><input.vo_name>\</i>
      * value objects.
      */
     public static final ResultSetExtractor
         <input.table_name_uppercased>_EXTRACTOR =
-            new <input.table_name>ResultSetExtractor();
+            new <input.vo_name>ResultSetExtractor();
 
     /**
-     * The result set extractor for \<i><input.table_name>\</i>
+     * The result set extractor for \<i><input.vo_name>\</i>
      * primary keys (see inner class).
      */
     public static final ResultSetExtractor
-        <input.table_name_uppercased>_PK_EXTRACTOR =
-            new <input.table_name>PkResultSetExtractor();
+        <input.vo_name_uppercased>_PK_EXTRACTOR =
+            new <input.vo_name>PkResultSetExtractor();
 
     <input.custom_results:resultset_extractor_constants(
       crseid=it.id,

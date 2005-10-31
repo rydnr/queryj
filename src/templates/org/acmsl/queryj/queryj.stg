@@ -101,12 +101,11 @@ java_header(years,description,timestamp) ::= <<
  */
 >>
 
-package_declaration(package) ::= <<
+package_declaration(basePackageName, subpackage) ::= <<
 <! Generates the package declaration !>
-<! @param package the package !>
-<! @param description the description !>
-<! @param timestamp the timestamp !>
-package <package>;
+<! @param basePackageName the base package name !>
+<! @param subpackage the subpackage !>
+package <basePackageName>.<subpackage>;
 >>
 
 precondition_notnull(name) ::= <<

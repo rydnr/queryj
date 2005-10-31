@@ -282,14 +282,14 @@ public class DAOTemplate
             engineName,
             engineVersion,
             basePackageName,
+            packageUtils.retrieveDAOSubpackage(engineName),
             createTimestamp(),
             defaultThemeUtils.buildDAOImplementationClassName(
                 t_strCapitalizedEngine, t_strSingularName),
-            packageUtils.retrieveDAOSubpackage(engineName),
             defaultThemeUtils.buildDAOClassName(t_strSingularName),
             packageUtils.retrieveBaseDAOPackage(basePackageName),
             t_cCustomResults,
-            t-cForeignKeyAttributes);
+            t_cForeignKeyAttributes);
         
         result = t_Template.toString();
 
@@ -305,9 +305,9 @@ public class DAOTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
+     * @param subpackage the subpackage.
      * @param timestamp the timestamp.
      * @param className the class name of the DAO.
-     * @param subpackageName the subpackage.
      * @param baseDAOClassName the class name of the DAO interface.
      * @param baseDAOPackageName the DAO interface package.
      * @param customResults the custom results.
@@ -319,9 +319,9 @@ public class DAOTemplate
      * @precondition engineName != null
      * @precondition engineVersion != null
      * @precondition basePackageName != null
+     * @precondition subpackage != null
      * @precondition timestamp != null
      * @precondition className != null
-     * @precondition subpackageName != null
      * @precondition baseDAOClassName != null
      * @precondition baseDAOPackageName != null
      * @precondition customResults != null
@@ -335,9 +335,9 @@ public class DAOTemplate
         final String engineName,
         final String engineVersion,
         final String basePackageName,
+        final String subpackage,
         final String timestamp,
         final String className,
-        final String subpackageName,
         final String baseDAOClassName,
         final String baseDAOPackageName,
         final Collection customResults,
@@ -351,16 +351,24 @@ public class DAOTemplate
 
         fillJavaHeaderParameters(input, copyrightYears, timestamp);
 
-        fillPackageDeclarationParameters(input, packageName);
+        fillPackageDeclarationParameters(input, basePackageName, subpackage);
 
         fillProjectImportsParameters(
             input,
             basePackageName,
+            subpackage,
             tableName,
             customResults,
             voName,
-            subpackageName,
             foreignKeyAttributes);
+
+        fillClassParameters(
+            input,
+            voName,
+            engineName,
+            engineVersion,
+            timestamp,
+            customResults);
         
         input.put("class_name", className);
 
@@ -411,47 +419,83 @@ public class DAOTemplate
     /**
      * Fills the parameters for <code>package_declaration</code> rule.
      * @param input the input.
-     * @param packageName the package name.
+     * @param basePackageName the base package name.
+     * @param subpackage the subpackage.
      * @precondition input != null
-     * @precondition packageName != null
+     * @precondition basePackageName != null
+     * @precondition subpackage != null
      */
     protected void fillPackageDeclarationParameters(
-        final Map input, final String packageName)
+        final Map input,
+        final String basePackageName,
+        final String subpackage)
     {
-        input.put("package_name", packageName);
+        input.put("base_package_name", basePackageName);
+        input.put("subpackage", subpackage);
     }
 
     /**
      * Fills the parameters for the <code>project_imports</code> rule.
      * @param input the input.
      * @param basePackageName the base package.
+     * @param subpackage the name of the subpackage.
      * @param tableName the table name.
      * @param customResults the custom results.
      * @param voName the name of the value object.
-     * @param subpackageName the name of the subpackage.
      * @param fkAttributes the foreign-key attributes.
      * @precondition input != null
      * @precondition basePackageName != null
+     * @precondition subpackage != null
      * @precondition tableName != null
      * @precondition customResults != null
      * @precondition voName != null
-     * @precondition subpackageName != null
      * @precondition fkAttributes != null
      */
     protected void fillProjectImportsParameters(
         final Map input,
         final String basePackageName,
+        final String subpackage,
         final String tableName,
-        final String customResults,
+        final Collection customResults,
         final String voName,
-        final String subpackageName,
-        final String fkAttributes)
+        final Collection fkAttributes)
     {
         input.put("base_package_name", basePackageName);
+        input.put("subpackage", subpackage);
         input.put("table_name", tableName);
         input.put("custom_results", customResults);
         input.put("vo_name", voName);
-        input.put("subpackage_name", subpackageName);
         input.put("fk_attributes", fkAttributes);
+    }
+
+    /**
+     * Fills the parameters required by <code>class</code> rule.
+     * @param input the input.
+     * @param voName the name of the value object.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param timestamp the timestamp.
+     * @param customResults the custom results.
+     * @precondition input != null
+     * @precondition voName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition timestamp != null
+     * @precondition customResults != null
+     */
+    protected void fillClassParameters(
+        final Map input,
+        final String voName,
+        final String engineName,
+        final String engineVersion,
+        final String timestamp,
+        final Collection customResults)
+    {
+        input.put("vo_name", voName);
+        input.put("engine_name", engineName);
+        input.put("engine_version", engineVersion);
+        input.put("timestamp", timestamp);
+        input.put("custom_results", customResults);
+        input.put("vo_name_uppercased", voName.toUpperCase());
     }
 }
