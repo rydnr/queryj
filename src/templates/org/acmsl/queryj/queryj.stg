@@ -40,6 +40,17 @@
 // $Id$
 group queryj;
 
+typeInitMap ::= [
+  "jdbcOperationsSubpackage":"jdbc",
+  "baseDaoSubpackage":"dao",
+  "voSubpackage":"vo",
+  "voFactorySubpackage":"vo",
+  "rdbSubpackage":"rdb",
+  "tableRepositorySubpackage":"tables",
+  "dataAccessManagerSubpackage":"dao",
+  "foreignKeyStatementSetterSubpackage":"dao.rdb"
+]
+
 java_header(years,description,timestamp) ::= <<
 <! Generates the copyright header !>
 <! @param years the copyright years. !>

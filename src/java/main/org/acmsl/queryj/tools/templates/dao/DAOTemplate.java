@@ -266,6 +266,10 @@ public class DAOTemplate
         int t_iPrimaryKeysLength =
             (t_astrPrimaryKeys != null) ? t_astrPrimaryKeys.length : 0;
 
+        Collection t_cCustomResults = new ArrayList();
+
+        Collection t_cForeignKeyAttributes = new ArrayList();
+        
         fillParameters(
             t_Template,
             new Integer[]
@@ -274,14 +278,18 @@ public class DAOTemplate
                 new Integer(retrieveCurrentYear())
             },
             t_strTableName,
+            t_strCapitalizedValueObjectName,
             engineName,
+            engineVersion,
+            basePackageName,
             createTimestamp(),
             defaultThemeUtils.buildDAOImplementationClassName(
                 t_strCapitalizedEngine, t_strSingularName),
-            packageUtils.retrieveDAOPackage(
-                basePackageName, engineName),
+            packageUtils.retrieveDAOSubpackage(engineName),
             defaultThemeUtils.buildDAOClassName(t_strSingularName),
-            packageUtils.retrieveBaseDAOPackage(basePackageName));
+            packageUtils.retrieveBaseDAOPackage(basePackageName),
+            t_cCustomResults,
+            t-cForeignKeyAttributes);
         
         result = t_Template.toString();
 
@@ -293,49 +301,157 @@ public class DAOTemplate
      * @param template the template.
      * @param copyrightYears the copyright years.
      * @param tableName the table name.
+     * @param voName the name of the value object.
      * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param basePackageName the base package name.
      * @param timestamp the timestamp.
-     * @param daoImplementationClassName the class name
-     * of the DAO implementation.
-     * @param daoImplementationPackageName the package
-     * of the DAO implementation.
-     * @param daoClassName the class name of the DAO.
-     * @param daoPackageName the DAO package.
+     * @param className the class name of the DAO.
+     * @param subpackageName the subpackage.
+     * @param baseDAOClassName the class name of the DAO interface.
+     * @param baseDAOPackageName the DAO interface package.
+     * @param customResults the custom results.
+     * @param foreignKeyAttributes the foreign key attributes.
      * @precondition template != null
      * @precondition copyrightYears != null
      * @precondition tableName != null
+     * @precondition voName != null
      * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition basePackageName != null
      * @precondition timestamp != null
-     * @precondition daoImplementationClassName != null
-     * @precondition daoImplementationPackageName != null
-     * @precondition daoClassName != null
-     * @precondition daoPackageName != null
+     * @precondition className != null
+     * @precondition subpackageName != null
+     * @precondition baseDAOClassName != null
+     * @precondition baseDAOPackageName != null
+     * @precondition customResults != null
+     * @precondition foreignKeyAttributes != null
      */
     protected void fillParameters(
         final StringTemplate template,
         final Integer[] copyrightYears,
         final String tableName,
+        final String voName,
         final String engineName,
+        final String engineVersion,
+        final String basePackageName,
         final String timestamp,
-        final String daoClassName,
-        final String daoPackageName,
-        final String daoImplementationClassName,
-        final String daoImplementationPackageName)
+        final String className,
+        final String subpackageName,
+        final String baseDAOClassName,
+        final String baseDAOPackageName,
+        final Collection customResults,
+        final Collection foreignKeyAttributes)
     {
         Map input = new HashMap();
 
         template.setAttribute("input", input);
 
-        input.put("copyright_years", copyrightYears);
+        fillCommonParameters(input, tableName, engineName, engineVersion);
 
+        fillJavaHeaderParameters(input, copyrightYears, timestamp);
+
+        fillPackageDeclarationParameters(input, packageName);
+
+        fillProjectImportsParameters(
+            input,
+            basePackageName,
+            tableName,
+            customResults,
+            voName,
+            subpackageName,
+            foreignKeyAttributes);
+        
+        input.put("class_name", className);
+
+        input.put("base_dao_class_name", baseDAOClassName);
+        input.put("base_dao_package_name",  baseDAOPackageName);
+    }
+
+    /**
+     * Fills the common parameters.
+     * @param input the input.
+     * @param tableName the table name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @precondition input != null
+     * @precondition tableName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     */
+    protected void fillCommonParameters(
+        final Map input,
+        final String tableName,
+        final String engineName,
+        final String engineVersion)
+    {
         input.put("table_name",  tableName);
         input.put("engine_name", engineName);
-        input.put("timestamp", timestamp);
-        
-        input.put("package_name", daoImplementationPackageName);
-        input.put("class_name", daoImplementationClassName);
+        input.put("engine_version", engineVersion);
+    }
 
-        input.put("dao_class_name", daoClassName);
-        input.put("dao_package_name",  daoPackageName);
+    /**
+     * Fills the parameters for <code>java_header</code> rule.
+     * @param input the input.
+     * @param copyrightYears the copyright years.
+     * @param timestamp the timestamp.
+     * @precondition input != null
+     * @precondition copyrightYears != null
+     * @precondition timestamp != null
+     */
+    protected void fillJavaHeaderParameters(
+        final Map input,
+        final Integer[] copyrightYears,
+        final String timestamp)
+    {
+        input.put("copyright_years", copyrightYears);
+        input.put("timestamp", timestamp);
+    }
+
+    /**
+     * Fills the parameters for <code>package_declaration</code> rule.
+     * @param input the input.
+     * @param packageName the package name.
+     * @precondition input != null
+     * @precondition packageName != null
+     */
+    protected void fillPackageDeclarationParameters(
+        final Map input, final String packageName)
+    {
+        input.put("package_name", packageName);
+    }
+
+    /**
+     * Fills the parameters for the <code>project_imports</code> rule.
+     * @param input the input.
+     * @param basePackageName the base package.
+     * @param tableName the table name.
+     * @param customResults the custom results.
+     * @param voName the name of the value object.
+     * @param subpackageName the name of the subpackage.
+     * @param fkAttributes the foreign-key attributes.
+     * @precondition input != null
+     * @precondition basePackageName != null
+     * @precondition tableName != null
+     * @precondition customResults != null
+     * @precondition voName != null
+     * @precondition subpackageName != null
+     * @precondition fkAttributes != null
+     */
+    protected void fillProjectImportsParameters(
+        final Map input,
+        final String basePackageName,
+        final String tableName,
+        final String customResults,
+        final String voName,
+        final String subpackageName,
+        final String fkAttributes)
+    {
+        input.put("base_package_name", basePackageName);
+        input.put("table_name", tableName);
+        input.put("custom_results", customResults);
+        input.put("vo_name", voName);
+        input.put("subpackage_name", subpackageName);
+        input.put("fk_attributes", fkAttributes);
     }
 }

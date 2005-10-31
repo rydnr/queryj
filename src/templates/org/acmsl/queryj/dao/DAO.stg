@@ -62,24 +62,23 @@ source(input) ::= <<
       engineName=input.engine_name,
       engineVersion=input.engine_version),
     timestamp=input.timestamp)>
-<package_declaration(input.package)>
+<package_declaration(input.package_name)>
 
 <project_imports(
+  basePackageName=input.base_package_name,
   tableName=input.table_name,
-  jdbcOperationsPackageName=input.jdbc_operations_package_name,
+  jdbcOperationsSubpackage=typeInitMap.jdbcOperationsSubpackage,
   customResults=input.custom_results,
-  voPackageName=input.vo_package_name,
-  voClassName=input.vo_class_name,
-  voFactoryPackageName=input.vo_factory_package_name,
-  voFactoryClassName=input.vo_factory_class_name,
-  daoPackageName=input.dao_package_name,
-  daoClassName=input.dao_class_name,
-  rdbPackageName=input.rdb_package_name,
-  trPackageName=input.tr_package_name,
-  damPackageName=input.dam_package_name,
-  fkssPackageName=input.fkss_package_name,
+  voPackageName=typeInitMap.voSubpackage,
+  voName=input.vo_name,
+  voFactorySubpackageName=typeInitMap.voFactorySubpackage,
+  subpackageName=input.subpackage_name,
+  rdbSubpackage=typeInitMap.rdbSubpackage,
+  trSubpackage=typeInitMap.tableRepositorySubpackage,
+  damSubpackage=typeInitMap.dataAccessManagerSubpackage,
+  fkssSubpackageName=typeInitMap.foreignKeyStatementSetterSubpackage,
   fkAttributes=input.fk_attributes,
-  baseDAOPackageName=input.base_dao_package_name)>
+  baseDaoSubpackage=typeInitMap.baseDaoSubpackage)>
 
 /*
  * Importing some ACM-SL classes.

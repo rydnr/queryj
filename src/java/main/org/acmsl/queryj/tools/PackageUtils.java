@@ -785,6 +785,17 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the subpackage name for DAO templates.
+     * @param engineName the DAO engine.
+     * @return the subpackage for the associated DAO class.
+     * @precondition engineName != null
+     */
+    public String retrieveDAOSubpackage(final String engineName)
+    {
+        return engineName.toLowerCase();
+    }
+    
+    /**
      * Retrieves the package name for DAO templates.
      * @param packageName the original package.
      * @param engineName the DAO engine.
@@ -797,7 +808,8 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                retrieveRdbPackage(packageName), engineName.toLowerCase());
+                retrieveRdbPackage(packageName),
+                retrieveDAOSubpackage(engineName));
     }
 
     /**
