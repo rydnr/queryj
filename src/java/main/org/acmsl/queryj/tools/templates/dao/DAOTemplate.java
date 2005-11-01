@@ -497,5 +497,38 @@ public class DAOTemplate
         input.put("timestamp", timestamp);
         input.put("custom_results", customResults);
         input.put("vo_name_uppercased", voName.toUpperCase());
+        input.put("static_table", "" + Boolean.TRUE); // TODO
+    }
+
+    /**
+     * Provides the parameters required by
+     * <code>static_table</code> rule.
+     * @param input the input.
+     * @param voName the value object name.
+     * @param staticAttributeName the static attribute name.
+     * @param staticAttributeType the static attribute type.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @precondition input != null
+     * @precondition voName != null
+     * @precondition staticAttributeName != null
+     * @precondition staticAttributeType != null
+     * @precondition stringUtils != null
+     */
+    protected void fillStaticTableParameters(
+        final Map input,
+        final String voName,
+        final String staticAttributeName,
+        final String staticAttributeType,
+        final StringUtils stringUtils)
+    {
+        input.put("vo_name", voName);
+        input.put("static_attribute_name", staticAttributeName);
+        input.put(
+            "static_attribute_name_lowercased",
+            staticAttributeName.toLowerCase());
+        input.put(
+            "static_attribute_name_capitalized",
+            stringUtils.capitalize(staticAttributeName, '_'));
+        input.put("static_attribute_type", staticAttributeType);
     }
 }
