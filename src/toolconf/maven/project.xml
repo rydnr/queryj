@@ -48,7 +48,7 @@
     <url>http://www.acm-sl.org/</url>
     <logo>http://www.acm-sl.org/images/logo.png</logo>
   </organization>
-  <inceptionYear>2003</inceptionYear>
+  <inceptionYear>2001-2005</inceptionYear>
   <package>org.acmsl.queryj</package>
 
   <shortDescription>
@@ -402,9 +402,9 @@
       jsanleandro@yahoo.es
     </nagEmailAddress>
 
-    <sourceDirectory>../../java/</sourceDirectory>
+    <sourceDirectory>../../java/main</sourceDirectory>
 
-    <unitTestSourceDirectory>../../java</unitTestSourceDirectory>
+    <unitTestSourceDirectory>../../java/test</unitTestSourceDirectory>
     <integrationUnitTestSourceDirectory/>
 
     <aspectSourceDirectory/>

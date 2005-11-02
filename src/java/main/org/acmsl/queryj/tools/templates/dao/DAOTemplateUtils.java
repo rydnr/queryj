@@ -898,6 +898,7 @@ public class DAOTemplateUtils
         }
 
         return
-            (PropertyElement[]) t_cResult.toArray(EMPTY_PROPERTYELEMENT_ARRAY);
+            (PropertyElement[])
+                t_cResult.toArray(EMPTY_PROPERTYELEMENT_ARRAY);
     }
 }

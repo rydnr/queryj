@@ -53,9 +53,9 @@ import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.AbstractDAOTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplateDefaults;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
+import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -183,7 +183,8 @@ public class DAOTemplate
                 PackageUtils.getInstance(),
                 StringValidator.getInstance(),
                 EnglishGrammarUtils.getInstance(),
-                DAOTemplateUtils.getInstance());
+                DAOTemplateUtils.getInstance(),
+                MetaLanguageUtils.getInstance());
     }
 
     /**
@@ -204,6 +205,7 @@ public class DAOTemplate
      * @param stringValidator the StringValidator instance.
      * @param englishGrammarUtils the EnglishGrammarUtils instance.
      * @param daoTemplateUtils the DAOTemplateUtils instance.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
      * @return such code.
      * @precondition tableTemplate != null
      * @precondition metaDataManager != null
@@ -214,6 +216,7 @@ public class DAOTemplate
      * @precondition stringValidator != null
      * @precondition englishGrammarUtils != null
      * @precondition daoTemplateUtils != null
+     * @precondition metaLanguageUtils != null
      */
     protected String generateOutput(
         final TableTemplate tableTemplate,
@@ -231,7 +234,8 @@ public class DAOTemplate
         final PackageUtils packageUtils,
         final StringValidator stringValidator,
         final EnglishGrammarUtils englishGrammarUtils,
-        final DAOTemplateUtils daoTemplateUtils)
+        final DAOTemplateUtils daoTemplateUtils,
+        final MetaLanguageUtils metaLanguageUtils)
     {
         String result = "";
 
@@ -266,10 +270,42 @@ public class DAOTemplate
         int t_iPrimaryKeysLength =
             (t_astrPrimaryKeys != null) ? t_astrPrimaryKeys.length : 0;
 
+        String[] t_astrColumnNames =
+            metaDataManager.getColumnNames(t_strTableName);
+
+        String t_strTableComment =
+            metaDataManager.getTableComment(t_strTableName);
+
+        String t_strStaticAttributeName =
+            metaLanguageUtils.retrieveStaticAttribute(t_strTableComment);
+
+        String t_strStaticAttributeType = null;
+        
+        // items have to include the following methods:
+        // getName()
+        // getNameUppercased()
+        // getNameLowercased()
+        // getType()
+        // getNativeType()
+        // getTableName()
+        // getUncapitalizedTableName()
+        // getAllowsNull()
+        Collection t_cPrimaryKeyAttributes = new ArrayList();
+
+        Collection t_cNonPrimaryKeyAttributes = new ArrayList();
+        
+        Collection t_cForeignKeyAttributes = new ArrayList();
+
+        Collection t_cAttributes = new ArrayList();
+
+        Collection t_cExternallyManagedAttributes = new ArrayList();
+        
+        Collection t_cForeignKeys = new ArrayList();
+
+        Collection t_cCustomSelects = new ArrayList();
+        
         Collection t_cCustomResults = new ArrayList();
 
-        Collection t_cForeignKeyAttributes = new ArrayList();
-        
         fillParameters(
             t_Template,
             new Integer[]
@@ -288,8 +324,18 @@ public class DAOTemplate
                 t_strCapitalizedEngine, t_strSingularName),
             defaultThemeUtils.buildDAOClassName(t_strSingularName),
             packageUtils.retrieveBaseDAOPackage(basePackageName),
+            t_cPrimaryKeyAttributes,
+            t_cNonPrimaryKeyAttributes,
+            t_cForeignKeyAttributes,
+            t_cAttributes,
+            t_cExternallyManagedAttributes,
+            t_cForeignKeys,
+            t_cCustomSelects,
             t_cCustomResults,
-            t_cForeignKeyAttributes);
+            t_strStaticAttributeName,
+            t_strStaticAttributeType,
+            t_strRepositoryName,
+            stringUtils);
         
         result = t_Template.toString();
 
@@ -310,8 +356,22 @@ public class DAOTemplate
      * @param className the class name of the DAO.
      * @param baseDAOClassName the class name of the DAO interface.
      * @param baseDAOPackageName the DAO interface package.
-     * @param customResults the custom results.
+     * @param primaryKeyAttributes the primary key attributes.
+     * @param nonPrimaryKeyAttributes the ones not part of the primary
+     * key..
      * @param foreignKeyAttributes the foreign key attributes.
+     * @param attributes the attributes.
+     * @param externallyManagedAttributes the attributes which are
+     * managed externally.
+     * @param foreignKeys the entities pointing to this instance's table.
+     * @param customSelects the custom selects.
+     * @param customResults the custom results.
+     * @param staticAttributeName the name of the static attribute, or
+     * <code>null</code> for non-static tables.
+     * @param staticAttributeType the type of the static attribute, or
+     * <code>null</code> for non-static tables.
+     * @param tableRepositoryName the table repository.
+     * @param stringUtils the <code>StringUtils</code> instance.
      * @precondition template != null
      * @precondition copyrightYears != null
      * @precondition tableName != null
@@ -324,8 +384,16 @@ public class DAOTemplate
      * @precondition className != null
      * @precondition baseDAOClassName != null
      * @precondition baseDAOPackageName != null
-     * @precondition customResults != null
+     * @precondition primaryKeyAttributes != null
+     * @precondition nonPrimaryKeyAttributes != null
      * @precondition foreignKeyAttributes != null
+     * @precondition attributes != null
+     * @precondition externallyManagedAttributes != null
+     * @precondition foreignKeys != null
+     * @precondition customSelects != null
+     * @precondition customResults != null
+     * @precondition tableRepositoryName != null
+     * @precondition stringUtils != null
      */
     protected void fillParameters(
         final StringTemplate template,
@@ -340,8 +408,18 @@ public class DAOTemplate
         final String className,
         final String baseDAOClassName,
         final String baseDAOPackageName,
+        final Collection primaryKeyAttributes,
+        final Collection nonPrimaryKeyAttributes,
+        final Collection foreignKeyAttributes,
+        final Collection attributes,
+        final Collection externallyManagedAttributes,
+        final Collection foreignKeys,
+        final Collection customSelects,
         final Collection customResults,
-        final Collection foreignKeyAttributes)
+        final String staticAttributeName,
+        final String staticAttributeType,
+        final String tableRepositoryName,
+        final StringUtils stringUtils)
     {
         Map input = new HashMap();
 
@@ -368,8 +446,25 @@ public class DAOTemplate
             engineName,
             engineVersion,
             timestamp,
+            (staticAttributeName != null),
+            tableRepositoryName,
+            tableName,
+            primaryKeyAttributes,
+            nonPrimaryKeyAttributes,
+            foreignKeyAttributes,
+            attributes,
+            externallyManagedAttributes,
+            foreignKeys,
+            customSelects,
             customResults);
-        
+
+        fillStaticTableParameters(
+            input,
+            voName,
+            staticAttributeName,
+            staticAttributeType,
+            stringUtils);
+
         input.put("class_name", className);
 
         input.put("base_dao_class_name", baseDAOClassName);
@@ -476,11 +571,31 @@ public class DAOTemplate
      * @param engineVersion the engine version.
      * @param timestamp the timestamp.
      * @param customResults the custom results.
+     * @param staticTable whether the table is static or not.
+     * @param tableRepositoryName the table repository name.
+     * @param tableName the table name.
+     * @param pkAttributes the primary key attributes.
+     * @param nonPkAttributes the ones not part of the primary key.
+     * @param fkAttributes the foreign key attributes.
+     * @param attributes the attributes.
+     * @param externallyManagedAttributes the attributes which are
+     * managed externally.
+     * @param foreignKeys the entities pointing to this instance's table.
+     * @param customSelects the custom selects.
      * @precondition input != null
      * @precondition voName != null
      * @precondition engineName != null
      * @precondition engineVersion != null
      * @precondition timestamp != null
+     * @precondition tableRepositoryName != null
+     * @precondition tableName != null
+     * @precondition pkAttributes != null
+     * @precondition nonPkAttributes != null
+     * @precondition fkAttributes != null
+     * @precondition attributes != null
+     * @precondition externallyManagedAttributes != null
+     * @precondition foreignKeys != null
+     * @precondition customSelects != null
      * @precondition customResults != null
      */
     protected void fillClassParameters(
@@ -489,15 +604,34 @@ public class DAOTemplate
         final String engineName,
         final String engineVersion,
         final String timestamp,
+        final boolean staticTable,
+        final String tableRepositoryName,
+        final String tableName,
+        final Collection pkAttributes,
+        final Collection nonPkAttributes,
+        final Collection fkAttributes,
+        final Collection attributes,
+        final Collection externallyManagedAttributes,
+        final Collection foreignKeys,
+        final Collection customSelects,
         final Collection customResults)
     {
         input.put("vo_name", voName);
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);
         input.put("timestamp", timestamp);
-        input.put("custom_results", customResults);
         input.put("vo_name_uppercased", voName.toUpperCase());
-        input.put("static_table", "" + Boolean.TRUE); // TODO
+        input.put("static_table", "" + staticTable);
+        input.put("tr_name", tableRepositoryName);
+        input.put("table_name", tableName);
+        input.put("table_name_uppercased", tableName.toUpperCase());
+        input.put("pk_attributes", pkAttributes);
+        input.put("nonpk_attributes", nonPkAttributes);
+        input.put("fk_attributes", fkAttributes);
+        input.put("attributes", attributes);
+        input.put("foreign_keys", foreignKeys);
+        input.put("custom_selects", customSelects);
+        input.put("custom_results", customResults);
     }
 
     /**
@@ -531,4 +665,8 @@ public class DAOTemplate
             stringUtils.capitalize(staticAttributeName, '_'));
         input.put("static_attribute_type", staticAttributeType);
     }
+
+    /**
+     * Provides the parameters required by <code>
+     */
 }
