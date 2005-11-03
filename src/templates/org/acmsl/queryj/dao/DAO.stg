@@ -1488,7 +1488,7 @@ custom_select(
                         // calls setXXX twice
                         // preparedStatementCreatorFactory
                         //     .newPreparedStatementSetter(t_aParams),
-                        <cs.idConstant>_EXTRACTOR,
+                        <cs.idAsConstant>_EXTRACTOR,
                         this));
 
         return result;

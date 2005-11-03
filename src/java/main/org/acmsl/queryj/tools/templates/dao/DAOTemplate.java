@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -51,6 +52,7 @@ import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.AbstractDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
@@ -90,6 +92,7 @@ import java.util.Map;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 
 /**
  * Is able to create engine-specific DAO interfaces for each
@@ -290,9 +293,13 @@ public class DAOTemplate
         // getTableName()
         // getUncapitalizedTableName()
         // getAllowsNull()
-        Collection t_cPrimaryKeyAttributes = new ArrayList();
-
-        Collection t_cNonPrimaryKeyAttributes = new ArrayList();
+        Collection t_cPrimaryKeyAttributes =
+            retrievePrimaryKeyAttributes(
+                t_strTableName, metaDataManager, metaDataUtils);
+        
+        Collection t_cNonPrimaryKeyAttributes =
+            retrieveNonPrimaryKeyAttributes(
+                t_strTableName, metaDataManager, metaDataUtils);
         
         Collection t_cForeignKeyAttributes = new ArrayList();
 
@@ -302,6 +309,19 @@ public class DAOTemplate
         
         Collection t_cForeignKeys = new ArrayList();
 
+        // items have to include the following methods:
+        // getId()
+        // getIdAsConstant()
+        // getDescription()
+        // getName()
+        // getResultClass()
+        // getNameNormalized()
+        // getType()
+        // getParams() : Collection of items supporting:
+        //   getObjectType())
+        //   getName()
+        //   getType()
+        //   getSqlType() // the java.sql.Types constant
         Collection t_cCustomSelects = new ArrayList();
         
         Collection t_cCustomResults = new ArrayList();
@@ -667,6 +687,123 @@ public class DAOTemplate
     }
 
     /**
-     * Provides the parameters required by <code>
+     * Retrieves the primary key attributes.
+     * @param tableName the table name.
+     * @param metaDataManager the <code>DatabaseMetaDataManager</code>
+     * instance.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @return the collection of attributes participating in the primary key.
+     * @precondition tableName != null
+     * @precondition metaDataManager != null
+     * @precondition metaDataUtils != null
      */
+    protected Collection retrievePrimaryKeyAttributes(
+        final String tableName,
+        final DatabaseMetaDataManager metaDataManager,
+        final MetaDataUtils metaDataUtils)
+    {
+        return
+            buildAttributes(
+                metaDataManager.getPrimaryKeys(tableName),
+                tableName,
+                metaDataManager,
+                metaDataUtils);
+    }
+    
+    /**
+     * Retrieves the non-primary key attributes.
+     * @param tableName the table name.
+     * @param metaDataManager the <code>DatabaseMetaDataManager</code>
+     * instance.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @return the collection of attributes not participating in the primary
+     * key.
+     * @precondition tableName != null
+     * @precondition metaDataManager != null
+     * @precondition metaDataUtils != null
+     */
+    protected Collection retrieveNonPrimaryKeyAttributes(
+        final String tableName,
+        final DatabaseMetaDataManager metaDataManager,
+        final MetaDataUtils metaDataUtils)
+    {
+        Collection t_cNonPkNames = new ArrayList();
+        
+        String[] t_astrColumnNames =
+            metaDataManager.getColumnNames(tableName);
+
+        int t_iLength =
+            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            if  (!metaDataManager.isPrimaryKey(
+                     tableName, t_astrColumnNames[t_iIndex]))
+            {
+                t_cNonPkNames.add(t_astrColumnNames[t_iIndex]);
+            }
+        }
+
+        return
+            buildAttributes(
+                (String[]) t_cNonPkNames.toArray(new String[0]),
+                tableName,
+                metaDataManager,
+                metaDataUtils);
+    }
+    
+    /**
+     * Builds the attributes associated to given column names.
+     * @param columnNames the column names.
+     * @param tableName the table name.
+     * @param metaDataManager the <code>DatabaseMetaDataManager</code>
+     * instance.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @return the attribute collection.
+     * @precondition columnNames != null
+     * @precondition tableName != null
+     * @precondition metaDataManager != null
+     * @precondition metaDataUtils != null
+     */
+    protected Collection buildAttributes(
+        final String[] columnNames,
+        final String tableName,
+        final DatabaseMetaDataManager metaDataManager,
+        final MetaDataUtils metaDataUtils)
+    {
+        Collection result = new ArrayList();
+        
+        int t_iLength = (columnNames != null) ? columnNames.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            int t_iType =
+                metaDataManager.getColumnType(
+                    tableName, columnNames[t_iIndex]);
+
+            String t_strNativeType = metaDataUtils.getNativeType(t_iType);
+
+            boolean t_bAllowsNull =
+                metaDataManager.allowsNull(tableName, columnNames[t_iIndex]);
+
+            String t_strFieldType =
+                metaDataUtils.getFieldType(t_iType, t_bAllowsNull);
+
+            boolean t_bManagedExternally =
+                metaDataManager.isManagedExternally(
+                    tableName, columnNames[t_iIndex]);
+
+            result.add(
+                new AttributeDecorator(
+                    columnNames[t_iIndex],
+                    t_iType,
+                    t_strNativeType,
+                    t_strFieldType,
+                    tableName,
+                    t_bManagedExternally,
+                    t_bAllowsNull));
+        }
+        
+        return result;
+    }
 }
