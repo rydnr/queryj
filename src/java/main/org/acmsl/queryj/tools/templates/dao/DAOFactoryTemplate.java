@@ -175,6 +175,8 @@ public class DAOFactoryTemplate
             },
             t_strTableName,
             engineName,
+            basePackageName,
+            packageUtils.retrieveDAOSubpackage(engineName),
             createTimestamp(),
             defaultThemeUtils.buildDAOFactoryImplementationClassName(
                 t_strCapitalizedEngine, t_strSingularName),
@@ -202,6 +204,8 @@ public class DAOFactoryTemplate
      * @param copyrightYears the copyright years.
      * @param tableName the table name.
      * @param engineName the engine name.
+     * @param basePackageName the base package name.
+     * @param subpackageName the subpackage.
      * @param timestamp the timestamp.
      * @param daoFactoryImplementationClassName the class name
      * of the factory implementation.
@@ -222,6 +226,8 @@ public class DAOFactoryTemplate
      * @precondition copyrightYears != null
      * @precondition tableName != null
      * @precondition engineName != null
+     * @precondition basePackageName != null
+     * @precondition subpackageName != null
      * @precondition timestamp != null
      * @precondition daoFactoryImplementationClassName != null
      * @precondition daoFactoryImplementationPackageName != null
@@ -238,6 +244,8 @@ public class DAOFactoryTemplate
         final Integer[] copyrightYears,
         final String tableName,
         final String engineName,
+        final String basePackageName,
+        final String subpackageName,
         final String timestamp,
         final String daoFactoryImplementationClassName,
         final String daoFactoryImplementationPackageName,
@@ -253,13 +261,15 @@ public class DAOFactoryTemplate
 
         template.setAttribute("input", input);
 
+        fillPackageDeclarationParameters(
+            input, basePackageName, subpackageName);
+        
         input.put("copyright_years", copyrightYears);
 
         input.put("table_name",  tableName);
         input.put("engine_name", engineName);
         input.put("timestamp", timestamp);
         
-        input.put("package_name", daoFactoryImplementationPackageName);
         input.put("class_name", daoFactoryImplementationClassName);
 
         input.put("dao_class_name", daoClassName);
@@ -279,6 +289,24 @@ public class DAOFactoryTemplate
             "dao_implementation_package_name", daoImplementationPackageName);
 
         input.put("jndi_location", jndiLocation);
+    }
+
+    /**
+     * Fills the parameters for <code>package_declaration</code> rule.
+     * @param input the input.
+     * @param basePackageName the base package name.
+     * @param subpackageName the subpackage.
+     * @precondition input != null
+     * @precondition basePackageName != null
+     * @precondition subpackageName != null
+     */
+    protected void fillPackageDeclarationParameters(
+        final Map input,
+        final String basePackageName,
+        final String subpackageName)
+    {
+        input.put("base_package_name", basePackageName);
+        input.put("subpackage_name", subpackageName);
     }
 
     /**

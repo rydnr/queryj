@@ -186,5 +186,41 @@ public class AttributeDecorator
     {
         return stringUtils.unCapitalizeStart(value);
     }
+
+    /**
+     * Retrieves the value-object name associated to the table name.
+     * @return such name.
+     */
+    public String getVoName()
+    {
+        return capitalize(getTableName());
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @return the modified version of the value.
+     * @precondition value != null
+     */
+    protected String capitalize(final String value)
+    {
+        return capitalize(value, StringUtils.getInstance());
+        
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the modified version of the value.
+     * @precondition value != null
+     * @precondition stringUtils != null
+     */
+    protected String capitalize(
+        final String value, final StringUtils stringUtils)
+    {
+        return stringUtils.capitalize(value, '_');
+    }
+
 }
 

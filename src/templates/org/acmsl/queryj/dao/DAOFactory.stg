@@ -56,10 +56,11 @@ source(input) ::= <<
   years=input.copyright_years,
   description=
     description(
-      daoImplementationClassName=input.dao_implementation_class_name,
+      className=input.dao_implementation_class_name,
       engineName=input.engine_name),
     timestamp=input.timestamp)>
-<package_declaration(input.package_name)>
+<package_declaration(
+  basePackageName=input.base_package_name, subpackageName=input.subpackage_name)>
 
 <project_imports(
   daoPackageName=input.dao_package_name,
@@ -93,13 +94,13 @@ import org.apache.commons.logging.LogFactory;
 <class(input=input)>
 >>
 
-description(daoImplementationClassName, engineName) ::= <<
+description(className, engineName) ::= <<
 <!
   Generates a description for the file.
-  @param daoImplementationClassName the class name.
+  @param className the class name.
   @param engineName the engine name.
 !>
-Is able to create <daoImplementationClassName> instances according to
+Is able to create <className> instances according to
 information in the <engineName>-based persistence domain.
 >>
 
@@ -147,7 +148,7 @@ class(input) ::= <<
 !>
 /**
  * <description(
-      daoImplementationClassName=input.dao_implementation_class_name,
+      className=input.dao_implementation_class_name,
       engineName=input.engine_name)>
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)

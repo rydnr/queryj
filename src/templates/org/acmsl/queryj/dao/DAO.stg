@@ -62,23 +62,24 @@ source(input) ::= <<
       engineName=input.engine_name,
       engineVersion=input.engine_version),
     timestamp=input.timestamp)>
-<package_declaration(input.base_package_name, input.subpackage)>
+<package_declaration(
+  basePackageName=input.base_package_name, subpackageName=input.subpackage_name)>
 
 <project_imports(
   basePackageName=input.base_package_name,
-  subpackage=input.subpackage,
+  subpackageName=input.subpackage_name,
   tableName=input.table_name,
-  jdbcOperationsSubpackage=typeInitMap.jdbcOperationsSubpackage,
+  jdbcOperationsSubpackageName=typeInitMap.jdbcOperationsSubpackageName,
   customResults=input.custom_results,
-  voSubpackage=typeInitMap.voSubpackage,
+  voSubpackageName=typeInitMap.voSubpackageName,
   voName=input.vo_name,
-  voFactorySubpackage=typeInitMap.voFactorySubpackage,
-  rdbSubpackage=typeInitMap.rdbSubpackage,
-  trSubpackage=typeInitMap.tableRepositorySubpackage,
-  damSubpackage=typeInitMap.dataAccessManagerSubpackage,
-  fkssSubpackage=typeInitMap.foreignKeyStatementSetterSubpackage,
+  voFactorySubpackageName=typeInitMap.voFactorySubpackageName,
+  rdbSubpackageName=typeInitMap.rdbSubpackageName,
+  trSubpackageName=typeInitMap.tableRepositorySubpackageName,
+  damSubpackageName=typeInitMap.dataAccessManagerSubpackageName,
+  fkssSubpackageName=typeInitMap.foreignKeyStatementSetterSubpackageName,
   fkAttributes=input.fk_attributes,
-  baseDAOSubpackage=typeInitMap.baseDAOSubpackage)>
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName)>
 
 /*
  * Importing some ACM-SL classes.
@@ -143,105 +144,105 @@ description(tableName, engineName, engineVersion) ::= <<
   @param engineVersion the engine version.
 !>
 DAO implementation responsible of managing the access to <tableName>
-structures from <engineName> (<engineVersion>) persistence layer.
+entities from <engineName> (<engineVersion>) persistence layer.
 >>
 
 project_imports(
   basePackageName,
   subpackageName,
   tableName,
-  jdbcOperationsSubpackage,
+  jdbcOperationsSubpackageName,
   customResults,
-  voSubpackage,
+  voSubpackageName,
   voName,
-  voFactorySubpackage,
-  rdbSubpackage,
-  trSubpackage,
-  damSubpackage,
-  fkssSubpackage,
+  voFactorySubpackageName,
+  rdbSubpackageName,
+  trSubpackageName,
+  damSubpackageName,
+  fkssSubpackageName,
   fkAttributes,
-  baseDAOSubpackage) ::= <<
+  baseDAOSubpackageName) ::= <<
 <!
   Generates the project imports
   @param basePackageName the base package name.
-  @param subpackage the subpackage name.
+  @param subpackageName the subpackage name.
   @param tableName the table name.
-  @param jdbcOperationsSubpackage the subpackage for the JDBC operations.
+  @param jdbcOperationsSubpackageName the subpackage for the JDBC operations.
   @param customResults the results of the custom queries.
-  @param voSubpackage the subpackage for the value 
+  @param voSubpackageName the subpackage for the value 
   @param voName the class name of the value-object.
-  @param voFactorySubpackage the subpackage of the value object factories.
-  @param rdbSubpackage the subpackage common of all RDBMs implementations.
-  @param trSubpackage the subpackage of the table repository.
-  @param damSubpackage the subpackage of the DataAccessManager.
-  @param fkssSubpackage the subpackage of the foreign key attribute
+  @param voFactorySubpackageName the subpackage of the value object factories.
+  @param rdbSubpackageName the subpackage common of all RDBMs implementations.
+  @param trSubpackageName the subpackage of the table repository.
+  @param damSubpackageName the subpackage of the DataAccessManager.
+  @param fkssSubpackageName the subpackage of the foreign key attribute
   statement setter.
   @param fkAttributes the foreign key attributes.
-  @param baseDAOSubpackage the subpackage of the base DAO interface.
+  @param baseDAOSubpackageName the subpackage of the base DAO interface.
 !>
 /*
  * Importing project-specific classes.
  */
-import <basePackageName>.<jdbcOperationsSubpackage>.<tableName>AttributesStatementSetter;
-import <basePackageName>.<jdbcOperationsSubpackage>.<tableName>PkStatementSetter;
-import <basePackageName>.<jdbcOperationsSubpackage>.<tableName>ResultSetExtractor;
+import <basePackageName>.<jdbcOperationsSubpackageName>.<tableName>AttributesStatementSetter;
+import <basePackageName>.<jdbcOperationsSubpackageName>.<tableName>PkStatementSetter;
+import <basePackageName>.<jdbcOperationsSubpackageName>.<tableName>ResultSetExtractor;
 <customResults:resultset_extractor_import(
   basePackageName=basePackageName,
-  jdbcOperationsSubpackage=jdbcOperationsSubpackage,
+  jdbcOperationsSubpackageName=jdbcOperationsSubpackageName,
   crseId=it.id); separator="\n">
-import <basePackageName>.<voSubpackage>.<voName>;
-import <basePackageName>.<voFactorySubpackage>.<voName>Factory;
-import <basePackageName>.<baseDAOSubpackage>.<voName>DAO;
-import <basePackageName>.<rdbSubpackage>.QueryPreparedStatementCreator;
-import <basePackageName>.<trSubpackage>.TableRepository;
-import <basePackageName>.<damSubpackage>.DataAccessManager;
+import <basePackageName>.<voSubpackageName>.<voName>;
+import <basePackageName>.<voFactorySubpackageName>.<voName>Factory;
+import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
+import <basePackageName>.<rdbSubpackageName>.QueryPreparedStatementCreator;
+import <basePackageName>.<trSubpackageName>.TableRepository;
+import <basePackageName>.<damSubpackageName>.DataAccessManager;
 <fkAttributes:foreignkey_statementsetter_import(
   basePackageName=basePackageName,
-  fkssSubpackage=fkssSubpackage,
+  fkssSubpackageName=fkssSubpackageName,
   voName=voName,
   referredVOName=it.voName); separator="\n">
 <fkAttributes:foreignkey_dao_import(
   basePackageName=basePackageName,
-  baseDAOSubpackage=baseDAOSubpackage,
+  baseDAOSubpackageName=baseDAOSubpackageName,
   referredVOName=it.voName); separator="\n">
 >>
 
 resultset_extractor_import(
   basePackageName,
-  jdbcOperationsSubpackage,
+  jdbcOperationsSubpackageName,
   crseId) ::= <<
 <!
   Generates the import statement of a custom resultset extractor.
   @param basePackageName the base package.
-  @param jdbcOperationsSubpackage the jdbc operations subpackage.
+  @param jdbcOperationsSubpackageName the jdbc operations subpackage.
   @param crseId the custom resultset extractor identifier.
 !>
-import <basePackageName>.<jdbcOperationsSubpackage>.<crseId>Extractor;
+import <basePackageName>.<jdbcOperationsSubpackageName>.<crseId>Extractor;
 >>
 
 foreignkey_statementsetter_import(
   basePackageName,
-  fkssSubpackage,
+  fkssSubpackageName,
   voName,
   referredVOName) ::= <<
 <!
   Generates the import statement of a foreign key statement setter.
   @param basePackageName the base package.
-  @param fkssSubpackage the subpackage of the foreign key attribute 
+  @param fkssSubpackageName the subpackage of the foreign key attribute 
   statement setter.
   @param voName the value object name.
   @param referredVOName the referred value object name.
 !>
-import <basePackageName>.<fkssSubpackage>.<voName>By<referredVOName>StatementSetter;
+import <basePackageName>.<fkssSubpackageName>.<voName>By<referredVOName>StatementSetter;
 >>
 
 foreignkey_dao_import(
   basePackageName,
-  baseDAOSubpackage,
+  baseDAOSubpackageName,
   referredVOName) ::= <<
 <!
   Generates the import statement of a foreign key DAO.
-  @param baseDAOSubpackage the subpackage of the base DAO interface.
+  @param baseDAOSubpackageName the subpackage of the base DAO interface.
   @param referredVOName the referred value object name.
 !>
 import <baseDAOPackageName>.<referredVOName>DAO;
@@ -259,7 +260,7 @@ class(input) ::= <<
 !>
 /**
  * <description(
-      voName=input.vo_name,
+      tableName=input.table_name,
       engineName=input.engine_name,
       engineVersion=input.engine_version)>
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
@@ -302,12 +303,14 @@ public class <input.engine_name><input.vo_name>DAO
         super(dataSource);
     }
 
-<(input.static_table)_static_table(
+<if(input.static_table)>
+<static_table(
   voName=input.vo_name,
   staticAttributeName=input.static_attribute_name,
   staticAttributeNameLowercased=input.static_attribute_name_lowercased,
   staticAttributeNameCapitalized=input.static_attribute_name_capitalized,
   staticAttributeType=input.static_attribute_type)>
+<endif>
 
     /**
      * Builds the query for finding the \<i><input.vo_name>\</i>
@@ -589,7 +592,7 @@ public class <input.engine_name><input.vo_name>DAO
      <input.attributes:attribute_javadoc(name=it.name); separator="\n">
      * @throws DataAccessException if the operation fails.
      */
-    public <input.vo_class_name> create(
+    public <input.vo_name> create(
         <input.attributes:attribute_declaration(
           name=it.name,type=it.type); separator=",\n">)
       throws DataAccessException
@@ -599,7 +602,7 @@ public class <input.engine_name><input.vo_name>DAO
                 <input.attributes:{<it.name>}; separator=",\n">,
                 buildInsertQuery(),
                 getDataSource(),
-                <input.vo_factory_class_name>.getInstance());
+                <input.vo_name>Factory.getInstance());
     }
 
     /**
@@ -643,7 +646,7 @@ public class <input.engine_name><input.vo_name>DAO
      * @precondition transactionManager != null
      * @precondition factory != null
      */
-    protected <input.vo_class_name> create(
+    protected <input.vo_name> create(
         <input.attributes:attribute_declaration(
           name=it.name,type=it.type); separator=",\n">,
         final Query query,
@@ -670,7 +673,7 @@ public class <input.engine_name><input.vo_name>DAO
      * @precondition transactionTemplate != null
      * @precondition factory != null
      */
-    protected <input.vo_class_name> create(
+    protected <input.vo_name> create(
         <input.attributes:attribute_declaration(
           name=it.name,type=it.type); separator=",\n">)
         final Query query,
@@ -749,7 +752,7 @@ public class <input.engine_name><input.vo_name>DAO
     }
 
     /**
-     * Updates \<code><vo.table_name>\</code> information.
+     * Updates \<code><input.vo_name>\</code> information.
      <input.attributes:attribute_javadoc(name=it.name); separator="\n">
      * @throws DataAccessException if the operation fails.
      */
@@ -1044,9 +1047,7 @@ public static final ResultSetExtractor
         new <crseidNormalized>Extractor();
 >>
 
-false_static_table() ::= <<>>
-
-true_static_table(
+static_table(
   voName,
   staticAttributeName,
   staticAttributeNameLowercased,

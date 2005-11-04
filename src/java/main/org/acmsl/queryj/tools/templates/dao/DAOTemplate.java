@@ -371,7 +371,7 @@ public class DAOTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
-     * @param subpackage the subpackage.
+     * @param subpackageName the subpackage.
      * @param timestamp the timestamp.
      * @param className the class name of the DAO.
      * @param baseDAOClassName the class name of the DAO interface.
@@ -399,7 +399,7 @@ public class DAOTemplate
      * @precondition engineName != null
      * @precondition engineVersion != null
      * @precondition basePackageName != null
-     * @precondition subpackage != null
+     * @precondition subpackageName != null
      * @precondition timestamp != null
      * @precondition className != null
      * @precondition baseDAOClassName != null
@@ -423,7 +423,7 @@ public class DAOTemplate
         final String engineName,
         final String engineVersion,
         final String basePackageName,
-        final String subpackage,
+        final String subpackageName,
         final String timestamp,
         final String className,
         final String baseDAOClassName,
@@ -449,12 +449,13 @@ public class DAOTemplate
 
         fillJavaHeaderParameters(input, copyrightYears, timestamp);
 
-        fillPackageDeclarationParameters(input, basePackageName, subpackage);
+        fillPackageDeclarationParameters(
+            input, basePackageName, subpackageName);
 
         fillProjectImportsParameters(
             input,
             basePackageName,
-            subpackage,
+            subpackageName,
             tableName,
             customResults,
             voName,
@@ -478,12 +479,15 @@ public class DAOTemplate
             customSelects,
             customResults);
 
-        fillStaticTableParameters(
-            input,
-            voName,
-            staticAttributeName,
-            staticAttributeType,
-            stringUtils);
+        if  (staticAttributeName != null)
+        {
+            fillStaticTableParameters(
+                input,
+                voName,
+                staticAttributeName,
+                staticAttributeType,
+                stringUtils);
+        }
 
         input.put("class_name", className);
 
@@ -535,32 +539,32 @@ public class DAOTemplate
      * Fills the parameters for <code>package_declaration</code> rule.
      * @param input the input.
      * @param basePackageName the base package name.
-     * @param subpackage the subpackage.
+     * @param subpackageName the subpackage.
      * @precondition input != null
      * @precondition basePackageName != null
-     * @precondition subpackage != null
+     * @precondition subpackageName != null
      */
     protected void fillPackageDeclarationParameters(
         final Map input,
         final String basePackageName,
-        final String subpackage)
+        final String subpackageName)
     {
         input.put("base_package_name", basePackageName);
-        input.put("subpackage", subpackage);
+        input.put("subpackage_name", subpackageName);
     }
 
     /**
      * Fills the parameters for the <code>project_imports</code> rule.
      * @param input the input.
      * @param basePackageName the base package.
-     * @param subpackage the name of the subpackage.
+     * @param subpackageName the name of the subpackage.
      * @param tableName the table name.
      * @param customResults the custom results.
      * @param voName the name of the value object.
      * @param fkAttributes the foreign-key attributes.
      * @precondition input != null
      * @precondition basePackageName != null
-     * @precondition subpackage != null
+     * @precondition subpackageName != null
      * @precondition tableName != null
      * @precondition customResults != null
      * @precondition voName != null
@@ -569,14 +573,14 @@ public class DAOTemplate
     protected void fillProjectImportsParameters(
         final Map input,
         final String basePackageName,
-        final String subpackage,
+        final String subpackageName,
         final String tableName,
         final Collection customResults,
         final String voName,
         final Collection fkAttributes)
     {
         input.put("base_package_name", basePackageName);
-        input.put("subpackage", subpackage);
+        input.put("subpackage_name", subpackageName);
         input.put("table_name", tableName);
         input.put("custom_results", customResults);
         input.put("vo_name", voName);
@@ -641,7 +645,12 @@ public class DAOTemplate
         input.put("engine_version", engineVersion);
         input.put("timestamp", timestamp);
         input.put("vo_name_uppercased", voName.toUpperCase());
-        input.put("static_table", "" + staticTable);
+
+        if  (staticTable)
+        {
+            input.put("static_table", Boolean.TRUE);
+        }
+
         input.put("tr_name", tableRepositoryName);
         input.put("table_name", tableName);
         input.put("table_name_uppercased", tableName.toUpperCase());
