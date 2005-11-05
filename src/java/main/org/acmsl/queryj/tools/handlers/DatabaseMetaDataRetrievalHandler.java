@@ -462,9 +462,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                     {
                                         t_MetaDataManager.addForeignKey(
                                             t_strTableName,
-                                            t_strFieldName,
+                                            new String[] {t_strFieldName},
                                             t_FieldFk.getTable(),
-                                            t_FieldFk.getField());
+                                            new String[] {t_FieldFk.getField()});
                                     }
                                 }
                             }
@@ -958,9 +958,12 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                         {
                                             metaDataManager.addForeignKey(
                                                 t_strTableName,
-                                                t_strFieldName,
+                                                new String[] {t_strFieldName},
                                                 t_FieldFk.getTable(),
-                                                t_FieldFk.getField());
+                                                new String[]
+                                                {
+                                                    t_FieldFk.getField()
+                                                });
                                         }
                                     }
                                 }

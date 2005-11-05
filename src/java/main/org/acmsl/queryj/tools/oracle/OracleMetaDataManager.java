@@ -451,11 +451,15 @@ public class OracleMetaDataManager
                             addForeignKey(
                                 t_Results.getString(
                                     RCOL.TABLE_NAME),
-                                t_Results.getString(
-                                    RCOL.COLUMN_NAME),
+                                new String[]
+                                {
+                                    t_Results.getString(RCOL.COLUMN_NAME)
+                                },
                                 tableNames[t_iTableIndex],
-                                t_Results.getString(
-                                    COL.COLUMN_NAME));
+                                new String[]
+                                {
+                                    t_Results.getString(COL.COLUMN_NAME)
+                                });
                         }
                     }
                 }

@@ -499,7 +499,7 @@ public class XMLDAOTemplate
                 String[] t_astrFkNames =
                     metaDataManager.getReferredKeys(
                         t_strTableName,
-                        t_astrReferredTables[t_iRefTableIndex]);
+                        t_astrReferredTables[t_iRefTableIndex])[0];
 
                 t_sbFkDeclaration = new StringBuffer();
 
@@ -660,7 +660,7 @@ public class XMLDAOTemplate
                 }));
 
         String[] t_astrPrimaryKeys =
-            metaDataManager.getPrimaryKeys(t_strTableName);
+            metaDataManager.getPrimaryKey(t_strTableName);
 
         if  (t_astrPrimaryKeys != null)
         {
@@ -815,7 +815,7 @@ public class XMLDAOTemplate
                   t_iColumnIndex++)
         {
             t_bIsPrimaryKey =
-                metaDataManager.isPrimaryKey(
+                metaDataManager.isPartOfPrimaryKey(
                     t_strTableName,
                     t_astrColumnNames[t_iColumnIndex]);
 
@@ -864,7 +864,7 @@ public class XMLDAOTemplate
                 metaDataUtils.getNativeType(t_iColumnType, t_bAllowsNull);
 
             t_bIsPrimaryKey =
-                metaDataManager.isPrimaryKey(
+                metaDataManager.isPartOfPrimaryKey(
                     t_strTableName,
                     t_astrColumnNames[t_iColumnIndex]);
                 

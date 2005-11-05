@@ -265,7 +265,7 @@ public class MockDAOTestTemplate
                     new StringBuffer();
 
                 String[] t_astrPrimaryKeys =
-                    t_MetaDataManager.getPrimaryKeys(
+                    t_MetaDataManager.getPrimaryKey(
                         t_TableTemplate.getTableName());
 
                 StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
@@ -386,7 +386,7 @@ public class MockDAOTestTemplate
                                         t_TableTemplate.getTableName(),
                                         t_astrColumnNames[t_iColumnIndex])));
 
-                            if  (!t_MetaDataManager.isPrimaryKey(
+                            if  (!t_MetaDataManager.isPartOfPrimaryKey(
                                      t_TableTemplate.getTableName(),
                                      t_astrColumnNames[t_iColumnIndex]))
                             {

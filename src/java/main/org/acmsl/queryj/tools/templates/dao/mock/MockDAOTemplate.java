@@ -436,9 +436,10 @@ public class MockDAOTemplate
                 String[] t_astrFkNames =
                     metaDataManager.getReferredKeys(
                         t_strTableName,
-                        t_astrReferredTables[t_iRefTableIndex]);
+                        t_astrReferredTables[t_iRefTableIndex])[0];
 
-                int t_iLength = (t_astrFkNames != null) ? t_astrFkNames.length : 0;
+                int t_iLength =
+                    (t_astrFkNames != null) ? t_astrFkNames.length : 0;
 
                 for  (int t_iColumnIndex = 0;
                           t_iColumnIndex < t_iLength;
@@ -543,7 +544,7 @@ public class MockDAOTemplate
                 }));
 
         String[] t_astrPrimaryKeys =
-            metaDataManager.getPrimaryKeys(t_strTableName);
+            metaDataManager.getPrimaryKey(t_strTableName);
 
         if  (   (t_astrPrimaryKeys == null)
              || (t_astrPrimaryKeys.length == 0))
@@ -680,7 +681,7 @@ public class MockDAOTemplate
                     }
                 }
 
-                if  (!metaDataManager.isPrimaryKey(
+                if  (!metaDataManager.isPartOfPrimaryKey(
                          t_strTableName,
                          t_astrColumnNames[t_iColumnIndex]))
                 {

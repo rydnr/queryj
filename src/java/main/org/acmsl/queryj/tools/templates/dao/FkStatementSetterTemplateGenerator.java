@@ -252,7 +252,7 @@ public class FkStatementSetterTemplateGenerator
                 englishGrammarUtils.getSingular(
                     metaDataManager.getReferredTable(
                         tableName,
-                        foreignKeys[0]).toLowerCase()),
+                        foreignKeys).toLowerCase()),
                 '_')
             + "StatementSetter.java",
             template.generate());

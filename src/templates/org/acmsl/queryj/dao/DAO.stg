@@ -1055,10 +1055,8 @@ public class <input.engine_name><input.vo_name>DAO
     {
         <input.fk_attributes:fk_dao_delete_call(
             foreignTableName=it.tableName,
-            tableName=input.table_name,
-            allowsNull=it.allowsNull,
-            pkAttributes=input.pk_attributes); separator="\n\n">
-
+            foreignKey=input.<"_fk_" + table_name>,
+            allowsNull=it.allowsNull); separator="\n\n">
 <endif>
 
         deleteNoFk(
@@ -1226,26 +1224,22 @@ query.set(<tableRepositoryName>TableRepository.<tableNameUppercased>.<nameUpperc
 
 fk_dao_delete_call(
   foreignTableName,
-  tableName,
-  allowsNull,
-  pkAttributes) ::= <<
+  foreignKey,
+  allowsNull) ::= <<
 <!
   Writes the code needed to use the DAO associated to a
   concrete foreign key to perform a delete operation.
   @param foreignTableName the name of the referred table.
-  @param tableName the table name.
+  @param foreignKey the foreign key.
   @param allowsNull whether the referred table allows null
   references.
-  @param pkAttributes the promary key attributes.
-  @todo allow multi-attribute foreign keys!!.
 !>
 <if(allowsNull)>
-t_<foreignTableName>DAO.discardRelationTo<tableName>DAO(
-    <pkAttributes:{<it.name>}; separator=",\n">);
+t_<foreignTableName>DAO.discardRelationTo<foreignKey:{attr |<attr.nameCapitalized>}>DAO(
 <else>
-t_<foreignTableName>DAO.deleteBy<tableName>DAO(
-    <pkAttributes:{<it.name>}; separator=",\n">);
+t_<foreignTableName>DAO.deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>DAO(
 <endif>
+    <foreignKey:{attr |<attr.name>}; separator=",\n">);
 >>
 
 dao_javadoc(name,uncapitalizedName) ::= <<
@@ -1274,7 +1268,8 @@ fk_delete_method(foreignKey,input) ::= <<
 !>
     /**
      * Builds the query required to \<i>delete\</i> a concrete
-     * \<code><input.table_name>\</code> entity, determined by a concrete foreign key.
+     * \<code><input.table_name>\</code> entity, determined by a foreign key.
+     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
      * @return the \<code>DeleteQuery\</code> instance.
      */
     protected Query buildDeleteBy<foreignKey:{<it.nameCapitalized>}>Query()
@@ -1284,14 +1279,15 @@ fk_delete_method(foreignKey,input) ::= <<
 
     /**
      * Builds the query required to \<i>delete\</i> a concrete
-     * \<code><input.table_name>\</code> entity, determined by a concrete foreign key.
+     * \<code><input.table_name>\</code> entity, determined by a foreign key.
+     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
      * @return the \<code>DeleteQuery\</code> instance.
      */
-    protected Query buildDeleteBy<foreignKey:{attr | <attr.nameCapitalized>}>Query()
+    protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query()
     {
         DeleteQuery result = queryFactory.createDeleteQuery();
 
-        buildDeleteBy<foreignKey:{attr | <attr.nameCapitalized>}>Query(result);
+        buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(result);
 
         return result;
     }
@@ -1299,10 +1295,11 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Builds the query required to \<i>delete\</i> a concrete
      * \<code><input.table_name>\</code> entity, determined by a concrete foreign key.
+     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
      * @param query the query to initialize.
      * @precondition query != null
      */
-    protected Query buildDeleteBy<foreignKey:{attr | <attr.nameCapitalized>}>Query(
+    protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(
         final DeleteQuery query)
     {
         query.deleteFrom(<input.table_repository_name>TableRepository.<input.table_name_uppercased>);
@@ -1318,13 +1315,13 @@ fk_delete_method(foreignKey,input) ::= <<
      * by given foreign keys.
      <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
      */
-    public void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+    public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
         <foreignKey:attribute_declaration(
           name=it.name,type=it.fieldType); separator=",\n">)
     {
-        deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+        deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
             <foreignKey:{<it.name>}; separator=",\n">,
-            buildDeleteBy<foreignKey:{attr | <attr.nameCapitalized>}>Query,
+            buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query,
             getDataSource());
     }
 
@@ -1337,13 +1334,13 @@ fk_delete_method(foreignKey,input) ::= <<
      * @precondition query != null
      * @precondition dataSource != null
      */
-    protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+    protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
         <foreignKey:attribute_declaration(
           name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final DataSource dataSource)
     {
-        deleteBy<foreignKey>(
+        deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
             <foreignKey:{<it.name>}; separator=",\n">,
             query,
             new DataSourceTransactionManager(dataSource));
@@ -1359,13 +1356,13 @@ fk_delete_method(foreignKey,input) ::= <<
      * @precondition query != null
      * @precondition transactionManager != null
      */
-    protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+    protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
         <foreignKey:attribute_declaration(
           name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
-        deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+        deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
             <foreignKey:{<it.name>}; separator=",\n">,
             query,
             new TransactionTemplate(transactionManager));
@@ -1390,8 +1387,8 @@ fk_delete_method(foreignKey,input) ::= <<
         transactionTemplate.execute(
             new UpdateTransactionCallback(
                 new QueryPreparedStatementCreator(query),
-                new <input.vo_name>By<foreignKey:{attr | <attr.nameCapitalized>}>StatementSetter(
-                    <foreignKey:{attr | <attr.name>}; separator=",\n">),
+                new <input.vo_name>By<foreignKey:{attr |<attr.nameCapitalized>}>StatementSetter(
+                    <foreignKey:{attr |<attr.name>}; separator=",\n">),
                 this));
     }
 >>

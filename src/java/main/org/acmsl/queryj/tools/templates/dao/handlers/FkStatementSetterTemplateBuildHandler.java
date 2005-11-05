@@ -229,7 +229,7 @@ public class FkStatementSetterTemplateBuildHandler
             {
                 String[] t_astrFks =
                     metaDataManager.getForeignKeys(
-                        tableTemplates[t_iIndex].getTableName());
+                        tableTemplates[t_iIndex].getTableName())[0];
 
                 String[] t_astrSimpleFks =
                     retrieveSimpleFks(
@@ -268,12 +268,13 @@ public class FkStatementSetterTemplateBuildHandler
                           t_iReferredTableIndex < t_iReferredTablesLength;
                           t_iReferredTableIndex++)
                 {
+                    // TODO: FIXME!!
                     t_cTemplates.add(
                         templateFactory.createFkStatementSetterTemplate(
                             tableTemplates[t_iIndex],
                             metaDataManager.getForeignKeys(
                                 tableTemplates[t_iIndex].getTableName(),
-                                t_astrReferredTables[t_iReferredTableIndex]),
+                                t_astrReferredTables[t_iReferredTableIndex])[0],
                             metaDataManager,
                             retrievePackage(
                                 engineName,
@@ -449,8 +450,10 @@ public class FkStatementSetterTemplateBuildHandler
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
+            // TODO: FIXME!!
             String t_strReferredTable =
-                metaDataManager.getReferredTable(tableName, allFks[t_iIndex]);
+                metaDataManager.getReferredTable(
+                    tableName, new String[] {allFks[t_iIndex]});
 
             if  (t_mAux.containsKey(t_strReferredTable))
             {
@@ -487,8 +490,9 @@ public class FkStatementSetterTemplateBuildHandler
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            String[] t_astrForeignKeys =
-                metaDataManager.getForeignKeys(tableName, t_astrReferredTables[t_iIndex]);
+            String[][] t_astrForeignKeys =
+                metaDataManager.getForeignKeys(
+                    tableName, t_astrReferredTables[t_iIndex]);
 
             if  (   (t_astrForeignKeys != null)
                  && (t_astrForeignKeys.length > 0))

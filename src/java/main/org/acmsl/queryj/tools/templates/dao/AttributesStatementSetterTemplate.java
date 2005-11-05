@@ -390,7 +390,7 @@ public class AttributesStatementSetterTemplate
                 boolean t_bAllowsNull = false;
 
                 boolean t_bIsPrimaryKey =
-                    metaDataManager.isPrimaryKey(
+                    metaDataManager.isPartOfPrimaryKey(
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 

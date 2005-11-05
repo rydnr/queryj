@@ -1074,7 +1074,7 @@ public abstract class AbstractFkStatementSetterTemplate
                 englishGrammarUtils.getSingular(
                     metaDataManager.getReferredTable(
                         tableTemplate.getTableName(),
-                        foreignKeys[0]).toLowerCase()),
+                        foreignKeys).toLowerCase()),
                 '_')
             + "StatementSetter.";
     }

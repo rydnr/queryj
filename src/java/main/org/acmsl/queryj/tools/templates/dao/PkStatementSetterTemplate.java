@@ -351,7 +351,7 @@ public class PkStatementSetterTemplate
         StringBuffer t_sbParameterSpecifications = new StringBuffer();
 
         String[] t_astrPrimaryKeys =
-            metaDataManager.getPrimaryKeys(t_strTableName);
+            metaDataManager.getPrimaryKey(t_strTableName);
 
         if  (   (t_astrPrimaryKeys == null)
              || (t_astrPrimaryKeys.length == 0))

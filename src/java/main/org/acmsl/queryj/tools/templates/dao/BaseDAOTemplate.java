@@ -638,7 +638,7 @@ public class BaseDAOTemplate
             new MessageFormat(updateParametersDeclaration);
 
         String[] t_astrPrimaryKeys =
-            metaDataManager.getPrimaryKeys(tableTemplate.getTableName());
+            metaDataManager.getPrimaryKey(tableTemplate.getTableName());
 
         MessageFormat t_DeleteMethodFormatter =
             new MessageFormat(deleteMethod);
@@ -803,7 +803,7 @@ public class BaseDAOTemplate
                          tableTemplate.getTableName(),
                          t_astrColumnNames[t_iColumnIndex]))
                 {
-                    if  (!metaDataManager.isPrimaryKey(
+                    if  (!metaDataManager.isPartOfPrimaryKey(
                              tableTemplate.getTableName(),
                              t_astrColumnNames[t_iColumnIndex]))
                     {
@@ -939,67 +939,82 @@ public class BaseDAOTemplate
                       t_iRefTableIndex < t_astrReferredTables.length;
                       t_iRefTableIndex++)
             {
-                t_astrReferredColumns =
+                String[][] t_aastrForeignKey =
                     metaDataManager.getForeignKeys(
                         tableTemplate.getTableName(),
                         t_astrReferredTables[t_iRefTableIndex]);
 
-                String t_strReferredTableName =
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            t_astrReferredTables[t_iRefTableIndex]
-                                .toLowerCase()),
-                        '_');
+                int t_iForeignKeyLength =
+                    (t_aastrForeignKey != null)
+                    ?  t_aastrForeignKey.length
+                    :  0;
 
-                StringBuffer t_sbFkJavadoc = new StringBuffer();
-                StringBuffer t_sbFkDeclaration = new StringBuffer();
-
-                int t_iLength =
-                    (t_astrReferredColumns != null) ? t_astrReferredColumns.length : 0;
-
-                for  (int t_iColumnIndex = 0;
-                          t_iColumnIndex < t_iLength;
-                          t_iColumnIndex++)
+                for  (int t_iFkIndex = 0;
+                          t_iFkIndex < t_iForeignKeyLength;
+                          t_iFkIndex++)
                 {
-                    t_sbFkJavadoc.append(
-                        t_FkJavadocFormatter.format(
-                            new Object[]
-                            {
-                                t_astrReferredColumns[t_iColumnIndex].toLowerCase(),
-                                t_astrReferredColumns[t_iColumnIndex]
-                            }));
+                    t_astrReferredColumns = t_aastrForeignKey[t_iFkIndex];
+                    
+                    String t_strReferredTableName =
+                        stringUtils.capitalize(
+                            englishGrammarUtils.getSingular(
+                                t_astrReferredTables[t_iRefTableIndex]
+                                   .toLowerCase()),
+                            '_');
 
-                    t_sbFkDeclaration.append(
-                        t_FkDeclarationFormatter.format(
-                            new Object[]
-                            {
-                                metaDataUtils.getNativeType(
-                                    metaDataManager.getColumnType(
-                                        tableTemplate.getTableName(),
-                                        t_astrReferredColumns[t_iColumnIndex])),
-                                t_astrReferredColumns[t_iColumnIndex].toLowerCase()
-                            }));
+                    StringBuffer t_sbFkJavadoc = new StringBuffer();
+                    StringBuffer t_sbFkDeclaration = new StringBuffer();
 
-                    if  (t_iColumnIndex < t_iLength - 1)
+                    int t_iLength =
+                        (t_astrReferredColumns != null)
+                        ?  t_astrReferredColumns.length : 0;
+
+                    for  (int t_iColumnIndex = 0;
+                              t_iColumnIndex < t_iLength;
+                              t_iColumnIndex++)
                     {
-                        t_sbFkDeclaration.append(",");
-                    }
-                }
+                        t_sbFkJavadoc.append(
+                            t_FkJavadocFormatter.format(
+                                new Object[]
+                                {
+                                    t_astrReferredColumns[t_iColumnIndex]
+                                        .toLowerCase(),
+                                    t_astrReferredColumns[t_iColumnIndex]
+                                }));
 
-                t_sbDeleteByFkMethod.append(
-                    t_DeleteByFkMethodFormatter.format(
-                        new Object[]
+                        t_sbFkDeclaration.append(
+                            t_FkDeclarationFormatter.format(
+                                new Object[]
+                                {
+                                    metaDataUtils.getNativeType(
+                                        metaDataManager.getColumnType(
+                                            tableTemplate.getTableName(),
+                                            t_astrReferredColumns[
+                                                t_iColumnIndex])),
+                                    t_astrReferredColumns[t_iColumnIndex]
+                                        .toLowerCase()
+                                }));
+
+                        if  (t_iColumnIndex < t_iLength - 1)
                         {
-                            stringUtils.capitalize(
-                                englishGrammarUtils.getSingular(
-                                    t_astrReferredTables[t_iRefTableIndex]
-                                        .toLowerCase()),
-                                '_'),
-                            t_sbFkJavadoc,
-                            t_strReferredTableName,
-                            t_sbFkDeclaration
-                        }));
+                            t_sbFkDeclaration.append(",");
+                        }
+                    }
 
+                    t_sbDeleteByFkMethod.append(
+                        t_DeleteByFkMethodFormatter.format(
+                            new Object[]
+                            {
+                                stringUtils.capitalize(
+                                    englishGrammarUtils.getSingular(
+                                        t_astrReferredTables[t_iRefTableIndex]
+                                            .toLowerCase()),
+                                    '_'),
+                                t_sbFkJavadoc,
+                                t_strReferredTableName,
+                                t_sbFkDeclaration
+                            }));
+                }
             }
         }
 

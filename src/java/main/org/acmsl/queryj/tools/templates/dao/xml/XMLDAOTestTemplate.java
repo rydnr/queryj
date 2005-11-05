@@ -373,7 +373,7 @@ public class XMLDAOTestTemplate
             new StringBuffer();
 
         String[] t_astrPrimaryKeys =
-            metaDataManager.getPrimaryKeys(
+            metaDataManager.getPrimaryKey(
                 tableTemplate.getTableName());
 
         StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
@@ -480,7 +480,7 @@ public class XMLDAOTestTemplate
             boolean t_bAllowsNull = false;
 
             boolean t_bIsPrimaryKey =
-                metaDataManager.isPrimaryKey(
+                metaDataManager.isPartOfPrimaryKey(
                     tableTemplate.getTableName(),
                     t_astrColumnNames[t_iColumnIndex]);
 
@@ -527,7 +527,7 @@ public class XMLDAOTestTemplate
 
                 t_sbInsertParametersTypes.append(t_strTestValue);
 
-                if  (!metaDataManager.isPrimaryKey(
+                if  (!metaDataManager.isPartOfPrimaryKey(
                          tableTemplate.getTableName(),
                          t_astrColumnNames[t_iColumnIndex]))
                 {

@@ -83,6 +83,12 @@ public class DatabaseMetaDataManager
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
+     * An empty array of String arrays for performance issues.
+     */
+    public static final String[][] EMPTY_ARRAY_OF_STRING_ARRAYS =
+        new String[0][0];
+
+    /**
      * An empty int array for performance issues.
      */
     public static final int[] EMPTY_INT_ARRAY = new int[0];
@@ -1193,14 +1199,27 @@ public class DatabaseMetaDataManager
     }
 
     /**
-     * Retrieves the primary keys.
+     * Retrieves the number of columns building the primary key.
      * @param tableName the table name.
      * @return the primary keys.
      * @precondition tableName != null
      */
-    public String[] getPrimaryKeys(final String tableName)
+    public int getPrimaryKeyColumnCount(final String tableName)
     {
-        return getPrimaryKeys(tableName, getPrimaryKeys());
+        String[] t_astrPrimaryKey = getPrimaryKey(tableName);
+
+        return (t_astrPrimaryKey != null) ? t_astrPrimaryKey.length : 0;
+    }
+
+    /**
+     * Retrieves the primary key.
+     * @param tableName the table name.
+     * @return the primary key.
+     * @precondition tableName != null
+     */
+    public String[] getPrimaryKey(final String tableName)
+    {
+        return getPrimaryKey(tableName, getPrimaryKeys());
     }
 
     /**
@@ -1211,51 +1230,56 @@ public class DatabaseMetaDataManager
      * @precondition tableName != null
      * @precondition primaryKeys != null
      */
-    protected String[] getPrimaryKeys(final String tableName, final Map primaryKeys)
+    protected String[] getPrimaryKey(
+        final String tableName, final Map primaryKeys)
     {
         String[] result = EMPTY_STRING_ARRAY;
 
-        Collection t_cPks = (Collection) primaryKeys.get(buildPkKey(tableName));
+        Collection t_cPk =
+            (Collection) primaryKeys.get(buildPkKey(tableName));
 
-        if  (t_cPks != null)
+        if  (t_cPk != null)
         {
-            result = (String[]) t_cPks.toArray(result);
+            result = (String[]) t_cPk.toArray(result);
         }
         
         return result;
     }
 
     /**
-     * Checks whether given field is a primary key or not.
+     * Checks whether given field belongs to the primary key or not.
      * @param tableName the table name.
      * @param fieldName the field name.
-     * @return <code>true</code> if such field identifies a concrete row.
+     * @return <code>true</code> if such field is part of what dentifies a
+     * concrete row.
      * @precondition tableName != null
      * @precondition fieldName != null
      */
-    public boolean isPrimaryKey(final String tableName, final String fieldName)
+    public boolean isPartOfPrimaryKey(
+        final String tableName, final String fieldName)
     {
-        return isPrimaryKey(fieldName, getPrimaryKeys(tableName));
+        return isPartOfPrimaryKey(fieldName, getPrimaryKey(tableName));
     }
 
     /**
      * Checks whether given field is a primary key or not.
      * @param fieldName the field name.
-     * @param primaryKeys the primary keys.
+     * @param primaryKey the primary key.
      * @return <code>true</code> if such field identifies a concrete row.
      * @precondition fieldName != null
      */
-    protected boolean isPrimaryKey(final String fieldName, final String[] primaryKeys)
+    protected boolean isPartOfPrimaryKey(
+        final String fieldName, final String[] primaryKey)
     {
         boolean result = false;
 
-        if  (primaryKeys != null)
+        if  (primaryKey != null)
         {
             for  (int t_iPkIndex = 0;
-                      t_iPkIndex < primaryKeys.length;
+                      t_iPkIndex < primaryKey.length;
                       t_iPkIndex++)
             {
-                if  (fieldName.equals(primaryKeys[t_iPkIndex]))
+                if  (fieldName.equals(primaryKey[t_iPkIndex]))
                 {
                     result = true;
 
@@ -1297,29 +1321,29 @@ public class DatabaseMetaDataManager
     /**
      * Adds a foreign key.
      * @param tableName the table name.
-     * @param columnName the column name.
+     * @param columnNames the column names.
      * @param refTableName the referred table name.
-     * @param refColumnName the referred column name.
+     * @param refColumnNames the referred column names.
      * @precondition tableName != null
-     * @precondition columnName != null
+     * @precondition columnNames != null
      * @precondition refRableName != null
-     * @precondition refColumnName != null
+     * @precondition refColumnNames != null
      */
     public void addForeignKey(
         final String tableName,
-        final String columnName,
+        final String[] columnNames,
         final String refTableName,
-        final String refColumnName)
+        final String[] refColumnNames)
     {
         logVerbose(
               "Adding foreign key: ("
             + tableName
             + ","
-            + columnName
+            + concat(columnNames, ", ")
             + ") -> ("
             + refTableName
             + ","
-            + refColumnName
+            + concat(refColumnNames, ", ")
             + ")");
 
         Map t_mForeignKeys = getForeignKeys();
@@ -1343,25 +1367,26 @@ public class DatabaseMetaDataManager
             }
 
             t_mForeignKeys.put(
-                buildFkKey(tableName, columnName, refTableName, refColumnName),
-                columnName);
+                buildFkKey(
+                    tableName, columnNames, refTableName, refColumnNames),
+                columnNames);
 
             t_mForeignKeys.put(
-                buildFkKey(tableName, columnName, refTableName),
-                refColumnName);
+                buildFkKey(tableName, columnNames, refTableName),
+                refColumnNames);
 
             annotateForeignKey(
                 buildFkKey(tableName, refTableName),
-                columnName,
+                columnNames,
                 t_mForeignKeys);
 
             t_mForeignKeys.put(
-                buildRefTableKey(tableName, columnName),
+                buildRefTableKey(tableName, columnNames),
                 refTableName);
 
             t_mForeignKeys.put(
                 buildRefFkKey(tableName, refTableName),
-                refColumnName);
+                refColumnNames);
 
             Collection t_ReferredTables =
                 (Collection) t_mForeignKeys.get(buildFkKey(tableName));
@@ -1376,9 +1401,7 @@ public class DatabaseMetaDataManager
                 t_ReferredTables.add(refTableName);
             }
 
-            t_mForeignKeys.put(
-                buildFkKey(tableName),
-                t_ReferredTables);
+            t_mForeignKeys.put(buildFkKey(tableName), t_ReferredTables);
         }
     }
 
@@ -1394,33 +1417,53 @@ public class DatabaseMetaDataManager
     protected void annotateForeignKey(
         final Object key, final String value, final Map map)
     {
+        annotateForeignKey(key, new String[] { value }, map);
+    }
+    
+    /**
+     * Annotates the foreign key in given map.
+     * @param key the key.
+     * @param values the values.
+     * @param map the map.
+     * @precondition key != null
+     * @precondition values != null
+     * @precondition map != null
+     */
+    protected void annotateForeignKey(
+        final Object key, final String[] values, final Map map)
+    {
         Object t_Fks = map.get(key);
 
-        Collection t_cFks = null;
+        synchronized(map)
+        {
+            String[][] t_aastrFks = EMPTY_ARRAY_OF_STRING_ARRAYS;
 
-        if  (t_Fks == null)
-        {
-            t_Fks = value;
-        }
-        else if  (t_Fks instanceof String)
-        {
-            t_cFks = new ArrayList();
-            t_cFks.add(t_Fks);
-            t_cFks.add(value);
-        }
-        else if  (t_Fks instanceof Collection)
-        {
-            t_cFks = (Collection) t_Fks;
-            t_cFks.add(value);
-        }
+            if  (t_Fks == null)
+            {
+                t_Fks = values;
+            }
+            else if  (t_Fks instanceof String)
+            {
+                t_aastrFks = new String[][] { { (String) t_Fks }, values };
+            }
+            else if  (t_Fks instanceof String[][])
+            {
+                String[][] t_aastrCurrentFks = (String[][]) t_Fks;
+            
+                t_aastrFks =
+                    new String[t_aastrCurrentFks.length + 1][values.length];
 
-        if  (t_cFks != null)
-        {
-            map.put(key, t_cFks);
-        }
-        else
-        {
-            map.put(key, t_Fks);
+                for  (int t_iIndex = 0;
+                          t_iIndex < t_aastrCurrentFks.length;
+                          t_iIndex++)
+                {
+                    t_aastrFks[t_iIndex] = t_aastrCurrentFks[t_iIndex];
+                }
+
+                t_aastrFks[t_aastrCurrentFks.length] = values;
+            }
+
+            map.put(key, t_aastrFks);
         }
     }
 
@@ -1453,7 +1496,8 @@ public class DatabaseMetaDataManager
 
                     while  (t_itReferingTables.hasNext())
                     {
-                        t_strReferingTable = (String) t_itReferingTables.next();
+                        t_strReferingTable =
+                            (String) t_itReferingTables.next();
 
                         t_astrReferredTables =
                             getReferredTables(t_strReferingTable);
@@ -1466,10 +1510,10 @@ public class DatabaseMetaDataManager
                                       t_iIndex < t_astrReferredTables.length;
                                       t_iIndex++)
                             {
-                                t_strCurrentTable = t_astrReferredTables[t_iIndex];
+                                t_strCurrentTable =
+                                    t_astrReferredTables[t_iIndex];
 
                                 if  (   (t_strCurrentTable != null)
-                                     && (!t_cResult.contains(t_strReferingTable))
                                      && (tableName.equalsIgnoreCase(
                                              t_strCurrentTable)))
                                 {
@@ -1491,36 +1535,44 @@ public class DatabaseMetaDataManager
      * @return its foreign keys.
      * @precondition tableName != null
      */
-    public String[] getForeignKeys(final String tableName)
+    public String[][] getForeignKeys(final String tableName)
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[][] result = EMPTY_ARRAY_OF_STRING_ARRAYS;
+        
+        Collection t_cResult = new ArrayList();
 
         String[] t_astrReferredTables = getReferredTables(tableName);
+
+        int t_iLength =
+            (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
         
-        Collection t_cResult = null;
-
-        for  (int t_iIndex = 0;
-                  t_iIndex < t_astrReferredTables.length;
-                  t_iIndex++)
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            if  (t_cResult == null)
-            {
-                t_cResult = new ArrayList();
-            }
+            String[][] t_aastrFks =
+                getForeignKeys(
+                    tableName, t_astrReferredTables[t_iIndex]);
 
-            t_cResult.addAll(
-                Arrays.asList(
-                    getForeignKeys(
-                        tableName, t_astrReferredTables[t_iIndex])));
+            int t_iFkLength = (t_aastrFks != null) ? t_aastrFks.length : 0;
+            
+            for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkLength; t_iFkIndex++)
+            {
+                t_cResult.add(t_aastrFks[t_iFkIndex]);
+            }
         }
 
-        if  (   (t_cResult != null)
-             && (t_cResult.size() > 0))
+        Iterator t_Iterator = t_cResult.iterator();
+        
+        result = new String[t_cResult.size()][];
+        
+        int t_iActualIndex = 0;
+        
+        while  (t_Iterator.hasNext())
         {
-            result = (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
+            result[t_iActualIndex++] = (String[]) t_Iterator.next();
         }
 
         return result;
+        
     }
 
     /**
@@ -1533,11 +1585,11 @@ public class DatabaseMetaDataManager
     {
         boolean result = false;
 
-        String[] t_astrForeignKeys = getForeignKeys(tableName);
+        String[][] t_aastrForeignKeys = getForeignKeys(tableName);
 
         result =
-            (   (t_astrForeignKeys != null)
-             && (t_astrForeignKeys.length > 0));
+            (   (t_aastrForeignKeys != null)
+             && (t_aastrForeignKeys.length > 0));
 
         return result;
     }
@@ -1550,22 +1602,21 @@ public class DatabaseMetaDataManager
      */
     public String[] getReferredTables(final String tableName)
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        Collection t_cResult = null;
 
         Map t_mForeignKeys = getForeignKeys();
 
         if  (t_mForeignKeys != null) 
         {
-            Collection t_Result =
-                (Collection) t_mForeignKeys.get(buildFkKey(tableName));
-
-            if  (t_Result != null)
-            {
-                result = (String[]) t_Result.toArray(EMPTY_STRING_ARRAY);
-            }
+            t_cResult = (Collection) t_mForeignKeys.get(buildFkKey(tableName));
         }
         
-        return result;
+        if  (t_cResult == null)
+        {
+            t_cResult = new ArrayList();
+        }
+        
+        return (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -1576,9 +1627,10 @@ public class DatabaseMetaDataManager
      * @precondition tableName != null
      * @precondition refTableName != null
      */
-    public String[] getForeignKeys(final String tableName, String refTableName)
+    public String[][] getForeignKeys(
+        final String tableName, String refTableName)
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[][] result = EMPTY_ARRAY_OF_STRING_ARRAYS;
 
         Map t_mForeignKeys = getForeignKeys();
 
@@ -1589,11 +1641,11 @@ public class DatabaseMetaDataManager
 
             if  (t_ForeignKeys instanceof String)
             {
-                result = new String[] { (String) t_ForeignKeys };
+                result = new String[][] { { (String) t_ForeignKeys } };
             }
-            else if  (t_ForeignKeys instanceof Collection)
+            else if  (t_ForeignKeys instanceof String[][])
             {
-                result = (String[]) ((Collection) t_ForeignKeys).toArray(EMPTY_STRING_ARRAY);
+                result = (String[][]) t_ForeignKeys;
             }
         }
         
@@ -1608,7 +1660,8 @@ public class DatabaseMetaDataManager
      * @precondition tableName != null
      * @precondition foreignKey != null
      */
-    public String getReferredTable(final String tableName, final String foreignKey)
+    public String getReferredTable(
+        final String tableName, final String[] foreignKey)
     {
         String result = null;
 
@@ -1618,23 +1671,26 @@ public class DatabaseMetaDataManager
         {
             result =
                 (String)
-                    t_mForeignKeys.get(buildRefTableKey(tableName, foreignKey));
+                    t_mForeignKeys.get(
+                        buildRefTableKey(tableName, foreignKey));
         }
 
         return result;
     }
 
     /**
-     * Retrieves the field of referred table pointed by a field on the original one.
+     * Retrieves the field of referred table pointed by a field on the
+     * original one.
      * @param tableName the table name.
      * @param refTableName the referred table name.
      * @return such field.
      * @precondition tableName != null
      * @precondition refTableName != null
      */
-    public String[] getReferredKeys(final String tableName, String refTableName)
+    public String[][] getReferredKeys(
+        final String tableName, String refTableName)
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[][] result = EMPTY_ARRAY_OF_STRING_ARRAYS;
 
         Map t_mForeignKeys = getForeignKeys();
 
@@ -1645,11 +1701,11 @@ public class DatabaseMetaDataManager
 
             if  (t_ForeignKeys instanceof String)
             {
-                result = new String[] { (String) t_ForeignKeys };
+                result = new String[][] { { (String) t_ForeignKeys } };
             }
-            else if  (t_ForeignKeys instanceof Collection)
+            else if  (t_ForeignKeys instanceof String[][])
             {
-                result = (String[]) ((Collection) t_ForeignKeys).toArray(EMPTY_STRING_ARRAY);
+                result = (String[][]) t_ForeignKeys;
             }
         }
         
@@ -2140,7 +2196,18 @@ public class DatabaseMetaDataManager
     protected Object buildFkKey(
         final Object firstKey, final Object secondKey)
     {
-        return buildFkKey(firstKey) + "++" + secondKey;
+        Object result = null;
+        
+        String secondPart = "" + secondKey;
+        
+        if  (secondKey instanceof String[])
+        {
+            secondPart = concat((String[]) secondKey, ",");
+        }
+        
+        result = buildFkKey(firstKey) + "++" + secondPart;
+
+        return result;
     }
 
     /**
@@ -2169,7 +2236,19 @@ public class DatabaseMetaDataManager
         final Object thirdKey,
         final Object fourthKey)
     {
-        return buildFkKey(firstKey, secondKey, thirdKey) + ".;.;" + fourthKey;
+        Object result = null;
+        
+        String fourthPart = "" + fourthKey;
+        
+        if  (fourthKey instanceof String[])
+        {
+            fourthPart = concat((String[]) fourthKey, ",");
+        }
+        
+        result =
+            buildFkKey(firstKey, secondKey, thirdKey) + ".;.;" + fourthPart;
+
+        return result;
     }
 
     /**
@@ -2178,7 +2257,8 @@ public class DatabaseMetaDataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildRefFkKey(final Object firstKey, final Object secondKey)
+    protected Object buildRefFkKey(
+        final Object firstKey, final Object secondKey)
     {
         return "\\ref//" + buildFkKey(firstKey, secondKey);
     }
@@ -2214,7 +2294,9 @@ public class DatabaseMetaDataManager
     protected Object buildExternallyManagedFieldRetrievalQueryKey(
         final Object firstKey)
     {
-        return "[externally-managed-field-retrieval-query]!!" + buildKey(firstKey);
+        return
+              "[externally-managed-field-retrieval-query]!!"
+            + buildKey(firstKey);
     }
 
     /**
@@ -3253,14 +3335,48 @@ public class DatabaseMetaDataManager
                         schema,
                         t_astrTableNames[t_iTableIndex]);
 
+                String t_strFkTableName = null;
+                String t_strPreviousFkTableName = null;
+                Collection t_cPkColumnNames = new ArrayList();
+                Collection t_cFkColumnNames = new ArrayList();
+                int t_iPkColumnCount =
+                    getPrimaryKeyColumnCount(t_astrTableNames[t_iTableIndex]);
+                
+                int t_iIndex = 0;
+
                 while  (   (t_rsForeignKeys != null)
                         && (t_rsForeignKeys.next()))
                 {
-                    addForeignKey(
-                        t_astrTableNames[t_iTableIndex],
-                        t_rsForeignKeys.getString("PKCOLUMN_NAME"),
-                        t_rsForeignKeys.getString("FKTABLE_NAME"),
+                    t_strFkTableName =
+                        t_rsForeignKeys.getString("FKTABLE_NAME");
+
+                    if  (   (   (t_strFkTableName == null)
+                             || (!t_strFkTableName.equals(
+                                     t_strPreviousFkTableName)))
+                         || (t_iIndex == t_iPkColumnCount))
+                    {
+                        addForeignKey(
+                            t_astrTableNames[t_iTableIndex],
+                            (String[])
+                                t_cPkColumnNames.toArray(EMPTY_STRING_ARRAY),
+                            t_strPreviousFkTableName,
+                            (String[])
+                                t_cFkColumnNames.toArray(EMPTY_STRING_ARRAY));
+
+                        t_cPkColumnNames = new ArrayList();
+                        t_cFkColumnNames = new ArrayList();
+                        t_iIndex = 0;
+                    }
+
+                    t_cPkColumnNames.add(
+                        t_rsForeignKeys.getString("PKCOLUMN_NAME"));
+                    
+                    t_cFkColumnNames.add(
                         t_rsForeignKeys.getString("FKCOLUMN_NAME"));
+
+                    t_strPreviousFkTableName = t_strFkTableName;
+
+                    t_iIndex++;
                 }
 
                 if  (t_rsForeignKeys != null)
@@ -3467,9 +3583,11 @@ public class DatabaseMetaDataManager
      * @precondition foreignKey != null.
      */
     protected final String buildRefTableKey(
-        final String tableName, final String foreignKey)
+        final String tableName, final String[] foreignKey)
     {
-        return ".|_|referred|_table|_|.," + tableName + "$$" + foreignKey;
+        return
+              ".|_|referred|_table|_|.," + tableName
+            + "$$" + concat(foreignKey, ",");
     }
 
     /**
@@ -3502,5 +3620,64 @@ public class DatabaseMetaDataManager
         {
             t_Log.warn(message, exception);
         }
+    }
+
+    /**
+     * Concatenates given array using a separator.
+     * @param values the values.
+     * @param separator the separator.
+     * @return the result of concatenating given values.
+     * @precondition values != null
+     * @precondition separator != null
+     */
+    protected String concat(final String[] values, final String separator)
+    {
+        StringBuffer result = new StringBuffer();
+
+        int t_iLength = (values != null) ? values.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            if  (values[t_iIndex] != null)
+            {
+                result.append(values[t_iIndex]);
+            
+                if  (   (t_iIndex < values.length - 1)
+                     && (anythingElseToConcatenate(values, t_iIndex + 1)))
+                {
+                    result.append(separator);
+                }
+            }
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * Checks whether there's something to concatenate.
+     * @param values the values.
+     * @param start the index to start from.
+     * @return <code>true</code> if there are still items to concatenate.
+     * @precondition values != null
+     * @precondition start >= 0;
+     * @precondition start < values.length
+     */
+    protected boolean anythingElseToConcatenate(
+        final String[] values, final int start)
+    {
+        boolean result = false;
+
+        int t_iLength = (values != null) ? values.length : 0;
+        
+        for  (int t_iIndex = start; t_iIndex < t_iLength; t_iIndex++)
+        {
+            if  (values[t_iIndex] != null)
+            {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
     }
 }

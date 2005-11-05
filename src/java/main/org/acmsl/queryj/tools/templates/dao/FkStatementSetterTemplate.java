@@ -355,7 +355,7 @@ public class FkStatementSetterTemplate
                     englishGrammarUtils.getSingular(
                         metaDataManager.getReferredTable(
                             tableTemplate.getTableName(),
-                            foreignKeys[0]).toLowerCase()),
+                            foreignKeys).toLowerCase()),
                     '_');
         }
 

@@ -435,7 +435,7 @@ public class DAOTestTemplate
             new StringBuffer();
 
         String[] t_astrPrimaryKeys =
-            metaDataManager.getPrimaryKeys(
+            metaDataManager.getPrimaryKey(
                 tableTemplate.getTableName());
 
         String[] t_astrColumnNames =
@@ -601,7 +601,7 @@ public class DAOTestTemplate
                     t_sbInsertParametersTypes.append(
                         metaDataUtils.getNativeType(t_iColumnType));
 
-                    if  (!metaDataManager.isPrimaryKey(
+                    if  (!metaDataManager.isPartOfPrimaryKey(
                              tableTemplate.getTableName(),
                              t_astrColumnNames[t_iColumnIndex]))
                     {

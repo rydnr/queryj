@@ -273,7 +273,7 @@ public class DAOTemplate
             stringUtils.capitalize(t_strValueObjectName, '_');
 
         String[] t_astrPrimaryKeys =
-            metaDataManager.getPrimaryKeys(tableTemplate.getTableName());
+            metaDataManager.getPrimaryKey(tableTemplate.getTableName());
 
         int t_iPrimaryKeysLength =
             (t_astrPrimaryKeys != null) ? t_astrPrimaryKeys.length : 0;
@@ -309,6 +309,11 @@ public class DAOTemplate
         
         Collection t_cForeignKeyAttributes =
             retrieveForeignKeyAttributes(
+                t_strTableName, metaDataManager, metaDataUtils);
+
+        // A map of "fk_"referringTableName -> foreign_keys (list of lists)
+        Map t_mReferringKeys =
+            retrieveReferingKeys(
                 t_strTableName, metaDataManager, metaDataUtils);
 
         Collection t_cAttributes =
@@ -361,6 +366,7 @@ public class DAOTemplate
             t_cPrimaryKeyAttributes,
             t_cNonPrimaryKeyAttributes,
             t_cForeignKeyAttributes,
+            t_mReferringKeys,
             t_cAttributes,
             t_cExternallyManagedAttributes,
             t_cForeignKeys,
@@ -394,6 +400,10 @@ public class DAOTemplate
      * @param nonPrimaryKeyAttributes the ones not part of the primary
      * key..
      * @param foreignKeyAttributes the foreign key attributes.
+     * @param referingKeys the foreign keys of other tables pointing
+     * to this one. It's expected to be
+     * a map of "fk_"referringTableName -> foreign_keys (list of attribute
+     * lists).
      * @param attributes the attributes.
      * @param externallyManagedAttributes the attributes which are
      * managed externally.
@@ -445,6 +455,7 @@ public class DAOTemplate
         final Collection primaryKeyAttributes,
         final Collection nonPrimaryKeyAttributes,
         final Collection foreignKeyAttributes,
+        final Map referingKeys,
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection foreignKeys,
@@ -487,6 +498,7 @@ public class DAOTemplate
             primaryKeyAttributes,
             nonPrimaryKeyAttributes,
             foreignKeyAttributes,
+            referingKeys,
             attributes,
             externallyManagedAttributes,
             foreignKeys,
@@ -615,6 +627,10 @@ public class DAOTemplate
      * @param pkAttributes the primary key attributes.
      * @param nonPkAttributes the ones not part of the primary key.
      * @param fkAttributes the foreign key attributes.
+     * @param referingKeys the foreign keys of other tables pointing
+     * to this one. It's expected to be
+     * a map of "fk_"referringTableName -> foreign_keys (list of attribute
+     * lists).
      * @param attributes the attributes.
      * @param externallyManagedAttributes the attributes which are
      * managed externally.
@@ -648,6 +664,7 @@ public class DAOTemplate
         final Collection pkAttributes,
         final Collection nonPkAttributes,
         final Collection fkAttributes,
+        final Map referingKeys,
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection foreignKeys,
@@ -673,6 +690,7 @@ public class DAOTemplate
         input.put("fk_attributes", fkAttributes);
         input.put("attributes", attributes);
         input.put("foreign_keys", foreignKeys);
+        input.putAll(referingKeys);
         input.put("custom_selects", customSelects);
         input.put("custom_results", customResults);
     }
@@ -727,7 +745,7 @@ public class DAOTemplate
     {
         return
             buildAttributes(
-                metaDataManager.getPrimaryKeys(tableName),
+                metaDataManager.getPrimaryKey(tableName),
                 tableName,
                 metaDataManager,
                 metaDataUtils);
@@ -760,7 +778,7 @@ public class DAOTemplate
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            if  (!metaDataManager.isPrimaryKey(
+            if  (!metaDataManager.isPartOfPrimaryKey(
                      tableName, t_astrColumnNames[t_iIndex]))
             {
                 t_cNonPkNames.add(t_astrColumnNames[t_iIndex]);
@@ -791,12 +809,25 @@ public class DAOTemplate
         final DatabaseMetaDataManager metaDataManager,
         final MetaDataUtils metaDataUtils)
     {
-        return
-            buildAttributes(
-                metaDataManager.getForeignKeys(tableName),
-                tableName,
-                metaDataManager,
-                metaDataUtils);
+        Collection result = new ArrayList();
+
+        String[][] t_aastrForeignKeys =
+            metaDataManager.getForeignKeys(tableName);
+
+        int t_iLength =
+            (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            result.add(
+                buildAttributes(
+                    t_aastrForeignKeys[t_iIndex],
+                    tableName,
+                    metaDataManager,
+                    metaDataUtils));
+        }
+
+        return result;
     }
 
     /**
@@ -905,24 +936,108 @@ public class DAOTemplate
             t_strReferredTable =
                 t_astrReferredTables[t_iRefTableIndex];
 
-            t_astrReferredColumns =
+            String[][] t_aastrForeignKeys =
                 metaDataManager.getForeignKeys(
                     t_strReferredTable, tableName);
 
-            t_cCurrentForeignKey =
-                buildAttributes(
-                    t_astrReferredColumns,
-                    t_strReferredTable,
+            int t_iFkLength =
+                (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
+
+            for  (int t_iIndex = 0; t_iIndex < t_iFkLength; t_iIndex++)
+            {
+                t_cCurrentForeignKey =
+                    buildAttributes(
+                        t_aastrForeignKeys[t_iIndex],
+                        t_strReferredTable,
                     (metaDataManager.allowsNull(
                         t_strReferredTable, t_astrReferredColumns)
                      ?  Boolean.TRUE : Boolean.FALSE),
                     metaDataManager,
                     metaDataUtils);
 
-            // Note: 'result' contains a list of lists.
-            result.add(t_cCurrentForeignKey);
+                // Note: 'result' contains a list of lists.
+                result.add(t_cCurrentForeignKey);
 
-            t_cCurrentForeignKey = null;
+                t_cCurrentForeignKey = null;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the refering keys.
+     * @param tableName the table name.
+     * @param metaDataManager the <code>DatabaseMetaDataManager</code>
+     * instance.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @return the foreign keys of other tables pointing
+     * to this one: 
+     * a map of "fk_"referringTableName -> foreign_keys (list of attribute
+     * lists).
+     * @precondition tableName != null
+     * @precondition metaDataManager != null
+     * @precondition metaDataUtils != null
+     */
+    protected Map retrieveReferingKeys(
+        final String tableName,
+        final DatabaseMetaDataManager metaDataManager,
+        final MetaDataUtils metaDataUtils)
+    {
+        Map result = new HashMap();
+
+        String[] t_astrReferingTables =
+            metaDataManager.getReferingTables(tableName);
+
+        String[][] t_aastrReferingColumns = null;
+
+        int t_iLength =
+            (t_astrReferingTables != null) ? t_astrReferingTables.length : 0;
+
+        Collection t_cReferingFks = null;
+
+        Collection t_cCurrentForeignKey = null;
+
+        String t_strReferingTable = null;
+
+        for  (int t_iRefTableIndex = 0;
+                  t_iRefTableIndex < t_iLength;
+                  t_iRefTableIndex++)
+        {
+            t_cReferingFks = new ArrayList();
+
+            t_strReferingTable =
+                t_astrReferingTables[t_iRefTableIndex];
+
+            t_aastrReferingColumns =
+                metaDataManager.getForeignKeys(
+                    t_strReferingTable, tableName);
+
+            int t_iFkCount =
+                (t_aastrReferingColumns != null)
+                ?  t_aastrReferingColumns.length
+                :  0;
+
+            for  (int t_iFk = 0; t_iFk < t_iFkCount; t_iFk++)
+            {
+                t_cCurrentForeignKey =
+                    buildAttributes(
+                        t_aastrReferingColumns[t_iFk],
+                        t_strReferingTable,
+                        (metaDataManager.allowsNull(
+                            t_strReferingTable,
+                            t_aastrReferingColumns[t_iFk])
+                         ?  Boolean.TRUE : Boolean.FALSE),
+                        metaDataManager,
+                        metaDataUtils);
+
+                // Note: 't_cReferingFks' contains a list of lists.
+                t_cReferingFks.add(t_cCurrentForeignKey);
+
+                t_cCurrentForeignKey = null;
+            }
+
+            result.put("_fk_" + t_strReferingTable, t_cReferingFks);
         }
 
         return result;
