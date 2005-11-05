@@ -1796,7 +1796,8 @@ public class DatabaseMetaDataManager
      * @param fieldName the field name.
      * @return <code>true</code> if such field is managed externally.
      */
-    public boolean isManagedExternally(final String tableName, String fieldName)
+    public boolean isManagedExternally(
+        final String tableName, String fieldName)
     {
         boolean result = false;
 

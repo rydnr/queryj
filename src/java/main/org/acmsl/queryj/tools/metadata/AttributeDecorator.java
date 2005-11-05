@@ -122,6 +122,15 @@ public class AttributeDecorator
     }
     
     /**
+     * Retrieves the capitalized name.
+     * @return such name.
+     */
+    public String getNameCapitalized()
+    {
+        return capitalize(getName());
+    }
+
+    /**
      * Converts given value to upper-case.
      * @param value the value.
      * @return the alternate version of the value.

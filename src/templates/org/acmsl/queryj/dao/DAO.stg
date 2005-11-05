@@ -57,13 +57,29 @@ source(input) ::= <<
 <java_header(
   years=input.copyright_years,
   description=
-    description(
-      tableName=input.table_name,
-      engineName=input.engine_name,
-      engineVersion=input.engine_version),
+    [
+      first_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version),
+      second_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version),
+      third_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version)
+    ],
     timestamp=input.timestamp)>
 <package_declaration(
-  basePackageName=input.base_package_name, subpackageName=input.subpackage_name)>
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName,
+    input.subpackage_name
+  ])>
 
 <project_imports(
   basePackageName=input.base_package_name,
@@ -136,15 +152,34 @@ import org.apache.commons.logging.LogFactory;
 <class(input=input)>
 >>
 
-description(tableName, engineName, engineVersion) ::= <<
+first_line_description(tableName, engineName, engineVersion) ::= <<
 <!
   Generates a description for the generated file.
   @param tableName the table name.
   @param engineName the engine name.
   @param engineVersion the engine version.
 !>
-DAO implementation responsible of managing the access to <tableName>
-entities from <engineName> (<engineVersion>) persistence layer.
+DAO implementation responsible of managing the access to
+>>
+
+second_line_description(tableName, engineName, engineVersion) ::= <<
+<!
+  Generates a description for the generated file.
+  @param tableName the table name.
+  @param engineName the engine name.
+  @param engineVersion the engine version.
+!>
+ <tableName> entities from <engineName>
+>>
+
+third_line_description(tableName, engineName, engineVersion) ::= <<
+<!
+  Generates a description for the generated file.
+  @param tableName the table name.
+  @param engineName the engine name.
+  @param engineVersion the engine version.
+!>
+(<engineVersion>) persistence layers.
 >>
 
 project_imports(
@@ -245,7 +280,7 @@ foreignkey_dao_import(
   @param baseDAOSubpackageName the subpackage of the base DAO interface.
   @param referredVOName the referred value object name.
 !>
-import <baseDAOPackageName>.<referredVOName>DAO;
+import <basePackageName>.<baseDAOSubpackageName>.<referredVOName>DAO;
 >>
 
 class(input) ::= <<
@@ -259,10 +294,20 @@ class(input) ::= <<
   @param input.tr_name the table repository name.
 !>
 /**
- * <description(
-      tableName=input.table_name,
-      engineName=input.engine_name,
-      engineVersion=input.engine_version)>
+ * <[
+      first_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version),
+      second_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version),
+      third_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version)
+    ]:{line |<line>}; separator="\n * ")>
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
@@ -347,7 +392,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void buildFindByPrimaryKeyQuery(final SelectQuery query)
     {
-        query.select(<input.tr_name>.TableRepository.<input.table_name_uppercased>.getAll());
+        query.select(<input.tr_name>TableRepository.<input.table_name_uppercased>.getAll());
         query.from(<input.tr_name>TableRepository.<input.table_name_uppercased>);
         <input.pk_attributes:attribute_query_filter(
           tableRepositoryName=input.tr_name,
@@ -365,7 +410,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     public <input.vo_name> findByPrimaryKey(
         <input.pk_attributes:attribute_declaration(
-          name=it.name, type=it.type); separator=",\n">)
+          name=it.name, type=it.fieldType); separator=",\n">)
       throws DataAccessException
     {
         return
@@ -388,7 +433,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected <input.vo_name> findByPrimaryKey(
         <input.pk_attributes:attribute_declaration(
-          name=it.name, type=it.type); separator=",\n">,
+          name=it.name, type=it.fieldType); separator=",\n">,
         final Query query,
         final DataSource dataSource)
       throws DataAccessException
@@ -415,7 +460,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected <input.vo_name> findByPrimaryKey(
         <input.pk_attributes:attribute_declaration(
-          name=it.name, type=it.type); separator=",\n">,
+          name=it.name, type=it.fieldType); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
@@ -442,7 +487,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected <input.vo_name> findByPrimaryKey(
         <input.pk_attributes:attribute_declaration(
-          name=it.name, type=it.type); separator=",\n">,
+          name=it.name, type=it.fieldType); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
@@ -506,7 +551,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     public void insert(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">)
+          name=it.name,type=it.fieldType); separator=",\n">)
       throws DataAccessException
     {
         insert(
@@ -526,7 +571,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void insert(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final DataSource dataSource)
       throws DataAccessException
@@ -549,7 +594,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void insert(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
@@ -572,7 +617,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void insert(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
@@ -594,7 +639,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     public <input.vo_name> create(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">)
+          name=it.name,type=it.fieldType); separator=",\n">)
       throws DataAccessException
     {
         return
@@ -619,7 +664,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected <input.vo_name> create(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final DataSource dataSource,
         final <input.vo_name>Factory factory)
@@ -648,7 +693,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected <input.vo_name> create(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager,
         final <input.vo_name>Factory factory)
@@ -667,7 +712,8 @@ public class <input.engine_name><input.vo_name>DAO
      * \<code><input.vo_name>\</code> instance.
      <input.attributes:attribute_javadoc(name=it.name); separator="\n">
      * @param query the query required to insert given information.
-     * @param transactionTemplate the \<code>TransactionTemplate\<code> instance..
+     * @param transactionTemplate the \<code>TransactionTemplate\<code>
+     * instance.
      * @param factory the \<code><input.vo_name>Factory\</code> instance.
      * @throws DataAccessException if the operation fails.
      * @precondition transactionTemplate != null
@@ -675,7 +721,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected <input.vo_name> create(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">)
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate,
         final <input.vo_name>Factory factory)
@@ -689,7 +735,7 @@ public class <input.engine_name><input.vo_name>DAO
           query=it.query,
           nativeType=it.nativeType,
           nameLowercased=it.nameLowercased,
-          type=it.type); separator="\n">
+          type=it.fieldType); separator="\n">
 
         transactionTemplate.execute(
             new UpdateTransactionCallback(
@@ -758,7 +804,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     public void update(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">)
+          name=it.name,type=it.fieldType); separator=",\n">)
       throws DataAccessException
     {
         update(
@@ -778,7 +824,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void update(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final DataSource dataSource)
       throws DataAccessException
@@ -801,7 +847,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void update(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
@@ -824,7 +870,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void update(
         <input.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
@@ -887,7 +933,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">)
+          name=it.name,type=it.fieldType); separator=",\n">)
     {
         deleteNoFk(
             <input.pk_attributes:{<it.name>}; separator=",\n">,
@@ -905,7 +951,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final DataSource dataSource)
     {
@@ -926,7 +972,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
@@ -947,7 +993,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
     {
@@ -965,7 +1011,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     public void delete(
         <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">)
+          name=it.name,type=it.fieldType); separator=",\n">)
     {
 <if(input.fk_attributes)>
         delete(
@@ -981,7 +1027,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void delete(
         <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         final DataAccessManager dataAccessManager)
     {
         delete(
@@ -1001,7 +1047,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void delete(
         <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+          name=it.name,type=it.fieldType); separator=",\n">,
         <input.fk_attributes:dao_declaration(
           name=it.tableName,
           uncapitalizedName=it.uncapitalizedTableName)
@@ -1231,9 +1277,9 @@ fk_delete_method(foreignKey,input) ::= <<
      * \<code><input.table_name>\</code> entity, determined by a concrete foreign key.
      * @return the \<code>DeleteQuery\</code> instance.
      */
-    protected Query buildDeleteBy<foreignKey.to>Query()
+    protected Query buildDeleteBy<foreignKey:{<it.nameCapitalized>}>Query()
     {
-        return buildDeleteBy<foreignKey.to>Query(QueryFactory.getInstance());
+        return buildDeleteBy<foreignKey:{<it.nameCapitalized>}>Query(QueryFactory.getInstance());
     }
 
     /**
@@ -1241,11 +1287,11 @@ fk_delete_method(foreignKey,input) ::= <<
      * \<code><input.table_name>\</code> entity, determined by a concrete foreign key.
      * @return the \<code>DeleteQuery\</code> instance.
      */
-    protected Query buildDeleteBy<foreignKey.to>Query()
+    protected Query buildDeleteBy<foreignKey:{attr | <attr.nameCapitalized>}>Query()
     {
         DeleteQuery result = queryFactory.createDeleteQuery();
 
-        buildDeleteBy<foreignKey.to>Query(result);
+        buildDeleteBy<foreignKey:{attr | <attr.nameCapitalized>}>Query(result);
 
         return result;
     }
@@ -1256,12 +1302,12 @@ fk_delete_method(foreignKey,input) ::= <<
      * @param query the query to initialize.
      * @precondition query != null
      */
-    protected Query buildDeleteBy<foreignKey.to>Query(
+    protected Query buildDeleteBy<foreignKey:{attr | <attr.nameCapitalized>}>Query(
         final DeleteQuery query)
     {
         query.deleteFrom(<input.table_repository_name>TableRepository.<input.table_name_uppercased>);
 
-        <foreignKey.attributes:attribute_query_filter(
+        <foreignKey:attribute_query_filter(
           tableRepositoryName=input.table_repository_name,
           tableNameUppercased=input.table_name_uppercased,
           nameUppercased=it.nameUppercased); separator="\n">
@@ -1270,35 +1316,35 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Deletes <input.table_name> information from the persistence layer filtering
      * by given foreign keys.
-     <input.foreignKey.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
      */
-    public void deleteBy<foreignKey.to>(
-        <foreignKey.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">)
+    public void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+        <foreignKey:attribute_declaration(
+          name=it.name,type=it.fieldType); separator=",\n">)
     {
-        deleteBy<foreignKey.to>(
-            <foreignKey.attributes:{<it.name>}; separator=",\n">,
-            buildDeleteBy<foreignKey.to>Query,
+        deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+            <foreignKey:{<it.name>}; separator=",\n">,
+            buildDeleteBy<foreignKey:{attr | <attr.nameCapitalized>}>Query,
             getDataSource());
     }
 
     /**
      * Deletes <input.table_name> information from the persistence layer filtering
      * by given foreign keys.
-     <input.foreignKey.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
      * @param query the delete query.
      * @param dataSource the \<code>DataSource\<code> instance.
      * @precondition query != null
      * @precondition dataSource != null
      */
-    protected void deleteBy<foreignKey.to>(
-        <foreignKey.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+    protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+        <foreignKey:attribute_declaration(
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final DataSource dataSource)
     {
-        deleteBy<foreignKey.to>(
-            <foreignKey.attributes:{<it.name>}; separator=",\n">,
+        deleteBy<foreignKey>(
+            <foreignKey:{<it.name>}; separator=",\n">,
             query,
             new DataSourceTransactionManager(dataSource));
     }
@@ -1306,21 +1352,21 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Deletes <input.table_name> information from the persistence layer filtering
      * by given foreign keys.
-     <input.foreignKey.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
      * @param query the delete query.
      * @param transactionManager the
      * \<code>PlaformTransactionManager\<code> instance.
      * @precondition query != null
      * @precondition transactionManager != null
      */
-    protected void deleteBy<foreignKey.to>(
-        <foreignKey.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+    protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+        <foreignKey:attribute_declaration(
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
-        deleteBy<foreignKey.to>(
-            <foreignKey.attributes:{<it.name>}; separator=",\n">,
+        deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+            <foreignKey:{<it.name>}; separator=",\n">,
             query,
             new TransactionTemplate(transactionManager));
     }
@@ -1328,24 +1374,24 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Deletes <input.table_name> information from the persistence layer filtering
      * by given foreign keys.
-     <input.foreignKey.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
      * @param query the delete query.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
      * instance.
      * @precondition query != null
      * @precondition transactionTemplate != null
      */
-    protected void deleteBy<foreignKey.to>(
-        <foreignKey.attributes:attribute_declaration(
-          name=it.name,type=it.type); separator=",\n">,
+    protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+        <foreignKey:attribute_declaration(
+          name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
     {
         transactionTemplate.execute(
             new UpdateTransactionCallback(
                 new QueryPreparedStatementCreator(query),
-                new <input.table_name>By<foreignKey.to>StatementSetter(
-                    <foreignKey.attributes:{<it.name>}; separator=",\n">),
+                new <input.vo_name>By<foreignKey:{attr | <attr.nameCapitalized>}>StatementSetter(
+                    <foreignKey:{attr | <attr.name>}; separator=",\n">),
                 this));
     }
 >>
@@ -1367,7 +1413,8 @@ custom_select(
      * @throws DataAccessException if the operation fails.
      */
     public <cs.resultClass> <cs.nameNormalized>(
-        <cs.params:attribute_declaration(name=it.name,type=it.type); separator=",\n">
+        <cs.params:attribute_declaration(
+          name=it.name,type=it.fieldType); separator=",\n">
       throws DataAccessException
     {
         return
@@ -1400,7 +1447,8 @@ custom_select(
      * <precondition_notnull(name="dataSource")>
      */
     protected <cs.resultClass> <cs.nameNormalized>(
-        <cs.params:attribute_declaration(name=it.name,type=it.type); separator=",\n">,
+        <cs.params:attribute_declaration(
+          name=it.name,type=it.fieldType); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final DataSource dataSource)
@@ -1431,7 +1479,8 @@ custom_select(
      * <precondition_notnull(name="transactionManager")>
      */
     protected <cs.resultClass> <cs.nameNormalized>(
-        <cs.params:attribute_declaration(name=it.name,type=it.type); separator=",\n">,
+        <cs.params:attribute_declaration(
+          name=it.name,type=it.fieldType); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final PlatformTransactionManager transactionManager)
@@ -1462,7 +1511,8 @@ custom_select(
      * <precondition_notnull(name="transactionTemplate")>
      */
     protected <cs.resultClass> <cs.nameNormalized>(
-        <cs.params:attribute_declaration(name=it.name,type=it.type); separator=",\n">,
+        <cs.params:attribute_declaration(
+          name=it.name,type=it.fieldType); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException

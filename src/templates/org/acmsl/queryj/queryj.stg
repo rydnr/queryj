@@ -41,8 +41,9 @@
 group queryj;
 
 typeInitMap ::= [
+  "empty":"",
   "jdbcOperationsSubpackageName":"jdbc",
-  "baseDaoSubpackageName":"dao",
+  "baseDAOSubpackageName":"dao",
   "voSubpackageName":"vo",
   "voFactorySubpackageName":"vo",
   "rdbSubpackageName":"rdb",
@@ -91,7 +92,7 @@ java_header(years,description,timestamp) ::= <<
  *
  * Author: QueryJ
  *
- * Description: <description>
+ * Description: <description:{line | <line>}; separator="\n *              ">
  *
  * Last modified by: <"$">Author: $ at <"$">Date: $
  *
@@ -101,11 +102,10 @@ java_header(years,description,timestamp) ::= <<
  */
 >>
 
-package_declaration(basePackageName, subpackageName) ::= <<
+package_declaration(packageNames) ::= <<
 <! Generates the package declaration !>
-<! @param basePackageName the base package name !>
-<! @param subpackageName the subpackage !>
-package <basePackageName>.<subpackageName>;
+<! @param packageNames the package names !>
+package <packageNames; separator=".">;
 >>
 
 precondition_notnull(name) ::= <<

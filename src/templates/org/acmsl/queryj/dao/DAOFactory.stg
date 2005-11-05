@@ -55,12 +55,23 @@ source(input) ::= <<
 <java_header(
   years=input.copyright_years,
   description=
-    description(
-      className=input.dao_implementation_class_name,
-      engineName=input.engine_name),
+    [
+      first_line_description(
+        className=input.dao_implementation_class_name,
+        engineName=input.engine_name),
+      second_line_description(
+        className=input.dao_implementation_class_name,
+        engineName=input.engine_name)
+    ],
     timestamp=input.timestamp)>
 <package_declaration(
-  basePackageName=input.base_package_name, subpackageName=input.subpackage_name)>
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName,
+    input.subpackage_name
+  ])>
 
 <project_imports(
   daoPackageName=input.dao_package_name,
@@ -94,13 +105,21 @@ import org.apache.commons.logging.LogFactory;
 <class(input=input)>
 >>
 
-description(className, engineName) ::= <<
+first_line_description(className, engineName) ::= <<
 <!
   Generates a description for the file.
   @param className the class name.
   @param engineName the engine name.
 !>
 Is able to create <className> instances according to
+>>
+
+second_line_description(className, engineName) ::= <<
+<!
+  Generates a description for the file.
+  @param className the class name.
+  @param engineName the engine name.
+!>
 information in the <engineName>-based persistence domain.
 >>
 
@@ -147,9 +166,14 @@ class(input) ::= <<
   @param input.table_name the table name.
 !>
 /**
- * <description(
-      className=input.dao_implementation_class_name,
-      engineName=input.engine_name)>
+ * <[
+      first_line_description(
+        className=input.dao_implementation_class_name,
+        engineName=input.engine_name),
+      second_line_description(
+        className=input.dao_implementation_class_name,
+        engineName=input.engine_name)
+    ]:{ line |<line>}; separator="\n * ">
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
