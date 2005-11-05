@@ -149,7 +149,7 @@ import javax.sql.DataSource;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(input=input)>
+<class(input=input,foreign_keys_by_table=input.foreign_keys_by_table)>
 >>
 
 first_line_description(tableName, engineName, engineVersion) ::= <<
@@ -283,7 +283,7 @@ foreignkey_dao_import(
 import <basePackageName>.<baseDAOSubpackageName>.<referredVOName>DAO;
 >>
 
-class(input) ::= <<
+class(input,foreign_keys_by_table) ::= <<
 <!
   Generates the class body.
   @param input.vo_name the value object name.
@@ -292,6 +292,7 @@ class(input) ::= <<
   @param input.timestamp the timestamp.
   @param input.custom_results the results for the custom queries.
   @param input.tr_name the table repository name.
+  @param foreign_keys_by_table a map of table-name->foreign_key
 !>
 /**
  * <[
@@ -1055,7 +1056,7 @@ public class <input.engine_name><input.vo_name>DAO
     {
         <input.fk_attributes:fk_dao_delete_call(
             foreignTableName=it.tableName,
-            foreignKey=input.<"_fk_" + table_name>,
+            foreignKey=foreign_keys_by_table.<table_name>,
             allowsNull=it.allowsNull); separator="\n\n">
 <endif>
 

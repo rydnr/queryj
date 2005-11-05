@@ -690,7 +690,7 @@ public class DAOTemplate
         input.put("fk_attributes", fkAttributes);
         input.put("attributes", attributes);
         input.put("foreign_keys", foreignKeys);
-        input.putAll(referingKeys);
+        input.put("foreign_keys_by_table", referingKeys);
         input.put("custom_selects", customSelects);
         input.put("custom_results", customResults);
     }
@@ -1037,7 +1037,7 @@ public class DAOTemplate
                 t_cCurrentForeignKey = null;
             }
 
-            result.put("_fk_" + t_strReferingTable, t_cReferingFks);
+            result.put(t_strReferingTable, t_cReferingFks);
         }
 
         return result;
