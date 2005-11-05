@@ -1056,7 +1056,7 @@ public class <input.engine_name><input.vo_name>DAO
     {
         <input.fk_attributes:fk_dao_delete_call(
             foreignTableName=it.tableName,
-            foreignKey=foreign_keys_by_table.<table_name>,
+            foreignKey=foreign_keys_by_table.(table_name),
             allowsNull=it.allowsNull); separator="\n\n">
 <endif>
 
