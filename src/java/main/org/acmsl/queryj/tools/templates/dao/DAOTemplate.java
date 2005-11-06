@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
+import org.acmsl.queryj.tools.metadata.SqlDecorator;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.AbstractDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
@@ -341,7 +342,9 @@ public class DAOTemplate
         //   getName()
         //   getType()
         //   getSqlType() // the java.sql.Types constant
-        Collection t_cCustomSelects = new ArrayList();
+        Collection t_cCustomSelects =
+            retrieveCustomSelects(
+                t_strTableName, customSqlProvider, daoTemplateUtils);
         
         Collection t_cCustomResults = new ArrayList();
 
@@ -1136,6 +1139,65 @@ public class DAOTemplate
                     t_bAllowsNull));
         }
         
+        return result;
+    }
+
+    /**
+     * Retrieves the custom selects.
+     * @param tableName the table name.
+     * @param customSqlProvider the provider.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @return the custom selects.
+     * @precondition tableName != null
+     * @precondition customSqlProvider != null
+     * @precondition daoTemplateUtils != null
+     */
+    protected Collection retrieveCustomSelects(
+        final String tableName,
+        final CustomSqlProvider customSqlProvider,
+        final DAOTemplateUtils daoTemplateUtils)
+    {
+        Collection result = new ArrayList();
+
+        Collection t_cContents = customSqlProvider.getCollection();
+
+        if  (t_cContents != null)
+        {
+            Iterator t_itContentIterator = t_cContents.iterator();
+
+            while  (t_itContentIterator.hasNext())
+            {
+                Object t_Content = t_itContentIterator.next();
+
+                if  (t_Content instanceof SqlElement)
+                {
+                    SqlElement t_SqlElement = (SqlElement) t_Content;
+
+                    if  (   (SqlElement.SELECT.equals(
+                                 t_SqlElement.getType()))
+                         && (daoTemplateUtils.matches(
+                                 tableName, t_SqlElement.getDao())))
+                    {
+                        // getId()
+                        // getIdAsConstant()
+                        // getDescription()
+                        // getName()
+                        // getResultClass()
+                        // getNameNormalized()
+                        // getType()
+                        // getParams() : Collection of items supporting:
+                        //   getObjectType())
+                        //   getName()
+                        //   getType()
+                        //   getSqlType() // the java.sql.Types constant
+
+                        result.add(
+                            new SqlDecorator(t_SqlElement, customSqlProvider));
+                    }
+                }
+            }
+        }
+
         return result;
     }
 }

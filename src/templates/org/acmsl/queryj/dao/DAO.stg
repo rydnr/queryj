@@ -1407,23 +1407,23 @@ custom_select(
     /**
      * Custom select \<i><cs.id>\</i>:\<br/>
      * \<b><cs.description>\<b>.
-     <cs.params:attribute_javadoc(name=it.name); separator="\n">
+     <cs.parameters:attribute_javadoc(name=it.name); separator="\n">
      * @return the \<i><cs.resultClass>\</i> information retrieved.
      * @throws DataAccessException if the operation fails.
      */
     public <cs.resultClass> <cs.nameNormalized>(
-        <cs.params:attribute_declaration(
+        <cs.parameters:attribute_declaration(
           name=it.name,type=it.fieldType); separator=",\n">
       throws DataAccessException
     {
         return
             <cs.nameNormalized>(
-                <cs.params:{<it.name>}; separator="\n">,
+                <cs.parameters:{<it.name>}; separator="\n">,
                 new PreparedStatementCreatorFactory(
                    "<cs.value>"),
                 new Object[]
                 {
-                    <cs.params:custom_select_parameter_value(
+                    <cs.parameters:custom_select_parameter_value(
                       name=it.name,
                       objectType=it.objectType); separator=",\n">
                 },
@@ -1433,7 +1433,7 @@ custom_select(
     /**
      * Custom select \<i><cs.id>\</i>:\<br/>
      * \<b><cs.description>\<b>.
-     <cs.params:attribute_javadoc(name=it.name); separator="\n">
+     <cs.parameters:attribute_javadoc(name=it.name); separator="\n">
      * @param preparedStatementCreatorFactory the
      * \<code>PreparedStatementCreatorFactory\</code> instance
      * specific for this operation.
@@ -1446,7 +1446,7 @@ custom_select(
      * <precondition_notnull(name="dataSource")>
      */
     protected <cs.resultClass> <cs.nameNormalized>(
-        <cs.params:attribute_declaration(
+        <cs.parameters:attribute_declaration(
           name=it.name,type=it.fieldType); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
@@ -1455,7 +1455,7 @@ custom_select(
     {
         return
             <cs.nameNormalized>(
-                <cs.params:{<it.name>}; separator="\n">,
+                <cs.parameters:{<it.name>}; separator="\n">,
                 preparedStatementCreatorFactory,
                 params,
                 new DataSourceTransactionManager(dataSource));
@@ -1464,7 +1464,7 @@ custom_select(
     /**
      * Custom select \<i><cs.id>\</i>:\<br/>
      * \<b><cs.description>\<b>.
-     <cs.params:attribute_javadoc(name=it.name); separator="\n">
+     <cs.parameters:attribute_javadoc(name=it.name); separator="\n">
      * @param preparedStatementCreatorFactory the
      * \<code>PreparedStatementCreatorFactory\</code> instance
      * specific for this operation.
@@ -1478,7 +1478,7 @@ custom_select(
      * <precondition_notnull(name="transactionManager")>
      */
     protected <cs.resultClass> <cs.nameNormalized>(
-        <cs.params:attribute_declaration(
+        <cs.parameters:attribute_declaration(
           name=it.name,type=it.fieldType); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
@@ -1487,7 +1487,7 @@ custom_select(
     {
         return
             <cs.nameNormalized>(
-                <cs.params:{<it.name>}; separator="\n">,
+                <cs.parameters:{<it.name>}; separator="\n">,
                 preparedStatementCreatorFactory,
                 params,
                 new TransactionTemplate(transactionManager));
@@ -1496,7 +1496,7 @@ custom_select(
     /**
      * Custom select \<i><cs.id>\</i>:\<br/>
      * \<b><cs.description>\<b>.
-     <cs.params:attribute_javadoc(name=it.name); separator="\n">
+     <cs.parameters:attribute_javadoc(name=it.name); separator="\n">
      * @param preparedStatementCreatorFactory the
      * \<code>PreparedStatementCreatorFactory\</code> instance
      * specific for this operation.
@@ -1510,7 +1510,7 @@ custom_select(
      * <precondition_notnull(name="transactionTemplate")>
      */
     protected <cs.resultClass> <cs.nameNormalized>(
-        <cs.params:attribute_declaration(
+        <cs.parameters:attribute_declaration(
           name=it.name,type=it.fieldType); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final TransactionTemplate transactionTemplate)
@@ -1525,7 +1525,7 @@ custom_select(
         preparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
         */
 
-        <cs.params:custom_select_parameter_type_specification(
+        <cs.parameters:custom_select_parameter_type_specification(
           type=it.sqlType); separator="\n">
 
         result =

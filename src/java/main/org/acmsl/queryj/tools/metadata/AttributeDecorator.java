@@ -44,6 +44,7 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.metadata.vo.AbstractAttribute;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -118,7 +119,7 @@ public class AttributeDecorator
      */
     public String getNameUppercased()
     {
-        return upperCase(getName());
+        return upperCase(getName(), DecorationUtils.getInstance());
     }
     
     /**
@@ -127,18 +128,35 @@ public class AttributeDecorator
      */
     public String getNameCapitalized()
     {
-        return capitalize(getName());
+        return capitalize(getName(), DecorationUtils.getInstance());
     }
 
     /**
-     * Converts given value to upper-case.
+     * Capitalizes given value.
      * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
      * @precondition value != null
+     * @precondition decorationUtils != null
      */
-    protected String upperCase(final String value)
+    protected String capitalize(
+        final String value, final DecorationUtils decorationUtils)
     {
-        return value.toUpperCase();
+        return decorationUtils.capitalize(value);
+    }
+    
+    /**
+     * Converts given value to upper-case.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the alternate version of the value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String upperCase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.upperCase(value);
     }
     
     /**
@@ -147,18 +165,21 @@ public class AttributeDecorator
      */
     public String getNameLowercased()
     {
-        return lowerCase(getName());
+        return lowerCase(getName(), DecorationUtils.getInstance());
     }
     
     /**
      * Converts given value to lower-case.
      * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
      * @precondition value != null
+     * @precondition decorationUtils != null
      */
-    protected String lowerCase(final String value)
+    protected String lowerCase(
+        final String value, final DecorationUtils decorationUtils)
     {
-        return value.toLowerCase();
+        return decorationUtils.lowerCase(value);
     }
 
     /**
@@ -167,33 +188,22 @@ public class AttributeDecorator
      */
     public String getUncapitalizedTableName()
     {
-        return uncapitalize(getTableName());
+        return uncapitalize(getTableName(), DecorationUtils.getInstance());
     }
 
     /**
      * Uncapitalizes given value.
      * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the modified version of the value.
      * @precondition value != null
-     */
-    protected String uncapitalize(final String value)
-    {
-        return uncapitalize(value, StringUtils.getInstance());
-        
-    }
-
-    /**
-     * Uncapitalizes given value.
-     * @param value the value.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @return the modified version of the value.
-     * @precondition value != null
-     * @precondition stringUtils != null
+     * @precondition decorationUtils != null
      */
     protected String uncapitalize(
-        final String value, final StringUtils stringUtils)
+        final String value, final DecorationUtils decorationUtils)
     {
-        return stringUtils.unCapitalizeStart(value);
+        return decorationUtils.uncapitalize(value);
+        
     }
 
     /**
@@ -202,34 +212,7 @@ public class AttributeDecorator
      */
     public String getVoName()
     {
-        return capitalize(getTableName());
+        return capitalize(getTableName(), DecorationUtils.getInstance());
     }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @return the modified version of the value.
-     * @precondition value != null
-     */
-    protected String capitalize(final String value)
-    {
-        return capitalize(value, StringUtils.getInstance());
-        
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @return the modified version of the value.
-     * @precondition value != null
-     * @precondition stringUtils != null
-     */
-    protected String capitalize(
-        final String value, final StringUtils stringUtils)
-    {
-        return stringUtils.capitalize(value, '_');
-    }
-
 }
 

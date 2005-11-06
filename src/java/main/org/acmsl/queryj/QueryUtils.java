@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2004  Jose San Leandro Armend&aacute;riz
+    Copyright (C) 2002-2005  Jose San Leandro Armend&aacute;riz
                              chous@acm-sl.org
      
     This library is free software; you can redistribute it and/or
@@ -38,10 +38,15 @@
 package org.acmsl.queryj;
 
 /*
- * Importing ACM-SL classes.
+ * Importing project classes.
  */
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.SelectQuery;
+
+/*
+ * Importing ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Utils;
 
 /*
  * Importing some JDK classes.
@@ -55,7 +60,8 @@ import java.util.Iterator;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro Armend&aacute;riz</a>
  */
-public abstract class QueryUtils
+public class QueryUtils
+    implements  Utils
 {
     /**
      * Singleton implemented as a weak reference.
@@ -71,7 +77,7 @@ public abstract class QueryUtils
      * Specifies a new weak reference.
      * @param utils the utils instance to use.
      */
-    protected static void setReference(QueryUtils utils)
+    protected static void setReference(final QueryUtils utils)
     {
         singleton = new WeakReference(utils);
     }
@@ -86,7 +92,7 @@ public abstract class QueryUtils
     }
 
     /**
-     * Retrieves a QueryUtils instance.
+     * Retrieves a <code>QueryUtils</code> instance.
      * @return such instance.
      */
     public static QueryUtils getInstance()
@@ -102,7 +108,7 @@ public abstract class QueryUtils
 
         if  (result == null) 
         {
-            result = new QueryUtils() {};
+            result = new QueryUtils();
 
             setReference(result);
         }
