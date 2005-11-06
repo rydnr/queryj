@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
+import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.AbstractDAOTemplate;
@@ -93,7 +94,6 @@ import java.util.Map;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 
 /**
  * Is able to create engine-specific DAO interfaces for each
@@ -345,8 +345,14 @@ public class DAOTemplate
         Collection t_cCustomSelects =
             retrieveCustomSelects(
                 t_strTableName, customSqlProvider, daoTemplateUtils);
-        
-        Collection t_cCustomResults = new ArrayList();
+
+        // items must contain
+        // getId()
+        // getIdNormalized()
+        // getIdNormalizedUppercased()
+        Collection t_cCustomResults =
+            retrieveCustomResults(
+                t_strTableName, customSqlProvider, daoTemplateUtils);
 
         fillParameters(
             t_Template,
@@ -1165,34 +1171,121 @@ public class DAOTemplate
         {
             Iterator t_itContentIterator = t_cContents.iterator();
 
-            while  (t_itContentIterator.hasNext())
+            if  (t_itContentIterator != null)
             {
-                Object t_Content = t_itContentIterator.next();
-
-                if  (t_Content instanceof SqlElement)
+                while  (t_itContentIterator.hasNext())
                 {
-                    SqlElement t_SqlElement = (SqlElement) t_Content;
+                    Object t_Content = t_itContentIterator.next();
 
-                    if  (   (SqlElement.SELECT.equals(
-                                 t_SqlElement.getType()))
-                         && (daoTemplateUtils.matches(
-                                 tableName, t_SqlElement.getDao())))
+                    if  (t_Content instanceof SqlElement)
                     {
-                        // getId()
-                        // getIdAsConstant()
-                        // getDescription()
-                        // getName()
-                        // getResultClass()
-                        // getNameNormalized()
-                        // getType()
-                        // getParams() : Collection of items supporting:
-                        //   getObjectType())
-                        //   getName()
-                        //   getType()
-                        //   getSqlType() // the java.sql.Types constant
+                        SqlElement t_SqlElement = (SqlElement) t_Content;
 
-                        result.add(
-                            new SqlDecorator(t_SqlElement, customSqlProvider));
+                        if  (   (SqlElement.SELECT.equals(
+                                     t_SqlElement.getType()))
+                             && (daoTemplateUtils.matches(
+                                     tableName, t_SqlElement.getDao())))
+                        {
+                            result.add(
+                                new SqlDecorator(
+                                    t_SqlElement, customSqlProvider));
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the custom results.
+     * @param tableName the table name.
+     * @param customSqlProvider the provider.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @return the custom results.
+     * @precondition tableName != null
+     * @precondition customSqlProvider != null
+     * @precondition daoTemplateUtils != null
+     */
+    protected Collection retrieveCustomResults(
+        final String tableName,
+        final CustomSqlProvider customSqlProvider,
+        final DAOTemplateUtils daoTemplateUtils)
+    {
+        Collection result = new ArrayList();
+
+        Collection t_cContents = customSqlProvider.getCollection();
+
+        if  (t_cContents != null)
+        {
+            Collection t_cSql = new ArrayList();
+
+            Object t_Content = null;
+            SqlElement t_SqlElement = null;
+            ResultRefElement t_ResultRefElement = null;
+            ResultElement t_ResultElement = null;
+
+            Iterator t_itContentIterator = t_cContents.iterator();
+
+            if  (t_itContentIterator != null)
+            {
+                while  (t_itContentIterator.hasNext())
+                {
+                    t_Content = t_itContentIterator.next();
+
+                    if  (t_Content instanceof SqlElement)
+                    {
+                        t_SqlElement = (SqlElement) t_Content;
+
+                        if  (daoTemplateUtils.matches(
+                                 tableName, t_SqlElement.getDao()))
+                        {
+                            t_ResultRefElement = t_SqlElement.getResultRef();
+
+                            if  (t_ResultRefElement != null)
+                            {
+                                t_ResultElement =
+                                    customSqlProvider.resolveReference(
+                                        t_ResultRefElement);
+
+                                if  (t_ResultElement != null)
+                                {
+                                    result.add(
+                                        new ResultDecorator(
+                                            t_ResultElement,
+                                            customSqlProvider));
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        // todo throw something.
+                                        LogFactory.getLog("custom-sql").warn(
+                                              "Referenced result not found:"
+                                            + t_ResultRefElement.getId());
+                                    }
+                                    catch  (final Throwable throwable)
+                                    {
+                                        // class-loading problem.
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    // todo throw something.
+                                    LogFactory.getLog("custom-sql").warn(
+                                          "Referenced result not found:"
+                                        + t_ResultRefElement.getId());
+                                }
+                                catch  (final Throwable throwable)
+                                {
+                                    // class-loading problem.
+                                }
+                            }
+                        }
                     }
                 }
             }
