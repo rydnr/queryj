@@ -221,37 +221,52 @@ public class FkStatementSetterTemplateBuildHandler
 
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
         
+        String[][] t_aastrFks = null;
+        
+        int t_iFkCount = 0;
+        
         try
         {
-            for  (int t_iIndex = 0;
-                      t_iIndex < t_iLength;
-                      t_iIndex++) 
+            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
             {
-                String[] t_astrFks =
+                t_aastrFks =
                     metaDataManager.getForeignKeys(
-                        tableTemplates[t_iIndex].getTableName())[0];
+                        tableTemplates[t_iIndex].getTableName());
 
-                String[] t_astrSimpleFks =
-                    retrieveSimpleFks(
-                        t_astrFks,
-                        tableTemplates[t_iIndex].getTableName(),
-                        metaDataManager);
-
+                t_iFkCount = (t_aastrFks != null) ? t_aastrFks.length : 0;
+                
                 for  (int t_iFkIndex = 0;
-                          t_iFkIndex < t_astrSimpleFks.length;
+                          t_iFkIndex < t_iFkCount;
                           t_iFkIndex++)
                 {
-                    t_cTemplates.add(
-                        templateFactory.createFkStatementSetterTemplate(
-                            tableTemplates[t_iIndex],
-                            new String[] {t_astrFks[t_iFkIndex]},
-                            metaDataManager,
-                            retrievePackage(
-                                engineName,
-                                tableTemplates[t_iIndex].getTableName(),
-                                parameters),
-                            basePackageName,
-                            repositoryName));
+                    String[] t_astrSimpleFks =
+                        retrieveSimpleFks(
+                            t_aastrFks[t_iFkIndex],
+                            tableTemplates[t_iIndex].getTableName(),
+                            metaDataManager);
+
+                    int t_iSimpleFkCount =
+                        (t_astrSimpleFks != null) ? t_astrSimpleFks.length : 0;
+
+                    for  (int t_iSimpleFkIndex = 0;
+                              t_iSimpleFkIndex < t_iSimpleFkCount;
+                              t_iSimpleFkIndex++)
+                    {
+                        t_cTemplates.add(
+                            templateFactory.createFkStatementSetterTemplate(
+                                tableTemplates[t_iIndex],
+                                new String[]
+                                {
+                                    t_astrSimpleFks[t_iSimpleFkIndex]
+                                },
+                                metaDataManager,
+                                retrievePackage(
+                                    engineName,
+                                    tableTemplates[t_iIndex].getTableName(),
+                                    parameters),
+                                basePackageName,
+                                repositoryName));
+                    }
                 }
 
                 String[] t_astrReferredTables =
@@ -268,20 +283,30 @@ public class FkStatementSetterTemplateBuildHandler
                           t_iReferredTableIndex < t_iReferredTablesLength;
                           t_iReferredTableIndex++)
                 {
-                    // TODO: FIXME!!
-                    t_cTemplates.add(
-                        templateFactory.createFkStatementSetterTemplate(
-                            tableTemplates[t_iIndex],
-                            metaDataManager.getForeignKeys(
-                                tableTemplates[t_iIndex].getTableName(),
-                                t_astrReferredTables[t_iReferredTableIndex])[0],
-                            metaDataManager,
-                            retrievePackage(
-                                engineName,
-                                tableTemplates[t_iIndex].getTableName(),
-                                parameters),
-                            basePackageName,
-                            repositoryName));
+                    t_aastrFks =
+                        metaDataManager.getForeignKeys(
+                            t_astrReferredTables[t_iReferredTableIndex]);
+
+                    t_iFkCount =
+                        (t_aastrFks != null) ? t_aastrFks.length : 0;
+                
+                    for  (int t_iFkIndex = 0;
+                              t_iFkIndex < t_iFkCount;
+                              t_iFkIndex++)
+                    {
+                        t_cTemplates.add(
+                            templateFactory.createFkStatementSetterTemplate(
+                                tableTemplates[t_iIndex],
+                                t_aastrFks[t_iFkIndex],
+                                metaDataManager,
+                                retrievePackage(
+                                    engineName,
+                                    tableTemplates[t_iIndex].getTableName(),
+                                    parameters),
+                                basePackageName,
+                                repositoryName));
+                    }
+                    
                 }
             }
 

@@ -315,7 +315,8 @@ class(input,foreign_keys_by_table) ::= <<
  */
 public class <input.engine_name><input.vo_name>DAO
   extends     QueryjJdbcTemplate
-  implements  <input.vo_name>DAO
+  implements  <input.vo_name>DAO,
+              <input.tr_name>TableRepository
 {
     /**
      * The result set extractor for \<i><input.vo_name>\</i>
@@ -393,8 +394,8 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void buildFindByPrimaryKeyQuery(final SelectQuery query)
     {
-        query.select(<input.tr_name>TableRepository.<input.table_name_uppercased>.getAll());
-        query.from(<input.tr_name>TableRepository.<input.table_name_uppercased>);
+        query.select(<input.table_name_uppercased>.getAll());
+        query.from(<input.table_name_uppercased>);
         <input.pk_attributes:attribute_query_filter(
           tableRepositoryName=input.tr_name,
           tableNameUppercased=input.table_name_uppercased,
@@ -538,7 +539,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void buildInsertQuery(final InsertQuery query)
     {
-        query.insertInto(<input.tr_name>TableRepository.<input.table_name_uppercased>);
+        query.insertInto(<input.table_name_uppercased>);
         <input.attributes:attribute_query_insert(
           tableRepositoryName=input.tr_name,
           tableNameUppercased=input.table_name_uppercased,
@@ -787,7 +788,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void buildUpdateQuery(final UpdateQuery query)
     {
-        query.update(<input.tr_name>TableRepository.<input.table_name_uppercased>);
+        query.update(<input.table_name_uppercased>);
         <input.nonpk_attributes:attribute_query_update(
           tableRepositoryName=input.tr_name,
           tableNameUppercased=input.table_name_uppercased,
@@ -921,7 +922,7 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected void buildDeleteQuery(final DeleteQuery query)
     {
-        query.deleteFrom(<input.tr_name>TableRepository.<input.table_name_uppercased>);
+        query.deleteFrom(<input.table_name_uppercased>);
         <input.pk_attributes:attribute_query_filter(
           tableRepositoryName=input.tr_name,
           tableNameUppercased=input.table_name_uppercased,
@@ -1153,7 +1154,7 @@ attribute_query_filter(
   @param tableNameUppercased the table name, in upper-case.
   @param nameUppercased the attribute name, in upper-case.
 !>
-query.where(<tableRepositoryName>TableRepository.<tableNameUppercased>.<nameUppercased>.equals());
+query.where(<tableNameUppercased>.<nameUppercased>.equals());
 >>
 
 attribute_javadoc(name) ::= <<
@@ -1183,7 +1184,7 @@ attribute_query_insert(
   @param tableNameUppercased the table name, in upper-case.
   @param nameUppercased the attribute name, in upper-case.
 !>
-query.value(<tableRepositoryName>TableRepository.<tableNameUppercased>.<nameUppercased>);
+query.value(<tableNameUppercased>.<nameUppercased>);
 >>
 
 em_attribute_value_retrieval(
@@ -1220,7 +1221,7 @@ attribute_query_update(
   @param tableNameUppercased the table name, in upper-case.
   @param nameUppercased the attribute name, in upper-case.
 !>
-query.set(<tableRepositoryName>TableRepository.<tableNameUppercased>.<nameUppercased>);
+query.set(<tableNameUppercased>.<nameUppercased>);
 >>
 
 fk_dao_delete_call(
@@ -1303,7 +1304,7 @@ fk_delete_method(foreignKey,input) ::= <<
     protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(
         final DeleteQuery query)
     {
-        query.deleteFrom(<input.table_repository_name>TableRepository.<input.table_name_uppercased>);
+        query.deleteFrom(<input.table_name_uppercased>);
 
         <foreignKey:attribute_query_filter(
           tableRepositoryName=input.table_repository_name,
