@@ -158,7 +158,9 @@ public class SqlDecorator
     {
         return
             decorationUtils.surround(
-                decorationUtils.trim(decorationUtils.split(value)),
+                decorationUtils.trim(
+                    decorationUtils.split(
+                        decorationUtils.escape(value, '\"')),
                 "\"", " \"");
     }
     
@@ -169,6 +171,15 @@ public class SqlDecorator
     public String getIdAsConstant()
     {
         return uppercase(getId());
+    }
+    
+    /**
+     * Retrieves the id capitalized.
+     * @return such information.
+     */
+    public String getIdCapitalized()
+    {
+        return capitalize(getId());
     }
     
     /**
@@ -203,6 +214,20 @@ public class SqlDecorator
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(value);
+    }
+    
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the value, after being processed.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String capitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
     }
     
     /**

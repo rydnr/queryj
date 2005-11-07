@@ -229,8 +229,10 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackage
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>ResultSetExtractor;
 <customResults:resultset_extractor_import(
   basePackageName=basePackageName,
-  jdbcOperationsSubpackageName=jdbcOperationsSubpackageName,
-  crseId=it.id); separator="\n">
+  rdbSubpackageName=rdbSubpackageName,
+  subpackageName=subpackageName,
+  tableNameLowercased=tableNameLowercased,
+  crseIdCapitalized=it.idCapitalized); separator="\n">
 import <basePackageName>.<voSubpackageName>.<voName>;
 import <basePackageName>.<voFactorySubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
@@ -250,15 +252,19 @@ import <basePackageName>.<damSubpackageName>.DataAccessManager;
 
 resultset_extractor_import(
   basePackageName,
-  jdbcOperationsSubpackageName,
-  crseId) ::= <<
+  rdbSubpackageName,
+  subpackageName,
+  tableNameLowercased,
+  crseIdCapitalized) ::= <<
 <!
   Generates the import statement of a custom resultset extractor.
   @param basePackageName the base package.
-  @param jdbcOperationsSubpackageName the jdbc operations subpackage.
-  @param crseId the custom resultset extractor identifier.
+  @param rdbSubpackageName the rdb subpackage.
+  @param subpackageName the subpackage.
+  @param tableNameLowercased the table name, in lower case.
+  @param crseIdCapitalized the custom resultset extractor identifier, capitalized.
 !>
-import <basePackageName>.<jdbcOperationsSubpackageName>.<crseId>Extractor;
+import <basePackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<crseIdCapitalized>Extractor;
 >>
 
 foreignkey_statementsetter_import(
@@ -655,7 +661,7 @@ public class <input.engine_name><input.vo_name>DAO
                 <input.attributes:{<it.name>}; separator=",\n">,
                 buildInsertQuery(),
                 getDataSource(),
-                <input.vo_name>Factory.getInstance());
+                <input.vo_name>ValueObjectFactory.getInstance());
     }
 
     /**
@@ -664,7 +670,8 @@ public class <input.engine_name><input.vo_name>DAO
      <input.attributes:attribute_javadoc(name=it.name); separator="\n">
      * @param query the query required to insert given information.
      * @param dataSource the data source.
-     * @param factory the \<code><input.vo_name>Factory\</code> instance.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
      * @throws DataAccessException if the operation fails.
      * @precondition query != null
      * @precondition dataSource != null
@@ -675,7 +682,7 @@ public class <input.engine_name><input.vo_name>DAO
           name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final DataSource dataSource,
-        final <input.vo_name>Factory factory)
+        final <input.vo_name>ValueObjectFactory factory)
       throws DataAccessException
     {
         return
@@ -693,7 +700,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param query the query required to insert given information.
      * @param transactionManager the \<code>PlatformTransactionManager\</code>
      * instance.
-     * @param factory the \<code><input.vo_name>Factory\</code> instance.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
      * @throws DataAccessException if the operation fails.
      * @precondition query != null
      * @precondition transactionManager != null
@@ -704,7 +712,7 @@ public class <input.engine_name><input.vo_name>DAO
           name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager,
-        final <input.vo_name>Factory factory)
+        final <input.vo_name>ValueObjectFactory factory)
       throws DataAccessException
     {
         return
@@ -722,7 +730,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param query the query required to insert given information.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
      * instance.
-     * @param factory the \<code><input.vo_name>Factory\</code> instance.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
      * @throws DataAccessException if the operation fails.
      * @precondition transactionTemplate != null
      * @precondition factory != null
@@ -732,7 +741,7 @@ public class <input.engine_name><input.vo_name>DAO
           name=it.name,type=it.fieldType); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate,
-        final <input.vo_name>Factory factory)
+        final <input.vo_name>ValueObjectFactory factory)
       throws DataAccessException
     {
         <input.vo_name> result = null;

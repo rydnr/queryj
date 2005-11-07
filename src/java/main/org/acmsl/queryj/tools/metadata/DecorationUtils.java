@@ -49,7 +49,6 @@ import org.acmsl.commons.utils.StringUtils;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.StringTokenizer;
 
 /**
  * Provides some useful decoration methods.
@@ -234,64 +233,21 @@ public class DecorationUtils
      */
     public String[] split(final String value)
     {
-        return
-            split(
-                value,
-                new String[] { System.getProperty("line.separator"), "\n" });
+        return split(value, StringUtils.getInstance());
     }
     
     /**
      * Splits given value into multiple lines.
      * @param value the value.
-     * @param separators an ordered list of separators. The first non-null
+     * @param stringUtils the <code>StringUtils</code> instance.
      * will be the one used.
      * @return such output.
      * @precondition value != null
-     * @precondition separators != null
+     * @precondition stringUtils != null
      */
-    public String[] split(final String value, final String[] separators)
+    public String[] split(final String value, final StringUtils stringUtils)
     {
-        Collection t_cResult = new ArrayList();
-
-        int t_iLength = (separators != null) ? separators.length : 0;
-        
-        String t_strSeparator = null;
-        
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            t_strSeparator = separators[t_iIndex];
-
-            if  (t_strSeparator != null)
-            {
-                break;
-            }
-        }
-
-        if  (t_strSeparator != null)
-        {
-            StringTokenizer t_Tokenizer =
-                new StringTokenizer(value.trim(), t_strSeparator, false);
-
-            while  (t_Tokenizer.hasMoreTokens())
-            {
-                t_cResult.add(t_Tokenizer.nextToken());
-            }
-        }
-        
-        return (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
-    }
-
-    /**
-     * Surrounds given values using given separator.
-     * @param values the values.
-     * @param separator the separator.
-     * @return the quoted values.
-     * @precondition values != null
-     * @precondition separator != null
-     */
-    public String[] surround(final String[] values, final String separator)
-    {
-        return surround(values, separator, separator);
+        return stringUtils.split(value);
     }
 
     /**
@@ -308,26 +264,34 @@ public class DecorationUtils
         final String leftSeparator,
         final String rightSeparator)
     {
-        String[] result = EMPTY_STRING_ARRAY;
-        
-        int t_iLength = (values != null) ? values.length : 0;
-        
-        result = new String[t_iLength];
-        
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            result[t_iIndex] = values[t_iIndex];
-            
-            if  (result[t_iIndex] != null)
-            {
-                result[t_iIndex] =
-                    leftSeparator + result[t_iIndex] + rightSeparator;
-            }
-        }
-        
-        return result;
+        return
+            surround(
+                values,
+                leftSeparator,
+                rightSeparator,
+                StringUtils.getInstance());
     }
 
+    /**
+     * Surrounds given values using given separators.
+     * @param values the values.
+     * @param leftSeparator the left-side separator.
+     * @param rightSeparator the right-side separator.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the quoted values.
+     * @precondition values != null
+     * @precondition separator != null
+     * @precondition stringUtils != null
+     */
+    protected String[] surround(
+        final String[] values,
+        final String leftSeparator,
+        final String rightSeparator,
+        final StringUtils stringUtils)
+    {
+        return stringUtils.surround(values, leftSeparator, rightSeparator);
+    }
+    
     /**
      * Trims given values.
      * @param values the values.
@@ -336,27 +300,49 @@ public class DecorationUtils
      */
     public String[] trim(final String[] values)
     {
-        Collection t_cResult = new ArrayList();
-        
-        int t_iLength = (values != null) ? values.length : 0;
+        return trim(values, StringUtils.getInstance());
+    }
 
-        String t_strCurrentLine = null;
-        
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            t_strCurrentLine = values[t_iIndex];
-            
-            if  (t_strCurrentLine != null)
-            {
-                t_strCurrentLine = t_strCurrentLine.trim();
-            }
-            
-            if  (t_strCurrentLine.length() > 0)
-            {
-                t_cResult.add(t_strCurrentLine);
-            }
-        }
-        
-        return (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
+    /**
+     * Trims given values.
+     * @param values the values.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the trimmed lines.
+     * @precondition values != null
+     * @precondition stringUtils != null
+     */
+    protected String[] trim(
+        final String[] values, final StringUtils stringUtils)
+    {
+        return stringUtils.trim(values);
+    }
+
+    /**
+     * Escapes given char.
+     * @param value the value.
+     * @param charToEscape the char to escape.
+     * @return the processed value.
+     * @precondition value != null
+     */
+    public String escape(final String value, final char charToEscape)
+    {
+        return escape(value, charToEscape, StringUtils.getInstance());
+    }
+
+    /**
+     * Escapes given char.
+     * @param value the value.
+     * @param charToEscape the char to escape.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the processed value.
+     * @precondition value != null
+     * @precondition stringUtils != null
+     */
+    protected String escape(
+        final String value,
+        final char charToEscape,
+        final StringUtils stringUtils)
+    {
+        return stringUtils.escape(value, charToEscape);
     }
 }
