@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -694,6 +695,10 @@ public class DAOTemplate
         input.put("tr_name", tableRepositoryName);
         input.put("table_name", tableName);
         input.put("table_name_uppercased", tableName.toUpperCase());
+        input.put(
+            "table_name_normalized_lowercased",
+            normalizeLowercase(tableName, DecorationUtils.getInstance()));
+
         input.put("pk_attributes", pkAttributes);
         input.put("nonpk_attributes", nonPkAttributes);
         input.put("fk_attributes", fkAttributes);
@@ -1292,5 +1297,19 @@ public class DAOTemplate
         }
 
         return result;
+    }
+
+    /**
+     * Normalizes given value, in lower-case.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such output.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalizeLowercase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.normalize(value);
     }
 }

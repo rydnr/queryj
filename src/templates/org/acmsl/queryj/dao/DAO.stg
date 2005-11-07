@@ -85,6 +85,7 @@ source(input) ::= <<
   basePackageName=input.base_package_name,
   subpackageName=input.subpackage_name,
   tableName=input.table_name,
+  tableNameLowercased=input.table_name_normalized_lowercased,
   jdbcOperationsSubpackageName=typeInitMap.jdbcOperationsSubpackageName,
   customResults=input.custom_results,
   voSubpackageName=typeInitMap.voSubpackageName,
@@ -92,6 +93,7 @@ source(input) ::= <<
   voFactorySubpackageName=typeInitMap.voFactorySubpackageName,
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
   trSubpackageName=typeInitMap.tableRepositorySubpackageName,
+  trName=input.tr_name,
   damSubpackageName=typeInitMap.dataAccessManagerSubpackageName,
   fkssSubpackageName=typeInitMap.foreignKeyStatementSetterSubpackageName,
   fkAttributes=input.fk_attributes,
@@ -186,6 +188,7 @@ project_imports(
   basePackageName,
   subpackageName,
   tableName,
+  tableNameLowercased,
   jdbcOperationsSubpackageName,
   customResults,
   voSubpackageName,
@@ -193,6 +196,7 @@ project_imports(
   voFactorySubpackageName,
   rdbSubpackageName,
   trSubpackageName,
+  trName,
   damSubpackageName,
   fkssSubpackageName,
   fkAttributes,
@@ -202,6 +206,7 @@ project_imports(
   @param basePackageName the base package name.
   @param subpackageName the subpackage name.
   @param tableName the table name.
+  @param tableNameLowercased the table name, in lower-case.
   @param jdbcOperationsSubpackageName the subpackage for the JDBC operations.
   @param customResults the results of the custom queries.
   @param voSubpackageName the subpackage for the value 
@@ -209,6 +214,7 @@ project_imports(
   @param voFactorySubpackageName the subpackage of the value object factories.
   @param rdbSubpackageName the subpackage common of all RDBMs implementations.
   @param trSubpackageName the subpackage of the table repository.
+  @param trName the name of the table repository.
   @param damSubpackageName the subpackage of the DataAccessManager.
   @param fkssSubpackageName the subpackage of the foreign key attribute
   statement setter.
@@ -218,18 +224,18 @@ project_imports(
 /*
  * Importing project-specific classes.
  */
-import <basePackageName>.<jdbcOperationsSubpackageName>.<tableName>AttributesStatementSetter;
-import <basePackageName>.<jdbcOperationsSubpackageName>.<tableName>PkStatementSetter;
-import <basePackageName>.<jdbcOperationsSubpackageName>.<tableName>ResultSetExtractor;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>AttributesStatementSetter;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>PkStatementSetter;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>ResultSetExtractor;
 <customResults:resultset_extractor_import(
   basePackageName=basePackageName,
   jdbcOperationsSubpackageName=jdbcOperationsSubpackageName,
   crseId=it.id); separator="\n">
 import <basePackageName>.<voSubpackageName>.<voName>;
-import <basePackageName>.<voFactorySubpackageName>.<voName>Factory;
+import <basePackageName>.<voFactorySubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
-import <basePackageName>.<rdbSubpackageName>.QueryPreparedStatementCreator;
-import <basePackageName>.<trSubpackageName>.TableRepository;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.QueryPreparedStatementCreator;
+import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 import <basePackageName>.<damSubpackageName>.DataAccessManager;
 <fkAttributes:foreignkey_statementsetter_import(
   basePackageName=basePackageName,
@@ -581,7 +587,7 @@ public class <input.engine_name><input.vo_name>DAO
         insert(
             <input.attributes:{<it.name>}; separator=",\n">,
             query,
-            new DataSourceTransactionManager(dataSource);
+            new DataSourceTransactionManager(dataSource));
     }
 
     /**
@@ -881,7 +887,7 @@ public class <input.engine_name><input.vo_name>DAO
             new UpdateTransactionCallback(
                 new QueryPreparedStatementCreator(query),
                 new <input.vo_name>AttributesStatementSetter(
-                    <input.nonpk_attributes:{<it.name>}; separator="\n">,
+                    <input.nonpk_attributes:{<it.name>}; separator=",\n">,
                     true),
                 this));
     }
@@ -1411,16 +1417,16 @@ custom_select(
      * @return the \<i><cs.resultClass>\</i> information retrieved.
      * @throws DataAccessException if the operation fails.
      */
-    public <cs.resultClass> <cs.nameNormalized>(
+    public <cs.resultClass> <cs.nameUncapitalized>(
         <cs.parameters:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">
+          name=it.name,type=it.fieldType); separator=",\n">)
       throws DataAccessException
     {
         return
-            <cs.nameNormalized>(
-                <cs.parameters:{<it.name>}; separator="\n">,
+            <cs.nameUncapitalized>(
+                <cs.parameters:{<it.name>}; separator=",\n">,
                 new PreparedStatementCreatorFactory(
-                   "<cs.value>"),
+                    <cs.splittedQuotedValue; separator=" +\n">),
                 new Object[]
                 {
                     <cs.parameters:custom_select_parameter_value(
@@ -1445,7 +1451,7 @@ custom_select(
      * <precondition_notnull(name="params")>
      * <precondition_notnull(name="dataSource")>
      */
-    protected <cs.resultClass> <cs.nameNormalized>(
+    protected <cs.resultClass> <cs.nameUncapitalized>(
         <cs.parameters:attribute_declaration(
           name=it.name,type=it.fieldType); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
@@ -1454,8 +1460,8 @@ custom_select(
       throws DataAccessException
     {
         return
-            <cs.nameNormalized>(
-                <cs.parameters:{<it.name>}; separator="\n">,
+            <cs.nameUncapitalized>(
+                <cs.parameters:{<it.name>}; separator=",\n">,
                 preparedStatementCreatorFactory,
                 params,
                 new DataSourceTransactionManager(dataSource));
@@ -1477,7 +1483,7 @@ custom_select(
      * <precondition_notnull(name="params")>
      * <precondition_notnull(name="transactionManager")>
      */
-    protected <cs.resultClass> <cs.nameNormalized>(
+    protected <cs.resultClass> <cs.nameUncapitalized>(
         <cs.parameters:attribute_declaration(
           name=it.name,type=it.fieldType); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
@@ -1486,8 +1492,8 @@ custom_select(
       throws DataAccessException
     {
         return
-            <cs.nameNormalized>(
-                <cs.parameters:{<it.name>}; separator="\n">,
+            <cs.nameUncapitalized>(
+                <cs.parameters:{<it.name>}; separator=",\n">,
                 preparedStatementCreatorFactory,
                 params,
                 new TransactionTemplate(transactionManager));
@@ -1509,7 +1515,7 @@ custom_select(
      * <precondition_notnull(name="params")>
      * <precondition_notnull(name="transactionTemplate")>
      */
-    protected <cs.resultClass> <cs.nameNormalized>(
+    protected <cs.resultClass> <cs.nameUncapitalized>(
         <cs.parameters:attribute_declaration(
           name=it.name,type=it.fieldType); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,

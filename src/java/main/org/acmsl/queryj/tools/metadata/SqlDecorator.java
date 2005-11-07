@@ -137,6 +137,32 @@ public class SqlDecorator
     }
 
     /**
+     * Retrieves the value, in multiple lines.
+     * @return such output.
+     */
+    public String[] getSplittedQuotedValue()
+    {
+        return splitAndQuote(getValue(), DecorationUtils.getInstance());
+    }
+    
+    /**
+     * Splits given value into several lines, quoting each one.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the splitted value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String[] splitAndQuote(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return
+            decorationUtils.surround(
+                decorationUtils.trim(decorationUtils.split(value)),
+                "\"", " \"");
+    }
+    
+    /**
      * Retrieves the id formatted as a constant.
      * @return such information.
      */
@@ -157,26 +183,26 @@ public class SqlDecorator
     }
 
     /**
-     * Retrieves the name, normalized.
+     * Retrieves the name, (un)capitalized.
      * @return such information.
      */
-    public String getNameNormalized()
+    public String getNameUncapitalized()
     {
-        return normalize(getName(), DecorationUtils.getInstance());
+        return uncapitalize(getName(), DecorationUtils.getInstance());
     }
     
     /**
-     * Normalizes given value.
+     * (Un)capitalizes given value.
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the normalized value.
+     * @return the value, after being processed.
      * @precondition value != null
      * @precondition decorationUtils != null
      */
-    protected String normalize(
+    protected String uncapitalize(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.normalize(value);
+        return decorationUtils.uncapitalize(value);
     }
     
     /**
