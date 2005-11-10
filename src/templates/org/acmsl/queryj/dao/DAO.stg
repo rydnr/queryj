@@ -229,6 +229,7 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackage
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>ResultSetExtractor;
 <customResults:resultset_extractor_import(
   basePackageName=basePackageName,
+  baseDAOSubpackageName=baseDAOSubpackageName,
   rdbSubpackageName=rdbSubpackageName,
   subpackageName=subpackageName,
   tableNameLowercased=tableNameLowercased,
@@ -252,6 +253,7 @@ import <basePackageName>.<damSubpackageName>.DataAccessManager;
 
 resultset_extractor_import(
   basePackageName,
+  baseDAOSubpackageName,
   rdbSubpackageName,
   subpackageName,
   tableNameLowercased,
@@ -259,12 +261,13 @@ resultset_extractor_import(
 <!
   Generates the import statement of a custom resultset extractor.
   @param basePackageName the base package.
+  @param baseDAOSubpackageName the base DAO subpackage.
   @param rdbSubpackageName the rdb subpackage.
   @param subpackageName the subpackage.
   @param tableNameLowercased the table name, in lower case.
   @param crseIdCapitalized the custom resultset extractor identifier, capitalized.
 !>
-import <basePackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<crseIdCapitalized>Extractor;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<crseIdCapitalized>Extractor;
 >>
 
 foreignkey_statementsetter_import(

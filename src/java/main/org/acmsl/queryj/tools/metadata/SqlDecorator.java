@@ -160,8 +160,9 @@ public class SqlDecorator
             decorationUtils.surround(
                 decorationUtils.trim(
                     decorationUtils.split(
-                        decorationUtils.escape(value, '\"')),
-                "\"", " \"");
+                        decorationUtils.escape(value, '\"'))),
+                "\"",
+                " \"");
     }
     
     /**
@@ -179,7 +180,7 @@ public class SqlDecorator
      */
     public String getIdCapitalized()
     {
-        return capitalize(getId());
+        return capitalize(getId(), DecorationUtils.getInstance());
     }
     
     /**

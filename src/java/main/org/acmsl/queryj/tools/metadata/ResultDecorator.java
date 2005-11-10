@@ -130,6 +130,29 @@ public class ResultDecorator
     }
     
     /**
+     * Retrieves the id capitalized.
+     * @return such information.
+     */
+    public String getIdCapitalized()
+    {
+        return capitalize(getId(), DecorationUtils.getInstance());
+    }
+    
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the value, after being processed.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String capitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
+    }
+    
+    /**
      * Normalizes given value.
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.

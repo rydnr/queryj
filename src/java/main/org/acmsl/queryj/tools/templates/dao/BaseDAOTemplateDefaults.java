@@ -82,7 +82,7 @@ public interface BaseDAOTemplateDefaults
           "/*\n"
         + " * Importing project classes.\n"
         + " */\n"
-        + "import {0}.{1}ValueObject;\n\n";
+        + "import {0}.{1};\n\n";
 
 
     /**
@@ -136,8 +136,8 @@ public interface BaseDAOTemplateDefaults
           "    /**\n"
         + "     * The {0} constant.\n"
         + "     */\n"
-        + "    public static final {1}ValueObject {0} =\n"
-        + "        new {1}ValueObject({2});\n\n";
+        + "    public static final {1} {0} =\n"
+        + "        new {1}({2});\n\n";
 
     /**
      * The constant records, if the table is static.
@@ -148,8 +148,8 @@ public interface BaseDAOTemplateDefaults
           "    /**\n"
         + "     * The whole constants.\n"
         + "     */\n"
-        + "    public static final {0}ValueObject[] _ALL_QUERYJ_CONSTANTS_ =\n"
-        + "        new {0}ValueObject[]\n"
+        + "    public static final {0}[] _ALL_QUERYJ_CONSTANTS_ =\n"
+        + "        new {0}[]\n"
         + "        '{'"
         + "{1}\n"
         + "        '};\n\n";
@@ -177,7 +177,7 @@ public interface BaseDAOTemplateDefaults
         + "{2}\n"
         + "     * @return the information extracted from the persistence layer.\n"
         + "     */\n"
-        + "    public {3}ValueObject findConstantBy{4}("
+        + "    public {3} findConstantBy{4}("
         + "{5});\n\n";
 
     /**
@@ -208,7 +208,7 @@ public interface BaseDAOTemplateDefaults
          // FIND_BY_PRIMARY_KEY_PK_JAVADOC
         + "     * @return the information extracted from the persistence layer.\n"
         + "     */\n"
-        + "    public {2}ValueObject findByPrimaryKey("
+        + "    public {2} findByPrimaryKey("
          // java table name
         + "{3});\n\n";
          // FIND_BY_PRIMARY_KEY_PK_DECLARATION
@@ -274,7 +274,7 @@ public interface BaseDAOTemplateDefaults
         + "{2}\n"
          // update parameters javadoc
         + "     */\n"
-        + "    public {0}ValueObject create("
+        + "    public {0}cg create("
         + "{3}"
          // (optional) pk declaration
         + "{4});\n\n";
