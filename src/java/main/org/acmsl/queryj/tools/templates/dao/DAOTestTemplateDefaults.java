@@ -85,7 +85,7 @@ public interface DAOTestTemplateDefaults
         + " */\n"
         + "import {0}.{1}{2}DAO;\n"
     // DAO package - engine name - table name
-        + "import {3}.{2}ValueObject;\n\n";
+        + "import {3}.{2};\n\n";
     // package - table name
 
     /**
@@ -178,7 +178,7 @@ public interface DAOTestTemplateDefaults
         + "     * {4} information used just for testing.\n"
          // value object name.
         + "     */\n"
-        + "    private static {4}ValueObject m__ValueObject;\n\n"
+        + "    private static {4} m__ValueObject;\n\n"
          // value object name.
         + "    /**\n"
         + "     * The tested instance.\n"
@@ -335,7 +335,7 @@ public interface DAOTestTemplateDefaults
         + "     * @param {2} such information.\n"
          // value object name
         + "     */\n"
-        + "    private static void set{1}({1}ValueObject {2})\n"
+        + "    private static void set{1}({1} {2})\n"
          // Value Object Name - Value Object Name - value object name
         + "    '{'\n"
         + "        m__ValueObject = {2};\n"
@@ -346,7 +346,7 @@ public interface DAOTestTemplateDefaults
          // Value Object Name
         + "     * @return such information.\n"
         + "     */\n"
-        + "    public static {1}ValueObject get{1}()\n"
+        + "    public static {1} get{1}()\n"
          // Value Object Name - Value Object Name
         + "    '{'\n"
         + "        return m__ValueObject;\n"
@@ -553,7 +553,7 @@ public interface DAOTestTemplateDefaults
         + "        public void testFindByPrimaryKey()\n"
         + "        '{'\n"
         + "            assertNotNull(getTestedInstance());\n\n"
-        + "            {2}ValueObject t_ValueObject =\n"
+        + "            {2} t_ValueObject =\n"
         + "                getTestedInstance()\n"
         + "                    .findByPrimaryKey("
         + "{4});\n"

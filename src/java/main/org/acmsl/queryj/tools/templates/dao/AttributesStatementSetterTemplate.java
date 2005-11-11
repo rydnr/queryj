@@ -464,12 +464,12 @@ public class AttributesStatementSetterTemplate
                 String t_strParameterSpecification =
                     formatParameterSpecification(
                         t_ParameterSpecificationFormatter,
-                        t_strStatementSetterType,
+                        t_iColumnType,
                         t_strRepositoryName,
                         t_strTableName,
                         t_strPropertyName,
                         t_strParameterName,
-                        stringUtils);
+                        metaDataUtils);
 
                 if  (!t_bManagedExternally)
                 {
@@ -656,31 +656,29 @@ public class AttributesStatementSetterTemplate
      * @param tableName the table name.
      * @param propertyName the property name.
      * @param parameterName the parameter name.
-     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @return the generated code.
      * @precondition parameterSpecificationFormatter != null
-     * @precondition parameterType != null
      * @precondition repositoryName != null
      * @precondition tableName != null
      * @precondition propertyName != null
      * @precondition parameterName != null
-     * @precondition stringUtils != null
+     * @precondition metaDataUtils != null
      */
     protected String formatParameterSpecification(
         final MessageFormat parameterSpecificationFormatter,
-        final String parameterType,
+        final int parameterType,
         final String repositoryName,
         final String tableName,
         final String propertyName,
         final String parameterName,
-        final StringUtils stringUtils)
+        final MetaDataUtils metaDataUtils)
     {
         return
             parameterSpecificationFormatter.format(
                 new Object[]
                 {
-                    stringUtils.capitalize(
-                        parameterType, '_'),
+                    metaDataUtils.getSmartObjectType(parameterType),
                     repositoryName,
                     tableName.toUpperCase(),
                     propertyName,

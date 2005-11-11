@@ -1310,6 +1310,6 @@ public class DAOTemplate
     protected String normalizeLowercase(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.normalize(value);
+        return decorationUtils.normalizeLowercase(value);
     }
 }

@@ -195,9 +195,9 @@ public class DecorationUtils
      * @return the normalized value.
      * @precondition value != null
      */
-    public String normalize(final String value)
+    public String normalizeLowercase(final String value)
     {
-        return normalizeUppercase(value).toLowerCase();
+        return normalize(value).toLowerCase();
     }
     
     /**
@@ -208,18 +208,29 @@ public class DecorationUtils
      */
     public String normalizeUppercase(final String value)
     {
-        return normalizeUppercase(value, StringUtils.getInstance());
+        return normalize(value).toUpperCase();
     }
     
     /**
-     * Normalizes given value, in upper case.
+     * Normalizes given value,.
+     * @param value the value.
+     * @return the normalized value.
+     * @precondition value != null
+     */
+    public String normalize(final String value)
+    {
+        return normalize(value, StringUtils.getInstance());
+    }
+    
+    /**
+     * Normalizes given value.
      * @param value the value.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the normalized value.
      * @precondition value != null
      * @precondition stringUtils != null
      */
-    protected String normalizeUppercase(
+    protected String normalize(
         final String value, final StringUtils stringUtils)
     {
         return stringUtils.normalize(value, '_');

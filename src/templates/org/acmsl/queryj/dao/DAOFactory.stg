@@ -198,11 +198,11 @@ public class <input.class_name>
 
     /**
      * Specifies a new weak reference.
-     * @param factory the new \<code\><input.dao_factory_implementation_class_name>\</code\>
+     * @param factory the new \<code\><input.class_name>\</code\>
      * instance.
      */
     protected static void setReference(
-        final <input.dao_class_name> factory)
+        final <input.class_name> factory)
     {
         singleton = new WeakReference(factory);
     }

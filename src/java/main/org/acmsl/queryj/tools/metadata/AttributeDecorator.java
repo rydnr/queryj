@@ -251,9 +251,9 @@ public class AttributeDecorator
      * Retrieves whether this attribute can be modelled as a primitive or not.
      * @return <code>false</code> if no primitive matches.
      */
-    public boolean isObject()
+    public Boolean isPrimitive()
     {
-        return isObject(getType(), MetaDataUtils.getInstance());
+        return isPrimitive(getType(), MetaDataUtils.getInstance());
     }
 
     /**
@@ -263,10 +263,32 @@ public class AttributeDecorator
      * @return <code>false</code> if no primitive matches.
      * @precondition metaDataUtils != null
      */
-    protected boolean isObject(
+    protected Boolean isPrimitive(
         final int type, final MetaDataUtils metaDataUtils)
     {
-        return metaDataUtils.isObject(type);
+        return
+            (metaDataUtils.isPrimitive(type) ? Boolean.TRUE : Boolean.FALSE);
+    }
+
+    /**
+     * Retrieves the object type.
+     * @return such information.
+     */
+    public String getObjectType()
+    {
+        return getObjectType(getType(), MetaDataUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the attribute's object type.
+     * @param type the attribute type.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @return such type.
+     * @precondition metaDataUtils != null
+     */
+    protected String getObjectType(
+        final int type, final MetaDataUtils metaDataUtils)
+    {
+        return metaDataUtils.getSmartObjectType(type);
     }
 }
-

@@ -171,7 +171,21 @@ public class SqlDecorator
      */
     public String getIdAsConstant()
     {
-        return uppercase(getId());
+        return uppercase(normalize(getId(), DecorationUtils.getInstance()));
+    }
+    
+    /**
+     * Normalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the value, after being processed.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.normalize(value);
     }
     
     /**
@@ -335,6 +349,64 @@ public class SqlDecorator
                 {
                     result = t_Result.getClassValue();
                 }
+            }
+            else
+            {
+                try
+                {
+                    // todo throw something.
+                    LogFactory.getLog("custom-sql").warn(
+                          "Referenced result not found:"
+                        + resultRef.getId());
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the result id as constant.
+     * @return such information.
+     */
+    public String getResultIdAsConstant()
+    {
+        return
+            getResultIdAsConstant(
+                getResultRef(),
+                getCustomSqlProvider(),
+                DecorationUtils.getInstance());
+    }
+    
+    /**
+     * Retrieves the result id as constant.
+     * @param resultRef the result ref.
+     * @param customSqlProvider the custom sql provider.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such information.
+     * @precondition customSqlProvider != null
+     * @precondition decorationUtils != null
+     */
+    protected String getResultIdAsConstant(
+        final ResultRefElement resultRef,
+        final CustomSqlProvider customSqlProvider,
+        final DecorationUtils decorationUtils)
+    {
+        String result = null;
+
+        if  (resultRef != null)
+        {
+            ResultElement t_Result =
+                customSqlProvider.resolveReference(resultRef);
+
+            if  (t_Result != null)
+            {
+                result =
+                    uppercase(normalize(t_Result.getId(), decorationUtils));
             }
             else
             {
