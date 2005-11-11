@@ -1057,7 +1057,7 @@ public class <input.engine_name><input.vo_name>DAO
     }
 
     /**
-     * Deletes \<code><input.table_name>\</code> information.
+     * Deletes \<code><input.vo_name>\</code> information.
      <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
      <input.fk_attributes:dao_javadoc(
        name=it.tableName,
@@ -1090,17 +1090,17 @@ public class <input.engine_name><input.vo_name>DAO
   input=input); separator="\n">
 
     /**
-     * Extracts \<i><voName>\</i> value objects from result sets.
+     * Extracts \<i><input.vo_name>\</i> value objects from result sets.
      * @author \<a href="http://maven.acm-sl.org/queryj">QueryJ\</a>
      */
     public static class <voName>PkResultSetExtractor
         implements  ResultSetExtractor
     {
-        // <extract data>
+        // \<extract data>
         /**
-         * Extracts <i>{0}</i> information from given result set.
+         * Extracts \<i><input.vo_name>\</i> information from given result set.
          * @param resultSet the result set.
-         * @return the \<code><voName>\</code> or \<code>null\</code>
+         * @return the \<code><input.vo_name>\</code> or \<code>null\</code>
          * if the operation returned no data.
          * @throws SQLException intercepted by \<i>Spring\</i>.
          * @throws DataAccessException with information about any
@@ -1126,7 +1126,7 @@ public class <input.engine_name><input.vo_name>DAO
 
             return result;
         }
-        // </extract data>
+        // \</extract data>
     }
 }
 >>
