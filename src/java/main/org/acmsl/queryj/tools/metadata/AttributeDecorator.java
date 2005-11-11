@@ -45,6 +45,7 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.metadata.vo.AbstractAttribute;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
+import org.acmsl.queryj.tools.MetaDataUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -213,6 +214,59 @@ public class AttributeDecorator
     public String getVoName()
     {
         return capitalize(getTableName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the attribute's Java name.
+     * @return such information.
+     */
+    public String getJavaName()
+    {
+        return upperCase(getName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the attribute's associated getter method.
+     * @return such information.
+     */
+    public String getGetterMethod()
+    {
+        return getGetterMethod(getType(), MetaDataUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the attribute's associated getter method.
+     * @param type the attribute type.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @return such information.
+     * @precondition metaDataUtils != null
+     */
+    protected String getGetterMethod(
+        final int type, final MetaDataUtils metaDataUtils)
+    {
+        return metaDataUtils.getGetterMethod(type);
+    }
+
+    /**
+     * Retrieves whether this attribute can be modelled as a primitive or not.
+     * @return <code>false</code> if no primitive matches.
+     */
+    public boolean isObject()
+    {
+        return isObject(getType(), MetaDataUtils.getInstance());
+    }
+
+    /**
+     * Retrieves whether this attribute can be modelled as a primitive or not.
+     * @param type the attribute type.
+     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @return <code>false</code> if no primitive matches.
+     * @precondition metaDataUtils != null
+     */
+    protected boolean isObject(
+        final int type, final MetaDataUtils metaDataUtils)
+    {
+        return metaDataUtils.isObject(type);
     }
 }
 

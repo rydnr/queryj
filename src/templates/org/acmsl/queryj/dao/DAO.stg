@@ -358,7 +358,7 @@ public class <input.engine_name><input.vo_name>DAO
      * Builds a \<code><input.class_name>\</code> instance
      * with given data source.\n"
      * @param dataSource the required data source.
-     * @precondition dataSource != null
+     * <precondition_notnull("dataSource")>
      */
     public <input.class_name>(final DataSource dataSource)
     {
@@ -389,7 +389,7 @@ public class <input.engine_name><input.vo_name>DAO
      * information searching by its primary key.
      * @param queryFactory the \<code>QueryFactory\</code> instance.
      * @return the \<code>SelectQuery\</code> instance.
-     * @precondition queryFactory != null
+     * <precondition_notnull("queryFactory")>
      */
     protected Query buildFindByPrimaryKeyQuery(
         final QueryFactory queryFactory)
@@ -405,7 +405,7 @@ public class <input.engine_name><input.vo_name>DAO
      * Builds the query for finding the \<i><input.table_name>\</i>
      * information searching by its primary key.
      * @param query the \<code>SelectQuery\</code> to configure.
-     * @precondition query != null
+     * <precondition_notnull("query")>
      */
     protected void buildFindByPrimaryKeyQuery(final SelectQuery query)
     {
@@ -446,7 +446,7 @@ public class <input.engine_name><input.vo_name>DAO
      * @return the \<code><input.vo_name>\</code> matching given
      * primary key.
      * @throws DataAccessException if the operation fails.
-     * @precondition dataSource != null
+     * <precondition_notnull("dataSource")>
      */
     protected <input.vo_name> findByPrimaryKey(
         <input.pk_attributes:attribute_declaration(
@@ -472,8 +472,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @return the \<code><input.vo_name>\</code> matching given
      * primary key.
      * @throws DataAccessException if the operation fails.
-     * @precondition query != null
-     * @precondition transactionManager != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionManager")>
      */
     protected <input.vo_name> findByPrimaryKey(
         <input.pk_attributes:attribute_declaration(
@@ -499,8 +499,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @return the \<code><input.vo_class_name>\</code> matching given
      * primary key.
      * @throws DataAccessException if the operation fails.
-     * @precondition query != null
-     * @precondition transactionTemplate != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionTemplate")>
      */
     protected <input.vo_name> findByPrimaryKey(
         <input.pk_attributes:attribute_declaration(
@@ -535,7 +535,7 @@ public class <input.engine_name><input.vo_name>DAO
      * \<code><input.table_name>\</code> instance.
      * @param queryFactory the \<code>QueryFactory\</code> instance.
      * @return the \<code>InsertQuery\</code> instance.
-     * @precondition queryFactory != null
+     * <precondition_notnull("queryFactory")>
      */
     protected Query buildInsertQuery(final QueryFactory queryFactory)
     {
@@ -550,7 +550,7 @@ public class <input.engine_name><input.vo_name>DAO
      * Builds the query required to \<i>insert\</i> a concrete
      * \<code><input.vo_name>\</code> instance.
      * @param query the \<code>InsertQuery\</code> instance.
-     * @precondition queryFactory != null
+     * <precondition_notnull("queryFactory")>
      */
     protected void buildInsertQuery(final InsertQuery query)
     {
@@ -583,8 +583,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param query the query to insert the values.
      * @param dataSource the \<code>DataSource\</code> instance.
      * @throws DataAccessException if the operation fails.
-     * @precondition query != null
-     * @precondition dataSource != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("dataSource")>
      */
     protected void insert(
         <input.attributes:attribute_declaration(
@@ -606,8 +606,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param transactionManager the \<code>PlatformTransactionManager\</code>
      * instance.
      * @throws DataAccessException if the operation fails.
-     * @precondition query != null
-     * @precondition transactionManager != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionManager")>
      */
     protected void insert(
         <input.attributes:attribute_declaration(
@@ -629,8 +629,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param transactionTemplate the \<code>TransactionTemplate\</code>
      * instance.
      * @throws DataAccessException if the operation fails.
-     * @precondition query != null
-     * @precondition transactionTemplate != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionTemplate")>
      */
     protected void insert(
         <input.attributes:attribute_declaration(
@@ -676,9 +676,9 @@ public class <input.engine_name><input.vo_name>DAO
      * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
      * instance.
      * @throws DataAccessException if the operation fails.
-     * @precondition query != null
-     * @precondition dataSource != null
-     * @precondition factory != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("dataSource")>
+     * <precondition_notnull("factory")>
      */
     protected <input.vo_name> create(
         <input.attributes:attribute_declaration(
@@ -706,9 +706,9 @@ public class <input.engine_name><input.vo_name>DAO
      * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
      * instance.
      * @throws DataAccessException if the operation fails.
-     * @precondition query != null
-     * @precondition transactionManager != null
-     * @precondition factory != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionManager")>
+     * <precondition_notnull("factory")>
      */
     protected <input.vo_name> create(
         <input.attributes:attribute_declaration(
@@ -736,8 +736,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
      * instance.
      * @throws DataAccessException if the operation fails.
-     * @precondition transactionTemplate != null
-     * @precondition factory != null
+     * <precondition_notnull("transactionTemplate")>
+     * <precondition_notnull("factory")>
      */
     protected <input.vo_name> create(
         <input.attributes:attribute_declaration(
@@ -787,7 +787,7 @@ public class <input.engine_name><input.vo_name>DAO
      * \<code><input.vo_name>\</code> entity, determined by its primary key.
      * @param queryFactory the \<code>QueryFactory\</code> instance.
      * @return the \<code>UpdateQuery\</code> instance.
-     * @precondition queryFactory != null
+     * <precondition_notnull("queryFactory")>
      */
     protected Query buildUpdateQuery(final QueryFactory queryFactory)
     {
@@ -802,7 +802,7 @@ public class <input.engine_name><input.vo_name>DAO
      * Builds the query required to \<i>update\</i> a concrete
      * \<code><input.vo_name>\</code> entity, determined by its primary key.
      * @param query the \<code>UpdateQuery\</code> instance to set up.
-     * @precondition query != null
+     * <precondition_notnull("query")>
      */
     protected void buildUpdateQuery(final UpdateQuery query)
     {
@@ -839,8 +839,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param query the query used to perform the update operation.
      * @param dataSource the \<code>DataSource\<code> instance.
      * @throws DataAccessException if the operation fails.
-     * @precondition query != null
-     * @precondition dataSource != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("dataSource")>
      */
     protected void update(
         <input.attributes:attribute_declaration(
@@ -862,8 +862,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance. 
     * @throws DataAccessException if the operation fails.
-     * @precondition query != null
-     * @precondition transactionManager != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionManager")>
      */
     protected void update(
         <input.attributes:attribute_declaration(
@@ -885,8 +885,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance.
      * @throws DataAccessException if the operation fails.
-     * @precondition query != null
-     * @precondition transactionManager != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionManager")>
      */
     protected void update(
         <input.attributes:attribute_declaration(
@@ -920,7 +920,7 @@ public class <input.engine_name><input.vo_name>DAO
      * @param queryFactory the \<code>QueryFactory\</code>
      * instance.
      * @return the \<code>DeleteQuery\</code> instance.
-     * @precondition queryFactory != null
+     * <precondition_notnull("queryFactory")>
      */
     protected Query buildDeleteQuery(
         final QueryFactory queryFactory)
@@ -936,7 +936,7 @@ public class <input.engine_name><input.vo_name>DAO
      * Builds the query required to \<i>delete\</i> a concrete
      * \<code><input.vo_name>\</code> entity, determined by its primary key.
      * @param query the \<code>DeleteQuery\</code> instance.
-     * @precondition query != null
+     * <precondition_notnull("query")>
      */
     protected void buildDeleteQuery(final DeleteQuery query)
     {
@@ -966,8 +966,8 @@ public class <input.engine_name><input.vo_name>DAO
      <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param dataSource the \<code>DataSource\<code> instance.
-     * @precondition query != null
-     * @precondition dataSource != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("dataSource")>
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(
@@ -987,8 +987,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param query the query used to perform the delete operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance.
-     * @precondition query != null
-     * @precondition transactionManager != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionManager")>
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(
@@ -1008,8 +1008,8 @@ public class <input.engine_name><input.vo_name>DAO
      * @param query the query used to perform the delete operation.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
      * instance.
-     * @precondition query != null
-     * @precondition transactionTemplate != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionTemplate")>
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(
@@ -1043,7 +1043,7 @@ public class <input.engine_name><input.vo_name>DAO
      * Deletes \<code><input.vo_name>\</code> information.
      <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
      * @param dataAccessManager the \<code>DataAccessManager\</code> instance.
-     * @precondition dataAccessManager != null
+     * <precondition_notnull("dataAccessManager")>
      */
     protected void delete(
         <input.pk_attributes:attribute_declaration(
@@ -1088,7 +1088,66 @@ public class <input.engine_name><input.vo_name>DAO
 <input.custom_selects:custom_select(
   cs=it,
   input=input); separator="\n">
+
+    /**
+     * Extracts \<i><voName>\</i> value objects from result sets.
+     * @author \<a href="http://maven.acm-sl.org/queryj">QueryJ\</a>
+     */
+    public static class <voName>PkResultSetExtractor
+        implements  ResultSetExtractor
+    {
+        // <extract data>
+        /**
+         * Extracts <i>{0}</i> information from given result set.
+         * @param resultSet the result set.
+         * @return the \<code><voName>\</code> or \<code>null\</code>
+         * if the operation returned no data.
+         * @throws SQLException intercepted by \<i>Spring\</i>.
+         * @throws DataAccessException with information about any
+         * custom exception.
+         * <precondition_notnull("resultSet")>
+         */
+        public Object extractData(final ResultSet resultSet)
+            throws  SQLException,
+                    DataAccessException
+        {
+            Map result = new HashMap();
+
+            if  (resultSet.next())
+            {
+                int index = 1;
+
+<input.pk_attributes:pk_resultset_extractor_parameter_retrieval(
+  javaName=it.javaName,
+  getterMethod=it.getterMethod,
+  javaType=it.fieldType,
+  isObject=it.object)>
+            }
+
+            return result;
+        }
+        // </extract data>
+    }
 }
+>>
+
+pk_resultset_extractor_parameter_retrieval(
+  javaName, getterMethod, javaType, isObject) ::= <<
+<!
+  Generates the piece of code to build a concrete value-object attribute.
+  @param javaName the attribute name (Java version).
+  @param getterMethod the getter method associated to such attribute.
+  @param javaType the attribute type (Java version).
+  @param isObject whether the attribute is modelled as an instance or as
+  a primitive type.
+!>
+            result.put(
+               "<javaName>",
+<if(isObject)>
+               new <javaType>(resultSet.<getterMethod>(index++)));
+<else>
+               resultSet.<getterMethod>(index++));
+<endif>
 >>
 
 resultset_extractor_constants(
@@ -1133,7 +1192,7 @@ static_table(
      * @param <staticAttributeNameLowercased> the <staticAttributeName>
      * to filter.
      * @return the \<code><voName>\</code> instance.
-     * @precondition <staticAttributeName> != null
+     * <precondition_notnull(staticAttributeName)>
      */
     public <voName> findConstantBy<staticAttributeNameCapitalized>(
         final <staticAttributeType> <staticAttributeNameLowercased>)
@@ -1317,7 +1376,7 @@ fk_delete_method(foreignKey,input) ::= <<
      * \<code><input.table_name>\</code> entity, determined by a concrete foreign key.
      <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
      * @param query the query to initialize.
-     * @precondition query != null
+     * <precondition_notnull("query")>
      */
     protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(
         final DeleteQuery query)
@@ -1351,8 +1410,8 @@ fk_delete_method(foreignKey,input) ::= <<
      <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
      * @param query the delete query.
      * @param dataSource the \<code>DataSource\<code> instance.
-     * @precondition query != null
-     * @precondition dataSource != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("dataSource")>
      */
     protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
         <foreignKey:attribute_declaration(
@@ -1373,8 +1432,8 @@ fk_delete_method(foreignKey,input) ::= <<
      * @param query the delete query.
      * @param transactionManager the
      * \<code>PlaformTransactionManager\<code> instance.
-     * @precondition query != null
-     * @precondition transactionManager != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionManager")>
      */
     protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
         <foreignKey:attribute_declaration(
@@ -1395,8 +1454,8 @@ fk_delete_method(foreignKey,input) ::= <<
      * @param query the delete query.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
      * instance.
-     * @precondition query != null
-     * @precondition transactionTemplate != null
+     * <precondition_notnull("query")>
+     * <precondition_notnull("transactionTemplate")>
      */
     protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
         <foreignKey:attribute_declaration(
@@ -1459,9 +1518,9 @@ custom_select(
      * @param dataSource the \<code>DataSource\<code> instance.
      * @return the \<i><cs.resultClass>\</i> information retrieved.
      * @throws DataAccessException if the operation fails.
-     * <precondition_notnull(name="preparedStatementCreatorFactory")>
-     * <precondition_notnull(name="params")>
-     * <precondition_notnull(name="dataSource")>
+     * <precondition_notnull("preparedStatementCreatorFactory")>
+     * <precondition_notnull("params")>
+     * <precondition_notnull("dataSource")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
         <cs.parameters:attribute_declaration(
@@ -1491,9 +1550,9 @@ custom_select(
      * instance.
      * @return the \<i><cs.resultClass>\</i> information retrieved.
      * @throws DataAccessException if the operation fails.
-     * <precondition_notnull(name="preparedStatementCreatorFactory")>
-     * <precondition_notnull(name="params")>
-     * <precondition_notnull(name="transactionManager")>
+     * <precondition_notnull("preparedStatementCreatorFactory")>
+     * <precondition_notnull("params")>
+     * <precondition_notnull("transactionManager")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
         <cs.parameters:attribute_declaration(
@@ -1523,9 +1582,9 @@ custom_select(
      * instance.
      * @return the \<i><cs.resultClass>\</i> information retrieved.
      * @throws DataAccessException if the operation fails.
-     * <precondition_notnull(name="preparedStatementCreatorFactory")>
-     * <precondition_notnull(name="params")>
-     * <precondition_notnull(name="transactionTemplate")>
+     * <precondition_notnull("preparedStatementCreatorFactory")>
+     * <precondition_notnull("params")>
+     * <precondition_notnull("transactionTemplate")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
         <cs.parameters:attribute_declaration(

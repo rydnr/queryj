@@ -274,7 +274,7 @@ public interface BaseDAOTemplateDefaults
         + "{2}\n"
          // update parameters javadoc
         + "     */\n"
-        + "    public {0}cg create("
+        + "    public {0} create("
         + "{3}"
          // (optional) pk declaration
         + "{4});\n\n";
