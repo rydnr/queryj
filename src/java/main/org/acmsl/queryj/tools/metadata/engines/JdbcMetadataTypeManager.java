@@ -19,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
+    Contact info: jose.sanleandro@acm-sl.com
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -32,10 +32,17 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Provides some useful methods when working with database metadata.
+ * Description: Provides the basic translation and management services
+ *              related to database attribute types, according to strict
+ *              JDBC specification.
  *
  */
-package org.acmsl.queryj.tools;
+package org.acmsl.queryj.tools.metadata.engines;
+
+/*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -57,34 +64,37 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * Provides some useful methods when working with database metadata.
+ * Provides the basic translation and management services
+ * related to database attribute types, according to strict
+ * JDBC specification.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class MetaDataUtils
+public class JdbcMetadataTypeManager
+    implements  MetadataTypeManager
 {
-    /**
-     * The native to Java type mapping.
-     */
-    private Map m__mNative2JavaTypeMapping;
-
     /**
      * Singleton implemented as a weak reference.
      */
     private static WeakReference singleton;
 
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * The native to Java type mapping.
      */
-    protected MetaDataUtils() {};
+    private Map m__mNative2JavaTypeMapping;
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
+     * Creates an empty <code>JdbcMetadataTypeManager</code>.
      */
-    protected static void setReference(final MetaDataUtils utils)
+    public JdbcMetadataTypeManager() {};
+    
+    /**
+     * Specifies a new weak reference.
+     * @param manager the manager instance to use.
+     */
+    protected static void setReference(final JdbcMetadataTypeManager manager)
     {
-        singleton = new WeakReference(utils);
+        singleton = new WeakReference(manager);
     }
 
     /**
@@ -97,23 +107,23 @@ public class MetaDataUtils
     }
 
     /**
-     * Retrieves a MetaDataUtils instance.
+     * Retrieves a <code>JdbcMetadataTypeManager< instance.
      * @return such instance.
      */
-    public static MetaDataUtils getInstance()
+    public static JdbcMetadataTypeManager getInstance()
     {
-        MetaDataUtils result = null;
+        JdbcMetadataTypeManager result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (MetaDataUtils) reference.get();
+            result = (JdbcMetadataTypeManager) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new MetaDataUtils();
+            result = new JdbcMetadataTypeManager();
 
             setReference(result);
         }
@@ -160,7 +170,7 @@ public class MetaDataUtils
     {
         String result = null;
 
-        switch (dataType)
+        switch  (dataType)
         {
             case Types.DECIMAL:
                 result = "BigDecimal";

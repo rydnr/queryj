@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -128,7 +128,7 @@ public class FkStatementSetterTemplateGenerator
      * Generates a FkStatementSetter template.
      * @param tableTemplate the table template.
      * @param foreignKeys the foreign keys.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -136,7 +136,7 @@ public class FkStatementSetterTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
      * @precondition foreignKeys != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition basePackageName != null
      * @precondition repositoryName != null
@@ -144,7 +144,7 @@ public class FkStatementSetterTemplateGenerator
     public FkStatementSetterTemplate createFkStatementSetterTemplate(
         final TableTemplate tableTemplate,
         final String[] foreignKeys,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String basePackageName,
         final String repositoryName)
@@ -154,7 +154,7 @@ public class FkStatementSetterTemplateGenerator
             new FkStatementSetterTemplate(
                 tableTemplate,
                 foreignKeys,
-                metaDataManager,
+                metadataManager,
                 packageName,
                 basePackageName,
                 repositoryName);
@@ -200,7 +200,7 @@ public class FkStatementSetterTemplateGenerator
             outputDir,
             tableTemplate.getTableName(),
             template.getForeignKeys(),
-            template.getMetaDataManager(),
+            template.getMetadataManager(),
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
             FileUtils.getInstance());
@@ -211,7 +211,7 @@ public class FkStatementSetterTemplateGenerator
      * @param template the template to write.
      * @param tableName the table name.
      * @param foreignKeys the foreign keys.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
@@ -221,7 +221,7 @@ public class FkStatementSetterTemplateGenerator
      * @precondition template != null
      * @precondition tableName != null
      * @precondition foreignKeys != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
@@ -232,7 +232,7 @@ public class FkStatementSetterTemplateGenerator
         final File outputDir,
         final String tableName,
         final String[] foreignKeys,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
         final FileUtils fileUtils)
@@ -250,7 +250,7 @@ public class FkStatementSetterTemplateGenerator
             + "By"
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    metaDataManager.getReferredTable(
+                    metadataManager.getReferredTable(
                         tableName,
                         foreignKeys).toLowerCase()),
                 '_')

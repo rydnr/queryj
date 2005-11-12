@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -72,7 +72,7 @@ public abstract class AbstractFkStatementSetterTemplate
     /**
      * The database metadata manager.
      */
-    private DatabaseMetaDataManager m__MetaDataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
      * The header.
@@ -194,7 +194,7 @@ public abstract class AbstractFkStatementSetterTemplate
      * given information.
      * @param tableTemplate the table template.
      * @param foreignKeys the foreign keys.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -222,7 +222,7 @@ public abstract class AbstractFkStatementSetterTemplate
     protected AbstractFkStatementSetterTemplate(
         final TableTemplate tableTemplate,
         final String[] foreignKeys,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -253,8 +253,8 @@ public abstract class AbstractFkStatementSetterTemplate
         immutableSetForeignKeys(
             foreignKeys);
 
-        immutableSetMetaDataManager(
-            metaDataManager);
+        immutableSetMetadataManager(
+            metadataManager);
 
         immutableSetHeader(
             header);
@@ -375,31 +375,31 @@ public abstract class AbstractFkStatementSetterTemplate
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      */
-    private void immutableSetMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager)
+    private void immutableSetMetadataManager(
+        final MetadataManager metadataManager)
     {
-        m__MetaDataManager = metaDataManager;
+        m__MetadataManager = metadataManager;
     }
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      */
-    protected void setMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager)
+    protected void setMetadataManager(
+        final MetadataManager metadataManager)
     {
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
     }
 
     /**
      * Retrieves the metadata manager.
      * @return such manager.
      */
-    public DatabaseMetaDataManager getMetaDataManager()
+    public MetadataManager getMetadataManager()
     {
-        return m__MetaDataManager;
+        return m__MetadataManager;
     }
 
     /**
@@ -1036,7 +1036,7 @@ public abstract class AbstractFkStatementSetterTemplate
             buildHeader(
                 getTableTemplate(),
                 getForeignKeys(),
-                getMetaDataManager(),
+                getMetadataManager(),
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance());
     }
@@ -1045,21 +1045,21 @@ public abstract class AbstractFkStatementSetterTemplate
      * Builds the header for logging purposes.
      * @param tableTemplate the table template.
      * @param foreignKeys the foreign keys.
-     * @param metaDataManager the <code>DatabaseMetaDataManager</code> instance.
+     * @param metadataManager the metadata manager.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @return such header.
      * @precondition tableTemplate != null
      * @precondition foreignKeys != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      */
     protected String buildHeader(
         final TableTemplate tableTemplate,
         final String[] foreignKeys,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils)
     {
@@ -1072,7 +1072,7 @@ public abstract class AbstractFkStatementSetterTemplate
             + "By"
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    metaDataManager.getReferredTable(
+                    metadataManager.getReferredTable(
                         tableTemplate.getTableName(),
                         foreignKeys).toLowerCase()),
                 '_')

@@ -44,12 +44,11 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
-import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateFactory;
@@ -182,7 +181,7 @@ public class DAOTemplateBuildHandler
                 engineName,
                 engineVersion,
                 quote,
-                retrieveDatabaseMetaDataManager(parameters),
+                retrieveMetadataManager(parameters),
                 retrieveCustomSqlProvider(parameters),
                 DAOTemplateGenerator.getInstance(),
                 retrieveProjectPackage(parameters),
@@ -197,7 +196,7 @@ public class DAOTemplateBuildHandler
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the quote character.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
      * @param projectPackage the project package.
@@ -208,7 +207,7 @@ public class DAOTemplateBuildHandler
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition customSqlProvider != null
      * @precondition templateFactory != null
      * @precondition projectPackage != null
@@ -221,7 +220,7 @@ public class DAOTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String quote,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final DAOTemplateFactory templateFactory,
         final String projectPackage,
@@ -245,7 +244,7 @@ public class DAOTemplateBuildHandler
                 t_aDAOTemplates[t_iDAOIndex] =
                     templateFactory.createDAOTemplate(
                         tableTemplates[t_iDAOIndex],
-                        metaDataManager,
+                        metadataManager,
                         customSqlProvider,
                         packageName,
                         engineName,

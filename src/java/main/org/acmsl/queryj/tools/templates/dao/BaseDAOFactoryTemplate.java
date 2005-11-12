@@ -41,8 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -75,13 +74,13 @@ public class BaseDAOFactoryTemplate
     /**
      * Builds a BaseDAOFactoryTemplate using given information.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param projectPackageName the project package name.
      */
     public BaseDAOFactoryTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String projectPackageName)
     {
@@ -89,7 +88,7 @@ public class BaseDAOFactoryTemplate
             DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             tableTemplate,
-            metaDataManager,
+            metadataManager,
             packageName,
             projectPackageName,
             DEFAULT_PROJECT_IMPORTS,
@@ -114,7 +113,7 @@ public class BaseDAOFactoryTemplate
                 getHeader(),
                 getPackageDeclaration(),
                 getTableTemplate(),
-                getMetaDataManager(),
+                getMetadataManager(),
                 getPackageName(),
                 getProjectPackageName(),
                 getProjectImports(),
@@ -136,7 +135,7 @@ public class BaseDAOFactoryTemplate
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param projectPackageName the project package name.
      * @param projectImports the project imports.
@@ -161,7 +160,7 @@ public class BaseDAOFactoryTemplate
         final String header,
         final String packageDeclaration,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String projectPackageName,
         final String projectImports,

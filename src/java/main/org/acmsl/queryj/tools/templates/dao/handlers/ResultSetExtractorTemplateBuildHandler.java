@@ -43,7 +43,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -165,7 +165,7 @@ public class ResultSetExtractorTemplateBuildHandler
             handle(
                 parameters,
                 engineName,
-                retrieveDatabaseMetaDataManager(parameters),
+                retrieveMetadataManager(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 ResultSetExtractorTemplateGenerator.getInstance(),
@@ -178,7 +178,7 @@ public class ResultSetExtractorTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param basePackageName the base package name.
      * @param repository the repository.
      * @param templateFactory the template factory.
@@ -187,7 +187,7 @@ public class ResultSetExtractorTemplateBuildHandler
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition basePackageName != null
      * @precondition repositoryName != null
@@ -197,7 +197,7 @@ public class ResultSetExtractorTemplateBuildHandler
     protected boolean handle(
         final Map parameters,
         final String engineName,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String basePackageName,
         final String repositoryName,
         final ResultSetExtractorTemplateFactory templateFactory,
@@ -220,7 +220,7 @@ public class ResultSetExtractorTemplateBuildHandler
                 t_aTemplates[t_iIndex] =
                     templateFactory.createResultSetExtractorTemplate(
                         tableTemplates[t_iIndex],
-                        metaDataManager,
+                        metadataManager,
                         retrievePackage(
                             engineName,
                             tableTemplates[t_iIndex].getTableName(),
@@ -304,23 +304,6 @@ public class ResultSetExtractorTemplateBuildHandler
                 projectPackage,
                 engineName,
                 tableName);
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**

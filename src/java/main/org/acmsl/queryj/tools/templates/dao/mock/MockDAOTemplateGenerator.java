@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -197,19 +197,19 @@ public class MockDAOTemplateGenerator
     /**
      * Generates a Mock DAO template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      */
     public MockDAOTemplate createMockDAOTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String basePackageName,
         final String repositoryName)
@@ -226,7 +226,7 @@ public class MockDAOTemplateGenerator
             result =
                 t_TemplateFactory.createMockDAOTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     basePackageName,
                     repositoryName);
@@ -236,7 +236,7 @@ public class MockDAOTemplateGenerator
             result =
                 new MockDAOTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     basePackageName,
                     repositoryName);

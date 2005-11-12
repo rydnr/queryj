@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.valueobject;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -77,7 +77,7 @@ public abstract class AbstractValueObjectFactoryTemplate
     /**
      * The metadata manager.
      */
-    private DatabaseMetaDataManager m__MetaDataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
      * The project import statements.
@@ -145,7 +145,7 @@ public abstract class AbstractValueObjectFactoryTemplate
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param projectImports the project imports.
      * @param jdkImports the JDK imports.
      * @param javadoc the class Javadoc.
@@ -164,7 +164,7 @@ public abstract class AbstractValueObjectFactoryTemplate
         final String packageDeclaration,
         final String packageName,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String projectImports,
         final String jdkImports,
         final String javadoc,
@@ -182,8 +182,7 @@ public abstract class AbstractValueObjectFactoryTemplate
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetTableTemplate(tableTemplate);
-        immutableSetMetaDataManager(metaDataManager);
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
         immutableSetProjectImports(projectImports);
         immutableSetJdkImports(jdkImports);
         immutableSetJavadoc(javadoc);
@@ -308,31 +307,31 @@ public abstract class AbstractValueObjectFactoryTemplate
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
+     * @param metadataManager the new metadata manager.
      */
-    private void immutableSetMetaDataManager(
-        DatabaseMetaDataManager metaDataManager)
+    private void immutableSetMetadataManager(
+        final MetadataManager metadataManager)
     {
-        m__MetaDataManager = metaDataManager;
+        m__MetadataManager = metadataManager;
     }
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
+     * @param metadataManager the new metadata manager.
      */
-    protected void setMetaDataManager(
-        DatabaseMetaDataManager metaDataManager)
+    protected void setMetadataManager(
+        final MetadataManager metadataManager)
     {
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
     }
 
     /**
      * Retrieves the metadata manager.
      * @return such information.
      */
-    public DatabaseMetaDataManager getMetaDataManager()
+    public MetadataManager getMetadataManager()
     {
-        return m__MetaDataManager;
+        return m__MetadataManager;
     }
 
     /**

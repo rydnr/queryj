@@ -42,11 +42,10 @@ package org.acmsl.queryj.tools.templates.dao.mock.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplateFactory;
@@ -118,7 +117,7 @@ public class MockDAOTemplateBuildHandler
         return
             handle(
                 parameters,
-                retrieveDatabaseMetaDataManager(parameters),
+                retrieveMetadataManager(parameters),
                 retrieveProjectPackage(parameters),
                 retrievePackage(parameters),
                 retrieveTableRepositoryName(parameters),
@@ -129,7 +128,7 @@ public class MockDAOTemplateBuildHandler
     /**
      * Builds the Mock DAO templates.
      * @param parameters the parameters.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param basePackageName the base package name.
      * @param packageName the package name.
      * @param tableRepositoryName the name of the table repository.
@@ -138,7 +137,7 @@ public class MockDAOTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition basePackageName != null
      * @precondition packageName != null
      * @precondition tableRepositoryName != null
@@ -147,7 +146,7 @@ public class MockDAOTemplateBuildHandler
      */
     protected boolean handle(
         final Map parameters,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String basePackageName,
         final String packageName,
         final String tableRepositoryName,
@@ -171,7 +170,7 @@ public class MockDAOTemplateBuildHandler
                 t_aMockDAOTemplates[t_iMockDAOIndex] =
                     templateFactory.createMockDAOTemplate(
                         tableTemplates[t_iMockDAOIndex],
-                        metaDataManager,
+                        metadataManager,
                         packageName,
                         basePackageName,
                         tableRepositoryName);
@@ -194,23 +193,6 @@ public class MockDAOTemplateBuildHandler
         }
         
         return result;
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**

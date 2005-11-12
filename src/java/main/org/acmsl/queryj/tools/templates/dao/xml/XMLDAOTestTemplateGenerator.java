@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -247,7 +247,7 @@ public class XMLDAOTestTemplateGenerator
     /**
      * Generates a DAO test template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -257,14 +257,14 @@ public class XMLDAOTestTemplateGenerator
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition daoPackageName != null
      * @precondition valueObjectPackageName != null
      */
     public XMLDAOTestTemplate createXMLDAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String daoPackageName,
         final String valueObjectPackageName)
@@ -280,7 +280,7 @@ public class XMLDAOTestTemplateGenerator
             result =
                 t_TemplateFactory.createXMLDAOTestTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     daoPackageName,
                     valueObjectPackageName);
@@ -290,7 +290,7 @@ public class XMLDAOTestTemplateGenerator
             result =
                 new XMLDAOTestTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     daoPackageName,
                     valueObjectPackageName);

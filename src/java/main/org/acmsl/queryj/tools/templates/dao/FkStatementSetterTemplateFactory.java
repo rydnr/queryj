@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -57,7 +57,7 @@ public interface FkStatementSetterTemplateFactory
      * Generates a FkStatementSetter template.
      * @param tableTemplate the table template.
      * @param foreignKeys the foreign keys.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -67,7 +67,7 @@ public interface FkStatementSetterTemplateFactory
     public FkStatementSetterTemplate createFkStatementSetterTemplate(
         final TableTemplate tableTemplate,
         final String[] foreignKeys,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String basePackageName,
         final String repositoryName)

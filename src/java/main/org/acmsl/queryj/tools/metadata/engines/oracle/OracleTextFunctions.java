@@ -37,7 +37,7 @@
  *              JServer Release 8.1.7.0.1 - Production.
  *
  */
-package org.acmsl.queryj.tools.oracle;
+package org.acmsl.queryj.tools.metadata.engines.oracle;
 
 /*
  * Importing some ACM-SL classes.
@@ -64,7 +64,7 @@ import java.util.Calendar;
  * Release 8.1.7.0.1 - Production JServer Release 8.1.7.0.1 - Production.
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
  */
-public abstract class OracleTextFunctions
+public class OracleTextFunctions
 {
     /**
      * Singleton implemented as a weak reference.
@@ -106,7 +106,7 @@ public abstract class OracleTextFunctions
 
         if  (result == null) 
         {
-            result = new OracleTextFunctions() { };
+            result = new OracleTextFunctions();
 
             setReference(result);
         }

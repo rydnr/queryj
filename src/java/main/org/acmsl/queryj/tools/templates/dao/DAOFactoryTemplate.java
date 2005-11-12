@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -90,7 +89,6 @@ public class DAOFactoryTemplate
     {
         super(
             tableTemplate,
-            null,
             packageName,
             engineName,
             null,

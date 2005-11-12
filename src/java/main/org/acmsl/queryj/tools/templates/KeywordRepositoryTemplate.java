@@ -41,10 +41,8 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
-import org.acmsl.queryj.tools.ProcedureMetaData;
-import org.acmsl.queryj.tools.ProcedureParameterMetaData;
+import org.acmsl.queryj.tools.templates.AbstractKeywordRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateDefaults;
 
 /*
  * Importing some ACM-SL classes.

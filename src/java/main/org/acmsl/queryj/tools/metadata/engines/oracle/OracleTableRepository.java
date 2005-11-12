@@ -35,14 +35,14 @@
  * Description: Contains all tables belonging to Oracle dictionary.
  *
  */
-package org.acmsl.queryj.tools.oracle;
+package org.acmsl.queryj.tools.metadata.engines.oracle;
 
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.oracle.OracleUserColCommentsTable;
-import org.acmsl.queryj.tools.oracle.OracleUserTabColumnsTable;
-import org.acmsl.queryj.tools.oracle.OracleUserTablesTable;
+import org.acmsl.queryj.tools.metadata.engines.oracle.OracleUserColCommentsTable;
+import org.acmsl.queryj.tools.metadata.engines.oracle.OracleUserTabColumnsTable;
+import org.acmsl.queryj.tools.metadata.engines.oracle.OracleUserTablesTable;
 
 /**
  * Contains all tables belonging to Oracle dictionary.

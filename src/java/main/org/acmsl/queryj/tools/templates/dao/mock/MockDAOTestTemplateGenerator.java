@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -251,7 +251,7 @@ public class MockDAOTestTemplateGenerator
     /**
      * Generates a DAO test template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -261,14 +261,14 @@ public class MockDAOTestTemplateGenerator
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition daoPackageName != null
      * @precondition valueObjectPackageName != null
      */
     public MockDAOTestTemplate createMockDAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String daoPackageName,
         final String valueObjectPackageName)
@@ -284,7 +284,7 @@ public class MockDAOTestTemplateGenerator
             result =
                 t_TemplateFactory.createMockDAOTestTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     daoPackageName,
                     valueObjectPackageName);
@@ -294,7 +294,7 @@ public class MockDAOTestTemplateGenerator
             result =
                 new MockDAOTestTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     daoPackageName,
                     valueObjectPackageName);

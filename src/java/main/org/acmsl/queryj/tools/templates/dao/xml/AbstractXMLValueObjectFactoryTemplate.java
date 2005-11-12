@@ -40,8 +40,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -83,7 +82,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
     /**
      * The metadata manager.
      */
-    private DatabaseMetaDataManager m__MetaDataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
      * The project import statements.
@@ -163,7 +162,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
      * @param packageName the package name.
      * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param projectImports the project imports.
      * @param acmSlImports the ACM-SL imports.
      * @param jdkImports the JDK imports.
@@ -186,7 +185,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
         final String packageName,
         final String valueObjectPackageName,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String projectImports,
         final String acmSlImports,
         final String jdkImports,
@@ -207,7 +206,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
         immutableSetPackageName(packageName);
         immutableSetValueObjectPackageName(valueObjectPackageName);
         immutableSetTableTemplate(tableTemplate);
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
         immutableSetProjectImports(projectImports);
         immutableSetAcmSlImports(acmSlImports);
         immutableSetJdkImports(jdkImports);
@@ -362,31 +361,31 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
+     * @param metadataManager the new metadata manager.
      */
-    private void immutableSetMetaDataManager(
-        DatabaseMetaDataManager metaDataManager)
+    private void immutableSetMetadataManager(
+        MetadataManager metadataManager)
     {
-        m__MetaDataManager = metaDataManager;
+        m__MetadataManager = metadataManager;
     }
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
+     * @param metadataManager the new metadata manager.
      */
-    protected void setMetaDataManager(
-        DatabaseMetaDataManager metaDataManager)
+    protected void setMetadataManager(
+        MetadataManager metadataManager)
     {
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
     }
 
     /**
      * Retrieves the metadata manager.
      * @return such information.
      */
-    public DatabaseMetaDataManager getMetaDataManager()
+    public MetadataManager getMetadataManager()
     {
-        return m__MetaDataManager;
+        return m__MetadataManager;
     }
 
     /**

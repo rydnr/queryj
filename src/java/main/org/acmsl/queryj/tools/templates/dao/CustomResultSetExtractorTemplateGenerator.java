@@ -43,7 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -131,7 +131,7 @@ public class CustomResultSetExtractorTemplateGenerator
      * @param resultElement the result element.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -140,7 +140,7 @@ public class CustomResultSetExtractorTemplateGenerator
      * @precondition resultElement != null
      * @precondition customSqlProvider != null
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition basePackageName != null
      * @precondition repositoryName != null
@@ -149,7 +149,7 @@ public class CustomResultSetExtractorTemplateGenerator
         final ResultElement resultElement,
         final CustomSqlProvider customSqlProvider,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String basePackageName,
         final String repositoryName)
@@ -160,7 +160,7 @@ public class CustomResultSetExtractorTemplateGenerator
                 resultElement,
                 customSqlProvider,
                 tableTemplate,
-                metaDataManager,
+                metadataManager,
                 packageName,
                 basePackageName,
                 repositoryName);

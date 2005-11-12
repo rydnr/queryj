@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -55,7 +55,7 @@ public interface MockDAOTestTemplateFactory
     /**
      * Generates a Mock DAO test template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectPackageName the value object's package name.
@@ -64,7 +64,7 @@ public interface MockDAOTestTemplateFactory
      */
     public MockDAOTestTemplate createMockDAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String daoPackageName,
         final String valueObjectPackageName)

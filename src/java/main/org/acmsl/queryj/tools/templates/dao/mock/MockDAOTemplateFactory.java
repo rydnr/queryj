@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -55,7 +55,7 @@ public interface MockDAOTemplateFactory
     /**
      * Generates a MockDAO template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -63,10 +63,10 @@ public interface MockDAOTemplateFactory
      * @throws QueryJException if the input values are invalid.
      */
     public MockDAOTemplate createMockDAOTemplate(
-        final TableTemplate           tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
-        final String                  packageName,
-        final String                  basePackageName,
-        final String                  repositoryName)
+        final TableTemplate tableTemplate,
+        final MetadataManager metadataManager,
+        final String packageName,
+        final String basePackageName,
+        final String repositoryName)
       throws  QueryJException;
 }

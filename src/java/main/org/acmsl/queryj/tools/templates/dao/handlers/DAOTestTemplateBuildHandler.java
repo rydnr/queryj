@@ -42,12 +42,11 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
-import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplateFactory;
@@ -113,31 +112,31 @@ public class DAOTestTemplateBuildHandler
             handle(
                 parameters,
                 retrieveDatabaseMetaData(parameters),
-                retrieveDatabaseMetaDataManager(parameters));
+                retrieveMetadataManager(parameters));
     }
     
     /**
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @param metaData the database metadata.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      */
     protected boolean handle(
         final Map parameters,
         final DatabaseMetaData metaData,
-        final DatabaseMetaDataManager metaDataManager)
+        final MetadataManager metadataManager)
       throws  BuildException
     {
         return
             handle(
                 parameters,
                 metaData,
-                metaDataManager,
+                metadataManager,
                 retrieveTableTemplates(parameters),
                 DAOTestTemplateGenerator.getInstance());
     }
@@ -146,21 +145,21 @@ public class DAOTestTemplateBuildHandler
      * Builds the DAO test templates.
      * @param parameters the parameters.
      * @param metaData the database metadata.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param tableTemplates the table templates.
      * @param templateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition tableTemplates != null
      * @precondition templateFactory != null
      */
     protected boolean handle(
         final Map parameters,
         final DatabaseMetaData metaData,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final TableTemplate[] tableTemplates,
         final DAOTestTemplateFactory factory)
       throws  BuildException
@@ -199,7 +198,7 @@ public class DAOTestTemplateBuildHandler
                 t_aDAOTestTemplates[t_iDAOTestIndex] =
                     factory.createDAOTestTemplate(
                         tableTemplates[t_iDAOTestIndex],
-                        metaDataManager,
+                        metadataManager,
                         t_strPackage,
                         metaData.getDatabaseProductName(),
                         metaData.getDatabaseProductVersion(),

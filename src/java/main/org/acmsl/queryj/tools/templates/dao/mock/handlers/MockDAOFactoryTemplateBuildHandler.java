@@ -43,10 +43,8 @@ package org.acmsl.queryj.tools.templates.dao.mock.handlers;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
@@ -68,7 +66,6 @@ import org.apache.tools.ant.BuildException;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Map;
 

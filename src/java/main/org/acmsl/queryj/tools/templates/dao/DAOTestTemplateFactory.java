@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -55,7 +55,7 @@ public interface DAOTestTemplateFactory
     /**
      * Generates a DAO test template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -71,7 +71,7 @@ public interface DAOTestTemplateFactory
      */
     public DAOTestTemplate createDAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String engineName,
         final String engineVersion,

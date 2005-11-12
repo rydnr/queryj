@@ -43,7 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -248,21 +248,21 @@ public class BaseDAOTemplateGenerator
     /**
      * Generates a base DAO template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param customSqlProvider the custom sql provider.
      * @param packageName the package name.
      * @param valueObjectPackageName the value object package name.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition customSqlProvider != null
      * @precondition packageName != null
      * @precondition valueObjectPackageName != null
      */
     public BaseDAOTemplate createBaseDAOTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String valueObjectPackageName)
@@ -278,7 +278,7 @@ public class BaseDAOTemplateGenerator
             result =
                 t_TemplateFactory.createBaseDAOTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     customSqlProvider,
                     packageName,
                     valueObjectPackageName);
@@ -288,7 +288,7 @@ public class BaseDAOTemplateGenerator
             result =
                 new BaseDAOTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     customSqlProvider,
                     packageName,
                     valueObjectPackageName);

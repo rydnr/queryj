@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.customsql.ParameterRefElement;
 import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ParameterDecorator;
 
 /*
@@ -78,17 +79,26 @@ public class SqlDecorator
      * @todo remove this.
      */
     private CustomSqlProvider m__CustomSqlProvider;
+
+    /**
+     * The metadata type manager.
+     */
+    private MetadataTypeManager m__MetadataTypeManager;
     
     /**
      * Creates a <code>SqlDecorator</code> with given information.
      * @param sqlElement the <code>SqlElement</code> to decorate.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
      * to decorate referred parameters.
+     * @param metadataTypeManager the metadata type manager.
      * @precondition sqlElement != null
      * @precondition customSqlProvider != null
+     * @precondition metadataTypeManager != null
      */
     public SqlDecorator(
-        final SqlElement sqlElement, final CustomSqlProvider customSqlProvider)
+        final SqlElement sqlElement,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataTypeManager metadataTypeManager)
     {
         super(
             sqlElement.getId(),
@@ -105,6 +115,7 @@ public class SqlDecorator
         immutableSetStatementFlagsRef(sqlElement.getStatementFlagsRef());
         immutableSetResultSetFlagsRef(sqlElement.getResultSetFlagsRef());
         immutableSetCustomSqlProvider(customSqlProvider);
+        immutableSetMetadataTypeManager(metadataTypeManager);
     }
 
     /**
@@ -134,6 +145,35 @@ public class SqlDecorator
     protected CustomSqlProvider getCustomSqlProvider()
     {
         return m__CustomSqlProvider;
+    }
+
+    /**
+     * Specifies the metadata type manager.
+     * @param metadataTypeManager such manager.
+     */
+    protected final void immutableSetMetadataTypeManager(
+        final MetadataTypeManager metadataTypeManager)
+    {
+        m__MetadataTypeManager = metadataTypeManager;
+    }
+    
+    /**
+     * Specifies the metadata type manager.
+     * @param metadataTypeManager such manager.
+     */
+    protected void setMetadataTypeManager(
+        final MetadataTypeManager metadataTypeManager)
+    {
+        immutableSetMetadataTypeManager(metadataTypeManager);
+    }
+    
+    /**
+     * Retrieves the metadata type manager.
+     * @return such manager.
+     */
+    protected MetadataTypeManager getMetadataTypeManager()
+    {
+        return m__MetadataTypeManager;
     }
 
     /**
@@ -251,7 +291,11 @@ public class SqlDecorator
      */
     public Collection getParameters()
     {
-        return getParameters(getParameterRefs(), getCustomSqlProvider());
+        return
+            getParameters(
+                getParameterRefs(),
+                getCustomSqlProvider(),
+                getMetadataTypeManager());
     }
     
     /**
@@ -259,12 +303,15 @@ public class SqlDecorator
      * @todo fix reference to customSqlProvider.
      * @param parameterRefs the parameter references.
      * @param customSqlProvider the <code>CustomSqlProvider</code>.
+     * @param metadataTypeManager the metadata type manager.
      * @return such information.
      * @precondition customSqlProvider != null
+     * @precondition metadataTypeManager != null
      */
-    public Collection getParameters(
+    protected Collection getParameters(
         final Collection parameterRefs,
-        final CustomSqlProvider customSqlProvider)
+        final CustomSqlProvider customSqlProvider,
+        final MetadataTypeManager metadataTypeManager)
     {
         Collection result = new ArrayList();
 
@@ -288,7 +335,8 @@ public class SqlDecorator
                             customSqlProvider.resolveReference(t_ParameterRef);
 
                         result.add(
-                            new ParameterDecorator(t_Parameter));
+                            new ParameterDecorator(
+                                t_Parameter, metadataTypeManager));
                     }
                     else
                     {

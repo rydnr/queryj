@@ -42,12 +42,11 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateFactory;
@@ -109,7 +108,7 @@ public class BaseDAOFactoryTemplateBuildHandler
         return
             handle(
                 parameters,
-                retrieveDatabaseMetaDataManager(parameters),
+                retrieveMetadataManager(parameters),
                 retrievePackage(parameters),
                 retrieveProjectPackage(parameters),
                 BaseDAOFactoryTemplateGenerator.getInstance(),
@@ -119,7 +118,7 @@ public class BaseDAOFactoryTemplateBuildHandler
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param packageName the package name.
      * @param projectPackage the project package.
      * @param templateFactory the template factory.
@@ -127,14 +126,14 @@ public class BaseDAOFactoryTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition templateFactory != null
      * @precondition tableTemplates != null
      */
     protected boolean handle(
         final Map parameters,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String projectPackage,
         final BaseDAOFactoryTemplateFactory templateFactory,
@@ -157,7 +156,7 @@ public class BaseDAOFactoryTemplateBuildHandler
                 t_aBaseDAOFactoryTemplates[t_iBaseDAOFactoryIndex] =
                     templateFactory.createBaseDAOFactoryTemplate(
                         tableTemplates[t_iBaseDAOFactoryIndex],
-                        metaDataManager,
+                        metadataManager,
                         packageName,
                         projectPackage);
             }
@@ -171,23 +170,6 @@ public class BaseDAOFactoryTemplateBuildHandler
         }
         
         return result;
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-        throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**

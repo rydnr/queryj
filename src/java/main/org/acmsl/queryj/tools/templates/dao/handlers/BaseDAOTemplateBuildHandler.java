@@ -44,7 +44,7 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
@@ -115,7 +115,7 @@ public class BaseDAOTemplateBuildHandler
         return
             handle(
                 parameters,
-                retrieveDatabaseMetaDataManager(parameters),
+                retrieveMetadataManager(parameters),
                 retrieveCustomSqlProvider(parameters),
                 retrievePackage(parameters),
                 retrieveValueObjectPackageName(parameters),
@@ -126,7 +126,7 @@ public class BaseDAOTemplateBuildHandler
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param databaseMetaDataManager the manager instance
+     * @param metadataManager the manager instance
      * of the database metadata.
      * @param customSqlProvider the custom sql provider.
      * @param packageName the package name.
@@ -136,7 +136,7 @@ public class BaseDAOTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
-     * @precondition databaseMetaDataManager != null
+     * @precondition metadataManager != null
      * @precondition customSqlProvider != null
      * @precondition packageName != null
      * @precondition valueObjectPackageName != null
@@ -145,7 +145,7 @@ public class BaseDAOTemplateBuildHandler
      */
     protected boolean handle(
         final Map parameters,
-        final DatabaseMetaDataManager databaseMetaDataManager,
+        final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String valueObjectPackageName,
@@ -170,7 +170,7 @@ public class BaseDAOTemplateBuildHandler
                 t_aBaseDAOTemplates[t_iBaseDAOIndex] =
                     templateFactory.createBaseDAOTemplate(
                         tableTemplates[t_iBaseDAOIndex],
-                        databaseMetaDataManager,
+                        metadataManager,
                         customSqlProvider,
                         packageName,
                         valueObjectPackageName);
@@ -195,23 +195,6 @@ public class BaseDAOTemplateBuildHandler
     protected String retrieveValueObjectPackageName(final Map parameters)
     {
         return ValueObjectTemplateBuildHandler.retrievePackage(parameters);
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**

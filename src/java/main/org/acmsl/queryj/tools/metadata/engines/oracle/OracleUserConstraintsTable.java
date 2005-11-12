@@ -11,7 +11,7 @@
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    MERCHANCONSILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     General Public License for more details.
 
     You should have received a copy of the GNU General Public
@@ -32,10 +32,11 @@
  *
  * Author: QueryJ
  *
- * Description: Represents the USER_TABLES table in the persistence domain.
+ * Description: Represents the USER_CONSTRAINTS table in the persistence
+ *              domain.
  *
  */
-package org.acmsl.queryj.tools.oracle;
+package org.acmsl.queryj.tools.metadata.engines.oracle;
 
 /*
  * Importing some ACM-SL classes.
@@ -55,10 +56,10 @@ import org.acmsl.queryj.Table;
 import java.lang.ref.WeakReference;
 
 /**
- * Represents the USER_TABLES table in the persistence domain.
+ * Represents the USER_CONSTRAINTS table in the persistence domain.
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
  */
-public class OracleUserTablesTable
+public class OracleUserConstraintsTable
     extends  Table
 {
     /**
@@ -67,24 +68,54 @@ public class OracleUserTablesTable
     private static WeakReference singleton;
 
     /**
-     * The user_tables table table_name field.
+     * The user_constraints table constraint_name field.
+     */
+    public StringField CONSTRAINT_NAME =
+        new StringField("CONSTRAINT_NAME", this);
+
+    /**
+     * The user_constraints table r_constraint_name field.
+     */
+    public StringField R_CONSTRAINT_NAME =
+        new StringField("R_CONSTRAINT_NAME", this);
+
+    /**
+     * The user_constraints table constraint_type field.
+     */
+    public StringField CONSTRAINT_TYPE =
+        new StringField("CONSTRAINT_TYPE", this);
+
+    /**
+     * The user_constraints table table_name field.
      */
     public StringField TABLE_NAME =
         new StringField("TABLE_NAME", this);
 
     /**
+     * The user_constraints table column_name field.
+     */
+    public StringField COLUMN_NAME =
+        new StringField("COLUMN_NAME", this);
+
+    /**
+     * The user_constraints table position field.
+     */
+    public IntField POSITION =
+        new IntField("POSITION", this);
+
+    /**
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */
-    protected OracleUserTablesTable(final String alias)
+    protected OracleUserConstraintsTable(final String alias)
     {
-        super("USER_TABLES", alias);
+        super("USER_CONSTRAINTS", alias);
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected OracleUserTablesTable()
+    protected OracleUserConstraintsTable()
     {
         this(null);
     }
@@ -93,7 +124,7 @@ public class OracleUserTablesTable
      * Specifies a new weak reference.
      * @param table the table instance to use.
      */
-    protected static void setReference(final OracleUserTablesTable table)
+    protected static void setReference(final OracleUserConstraintsTable table)
     {
         singleton = new WeakReference(table);
     }
@@ -108,17 +139,17 @@ public class OracleUserTablesTable
     }
 
     /**
-     * Retrieves a OracleUserTablesTable instance.
+     * Retrieves a OracleUserConstraintsTable instance.
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserTablesTable getInstance(final String alias)
+    public static OracleUserConstraintsTable getInstance(final String alias)
     {
-        OracleUserTablesTable result = null;
+        OracleUserConstraintsTable result = null;
 
         if  (alias != null)
         {
-            result = new OracleUserTablesTable(alias);
+            result = new OracleUserConstraintsTable(alias);
         }
         else
         {
@@ -129,23 +160,23 @@ public class OracleUserTablesTable
     }
 
     /**
-     * Retrieves a OracleUserTablesTable instance.
+     * Retrieves a OracleUserConstraintsTable instance.
      * @return such instance.
      */
-    public static OracleUserTablesTable getInstance()
+    public static OracleUserConstraintsTable getInstance()
     {
-        OracleUserTablesTable result = null;
+        OracleUserConstraintsTable result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (OracleUserTablesTable) reference.get();
+            result = (OracleUserConstraintsTable) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new OracleUserTablesTable();
+            result = new OracleUserConstraintsTable() { };
 
             setReference(result);
         }
@@ -159,7 +190,7 @@ public class OracleUserTablesTable
      */
     public String getTableName()
     {
-        return "USER_TABLES";
+        return "USER_CONSTRAINTS";
     }
 
     /**
@@ -171,7 +202,11 @@ public class OracleUserTablesTable
         return
             new Field[]
             {
-                TABLE_NAME
+                CONSTRAINT_NAME,
+                R_CONSTRAINT_NAME,
+                TABLE_NAME,
+                COLUMN_NAME,
+                POSITION
             };
     }
 }

@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -288,7 +288,7 @@ public class DAOTestTemplateGenerator
     /**
      * Generates a DAO test template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -302,7 +302,7 @@ public class DAOTestTemplateGenerator
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition engineName != null
      * @precondition engineVersion != null
@@ -316,7 +316,7 @@ public class DAOTestTemplateGenerator
      */
     public DAOTestTemplate createDAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -340,7 +340,7 @@ public class DAOTestTemplateGenerator
             result =
                 t_TemplateFactory.createDAOTestTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     engineName,
                     engineVersion,
@@ -357,7 +357,7 @@ public class DAOTestTemplateGenerator
             result =
                 new DAOTestTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     engineName,
                     engineVersion,

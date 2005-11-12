@@ -36,12 +36,11 @@
  * Description: Manages the information metadata stored in an Oracle database.
  *
  */
-package org.acmsl.queryj.tools.oracle;
+package org.acmsl.queryj.tools.metadata.engines.oracle;
 
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.Query;
@@ -49,10 +48,9 @@ import org.acmsl.queryj.QueryFactory;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.QueryResultSet;
 import org.acmsl.queryj.SelectQuery;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.oracle.OracleTableRepository;
-import org.acmsl.queryj.tools.ProcedureMetaData;
-import org.acmsl.queryj.tools.ProcedureParameterMetaData;
+import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
+import org.acmsl.queryj.tools.metadata.engines.oracle.OracleTableRepository;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -83,19 +81,19 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class OracleMetaDataManager
-    extends  DatabaseMetaDataManager
+public class OracleMetadataManager
+    extends  JdbcMetadataManager
 {
     /**
-     * Creates an empty OracleMetaDataManager.
+     * Creates an empty <code>OracleMetadataManager</code>.
      */
-    protected OracleMetaDataManager()
+    protected OracleMetadataManager()
     {
         super();
     }
 
     /**
-     * Creates an OracleMetaDataManager using given information.
+     * Creates an <code>OracleMetadataManager</code>. using given information.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -115,7 +113,7 @@ public class OracleMetaDataManager
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
-    public OracleMetaDataManager(
+    public OracleMetadataManager(
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -141,7 +139,7 @@ public class OracleMetaDataManager
     }
 
     /**
-     * Creates an OracleMetaDataManager using given information.
+     * Creates an <code>OracleMetadataManager</code> using given information.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param metaData the database meta data.
@@ -151,7 +149,7 @@ public class OracleMetaDataManager
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
-    public OracleMetaDataManager(
+    public OracleMetadataManager(
         final String[] tableNames,
         final String[] procedureNames,
         final DatabaseMetaData metaData,
@@ -232,7 +230,8 @@ public class OracleMetaDataManager
                 {
                     SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                    t_Query.select(OracleTableRepository.USER_CONS_COLUMNS.COLUMN_NAME);
+                    t_Query.select(
+                        OracleTableRepository.USER_CONS_COLUMNS.COLUMN_NAME);
 
                     t_Query.from(OracleTableRepository.USER_CONS_COLUMNS);
                     t_Query.from(OracleTableRepository.USER_CONSTRAINTS);
@@ -973,23 +972,23 @@ public class OracleMetaDataManager
     {
         return
             extractColumnTypes(
-                resultSet, fieldName, MetaDataUtils.getInstance());
+                resultSet, fieldName, getMetadataTypeManager());
     }
 
     /**
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      */
     protected int[] extractColumnTypes(
         final ResultSet resultSet,
         final String fieldName,
-        final MetaDataUtils metaDataUtils)
+        final MetadataTypeManager metadataTypeManager)
       throws  SQLException
     {
         int[] result = EMPTY_INT_ARRAY;
@@ -1005,7 +1004,7 @@ public class OracleMetaDataManager
                       t_iIndex++) 
             {
                 result[t_iIndex] =
-                    metaDataUtils.getJavaType(t_astrTypes[t_iIndex]);
+                    metadataTypeManager.getJavaType(t_astrTypes[t_iIndex]);
             }
         }
 

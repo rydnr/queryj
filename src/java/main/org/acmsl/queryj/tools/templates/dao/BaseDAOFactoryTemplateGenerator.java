@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -294,19 +294,19 @@ public class BaseDAOFactoryTemplateGenerator
     /**
      * Generates a base DAO factory template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param projectPackageName the project package name.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition projectPackageName != null
      */
     public BaseDAOFactoryTemplate createBaseDAOFactoryTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String projectPackageName)
       throws  QueryJException
@@ -314,7 +314,7 @@ public class BaseDAOFactoryTemplateGenerator
         return
             new BaseDAOFactoryTemplate(
                 tableTemplate,
-                metaDataManager,
+                metadataManager,
                 packageName,
                 projectPackageName);
     }

@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
@@ -80,21 +80,21 @@ public class XMLDAOTestTemplate
     /**
      * Builds a <code>XMLDAOTestTemplate</code> using given information.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param packageName the package name.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectsPackageName the value objects' package name.
      */
     public XMLDAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String daoPackageName,
         final String valueObjectsPackageName)
     {
         super(
             tableTemplate,
-            metaDataManager,
+            metadataManager,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
@@ -133,10 +133,22 @@ public class XMLDAOTestTemplate
      */
     protected String generateOutput()
     {
+        return generateOutput(getMetadataManager());
+    }
+    
+    /**
+     * Produces a text version of the template, weaving the
+     * dynamic parts with the static skeleton.
+     * @param metadataManager the metadata manager.
+     * @return such source code.
+     * @precondition metadataManager != null
+     */
+    protected String generateOutput(final MetadataManager metadataManager)
+    {
         return
             generateOutput(
                 getTableTemplate(),
-                getMetaDataManager(),
+                metadataManager,
                 getHeader(),
                 getPackageDeclaration(),
                 getPackageName(),
@@ -166,7 +178,7 @@ public class XMLDAOTestTemplate
                 getRemoveTest(),
                 getRemoveFilterValues(),
                 getClassEnd(),
-                MetaDataUtils.getInstance(),
+                metadataManager.getMetadataTypeManager(),
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance());
     }
@@ -175,7 +187,7 @@ public class XMLDAOTestTemplate
      * Produces a text version of the template, weaving the
      * dynamic parts with the static skeleton.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -211,18 +223,19 @@ public class XMLDAOTestTemplate
      * @param removeFilterValues the remove filter values
      * subtemplate.
      * @param classEnd the class end.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @return such source code.
-     * @precondition metaDataUtils != null
+     * @precondition metadataManager
+     * @precondition metadataTypeManager != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      */
     protected String generateOutput(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -252,7 +265,7 @@ public class XMLDAOTestTemplate
         final String removeTest,
         final String removeFilterValues,
         final String classEnd,
-        final MetaDataUtils metaDataUtils,
+        final MetadataTypeManager metadataTypeManager,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils)
     {
@@ -373,7 +386,7 @@ public class XMLDAOTestTemplate
             new StringBuffer();
 
         String[] t_astrPrimaryKeys =
-            metaDataManager.getPrimaryKey(
+            metadataManager.getPrimaryKey(
                 tableTemplate.getTableName());
 
         StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
@@ -400,7 +413,7 @@ public class XMLDAOTestTemplate
                   t_iPkIndex++) 
         {
             t_iColumnType =
-                metaDataManager.getColumnType(
+                metadataManager.getColumnType(
                     tableTemplate.getTableName(),
                     t_astrPrimaryKeys[t_iPkIndex]);
 
@@ -408,7 +421,7 @@ public class XMLDAOTestTemplate
                 t_TestParametersValuesFormatter.format(
                     new Object[]
                     {
-                        metaDataUtils.getNativeType(t_iColumnType).toUpperCase()
+                        metadataTypeManager.getNativeType(t_iColumnType).toUpperCase()
                     }));
 
             t_sbUpdateFilterValues.append(
@@ -432,7 +445,7 @@ public class XMLDAOTestTemplate
                     }));
 
             t_sbFindByPrimaryKeyParametersTypes.append(
-                metaDataUtils.getNativeType(t_iColumnType));
+                metadataTypeManager.getNativeType(t_iColumnType));
 
             if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
             {
@@ -443,13 +456,13 @@ public class XMLDAOTestTemplate
             }
 
             t_sbUpdateParametersTypes.append(
-                metaDataUtils.getNativeType(t_iColumnType));
+                metadataTypeManager.getNativeType(t_iColumnType));
 
             t_sbUpdateParametersTypes.append(",");
         }
 
         String[] t_astrColumnNames =
-            metaDataManager.getColumnNames(
+            metadataManager.getColumnNames(
                 tableTemplate.getTableName());
 
         t_iLength = (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
@@ -473,31 +486,31 @@ public class XMLDAOTestTemplate
                   t_iColumnIndex++)
         {
             t_iColumnType =
-                metaDataManager.getColumnType(
+                metadataManager.getColumnType(
                     tableTemplate.getTableName(),
                     t_astrColumnNames[t_iColumnIndex]);
 
             boolean t_bAllowsNull = false;
 
             boolean t_bIsPrimaryKey =
-                metaDataManager.isPartOfPrimaryKey(
+                metadataManager.isPartOfPrimaryKey(
                     tableTemplate.getTableName(),
                     t_astrColumnNames[t_iColumnIndex]);
 
             t_bAllowsNull =
-                metaDataManager.allowsNull(
+                metadataManager.allowsNull(
                     tableTemplate.getTableName(),
                     t_astrColumnNames[t_iColumnIndex]);
 
-            if  (!metaDataManager.isManagedExternally(
+            if  (!metadataManager.isManagedExternally(
                      tableTemplate.getTableName(),
                      t_astrColumnNames[t_iColumnIndex]))
             {
                 String t_strTestValue =
-                    metaDataUtils.getNativeType(t_iColumnType);
+                    metadataTypeManager.getNativeType(t_iColumnType);
 
                 String t_strFieldType =
-                    metaDataUtils.getNativeType(
+                    metadataTypeManager.getNativeType(
                         t_iColumnType, t_bAllowsNull);
 
                 Object[] t_aParams =
@@ -506,10 +519,10 @@ public class XMLDAOTestTemplate
                 MessageFormat t_Formatter = t_TestParametersValuesFormatter;
 
                 if  (   (t_bAllowsNull)
-                     && (metaDataUtils.isPrimitive(t_iColumnType)))
+                     && (metadataTypeManager.isPrimitive(t_iColumnType)))
                 {
                     t_strFieldType =
-                        metaDataUtils.getSmartObjectType(t_iColumnType);
+                        metadataTypeManager.getSmartObjectType(t_iColumnType);
 
                     t_Formatter =
                         t_NullableInsertedValuesConversionFormatter;
@@ -527,7 +540,7 @@ public class XMLDAOTestTemplate
 
                 t_sbInsertParametersTypes.append(t_strTestValue);
 
-                if  (!metaDataManager.isPartOfPrimaryKey(
+                if  (!metadataManager.isPartOfPrimaryKey(
                          tableTemplate.getTableName(),
                          t_astrColumnNames[t_iColumnIndex]))
                 {
@@ -538,7 +551,7 @@ public class XMLDAOTestTemplate
                     }
 
                     if  (   (t_bAllowsNull)
-                         && (metaDataUtils.isPrimitive(t_iColumnType)))
+                         && (metadataTypeManager.isPrimitive(t_iColumnType)))
                     {
                         t_sbTestParametersUpdatedValues.append(
                             t_NullableUpdatedValuesConversionFormatter.format(

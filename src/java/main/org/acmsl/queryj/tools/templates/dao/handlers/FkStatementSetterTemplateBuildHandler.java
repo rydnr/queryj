@@ -42,11 +42,11 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateFactory;
@@ -178,7 +178,7 @@ public class FkStatementSetterTemplateBuildHandler
             handle(
                 parameters,
                 engineName,
-                retrieveDatabaseMetaDataManager(parameters),
+                retrieveMetadataManager(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 FkStatementSetterTemplateGenerator.getInstance(),
@@ -189,7 +189,7 @@ public class FkStatementSetterTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param basePackageName the base package name.
      * @param repository the repository.
      * @param templateFactory the template factory.
@@ -198,7 +198,7 @@ public class FkStatementSetterTemplateBuildHandler
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition basePackageName != null
      * @precondition repositoryName != null
@@ -208,7 +208,7 @@ public class FkStatementSetterTemplateBuildHandler
     protected boolean handle(
         final Map parameters,
         final String engineName,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String basePackageName,
         final String repositoryName,
         final FkStatementSetterTemplateFactory templateFactory,
@@ -230,7 +230,7 @@ public class FkStatementSetterTemplateBuildHandler
             for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
             {
                 t_aastrFks =
-                    metaDataManager.getForeignKeys(
+                    metadataManager.getForeignKeys(
                         tableTemplates[t_iIndex].getTableName());
 
                 t_iFkCount = (t_aastrFks != null) ? t_aastrFks.length : 0;
@@ -243,7 +243,7 @@ public class FkStatementSetterTemplateBuildHandler
                         retrieveSimpleFks(
                             t_aastrFks[t_iFkIndex],
                             tableTemplates[t_iIndex].getTableName(),
-                            metaDataManager);
+                            metadataManager);
 
                     int t_iSimpleFkCount =
                         (t_astrSimpleFks != null) ? t_astrSimpleFks.length : 0;
@@ -259,7 +259,7 @@ public class FkStatementSetterTemplateBuildHandler
                                 {
                                     t_astrSimpleFks[t_iSimpleFkIndex]
                                 },
-                                metaDataManager,
+                                metadataManager,
                                 retrievePackage(
                                     engineName,
                                     tableTemplates[t_iIndex].getTableName(),
@@ -272,7 +272,7 @@ public class FkStatementSetterTemplateBuildHandler
                 String[] t_astrReferredTables =
                     retrieveReferredTablesByCompoundFks(
                         tableTemplates[t_iIndex].getTableName(),
-                        metaDataManager);
+                        metadataManager);
 
                 int t_iReferredTablesLength =
                     (t_astrReferredTables != null)
@@ -284,7 +284,7 @@ public class FkStatementSetterTemplateBuildHandler
                           t_iReferredTableIndex++)
                 {
                     t_aastrFks =
-                        metaDataManager.getForeignKeys(
+                        metadataManager.getForeignKeys(
                             t_astrReferredTables[t_iReferredTableIndex]);
 
                     t_iFkCount =
@@ -298,7 +298,7 @@ public class FkStatementSetterTemplateBuildHandler
                             templateFactory.createFkStatementSetterTemplate(
                                 tableTemplates[t_iIndex],
                                 t_aastrFks[t_iFkIndex],
-                                metaDataManager,
+                                metadataManager,
                                 retrievePackage(
                                     engineName,
                                     tableTemplates[t_iIndex].getTableName(),
@@ -377,23 +377,6 @@ public class FkStatementSetterTemplateBuildHandler
     }
 
     /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-    }
-
-    /**
      * Retrieves the repository name.
      * @param parameters the parameters.
      * @return the repository's name.
@@ -441,31 +424,32 @@ public class FkStatementSetterTemplateBuildHandler
     /**
      * Checks whether the table associated to given template contains foreign keys.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @return <code>true</code> in such case.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      */
     protected boolean containsForeignKeys(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager)
+        final MetadataManager metadataManager)
     {
-        return metaDataManager.containsForeignKeys(tableTemplate.getTableName());
+        return
+            metadataManager.containsForeignKeys(tableTemplate.getTableName());
     }
 
     /**
      * Retrieves the simple foreign keys.
      * @param allFks the complete list of foreign keys.
      * @param tableName the table name.
-     * @param metaDataManager the <code>DatabaseMetaDataManager</code> instance.
+     * @param metadataManager the database metadata manager.
      * @precondition allFks != null
      * @precondition tableName != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      */
     protected String[] retrieveSimpleFks(
         final String[] allFks,
         final String tableName,
-        final DatabaseMetaDataManager metaDataManager)
+        final MetadataManager metadataManager)
     {
         Collection t_cResult = new ArrayList();
 
@@ -477,7 +461,7 @@ public class FkStatementSetterTemplateBuildHandler
         {
             // TODO: FIXME!!
             String t_strReferredTable =
-                metaDataManager.getReferredTable(
+                metadataManager.getReferredTable(
                     tableName, new String[] {allFks[t_iIndex]});
 
             if  (t_mAux.containsKey(t_strReferredTable))
@@ -498,17 +482,18 @@ public class FkStatementSetterTemplateBuildHandler
     /**
      * Retrieves the tables referred by compound foreign keys.
      * @param tableName the table name.
-     * @param metaDataManager the <code>DatabaseMetaDataManager</code> instance.
+     * @param metadataManager the database metadata manager.
      * @precondition tableName != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      */
     protected String[] retrieveReferredTablesByCompoundFks(
         final String tableName,
-        final DatabaseMetaDataManager metaDataManager)
+        final MetadataManager metadataManager)
     {
         Collection t_cResult = new ArrayList();
 
-        String[] t_astrReferredTables = metaDataManager.getReferredTables(tableName);
+        String[] t_astrReferredTables =
+            metadataManager.getReferredTables(tableName);
 
         int t_iLength =
             (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
@@ -516,7 +501,7 @@ public class FkStatementSetterTemplateBuildHandler
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
             String[][] t_astrForeignKeys =
-                metaDataManager.getForeignKeys(
+                metadataManager.getForeignKeys(
                     tableName, t_astrReferredTables[t_iIndex]);
 
             if  (   (t_astrForeignKeys != null)

@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -56,7 +56,7 @@ public interface DAOTemplateFactory
     /**
      * Generates a DAO template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -69,7 +69,7 @@ public interface DAOTemplateFactory
      */
     public DAOTemplate createDAOTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String engineName,

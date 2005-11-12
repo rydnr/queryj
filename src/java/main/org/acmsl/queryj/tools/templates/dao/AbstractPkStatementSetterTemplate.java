@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -61,7 +61,7 @@ public abstract class AbstractPkStatementSetterTemplate
     /**
      * The database metadata manager.
      */
-    private DatabaseMetaDataManager m__MetaDataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
      * The header.
@@ -182,7 +182,7 @@ public abstract class AbstractPkStatementSetterTemplate
      * Builds an <code>AbstractPkStatementSetterTemplate</code> using
      * given information.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -209,7 +209,7 @@ public abstract class AbstractPkStatementSetterTemplate
      */
     protected AbstractPkStatementSetterTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -237,8 +237,8 @@ public abstract class AbstractPkStatementSetterTemplate
         immutableSetTableTemplate(
             tableTemplate);
 
-        immutableSetMetaDataManager(
-            metaDataManager);
+        immutableSetMetadataManager(
+            metadataManager);
 
         immutableSetHeader(
             header);
@@ -332,31 +332,31 @@ public abstract class AbstractPkStatementSetterTemplate
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      */
-    private void immutableSetMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager)
+    private void immutableSetMetadataManager(
+        final MetadataManager metadataManager)
     {
-        m__MetaDataManager = metaDataManager;
+        m__MetadataManager = metadataManager;
     }
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      */
-    protected void setMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager)
+    protected void setMetadataManager(
+        final MetadataManager metadataManager)
     {
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
     }
 
     /**
      * Retrieves the metadata manager.
      * @return such manager.
      */
-    public DatabaseMetaDataManager getMetaDataManager()
+    public MetadataManager getMetadataManager()
     {
-        return m__MetaDataManager;
+        return m__MetadataManager;
     }
 
     /**

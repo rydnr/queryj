@@ -50,7 +50,8 @@ import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some ACM-SL classes.
@@ -187,6 +188,7 @@ public class CustomSqlValidationHandler
         handle(
             retrieveCustomSqlProvider(parameters),
             retrieveConnection(parameters),
+            retrieveMetadataManager(parameters),
             log);
     }
 
@@ -195,13 +197,16 @@ public class CustomSqlValidationHandler
      * Handles given information.
      * @param customSqlProvider the custom sql provider.
      * @param connection the connection.
+     * @param metadataManager the metadata manager.
      * @param log the log instance.
      * @throws BuildException if the build process cannot be performed.
      * @precondition connection != null
+     * @precondition metadataManager != null
      */
     protected void handle(
         final CustomSqlProvider customSqlProvider,
         final Connection connection,
+        final MetadataManager metadataManager,
         final QueryJLog log)
       throws  BuildException
     {
@@ -237,6 +242,7 @@ public class CustomSqlValidationHandler
                                 t_SqlElement,
                                 customSqlProvider,
                                 connection,
+                                metadataManager.getMetadataTypeManager(),
                                 log);
                         }
                     }
@@ -250,16 +256,19 @@ public class CustomSqlValidationHandler
      * @param sqlElement such element.
      * @param customSqlProvider the custom sql provider.
      * @param connection the connection.
+     * @param metadataTypeManager the metadata type manager.
      * @param log the log instance.
      * @throws BuildException if the sql is not valid.
      * @precondition sqlElement != null
      * @precondition customSqlProvider != null
      * @precondition connection != null
+     * @precondition metadataTypeManager != null
      */
     protected void validate(
         final SqlElement sqlElement,
         final CustomSqlProvider customSqlProvider,
         final Connection connection,
+        final MetadataTypeManager metadataTypeManager,
         final QueryJLog log)
       throws  BuildException
     {
@@ -326,8 +335,8 @@ public class CustomSqlValidationHandler
                     sqlElement,
                     t_PreparedStatement,
                     customSqlProvider,
+                    metadataTypeManager,
                     ConversionUtils.getInstance(),
-                    MetaDataUtils.getInstance(),
                     log);
 
                 if  (   (SqlElement.INSERT.equals(sqlElement.getType()))
@@ -409,7 +418,7 @@ public class CustomSqlValidationHandler
      * @param sqlElement the sql element.
      * @param statement the prepared statement.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @param conversionUtils the <code>ConversionUtils</code> instance.
      * @param log the log instance.
      * @throws SQLException if the binding process fails.
@@ -417,15 +426,15 @@ public class CustomSqlValidationHandler
      * @precondition sqlElement != null
      * @precondition statement != null
      * @precondition customSqlProvider != null
+     * @precondition metadataTypeManager != null
      * @precondition conversionUtils != null
-     * @precondition metaDataUtils != null
      */
     protected void bindParameters(
         final SqlElement sqlElement,
         final PreparedStatement statement,
         final CustomSqlProvider customSqlProvider,
+        final MetadataTypeManager metadataTypeManager,
         final ConversionUtils conversionUtils,
-        final MetaDataUtils metaDataUtils,
         final QueryJLog log)
      throws  SQLException,
              BuildException
@@ -475,8 +484,8 @@ public class CustomSqlValidationHandler
             else
             {
                 t_strType =
-                    metaDataUtils.getObjectType(
-                        metaDataUtils.getJavaType(
+                    metadataTypeManager.getObjectType(
+                        metadataTypeManager.getJavaType(
                             t_Parameter.getType()));
 
                 try
@@ -550,8 +559,9 @@ public class CustomSqlValidationHandler
                 {
                     t_Method =
                         statement.getClass().getDeclaredMethod(
-                            getSetterMethod(t_strType),
-                            (Class[]) t_cSetterParams.toArray(EMPTY_CLASS_ARRAY));
+                            getSetterMethod(t_strType, metadataTypeManager),
+                            (Class[])
+                                t_cSetterParams.toArray(EMPTY_CLASS_ARRAY));
 
                 }
                 catch  (final NoSuchMethodException noSuchMethodException)
@@ -843,20 +853,23 @@ public class CustomSqlValidationHandler
     /**
      * Retrieves the setter method name.
      * @param type the data type.
+     * @param metadataTypeManager the metadata type manager.
      * @return the associated setter method.
      * @precondition type != null
+     * @precondition metadataTypeManager the metadata type manager.
      */
-    protected String getSetterMethod(final String type)
+    protected String getSetterMethod(
+        final String type, final MetadataTypeManager metadataTypeManager)
     {
         return
             getSetterMethod(
-                type, MetaDataUtils.getInstance(), StringUtils.getInstance());
+                type, metadataTypeManager, StringUtils.getInstance());
     }
 
     /**
      * Retrieves the setter method name.
      * @param type the data type.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the associated setter method.
      * @precondition type != null
@@ -865,7 +878,7 @@ public class CustomSqlValidationHandler
      */
     protected String getSetterMethod(
         final String type,
-        final MetaDataUtils metaDataUtils,
+        final MetadataTypeManager metadataTypeManager,
         final StringUtils stringUtils)
     {
         String result = "set";
@@ -879,8 +892,8 @@ public class CustomSqlValidationHandler
         {
             result +=
                 stringUtils.capitalize(
-                    metaDataUtils.getNativeType(
-                        metaDataUtils.getJavaType(type)), '|');
+                    metadataTypeManager.getNativeType(
+                        metadataTypeManager.getJavaType(type)), '|');
         }
 
         return result;

@@ -45,10 +45,11 @@ import org.acmsl.queryj.tools.AntFieldElement;
 import org.acmsl.queryj.tools.AntFieldFkElement;
 import org.acmsl.queryj.tools.AntTableElement;
 import org.acmsl.queryj.tools.AntTablesElement;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.MetaDataUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -95,7 +96,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     /**
      * The Database Metadata manager attribute name.
      */
-    public static final String DATABASE_METADATA_MANAGER = "jdbc.database.metadata.manager";
+    public static final String METADATA_MANAGER = "jdbc.database.metadata.manager";
 
     /**
      * The table names attribute name.
@@ -148,7 +149,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             handle(
                 parameters,
                 retrieveAlreadyDoneFlag(parameters),
-                retrieveMetaData(parameters));
+                retrieveMetadata(parameters));
     }
 
     /**
@@ -179,8 +180,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     parameters,
                     metaData,
                     retrieveExtractTables(parameters),
-                    retrieveExtractProcedures(parameters),
-                    MetaDataUtils.getInstance());
+                    retrieveExtractProcedures(parameters));
                 */
                 oldHandle(parameters);
 
@@ -201,9 +201,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
     {
         boolean result = false;
 
-        storeMetaData(retrieveMetaData(parameters), parameters);
+        storeMetadata(retrieveMetadata(parameters), parameters);
 
-        DatabaseMetaDataManager t_MetaDataManager = null;
+        MetadataManager t_MetadataManager = null;
 
         boolean t_bDisableTableExtraction =
             !retrieveExtractTables(parameters);
@@ -282,8 +282,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
             }
         }
 
-        t_MetaDataManager =
-            buildMetaDataManager(
+        t_MetadataManager =
+            buildMetadataManager(
                 t_bDisableTableExtraction,
                 (   (t_cFieldElements != null)
                     && (t_cFieldElements.size() > 0)),
@@ -291,9 +291,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 false,
                 parameters);
 
-        storeMetaDataManager(t_MetaDataManager, parameters);
+        storeMetadataManager(t_MetadataManager, parameters);
 
-        MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
+        MetadataTypeManager t_MetadataTypeManager =
+            t_MetadataManager.getMetadataTypeManager();
 
         if  (t_cTableElements != null)
         {
@@ -301,8 +302,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
 
         if  (   (t_itTableElements != null)
-             && (t_MetaDataUtils   != null)
-             && (t_MetaDataManager != null))
+             && (t_MetadataTypeManager != null)
+             && (t_MetadataManager != null))
         {
             while  (t_itTableElements.hasNext())
             {
@@ -344,10 +345,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                 t_astrTableFieldNames[t_iFieldIndex] =
                                     t_Field.getName();
 
-                                t_MetaDataManager.addColumnType(
+                                t_MetadataManager.addColumnType(
                                     t_Table.getName(),
                                     t_Field.getName(),
-                                    t_MetaDataUtils.getJavaType(t_Field.getType()));
+                                    t_MetadataTypeManager.getJavaType(
+                                        t_Field.getType()));
 
                                 Collection t_cFields =
                                     (Collection)
@@ -363,7 +365,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                                 if  (t_Field.isPk())
                                 {
-                                    t_MetaDataManager.addPrimaryKey(
+                                    t_MetadataManager.addPrimaryKey(
                                         t_Table.getName(),
                                         t_Field.getName());
 
@@ -401,14 +403,14 @@ public abstract class DatabaseMetaDataRetrievalHandler
                             t_iFieldIndex++;
                         }
 
-                        t_MetaDataManager.addColumnNames(
+                        t_MetadataManager.addColumnNames(
                             t_Table.getName(),
                             t_astrTableFieldNames);
                     }
                 }
             }
 
-            storeMetaDataManager(t_MetaDataManager, parameters);
+            storeMetadataManager(t_MetadataManager, parameters);
         }
 
         t_cTables = (Collection) t_mKeys.get(buildTableKey());
@@ -460,7 +462,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                                     if  (t_FieldFk != null)
                                     {
-                                        t_MetaDataManager.addForeignKey(
+                                        t_MetadataManager.addForeignKey(
                                             t_strTableName,
                                             new String[] {t_strFieldName},
                                             t_FieldFk.getTable(),
@@ -483,23 +485,20 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param metaData the database metadata.
      * @param enableTableExtraction whether to extract tables.
      * @param enableProcedureExtractor whether to extract procedures.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
-     * @precondition metaDataUtils != null
      */
     protected boolean handle(
         final Map parameters,
         final DatabaseMetaData metaData,
         final boolean enableTableExtraction,
-        final boolean enableProcedureExtraction,
-        final MetaDataUtils metaDataUtils)
+        final boolean enableProcedureExtraction)
     {
         boolean result = false;
 
-        storeMetaData(metaData, parameters);
+        storeMetadata(metaData, parameters);
 
         AntTablesElement t_TablesElement = null;
 
@@ -513,15 +512,15 @@ public abstract class DatabaseMetaDataRetrievalHandler
             storeTableNames(t_astrTableNames, parameters);
         }
 
-        DatabaseMetaDataManager t_MetaDataManager =
-            buildMetaDataManager(
+        MetadataManager t_MetadataManager =
+            buildMetadataManager(
                 !enableTableExtraction,
                 lazyTableExtraction(t_TablesElement),
                 !enableProcedureExtraction,
                 false,
                 parameters);
 
-        storeMetaDataManager(t_MetaDataManager, parameters);
+        storeMetadataManager(t_MetadataManager, parameters);
 
         if  (enableProcedureExtraction)
         {
@@ -533,9 +532,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
             extractProcedures(
                 parameters,
                 metaData,
-                t_MetaDataManager,
+                t_MetadataManager,
                 t_TablesElement,
-                metaDataUtils);
+                t_MetadataManager.getMetadataTypeManager());
         }
 
         return result;
@@ -670,58 +669,58 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Extracts the procedures..
      * @param parameters the parameters to handle.
      * @param metaData the database metadata.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the metadata manager.
      * @param tablesElement the tables element.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition tableElements != null
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      */
     protected boolean extractProcedures(
         final Map parameters,
         final DatabaseMetaData metaData,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final AntTablesElement tablesElement,
-        final MetaDataUtils metaDataUtils)
+        final MetadataTypeManager metadataTypeManager)
     {
         return
             extractProcedures(
                 parameters,
                 metaData,
-                metaDataManager,
+                metadataManager,
                 tablesElement.getTables(),
                 buildTableKey(),
-                metaDataUtils);
+                metadataTypeManager);
     }
 
     /**
      * Extracts the procedures..
      * @param parameters the parameters to handle.
      * @param metaData the database metadata.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the metadata manager.
      * @param tableElements the table elements.
      * @param tableKey the key to store the tables.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition tableElements != null
      * @precondition tableKey != null
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      */
     protected boolean extractProcedures(
         final Map parameters,
         final DatabaseMetaData metaData,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final Collection tableElements,
         final Object tableKey,
-        final MetaDataUtils metaDataUtils)
+        final MetadataTypeManager metadataTypeManager)
     {
         boolean result = false;
 
@@ -809,10 +808,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                     t_astrTableFieldNames[t_iFieldIndex] =
                                         t_Field.getName();
 
-                                    metaDataManager.addColumnType(
+                                    metadataManager.addColumnType(
                                         t_Table.getName(),
                                         t_Field.getName(),
-                                        metaDataUtils.getJavaType(t_Field.getType()));
+                                        metadataTypeManager.getJavaType(
+                                            t_Field.getType()));
 
                                     t_TableFieldsKey =
                                         buildTableFieldsKey(t_Table.getName());
@@ -830,7 +830,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                                     if  (t_Field.isPk())
                                     {
-                                        metaDataManager.addPrimaryKey(
+                                        metadataManager.addPrimaryKey(
                                             t_Table.getName(),
                                             t_Field.getName());
 
@@ -870,7 +870,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                 t_iFieldIndex++;
                             }
 
-                            metaDataManager.addColumnNames(
+                            metadataManager.addColumnNames(
                                 t_Table.getName(),
                                 t_astrTableFieldNames);
                         }
@@ -882,7 +882,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         if  (t_cTables != null)
         {
             extractForeignKeys(
-                t_cTables, t_mKeys, metaDataManager, tableKey);
+                t_cTables, t_mKeys, metadataManager, tableKey);
         }
 
         return result;
@@ -891,18 +891,18 @@ public abstract class DatabaseMetaDataRetrievalHandler
     /**
      * Extracts the procedures..
      * @param extractedMap the already-extracted information.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param tableKey the key to store the tables.
      * @throws BuildException if the build process cannot be performed.
      * @precondition tables != null
      * @precondition extractedMap != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition tableKey != null
      */
     protected void extractForeignKeys(
         final Collection tables,
         final Map extractedMap,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final Object tableKey)
     {
         Iterator t_itTables = tables.iterator();
@@ -956,7 +956,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                                         if  (t_FieldFk != null)
                                         {
-                                            metaDataManager.addForeignKey(
+                                            metadataManager.addForeignKey(
                                                 t_strTableName,
                                                 new String[] {t_strFieldName},
                                                 t_FieldFk.getTable(),
@@ -982,7 +982,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the metadata instance.
      * @throws BuildException if the retrieval process cannot be performed.
      */
-    protected DatabaseMetaData retrieveMetaData(final Map parameters)
+    protected DatabaseMetaData retrieveMetadata(final Map parameters)
         throws  BuildException
     {
         DatabaseMetaData result = null;
@@ -990,7 +990,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         if  (parameters != null) 
         {
             result =
-                retrieveMetaData(
+                retrieveMetadata(
                     (Connection)
                         parameters.get(
                             JdbcConnectionOpeningHandler.JDBC_CONNECTION));
@@ -1006,7 +1006,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @throws org.apache.tools.ant.BuildException whenever the required
      * parameters are not present or valid.
      */
-    protected DatabaseMetaData retrieveMetaData(final Connection connection)
+    protected DatabaseMetaData retrieveMetadata(final Connection connection)
         throws  BuildException
     {
         DatabaseMetaData result = null;
@@ -1110,7 +1110,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @throws BuildException if the retrieval process cannot be performed.
      * @precondition parameters != null
      */
-    protected DatabaseMetaDataManager buildMetaDataManager(
+    protected MetadataManager buildMetadataManager(
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
@@ -1118,16 +1118,16 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final Map parameters)
       throws  BuildException
     {
-        DatabaseMetaDataManager result = null;
+        MetadataManager result = null;
 
         if  (parameters != null) 
         {
-            result = retrieveDatabaseMetaDataManager(parameters);
+            result = retrieveMetadataManager(parameters);
 
             if  (result == null) 
             {
                 result =
-                    buildMetaDataManager(
+                    buildMetadataManager(
                         (String[]) parameters.get(TABLE_NAMES),
                         (String[]) parameters.get(PROCEDURE_NAMES),
                         disableTableExtraction,
@@ -1135,8 +1135,12 @@ public abstract class DatabaseMetaDataRetrievalHandler
                         disableProcedureExtraction,
                         lazyProcedureExtraction,
                         retrieveDatabaseMetaData(parameters),
-                        (String) parameters.get(ParameterValidationHandler.JDBC_CATALOG),
-                        (String) parameters.get(ParameterValidationHandler.JDBC_SCHEMA));
+                        (String)
+                            parameters.get(
+                                ParameterValidationHandler.JDBC_CATALOG),
+                        (String)
+                            parameters.get(
+                                ParameterValidationHandler.JDBC_SCHEMA));
             }
         }
 
@@ -1163,7 +1167,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * parameters are not present or valid.
      * @precondition metaData != null
      */
-    protected DatabaseMetaDataManager buildMetaDataManager(
+    protected MetadataManager buildMetadataManager(
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -1175,12 +1179,12 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final String schema)
       throws  BuildException
     {
-        DatabaseMetaDataManager result = null;
+        MetadataManager result = null;
 
         try 
         {
             result =
-                new DatabaseMetaDataManager(
+                new JdbcMetadataManager(
                     tableNames,
                     procedureNames,
                     disableTableExtraction,
@@ -1216,7 +1220,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition metaData != null
      * @precondition parameters != null
      */
-    protected void storeMetaData(
+    protected void storeMetadata(
         final DatabaseMetaData metaData, final Map parameters)
       throws  BuildException
     {
@@ -1263,8 +1267,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition parameters != null
      */
     protected void storeTableNames(
-        final String[] tableNames,
-        final Map parameters)
+        final String[] tableNames, final Map parameters)
       throws  BuildException
     {
         parameters.put(TABLE_NAMES, tableNames);
@@ -1272,18 +1275,17 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
     /**
      * Stores the database metadata manager in the attribute map.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the metadata manager.
      * @param parameters the parameter map.
      * @throws BuildException if the manager cannot be stored for any reason.
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition parameters != null
      */
-    protected void storeMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager,
-        final Map parameters)
+    protected void storeMetadataManager(
+        final MetadataManager metadataManager, final Map parameters)
       throws  BuildException
     {
-        parameters.put(DATABASE_METADATA_MANAGER, metaDataManager);
+        parameters.put(METADATA_MANAGER, metadataManager);
     }
 
     /**

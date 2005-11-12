@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.ParameterElement;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /**
  * Decorates &lt;parameter&gt; elements in <i>custom-sql</i> models.
@@ -52,11 +52,20 @@ public class ParameterDecorator
     extends  ParameterElement
 {
     /**
+     * The metadata type manager.
+     */
+    private MetadataTypeManager m__MetadataTypeManager;
+
+    /**
      * Creates a <code>ParameterDecorator</code> with given parameter.
      * @param parameter the parameter to decorate.
+     * @param metadataTypeManager the metadata type manager.
      * @precondition parameter != null
+     * @precondition metadataTypeManager != null
      */
-    public ParameterDecorator(final ParameterElement parameter)
+    public ParameterDecorator(
+        final ParameterElement parameter,
+        final MetadataTypeManager metadataTypeManager)
     {
         super(
             parameter.getId(),
@@ -65,6 +74,37 @@ public class ParameterDecorator
             parameter.getName(),
             parameter.getType(),
             parameter.getValidationValue());
+
+        immutableSetMetadataTypeManager(metadataTypeManager);
+    }
+
+    /**
+     * Specifies the metadata type manager.
+     * @param metadataTypeManager such instance.
+     */
+    protected final void immutableSetMetadataTypeManager(
+        final MetadataTypeManager metadataTypeManager)
+    {
+        m__MetadataTypeManager = metadataTypeManager;
+    }
+
+    /**
+     * Specifies the metadata type manager.
+     * @param metadataTypeManager such instance.
+     */
+    protected void setMetadataTypeManager(
+        final MetadataTypeManager metadataTypeManager)
+    {
+        immutableSetMetadataTypeManager(metadataTypeManager);
+    }
+
+    /**
+     * Retrieves the metadata type manager.
+     * @return such instance.
+     */
+    protected MetadataTypeManager getMetadataTypeManager()
+    {
+        return m__MetadataTypeManager;
     }
 
     /**
@@ -74,20 +114,22 @@ public class ParameterDecorator
      */
     public String getSqlType()
     {
-        return getSqlType(getType(), MetaDataUtils.getInstance());
+        return getSqlType(getType(), getMetadataTypeManager());
     }
 
     /**
      * Retrieves the sql type of the parameter.
      * @param type the type.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @return such information.
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      */
     protected String getSqlType(
-        final String type, final MetaDataUtils metaDataUtils)
+        final String type, final MetadataTypeManager metadataTypeManager)
     {
-        return metaDataUtils.getConstantName(metaDataUtils.getJavaType(type));
+        return
+            metadataTypeManager.getConstantName(
+                metadataTypeManager.getJavaType(type));
     }
 
     /**
@@ -96,20 +138,22 @@ public class ParameterDecorator
      */
     public String getObjectType()
     {
-        return getObjectType(getType(), MetaDataUtils.getInstance());
+        return getObjectType(getType(), getMetadataTypeManager());
     }
 
     /**
      * Retrieves the object type of the parameter.
      * @param type the type.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @return such information.
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      */
     public String getObjectType(
-        final String type, final MetaDataUtils metaDataUtils)
+        final String type, final MetadataTypeManager metadataTypeManager)
     {
-        return metaDataUtils.getObjectType(metaDataUtils.getJavaType(type));
+        return
+            metadataTypeManager.getObjectType(
+                metadataTypeManager.getJavaType(type));
     }
 
     /**
@@ -118,19 +162,21 @@ public class ParameterDecorator
      */
     public String getFieldType()
     {
-        return getFieldType(getType(), MetaDataUtils.getInstance());
+        return getFieldType(getType(), getMetadataTypeManager());
     }
 
     /**
      * Retrieves the field type of the parameter.
      * @param type the type.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @return such information.
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      */
     public String getFieldType(
-        final String type, final MetaDataUtils metaDataUtils)
+        final String type, final MetadataTypeManager metadataTypeManager)
     {
-        return metaDataUtils.getFieldType(metaDataUtils.getJavaType(type));
+        return
+            metadataTypeManager.getFieldType(
+                metadataTypeManager.getJavaType(type));
     }
 }

@@ -40,8 +40,8 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -76,13 +76,13 @@ public class XMLValueObjectFactoryTemplate
      * @param packageName the package name.
      * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      */
     public XMLValueObjectFactoryTemplate(
         final String packageName,
         final String valueObjectPackageName,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager)
+        final MetadataManager metadataManager)
     {
         super(
             DEFAULT_HEADER,
@@ -90,7 +90,7 @@ public class XMLValueObjectFactoryTemplate
             packageName,
             valueObjectPackageName,
             tableTemplate,
-            metaDataManager,
+            metadataManager,
             DEFAULT_PROJECT_IMPORTS,
             DEFAULT_ACMSL_IMPORTS,
             DEFAULT_JDK_IMPORTS,
@@ -113,35 +113,47 @@ public class XMLValueObjectFactoryTemplate
      */
     public String generateOutput()
     {
+        return generateOutput(getMetadataManager());
+    }
+    
+    /**
+     * Retrieves the source code of the generated field tableName.
+     * @param metadataManager the metadata manager.
+     * @return such source code.
+     * @precondition metadataManager != null
+     */
+    protected String generateOutput(final MetadataManager metadataManager)
+    {
         return
             generateOutput(
                 getTableTemplate(),
-                getMetaDataManager(),
+                metadataManager,
+                metadataManager.getMetadataTypeManager(),
                 StringUtils.getInstance(),
-                EnglishGrammarUtils.getInstance(),
-                MetaDataUtils.getInstance());
+                EnglishGrammarUtils.getInstance());
     }
  
    /**
      * Retrieves the source code of the generated field tableName.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
+     * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code> instance.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
      * @return such source code.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
-     * @precondition metaDataUtils != null
      */
     protected String generateOutput(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
         final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final MetaDataUtils metaDataUtils)
+        final EnglishGrammarUtils englishGrammarUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
@@ -245,38 +257,38 @@ public class XMLValueObjectFactoryTemplate
                 String t_strField = (String) t_itFields.next();
 
                 String t_strFieldType =
-                    metaDataUtils.getNativeType(
-                        metaDataManager.getColumnType(
+                    metadataTypeManager.getNativeType(
+                        metadataManager.getColumnType(
                             tableTemplate.getTableName(),
                             t_strField));
 
                 int t_iColumnType =
-                    metaDataManager.getColumnType(
+                    metadataManager.getColumnType(
                         tableTemplate.getTableName(),
                         t_strField);
 
                 boolean t_bAllowsNull = false;
 
                 boolean t_bIsPrimaryKey =
-                    metaDataManager.isPartOfPrimaryKey(
+                    metadataManager.isPartOfPrimaryKey(
                         tableTemplate.getTableName(),
                         t_strField);
 
                 if  (!t_bIsPrimaryKey)
                 {
                     t_bAllowsNull =
-                        metaDataManager.allowsNull(
+                        metadataManager.allowsNull(
                             tableTemplate.getTableName(),
                             t_strField);
                 }
 
                 t_strFieldType =
-                    metaDataUtils.getNativeType(t_iColumnType, t_bAllowsNull);
+                    metadataTypeManager.getNativeType(t_iColumnType, t_bAllowsNull);
 
                 if  (t_bAllowsNull)
                 {
                     t_strFieldType =
-                        metaDataUtils.getSmartObjectType(t_iColumnType);
+                        metadataTypeManager.getSmartObjectType(t_iColumnType);
                 }
 
                 t_sbFactoryMethodAttributeBuild.append(

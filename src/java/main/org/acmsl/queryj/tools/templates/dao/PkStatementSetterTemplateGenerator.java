@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -127,21 +127,21 @@ public class PkStatementSetterTemplateGenerator
     /**
      * Generates a PkStatementSetter template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
     public PkStatementSetterTemplate createPkStatementSetterTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String basePackageName,
         final String repositoryName)
@@ -150,7 +150,7 @@ public class PkStatementSetterTemplateGenerator
         return
             new PkStatementSetterTemplate(
                 tableTemplate,
-                metaDataManager,
+                metadataManager,
                 packageName,
                 basePackageName,
                 repositoryName);

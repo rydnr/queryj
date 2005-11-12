@@ -42,11 +42,10 @@ package org.acmsl.queryj.tools.templates.dao.xml.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateFactory;
@@ -142,7 +141,7 @@ public class XMLDAOTestTemplateBuildHandler
             handle(
                 parameters,
                 retrieveDatabaseMetaData(parameters),
-                retrieveDatabaseMetaDataManager(parameters),
+                retrieveMetadataManager(parameters),
                 retrieveXMLDAOTestPackage(projectPackage, useSubfolders),
                 retrieveValueObjectPackage(projectPackage),
                 retrieveXMLDAOPackage(projectPackage),
@@ -154,7 +153,7 @@ public class XMLDAOTestTemplateBuildHandler
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @param metaData the database metadata.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param packageName the package name.
      * @param voPackageName the value-object package name.
      * @param xmlDAOPackageName the package name of the XML DAOs.
@@ -164,7 +163,7 @@ public class XMLDAOTestTemplateBuildHandler
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition voPackageName != null
      * @precondition xmlDAOPackageName != null
@@ -174,7 +173,7 @@ public class XMLDAOTestTemplateBuildHandler
     protected boolean handle(
         final Map parameters,
         final DatabaseMetaData metaData,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String voPackageName,
         final String xmlDAOPackageName,
@@ -186,7 +185,8 @@ public class XMLDAOTestTemplateBuildHandler
 
         try
         {
-            int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
+            int t_iLength =
+                (tableTemplates != null) ? tableTemplates.length : 0;
 
             XMLDAOTestTemplate[] t_aXMLDAOTestTemplates =
                 new XMLDAOTestTemplate[t_iLength];
@@ -198,7 +198,7 @@ public class XMLDAOTestTemplateBuildHandler
                 t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex] =
                     templateFactory.createXMLDAOTestTemplate(
                         tableTemplates[t_iXMLDAOTestIndex],
-                        metaDataManager,
+                        metadataManager,
                         packageName,
                         xmlDAOPackageName,
                         voPackageName);

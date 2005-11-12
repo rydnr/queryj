@@ -42,12 +42,11 @@ package org.acmsl.queryj.tools.templates.dao.xml.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateFactory;
@@ -113,7 +112,7 @@ public class XMLDAOTemplateBuildHandler
         return
             handle(
                 parameters,
-                retrieveDatabaseMetaDataManager(parameters),
+                retrieveMetadataManager(parameters),
                 retrieveProjectPackage(parameters),
                 retrievePackage(parameters),
                 retrieveTableRepositoryName(parameters),
@@ -124,7 +123,7 @@ public class XMLDAOTemplateBuildHandler
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param basePackage the base package.
      * @param packageName the package name.
      * @param repositoryName the repository name.
@@ -133,7 +132,7 @@ public class XMLDAOTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition basePackage != null
      * @precondition packageName != null
      * @precondition repositoryName != null
@@ -142,7 +141,7 @@ public class XMLDAOTemplateBuildHandler
      */
     protected boolean handle(
         final Map parameters,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String basePackage,
         final String packageName,
         final String repositoryName,
@@ -165,7 +164,7 @@ public class XMLDAOTemplateBuildHandler
                 t_aXMLDAOTemplates[t_iXMLDAOIndex] =
                     templateFactory.createXMLDAOTemplate(
                         tableTemplates[t_iXMLDAOIndex],
-                        metaDataManager,
+                        metadataManager,
                         packageName,
                         basePackage,
                         repositoryName);
@@ -179,23 +178,6 @@ public class XMLDAOTemplateBuildHandler
         }
         
         return result;
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**

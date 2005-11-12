@@ -35,13 +35,13 @@
  * Description: Represents procedure metadata.
  *
  */
-package org.acmsl.queryj.tools;
+package org.acmsl.queryj.tools.metadata;
 
 /**
  * Represents procedure metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public class ProcedureMetaData
+public class ProcedureMetadata
 {
     /**
      * Indicates that a procedure's result is unknown.
@@ -79,7 +79,7 @@ public class ProcedureMetaData
      * @param type the type.
      * @param comment the procedure comment.
      */
-    public ProcedureMetaData(
+    public ProcedureMetadata(
         final String name, final int type, final String comment)
     {
         immutableSetName(name);
@@ -166,132 +166,5 @@ public class ProcedureMetaData
     public String getComment()
     {
         return m__strComment;
-    }
-
-    /**
-     * Represents procedure parameter metadata.
-     * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
-     */
-    private static class ProcedureParameterMetaData
-        extends  ProcedureMetaData
-    {
-        /**
-         * The data type.
-         */
-        private int m__iDataType;
-
-        /**
-         * The parameter length.
-         */
-        private int m__iLength;
-
-        /**
-         * The nullable setting.
-         */
-        private int m__iNullable;
-
-        /**
-         * Builds a ProcedureParameterMetaData using given information.
-         * @param name the name.
-         * @param type the type.
-         * @param comment the comment.
-         * @param dataType the data type.
-         * @param length the length.
-         * @param nullable the nullable flag.
-         */
-        public ProcedureParameterMetaData(
-            final String name,
-            final int    type,
-            final String comment,
-            final int    dataType,
-            final int    length,
-            final int    nullable)
-        {
-            super(name, type, comment);
-            immutableSetDataType(dataType);
-            immutableSetLength(length);
-            immutableSetNullable(nullable);
-        }
-
-        /**
-         * Specifies the data type.
-         * @param dataType the data type.
-         */
-        private void immutableSetDataType(final int dataType)
-        {
-            m__iDataType = dataType;
-        }
-
-        /**
-         * Specifies the data type.
-         * @param dataType the data type.
-         */
-        protected void setDataType(final int dataType)
-        {
-            immutableSetDataType(dataType);
-        }
-
-        /**
-         * Retrieves the data type.
-         * @return such type.
-         */
-        public int getDataType()
-        {
-            return m__iDataType;
-        }
-
-        /**
-         * Specifies the length.
-         * @param length the length.
-         */
-        private void immutableSetLength(final int length)
-        {
-            m__iLength = length;
-        }
-
-        /**
-         * Specifies the length.
-         * @param length the length.
-         */
-        protected void setLength(final int length)
-        {
-            immutableSetLength(length);
-        }
-
-        /**
-         * Retrieves the length.
-         * @return such length.
-         */
-        public int getLength()
-        {
-            return m__iLength;
-        }
-
-        /**
-         * Specifies the nullable setting.
-         * @param nullable the nullable setting.
-         */
-        private void immutableSetNullable(final int nullable)
-        {
-            m__iNullable = nullable;
-        }
-
-        /**
-         * Specifies the nullable setting.
-         * @param nullable the nullable setting.
-         */
-        protected void setNullable(final int nullable)
-        {
-            immutableSetNullable(nullable);
-        }
-
-        /**
-         * Retrieves the nullable setting.
-         * @return such setting.
-         */
-        public int getNullable()
-        {
-            return m__iNullable;
-        }
     }
 }

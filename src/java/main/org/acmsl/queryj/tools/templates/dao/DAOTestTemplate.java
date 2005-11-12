@@ -40,8 +40,8 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
@@ -77,7 +77,7 @@ public class DAOTestTemplate
     /**
      * Builds a <code>DAOTestTemplate</code> using given information.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -91,7 +91,7 @@ public class DAOTestTemplate
      */
     public DAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -105,7 +105,7 @@ public class DAOTestTemplate
     {
         super(
             tableTemplate,
-            metaDataManager,
+            metadataManager,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
@@ -152,10 +152,22 @@ public class DAOTestTemplate
      */
     protected String generateOutput()
     {
+        return generateOutput(getMetadataManager());
+    }
+        
+    /**
+     * Produces a text version of the template, weaving the
+     * dynamic parts with the static skeleton.
+     * @param metadataManager the metadata manager.
+     * @return such source code.
+     * @precondition metadataManager != null
+     */
+    protected String generateOutput(final MetadataManager metadataManager)
+    {
         return
             generateOutput(
                 getTableTemplate(),
-                getMetaDataManager(),
+                metadataManager,
                 getHeader(),
                 getPackageDeclaration(),
                 getPackageName(),
@@ -193,7 +205,7 @@ public class DAOTestTemplate
                 getRemoveTest(),
                 getRemoveFilterValues(),
                 getClassEnd(),
-                MetaDataUtils.getInstance(),
+                metadataManager.getMetadataTypeManager(),
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance());
     }
@@ -245,20 +257,20 @@ public class DAOTestTemplate
      * @param removeFilterValues the remove filter values
      * subtemplate.
      * @param classEnd the class end.
-     * @param metaDataUtils the <code>MetaDataUtis</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @return such source code.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
-     * @precondition metaDataUtils != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      */
     protected String generateOutput(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -296,7 +308,7 @@ public class DAOTestTemplate
         final String removeTest,
         final String removeFilterValues,
         final String classEnd,
-        final MetaDataUtils metaDataUtils,
+        final MetadataTypeManager metadataTypeManager,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils)
     {
@@ -435,11 +447,11 @@ public class DAOTestTemplate
             new StringBuffer();
 
         String[] t_astrPrimaryKeys =
-            metaDataManager.getPrimaryKey(
+            metadataManager.getPrimaryKey(
                 tableTemplate.getTableName());
 
         String[] t_astrColumnNames =
-            metaDataManager.getColumnNames(
+            metadataManager.getColumnNames(
                 tableTemplate.getTableName());
 
         StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
@@ -480,8 +492,8 @@ public class DAOTestTemplate
                     t_Formatter.format(
                         new Object[]
                         {
-                            metaDataUtils.getNativeType(
-                                metaDataManager.getColumnType(
+                            metadataTypeManager.getNativeType(
+                                metadataManager.getColumnType(
                                     tableTemplate.getTableName(),
                                     t_astrPrimaryKeys[t_iPkIndex]))
                             .toUpperCase()
@@ -508,8 +520,8 @@ public class DAOTestTemplate
                         }));
 
                 t_sbFindByPrimaryKeyParametersTypes.append(
-                    metaDataUtils.getNativeType(
-                        metaDataManager.getColumnType(
+                    metadataTypeManager.getNativeType(
+                        metadataManager.getColumnType(
                             tableTemplate.getTableName(),
                             t_astrPrimaryKeys[t_iPkIndex])));
 
@@ -528,8 +540,8 @@ public class DAOTestTemplate
                 }
 
                 t_sbUpdateParametersTypes.append(
-                    metaDataUtils.getNativeType(
-                        metaDataManager.getColumnType(
+                    metadataTypeManager.getNativeType(
+                        metadataManager.getColumnType(
                             tableTemplate.getTableName(),
                             t_astrPrimaryKeys[t_iPkIndex])));
 
@@ -561,29 +573,30 @@ public class DAOTestTemplate
                     t_TestNonNullableParametersValuesFormatter;
 
                 int t_iColumnType =
-                    metaDataManager.getColumnType(
+                    metadataManager.getColumnType(
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
                 String t_strType =
-                    metaDataUtils.getNativeType(t_iColumnType);
+                    metadataTypeManager.getNativeType(t_iColumnType);
 
                 boolean t_bAllowsNull =
-                    metaDataManager.allowsNull(
+                    metadataManager.allowsNull(
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
                 if  (   (t_bAllowsNull)
-                     && (metaDataUtils.isPrimitive(t_iColumnType)))
+                     && (metadataTypeManager.isPrimitive(t_iColumnType)))
                 {
-                    t_strType = metaDataUtils.getObjectType(t_iColumnType);
+                    t_strType =
+                        metadataTypeManager.getObjectType(t_iColumnType);
 
                     t_Formatter =
                         t_TestNullableParametersValuesFormatter;
                 }
 
                 t_bManagedExternally = 
-                    metaDataManager.isManagedExternally(
+                    metadataManager.isManagedExternally(
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
@@ -593,15 +606,15 @@ public class DAOTestTemplate
                         t_Formatter.format(
                             new Object[]
                             {
-                                metaDataUtils.getNativeType(t_iColumnType)
-                                    .toUpperCase(),
-                                    t_strType
+                                metadataTypeManager.getNativeType(
+                                    t_iColumnType).toUpperCase(),
+                                t_strType
                             }));
 
                     t_sbInsertParametersTypes.append(
-                        metaDataUtils.getNativeType(t_iColumnType));
+                        metadataTypeManager.getNativeType(t_iColumnType));
 
-                    if  (!metaDataManager.isPartOfPrimaryKey(
+                    if  (!metadataManager.isPartOfPrimaryKey(
                              tableTemplate.getTableName(),
                              t_astrColumnNames[t_iColumnIndex]))
                     {
@@ -609,14 +622,14 @@ public class DAOTestTemplate
                             t_TestParametersUpdatedValuesFormatter.format(
                                 new Object[]
                                 {
-                                    metaDataUtils.getNativeType(t_iColumnType)
-                                        .toUpperCase(),
+                                    metadataTypeManager.getNativeType(
+                                        t_iColumnType).toUpperCase(),
                                     t_strType
                                 }));
 
                         t_sbUpdateParametersTypes.append(
-                            metaDataUtils.getNativeType(
-                                metaDataManager.getColumnType(
+                            metadataTypeManager.getNativeType(
+                                metadataManager.getColumnType(
                                     tableTemplate.getTableName(),
                                     t_astrColumnNames[
                                         t_iColumnIndex])));

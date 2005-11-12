@@ -42,7 +42,6 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -343,20 +342,20 @@ public abstract class MockDAOFactoryTemplate
      * @param classEnd the class end.
      */
     public MockDAOFactoryTemplate(
-        final String                  header,
-        final String                  packageDeclaration,
-        final TableTemplate           tableTemplate,
-        final String                  packageName,
-        final String                  basePackageName,
-        final String                  projectImports,
-        final String                  jdkImports,
-        final String                  commonsLoggingImports,
-        final String                  javadoc,
-        final String                  classDefinition,
-        final String                  classStart,
-        final String                  singletonBody,
-        final String                  factoryMethod,
-        final String                  classEnd)
+        final String header,
+        final String packageDeclaration,
+        final TableTemplate tableTemplate,
+        final String packageName,
+        final String basePackageName,
+        final String projectImports,
+        final String jdkImports,
+        final String commonsLoggingImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String singletonBody,
+        final String factoryMethod,
+        final String classEnd)
     {
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
@@ -382,8 +381,8 @@ public abstract class MockDAOFactoryTemplate
      */
     public MockDAOFactoryTemplate(
         final TableTemplate tableTemplate,
-        final String        packageName,
-        final String        basePackageName)
+        final String packageName,
+        final String basePackageName)
     {
         this(
             DEFAULT_HEADER,
@@ -785,89 +784,108 @@ public abstract class MockDAOFactoryTemplate
      */
     public String toString()
     {
+        return generateOutput();
+    }
+    
+    /**
+     * Retrieves the source code of the generated field tableName.
+     * @return such source code.
+     */
+    protected String generateOutput()
+    {
+        return
+            generateOutput(
+                getTableTemplate(),
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance(),
+                PackageUtils.getInstance());
+    }
+    
+    /**
+     * Generates the template.
+     * @param tableTemplate the table template.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such source code.
+     * @precondition tableTemplate != null
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     * @precondition packageUtils != null
+     */
+    protected String generateOutput(
+        final TableTemplate tableTemplate,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final PackageUtils packageUtils)
+    {
         StringBuffer t_sbResult = new StringBuffer();
 
-        StringUtils t_StringUtils = StringUtils.getInstance();
+        Object[] t_aCapitalizedTableName =
+            new Object[]
+            {
+                stringUtils.capitalize(
+                    englishGrammarUtils.getSingular(
+                        tableTemplate.getTableName().toLowerCase()),
+                    '_'),
+            };
 
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
-
-        TableTemplate t_TableTemplate = getTableTemplate();
-
-        MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (t_StringUtils     != null)
-             && (t_TableTemplate   != null)
-             && (t_MetaDataUtils   != null)
-             && (t_PackageUtils    != null))
-        {
-            Object[] t_aCapitalizedTableName =
+        MessageFormat t_Formatter = new MessageFormat(getHeader());
+        t_sbResult.append(
+            t_Formatter.format(
                 new Object[]
                 {
-                    t_StringUtils.capitalize(
-                        t_EnglishGrammarUtils.getSingular(
-                            t_TableTemplate.getTableName().toLowerCase()),
-                        '_'),
-                };
+                    tableTemplate.getTableName()
+                }));
 
-            MessageFormat t_Formatter = new MessageFormat(getHeader());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        t_TableTemplate.getTableName()
-                    }));
+        t_Formatter = new MessageFormat(getPackageDeclaration());
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    getPackageName()
+                }));
 
-            t_Formatter = new MessageFormat(getPackageDeclaration());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        getPackageName()
-                    }));
+        t_Formatter = new MessageFormat(getProjectImports());
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    packageUtils.retrieveBaseDAOPackage(
+                        getBasePackageName()),
+                    t_aCapitalizedTableName[0],
+                    packageUtils.retrieveBaseDAOFactoryPackage(
+                        getBasePackageName()),
+                    packageUtils.retrieveMockDAOPackage(
+                        getBasePackageName())
+                }));
 
-            t_Formatter = new MessageFormat(getProjectImports());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        t_PackageUtils.retrieveBaseDAOPackage(
-                            getBasePackageName()),
-                        t_aCapitalizedTableName[0],
-                        t_PackageUtils.retrieveBaseDAOFactoryPackage(
-                            getBasePackageName()),
-                        t_PackageUtils.retrieveMockDAOPackage(
-                            getBasePackageName())
-                    }));
+        t_sbResult.append(getJdkImports());
+        t_sbResult.append(getCommonsLoggingImports());
 
-            t_sbResult.append(getJdkImports());
-            t_sbResult.append(getCommonsLoggingImports());
+        t_Formatter = new MessageFormat(getJavadoc());
+        t_sbResult.append(
+            t_Formatter.format(
+                new Object[]
+                {
+                    tableTemplate.getTableName()
+                }));
 
-            t_Formatter = new MessageFormat(getJavadoc());
-            t_sbResult.append(
-                t_Formatter.format(
-                    new Object[]
-                    {
-                        t_TableTemplate.getTableName()
-                    }));
+        t_Formatter = new MessageFormat(getClassDefinition());
+        t_sbResult.append(t_Formatter.format(t_aCapitalizedTableName));
 
-            t_Formatter = new MessageFormat(getClassDefinition());
-            t_sbResult.append(t_Formatter.format(t_aCapitalizedTableName));
+        t_sbResult.append(getClassStart());
 
-            t_sbResult.append(getClassStart());
+        t_Formatter = new MessageFormat(getSingletonBody());
 
-            t_Formatter = new MessageFormat(getSingletonBody());
+        t_sbResult.append(t_Formatter.format(t_aCapitalizedTableName));
 
-            t_sbResult.append(t_Formatter.format(t_aCapitalizedTableName));
+        t_Formatter = new MessageFormat(getFactoryMethod());
 
-            t_Formatter = new MessageFormat(getFactoryMethod());
+        t_sbResult.append(t_Formatter.format(t_aCapitalizedTableName));
 
-            t_sbResult.append(t_Formatter.format(t_aCapitalizedTableName));
-
-            t_sbResult.append(getClassEnd());
-        }
+        t_sbResult.append(getClassEnd());
 
         return t_sbResult.toString();
     }

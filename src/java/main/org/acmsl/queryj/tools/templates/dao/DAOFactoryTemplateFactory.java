@@ -54,7 +54,6 @@ public interface DAOFactoryTemplateFactory
     /**
      * Generates a DAO factory template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.

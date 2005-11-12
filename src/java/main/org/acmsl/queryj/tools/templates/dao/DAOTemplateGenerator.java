@@ -43,7 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -287,7 +287,7 @@ public class DAOTemplateGenerator
     /**
      * Generates a DAO template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -298,7 +298,7 @@ public class DAOTemplateGenerator
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition engineName != null
      * @precondition engineVersion != null
@@ -308,7 +308,7 @@ public class DAOTemplateGenerator
      */
     public DAOTemplate createDAOTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String engineName,
@@ -329,7 +329,7 @@ public class DAOTemplateGenerator
             result =
                 t_TemplateFactory.createDAOTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     customSqlProvider,
                     packageName,
                     engineName,
@@ -343,7 +343,7 @@ public class DAOTemplateGenerator
             result =
                 new DAOTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     customSqlProvider,
                     packageName,
                     engineName,

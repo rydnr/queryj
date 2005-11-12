@@ -42,10 +42,10 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /**
@@ -60,7 +60,7 @@ public interface CustomResultSetExtractorTemplateFactory
      * @param resultElement the result element.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -71,7 +71,7 @@ public interface CustomResultSetExtractorTemplateFactory
         final ResultElement resultElement,
         final CustomSqlProvider customSqlProvider,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String basePackageName,
         final String repositoryName)

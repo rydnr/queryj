@@ -42,12 +42,11 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -117,7 +116,7 @@ public class ValueObjectTemplateBuildHandler
             handle(
                 attributes,
                 retrieveDatabaseMetaData(attributes),
-                retrieveDatabaseMetaDataManager(attributes),
+                retrieveMetadataManager(attributes),
                 retrievePackage(attributes),
                 ValueObjectTemplateGenerator.getInstance(),
                 retrieveTableTemplates(attributes));
@@ -127,8 +126,7 @@ public class ValueObjectTemplateBuildHandler
      * Handles given command.
      * @param attributes the attributes.
      * @param databaseMetaData the <code>DatabaseMetaData</code> instance.
-     * @param databaseMetaDataManager the <code>DatabaseMetaDataManager</code>
-     * instance.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
@@ -136,7 +134,7 @@ public class ValueObjectTemplateBuildHandler
      * @throws BuildException if the build process cannot be performed.
      * @precondition attributes != null
      * @precondition databaseMetaData != null
-     * @precondition databaseMetaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition templateFactory != null
      * @precondition tableTemplates != null
@@ -144,7 +142,7 @@ public class ValueObjectTemplateBuildHandler
     public boolean handle(
         final Map attributes,
         final DatabaseMetaData databaseMetaData,
-        final DatabaseMetaDataManager databaseMetaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final ValueObjectTemplateFactory templateFactory,
         final TableTemplate[] tableTemplates)
@@ -161,7 +159,8 @@ public class ValueObjectTemplateBuildHandler
                       t_iValueObjectIndex < t_aValueObjectTemplates.length;
                       t_iValueObjectIndex++) 
             {
-                String t_strQuote = databaseMetaData.getIdentifierQuoteString();
+                String t_strQuote =
+                    databaseMetaData.getIdentifierQuoteString();
 
                 if  (t_strQuote == null)
                 {
@@ -177,7 +176,7 @@ public class ValueObjectTemplateBuildHandler
                     templateFactory.createValueObjectTemplate(
                         packageName,
                         tableTemplates[t_iValueObjectIndex],
-                        databaseMetaDataManager);
+                        metadataManager);
             }
 
             storeValueObjectTemplates(t_aValueObjectTemplates, attributes);
@@ -192,40 +191,6 @@ public class ValueObjectTemplateBuildHandler
         }
         
         return result;
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaData)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**

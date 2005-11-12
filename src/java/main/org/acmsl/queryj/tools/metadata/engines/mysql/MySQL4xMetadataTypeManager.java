@@ -19,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
+    Contact info: jose.sanleandro@acm-sl.com
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -32,42 +32,58 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create PkStatementSetter
- *              templates.
+ * Description: Provides the basic translation and management services
+ *              related to database attribute types, according to strict
+ *              JDBC specification.
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.metadata.engines.mysql;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.sql.Types;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
- * Represents entities able to create PkStatementSetter templates.
+ * Provides the core methods when working with database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface PkStatementSetterTemplateFactory
+public class MySQL4xMetadataTypeManager
+    extends  JdbcMetadataTypeManager
 {
     /**
-     * Generates a PkStatementSetter template.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
+     * Creates an empty <code>MySQL4xMetadataTypeManager</code>.
      */
-    public PkStatementSetterTemplate createPkStatementSetterTemplate(
-        final TableTemplate tableTemplate,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName)
-      throws  QueryJException;
+    public MySQL4xMetadataTypeManager() {};
+    
+    /**
+     * Retrieves the object type of given data type.
+     * @param dataType the data type.
+     * @return the associated object type.
+     */
+    public String getSmartObjectType(final int dataType)
+    {
+        String result = null;
+
+        switch (dataType)
+        {
+            case Types.INTEGER:
+                result = "Long";
+                break;
+
+            default:
+                result = super.getSmartObjectType(dataType);;
+                break;
+        }
+
+        return result;
+    }
 }

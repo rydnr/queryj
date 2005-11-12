@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -63,11 +62,6 @@ public abstract class AbstractDAOFactoryTemplate
      * The table template.
      */
     private TableTemplate m__TableTemplate;
-
-    /**
-     * The metadata manager.
-     */
-    private DatabaseMetaDataManager m__MetaDataManager;
 
     /**
      * The engine name.
@@ -97,7 +91,6 @@ public abstract class AbstractDAOFactoryTemplate
     /**
      * Builds an <code>AbstractDAOFactoryTemplate</code> using given information.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -107,7 +100,6 @@ public abstract class AbstractDAOFactoryTemplate
      */
     protected AbstractDAOFactoryTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -116,7 +108,6 @@ public abstract class AbstractDAOFactoryTemplate
         final String jndiDataSource)
     {
         immutableSetTableTemplate(tableTemplate);
-        immutableSetMetaDataManager(metaDataManager);
         immutableSetPackageName(packageName);
         immutableSetEngineName(engineName);
         immutableSetEngineVersion(engineVersion);
@@ -129,7 +120,7 @@ public abstract class AbstractDAOFactoryTemplate
      * Specifies the table template.
      * @param tableTemplate the new table template.
      */
-    private void immutableSetTableTemplate(TableTemplate tableTemplate)
+    private void immutableSetTableTemplate(final TableTemplate tableTemplate)
     {
         m__TableTemplate = tableTemplate;
     }
@@ -138,7 +129,7 @@ public abstract class AbstractDAOFactoryTemplate
      * Specifies the table template.
      * @param tableTemplate the new table template.
      */
-    protected void setTableTemplate(TableTemplate tableTemplate)
+    protected void setTableTemplate(final TableTemplate tableTemplate)
     {
         immutableSetTableTemplate(tableTemplate);
     }
@@ -151,36 +142,6 @@ public abstract class AbstractDAOFactoryTemplate
     {
         return m__TableTemplate;
     }
-
-    /**
-     * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
-     */
-    private void immutableSetMetaDataManager(
-        DatabaseMetaDataManager metaDataManager)
-    {
-        m__MetaDataManager = metaDataManager;
-    }
-
-    /**
-     * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
-     */
-    protected void setMetaDataManager(
-        DatabaseMetaDataManager metaDataManager)
-    {
-        immutableSetMetaDataManager(metaDataManager);
-    }
-
-    /**
-     * Retrieves the metadata manager.
-     * @return such information.
-     */
-    public DatabaseMetaDataManager getMetaDataManager()
-    {
-        return m__MetaDataManager;
-    }
-
 
     /**
      * Specifies the package name.

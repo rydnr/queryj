@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.templates.dao.mock;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
@@ -84,21 +84,21 @@ public class MockDAOTestTemplate
     /**
      * Builds a DAOTestTemplate using given information.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param packageName the package name.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectsPackageName the value objects' package name.
      */
     public MockDAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String daoPackageName,
         final String valueObjectsPackageName)
     {
         super(
             tableTemplate,
-            metaDataManager,
+            metadataManager,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
@@ -142,347 +142,343 @@ public class MockDAOTestTemplate
         EnglishGrammarUtils t_EnglishGrammarUtils =
             EnglishGrammarUtils.getInstance();
 
-        MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
-
         TableTemplate t_TableTemplate = getTableTemplate();
 
-        DatabaseMetaDataManager t_MetaDataManager = getMetaDataManager();
+        MetadataManager t_MetadataManager = getMetadataManager();
 
-        if  (   (t_TableTemplate                 != null)
-             && (t_MetaDataManager               != null)
-             && (t_MetaDataUtils                 != null)
-             && (t_MetaDataManager.getMetaData() != null)
-             && (t_StringUtils                   != null))
+        MetadataTypeManager t_MetadataTypeManager =
+            t_MetadataManager.getMetadataTypeManager();
+
+        String t_strCapitalizedTableName =
+            t_StringUtils.capitalize(
+                t_EnglishGrammarUtils.getSingular(
+                    t_TableTemplate.getTableName().toLowerCase()),
+                '_');
+        /*
+        try 
+         */
         {
-            String t_strCapitalizedTableName =
-                t_StringUtils.capitalize(
-                    t_EnglishGrammarUtils.getSingular(
-                        t_TableTemplate.getTableName().toLowerCase()),
-                    '_');
-            /*
-            try 
-            */
-            {
-                DatabaseMetaData t_MetaData = t_MetaDataManager.getMetaData();
+            DatabaseMetaData t_MetaData = t_MetadataManager.getMetaData();
 
-                MessageFormat t_Formatter = new MessageFormat(getHeader());
+            MessageFormat t_Formatter = new MessageFormat(getHeader());
 
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[] { t_TableTemplate.getTableName() }));
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[] { t_TableTemplate.getTableName() }));
 
-                t_Formatter = new MessageFormat(getPackageDeclaration());
+            t_Formatter = new MessageFormat(getPackageDeclaration());
 
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]{getPackageName()}));
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]{getPackageName()}));
 
-                t_Formatter = new MessageFormat(getProjectImports());
+            t_Formatter = new MessageFormat(getProjectImports());
 
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            t_strCapitalizedTableName,
-                            getValueObjectPackageName()
-                        }));
-
-                t_sbResult.append(getAcmslImports());
-                t_sbResult.append(getJdkImports());
-                t_sbResult.append(getJUnitImports());
-
-                t_Formatter = new MessageFormat(getJavadoc());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            t_strCapitalizedTableName
-                        }));
-
-                t_Formatter = new MessageFormat(getClassDefinition());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedTableName
-                        }));
-
-                t_Formatter = new MessageFormat(getClassStart());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedTableName
-                        }));
-
-                t_sbResult.append(getTestValues());
-
-                t_sbResult.append(getTestUpdatedValues());
-
-                t_Formatter = new MessageFormat(getConstructor());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedTableName
-                        }));
-
-                t_sbResult.append(getInnerMethods());
-
-                t_Formatter = new MessageFormat(getInitMethods());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedTableName,
-                              t_strCapitalizedTableName
-                                  .substring(0,1).toLowerCase()
-                            + t_strCapitalizedTableName.substring(1)
-                        }));
-
-                t_Formatter = new MessageFormat(getTestSuite());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedTableName
-                        }));
-
-                t_Formatter = new MessageFormat(getTestParametersValues());
-
-                MessageFormat t_UpdateFilterValuesFormatter =
-                    new MessageFormat(getUpdateFilterValues());
-
-                StringBuffer t_sbUpdateFilterValues =
-                    new StringBuffer();
-
-                String[] t_astrPrimaryKeys =
-                    t_MetaDataManager.getPrimaryKey(
-                        t_TableTemplate.getTableName());
-
-                StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
-                    new StringBuffer();
-
-                StringBuffer t_sbFindByPrimaryKeyParametersTypes =
-                    new StringBuffer();
-
-                StringBuffer t_sbUpdateParametersTypes =
-                    new StringBuffer();
-
-                MessageFormat t_RemoveFilterValuesFormatter =
-                    new MessageFormat(getRemoveFilterValues());
-
-                StringBuffer t_sbRemoveFilterValues =
-                    new StringBuffer();
-
-                if  (t_astrPrimaryKeys != null)
-                {
-
-                    for  (int t_iPkIndex = 0;
-                              t_iPkIndex < t_astrPrimaryKeys.length;
-                              t_iPkIndex++) 
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
                     {
-                        t_sbFindByPrimaryKeyTestParametersValues.append(
+                        getDAOPackageName(),
+                        t_strCapitalizedTableName,
+                        getValueObjectPackageName()
+                    }));
+
+            t_sbResult.append(getAcmslImports());
+            t_sbResult.append(getJdkImports());
+            t_sbResult.append(getJUnitImports());
+
+            t_Formatter = new MessageFormat(getJavadoc());
+
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
+                    {
+                        getDAOPackageName(),
+                        t_strCapitalizedTableName
+                    }));
+
+            t_Formatter = new MessageFormat(getClassDefinition());
+
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
+                    {
+                        t_strCapitalizedTableName
+                    }));
+
+            t_Formatter = new MessageFormat(getClassStart());
+
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
+                    {
+                        t_strCapitalizedTableName
+                    }));
+
+            t_sbResult.append(getTestValues());
+
+            t_sbResult.append(getTestUpdatedValues());
+
+            t_Formatter = new MessageFormat(getConstructor());
+
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
+                    {
+                        t_strCapitalizedTableName
+                    }));
+
+            t_sbResult.append(getInnerMethods());
+
+            t_Formatter = new MessageFormat(getInitMethods());
+
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
+                    {
+                        t_strCapitalizedTableName,
+                          t_strCapitalizedTableName.substring(0, 1)
+                              .toLowerCase()
+                        + t_strCapitalizedTableName.substring(1)
+                    }));
+
+            t_Formatter = new MessageFormat(getTestSuite());
+
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
+                    {
+                        t_strCapitalizedTableName
+                    }));
+
+            t_Formatter = new MessageFormat(getTestParametersValues());
+
+            MessageFormat t_UpdateFilterValuesFormatter =
+                new MessageFormat(getUpdateFilterValues());
+
+            StringBuffer t_sbUpdateFilterValues =
+                new StringBuffer();
+
+            String[] t_astrPrimaryKeys =
+                t_MetadataManager.getPrimaryKey(
+                    t_TableTemplate.getTableName());
+
+            StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
+                new StringBuffer();
+
+            StringBuffer t_sbFindByPrimaryKeyParametersTypes =
+                new StringBuffer();
+
+            StringBuffer t_sbUpdateParametersTypes =
+                new StringBuffer();
+
+            MessageFormat t_RemoveFilterValuesFormatter =
+                new MessageFormat(getRemoveFilterValues());
+
+            StringBuffer t_sbRemoveFilterValues =
+                new StringBuffer();
+
+            if  (t_astrPrimaryKeys != null)
+            {
+
+                for  (int t_iPkIndex = 0;
+                      t_iPkIndex < t_astrPrimaryKeys.length;
+                      t_iPkIndex++) 
+                {
+                    t_sbFindByPrimaryKeyTestParametersValues.append(
+                        t_Formatter.format(
+                            new Object[]
+                            {
+                                t_MetadataTypeManager.getNativeType(
+                                    t_MetadataManager.getColumnType(
+                                        t_TableTemplate.getTableName(),
+                                        t_astrPrimaryKeys[t_iPkIndex]))
+                                .toUpperCase()
+                            }));
+
+                    t_sbUpdateFilterValues.append(
+                        t_UpdateFilterValuesFormatter.format(
+                            new Object[]
+                            {
+                                t_strCapitalizedTableName,
+                                t_StringUtils.capitalize(
+                                    t_astrPrimaryKeys[t_iPkIndex]
+                                        .toLowerCase(),
+                                    '_')
+                            }));
+
+                    t_sbRemoveFilterValues.append(
+                        t_RemoveFilterValuesFormatter.format(
+                            new Object[]
+                            {
+                                t_strCapitalizedTableName,
+                                t_StringUtils.capitalize(
+                                    t_astrPrimaryKeys[t_iPkIndex]
+                                        .toLowerCase(),
+                                    '_')
+                            }));
+
+                    t_sbFindByPrimaryKeyParametersTypes.append(
+                        t_MetadataTypeManager.getNativeType(
+                            t_MetadataManager.getColumnType(
+                                t_TableTemplate.getTableName(),
+                                t_astrPrimaryKeys[t_iPkIndex])));
+
+                    if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
+                    {
+                        t_sbFindByPrimaryKeyParametersTypes.append(",");
+                    }
+
+                    t_sbUpdateParametersTypes.append(
+                        t_MetadataTypeManager.getNativeType(
+                            t_MetadataManager.getColumnType(
+                                t_TableTemplate.getTableName(),
+                                t_astrPrimaryKeys[t_iPkIndex])));
+
+                    t_sbUpdateParametersTypes.append(",");
+                }
+            }
+
+            String[] t_astrColumnNames =
+                t_MetadataManager.getColumnNames(
+                    t_TableTemplate.getTableName());
+
+            StringBuffer t_sbInsertTestParametersValues =
+                new StringBuffer();
+
+            StringBuffer t_sbInsertParametersTypes =
+                new StringBuffer();
+
+            MessageFormat t_TestParametersUpdatedValuesFormatter =
+                new MessageFormat(getTestParametersUpdatedValues());
+
+            StringBuffer t_sbTestParametersUpdatedValues =
+                new StringBuffer();
+
+            if  (t_astrColumnNames != null)
+            {
+                for  (int t_iColumnIndex = 0;
+                      t_iColumnIndex < t_astrColumnNames.length;
+                      t_iColumnIndex++)
+                {
+                    if  (!t_MetadataManager.isManagedExternally(
+                             t_TableTemplate.getTableName(),
+                             t_astrColumnNames[t_iColumnIndex]))
+                    {
+                        t_sbInsertTestParametersValues.append(
                             t_Formatter.format(
                                 new Object[]
                                 {
-                                    t_MetaDataUtils.getNativeType(
-                                        t_MetaDataManager.getColumnType(
+                                    t_MetadataTypeManager.getNativeType(
+                                        t_MetadataManager.getColumnType(
                                             t_TableTemplate.getTableName(),
-                                            t_astrPrimaryKeys[t_iPkIndex]))
-                                        .toUpperCase()
+                                            t_astrColumnNames[
+                                                t_iColumnIndex]))
+                                    .toUpperCase()
                                 }));
 
-                        t_sbUpdateFilterValues.append(
-                            t_UpdateFilterValuesFormatter.format(
-                                new Object[]
-                                {
-                                    t_strCapitalizedTableName,
-                                    t_StringUtils.capitalize(
-                                        t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
-                                        '_')
-                                }));
-
-                        t_sbRemoveFilterValues.append(
-                            t_RemoveFilterValuesFormatter.format(
-                                new Object[]
-                                {
-                                    t_strCapitalizedTableName,
-                                    t_StringUtils.capitalize(
-                                        t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
-                                        '_')
-                                }));
-
-                        t_sbFindByPrimaryKeyParametersTypes.append(
-                            t_MetaDataUtils.getNativeType(
-                                t_MetaDataManager.getColumnType(
+                        t_sbInsertParametersTypes.append(
+                            t_MetadataTypeManager.getNativeType(
+                                t_MetadataManager.getColumnType(
                                     t_TableTemplate.getTableName(),
-                                    t_astrPrimaryKeys[t_iPkIndex])));
+                                    t_astrColumnNames[t_iColumnIndex])));
 
-                        if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
-                        {
-                            t_sbFindByPrimaryKeyParametersTypes.append(",");
-                        }
-
-                        t_sbUpdateParametersTypes.append(
-                            t_MetaDataUtils.getNativeType(
-                                t_MetaDataManager.getColumnType(
-                                    t_TableTemplate.getTableName(),
-                                    t_astrPrimaryKeys[t_iPkIndex])));
-
-                        t_sbUpdateParametersTypes.append(",");
-                    }
-                }
-
-                String[] t_astrColumnNames =
-                    t_MetaDataManager.getColumnNames(
-                        t_TableTemplate.getTableName());
-
-                StringBuffer t_sbInsertTestParametersValues =
-                    new StringBuffer();
-
-                StringBuffer t_sbInsertParametersTypes =
-                    new StringBuffer();
-
-                MessageFormat t_TestParametersUpdatedValuesFormatter =
-                    new MessageFormat(getTestParametersUpdatedValues());
-
-                StringBuffer t_sbTestParametersUpdatedValues =
-                    new StringBuffer();
-
-                if  (t_astrColumnNames != null)
-                {
-                    for  (int t_iColumnIndex = 0;
-                              t_iColumnIndex < t_astrColumnNames.length;
-                              t_iColumnIndex++)
-                    {
-                        if  (!t_MetaDataManager.isManagedExternally(
+                        if  (!t_MetadataManager.isPartOfPrimaryKey(
                                  t_TableTemplate.getTableName(),
                                  t_astrColumnNames[t_iColumnIndex]))
                         {
-                            t_sbInsertTestParametersValues.append(
-                                t_Formatter.format(
+                            t_sbTestParametersUpdatedValues.append(
+                                t_TestParametersUpdatedValuesFormatter.format(
                                     new Object[]
                                     {
-                                        t_MetaDataUtils.getNativeType(
-                                            t_MetaDataManager.getColumnType(
+                                        t_MetadataTypeManager.getNativeType(
+                                            t_MetadataManager.getColumnType(
                                                 t_TableTemplate.getTableName(),
                                                 t_astrColumnNames[
                                                     t_iColumnIndex]))
                                         .toUpperCase()
-                                }));
+                                    }));
 
-                            t_sbInsertParametersTypes.append(
-                                t_MetaDataUtils.getNativeType(
-                                    t_MetaDataManager.getColumnType(
+                            t_sbUpdateParametersTypes.append(
+                                t_MetadataTypeManager.getNativeType(
+                                    t_MetadataManager.getColumnType(
                                         t_TableTemplate.getTableName(),
-                                        t_astrColumnNames[t_iColumnIndex])));
-
-                            if  (!t_MetaDataManager.isPartOfPrimaryKey(
-                                     t_TableTemplate.getTableName(),
-                                     t_astrColumnNames[t_iColumnIndex]))
-                            {
-                                t_sbTestParametersUpdatedValues.append(
-                                    t_TestParametersUpdatedValuesFormatter.format(
-                                        new Object[]
-                                        {
-                                            t_MetaDataUtils.getNativeType(
-                                                t_MetaDataManager.getColumnType(
-                                                    t_TableTemplate.getTableName(),
-                                                    t_astrColumnNames[
-                                                        t_iColumnIndex]))
-                                            .toUpperCase()
-                                        }));
-
-                                t_sbUpdateParametersTypes.append(
-                                    t_MetaDataUtils.getNativeType(
-                                        t_MetaDataManager.getColumnType(
-                                            t_TableTemplate.getTableName(),
-                                            t_astrColumnNames[
-                                                t_iColumnIndex])));
-
-                                if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-                                {
-                                    t_sbUpdateParametersTypes.append(",");
-                                }
-                            }
+                                        t_astrColumnNames[
+                                            t_iColumnIndex])));
 
                             if  (t_iColumnIndex < t_astrColumnNames.length - 1)
                             {
-                                    t_sbInsertParametersTypes.append(",");
+                                t_sbUpdateParametersTypes.append(",");
                             }
+                        }
+
+                        if  (t_iColumnIndex < t_astrColumnNames.length - 1)
+                        {
+                            t_sbInsertParametersTypes.append(",");
                         }
                     }
                 }
-
-                t_Formatter = new MessageFormat(getStoreTest());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            t_strCapitalizedTableName,
-                            t_sbInsertParametersTypes,
-                            t_sbInsertTestParametersValues
-                        }));
-
-                t_Formatter = new MessageFormat(getLoadTest());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            t_strCapitalizedTableName,
-                            t_sbFindByPrimaryKeyParametersTypes,
-                            t_sbFindByPrimaryKeyTestParametersValues
-                        }));
-
-                t_Formatter = new MessageFormat(getUpdateTest());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            t_strCapitalizedTableName,
-                            t_sbUpdateParametersTypes,
-                            t_sbUpdateFilterValues,
-                            t_sbTestParametersUpdatedValues
-                        }));
-
-                t_Formatter = new MessageFormat(getRemoveTest());
-
-                t_sbResult.append(
-                    t_Formatter.format(
-                        new Object[]
-                        {
-                            getDAOPackageName(),
-                            t_strCapitalizedTableName,
-                            t_sbFindByPrimaryKeyParametersTypes,
-                            t_sbRemoveFilterValues
-                        }));
-
-                t_sbResult.append(getClassEnd());
             }
-            /*
-            catch  (SQLException sqlException)
-            {
-                LogFactory.getLog(getClass()).error(
-                    "database.meta.data.error",
-                    sqlException);
-            }
-            */
+
+            t_Formatter = new MessageFormat(getStoreTest());
+
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
+                    {
+                        getDAOPackageName(),
+                        t_strCapitalizedTableName,
+                        t_sbInsertParametersTypes,
+                        t_sbInsertTestParametersValues
+                    }));
+
+            t_Formatter = new MessageFormat(getLoadTest());
+
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
+                    {
+                        getDAOPackageName(),
+                        t_strCapitalizedTableName,
+                        t_sbFindByPrimaryKeyParametersTypes,
+                        t_sbFindByPrimaryKeyTestParametersValues
+                    }));
+
+            t_Formatter = new MessageFormat(getUpdateTest());
+
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
+                    {
+                        getDAOPackageName(),
+                        t_strCapitalizedTableName,
+                        t_sbUpdateParametersTypes,
+                        t_sbUpdateFilterValues,
+                        t_sbTestParametersUpdatedValues
+                    }));
+
+            t_Formatter = new MessageFormat(getRemoveTest());
+
+            t_sbResult.append(
+                t_Formatter.format(
+                    new Object[]
+                    {
+                        getDAOPackageName(),
+                        t_strCapitalizedTableName,
+                        t_sbFindByPrimaryKeyParametersTypes,
+                        t_sbRemoveFilterValues
+                    }));
+
+            t_sbResult.append(getClassEnd());
         }
+        /*
+        catch  (SQLException sqlException)
+        {
+            LogFactory.getLog(getClass()).error(
+                "database.meta.data.error",
+                sqlException);
+        }
+         */
 
         return t_sbResult.toString();
     }

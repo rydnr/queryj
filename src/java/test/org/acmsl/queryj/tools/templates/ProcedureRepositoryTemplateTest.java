@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates;
 */
 // JUnitDoclet begin import
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
+import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
 // JUnitDoclet end import
 
 /*
@@ -111,8 +112,9 @@ extends TestCase
     return
         new org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate(
             "com.foo.bar", // package name
-            "queryj"); // repository
-    // JUnitDoclet end method testcase.createInstance
+            "queryj", // repository
+            JdbcMetadataTypeManager.getInstance());
+        // JUnitDoclet end method testcase.createInstance
   }
   
   /**

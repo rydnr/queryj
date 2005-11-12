@@ -35,12 +35,12 @@
  * Description: Represents procedure parameter metadata.
  *
  */
-package org.acmsl.queryj.tools;
+package org.acmsl.queryj.tools.metadata;
 
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.ProcedureMetaData;
+import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 
 /*
  * Importing Commons-Logging classes.
@@ -51,8 +51,8 @@ import org.apache.commons.logging.LogFactory;
  * Represents procedure parameter metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public class ProcedureParameterMetaData
-    extends  ProcedureMetaData
+public class ProcedureParameterMetadata
+    extends  ProcedureMetadata
 {
     /**
      * Indicates that the parameter definition is unknown.
@@ -103,13 +103,13 @@ public class ProcedureParameterMetaData
      * @param length the length.
      * @param nullable the nullable flag.
      */
-    public ProcedureParameterMetaData(
+    public ProcedureParameterMetadata(
         final String name,
-        final int    type,
+        final int type,
         final String comment,
-        final int    dataType,
-        final int    length,
-        final int    nullable)
+        final int dataType,
+        final int length,
+        final int nullable)
     {
         super(name, type, comment);
         immutableSetDataType(dataType);

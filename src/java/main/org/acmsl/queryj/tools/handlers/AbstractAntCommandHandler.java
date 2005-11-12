@@ -43,9 +43,9 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AntCommandHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
  * Importing some ACM-SL classes.
@@ -169,14 +169,14 @@ public abstract class AbstractAntCommandHandler
      * @throws BuildException if the manager retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
+    protected MetadataManager retrieveMetadataManager(
         final Map parameters)
       throws  BuildException
     {
         return
-            (DatabaseMetaDataManager)
+            (MetadataManager)
                 parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
+                    DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
     }
 
     /**

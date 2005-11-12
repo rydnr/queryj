@@ -41,13 +41,13 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.ProcedureMetaData;
-import org.acmsl.queryj.tools.ProcedureParameterMetaData;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
+import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator;
@@ -97,73 +97,43 @@ public class ProcedureRepositoryTemplateBuildHandler
         {
             Map attributes = command.getAttributeMap();
 
-            DatabaseMetaDataManager t_MetaDataManager =
-                retrieveDatabaseMetaDataManager(attributes);
+            MetadataManager t_MetadataManager =
+                retrieveMetadataManager(attributes);
 
             String t_strPackage = retrievePackage(attributes);
 
-            ProcedureRepositoryTemplateGenerator t_ProcedureRepositoryTemplateGenerator =
-                ProcedureRepositoryTemplateGenerator.getInstance();
+            ProcedureMetadata[] t_aProceduresMetadata =
+                (t_MetadataManager != null)
+                ?  t_MetadataManager.getProceduresMetadata()
+                :  null;
 
-            MetaDataUtils t_MetaDataUtils = MetaDataUtils.getInstance();
+            ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate =
+                buildProcedureRepositoryTemplate(
+                    attributes, t_MetadataManager.getMetadataTypeManager());
 
-            if  (   (t_MetaDataManager                      != null)
-                 && (t_ProcedureRepositoryTemplateGenerator != null)
-                 && (t_MetaDataUtils                        != null))
+            if  (  (t_ProcedureRepositoryTemplate != null)
+                && (t_aProceduresMetadata         != null))
             {
-                ProcedureMetaData[] t_aProceduresMetaData =
-                    t_MetaDataManager.getProceduresMetaData();
-
-                ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate =
-                    buildProcedureRepositoryTemplate(attributes);
-
-                if  (  (t_ProcedureRepositoryTemplate != null)
-                    && (t_aProceduresMetaData         != null))
+                for  (int t_iIndex = 0;
+                          t_iIndex < t_aProceduresMetadata.length;
+                          t_iIndex++) 
                 {
-                    for  (int t_iIndex = 0;
-                              t_iIndex < t_aProceduresMetaData.length;
-                              t_iIndex++) 
-                    {
-                        ProcedureParameterMetaData[] t_aProcedureParametersMetaData =
-                            t_MetaDataManager.getProcedureParametersMetaData(
-                                t_aProceduresMetaData[t_iIndex]);
+                    ProcedureParameterMetadata[] t_aProcedureParametersMetadata =
+                        t_MetadataManager.getProcedureParametersMetadata(
+                            t_aProceduresMetadata[t_iIndex]);
 
-                        t_ProcedureRepositoryTemplate
-                            .addProcedureMetaData(
-                                t_aProceduresMetaData[t_iIndex]);
+                    t_ProcedureRepositoryTemplate.addProcedureMetadata(
+                        t_aProceduresMetadata[t_iIndex]);
 
-                        t_ProcedureRepositoryTemplate
-                            .addProcedureParametersMetaData(
-                                t_aProceduresMetaData[t_iIndex],
-                                t_aProcedureParametersMetaData);
-                    }
+                    t_ProcedureRepositoryTemplate
+                        .addProcedureParametersMetadata(
+                            t_aProceduresMetadata[t_iIndex],
+                            t_aProcedureParametersMetadata);
                 }
-
-                storeProcedureRepositoryTemplate(t_ProcedureRepositoryTemplate, attributes);
             }
-        }
-        
-        return result;
-    }
 
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager instance.
-     * @throws BuildException if the manager retrieval process if faulty.
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaDataManager result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
+            storeProcedureRepositoryTemplate(
+                t_ProcedureRepositoryTemplate, attributes);
         }
         
         return result;
@@ -193,12 +163,13 @@ public class ProcedureRepositoryTemplateBuildHandler
      * Builds a procedure repository template using the information stored
      * in the attribute map.
      * @param parameters the parameter map.
+     * @param metadataTypeManager the metadata type manager.
      * @return the ProcedureRepositoryTemplate instance.
      * @throws BuildException if the repository cannot be created.
      */
     protected ProcedureRepositoryTemplate buildProcedureRepositoryTemplate(
-        final Map parameters)
-        throws  BuildException
+        final Map parameters, final MetadataTypeManager metadataTypeManager)
+      throws  BuildException
     {
         ProcedureRepositoryTemplate result = null;
 
@@ -211,7 +182,8 @@ public class ProcedureRepositoryTemplateBuildHandler
                             ParameterValidationHandler.PACKAGE),
                     (String)
                         parameters.get(
-                            ParameterValidationHandler.REPOSITORY));
+                            ParameterValidationHandler.REPOSITORY),
+                    metadataTypeManager);
 
             if  (result != null) 
             {
@@ -242,19 +214,22 @@ public class ProcedureRepositoryTemplateBuildHandler
      * Builds a procedure repository template using given information.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param metadataTypeManager the metadata type manager.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
      * information is not valid.
      */
     protected ProcedureRepositoryTemplate buildProcedureRepositoryTemplate(
         final String packageName,
-        final String repository)
+        final String repository,
+        final MetadataTypeManager metadataTypeManager)
       throws  BuildException
     {
         ProcedureRepositoryTemplate result = null;
 
         if  (   (packageName != null)
-             && (repository  != null))
+             && (repository != null)
+             && (metadataTypeManager != null))
         {
             ProcedureRepositoryTemplateGenerator t_ProcedureRepositoryTemplateGenerator =
                 ProcedureRepositoryTemplateGenerator.getInstance();
@@ -263,7 +238,7 @@ public class ProcedureRepositoryTemplateBuildHandler
             {
                 result =
                     t_ProcedureRepositoryTemplateGenerator.createProcedureRepositoryTemplate(
-                        packageName, repository);
+                        packageName, repository, metadataTypeManager);
             }
         }
 
@@ -277,14 +252,15 @@ public class ProcedureRepositoryTemplateBuildHandler
      * @throws BuildException if the repository cannot be stored for any reason.
      */
     protected void storeProcedureRepositoryTemplate(
-            ProcedureRepositoryTemplate procedureRepositoryTemplate,
-            Map                         parameters)
-        throws  BuildException
+        final ProcedureRepositoryTemplate procedureRepositoryTemplate,
+        final Map parameters)
+      throws  BuildException
     {
         if  (   (procedureRepositoryTemplate != null)
-             && (parameters                  != null))
+             && (parameters != null))
         {
-            parameters.put(PROCEDURE_REPOSITORY_TEMPLATE, procedureRepositoryTemplate);
+            parameters.put(
+                PROCEDURE_REPOSITORY_TEMPLATE, procedureRepositoryTemplate);
         }
     }
 }

@@ -42,11 +42,11 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplateFactory;
@@ -164,7 +164,7 @@ public class AttributesStatementSetterTemplateBuildHandler
             handle(
                 parameters,
                 engineName,
-                retrieveDatabaseMetaDataManager(parameters),
+                retrieveMetadataManager(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 AttributesStatementSetterTemplateGenerator.getInstance(),
@@ -175,7 +175,7 @@ public class AttributesStatementSetterTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param basePackageName the base package name.
      * @param repository the repository.
      * @param templateFactory the template factory.
@@ -194,7 +194,7 @@ public class AttributesStatementSetterTemplateBuildHandler
     protected boolean handle(
         final Map parameters,
         final String engineName,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String basePackageName,
         final String repositoryName,
         final AttributesStatementSetterTemplateFactory templateFactory,
@@ -217,7 +217,7 @@ public class AttributesStatementSetterTemplateBuildHandler
                 t_aTemplates[t_iIndex] =
                     templateFactory.createAttributesStatementSetterTemplate(
                         tableTemplates[t_iIndex],
-                        metaDataManager,
+                        metadataManager,
                         retrievePackage(
                             engineName,
                             tableTemplates[t_iIndex].getTableName(),
@@ -286,23 +286,6 @@ public class AttributesStatementSetterTemplateBuildHandler
                 projectPackage,
                 engineName,
                 tableName);
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**

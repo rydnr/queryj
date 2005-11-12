@@ -11,7 +11,7 @@
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    MERCHANCONSILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     General Public License for more details.
 
     You should have received a copy of the GNU General Public
@@ -32,16 +32,17 @@
  *
  * Author: QueryJ
  *
- * Description: Represents the USER_TAB_COLUMNS table in the persistence domain.
+ * Description: Represents the USER_CONS_COLUMNS table in the persistence
+ *              domain.
  *
  */
-package org.acmsl.queryj.tools.oracle;
+package org.acmsl.queryj.tools.metadata.engines.oracle;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.CalendarField;
 import org.acmsl.queryj.BigDecimalField;
+import org.acmsl.queryj.CalendarField;
 import org.acmsl.queryj.DoubleField;
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.IntField;
@@ -55,11 +56,10 @@ import org.acmsl.queryj.Table;
 import java.lang.ref.WeakReference;
 
 /**
- * Represents the USER_TAB_COLUMNS table in the persistence domain.
+ * Represents the USER_CONS_COLUMNS table in the persistence domain.
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
  */
-
-public class OracleUserTabColumnsTable
+public class OracleUserConsColumnsTable
     extends  Table
 {
     /**
@@ -68,42 +68,42 @@ public class OracleUserTabColumnsTable
     private static WeakReference singleton;
 
     /**
-     * The user_tab_columns table table_name field.
+     * The user_cons_columns table constraint_name field.
+     */
+    public StringField CONSTRAINT_NAME =
+        new StringField("CONSTRAINT_NAME", this);
+
+    /**
+     * The user_cons_columns table table_name field.
      */
     public StringField TABLE_NAME =
         new StringField("TABLE_NAME", this);
 
     /**
-     * The user_tab_columns table column_name field.
+     * The user_cons_columns table column_name field.
      */
     public StringField COLUMN_NAME =
         new StringField("COLUMN_NAME", this);
 
     /**
-     * The user_tab_columns table data_type field.
+     * The user_constraints table position field.
      */
-    public StringField DATA_TYPE =
-        new StringField("DATA_TYPE", this);
-
-    /**
-     * The user_tab_columns table nullable field.
-     */
-    public StringField NULLABLE =
-        new StringField("NULLABLE", this);
+    public IntField POSITION =
+        new IntField("POSITION", this);
 
     /**
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */
-    protected OracleUserTabColumnsTable(final String alias)
+    protected OracleUserConsColumnsTable(final String alias)
     {
-        super("USER_TAB_COLUMNS", alias);
+        super("USER_CONS_COLUMNS", alias);
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected OracleUserTabColumnsTable()
+    protected OracleUserConsColumnsTable()
     {
         this(null);
     }
@@ -112,8 +112,7 @@ public class OracleUserTabColumnsTable
      * Specifies a new weak reference.
      * @param table the table instance to use.
      */
-    protected static void setReference(
-        final OracleUserTabColumnsTable table)
+    protected static void setReference(final OracleUserConsColumnsTable table)
     {
         singleton = new WeakReference(table);
     }
@@ -128,17 +127,17 @@ public class OracleUserTabColumnsTable
     }
 
     /**
-     * Retrieves a OracleUserTabColumnsTable instance.
+     * Retrieves a OracleUserConsColumnsTable instance.
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserTabColumnsTable getInstance(final String alias)
+    public static OracleUserConsColumnsTable getInstance(final String alias)
     {
-        OracleUserTabColumnsTable result = null;
+        OracleUserConsColumnsTable result = null;
 
         if  (alias != null)
         {
-            result = new OracleUserTabColumnsTable(alias);
+            result = new OracleUserConsColumnsTable(alias) { };
         }
         else
         {
@@ -149,23 +148,23 @@ public class OracleUserTabColumnsTable
     }
 
     /**
-     * Retrieves a OracleUserTabColumnsTable instance.
+     * Retrieves a OracleUserConsColumnsTable instance.
      * @return such instance.
      */
-    public static OracleUserTabColumnsTable getInstance()
+    public static OracleUserConsColumnsTable getInstance()
     {
-        OracleUserTabColumnsTable result = null;
+        OracleUserConsColumnsTable result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (OracleUserTabColumnsTable) reference.get();
+            result = (OracleUserConsColumnsTable) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new OracleUserTabColumnsTable();
+            result = new OracleUserConsColumnsTable();
 
             setReference(result);
         }
@@ -179,7 +178,7 @@ public class OracleUserTabColumnsTable
      */
     public String getTableName()
     {
-        return "USER_TAB_COLUMNS";
+        return "USER_CONS_COLUMNS";
     }
 
     /**
@@ -191,9 +190,10 @@ public class OracleUserTabColumnsTable
         return
             new Field[]
             {
+                CONSTRAINT_NAME,
                 TABLE_NAME,
                 COLUMN_NAME,
-                DATA_TYPE
+                POSITION
             };
     }
 }

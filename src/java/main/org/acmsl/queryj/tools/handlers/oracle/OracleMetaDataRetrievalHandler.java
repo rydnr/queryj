@@ -40,8 +40,8 @@ package org.acmsl.queryj.tools.handlers.oracle;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.oracle.OracleMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.engines.oracle.OracleMetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
@@ -112,7 +112,7 @@ public class OracleMetaDataRetrievalHandler
      * parameters are not present or valid.
      * @precondition metaData != null
      */
-    protected DatabaseMetaDataManager buildMetaDataManager(
+    protected MetadataManager buildMetadataManager(
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -124,12 +124,12 @@ public class OracleMetaDataRetrievalHandler
         final String schema)
         throws  BuildException
     {
-        DatabaseMetaDataManager result = null;
+        MetadataManager result = null;
 
         try 
         {
             result =
-                new OracleMetaDataManager(
+                new OracleMetadataManager(
                     tableNames,
                     procedureNames,
                     disableTableExtraction,

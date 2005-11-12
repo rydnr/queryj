@@ -45,7 +45,6 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.metadata.vo.AbstractAttribute;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
-import org.acmsl.queryj.tools.MetaDataUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -62,12 +61,21 @@ public class AttributeDecorator
     extends AbstractAttribute
 {
     /**
+     * The metadata type manager.
+     */
+    private MetadataTypeManager m__MetadataTypeManager;
+
+    /**
      * Creates an <code>AttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
+     * @param metadataTypeManager the metadata type manager.
      * @precondition attribute != null
+     * @precondition metadataTypeManager != null
      */
-    public AttributeDecorator(final Attribute attribute)
+    public AttributeDecorator(
+        final Attribute attribute,
+        final MetadataTypeManager metadataTypeManager)
     {
         this(
             attribute.getName(),
@@ -76,11 +84,12 @@ public class AttributeDecorator
             attribute.getFieldType(),
             attribute.getTableName(),
             attribute.getManagedExternally(),
-            attribute.getAllowsNull());
+            attribute.getAllowsNull(),
+            metadataTypeManager);
     }
 
     /**
-     * Creates an <code>AttributeValueObject</code> with the following
+     * Creates an <code>AttributeDecorator</code> with the following
      * information.
      * @param name the name.
      * @param type the type.
@@ -89,11 +98,13 @@ public class AttributeDecorator
      * @param tableName the table name.
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
+     * @param metadataTypeManager the metadata type manager.
      * @precondition name != null
      * @precondition type != null
      * @precondition nativeType != null
      * @precondition fieldType != null
      * @precondition tableName != null
+     * @precondition metadataTypeManager != null
      */
     public AttributeDecorator(
         final String name,
@@ -102,7 +113,8 @@ public class AttributeDecorator
         final String fieldType,
         final String tableName,
         final boolean managedExternally,
-        final boolean allowsNull)
+        final boolean allowsNull,
+        final MetadataTypeManager metadataTypeManager)
     {
         super(
             name,
@@ -112,6 +124,37 @@ public class AttributeDecorator
             tableName,
             managedExternally,
             allowsNull);
+
+        immutableSetMetadataTypeManager(metadataTypeManager);
+    }
+
+    /**
+     * Specifies the metadata type manager.
+     * @param metadataTypeManager such instance.
+     */
+    protected final void immutableSetMetadataTypeManager(
+        final MetadataTypeManager metadataTypeManager)
+    {
+        m__MetadataTypeManager = metadataTypeManager;
+    }
+
+    /**
+     * Specifies the metadata type manager.
+     * @param metadataTypeManager such instance.
+     */
+    protected void setMetadataTypeManager(
+        final MetadataTypeManager metadataTypeManager)
+    {
+        immutableSetMetadataTypeManager(metadataTypeManager);
+    }
+
+    /**
+     * Retrieves the metadata type manager.
+     * @return such instance.
+     */
+    protected MetadataTypeManager getMetadataTypeManager()
+    {
+        return m__MetadataTypeManager;
     }
 
     /**
@@ -231,20 +274,20 @@ public class AttributeDecorator
      */
     public String getGetterMethod()
     {
-        return getGetterMethod(getType(), MetaDataUtils.getInstance());
+        return getGetterMethod(getType(), getMetadataTypeManager());
     }
 
     /**
      * Retrieves the attribute's associated getter method.
      * @param type the attribute type.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @return such information.
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      */
     protected String getGetterMethod(
-        final int type, final MetaDataUtils metaDataUtils)
+        final int type, final MetadataTypeManager metadataTypeManager)
     {
-        return metaDataUtils.getGetterMethod(type);
+        return metadataTypeManager.getGetterMethod(type);
     }
 
     /**
@@ -253,21 +296,22 @@ public class AttributeDecorator
      */
     public Boolean isPrimitive()
     {
-        return isPrimitive(getType(), MetaDataUtils.getInstance());
+        return isPrimitive(getType(), getMetadataTypeManager());
     }
 
     /**
      * Retrieves whether this attribute can be modelled as a primitive or not.
      * @param type the attribute type.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @return <code>false</code> if no primitive matches.
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      */
     protected Boolean isPrimitive(
-        final int type, final MetaDataUtils metaDataUtils)
+        final int type, final MetadataTypeManager metadataTypeManager)
     {
         return
-            (metaDataUtils.isPrimitive(type) ? Boolean.TRUE : Boolean.FALSE);
+            (metadataTypeManager.isPrimitive(type)
+             ?  Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
@@ -276,19 +320,19 @@ public class AttributeDecorator
      */
     public String getObjectType()
     {
-        return getObjectType(getType(), MetaDataUtils.getInstance());
+        return getObjectType(getType(), getMetadataTypeManager());
     }
 
     /**
      * Retrieves the attribute's object type.
      * @param type the attribute type.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @return such type.
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      */
     protected String getObjectType(
-        final int type, final MetaDataUtils metaDataUtils)
+        final int type, final MetadataTypeManager metadataTypeManager)
     {
-        return metaDataUtils.getSmartObjectType(type);
+        return metadataTypeManager.getSmartObjectType(type);
     }
 }

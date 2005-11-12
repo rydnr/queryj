@@ -32,10 +32,11 @@
  *
  * Author: QueryJ
  *
- * Description: Represents the USER_COL_COMMENTS table in the persistence domain.
+ * Description: Represents the USER_TAB_COMMENTS table in the persistence
+ *              domain.
  *
  */
-package org.acmsl.queryj.tools.oracle;
+package org.acmsl.queryj.tools.metadata.engines.oracle;
 
 /*
  * Importing some ACM-SL classes.
@@ -55,10 +56,10 @@ import org.acmsl.queryj.Table;
 import java.lang.ref.WeakReference;
 
 /**
- * Represents the USER_TAB_COLUMNS table in the persistence domain.
+ * Represents the USER_TAB_TABUMNS table in the persistence domain.
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
  */
-public class OracleUserColCommentsTable
+public class OracleUserTabCommentsTable
     extends  Table
 {
     /**
@@ -67,19 +68,19 @@ public class OracleUserColCommentsTable
     private static WeakReference singleton;
 
     /**
-     * The user_col_comments table table_name field.
+     * The user_tab_comments table table_name field.
      */
     public StringField TABLE_NAME =
         new StringField("TABLE_NAME", this);
 
     /**
-     * The user_col_comments table column_name field.
+     * The user_tab_comments table table_type field.
      */
-    public StringField COLUMN_NAME =
-        new StringField("COLUMN_NAME", this);
+    public StringField TABLE_TYPE =
+        new StringField("TABLE_TYPE", this);
 
     /**
-     * The user_col_comments table comments field.
+     * The user_tab_comments table comments field.
      */
     public StringField COMMENTS =
         new StringField("COMMENTS", this);
@@ -88,15 +89,15 @@ public class OracleUserColCommentsTable
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */
-    protected OracleUserColCommentsTable(final String alias)
+    protected OracleUserTabCommentsTable(final String alias)
     {
-        super("USER_COL_COMMENTS", alias);
+        super("USER_TAB_COMMENTS", alias);
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected OracleUserColCommentsTable()
+    protected OracleUserTabCommentsTable()
     {
         this(null);
     }
@@ -106,7 +107,7 @@ public class OracleUserColCommentsTable
      * @param table the table instance to use.
      */
     protected static void setReference(
-        final OracleUserColCommentsTable table)
+        final OracleUserTabCommentsTable table)
     {
         singleton = new WeakReference(table);
     }
@@ -121,17 +122,17 @@ public class OracleUserColCommentsTable
     }
 
     /**
-     * Retrieves a OracleUserColCommentsTable instance.
+     * Retrieves a OracleUserTabCommentsTable instance.
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserColCommentsTable getInstance(final String alias)
+    public static OracleUserTabCommentsTable getInstance(final String alias)
     {
-        OracleUserColCommentsTable result = null;
+        OracleUserTabCommentsTable result = null;
 
         if  (alias != null)
         {
-            result = new OracleUserColCommentsTable(alias);
+            result = new OracleUserTabCommentsTable(alias);
         }
         else
         {
@@ -142,23 +143,23 @@ public class OracleUserColCommentsTable
     }
 
     /**
-     * Retrieves a OracleUserColCommentsTable instance.
+     * Retrieves a OracleUserTabCommentsTable instance.
      * @return such instance.
      */
-    public static OracleUserColCommentsTable getInstance()
+    public static OracleUserTabCommentsTable getInstance()
     {
-        OracleUserColCommentsTable result = null;
+        OracleUserTabCommentsTable result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (OracleUserColCommentsTable) reference.get();
+            result = (OracleUserTabCommentsTable) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new OracleUserColCommentsTable();
+            result = new OracleUserTabCommentsTable();
 
             setReference(result);
         }
@@ -172,7 +173,7 @@ public class OracleUserColCommentsTable
      */
     public String getTableName()
     {
-        return "USER_COL_COMMENTS";
+        return "USER_TAB_COMMENTS";
     }
 
     /**
@@ -185,7 +186,7 @@ public class OracleUserColCommentsTable
             new Field[]
             {
                 TABLE_NAME,
-                COLUMN_NAME,
+                TABLE_TYPE,
                 COMMENTS
             };
     }

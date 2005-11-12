@@ -41,10 +41,9 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
-import org.acmsl.queryj.tools.ProcedureMetaData;
-import org.acmsl.queryj.tools.ProcedureParameterMetaData;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
+import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
 
 /*
  * Importing some ACM-SL classes.
@@ -76,15 +75,20 @@ public class ProcedureRepositoryTemplate
      * information.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param metadataTypeManager the metadata type manager.
+     * @precondition metadataTypeManager != null
      */
     public ProcedureRepositoryTemplate(
-        final String packageName, final String repository)
+        final String packageName,
+        final String repository,
+        final MetadataTypeManager metadataTypeManager)
     {
         super(
             DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             packageName,
             repository,
+            metadataTypeManager,
             DEFAULT_PROJECT_IMPORTS_JAVADOC,
             PROJECT_IMPORTS,
             ACMSL_IMPORTS,
@@ -133,9 +137,9 @@ public class ProcedureRepositoryTemplate
                 getOutParameterRetrieval(),
                 getValueObjectConstruction(),
                 getClassEnd(),
-                getProceduresMetaData(),
+                getProceduresMetadata(),
                 ProcedureRepositoryTemplateUtils.getInstance(),
-                MetaDataUtils.getInstance(),
+                getMetadataTypeManager(),
                 StringUtils.getInstance());
     }
 
@@ -162,15 +166,15 @@ public class ProcedureRepositoryTemplate
      * @param outParameterRetrieval the OUT parameter retrieval.
      * @param valueObjectConstruction the value object construction.
      * @param classEnd the class end.
-     * @param proceduresMetaData the procedures' meta data.
+     * @param proceduresMetadata the procedures' meta data.
      * @param procedureRepositoryTemplateUtils the
      * <code>ProcedureRepositoryTemplateUtils</code> instance.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return such source code.
      * @precondition proceduresMetaData != null
      * @precondition procedureRepositoryTemplateUtils != null
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      * @precondition stringUtils != null
      */
     protected String generateOutput(
@@ -195,9 +199,9 @@ public class ProcedureRepositoryTemplate
         final String outParameterRetrieval,
         final String valueObjectConstruction,
         final String classEnd,
-        final List proceduresMetaData,
+        final List proceduresMetadata,
         final ProcedureRepositoryTemplateUtils procedureRepositoryTemplateUtils,
-        final MetaDataUtils metaDataUtils,
+        final MetadataTypeManager metadataTypeManager,
         final StringUtils stringUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
@@ -236,7 +240,7 @@ public class ProcedureRepositoryTemplate
 
         t_sbResult.append(classStart);
 
-        Iterator t_itProceduresMetaData = proceduresMetaData.iterator();
+        Iterator t_itProceduresMetadata = proceduresMetadata.iterator();
 
         MessageFormat t_JavadocFormatter =
             new MessageFormat(procedureJavadoc);
@@ -263,16 +267,16 @@ public class ProcedureRepositoryTemplate
 
         int t_iReturnType = -1;
 
-        while  (t_itProceduresMetaData.hasNext())
+        while  (t_itProceduresMetadata.hasNext())
         {
-            ProcedureMetaData t_ProcedureMetaData =
-                (ProcedureMetaData) t_itProceduresMetaData.next();
+            ProcedureMetadata t_ProcedureMetadata =
+                (ProcedureMetadata) t_itProceduresMetadata.next();
 
-            ProcedureParameterMetaData[] t_aProcedureParametersMetaData =
-                getProcedureParametersMetaData(t_ProcedureMetaData);
+            ProcedureParameterMetadata[] t_aProcedureParametersMetadata =
+                getProcedureParametersMetadata(t_ProcedureMetadata);
 
-            if  (   (t_ProcedureMetaData            != null)
-                 && (t_aProcedureParametersMetaData != null))
+            if  (   (t_ProcedureMetadata            != null)
+                 && (t_aProcedureParametersMetadata != null))
             {
                 StringBuffer t_sbParametersJavadoc = new StringBuffer();
                 StringBuffer t_sbParametersDeclaration = new StringBuffer();
@@ -285,18 +289,18 @@ public class ProcedureRepositoryTemplate
                 int t_iInParameterIndex = 1;
 
                 for  (int t_iIndex = 0;
-                          t_iIndex < t_aProcedureParametersMetaData.length;
+                          t_iIndex < t_aProcedureParametersMetadata.length;
                           t_iIndex++)
                 {
-                    if  (t_aProcedureParametersMetaData[t_iIndex] != null)
+                    if  (t_aProcedureParametersMetadata[t_iIndex] != null)
                     {
-                        if  (   (   t_aProcedureParametersMetaData[
+                        if  (   (   t_aProcedureParametersMetadata[
                                         t_iIndex].getType()
-                                 == ProcedureParameterMetaData
+                                 == ProcedureParameterMetadata
                                         .IN_PARAMETER)
-                             || (   t_aProcedureParametersMetaData[
+                             || (   t_aProcedureParametersMetadata[
                                         t_iIndex].getType()
-                                 == ProcedureParameterMetaData
+                                 == ProcedureParameterMetadata
                                         .IN_OUT_PARAMETER))
                         {
                             if  (t_iInParameterIndex > 2)
@@ -310,28 +314,28 @@ public class ProcedureRepositoryTemplate
                                 t_InParameterSpecificationFormatter.format(
                                     new Object[]
                                     {
-                                        metaDataUtils.getSetterMethod(
-                                            t_aProcedureParametersMetaData[
+                                        metadataTypeManager.getSetterMethod(
+                                            t_aProcedureParametersMetadata[
                                                 t_iIndex].getDataType(),
                                             t_iInParameterIndex,
-                                            t_aProcedureParametersMetaData[
+                                            t_aProcedureParametersMetadata[
                                                 t_iIndex].getName().toLowerCase())
                                     }));
                         }
 
-                        if  (   (t_aProcedureParametersMetaData[
+                        if  (   (t_aProcedureParametersMetadata[
                                      t_iIndex].getName() != null)
-                             && (   (   t_aProcedureParametersMetaData[
+                             && (   (   t_aProcedureParametersMetadata[
                                             t_iIndex].getType()
-                                     == ProcedureParameterMetaData
+                                     == ProcedureParameterMetadata
                                             .IN_PARAMETER)
-                                 || (   t_aProcedureParametersMetaData[
+                                 || (   t_aProcedureParametersMetadata[
                                             t_iIndex].getType()
-                                     == ProcedureParameterMetaData
+                                     == ProcedureParameterMetadata
                                             .IN_OUT_PARAMETER)))
                         {
                             t_strComment =
-                                t_aProcedureParametersMetaData[
+                                t_aProcedureParametersMetadata[
                                     t_iIndex].getComment();
 
                             if  (t_strComment == null)
@@ -344,20 +348,20 @@ public class ProcedureRepositoryTemplate
                                 t_ParameterJavadocFormatter.format(
                                     new Object[]
                                     {
-                                        t_aProcedureParametersMetaData[
+                                        t_aProcedureParametersMetadata[
                                             t_iIndex]
                                                 .getName().toLowerCase(),
                                         t_strComment
                                     }));                                        
                         }
 
-                        if  (   t_aProcedureParametersMetaData[
+                        if  (   t_aProcedureParametersMetadata[
                                     t_iIndex].getType()
-                             == ProcedureParameterMetaData
+                             == ProcedureParameterMetadata
                                     .RESULT_PARAMETER)
                         {
                             t_iReturnType =
-                                t_aProcedureParametersMetaData[
+                                t_aProcedureParametersMetadata[
                                     t_iIndex].getDataType();
                         }
 
@@ -370,31 +374,31 @@ public class ProcedureRepositoryTemplate
                 int t_iParameterIndex = t_iInParameterCount;
 
                 for  (int t_iIndex = 0;
-                          t_iIndex < t_aProcedureParametersMetaData.length;
+                          t_iIndex < t_aProcedureParametersMetadata.length;
                           t_iIndex++)
                 {
-                    if  (t_aProcedureParametersMetaData[t_iIndex] != null)
+                    if  (t_aProcedureParametersMetadata[t_iIndex] != null)
                     {
-                        if  (   t_aProcedureParametersMetaData[t_iIndex]
+                        if  (   t_aProcedureParametersMetadata[t_iIndex]
                                     .getType()
-                             == ProcedureParameterMetaData
+                             == ProcedureParameterMetadata
                                     .RESULT_PARAMETER)
                         {
                             t_iReturnType =
-                                t_aProcedureParametersMetaData[t_iIndex]
+                                t_aProcedureParametersMetadata[t_iIndex]
                                     .getType();
                         }
 
-                        if  (   (   t_aProcedureParametersMetaData[
+                        if  (   (   t_aProcedureParametersMetadata[
                                         t_iIndex].getName()
                                  != null)
-                             && (   (   t_aProcedureParametersMetaData[
+                             && (   (   t_aProcedureParametersMetadata[
                                             t_iIndex].getType()
-                                     == ProcedureParameterMetaData
+                                     == ProcedureParameterMetadata
                                            .OUT_PARAMETER)
-                                 || (   t_aProcedureParametersMetaData[
+                                 || (   t_aProcedureParametersMetadata[
                                             t_iIndex].getType()
-                                     == ProcedureParameterMetaData
+                                     == ProcedureParameterMetadata
                                             .IN_OUT_PARAMETER)))
                         {
                             t_sbOutParametersRegistration.append(
@@ -402,8 +406,8 @@ public class ProcedureRepositoryTemplate
                                     new Object[]
                                     {
                                         new Integer(t_iIndex + 1),
-                                        metaDataUtils.getConstantName(
-                                            t_aProcedureParametersMetaData[
+                                        metadataTypeManager.getConstantName(
+                                            t_aProcedureParametersMetadata[
                                                 t_iIndex].getType())
                                     }));
 
@@ -411,14 +415,14 @@ public class ProcedureRepositoryTemplate
                                 t_ValueObjectConstructionFormatter.format(
                                     new Object[]
                                     {
-                                        metaDataUtils.getObjectType(
-                                            t_aProcedureParametersMetaData[
+                                        metadataTypeManager.getObjectType(
+                                            t_aProcedureParametersMetadata[
                                                 t_iIndex].getDataType()),
-                                        t_aProcedureParametersMetaData[
+                                        t_aProcedureParametersMetadata[
                                             t_iIndex].getName().toLowerCase(),
                                         stringUtils.capitalize(
-                                            metaDataUtils.getObjectType(
-                                                t_aProcedureParametersMetaData[
+                                            metadataTypeManager.getObjectType(
+                                                t_aProcedureParametersMetadata[
                                                     t_iIndex].getDataType()),
                                             '_'),
                                         new Integer(t_iIndex + 1)
@@ -436,20 +440,20 @@ public class ProcedureRepositoryTemplate
                 boolean t_bFirstInParameter = true;
 
                 for  (int t_iIndex = 0;
-                          t_iIndex < t_aProcedureParametersMetaData.length;
+                          t_iIndex < t_aProcedureParametersMetadata.length;
                           t_iIndex++)
                 {
-                    if  (t_aProcedureParametersMetaData[t_iIndex] != null)
+                    if  (t_aProcedureParametersMetadata[t_iIndex] != null)
                     {
-                        if  (   (t_aProcedureParametersMetaData[t_iIndex]
+                        if  (   (t_aProcedureParametersMetadata[t_iIndex]
                                      .getName() != null)
-                             && (   (   t_aProcedureParametersMetaData[
+                             && (   (   t_aProcedureParametersMetadata[
                                             t_iIndex].getType()
-                                     == ProcedureParameterMetaData
+                                     == ProcedureParameterMetadata
                                            .IN_PARAMETER)
-                                 || (   t_aProcedureParametersMetaData[
+                                 || (   t_aProcedureParametersMetadata[
                                             t_iIndex].getType()
-                                     == ProcedureParameterMetaData
+                                     == ProcedureParameterMetadata
                                             .IN_OUT_PARAMETER)))
                         {
                             if  (t_bFirstInParameter)
@@ -462,15 +466,15 @@ public class ProcedureRepositoryTemplate
                                 t_ParameterDeclarationFormatter.format(
                                     new Object[]
                                     {
-                                        metaDataUtils.getNativeType(
-                                            t_aProcedureParametersMetaData[
+                                        metadataTypeManager.getNativeType(
+                                            t_aProcedureParametersMetadata[
                                                 t_iIndex].getDataType()),
-                                        t_aProcedureParametersMetaData[
+                                        t_aProcedureParametersMetadata[
                                             t_iIndex]
                                         .getName().toLowerCase()
                                         + (  (  t_iInParameterIndex
                                                 + t_iOutParameterCount
-                                                < t_aProcedureParametersMetaData
+                                                < t_aProcedureParametersMetadata
                                                 .length)
                                              ? ","
                                              : "")
@@ -481,7 +485,7 @@ public class ProcedureRepositoryTemplate
                     }
                 }
 
-                t_strComment = t_ProcedureMetaData.getComment();
+                t_strComment = t_ProcedureMetadata.getComment();
 
                 if  (t_strComment == null)
                 {
@@ -497,7 +501,7 @@ public class ProcedureRepositoryTemplate
                         ));
 
                 String t_strReturnType =
-                    metaDataUtils.getProcedureResultType(t_iReturnType);
+                    metadataTypeManager.getProcedureResultType(t_iReturnType);
 
                 MessageFormat t_ProcedureBodyFormatter =
                     new MessageFormat(procedureBody);
@@ -507,14 +511,14 @@ public class ProcedureRepositoryTemplate
                         new Object[]
                         {
                             t_strReturnType,
-                            t_ProcedureMetaData.getName().toLowerCase(),
+                            t_ProcedureMetadata.getName().toLowerCase(),
                             t_sbParametersDeclaration.toString(),
-                            metaDataUtils.getProcedureDefaultValue(
+                            metadataTypeManager.getProcedureDefaultValue(
                                 t_iReturnType),
                             t_ProcedureSentenceFormatter.format(
                                 new Object[]
                                 {
-                                    t_ProcedureMetaData.getName(),
+                                    t_ProcedureMetadata.getName(),
                                     t_sbProcedureSentenceParameters
                                     .toString()
                                 }),
@@ -523,9 +527,9 @@ public class ProcedureRepositoryTemplate
                             t_sbOutParametersRetrieval.toString(),
                             t_sbValueObjectConstruction.toString(),
                             t_strReturnType,
-                            metaDataUtils.getGetterMethod(
+                            metadataTypeManager.getGetterMethod(
                                 t_iReturnType, 1),
-                            t_ProcedureMetaData.getName()
+                            t_ProcedureMetadata.getName()
                         }));
             }
         }
