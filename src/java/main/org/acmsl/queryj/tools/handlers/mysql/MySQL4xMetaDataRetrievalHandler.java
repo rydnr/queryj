@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
+import org.acmsl.commons.version.VersionUtils;
 
 /*
  * Importing some Ant classes.
@@ -93,7 +94,7 @@ public class MySQL4xMetaDataRetrievalHandler
 
         if  (result)
         {
-            result = checkVersion(productVersion);
+            result = checkVersion(productVersion, VersionUtils.getInstance());
         }
         
         return result;
@@ -102,14 +103,15 @@ public class MySQL4xMetaDataRetrievalHandler
     /**
      * Checks the engine version.
      * @param version the version.
+     * @param versionUtils the <code>VersionUtils</code> instance.
      * @return <code>true</code> if the version matches or is compatible with.
      * @precondition version != null
+     * @precondition versionUtils != null
      */
-    protected boolean checkVersion(final String version)
+    protected boolean checkVersion(
+        final String version, final VersionUtils versionUtils)
     {
-        boolean result = false;
-
-        return result;
+        return versionUtils.matches(version, "4.x");
     }
     
     /**
