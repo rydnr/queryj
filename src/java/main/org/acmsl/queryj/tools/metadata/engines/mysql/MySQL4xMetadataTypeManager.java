@@ -80,7 +80,30 @@ public class MySQL4xMetadataTypeManager
                 break;
 
             default:
-                result = super.getSmartObjectType(dataType);;
+                result = super.getSmartObjectType(dataType);
+                break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the object type of given data type.
+     * @param dataType the data type.
+     * @return the associated object type.
+     */
+    public String getObjectType(final int dataType)
+    {
+        String result = null;
+
+        switch (dataType)
+        {
+            case Types.INTEGER:
+                result = "Long";
+                break;
+
+            default:
+                result = super.getObjectType(dataType);
                 break;
         }
 
