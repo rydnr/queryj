@@ -1071,4 +1071,15 @@ public class JdbcMetadataTypeManager
 
         return result;
     }
+
+    /**
+     * Checks if given data type represents integers.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as an
+     * integer.
+     */
+    public boolean isClob(final int dataType)
+    {
+        return (dataType == Types.CLOB);
+    }
 }

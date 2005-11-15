@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.AntFieldElement;
 import org.acmsl.queryj.tools.AntFieldFkElement;
@@ -1144,6 +1145,26 @@ public abstract class DatabaseMetaDataRetrievalHandler
             }
         }
 
+        if  (result != null)
+        {
+            try 
+            {
+                result.retrieveMetadata();
+            }
+            catch  (final SQLException sqlException)
+            {
+                throw
+                    new BuildException(
+                        "Cannot retrieve metadata.", sqlException);
+            }
+            catch  (final QueryJException queryjException)
+            {
+                throw
+                    new BuildException(
+                        "Cannot retrieve metadata.", queryjException);
+            }
+        }
+        
         return result;
     }
 

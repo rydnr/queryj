@@ -1351,4 +1351,13 @@ public class OracleMetadataManager
 
         return result;
     }
+
+    /**
+     * Retrieves the type manager.
+     * @return such instance.
+     */
+    public MetadataTypeManager getMetadataTypeManager()
+    {
+        return OracleMetadataTypeManager.getInstance();
+    }
 }

@@ -335,4 +335,27 @@ public class AttributeDecorator
     {
         return metadataTypeManager.getSmartObjectType(type);
     }
+
+    /**
+     * Retrieves whether the attribute is a clob or not.
+     * return such information.
+     */
+    public boolean isClob()
+    {
+        return isClob(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is a clob or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * return such information.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isClob(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isClob(type);
+    }
 }

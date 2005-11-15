@@ -420,19 +420,18 @@ public class <input.engine_name><input.vo_name>DAO
     /**
      * Retrieves \<code><input.vo_name>\</code> information
      * filtering by its primary key.
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @return the \<code><input.vo_name>\</code> matching given
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
     public <input.vo_name> findByPrimaryKey(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name, type=it.fieldType); separator=",\n">)
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
       throws DataAccessException
     {
         return
             findByPrimaryKey(
-                <input.pk_attributes:{<it.name>}; separator=",\n">,
+                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                 buildFindByPrimaryKeyQuery(),
                 getDataSource());
     }
@@ -440,7 +439,7 @@ public class <input.engine_name><input.vo_name>DAO
     /**
      * Retrieves \<code><input.vo_name>\</code> information
      * filtering by its primary key.
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
      * @param dataSource the \<code>DataSource\</code> instance.
      * @return the \<code><input.vo_name>\</code> matching given
@@ -449,15 +448,14 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("dataSource")>
      */
     protected <input.vo_name> findByPrimaryKey(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name, type=it.fieldType); separator=",\n">,
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final DataSource dataSource)
       throws DataAccessException
     {
         return
             findByPrimaryKey(
-                <input.pk_attributes:{<it.name>}; separator=",\n">,
+                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new DataSourceTransactionManager(dataSource));
     }
@@ -465,7 +463,7 @@ public class <input.engine_name><input.vo_name>DAO
     /**
      * Retrieves \<code><input.vo_name>\</code> information
      * filtering by its primary key.
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
      * @param transactionManager the \<code>PlatformTransactionManager\</code>
      * instance.
@@ -476,15 +474,14 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("transactionManager")>
      */
     protected <input.vo_name> findByPrimaryKey(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name, type=it.fieldType); separator=",\n">,
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
         return
             findByPrimaryKey(
-                <input.pk_attributes:{<it.name>}; separator=",\n">,
+                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new TransactionTemplate(transactionManager));
     }
@@ -492,7 +489,7 @@ public class <input.engine_name><input.vo_name>DAO
     /**
      * Retrieves \<code><input.vo_name>\</code> information
      * filtering by its primary key.
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
      * @param transactionTemplate the \<code>TransactionTemplate\</code>
      * instance.
@@ -503,8 +500,7 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("transactionTemplate")>
      */
     protected <input.vo_name> findByPrimaryKey(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name, type=it.fieldType); separator=",\n">,
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
@@ -515,7 +511,7 @@ public class <input.engine_name><input.vo_name>DAO
                     new QueryTransactionCallback(
                         new QueryPreparedStatementCreator(query),
                         new <input.vo_name>PkStatementSetter(
-                            <input.pk_attributes:{<it.name>}; separator=",\n">),
+                            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
                         <input.table_name_uppercased>_EXTRACTOR,
                         this));
     }
@@ -563,23 +559,22 @@ public class <input.engine_name><input.vo_name>DAO
 
     /**
      * Persists \<code><input.vo_name>\</code> information."
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @throws DataAccessException if the operation fails.
      */
     public void insert(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">)
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">)
       throws DataAccessException
     {
         insert(
-            <input.attributes:{<it.name>}; separator=",\n">,
+            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
             buildInsertQuery(),
             getDataSource());
     }
 
     /**
      * Persists \<code><input.vo_name>\</code> information."
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to insert the values.
      * @param dataSource the \<code>DataSource\</code> instance.
      * @throws DataAccessException if the operation fails.
@@ -587,21 +582,20 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("dataSource")>
      */
     protected void insert(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final DataSource dataSource)
       throws DataAccessException
     {
         insert(
-            <input.attributes:{<it.name>}; separator=",\n">,
+            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
             query,
             new DataSourceTransactionManager(dataSource));
     }
 
     /**
      * Persists \<code><input.vo_name>\</code> information."
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to insert the values.
      * @param transactionManager the \<code>PlatformTransactionManager\</code>
      * instance.
@@ -610,21 +604,20 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("transactionManager")>
      */
     protected void insert(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
         insert(
-            <input.attributes:{<it.name>}; separator=",\n">,
+            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
             query,
             new TransactionTemplate(transactionManager));
     }
 
     /**
      * Persists \<code><input.vo_name>\</code> information."
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to insert the values.
      * @param transactionTemplate the \<code>TransactionTemplate\</code>
      * instance.
@@ -633,8 +626,7 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("transactionTemplate")>
      */
     protected void insert(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
@@ -643,7 +635,7 @@ public class <input.engine_name><input.vo_name>DAO
             new UpdateTransactionCallback(
                 new QueryPreparedStatementCreator(query),
                 new <input.vo_name>AttributesStatementSetter(
-                    <input.attributes:{<it.name>}; separator=",\n">,
+                    <input.attributes:{<it.nameLowercased>}; separator=",\n">,
                     false),
                 this));
     }
@@ -651,17 +643,16 @@ public class <input.engine_name><input.vo_name>DAO
     /**
      * Inserts and retrieves the newly-inserted
      * \<code><input.vo_name>\</code> instance."
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @throws DataAccessException if the operation fails.
      */
     public <input.vo_name> create(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">)
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">)
       throws DataAccessException
     {
         return
             create(
-                <input.attributes:{<it.name>}; separator=",\n">,
+                <input.attributes:{<it.nameLowercased>}; separator=",\n">,
                 buildInsertQuery(),
                 getDataSource(),
                 <input.vo_name>ValueObjectFactory.getInstance());
@@ -670,7 +661,7 @@ public class <input.engine_name><input.vo_name>DAO
     /**
      * Inserts and retrieves the newly-inserted
      * \<code><input.vo_name>\</code> instance."
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query required to insert given information.
      * @param dataSource the data source.
      * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
@@ -681,8 +672,7 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("factory")>
      */
     protected <input.vo_name> create(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final DataSource dataSource,
         final <input.vo_name>ValueObjectFactory factory)
@@ -690,7 +680,7 @@ public class <input.engine_name><input.vo_name>DAO
     {
         return
             create(
-                <input.attributes:{<it.name>}; separator=",\n">,
+                <input.attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new DataSourceTransactionManager(dataSource),
                 factory);
@@ -699,7 +689,7 @@ public class <input.engine_name><input.vo_name>DAO
     /**
      * Inserts and retrieves the newly-inserted
      * \<code><input.vo_name>\</code> instance."
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query required to insert given information.
      * @param transactionManager the \<code>PlatformTransactionManager\</code>
      * instance.
@@ -711,8 +701,7 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("factory")>
      */
     protected <input.vo_name> create(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager,
         final <input.vo_name>ValueObjectFactory factory)
@@ -720,7 +709,7 @@ public class <input.engine_name><input.vo_name>DAO
     {
         return
             create(
-                <input.attributes:{<it.name>}; separator=",\n">,
+                <input.attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new TransactionTemplate(transactionManager),
                 factory);
@@ -729,7 +718,7 @@ public class <input.engine_name><input.vo_name>DAO
     /**
      * Inserts and retrieves the newly-inserted
      * \<code><input.vo_name>\</code> instance.
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query required to insert given information.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
      * instance.
@@ -740,8 +729,7 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("factory")>
      */
     protected <input.vo_name> create(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate,
         final <input.vo_name>ValueObjectFactory factory)
@@ -761,13 +749,13 @@ public class <input.engine_name><input.vo_name>DAO
             new UpdateTransactionCallback(
                 new QueryPreparedStatementCreator(query),
                 new <input.vo_name>AttributesStatementSetter(
-                    <input.attributes:{<it.name>}; separator=",\n">,
+                    <input.attributes:{<it.nameLowercased>}; separator=",\n">,
                     true),
                 this));
 
         result =
             factory.create<input.vo_name>(
-                <input.attributes:{<it.name>}; separator=",\n">);
+                <input.attributes:{<it.nameLowercased>}; separator=",\n">);
 
         return result;
     }
@@ -819,23 +807,22 @@ public class <input.engine_name><input.vo_name>DAO
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @throws DataAccessException if the operation fails.
      */
     public void update(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">)
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">)
       throws DataAccessException
     {
         update(
-            <input.attributes:{<it.name>}; separator=",\n">,
+            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
             buildUpdateQuery(),
             getDataSource());
     }
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the update operation.
      * @param dataSource the \<code>DataSource\<code> instance.
      * @throws DataAccessException if the operation fails.
@@ -843,21 +830,20 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("dataSource")>
      */
     protected void update(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final DataSource dataSource)
       throws DataAccessException
     {
         update(
-            <input.attributes:{<it.name>}; separator=",\n">,
+            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
             query,
             new DataSourceTransactionManager(dataSource));
     }
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the update operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance. 
@@ -866,21 +852,20 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("transactionManager")>
      */
     protected void update(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
         update(
-            <input.attributes:{<it.name>}; separator=",\n">,
+            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
             query,
             new TransactionTemplate(transactionManager));
     }
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
-     <input.attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the update operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance.
@@ -889,8 +874,7 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("transactionManager")>
      */
     protected void update(
-        <input.attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
@@ -899,7 +883,7 @@ public class <input.engine_name><input.vo_name>DAO
             new UpdateTransactionCallback(
                 new QueryPreparedStatementCreator(query),
                 new <input.vo_name>AttributesStatementSetter(
-                    <input.attributes:{<it.name>}; separator=",\n">,
+                    <input.attributes:{<it.nameLowercased>}; separator=",\n">,
                     true),
                 this));
     }
@@ -949,41 +933,39 @@ public class <input.engine_name><input.vo_name>DAO
 
     /**
      * Deletes \<code><input.vo_name>\</code> information."
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     protected void deleteNoFk(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">)
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
     {
         deleteNoFk(
-            <input.pk_attributes:{<it.name>}; separator=",\n">,
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             buildDeleteQuery(),
             getDataSource());
     }
 
     /**
      * Deletes \<code><input.vo_name>\</code> information."
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param dataSource the \<code>DataSource\<code> instance.
      * <precondition_notnull("query")>
      * <precondition_notnull("dataSource")>
      */
     protected void deleteNoFk(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final DataSource dataSource)
     {
         deleteNoFk(
-            <input.pk_attributes:{<it.name>}; separator=",\n">,
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             query,
             new DataSourceTransactionManager(dataSource));
     }
 
     /**
      * Deletes \<code><input.vo_name>\</code> information."
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance.
@@ -991,20 +973,19 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("transactionManager")>
      */
     protected void deleteNoFk(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
         deleteNoFk(
-            <input.pk_attributes:{<it.name>}; separator=",\n">,
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             query,
             new TransactionTemplate(transactionManager));
     }
 
     /**
      * Deletes \<code><input.vo_name>\</code> information."
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
      * instance.
@@ -1012,8 +993,7 @@ public class <input.engine_name><input.vo_name>DAO
      * <precondition_notnull("transactionTemplate")>
      */
     protected void deleteNoFk(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
     {
@@ -1021,44 +1001,42 @@ public class <input.engine_name><input.vo_name>DAO
             new UpdateTransactionCallback(
                 new QueryPreparedStatementCreator(query),
                 new <input.vo_name>PkStatementSetter(
-                    <input.pk_attributes:{<it.name>}; separator=",\n">),
+                    <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
                 this));
     }
 
     /**
      * Deletes \<code><input.vo_name>\</code> information.
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     public void delete(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">)
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
     {
 <if(input.fk_attributes)>
         delete(
-            <input.pk_attributes:{<it.name>}; separator=",\n">,
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             DataAccessManager.getInstance());
     }
 
     /**
      * Deletes \<code><input.vo_name>\</code> information.
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param dataAccessManager the \<code>DataAccessManager\</code> instance.
      * <precondition_notnull("dataAccessManager")>
      */
     protected void delete(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final DataAccessManager dataAccessManager)
     {
         delete(
-            <input.pk_attributes:{<it.name>}; separator=",\n">,
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             <input.fk_attributes:{dataAccessManager.get<it.tableName>DAO()}
               ; separator=",\n">);
     }
 
     /**
      * Deletes \<code><input.vo_name>\</code> information.
-     <input.pk_attributes:attribute_javadoc(name=it.name); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      <input.fk_attributes:dao_javadoc(
        name=it.tableName,
        uncapitalizedName=it.uncapitalizedTableName)
@@ -1066,8 +1044,7 @@ public class <input.engine_name><input.vo_name>DAO
      <input.fk_attributes:precondition_notnull(name=it.tableName); separator="\n">
      */
     protected void delete(
-        <input.pk_attributes:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         <input.fk_attributes:dao_declaration(
           name=it.tableName,
           uncapitalizedName=it.uncapitalizedTableName)
@@ -1080,7 +1057,7 @@ public class <input.engine_name><input.vo_name>DAO
 <endif>
 
         deleteNoFk(
-            <input.pk_attributes:{<it.name>}; separator=",\n">);
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
     }
 <input.foreign_keys:fk_delete_method(
   foreignKey=it, input=input); separator="\n">
@@ -1628,13 +1605,12 @@ attribute_javadoc(name) ::= <<
 * @param <name> the \<i><name>\</i> value.
 >>
 
-attribute_declaration(name, type) ::= <<
+attribute_declaration(attr) ::= <<
 <!
   Writes the parameter declaration for a concrete attribute.
-  @param name the name of the attribute.
-  @param type the type of the attribute.
+  @param attr the attribute.
 !>
-final <type> <name>
+final <if(attr.clob)>String<else><attr.type><endif> <name>
 >>
 
 attribute_query_insert(
@@ -1734,7 +1710,7 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Builds the query required to \<i>delete\</i> a concrete
      * \<code><input.table_name>\</code> entity, determined by a foreign key.
-     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @return the \<code>DeleteQuery\</code> instance.
      */
     protected Query buildDeleteBy<foreignKey:{<it.nameCapitalized>}>Query()
@@ -1745,7 +1721,7 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Builds the query required to \<i>delete\</i> a concrete
      * \<code><input.table_name>\</code> entity, determined by a foreign key.
-     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @return the \<code>DeleteQuery\</code> instance.
      */
     protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query()
@@ -1760,7 +1736,7 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Builds the query required to \<i>delete\</i> a concrete
      * \<code><input.table_name>\</code> entity, determined by a concrete foreign key.
-     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to initialize.
      * <precondition_notnull("query")>
      */
@@ -1778,14 +1754,13 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Deletes <input.table_name> information from the persistence layer filtering
      * by given foreign keys.
-     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-        <foreignKey:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">)
+        <foreignKey:attribute_declaration(attr=it); separator=",\n">)
     {
         deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-            <foreignKey:{<it.name>}; separator=",\n">,
+            <foreignKey:{<it.nameLowercased>}; separator=",\n">,
             buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query,
             getDataSource());
     }
@@ -1793,20 +1768,19 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Deletes <input.table_name> information from the persistence layer filtering
      * by given foreign keys.
-     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the delete query.
      * @param dataSource the \<code>DataSource\<code> instance.
      * <precondition_notnull("query")>
      * <precondition_notnull("dataSource")>
      */
     protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-        <foreignKey:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <foreignKey:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final DataSource dataSource)
     {
         deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-            <foreignKey:{<it.name>}; separator=",\n">,
+            <foreignKey:{<it.nameLowercased>}; separator=",\n">,
             query,
             new DataSourceTransactionManager(dataSource));
     }
@@ -1814,7 +1788,7 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Deletes <input.table_name> information from the persistence layer filtering
      * by given foreign keys.
-     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the delete query.
      * @param transactionManager the
      * \<code>PlaformTransactionManager\<code> instance.
@@ -1822,13 +1796,12 @@ fk_delete_method(foreignKey,input) ::= <<
      * <precondition_notnull("transactionManager")>
      */
     protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-        <foreignKey:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <foreignKey:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
         deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-            <foreignKey:{<it.name>}; separator=",\n">,
+            <foreignKey:{<it.nameLowercased>}; separator=",\n">,
             query,
             new TransactionTemplate(transactionManager));
     }
@@ -1836,7 +1809,7 @@ fk_delete_method(foreignKey,input) ::= <<
     /**
      * Deletes <input.table_name> information from the persistence layer filtering
      * by given foreign keys.
-     <input.foreignKey:attribute_javadoc(name=it.name); separator="\n">
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the delete query.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
      * instance.
@@ -1844,8 +1817,7 @@ fk_delete_method(foreignKey,input) ::= <<
      * <precondition_notnull("transactionTemplate")>
      */
     protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
-        <foreignKey:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <foreignKey:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
     {
@@ -1870,24 +1842,23 @@ custom_select(
     /**
      * Custom select \<i><cs.id>\</i>:\<br/>
      * \<b><cs.description>\<b>.
-     <cs.parameters:attribute_javadoc(name=it.name); separator="\n">
+     <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @return the \<i><cs.resultClass>\</i> information retrieved.
      * @throws DataAccessException if the operation fails.
      */
     public <cs.resultClass> <cs.nameUncapitalized>(
-        <cs.parameters:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">)
+        <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
       throws DataAccessException
     {
         return
             <cs.nameUncapitalized>(
-                <cs.parameters:{<it.name>}; separator=",\n">,
+                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
                 new PreparedStatementCreatorFactory(
                     <cs.splittedQuotedValue; separator=" +\n">),
                 new Object[]
                 {
                     <cs.parameters:custom_select_parameter_value(
-                      name=it.name,
+                      name=it.nameLowercased,
                       objectType=it.objectType); separator=",\n">
                 },
                 getDataSource());
@@ -1896,7 +1867,7 @@ custom_select(
     /**
      * Custom select \<i><cs.id>\</i>:\<br/>
      * \<b><cs.description>\<b>.
-     <cs.parameters:attribute_javadoc(name=it.name); separator="\n">
+     <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param preparedStatementCreatorFactory the
      * \<code>PreparedStatementCreatorFactory\</code> instance
      * specific for this operation.
@@ -1909,8 +1880,7 @@ custom_select(
      * <precondition_notnull("dataSource")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
-        <cs.parameters:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final DataSource dataSource)
@@ -1918,7 +1888,7 @@ custom_select(
     {
         return
             <cs.nameUncapitalized>(
-                <cs.parameters:{<it.name>}; separator=",\n">,
+                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
                 preparedStatementCreatorFactory,
                 params,
                 new DataSourceTransactionManager(dataSource));
@@ -1927,7 +1897,7 @@ custom_select(
     /**
      * Custom select \<i><cs.id>\</i>:\<br/>
      * \<b><cs.description>\<b>.
-     <cs.parameters:attribute_javadoc(name=it.name); separator="\n">
+     <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param preparedStatementCreatorFactory the
      * \<code>PreparedStatementCreatorFactory\</code> instance
      * specific for this operation.
@@ -1941,8 +1911,7 @@ custom_select(
      * <precondition_notnull("transactionManager")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
-        <cs.parameters:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final PlatformTransactionManager transactionManager)
@@ -1950,7 +1919,7 @@ custom_select(
     {
         return
             <cs.nameUncapitalized>(
-                <cs.parameters:{<it.name>}; separator=",\n">,
+                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
                 preparedStatementCreatorFactory,
                 params,
                 new TransactionTemplate(transactionManager));
@@ -1959,7 +1928,7 @@ custom_select(
     /**
      * Custom select \<i><cs.id>\</i>:\<br/>
      * \<b><cs.description>\<b>.
-     <cs.parameters:attribute_javadoc(name=it.name); separator="\n">
+     <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param preparedStatementCreatorFactory the
      * \<code>PreparedStatementCreatorFactory\</code> instance
      * specific for this operation.
@@ -1973,8 +1942,7 @@ custom_select(
      * <precondition_notnull("transactionTemplate")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
-        <cs.parameters:attribute_declaration(
-          name=it.name,type=it.fieldType); separator=",\n">,
+        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final TransactionTemplate transactionTemplate)

@@ -44,11 +44,13 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
+import org.acmsl.queryj.QueryJException;
 
 /*
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 
 /**
  * Manages the information provided by database metadata, using plain JDBC.
@@ -57,6 +59,16 @@ import java.sql.DatabaseMetaData;
  */
 public interface MetadataManager
 {
+    /**
+     * Retrieves the metadata.
+     * @throws SQLException if the database operation fails.
+     * @throws QueryJException if an error, which is identified by QueryJ,
+     * occurs.
+     */
+    public void retrieveMetadata()
+      throws  SQLException,
+              QueryJException;
+
     /**
      * Retrieves the database meta data.
      * @return such information.
