@@ -82,7 +82,8 @@ public interface BaseDAOTemplateDefaults
           "/*\n"
         + " * Importing project classes.\n"
         + " */\n"
-        + "import {0}.{1};\n\n";
+        + "import {0}.{1};\n"
+        + "import {0}.{1}ValueObject;\n\n";
 
 
     /**
@@ -137,7 +138,7 @@ public interface BaseDAOTemplateDefaults
         + "     * The {0} constant.\n"
         + "     */\n"
         + "    public static final {1} {0} =\n"
-        + "        new {1}({2});\n\n";
+        + "        new {1}ValueObject({2});\n\n";
 
     /**
      * The constant records, if the table is static.

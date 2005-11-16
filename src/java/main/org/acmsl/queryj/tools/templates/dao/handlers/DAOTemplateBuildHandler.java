@@ -183,11 +183,20 @@ public class DAOTemplateBuildHandler
                 quote,
                 retrieveMetadataManager(parameters),
                 retrieveCustomSqlProvider(parameters),
-                DAOTemplateGenerator.getInstance(),
+                retrieveDAOTemplateFactory(),
                 retrieveProjectPackage(parameters),
                 retrievePackage(engineName, parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveTableTemplates(parameters));
+    }
+
+    /**
+     * Retrieves the DAO template factory.
+     * @return such instance.
+     */
+    protected DAOTemplateFactory retrieveDAOTemplateFactory()
+    {
+        return DAOTemplateGenerator.getInstance();
     }
 
     /**
@@ -365,8 +374,7 @@ public class DAOTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeDAOTemplates(
-        final DAOTemplate[] daoTemplates,
-        final Map parameters)
+        final DAOTemplate[] daoTemplates, final Map parameters)
     {
         parameters.put(TemplateMappingManager.DAO_TEMPLATES, daoTemplates);
     }

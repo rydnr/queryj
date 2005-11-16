@@ -85,7 +85,12 @@ public abstract class AbstractAttribute
      * Whether the attribute allows null values or not.
      */
     private boolean m__bAllowsNull;
-    
+
+    /**
+     * The optional value.
+     */
+    private String m__strValue;
+
     /**
      * Creates an <code>AbstractAttribute</code> with the following
      * information.
@@ -96,6 +101,7 @@ public abstract class AbstractAttribute
      * @param tableName the table name.
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
+     * @param value the optional value.
      */
     protected AbstractAttribute(
         final String name,
@@ -104,7 +110,8 @@ public abstract class AbstractAttribute
         final String fieldType,
         final String tableName,
         final boolean managedExternally,
-        final boolean allowsNull)
+        final boolean allowsNull,
+        final String value)
     {
         immutableSetName(name);
         immutableSetType(type);
@@ -112,6 +119,7 @@ public abstract class AbstractAttribute
         immutableSetFieldType(fieldType);
         immutableSetTableName(tableName);
         immutableSetAllowsNull(allowsNull);
+        immutableSetValue(value);
     }
     
     /**
@@ -303,5 +311,37 @@ public abstract class AbstractAttribute
     {
         return m__bAllowsNull;
     }
-}
 
+    /**
+     * Specifies the optional attribute's value, meaning
+     * it doesn't just describe the metadata, but also
+     * contains data.
+     * @param value such information.
+     */
+    protected final void immutableSetValue(final String value)
+    {
+        m__strValue = value;
+    }
+
+    /**
+     * Specifies the optional attribute's value, meaning
+     * it doesn't just describe the metadata, but also
+     * contains data.
+     * @param value such information.
+     */
+    protected void setValue(final String value)
+    {
+        immutableSetValue(value);
+    }
+
+    /**
+     * Retrieves the optional attribute's value, meaning
+     * it doesn't just describe the metadata, but also
+     * contains data.
+     * @return such information.
+     */
+    public String getValue()
+    {
+        return m__strValue;
+    }
+}

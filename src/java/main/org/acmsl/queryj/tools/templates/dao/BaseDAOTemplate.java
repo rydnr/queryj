@@ -41,30 +41,22 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ParameterElement;
-import org.acmsl.queryj.tools.customsql.ParameterRefElement;
-import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.customsql.PropertyRefElement;
-import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
-import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.RowDecorator;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.regexpplugin.Helper;
-import org.acmsl.commons.regexpplugin.RegexpEngine;
-import org.acmsl.commons.regexpplugin.RegexpEngineNotFoundException;
-import org.acmsl.commons.regexpplugin.RegexpManager;
-import org.acmsl.commons.regexpplugin.RegexpPluginMisconfiguredException;
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.acmsl.commons.utils.StringValidator;
 
 /*
  * Importing some Commons-Logging classes.
@@ -80,12 +72,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /*
@@ -100,1982 +88,222 @@ import org.apache.commons.logging.LogFactory;
  *         >Jose San Leandro</a>
  */
 public class BaseDAOTemplate
-    extends     AbstractBaseDAOTemplate
-    implements  BaseDAOTemplateDefaults
+    extends     DAOTemplate
 {
     /**
      * Builds a <code>BaseDAOTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the custom sql provider.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param valueObjectPackageName the value object package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
      */
     public BaseDAOTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String valueObjectPackageName)
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName)
     {
         super(
             tableTemplate,
             metadataManager,
             customSqlProvider,
-            DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
             packageName,
-            valueObjectPackageName,
-            DEFAULT_PROJECT_IMPORTS,
-            ACMSL_IMPORTS,
-            JDK_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            DEFAULT_CONSTANT_RECORD,
-            DEFAULT_CONSTANT_ARRAY,
-            DEFAULT_CONSTANT_ARRAY_ENTRY,
-            DEFAULT_FIND_BY_STATIC_FIELD_METHOD,
-            DEFAULT_FIND_BY_STATIC_FIELD_JAVADOC,
-            DEFAULT_FIND_BY_STATIC_FIELD_DECLARATION,
-            DEFAULT_FIND_BY_PRIMARY_KEY_METHOD,
-            DEFAULT_FIND_BY_PRIMARY_KEY_PK_JAVADOC,
-            DEFAULT_FIND_BY_PRIMARY_KEY_PK_DECLARATION,
-            DEFAULT_INSERT_METHOD,
-            DEFAULT_INSERT_PARAMETERS_JAVADOC,
-            DEFAULT_INSERT_PARAMETERS_DECLARATION,
-            DEFAULT_CREATE_METHOD,
-            DEFAULT_CREATE_PARAMETERS_JAVADOC,
-            DEFAULT_CREATE_PARAMETERS_DECLARATION,
-            DEFAULT_UPDATE_METHOD,
-            DEFAULT_UPDATE_PARAMETERS_JAVADOC,
-            DEFAULT_UPDATE_PARAMETERS_DECLARATION,
-            DEFAULT_DELETE_METHOD,
-            DEFAULT_DELETE_PK_JAVADOC,
-            DEFAULT_DELETE_PK_DECLARATION,
-            DEFAULT_DELETE_BY_FK_METHOD,
-            DEFAULT_DELETE_FK_JAVADOC,
-            DEFAULT_DELETE_FK_DECLARATION,
-            DEFAULT_CUSTOM_SELECT,
-            DEFAULT_CUSTOM_SELECT_PARAMETER_JAVADOC,
-            DEFAULT_CUSTOM_SELECT_PARAMETER_DECLARATION,
-            DEFAULT_CUSTOM_UPDATE_OR_INSERT,
-            DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_JAVADOC,
-            DEFAULT_CUSTOM_UPDATE_OR_INSERT_PARAMETER_DECLARATION,
-            DEFAULT_CUSTOM_SELECT_FOR_UPDATE,
-            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_JAVADOC,
-            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_RETURN_JAVADOC,
-            DEFAULT_CUSTOM_SELECT_FOR_UPDATE_PARAMETER_DECLARATION,
-            DEFAULT_CLASS_END);
+            engineName,
+            engineVersion,
+            quote,
+            basePackageName,
+            repositoryName);
     }
 
     /**
-     * Retrieves the source code generated by this template.
-     * @return such code.
-     * @throws InvalidTemplateException if the template is invalid.
+     * Retrieves the string template group.
+     * @return such instance.
      */
-    protected String generateOutput()
-        throws  InvalidTemplateException
+    protected StringTemplateGroup retrieveGroup()
     {
-        return generateOutput(getMetadataManager());
+        return retrieveGroup("/org/acmsl/queryj/dao/BaseDAO.stg");
     }
     
     /**
-     * Retrieves the source code generated by this template.
-     * @return such code.
-     * @param metadataManager the metadata manager.
-     * @throws InvalidTemplateException if the template is invalid.
-     * @precondition metadataManager != null
-     */
-    protected String generateOutput(final MetadataManager metadataManager)
-        throws  InvalidTemplateException
-    {
-        return
-            generateOutput(
-                getTableTemplate(),
-                metadataManager,
-                getHeader(),
-                getPackageDeclaration(),
-                getPackageName(),
-                getValueObjectPackageName(),
-                getProjectImports(),
-                getAcmslImports(),
-                getJdkImports(),
-                getJavadoc(),
-                getClassDefinition(),
-                getClassStart(),
-                getConstantRecord(),
-                getConstantArray(),
-                getConstantArrayEntry(),
-                getFindByStaticFieldMethod(),
-                getFindByStaticFieldJavadoc(),
-                getFindByStaticFieldDeclaration(),
-                getFindByPrimaryKeyMethod(),
-                getFindByPrimaryKeyPkJavadoc(),
-                getFindByPrimaryKeyPkDeclaration(),
-                getInsertMethod(),
-                getInsertParametersJavadoc(),
-                getInsertParametersDeclaration(),
-                getCreateMethod(),
-                getCreateParametersJavadoc(),
-                getCreateParametersDeclaration(),
-                getUpdateMethod(),
-                getUpdateParametersJavadoc(),
-                getUpdateParametersDeclaration(),
-                getDeleteMethod(),
-                getDeletePkJavadoc(),
-                getDeletePkDeclaration(),
-                getDeleteByFkMethod(),
-                getDeleteFkJavadoc(),
-                getDeleteFkDeclaration(),
-                getCustomSelect(),
-                getCustomSelectParameterJavadoc(),
-                getCustomSelectParameterDeclaration(),
-                getCustomUpdateOrInsert(),
-                getCustomUpdateOrInsertParameterJavadoc(),
-                getCustomUpdateOrInsertParameterDeclaration(),
-                getCustomSelectForUpdate(),
-                getCustomSelectForUpdateParameterJavadoc(),
-                getCustomSelectForUpdateReturnJavadoc(),
-                getCustomSelectForUpdateParameterDeclaration(),
-                getClassEnd(),
-                metadataManager.getMetadataTypeManager(),
-                EnglishGrammarUtils.getInstance(),
-                StringUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the source code generated by this template.
-     * @param tableTemplate the table template.
-     * @param metadataManager the database metadata manager.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param valueObjectPackageName the value object package name.
-     * @param projectImports the project imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param jdkImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param constantRecord the constant record subtemplate.
-     * @param constantArray the constant array.
-     * @param constantArrayEntry the constant array entry.
-     * @param findByStaticFieldMethod the find-by-static-field method.
-     * @param findByStaticFieldJavadoc the field javadoc for
-     * find-by-static-field method.
-     * @param findByStaticFieldDeclaration the field declaration for
-     * find-by-static-field method.
-     * @param findByPrimaryKeyMethod the find by primary key method.
-     * @param findByPrimaryKeyPkJavadoc the find by primary key pk javadoc.
-     * @param findByPrimaryKeyPkDeclaration the find by primary key pk
-     * declaration.
-     * @param insertMethod the insert method.
-     * @param insertParametersJavadoc the javadoc of the insert method's parameters.
-     * @param insertParametersDeclaration the declaration of the insert method's parameters.
-     * @param createMethod the create method.
-     * @param createParametersJavadoc the javadoc of the create method's parameters.
-     * @param createParametersDeclaration the declaration of the create method's parameters.
-     * @param updateMethod the update method.
-     * @param updateParametersJavadoc the javadoc of the update method's parameters.
-     * @param updateParametersDeclaration the declaration of the update method's parameters.
-     * @param deleteMethod the delete method.
-     * @param deletePkJavadoc the delete PK javadoc.
-     * @param deletePkDeclaration the delete PK declaration.
-     * @param deleteByFkMethod the delete by fk method.
-     * @param deleteFkJavadoc the delete FK javadoc.
-     * @param deleteFkDeclaration the delete FK declaration.
-     * @param customSelect the custom select template.
-     * @param customSelectParameterJavadoc the Javadoc for the parameters of
-     * the custom selects.
-     * @param customSelectParameterDeclaration the parameter declaration of the
-     * custom selects.
-     * @param customSelectResultPropertyValues the properties of the result
-     * set for custom selects.
-     * @param customUpdateOrInsert the custom update template.
-     * @param customUpdateOrInsertParameterJavadoc the Javadoc for the
-     * parameters of the custom updates or inserts.
-     * @param customUpdateOrInsertParameterDeclaration the parameter
-     * declaration of the custom updates or inserts.
-     * @param customSelectForUpdate the custom-select-for-update template.
-     * @param customSelectForUpdateParameterJavadoc the Javadoc for the
-     * parameters of the custom-select-for-update operations.
-     * @param customSelectForUpdateReturnJavadoc the Javadoc for the
-     * return of the custom-select-for-update operations.
-     * @param customSelectForUpdateParameterDeclaration the parameter
-     * declaration of the custom-select-for-update operations.
-     * @param classEnd the class end.
-     * @param metadataTypeManager the metadata type manager.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
-     * instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @return such code.
-     * @throws InvalidTemplateException if the template is invalid.
-     * @precondition tableTemplate != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition englishGrammarUtils != null
-     * @precondition stringUtils != null
-     */
-    protected String generateOutput(
-        final TableTemplate tableTemplate,
-        final MetadataManager metadataManager,
-        final String header,
-        final String packageDeclaration,
-        final String packageName,
-        final String valueObjectPackageName,
-        final String projectImports,
-        final String acmslImports,
-        final String jdkImports,
-        final String javadoc,
-        final String classDefinition,
-        final String classStart,
-        final String constantRecord,
-        final String constantArray,
-        final String constantArrayEntry,
-        final String findByStaticFieldMethod,
-        final String findByStaticFieldJavadoc,
-        final String findByStaticFieldDeclaration,
-        final String findByPrimaryKeyMethod,
-        final String findByPrimaryKeyPkJavadoc,
-        final String findByPrimaryKeyPkDeclaration,
-        final String insertMethod,
-        final String insertParametersJavadoc,
-        final String insertParametersDeclaration,
-        final String createMethod,
-        final String createParametersJavadoc,
-        final String createParametersDeclaration,
-        final String updateMethod,
-        final String updateParametersJavadoc,
-        final String updateParametersDeclaration,
-        final String deleteMethod,
-        final String deletePkJavadoc,
-        final String deletePkDeclaration,
-        final String deleteByFkMethod,
-        final String deleteFkJavadoc,
-        final String deleteFkDeclaration,
-        final String customSelect,
-        final String customSelectParameterJavadoc,
-        final String customSelectParameterDeclaration,
-        final String customUpdateOrInsert,
-        final String customUpdateOrInsertParameterJavadoc,
-        final String customUpdateOrInsertParameterDeclaration,
-        final String customSelectForUpdate,
-        final String customSelectForUpdateParameterJavadoc,
-        final String customSelectForUpdateReturnJavadoc,
-        final String customSelectForUpdateParameterDeclaration,
-        final String classEnd,
-        final MetadataTypeManager metadataTypeManager,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final StringUtils stringUtils)
-      throws  InvalidTemplateException
-    {
-        StringBuffer t_sbResult = new StringBuffer();
-
-        MessageFormat t_HeaderFormatter = new MessageFormat(header);
-
-        String t_strCapitalizedValueObjectName =
-            stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    tableTemplate.getTableName().toLowerCase()),
-                '_');
-
-        t_sbResult.append(
-            t_HeaderFormatter.format(
-                new Object[]
-                {
-                    tableTemplate.getTableName()
-                }));
-
-        MessageFormat t_PackageDeclarationFormatter =
-            new MessageFormat(packageDeclaration);
-
-        t_sbResult.append(
-            t_PackageDeclarationFormatter.format(
-                new Object[]{packageName}));
-
-        MessageFormat t_ProjectImportsFormatter =
-            new MessageFormat(projectImports);
-
-        t_sbResult.append(
-            t_ProjectImportsFormatter.format(
-                new Object[]
-                {
-                    valueObjectPackageName,
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_')
-                }));
-
-        t_sbResult.append(acmslImports);
-        t_sbResult.append(jdkImports);
-
-        MessageFormat t_JavadocFormatter = new MessageFormat(javadoc);
-
-        t_sbResult.append(
-            t_JavadocFormatter.format(
-                new Object[]
-                {
-                    tableTemplate.getTableName()
-                }));
-
-        MessageFormat t_ClassDefinitionFormatter =
-            new MessageFormat(classDefinition);
-
-        t_sbResult.append(
-            t_ClassDefinitionFormatter.format(
-                new Object[]
-                {
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_')
-                }));
-
-        t_sbResult.append(classStart);
-
-        String[] t_astrColumnNames =
-            metadataManager.getColumnNames(tableTemplate.getTableName());
-
-        String t_strTableComment =
-            metadataManager.getTableComment(tableTemplate.getTableName());
-
-        String t_strFieldType = null;
-
-        if  (t_strTableComment != null)
-        {
-            int t_iKeyIndex = t_strTableComment.lastIndexOf("@static");
-
-            if  (t_iKeyIndex >= 0)
-            {
-                MessageFormat t_ConstantRecordFormatter =
-                    new MessageFormat(constantRecord);
-
-                MessageFormat t_ConstantArrayFormatter =
-                    new MessageFormat(constantArray);
-
-                MessageFormat t_ConstantArrayEntryFormatter =
-                    new MessageFormat(constantArrayEntry);
-
-                StringBuffer t_sbConstantArrayEntries =
-                    new StringBuffer();
-
-                MessageFormat t_FindByStaticFieldMethodFormatter =
-                    new MessageFormat(findByStaticFieldMethod);
-
-                MessageFormat t_FindByStaticFieldJavadocFormatter =
-                    new MessageFormat(findByStaticFieldJavadoc);
-
-                MessageFormat t_FindByStaticFieldDeclarationFormatter =
-                    new MessageFormat(findByStaticFieldDeclaration);
-
-                String t_strDescriptionColumn =
-                    t_strTableComment.substring(
-                        t_iKeyIndex + "@static".length()).trim();
-
-                Map t_mProperties =
-                    queryContents(
-                        tableTemplate.getTableName(),
-                        t_strDescriptionColumn,
-                        t_astrColumnNames.length,
-                        metadataManager.getMetaData());
-
-                if  (t_mProperties != null)
-                {
-                    Collection t_cEntries =
-                        (Collection) t_mProperties.get(buildListKey());
-
-                    if  (t_cEntries != null)
-                    {
-                        Iterator t_itEntries = t_cEntries.iterator();
-
-                        while  (t_itEntries.hasNext())
-                        {
-                            String t_strColumnName =
-                                (String) t_itEntries.next();
-
-                            StringBuffer t_sbRecordPropertiesSpecification =
-                                new StringBuffer();
-
-                            int t_iType = -1;
-
-                            String t_strValue = "";
-
-                            Collection t_cColumns = 
-                                (Collection)
-                                    t_mProperties.get(
-                                        buildColumnKey(t_strColumnName));
-
-                            int t_iIndex = 0;
-
-                            if  (t_cColumns != null)
-                            {
-                                Iterator t_itColumns = t_cColumns.iterator();
-
-                                while  (t_itColumns.hasNext())
-                                {
-                                    t_iType =
-                                        metadataManager.getColumnType(
-                                            tableTemplate.getTableName(),
-                                            t_astrColumnNames[t_iIndex++]);
-
-                                    t_strValue = "" + t_itColumns.next();
-
-                                    if  (metadataTypeManager.isString(t_iType))
-                                    {
-                                        t_strValue = "\"" + t_strValue + "\"";
-                                    }
-                                    else if  (!metadataTypeManager.isInteger(
-                                                  t_iType))
-                                    {
-                                        t_strValue = "null";
-                                    }
-
-                                    t_sbRecordPropertiesSpecification.append(
-                                        t_strValue);
-
-                                    if  (t_itColumns.hasNext())
-                                    {
-                                        t_sbRecordPropertiesSpecification.append(", ");
-                                    }
-                                }
-                            }
-
-                            t_sbResult.append(
-                                t_ConstantRecordFormatter.format(
-                                    new Object[]
-                                    {
-                                        toJavaConstant(t_strColumnName),
-                                        t_strCapitalizedValueObjectName,
-                                        t_sbRecordPropertiesSpecification
-                                    }));
-
-                            t_sbConstantArrayEntries.append(
-                                t_ConstantArrayEntryFormatter.format(
-                                    new Object[]
-                                    {
-                                        toJavaConstant(t_strColumnName)
-                                    }));
-
-                            if  (t_itEntries.hasNext())
-                            {
-                                t_sbConstantArrayEntries.append(", ");
-                            }
-                        }
-
-                        t_sbResult.append(
-                            t_ConstantArrayFormatter.format(
-                                new Object[]
-                                {
-                                    t_strCapitalizedValueObjectName,
-                                    t_sbConstantArrayEntries
-                                }));
-
-                        String t_strFindByStaticFieldJavadoc =
-                            t_FindByStaticFieldJavadocFormatter.format(
-                                new Object[]
-                                {
-                                    t_strDescriptionColumn.toLowerCase(),
-                                    t_strDescriptionColumn
-                                });
-
-                        t_strFieldType =
-                            metadataTypeManager.getNativeType(
-                                metadataManager.getColumnType(
-                                    tableTemplate.getTableName(),
-                                    t_strDescriptionColumn),
-                                metadataManager.allowsNull(
-                                    tableTemplate.getTableName(),
-                                    t_strDescriptionColumn));
-
-                        String t_strFindByStaticFieldDeclaration =
-                            t_FindByStaticFieldDeclarationFormatter.format(
-                                new Object[]
-                                {
-                                    t_strFieldType,
-                                    t_strDescriptionColumn.toLowerCase()
-                                });
-
-                        t_sbResult.append(
-                            t_FindByStaticFieldMethodFormatter.format(
-                                new Object[]
-                                {
-                                    tableTemplate.getTableName(),
-                                    t_strDescriptionColumn.toLowerCase(),
-                                    t_strFindByStaticFieldJavadoc,
-                                    t_strCapitalizedValueObjectName,
-                                    stringUtils.capitalize(
-                                        t_strDescriptionColumn.toLowerCase(), '_'),
-                                    t_strFindByStaticFieldDeclaration
-                                }));
-                    }
-                }
-            }
-        }
-
-        MessageFormat t_FindByPrimaryKeyFormatter =
-            new MessageFormat(findByPrimaryKeyMethod);
-
-        MessageFormat t_FindByPrimaryKeyPkJavadocFormatter =
-            new MessageFormat(findByPrimaryKeyPkJavadoc);
-
-        MessageFormat t_FindByPrimaryKeyPkDeclarationFormatter =
-            new MessageFormat(findByPrimaryKeyPkDeclaration);
-
-        MessageFormat t_InsertMethodFormatter =
-            new MessageFormat(insertMethod);
-
-        MessageFormat t_InsertParametersJavadocFormatter =
-            new MessageFormat(insertParametersJavadoc);
-
-        MessageFormat t_InsertParametersDeclarationFormatter =
-            new MessageFormat(insertParametersDeclaration);
-
-        MessageFormat t_CreateMethodFormatter =
-            new MessageFormat(createMethod);
-
-        MessageFormat t_CreateParametersJavadocFormatter =
-            new MessageFormat(createParametersJavadoc);
-
-        MessageFormat t_CreateParametersDeclarationFormatter =
-            new MessageFormat(createParametersDeclaration);
-
-        MessageFormat t_UpdateMethodFormatter =
-            new MessageFormat(updateMethod);
-
-        MessageFormat t_UpdateParametersJavadocFormatter =
-            new MessageFormat(updateParametersJavadoc);
-
-        MessageFormat t_UpdateParametersDeclarationFormatter =
-            new MessageFormat(updateParametersDeclaration);
-
-        String[] t_astrPrimaryKeys =
-            metadataManager.getPrimaryKey(tableTemplate.getTableName());
-
-        MessageFormat t_DeleteMethodFormatter =
-            new MessageFormat(deleteMethod);
-
-        MessageFormat t_DeleteByFkMethodFormatter =
-            new MessageFormat(deleteByFkMethod);
-
-        MessageFormat t_FkJavadocFormatter =
-            new MessageFormat(deleteFkJavadoc);
-        MessageFormat t_FkDeclarationFormatter =
-            new MessageFormat(deleteFkDeclaration);
-
-        StringBuffer t_sbDeleteMethod = new StringBuffer();
-        StringBuffer t_sbPkJavadoc = new StringBuffer();
-        StringBuffer t_sbPkDeclaration = new StringBuffer();
-        StringBuffer t_sbDeleteByFkMethod = new StringBuffer();
-        
-        StringBuffer t_sbInsertPkJavadoc = new StringBuffer();
-        StringBuffer t_sbInsertPkDeclaration = new StringBuffer();
-        StringBuffer t_sbCreatePkJavadoc = new StringBuffer();
-        StringBuffer t_sbCreatePkDeclaration = new StringBuffer();
-
-        if  (t_astrPrimaryKeys != null)
-        {
-            StringBuffer t_sbSelectFields = new StringBuffer();
-            StringBuffer t_sbFilterDeclaration = new StringBuffer();
-            StringBuffer t_sbFilterValues = new StringBuffer();
-
-            for  (int t_iPkIndex = 0;
-                      t_iPkIndex < t_astrPrimaryKeys.length;
-                      t_iPkIndex++)
-            {
-                t_strFieldType =
-                    metadataTypeManager.getNativeType(
-                        metadataManager.getColumnType(
-                            tableTemplate.getTableName(),
-                            t_astrPrimaryKeys[t_iPkIndex]));
-                String t_strPkJavadoc =
-                    t_FindByPrimaryKeyPkJavadocFormatter.format(
-                        new Object[]
-                        {
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
-                            t_astrPrimaryKeys[t_iPkIndex]
-                        });
-
-                String t_strPkDeclaration =
-                    t_FindByPrimaryKeyPkDeclarationFormatter.format(
-                        new Object[]
-                        {
-                            t_strFieldType,
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
-                        });
-
-                t_sbPkJavadoc.append(t_strPkJavadoc);
-
-                t_sbPkDeclaration.append(t_strPkDeclaration);
-
-                if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
-                {
-                    t_sbPkDeclaration.append(",");
-                }
-
-                if  (!metadataManager.isManagedExternally(
-                         tableTemplate.getTableName(),
-                         t_astrPrimaryKeys[t_iPkIndex]))
-                {
-                    t_sbInsertPkJavadoc.append(t_strPkJavadoc);
-                    t_sbInsertPkDeclaration.append(t_strPkDeclaration);
-                    t_sbCreatePkJavadoc.append(t_strPkJavadoc);
-                    t_sbCreatePkDeclaration.append(t_strPkDeclaration);
-                }
-
-                if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
-                {
-                    t_sbInsertPkDeclaration.append(",");
-                    t_sbCreatePkDeclaration.append(",");
-                }
-            }
-
-            t_sbResult.append(
-                t_FindByPrimaryKeyFormatter.format(
-                    new Object[]
-                    {
-                        tableTemplate.getTableName(),
-                        t_sbPkJavadoc,
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                tableTemplate.getTableName()
-                                .toLowerCase()),
-                            '_'),
-                        t_sbPkDeclaration
-                    }));
-
-            t_sbDeleteMethod.append(
-                t_DeleteMethodFormatter.format(
-                    new Object[]
-                    {
-                        tableTemplate.getTableName(),
-                        t_sbPkJavadoc,
-                        t_sbPkDeclaration
-                    }));
-        }
-
-        if  (t_astrColumnNames != null)
-        {
-            boolean t_bAnyNotPrimaryKey = false;
-
-            StringBuffer t_sbBuildValueObjectRetrieval     =
-                new StringBuffer();
-            StringBuffer t_sbInsertParametersJavadoc       =
-                new StringBuffer();
-            StringBuffer t_sbInsertParametersDeclaration   =
-                new StringBuffer();
-            StringBuffer t_sbInsertParametersSpecification =
-                new StringBuffer();
-            StringBuffer t_sbCreateParametersJavadoc       =
-                new StringBuffer();
-            StringBuffer t_sbCreateParametersDeclaration   =
-                new StringBuffer();
-            StringBuffer t_sbCreateParametersSpecification =
-                new StringBuffer();
-
-            StringBuffer t_sbUpdateParametersJavadoc       =
-                new StringBuffer();
-            StringBuffer t_sbUpdateParametersDeclaration   =
-                new StringBuffer();
-            StringBuffer t_sbUpdateParametersSpecification =
-                new StringBuffer();
-
-            for  (int t_iColumnIndex = 0;
-                      t_iColumnIndex < t_astrColumnNames.length;
-                      t_iColumnIndex++)
-            {
-                int t_iColumnType =
-                    metadataManager.getColumnType(
-                        tableTemplate.getTableName(),
-                        t_astrColumnNames[t_iColumnIndex]);
-
-                t_strFieldType =
-                    metadataTypeManager.getNativeType(t_iColumnType);
-
-                boolean t_bAllowsNull =
-                    metadataManager.allowsNull(
-                        tableTemplate.getTableName(),
-                        t_astrColumnNames[t_iColumnIndex]);
-
-                if  (t_bAllowsNull)
-                {
-                    t_strFieldType =
-                        metadataTypeManager.getObjectType(t_iColumnType);
-                }
-
-                t_strFieldType =
-                    metadataTypeManager.getNativeType(
-                        metadataManager.getColumnType(
-                            tableTemplate.getTableName(),
-                            t_astrColumnNames[t_iColumnIndex]),
-                        metadataManager.allowsNull(
-                            tableTemplate.getTableName(),
-                            t_astrColumnNames[t_iColumnIndex]));
-
-                if  (!metadataManager.isManagedExternally(
-                         tableTemplate.getTableName(),
-                         t_astrColumnNames[t_iColumnIndex]))
-                {
-                    if  (!metadataManager.isPartOfPrimaryKey(
-                             tableTemplate.getTableName(),
-                             t_astrColumnNames[t_iColumnIndex]))
-                    {
-                        t_bAnyNotPrimaryKey = true;
-
-                        t_sbInsertParametersJavadoc.append(
-                            t_InsertParametersJavadocFormatter.format(
-                                new Object[]
-                                {
-                                    t_astrColumnNames[t_iColumnIndex]
-                                        .toLowerCase(),
-                                    t_astrColumnNames[t_iColumnIndex]
-                                }));
-
-                        t_sbCreateParametersJavadoc.append(
-                            t_CreateParametersJavadocFormatter.format(
-                                new Object[]
-                                {
-                                    t_astrColumnNames[t_iColumnIndex]
-                                        .toLowerCase(),
-                                    t_astrColumnNames[t_iColumnIndex]
-                                }));
-
-                        t_sbUpdateParametersJavadoc.append(
-                            t_UpdateParametersJavadocFormatter.format(
-                                new Object[]
-                                {
-                                    t_astrColumnNames[t_iColumnIndex].toLowerCase(),
-                                    t_astrColumnNames[t_iColumnIndex]
-                                }));
-
-                        t_sbInsertParametersDeclaration.append(
-                            t_InsertParametersDeclarationFormatter.format(
-                                new Object[]
-                                {
-                                    t_strFieldType,
-                                    t_astrColumnNames[t_iColumnIndex]
-                                        .toLowerCase()
-                                }));
-
-                        t_sbCreateParametersDeclaration.append(
-                            t_CreateParametersDeclarationFormatter.format(
-                                new Object[]
-                                {
-                                    t_strFieldType,
-                                    t_astrColumnNames[t_iColumnIndex]
-                                        .toLowerCase()
-                                }));
-
-                        t_sbUpdateParametersDeclaration.append(
-                            t_UpdateParametersDeclarationFormatter.format(
-                                new Object[]
-                                {
-                                    t_strFieldType,
-                                    t_astrColumnNames[t_iColumnIndex]
-                                        .toLowerCase()
-                                }));
-
-                        if  (t_iColumnIndex < t_astrColumnNames.length - 1)
-                        {
-                            t_sbInsertParametersDeclaration.append(",");
-                            t_sbCreateParametersDeclaration.append(",");
-                        }
-                    }
-                }
-            }
-
-            if  (   (t_bAnyNotPrimaryKey)
-                 && (t_sbInsertPkDeclaration.length() > 0))
-            {
-                t_sbInsertPkDeclaration.append(",");
-                t_sbCreatePkDeclaration.append(",");
-            }
-
-            t_sbResult.append(
-                t_InsertMethodFormatter.format(
-                    new Object[]
-                    {
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                tableTemplate.getTableName()
-                                    .toLowerCase()),
-                            '_'),
-                        t_sbInsertPkJavadoc.toString(),
-                        t_sbInsertParametersJavadoc,
-                        t_sbInsertPkDeclaration,
-                        t_sbInsertParametersDeclaration
-                    }));
-
-            t_sbResult.append(
-                t_CreateMethodFormatter.format(
-                    new Object[]
-                    {
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                tableTemplate.getTableName()
-                                    .toLowerCase()),
-                            '_'),
-                        t_sbCreatePkJavadoc.toString(),
-                        t_sbCreateParametersJavadoc,
-                        t_sbCreatePkDeclaration,
-                        t_sbCreateParametersDeclaration
-                    }));
-
-            t_sbResult.append(
-                t_UpdateMethodFormatter.format(
-                    new Object[]
-                    {
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                tableTemplate.getTableName()
-                                    .toLowerCase()),
-                            '_'),
-                        t_sbPkJavadoc.toString(),
-                        t_sbUpdateParametersJavadoc,
-                        t_sbPkDeclaration,
-                        t_sbUpdateParametersDeclaration
-                    }));
-        }
-
-        t_sbResult.append(t_sbDeleteMethod);
-
-        String[] t_astrReferredColumns = null;
-
-        String[] t_astrReferredTables =
-            metadataManager.getReferredTables(
-                tableTemplate.getTableName());
-
-        if  (   (t_astrReferredTables != null)
-             && (t_astrReferredTables.length > 0))
-        {
-            for  (int t_iRefTableIndex = 0;
-                      t_iRefTableIndex < t_astrReferredTables.length;
-                      t_iRefTableIndex++)
-            {
-                String[][] t_aastrForeignKey =
-                    metadataManager.getForeignKeys(
-                        tableTemplate.getTableName(),
-                        t_astrReferredTables[t_iRefTableIndex]);
-
-                int t_iForeignKeyLength =
-                    (t_aastrForeignKey != null)
-                    ?  t_aastrForeignKey.length
-                    :  0;
-
-                for  (int t_iFkIndex = 0;
-                          t_iFkIndex < t_iForeignKeyLength;
-                          t_iFkIndex++)
-                {
-                    t_astrReferredColumns = t_aastrForeignKey[t_iFkIndex];
-                    
-                    String t_strReferredTableName =
-                        stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
-                                t_astrReferredTables[t_iRefTableIndex]
-                                   .toLowerCase()),
-                            '_');
-
-                    StringBuffer t_sbFkJavadoc = new StringBuffer();
-                    StringBuffer t_sbFkDeclaration = new StringBuffer();
-
-                    int t_iLength =
-                        (t_astrReferredColumns != null)
-                        ?  t_astrReferredColumns.length : 0;
-
-                    for  (int t_iColumnIndex = 0;
-                              t_iColumnIndex < t_iLength;
-                              t_iColumnIndex++)
-                    {
-                        t_sbFkJavadoc.append(
-                            t_FkJavadocFormatter.format(
-                                new Object[]
-                                {
-                                    t_astrReferredColumns[t_iColumnIndex]
-                                        .toLowerCase(),
-                                    t_astrReferredColumns[t_iColumnIndex]
-                                }));
-
-                        t_sbFkDeclaration.append(
-                            t_FkDeclarationFormatter.format(
-                                new Object[]
-                                {
-                                    metadataTypeManager.getNativeType(
-                                        metadataManager.getColumnType(
-                                            tableTemplate.getTableName(),
-                                            t_astrReferredColumns[
-                                                t_iColumnIndex])),
-                                    t_astrReferredColumns[t_iColumnIndex]
-                                        .toLowerCase()
-                                }));
-
-                        if  (t_iColumnIndex < t_iLength - 1)
-                        {
-                            t_sbFkDeclaration.append(",");
-                        }
-                    }
-
-                    t_sbDeleteByFkMethod.append(
-                        t_DeleteByFkMethodFormatter.format(
-                            new Object[]
-                            {
-                                stringUtils.capitalize(
-                                    englishGrammarUtils.getSingular(
-                                        t_astrReferredTables[t_iRefTableIndex]
-                                            .toLowerCase()),
-                                    '_'),
-                                t_sbFkJavadoc,
-                                t_strReferredTableName,
-                                t_sbFkDeclaration
-                            }));
-                }
-            }
-        }
-
-        t_sbResult.append(t_sbDeleteByFkMethod);
-
-        t_sbResult.append(buildCustomSql(metadataTypeManager));
-
-        t_sbResult.append(classEnd);
-
-        return t_sbResult.toString();
-    }
-
-    /**
-     * Builds the custom templates.
-     * @param metadataTypeManager the metadata type manager.
-     * @return such generated code.
-     */
-    protected String buildCustomSql(
-        final MetadataTypeManager metadataTypeManager)
-    {
-        StringBuffer result = new StringBuffer();
-
-        CustomSqlProvider provider = getCustomSqlProvider();
-
-        if  (provider != null)
-        {
-            result.append(
-                buildCustomSelects(
-                    provider, getTableTemplate(), metadataTypeManager));
-            result.append(
-                buildCustomUpdates(
-                    provider, getTableTemplate(), metadataTypeManager));
-            result.append(
-                buildCustomInserts(
-                    provider, getTableTemplate(), metadataTypeManager));
-            result.append(
-                buildCustomDeletes(
-                    provider, getTableTemplate(), metadataTypeManager));
-            result.append(
-                buildCustomSelectForUpdates(
-                    provider, getTableTemplate(), metadataTypeManager));
-        }
-
-        return result.toString();
-    }
-
-    /**
-     * Builds the custom selects.
-     * @param provider the <code>CustomSqlProvider</code> instance.
-     * @param tableTemplate the table template.
-     * @param metadataTypeManager the metadata type manager.
-     * @return such generated code.
-     * @precondition provider != null
-     * @precondition tableTemplate != null
-     */
-    protected String buildCustomSelects(
-        final CustomSqlProvider provider,
-        final TableTemplate tableTemplate,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildCustomSelects(
-                provider,
-                metadataTypeManager,
-                tableTemplate.getTableName(),
-                getCustomSelect(),
-                getCustomSelectParameterJavadoc(),
-                getCustomSelectParameterDeclaration(),
-                DAOTemplateUtils.getInstance(),
-                StringUtils.getInstance(),
-                StringValidator.getInstance());
-    }
-
-    /**
-     * Builds the custom selects.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param metadataTypeManager the metadata type manager.
+     * Fills the parameters required by <code>class</code> rule.
+     * @param input the input.
+     * @param voName the name of the value object.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param timestamp the timestamp.
+     * @param customResults the custom results.
+     * @param staticTable whether the table is static or not.
+     * @param tableRepositoryName the table repository name.
      * @param tableName the table name.
-     * @param customSelect the custom select.
-     * @param parameterJavadoc the Javadoc template
-     * of the parameters.
-     * @param parameterDeclaration the parameter declaration.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param stringValidator the <code>StringValidator</code> instance.
-     * @return such generated code.
+     * @param pkAttributes the primary key attributes.
+     * @param nonPkAttributes the ones not part of the primary key.
+     * @param fkAttributes the foreign key attributes.
+     * @param referingKeys the foreign keys of other tables pointing
+     * to this one. It's expected to be
+     * a map of "fk_"referringTableName -> foreign_keys (list of attribute
+     * lists).
+     * @param attributes the attributes.
+     * @param externallyManagedAttributes the attributes which are
+     * managed externally.
+     * @param allButExternallyManagedAttributes all but the attributes which
+     * are managed externally.
+     * @param foreignKeys the entities pointing to this instance's table.
+     * @param staticAttributeName the name of the static attribute, or
+     * <code>null</code> for non-static tables.
+     * @param staticAttributeType the type of the static attribute, or
+     * <code>null</code> for non-static tables.
+     * @param customSelects the custom selects.
+     * @param customResults the custom results.
+     * @precondition input != null
+     * @precondition voName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition timestamp != null
+     * @precondition tableRepositoryName != null
      * @precondition tableName != null
-     * @precondition customSelect != null
-     * @precondition parameterJavadoc != null
-     * @precondition parameterDeclaration != null
-     * @precondition daoTemplateUtils != null
-     * @precondition stringUtils != null
-     * @precondition stringValidator != null
+     * @precondition pkAttributes != null
+     * @precondition nonPkAttributes != null
+     * @precondition fkAttributes != null
+     * @precondition attributes != null
+     * @precondition externallyManagedAttributes != null
+     * @precondition allButExternallyManagedAttributes != null
+     * @precondition foreignKeys != null
+     * @precondition customSelects != null
+     * @precondition customResults != null
      */
-    protected String buildCustomSelects(
-        final CustomSqlProvider customSqlProvider,
-        final MetadataTypeManager metadataTypeManager,
+    protected void fillClassParameters(
+        final Map input,
+        final String voName,
+        final String engineName,
+        final String engineVersion,
+        final String timestamp,
+        final boolean staticTable,
+        final String tableRepositoryName,
         final String tableName,
-        final String customSelect,
-        final String parameterJavadoc,
-        final String parameterDeclaration,
-        final DAOTemplateUtils daoTemplateUtils,
-        final StringUtils stringUtils,
-        final StringValidator stringValidator)
+        final Collection pkAttributes,
+        final Collection nonPkAttributes,
+        final Collection fkAttributes,
+        final Map referingKeys,
+        final Collection attributes,
+        final Collection externallyManagedAttributes,
+        final Collection allButExternallyManagedAttributes,
+        final Collection foreignKeys,
+        final String staticAttributeName,
+        final String staticAttributeType,
+        final Collection customSelects,
+        final Collection customResults)
     {
-        StringBuffer result = new StringBuffer();
+        super.fillClassParameters(
+            input,
+            voName,
+            engineName,
+            engineVersion,
+            timestamp,
+            staticTable,
+            tableRepositoryName,
+            tableName,
+            pkAttributes,
+            nonPkAttributes,
+            fkAttributes,
+            referingKeys,
+            attributes,
+            externallyManagedAttributes,
+            allButExternallyManagedAttributes,
+            foreignKeys,
+            staticAttributeName,
+            staticAttributeType,
+            customSelects,
+            customResults);
 
-        Collection t_cContents = null;
-
-        if  (customSqlProvider != null)
+        if  (staticTable) 
         {
-            t_cContents = customSqlProvider.getCollection();
+            queryContents(
+                input,
+                tableName,
+                staticAttributeName,
+                attributes.size(),
+                getMetadataManager());
         }
-
-        if  (t_cContents != null)
-        {
-            Iterator t_itContentIterator = t_cContents.iterator();
-
-            while  (t_itContentIterator.hasNext())
-            {
-                Object t_Content = t_itContentIterator.next();
-
-                if  (t_Content instanceof SqlElement)
-                {
-                    SqlElement t_SqlElement =
-                        (SqlElement) t_Content;
-
-                    if  (   (t_SqlElement.SELECT.equals(t_SqlElement.getType()))
-                         && (daoTemplateUtils.matches(
-                                 tableName, t_SqlElement.getDao())))
-                    {
-                        String[] t_astrParameterTemplates =
-                            buildParameterTemplates(
-                                customSqlProvider,
-                                t_SqlElement.getParameterRefs(),
-                                parameterJavadoc,
-                                parameterDeclaration,
-                                "",
-                                metadataTypeManager,
-                                stringUtils,
-                                stringValidator);
-
-                        result.append(
-                            buildCustomSelect(
-                                customSqlProvider,
-                                t_SqlElement,
-                                customSelect,
-                                t_astrParameterTemplates[0],
-                                t_astrParameterTemplates[1],
-                                stringUtils));
-                    }
-                }
-            }
-        }
-
-        return result.toString();
-    }
-
-    /**
-     * Builds the parameter templates with given parameters.
-     * @param provider the CustomSqlProvider instance.
-     * @param parameterRefs the parameter references.
-     * @param parameterJavadoc the template.
-     * @param parameterDeclaration the parameter declaration.
-     * @param parameterSpecification the parameter specification.
-     * @param metadataTypemanager the metadata type manager.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param stringValidator the <code>StringValidator</code> instance.
-     * @return the generated code.
-     * @precondition provider != null
-     * @precondition parameterJavadoc != null
-     * @precondition parameterDeclaration != null
-     * @precondition parameterTypeSpecification != null
-     * @precondition parameterValues != null
-     * @precondition parameterSpecification != null
-     * @precondition stringUtils != null
-     * @precondition stringValidator != null
-     */
-    protected String[] buildParameterTemplates(
-        final CustomSqlProvider provider,
-        final Collection parameterRefs,
-        final String parameterJavadoc,
-        final String parameterDeclaration,
-        final String parameterSpecification,
-        final MetadataTypeManager metadataTypeManager,
-        final StringUtils stringUtils,
-        final StringValidator stringValidator)
-    {
-        String[] result = new String[5];
-
-        StringBuffer t_sbParameterJavadoc = new StringBuffer();
-        StringBuffer t_sbParameterDeclaration = new StringBuffer();
-        StringBuffer t_sbParameterTypeSpecification = new StringBuffer();
-        StringBuffer t_sbParameterValues = new StringBuffer();
-        StringBuffer t_sbParameterSpecification = new StringBuffer();
-
-        if  (parameterRefs != null)
-        {
-            MessageFormat t_ParameterJavadocFormatter =
-                new MessageFormat(parameterJavadoc);
-
-            MessageFormat t_ParameterDeclarationFormatter =
-                new MessageFormat(parameterDeclaration);
-
-            MessageFormat t_ParameterSpecificationFormatter =
-                new MessageFormat(parameterSpecification);
-
-            Iterator t_itParameterRefs =
-                parameterRefs.iterator();
-
-            boolean t_bFirstParameter = true;
-
-            while  (t_itParameterRefs.hasNext())
-            {
-                ParameterRefElement t_ParameterRef =
-                    (ParameterRefElement) t_itParameterRefs.next();
-
-                if  (t_ParameterRef != null)
-                {
-                    ParameterElement t_Parameter =
-                        provider.resolveReference(t_ParameterRef);
-
-                    if  (t_Parameter == null)
-                    {
-                        try
-                        {
-                            LogFactory.getLog("custom-sql").warn(
-                                  "Referenced parameter not found:"
-                                + t_ParameterRef.getId());
-                        }
-                        catch  (final Throwable throwable)
-                        {
-                            // class-loading problem.
-                        }
-                    }
-                    else
-                    {
-                        String t_strName = t_Parameter.getName();
-
-                        if  (stringValidator.isEmpty(t_strName))
-                        {
-                            t_strName =
-                                stringUtils.toJavaMethod(
-                                    t_Parameter.getId(), '-');
-                        }
-
-                        if  (!t_bFirstParameter)
-                        {
-                            t_sbParameterDeclaration.append(",");
-                            t_sbParameterValues.append(",");
-                            t_sbParameterSpecification.append(",");
-                        }
-
-                        t_sbParameterJavadoc.append(
-                            t_ParameterJavadocFormatter.format(
-                                new Object[]
-                                {
-                                    t_strName
-                                }));
-                        t_sbParameterDeclaration.append(
-                            t_ParameterDeclarationFormatter.format(
-                                new Object[]
-                                {
-                                    t_Parameter.getType(),
-                                    t_strName
-                                }));
-                        t_sbParameterSpecification.append(
-                            t_ParameterSpecificationFormatter.format(
-                                new Object[]
-                                {
-                                    t_strName
-                                }));
-                    }
-                }
-
-                t_bFirstParameter = false;
-            }
-        }
-
-        result[0] = t_sbParameterJavadoc.toString();
-        result[1] = t_sbParameterDeclaration.toString();
-        result[2] = t_sbParameterTypeSpecification.toString();
-        result[3] = t_sbParameterValues.toString();
-        result[4] = t_sbParameterSpecification.toString();
-
-        return result;
-    }
-
-    /**
-     * Builds the result property values with given input.
-     * @param provider the CustomSqlProvider instance.
-     * @param resultRef the result reference.
-     * @param resultPropertyValues the template.
-     * @return such generated code.
-     * @precondition provider != null
-     * @precondition resultPropertyValues != null
-     */
-    protected String buildResultPropertyValues(
-        final CustomSqlProvider provider,
-        final ResultRefElement resultRef,
-        final String resultPropertyValues)
-    {
-        String result = "";
-
-        if  (resultRef != null)
-        {
-            ResultElement t_Result = provider.resolveReference(resultRef);
-
-            if  (t_Result == null)
-            {
-                try
-                {
-                    LogFactory.getLog("custom-sql").warn(
-                          "Referenced result not found:"
-                        + resultRef.getId());
-                }
-                catch  (final Throwable throwable)
-                {
-                    // class-loading problem.
-                }
-            }
-            else
-            {
-                result =
-                    buildResultPropertyValues(
-                        provider,
-                        t_Result.getPropertyRefs(),
-                        resultPropertyValues,
-                        StringUtils.getInstance());
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Builds the result property values with given input.
-     * @param provider the CustomSqlProvider instance.
-     * @param propertyRefs the property references.
-     * @param resultPropertyValues the template.
-     * @param stringUtils the StringUtils instance.
-     * @return such generated code.
-     * @precondition provider != null
-     * @precondition resultPropertyValues != null
-     * @precondition stringUtils != null
-     */
-    protected String buildResultPropertyValues(
-        final CustomSqlProvider provider,
-        final Collection propertyRefs,
-        final String resultPropertyValues,
-        final StringUtils stringUtils)
-    {
-        StringBuffer result = new StringBuffer();
-
-        if  (propertyRefs != null)
-        {
-            MessageFormat t_ResultPropertyValuesFormatter =
-                new MessageFormat(resultPropertyValues);
-
-            Iterator t_itPropertyRefs = propertyRefs.iterator();
-
-            boolean t_bPreviousWasTheFirst = true;
-
-            while  (t_itPropertyRefs.hasNext())
-            {
-                PropertyRefElement t_PropertyRef =
-                    (PropertyRefElement) t_itPropertyRefs.next();
-
-                if  (t_PropertyRef != null)
-                {
-                    PropertyElement t_Property =
-                        provider.resolveReference(t_PropertyRef);
-
-                    if  (t_Property == null)
-                    {
-                        try
-                        {
-                            LogFactory.getLog("custom-sql").warn(
-                                  "Referenced property not found:"
-                                + t_PropertyRef.getId());
-                        }
-                        catch  (final Throwable throwable)
-                        {
-                            // class-loading problem.
-                        }
-                    }
-                    else
-                    {
-                        result.append(
-                            t_ResultPropertyValuesFormatter.format(
-                                new Object[]
-                                {
-                                    stringUtils.capitalize(
-                                        t_Property.getType(), '_'),
-                                    (   (t_Property.getIndex() > 0)
-                                     ?  ("" + t_Property.getIndex())
-                                     :  "\"" + t_Property.getColumnName() + "\""),
-                                    t_Property.getName()
-                                }));
-
-                        if  (t_itPropertyRefs.hasNext())
-                        {
-                            result.append(",");
-                        }
-                    }
-                }
-            }
-        }
-
-        return result.toString();
-    }
-
-    /**
-     * Builds the complete custom select.
-     * @param provider the CustomSqlProvider instance.
-     * @param sqlElement the SqlElement instance.
-     * @param customSelect the custom select template.
-     * @param parameterJavadoc the generated parameter Javadoc.
-     * @param parameterDeclaration the generated parameter declaration.
-     * @param stringUtils the StringUtils isntance.
-     * @return the generated code.
-     * @precondition provider != null
-     * @precondition sqlElement != null
-     * @precondition customSelect != null
-     * @precondition parameterJavadoc != null
-     * @precondition parameterDeclaration != null
-     * @precondition stringUtils != null
-     */
-    protected String buildCustomSelect(
-        final CustomSqlProvider provider,
-        final SqlElement sqlElement,
-        final String customSelect,
-        final String parameterJavadoc,
-        final String parameterDeclaration,
-        final StringUtils stringUtils)
-    {
-        String result = "";
-
-        MessageFormat t_CustomSelectFormatter =
-            new MessageFormat(customSelect);
-
-        ResultElement t_Result = null;
-
-        ResultRefElement t_ResultRef = sqlElement.getResultRef();
-
-        if  (t_ResultRef != null)
-        {
-            t_Result = provider.resolveReference(t_ResultRef);
-        }
-        else
-        {
-            throw
-                new InvalidTemplateException(
-                    "invalid.result",
-                    new Object[] { sqlElement.getId()});
-        }
-
-        if  (t_Result == null)
-        {
-            throw
-                new InvalidTemplateException(
-                    "invalid.result.reference",
-                    new Object[] { sqlElement.getId(), t_ResultRef.getId()});
-        }
-
-        String t_strResultClass = t_Result.getClassValue();
-
-        if  (ResultElement.MULTIPLE.equalsIgnoreCase(
-                t_Result.getMatches()))
-        {
-            t_strResultClass = "List";
-        }
-
-        result =
-            t_CustomSelectFormatter.format(
-                new Object[]
-                {
-                    sqlElement.getId(),
-                    sqlElement.getDescription(),
-                    parameterJavadoc,
-                    t_strResultClass,
-                    stringUtils.unCapitalizeStart(
-                        stringUtils.capitalize(
-                            sqlElement.getName(), '-')),
-                    parameterDeclaration
-                });
-
-        return result;
-    }
-
-    /**
-     * Builds the custom updates.
-     * @param provider the CustomSqlProvider instance.
-     * @param tableTemplate the table template.
-     * @param metadataTypeManager the metadata type manager.
-     * @return such generated code.
-     * @throws RegexpEngineNotFoundException if the defined
-     * regexp engine cannot be found.
-     * @throws RegexpPluginMisconfiguredException if
-     * RegexpPlugin cannot be configured properly.
-     * @precondition provider != null
-     * @precondition tableTemplate != null
-     */
-    protected String buildCustomUpdates(
-        final CustomSqlProvider provider,
-        final TableTemplate tableTemplate,
-        final MetadataTypeManager metadataTypeManager)
-      throws  RegexpEngineNotFoundException,
-              RegexpPluginMisconfiguredException
-    {
-        return
-            buildCustomUpdatesOrInserts(
-                provider,
-                tableTemplate.getTableName(),
-                metadataTypeManager,
-                SqlElement.UPDATE,
-                getCustomUpdateOrInsert(),
-                getCustomUpdateOrInsertParameterJavadoc(),
-                getCustomUpdateOrInsertParameterDeclaration(),
-                getCustomUpdateOrInsertParameterTypeSpecification(),
-                getCustomUpdateOrInsertParameterValues(),
-                DAOTemplateUtils.getInstance(),
-                StringUtils.getInstance(),
-                StringValidator.getInstance(),
-                createHelper(RegexpManager.getInstance()));
-    }
-
-    /**
-     * Builds the custom update or insert.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param tableName the table name.
-     * @param metadataTypeManager the metadata type manager.
-     * @param type the type of operation.
-     * @param customTemplate the custom template.
-     * @param parameterJavadoc the Javadoc template
-     * of the parameters.
-     * @param parameterDeclaration the parameter declaration.
-     * @param parameterTypeSpecification the parameter type specification.
-     * @param parameterValues the parameter values.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
-     * @param metadataTypeManager the metadata type manager.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param stringValidator the <code>StringValidator</code> instance.
-     * @param helper the Helper instance.
-     * @return such generated code.
-     * @precondition tableName != null
-     * @precondition metadataTypeManager != null
-     * @precondition type != null
-     * @precondition customTemplate != null
-     * @precondition parameterJavadoc != null
-     * @precondition parameterDeclaration != null
-     * @precondition parameterTypeSpecification != null
-     * @precondition parameterValues != null
-     * @precondition daoTemplateUtils != null
-     * @precondition stringUtils != null
-     * @precondition stringValidator != null
-     * @precondition helper != null
-     */
-    protected String buildCustomUpdatesOrInserts(
-        final CustomSqlProvider customSqlProvider,
-        final String tableName,
-        final MetadataTypeManager metadataTypeManager,
-        final String type,
-        final String customTemplate,
-        final String parameterJavadoc,
-        final String parameterDeclaration,
-        final String parameterTypeSpecification,
-        final String parameterValues,
-        final DAOTemplateUtils daoTemplateUtils,
-        final StringUtils stringUtils,
-        final StringValidator stringValidator,
-        final Helper helper)
-    {
-        StringBuffer result = new StringBuffer();
-
-        Collection t_cContents = null;
-
-        if  (customSqlProvider != null)
-        {
-            t_cContents = customSqlProvider.getCollection();
-        }
-
-        if  (t_cContents != null)
-        {
-            Iterator t_itContentIterator = t_cContents.iterator();
-
-            while  (t_itContentIterator.hasNext())
-            {
-                Object t_Content = t_itContentIterator.next();
-
-                if  (t_Content instanceof SqlElement)
-                {
-                    SqlElement t_SqlElement =
-                        (SqlElement) t_Content;
-
-                    if  (   (type.equals(t_SqlElement.getType()))
-                         && (daoTemplateUtils.matches(
-                                 tableName, t_SqlElement.getDao())))
-                    {
-                        String[] t_astrParameterTemplates =
-                            buildParameterTemplates(
-                                customSqlProvider,
-                                t_SqlElement.getParameterRefs(),
-                                parameterJavadoc,
-                                parameterDeclaration,
-                                "",
-                                metadataTypeManager,
-                                stringUtils,
-                                stringValidator);
-
-                        result.append(
-                            buildCustomUpdateOrInsert(
-                                customSqlProvider,
-                                t_SqlElement,
-                                customTemplate,
-                                t_astrParameterTemplates[0],
-                                t_astrParameterTemplates[1],
-                                t_astrParameterTemplates[2],
-                                t_astrParameterTemplates[3],
-                                stringUtils,
-                                helper));
-                    }
-                }
-            }
-        }
-
-        return result.toString();
-    }
-
-    /**
-     * Builds the complete custom update or insert.
-     * @param provider the CustomSqlProvider instance.
-     * @param sqlElement the SqlElement instance.
-     * @param customTemplate the custom template.
-     * @param parameterJavadoc the generated parameter Javadoc.
-     * @param parameterDeclaration the generated parameter declaration.
-     * @param parameterTypeSpecification the parameter type specification.
-     * @param parameterValues the generared parameter values.
-     * @param stringUtils the StringUtils isntance.
-     * @param helper the Helper instance.
-     * @return the generated code.
-     * @precondition provider != null
-     * @param tableName != null
-     * @precondition sqlElement != null
-     * @precondition customTemplate != null
-     * @precondition parameterJavadoc != null
-     * @precondition parameterDeclaration != null
-     * @precondition parameterTypeSpecification != null
-     * @precondition parameterValues != null
-     * @precondition stringUtils != null
-     * @precondition helper != null
-     */
-    protected String buildCustomUpdateOrInsert(
-        final CustomSqlProvider provider,
-        final SqlElement sqlElement,
-        final String customTemplate,
-        final String parameterJavadoc,
-        final String parameterDeclaration,
-        final String parameterTypeSpecification,
-        final String parameterValues,
-        final StringUtils stringUtils,
-        final Helper helper)
-    {
-        String result = "";
-
-        MessageFormat t_CustomUpdateOrInsertFormatter =
-            new MessageFormat(customTemplate);
-
-        ResultElement t_Result = null;
-
-        ResultRefElement t_ResultRef = sqlElement.getResultRef();
-
-        if  (t_ResultRef != null)
-        {
-            t_Result = provider.resolveReference(t_ResultRef);
-        }
-
-        result =
-            t_CustomUpdateOrInsertFormatter.format(
-                new Object[]
-                {
-                    sqlElement.getId(),
-                    sqlElement.getDescription(),
-                    parameterJavadoc,
-                    stringUtils.unCapitalizeStart(
-                        stringUtils.capitalize(
-                            sqlElement.getName(), '-')),
-                    parameterDeclaration
-                });
-
-        return result;
-    }
-
-    /**
-     * Builds the custom inserts.
-     * @param provider the CustomSqlProvider instance.
-     * @param tableTemplate the table template.
-     * @param metadataTypeManager the metadata type manager.
-     * @return such generated code.
-     * @precondition provider != null
-     * @precondition tableTemplate != null
-     * @precondition metadataTypeManager != null
-     */
-    protected String buildCustomInserts(
-        final CustomSqlProvider provider,
-        final TableTemplate tableTemplate,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildCustomUpdatesOrInserts(
-                provider,
-                tableTemplate.getTableName(),
-                metadataTypeManager,
-                SqlElement.INSERT,
-                getCustomUpdateOrInsert(),
-                getCustomUpdateOrInsertParameterJavadoc(),
-                getCustomUpdateOrInsertParameterDeclaration(),
-                getCustomUpdateOrInsertParameterTypeSpecification(),
-                getCustomUpdateOrInsertParameterValues(),
-                DAOTemplateUtils.getInstance(),
-                StringUtils.getInstance(),
-                StringValidator.getInstance(),
-                createHelper(RegexpManager.getInstance()));
-    }
-
-    /**
-     * Builds the custom deletes.
-     * @param provider the CustomSqlProvider instance.
-     * @param tableTemplate the table template.
-     * @param metadataTypeManager the metadata type manager.
-     * @return such generated code.
-     * @precondition provider != null
-     * @precondition tableTemplate != null
-     * @precondition metadataTypeManager != null
-     */
-    protected String buildCustomDeletes(
-        final CustomSqlProvider provider,
-        final TableTemplate tableTemplate,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildCustomUpdatesOrInserts(
-                provider,
-                tableTemplate.getTableName(),
-                metadataTypeManager,
-                SqlElement.DELETE,
-                getCustomUpdateOrInsert(),
-                getCustomUpdateOrInsertParameterJavadoc(),
-                getCustomUpdateOrInsertParameterDeclaration(),
-                getCustomUpdateOrInsertParameterTypeSpecification(),
-                getCustomUpdateOrInsertParameterValues(),
-                DAOTemplateUtils.getInstance(),
-                StringUtils.getInstance(),
-                StringValidator.getInstance(),
-                createHelper(RegexpManager.getInstance()));
-    }
-
-    /**
-     * Builds the custom select-for-update operationss.
-     * @param provider the CustomSqlProvider instance.
-     * @param tableTemplate the table template.
-     * @param metadataTypeManager the metadata type manager.
-     * @return such generated code.
-     * @precondition provider != null
-     * @precondition tableTemplate != null
-     * @precondition metadataTypeManager != null
-     */
-    protected String buildCustomSelectForUpdates(
-        final CustomSqlProvider provider,
-        final TableTemplate tableTemplate,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildCustomSelectForUpdates(
-                provider,
-                tableTemplate.getTableName(),
-                metadataTypeManager,
-                getCustomSelectForUpdate(),
-                getCustomSelectForUpdateParameterJavadoc(),
-                getCustomSelectForUpdateReturnJavadoc(),
-                getCustomSelectForUpdateParameterDeclaration(),
-                DAOTemplateUtils.getInstance(),
-                StringUtils.getInstance(),
-                StringValidator.getInstance());
-    }
-
-    /**
-     * Builds the custom select-for-update operations.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param tableName the table name.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSelectForUpdate the custom-select-for-update template.
-     * @param parameterJavadoc the Javadoc template
-     * of the parameters.
-     * @param customSelectForUpdateReturnJavadoc the Javadoc template
-     * of the return.
-     * @param parameterDeclaration the parameter declaration.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param stringValidator the <code>StringValidator</code> instance.
-     * @return such generated code.
-     * @precondition tableName != null
-     * @precondition metadataTypeManager != null
-     * @precondition customSelectForUpdate != null
-     * @precondition parameterJavadoc != null
-     * @precondition parameterDeclaration != null
-     * @precondition daoTemplateUtils != null
-     * @precondition stringUtils != null
-     * @precondition stringValidator != null
-     */
-    protected String buildCustomSelectForUpdates(
-        final CustomSqlProvider customSqlProvider,
-        final String tableName,
-        final MetadataTypeManager metadataTypeManager,
-        final String customSelectForUpdate,
-        final String parameterJavadoc,
-        final String customSelectForUpdateReturnJavadoc,
-        final String parameterDeclaration,
-        final DAOTemplateUtils daoTemplateUtils,
-        final StringUtils stringUtils,
-        final StringValidator stringValidator)
-    {
-        StringBuffer result = new StringBuffer();
-
-        Collection t_cContents = null;
-
-        if  (customSqlProvider != null)
-        {
-            t_cContents = customSqlProvider.getCollection();
-        }
-
-        if  (t_cContents != null)
-        {
-            Iterator t_itContentIterator = t_cContents.iterator();
-
-            while  (t_itContentIterator.hasNext())
-            {
-                Object t_Content = t_itContentIterator.next();
-
-                if  (t_Content instanceof SqlElement)
-                {
-                    SqlElement t_SqlElement =
-                        (SqlElement) t_Content;
-
-                    if  (   (t_SqlElement.SELECT_FOR_UPDATE.equals(
-                                 t_SqlElement.getType()))
-                         && (daoTemplateUtils.matches(
-                                 tableName, t_SqlElement.getDao())))
-                    {
-                        String[] t_astrParameterTemplates =
-                            buildParameterTemplates(
-                                customSqlProvider,
-                                t_SqlElement.getParameterRefs(),
-                                parameterJavadoc,
-                                parameterDeclaration,
-                                "",
-                                metadataTypeManager,
-                                stringUtils,
-                                stringValidator);
-
-                        result.append(
-                            buildCustomSelectForUpdate(
-                                customSqlProvider,
-                                t_SqlElement,
-                                customSelectForUpdate,
-                                t_astrParameterTemplates[0],
-                                customSelectForUpdateReturnJavadoc,
-                                t_astrParameterTemplates[1],
-                                stringUtils));
-                    }
-                }
-            }
-        }
-
-        return result.toString();
-    }
-
-    /**
-     * Builds the complete custom select.
-     * @param provider the CustomSqlProvider instance.
-     * @param sqlElement the SqlElement instance.
-     * @param customSelectForUpdate the custom select-for-update template.
-     * @param parameterJavadoc the generated parameter Javadoc.
-     * @param returnJavadoc the generated return Javadoc.
-     * @param parameterDeclaration the generated parameter declaration.
-     * @param stringUtils the StringUtils isntance.
-     * @return the generated code.
-     * @precondition provider != null
-     * @precondition sqlElement != null
-     * @precondition customSelectForUpdate != null
-     * @precondition parameterJavadoc != null
-     * @precondition returnJavadoc != null
-     * @precondition parameterDeclaration != null
-     * @precondition stringUtils != null
-     */
-    protected String buildCustomSelectForUpdate(
-        final CustomSqlProvider provider,
-        final SqlElement sqlElement,
-        final String customSelectForUpdate,
-        final String parameterJavadoc,
-        final String returnJavadoc,
-        final String parameterDeclaration,
-        final StringUtils stringUtils)
-    {
-        String result = "";
-
-        MessageFormat t_CustomSelectForUpdateFormatter =
-            new MessageFormat(customSelectForUpdate);
-
-        ResultElement t_Result = null;
-
-        ResultRefElement t_ResultRef = sqlElement.getResultRef();
-
-        if  (t_ResultRef != null)
-        {
-            t_Result = provider.resolveReference(t_ResultRef);
-        }
-
-        String t_strCustomSelectForUpdateSubtemplate = "";
-
-        String t_strReturn = "void";
-
-        String t_strConditionalReturn = "";
-
-        String t_strReturnJavadoc = "";
-
-        result =
-            t_CustomSelectForUpdateFormatter.format(
-                new Object[]
-                {
-                    sqlElement.getId(),
-                    sqlElement.getDescription(),
-                    parameterJavadoc,
-                    t_strReturnJavadoc,
-                    t_strReturn,
-                    stringUtils.unCapitalizeStart(
-                        stringUtils.capitalize(
-                            sqlElement.getName(), '-')),
-                    parameterDeclaration
-                });
-
-        return result;
-    }
-
-    /**
-     * Builds the custom select-for-update template.
-     * @param template the template.
-     * @param subtemplate the subtemplate.
-     * @param queryObjectName the query object name.
-     * @param sqlQuery the sql query.
-     * @param resultType the result type.
-     * @return the generated code.
-     * @precondition template != null
-     * @precondition subtemplate != null
-     * @precondition customSelectForUpdateWithNoReturn != null
-     * @precondition queryObjectName != null
-     * @precondition sqlQuery != null
-     * @precondition resultType != null
-     */
-    protected String buildCustomSelectForUpdate(
-        final String template,
-        final String subtemplate,
-        final String queryObjectName,
-        final String sqlQuery,
-        final String resultType)
-    {
-        String result = "";
-
-        MessageFormat t_Formatter =
-            new MessageFormat(template);
-
-        result =
-            t_Formatter.format(
-                new Object[]
-                {
-                    queryObjectName,
-                    sqlQuery,
-                    resultType,
-                    subtemplate
-                });
-
-        return result;
-    }
-
-
-    /**
-     * Requests a regexp helper to given RegexpManager instance.
-     * @param regexpManager the RegexpManager instance.
-     * @return the regexp helper.
-     * @throws RegexpEngineNotFoundException if the defined
-     * regexp engine cannot be found.
-     * @throws RegexpPluginMisconfiguredException if
-     * RegexpPlugin cannot be configured properly.
-     * @precondition regexpManager != null
-     */
-    protected synchronized Helper createHelper(
-        final RegexpManager regexpManager)
-      throws  RegexpEngineNotFoundException,
-              RegexpPluginMisconfiguredException
-    {
-        return createHelper(regexpManager.getEngine());
-    }
-
-    /**
-     * Requests a regexp helper to given RegexpEngine instance.
-     * @param regexpEngine the RegexpEngine instance.
-     * @return the regexp helper.
-     * @precondition regexpEngine != null
-     */
-    protected Helper createHelper(
-        final RegexpEngine regexpEngine)
-      throws  RegexpEngineNotFoundException,
-              RegexpPluginMisconfiguredException
-    {
-        return regexpEngine.createHelper();
     }
 
     /**
      * Queries the contents of given table.
+     * @param input the input.
      * @param tableName the table name.
-     * @param descriptionColumn the description column.
+     * @param staticAttributeName the name of the static attribute.
      * @param columnCount the number of columns.
-     * @param metaData the metadata.
-     * @return such contents.
+     * @param metadataManager the metadata manager.
      * @throws InvalidTemplateException if the template is invalid.
      * @precondition tableName != null
-     * @precondition descriptionColumn != null
+     * @precondition staticAttributeName != null
      * @precondition columnCount > 0
+     * @precondition metadataManager != null
+     */
+    protected void queryContents(
+        final Map input,
+        final String tableName,
+        final String staticAttributeName,
+        final int columnCount,
+        final MetadataManager metadataManager)
+      throws  InvalidTemplateException
+    {
+        queryContents(
+            input,
+            tableName,
+            staticAttributeName,
+            columnCount,
+            metadataManager,
+            metadataManager.getMetadataTypeManager(),
+            metadataManager.getMetaData());
+    }
+
+    /**
+     * Queries the contents of given table.
+     * @param input the input.
+     * @param tableName the table name.
+     * @param staticAttributeName the name of the static attribute.
+     * @param columnCount the number of columns.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param metaData the metadata.
+     * @throws InvalidTemplateException if the template is invalid.
+     * @precondition tableName != null
+     * @precondition staticAttributeName != null
+     * @precondition columnCount > 0
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
      * @precondition metaData != null
      */
-    protected Map queryContents(
+    protected void queryContents(
+        final Map input,
         final String tableName,
-        final String descriptionColumn,
+        final String staticAttributeName,
         final int columnCount,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
         final DatabaseMetaData metaData)
       throws  InvalidTemplateException
     {
-        Map result = null;
-
         try
         {
-            result =
-                queryContents(
-                    tableName,
-                    descriptionColumn,
-                    columnCount,
-                    metaData.getConnection());
+            queryContents(
+                input,
+                tableName,
+                staticAttributeName,
+                columnCount,
+                metadataManager,
+                metadataTypeManager,
+                metaData.getConnection());
         }
         catch  (final SQLException sqlException)
         {
@@ -2085,34 +313,39 @@ public class BaseDAOTemplate
                     new Object[0],
                     sqlException);
         }
-
-        return result;
     }
 
     /**
      * Queries the contents of given table.
+     * @param input the input.
      * @param tableName the table name.
-     * @param descriptionColumn the description column.
+     * @param staticAttributeName the static attribute name.
      * @param columnCount the number of columns.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
      * @param connection the connection.
-     * @return such contents.
      * @throws InvalidTemplateException if the template is invalid.
      * @precondition tableName != null
-     * @precondition descriptionColumn != null
+     * @precondition staticAttributeName != null
      * @precondition columnCount > 0
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
      * @precondition connection != null
      */
-    protected Map queryContents(
+    protected void queryContents(
+        final Map input,
         final String tableName,
-        final String descriptionColumn,
+        final String staticAttributeName,
         final int columnCount,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
         final Connection connection)
       throws  InvalidTemplateException
     {
-        Map result = new HashMap();
-
         Log t_Log = UniqueLogFactory.getLog(getClass());
         
+        Collection t_cRows = new ArrayList();
+
         ResultSet t_rsResults = null;
 
         PreparedStatement t_PreparedStatement = null;
@@ -2125,50 +358,54 @@ public class BaseDAOTemplate
 
             t_rsResults = t_PreparedStatement.executeQuery();
 
-            String t_strColumnName = null;
+            String[] t_astrColumnNames = new String[columnCount];
 
-            String t_strRecordName = null;
+            String[] t_astrColumnValues = new String[columnCount];
 
-            String t_strColumnValue = null;
+            String t_strRowName = null;
 
             if  (t_rsResults != null)
             {
-                Collection t_cRecordNames = new ArrayList();
-
                 while  (t_rsResults.next())
                 {
-                    Collection t_cProperties = new ArrayList();
+                    t_strRowName = null;
 
                     ResultSetMetaData t_rsMetaData =
                         t_rsResults.getMetaData();
 
+                    int t_iArrayIndex = 0;
+
                     for  (int t_iIndex = 1;
-                          t_iIndex <= columnCount;
-                          t_iIndex++)
+                              t_iIndex <= columnCount;
+                              t_iIndex++)
                     {
-                        t_strColumnName =
+                        t_iArrayIndex = t_iIndex - 1;
+
+                        t_astrColumnNames[t_iArrayIndex] =
                             t_rsMetaData.getColumnName(t_iIndex);
 
-                        t_strColumnValue =
+                        t_astrColumnValues[t_iArrayIndex] =
                             t_rsResults.getString(t_iIndex);
 
-                        if  (descriptionColumn.equalsIgnoreCase(t_strColumnName))
+                        if  (staticAttributeName.equalsIgnoreCase(
+                                 t_astrColumnNames[t_iArrayIndex]))
                         {
-                            t_strRecordName = t_strColumnValue;
+                            t_strRowName = t_astrColumnValues[t_iArrayIndex];
                         }
-
-                        t_cProperties.add(t_strColumnValue);
                     }
 
-                    t_cRecordNames.add(t_strRecordName);
-
-                    result.put(
-                        buildColumnKey(t_strRecordName), t_cProperties);
+                    t_cRows.add(
+                        buildRow(
+                            t_strRowName,
+                            tableName,
+                            buildAttributes(
+                                t_astrColumnNames,
+                                t_astrColumnValues,
+                                tableName,
+                                metadataManager,
+                                metadataTypeManager),
+                            metadataTypeManager));
                 }
-
-                result.put(
-                    buildListKey(),
-                    t_cRecordNames);
             }
         }
         catch  (final SQLException sqlException)
@@ -2216,51 +453,29 @@ public class BaseDAOTemplate
             }
         }
 
-        return result;
+        input.put("cached_rows", t_cRows);
     }
 
     /**
-     * Builds the column key for given column value.
-     * @param value the value.
-     * @return the key.
-     * @precondition value != null
+     * Builds a row with given information.
+     * @param rowName the row name.
+     * @param tableName the table name.
+     * @param attributes the attributes.
+     * @param metadataTypeManager the metadata type manager.
+     * @return the row.
+     * @precondition rowName != null
+     * @precondition tableName != null
+     * @precondition attributes != null
+     * @precondition metadatTypeManager != null
      */
-    protected Object buildColumnKey(final String value)
+    protected Row buildRow(
+        final String rowName,
+        final String tableName,
+        final Collection attributes,
+        final MetadataTypeManager metadataTypeManager)
     {
-        return "column-key|:| " + value;
-    }
-
-    /**
-     * Builds the list key.
-     * @return such key.
-     */
-    protected Object buildListKey()
-    {
-        return ",.,list.,.";
-    }
-
-    /**
-     * Translates given column value into a Java constant.
-     * @param value the value.
-     * @return the constant.
-     * @precondition value != null
-     */
-    protected String toJavaConstant(final String value)
-    {
-        return toJavaConstant(value, createHelper(RegexpManager.getInstance()));
-    }
-
-    /**
-     * Translates given column value into a Java constant.
-     * @param value the value.
-     * @param helper the <code>Helper</code> instance.
-     * @return the constant.
-     * @precondition value != null
-     * @precondition stringUtils != null
-     */
-    protected String toJavaConstant(
-        final String value, final Helper helper)
-    {
-        return helper.replaceAll(value, "\\W", "_").toUpperCase();
+        return
+            new RowDecorator(
+                rowName, tableName, attributes, metadataTypeManager);
     }
 }

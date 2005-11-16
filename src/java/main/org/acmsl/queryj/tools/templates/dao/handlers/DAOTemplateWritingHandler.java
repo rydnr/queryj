@@ -156,9 +156,18 @@ public class DAOTemplateWritingHandler
         handle(
             retrieveDAOTemplates(parameters),
             retrieveOutputDir(engineName, parameters),
-            DAOTemplateGenerator.getInstance());
+            retrieveDAOTemplateGenerator());
     }
             
+    /**
+     * Retrieves the DAO template generator.
+     * @return such instance.
+     */
+    protected DAOTemplateGenerator retrieveDAOTemplateGenerator()
+    {
+        return DAOTemplateGenerator.getInstance();
+    }
+
     /**
      * Handles given information.
      * @param templates the DAO templates.

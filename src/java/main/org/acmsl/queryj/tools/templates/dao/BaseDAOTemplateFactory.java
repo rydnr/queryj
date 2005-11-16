@@ -37,37 +37,12 @@
  */
 package org.acmsl.queryj.tools.templates.dao;
 
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-
 /**
  * Is able to create base DAO templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public interface BaseDAOTemplateFactory
+    extends  DAOTemplateFactory
 {
-    /**
-     * Generates a BaseDAO template.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param valueObjectPackageName the value object package name.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
-     */
-    public BaseDAOTemplate createBaseDAOTemplate(
-        final TableTemplate tableTemplate,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String valueObjectPackageName)
-      throws  QueryJException;
 }

@@ -40,15 +40,14 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
+import org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some Ant classes.
@@ -59,7 +58,6 @@ import org.apache.tools.ant.BuildException;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -68,85 +66,20 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class BaseDAOTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends    DAOTemplateWritingHandler
 {
-    /**
-     * A cached empty base DAO template array.
-     */
-    public static final BaseDAOTemplate[] EMPTY_BASE_DAO_TEMPLATE_ARRAY =
-        new BaseDAOTemplate[0];
-
     /**
      * Creates a BaseDAOTemplateWritingHandler.
      */
     public BaseDAOTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * Retrieves the DAO template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected DAOTemplateGenerator retrieveDAOTemplateGenerator()
     {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
-     * Handles given parameters.
-     * @param parameters the parameters to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     */
-    protected boolean handle(final Map parameters)
-        throws  BuildException
-    {
-        return
-            handle(
-                retrieveBaseDAOTemplates(parameters),
-                retrieveOutputDir(parameters),
-                BaseDAOTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Writes the BaseDAO templates.
-     * @param templates the templates to write.
-     * @param outputDir the output dir.
-     * @param generator the <code>BaseDAOTemplateGenerator</code>
-     * instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition templates != null
-     * @precondition outputDir != null
-     * @precondition generator != null
-     */
-    protected boolean handle(
-        final BaseDAOTemplate[] templates,
-        final File outputDir,
-        final BaseDAOTemplateGenerator generator)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try 
-        {
-            int t_iLength = (templates != null) ? templates.length : 0;
-
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-            {
-                generator.write(templates[t_iIndex], outputDir);
-            }
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
-        
-        return result;
+        return BaseDAOTemplateGenerator.getInstance();
     }
 
     /**
@@ -156,39 +89,30 @@ public class BaseDAOTemplateWritingHandler
      * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected BaseDAOTemplate[] retrieveBaseDAOTemplates(
+    protected DAOTemplate[] retrieveDAOTemplates(
         final Map parameters)
       throws  BuildException
     {
         return
-            (BaseDAOTemplate[])
+            (DAOTemplate[])
                 parameters.get(
                     TemplateMappingManager.BASE_DAO_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param engineName the engine name, (optional).
      * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return retrieveOutputDir(parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
         return

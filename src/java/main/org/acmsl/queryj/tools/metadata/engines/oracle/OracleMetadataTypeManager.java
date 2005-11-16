@@ -149,4 +149,30 @@ public class OracleMetadataTypeManager
 
         return result;
     }
+
+    /**
+     * Retrieves the native type of given data type.
+     * @param dataType the data type.
+     * @param allowsNull whether to allow null or not.
+     * @return the associated native type.
+     */
+    public String getNativeType(
+        final int dataType, final boolean allowsNull)
+    {
+        String result = null;
+
+        switch  (dataType)
+        {
+            case Types.OTHER:
+            case Types.CLOB:
+                result = "String";
+                break;
+
+            default:
+                result = super.getNativeType(dataType, allowsNull);
+                break;
+        }
+
+        return result;
+    }
 }

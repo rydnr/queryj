@@ -52,7 +52,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /**
- * Decorates 'Attribute' instances to provide required alternate
+ * Decorates <code>Attribute</code> instances to provide required alternate
  * representations of the information stored therein.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
@@ -63,19 +63,24 @@ public class AttributeDecorator
     /**
      * The metadata type manager.
      */
+    private MetadataManager m__MetadataManager;
+
+    /**
+     * The metadata type manager.
+     */
     private MetadataTypeManager m__MetadataTypeManager;
 
     /**
      * Creates an <code>AttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
-     * @param metadataTypeManager the metadata type manager.
+     * @param metadataManager the metadata manager.
      * @precondition attribute != null
-     * @precondition metadataTypeManager != null
+     * @precondition metadataManager != null
      */
     public AttributeDecorator(
         final Attribute attribute,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataManager metadataManager)
     {
         this(
             attribute.getName(),
@@ -85,7 +90,9 @@ public class AttributeDecorator
             attribute.getTableName(),
             attribute.getManagedExternally(),
             attribute.getAllowsNull(),
-            metadataTypeManager);
+            attribute.getValue(),
+            metadataManager,
+            metadataManager.getMetadataTypeManager());
     }
 
     /**
@@ -98,12 +105,15 @@ public class AttributeDecorator
      * @param tableName the table name.
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
+     * @param value the optional attribute value.
+     * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @precondition name != null
      * @precondition type != null
      * @precondition nativeType != null
      * @precondition fieldType != null
      * @precondition tableName != null
+     * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
     public AttributeDecorator(
@@ -114,6 +124,8 @@ public class AttributeDecorator
         final String tableName,
         final boolean managedExternally,
         final boolean allowsNull,
+        final String value,
+        final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager)
     {
         super(
@@ -123,9 +135,40 @@ public class AttributeDecorator
             fieldType,
             tableName,
             managedExternally,
-            allowsNull);
+            allowsNull,
+            value);
 
+        immutableSetMetadataManager(metadataManager);
         immutableSetMetadataTypeManager(metadataTypeManager);
+    }
+
+    /**
+     * Specifies the metadata manager.
+     * @param metadataManager such instance.
+     */
+    protected final void immutableSetMetadataManager(
+        final MetadataManager metadataManager)
+    {
+        m__MetadataManager = metadataManager;
+    }
+
+    /**
+     * Specifies the metadata manager.
+     * @param metadataManager such instance.
+     */
+    protected void setMetadataManager(
+        final MetadataManager metadataManager)
+    {
+        immutableSetMetadataManager(metadataManager);
+    }
+
+    /**
+     * Retrieves the metadata manager.
+     * @return such instance.
+     */
+    protected MetadataManager getMetadataManager()
+    {
+        return m__MetadataManager;
     }
 
     /**
@@ -357,5 +400,75 @@ public class AttributeDecorator
         final int type, final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.isClob(type);
+    }
+
+    /**
+     * Retrieves whether the attribute is a string or not.
+     * return such information.
+     */
+    public boolean isString()
+    {
+        return isString(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is a string or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * return such information.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isString(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isString(type);
+    }
+
+    /**
+     * Retrieves the query to retrieve the externally-managed value.
+     * @return such information.
+     */
+    public String getQuery()
+    {
+        return getQuery(getManagedExternally());
+    }
+
+    /**
+     * Retrieves the query to retrieve the externally-managed value.
+     * @param managedExternally whether the attribute is managed externally.
+     * @return such information.
+     */
+    protected String getQuery(final boolean managedExternally)
+    {
+        String result = "";
+
+        if  (managedExternally)
+        {
+            result =
+                getQuery(getName(), getTableName(), getMetadataManager());
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the query to retrieve the externally-managed value.
+     * @param name the field name.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such information.
+     * @precondition name != null
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     */
+    protected String getQuery(
+        final String name,
+        final String tableName,
+        final MetadataManager metadataManager)
+    {
+        return
+            metadataManager.getExternallyManagedFieldRetrievalQuery(
+                tableName, name);
     }
 }

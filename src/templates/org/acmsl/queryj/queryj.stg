@@ -115,3 +115,19 @@ precondition_notnull(name) ::= <<
 !>
 * @precondition <name> != null
 >>
+
+attribute_javadoc(name) ::= <<
+<!
+  Writes the Javadoc for a attribute parameter.
+  @param name the name of the attribute.
+!>
+* @param <name> the \<i><name>\</i> value.
+>>
+
+attribute_declaration(attr) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute.
+  @param attr the attribute.
+!>
+final <if(attr.clob)>String<else><attr.fieldType><endif> <attr.nameLowercased>
+>>

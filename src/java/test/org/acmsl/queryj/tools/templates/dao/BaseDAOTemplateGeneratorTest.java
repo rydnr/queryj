@@ -108,7 +108,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator.getInstance();
+      return (BaseDAOTemplateGenerator) BaseDAOTemplateGenerator.getInstance();
     // JUnitDoclet end method testcase.createInstance
   }
   

@@ -285,7 +285,10 @@ public class DAOTemplate
         String t_strStaticAttributeName =
             metaLanguageUtils.retrieveStaticAttribute(t_strTableComment);
 
-        String t_strStaticAttributeType = null;
+        String t_strStaticAttributeType =
+            metadataTypeManager.getFieldType(
+                metadataManager.getColumnType(
+                    t_strTableName, t_strStaticAttributeName));
         
         // items have to include the following methods:
         // getName()
@@ -322,6 +325,10 @@ public class DAOTemplate
             retrieveExternallyManagedAttributes(
                 t_strTableName, metadataManager, metadataTypeManager);
         
+        Collection t_cAllButExternallyManagedAttributes =
+            retrieveAllButExternallyManagedAttributes(
+                t_strTableName, metadataManager, metadataTypeManager);
+        
         Collection t_cForeignKeys =
             retrieveForeignKeys(
                 t_strTableName, metadataManager, metadataTypeManager);
@@ -355,6 +362,7 @@ public class DAOTemplate
                 t_strTableName, customSqlProvider, daoTemplateUtils);
 
         fillParameters(
+            new HashMap(),
             t_Template,
             new Integer[]
             {
@@ -378,6 +386,7 @@ public class DAOTemplate
             t_mReferringKeys,
             t_cAttributes,
             t_cExternallyManagedAttributes,
+            t_cAllButExternallyManagedAttributes,
             t_cForeignKeys,
             t_cCustomSelects,
             t_cCustomResults,
@@ -393,6 +402,7 @@ public class DAOTemplate
 
     /**
      * Fills the template parameters.
+     * @param input the parameter container.
      * @param template the template.
      * @param copyrightYears the copyright years.
      * @param tableName the table name.
@@ -416,6 +426,8 @@ public class DAOTemplate
      * @param attributes the attributes.
      * @param externallyManagedAttributes the attributes which are
      * managed externally.
+     * @param allButExternallyManagedAttributes all but the attributes which
+     * are managed externally.
      * @param foreignKeys the entities pointing to this instance's table.
      * @param customSelects the custom selects.
      * @param customResults the custom results.
@@ -425,6 +437,7 @@ public class DAOTemplate
      * <code>null</code> for non-static tables.
      * @param tableRepositoryName the table repository.
      * @param stringUtils the <code>StringUtils</code> instance.
+     * @precondition input != null
      * @precondition template != null
      * @precondition copyrightYears != null
      * @precondition tableName != null
@@ -442,6 +455,7 @@ public class DAOTemplate
      * @precondition foreignKeyAttributes != null
      * @precondition attributes != null
      * @precondition externallyManagedAttributes != null
+     * @precondition allButExternallyManagedAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
      * @precondition customResults != null
@@ -449,6 +463,7 @@ public class DAOTemplate
      * @precondition stringUtils != null
      */
     protected void fillParameters(
+        final Map input,
         final StringTemplate template,
         final Integer[] copyrightYears,
         final String tableName,
@@ -467,6 +482,7 @@ public class DAOTemplate
         final Map referingKeys,
         final Collection attributes,
         final Collection externallyManagedAttributes,
+        final Collection allButExternallyManagedAttributes,
         final Collection foreignKeys,
         final Collection customSelects,
         final Collection customResults,
@@ -475,8 +491,6 @@ public class DAOTemplate
         final String tableRepositoryName,
         final StringUtils stringUtils)
     {
-        Map input = new HashMap();
-
         template.setAttribute("input", input);
 
         fillCommonParameters(input, tableName, engineName, engineVersion);
@@ -510,7 +524,10 @@ public class DAOTemplate
             referingKeys,
             attributes,
             externallyManagedAttributes,
+            allButExternallyManagedAttributes,
             foreignKeys,
+            staticAttributeName,
+            staticAttributeType,
             customSelects,
             customResults);
 
@@ -643,8 +660,15 @@ public class DAOTemplate
      * @param attributes the attributes.
      * @param externallyManagedAttributes the attributes which are
      * managed externally.
+     * @param allButExternallyManagedAttributes all but the attributes which
+     * are managed externally.
      * @param foreignKeys the entities pointing to this instance's table.
+     * @param staticAttributeName the name of the static attribute, or
+     * <code>null</code> for non-static tables.
+     * @param staticAttributeType the type of the static attribute, or
+     * <code>null</code> for non-static tables.
      * @param customSelects the custom selects.
+     * @param customResults the custom results.
      * @precondition input != null
      * @precondition voName != null
      * @precondition engineName != null
@@ -657,6 +681,7 @@ public class DAOTemplate
      * @precondition fkAttributes != null
      * @precondition attributes != null
      * @precondition externallyManagedAttributes != null
+     * @precondition allButExternallyManagedAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
      * @precondition customResults != null
@@ -676,7 +701,10 @@ public class DAOTemplate
         final Map referingKeys,
         final Collection attributes,
         final Collection externallyManagedAttributes,
+        final Collection allButExternallyManagedAttributes,
         final Collection foreignKeys,
+        final String staticAttributeName,
+        final String staticAttributeType,
         final Collection customSelects,
         final Collection customResults)
     {
@@ -702,6 +730,11 @@ public class DAOTemplate
         input.put("nonpk_attributes", nonPkAttributes);
         input.put("fk_attributes", fkAttributes);
         input.put("attributes", attributes);
+        input.put(
+            "externally_managed_attributes", externallyManagedAttributes);
+        input.put(
+            "all_but_externally_managed_attributes",
+            allButExternallyManagedAttributes);
         input.put("foreign_keys", foreignKeys);
         input.put("foreign_keys_by_table", referingKeys);
         input.put("custom_selects", customSelects);
@@ -892,7 +925,7 @@ public class DAOTemplate
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            if  (!metadataManager.isManagedExternally(
+            if  (metadataManager.isManagedExternally(
                      tableName, t_astrColumnNames[t_iIndex]))
             {
                 t_cExternallyManagedAttributeNames.add(
@@ -904,6 +937,50 @@ public class DAOTemplate
             buildAttributes(
                 (String[])
                     t_cExternallyManagedAttributeNames.toArray(
+                        EMPTY_STRING_ARRAY),
+                tableName,
+                metadataManager,
+                metadataTypeManager);
+    }
+
+    /**
+     * Retrieves all but the externally-managed attributes.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code>
+     * instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return all but the externally-managed attributes.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    protected Collection retrieveAllButExternallyManagedAttributes(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        Collection t_cNonExternallyManagedAttributeNames = new ArrayList();
+        
+        String[] t_astrColumnNames =
+            metadataManager.getColumnNames(tableName);
+
+        int t_iLength =
+            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            if  (!metadataManager.isManagedExternally(
+                     tableName, t_astrColumnNames[t_iIndex]))
+            {
+                t_cNonExternallyManagedAttributeNames.add(
+                    t_astrColumnNames[t_iIndex]);
+            }
+        }
+
+        return
+            buildAttributes(
+                (String[])
+                    t_cNonExternallyManagedAttributeNames.toArray(
                         EMPTY_STRING_ARRAY),
                 tableName,
                 metadataManager,
@@ -1077,6 +1154,38 @@ public class DAOTemplate
         return
             buildAttributes(
                 columnNames,
+                new String[columnNames.length],
+                tableName,
+                metadataManager,
+                metadataTypeManager);
+    }
+
+    /**
+     * Builds the attributes associated to given column names.
+     * @param columnNames the column names.
+     * @param columnValues the column values.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code>
+     * instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return the attribute collection.
+     * @precondition columnNames != null
+     * @precondition columnValues != null
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    protected Collection buildAttributes(
+        final String[] columnNames,
+        final String[] columnValues,
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            buildAttributes(
+                columnNames,
+                columnValues,
                 tableName,
                 null,
                 metadataManager,
@@ -1101,6 +1210,41 @@ public class DAOTemplate
      */
     protected Collection buildAttributes(
         final String[] columnNames,
+        final String tableName,
+        final Boolean allowsNullAsAWhole,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            buildAttributes(
+                columnNames,
+                new String[columnNames.length],
+                tableName,
+                allowsNullAsAWhole,
+                metadataManager,
+                metadataTypeManager);
+    }
+
+    /**
+     * Builds the attributes associated to given column names.
+     * @param columnNames the column names.
+     * @param columnValues the column values.
+     * @param tableName the table name.
+     * @param allowsNullAsAWhole whether given column names can be null
+     * as a whole or not.
+     * @param metadataManager the <code>MetadataManager</code>
+     * instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * @return the attribute collection.
+     * @precondition columnNames != null
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    protected Collection buildAttributes(
+        final String[] columnNames,
+        final String[] columnValues,
         final String tableName,
         final Boolean allowsNullAsAWhole,
         final MetadataManager metadataManager,
@@ -1148,6 +1292,8 @@ public class DAOTemplate
                     tableName,
                     t_bManagedExternally,
                     t_bAllowsNull,
+                    columnValues[t_iIndex],
+                    metadataManager,
                     metadataTypeManager));
         }
         

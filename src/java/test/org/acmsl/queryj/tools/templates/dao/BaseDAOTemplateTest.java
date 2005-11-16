@@ -111,10 +111,14 @@ extends TestCase
     return
         new org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate(
             null, // table template
-            null, // database metadata manager
+            null, // metadata manager
             null, // custom sql provider
-            "com.foo.bar.dao", // package name
-            "com.foo.bar.vo"); // vo package name
+            "dao", // package name
+            "test", // engine name
+            "X.y", // engine version
+            "'", // quote
+            "com.foo.bar",
+            "foo"); // repository
     // JUnitDoclet end method testcase.createInstance
   }
   
