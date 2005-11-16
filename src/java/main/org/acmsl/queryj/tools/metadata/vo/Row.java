@@ -33,17 +33,22 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents 'attribute' entities in the metadata model.
+ * Description: Represents 'row' entities in the metadata model.
  *
  */
 package org.acmsl.queryj.tools.metadata.vo;
 
+/*
+ * Importing JDK classes.
+ */
+import java.util.Collection;
+
 /**
- * Represents <i>attribute</i> entities in the metadata model.
+ * Represents <i>row</i> entities in the metadata model.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface Attribute
+public interface Row
 {
     /**
      * Retrieves the attribute name.
@@ -52,47 +57,14 @@ public interface Attribute
     public String getName();
 
     /**
-     * Retrieves the attribute type.
-     * @return its type.
-     */
-    public int getType();
-    
-    /**
-     * Retrieves the native type.
-     * @return such information.
-     */
-    public String getNativeType();
-
-    /**
-     * Retrieves the field type.
-     * @return such information.
-     */
-    public String getFieldType();
-
-    /**
      * Retrieves the table name.
      * @return such information.
      */
     public String getTableName();
 
     /**
-     * Retrieves whether it's managed externally.
+     * Retrieves the attributes.
      * @return such information.
      */
-    public boolean getManagedExternally();
-
-    /**
-     * Retrieves whether it allows null values or not.
-     * @return such information.
-     */
-    public boolean getAllowsNull();
-
-    /**
-     * Retrieves the optional attribute's value, meaning
-     * it doesn't just describe the metadata, but also
-     * contains data.
-     * @return such information.
-     */
-    public String getValue();
+    public Collection getAttributes();
 }
-

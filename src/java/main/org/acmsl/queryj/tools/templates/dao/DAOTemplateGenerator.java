@@ -159,42 +159,17 @@ public class DAOTemplateGenerator
         final String repositoryName)
       throws  QueryJException
     {
-        DAOTemplate result = null;
-
-        DAOTemplateFactory t_TemplateFactory =
-            getTemplateFactory(
-                tableTemplate.getTableName(), engineName, engineVersion);
-
-        if  (t_TemplateFactory != null)
-        {
-            result =
-                t_TemplateFactory.createDAOTemplate(
-                    tableTemplate,
-                    metadataManager,
-                    customSqlProvider,
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    basePackageName,
-                    repositoryName);
-        }
-        else 
-        {
-            result =
-                new DAOTemplate(
-                    tableTemplate,
-                    metadataManager,
-                    customSqlProvider,
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    basePackageName,
-                    repositoryName);
-        }
-
-        return result;
+        return
+            new DAOTemplate(
+                tableTemplate,
+                metadataManager,
+                customSqlProvider,
+                packageName,
+                engineName,
+                engineVersion,
+                quote,
+                basePackageName,
+                repositoryName);
     }
 
     /**

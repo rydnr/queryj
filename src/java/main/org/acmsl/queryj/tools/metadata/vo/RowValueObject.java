@@ -33,66 +33,44 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents 'attribute' entities in the metadata model.
+ * Description: Value-object implementation of Row interface.
  *
  */
 package org.acmsl.queryj.tools.metadata.vo;
 
+/*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.metadata.vo.AbstractRow;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.Collection;
+
 /**
- * Represents <i>attribute</i> entities in the metadata model.
+ * Value-object implementation of <code>Row</code> interface.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface Attribute
+public class RowValueObject
+    extends  AbstractRow
 {
     /**
-     * Retrieves the attribute name.
-     * @return such name.
+     * Creates a <code>RowValueObject</code> with the following
+     * information.
+     * @param name the name.
+     * @param tableName the table name.
+     * @param attributes the attributes.
+     * @precondition name != null
+     * @precondition tableName != null
+     * @precondition attributes != null
      */
-    public String getName();
-
-    /**
-     * Retrieves the attribute type.
-     * @return its type.
-     */
-    public int getType();
-    
-    /**
-     * Retrieves the native type.
-     * @return such information.
-     */
-    public String getNativeType();
-
-    /**
-     * Retrieves the field type.
-     * @return such information.
-     */
-    public String getFieldType();
-
-    /**
-     * Retrieves the table name.
-     * @return such information.
-     */
-    public String getTableName();
-
-    /**
-     * Retrieves whether it's managed externally.
-     * @return such information.
-     */
-    public boolean getManagedExternally();
-
-    /**
-     * Retrieves whether it allows null values or not.
-     * @return such information.
-     */
-    public boolean getAllowsNull();
-
-    /**
-     * Retrieves the optional attribute's value, meaning
-     * it doesn't just describe the metadata, but also
-     * contains data.
-     * @return such information.
-     */
-    public String getValue();
+    public RowValueObject(
+        final String name,
+        final String tableName,
+        final Collection attributes)
+    {
+        super(name, tableName, attributes);
+    }
 }
-

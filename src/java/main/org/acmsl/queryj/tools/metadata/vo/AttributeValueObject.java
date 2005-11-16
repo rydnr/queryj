@@ -61,6 +61,7 @@ public final class AttributeValueObject
      * @param tableName the table name.
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
+     * @param value the optional value.
      */
     public AttributeValueObject(
         final String name,
@@ -69,7 +70,8 @@ public final class AttributeValueObject
         final String fieldType,
         final String tableName,
         final boolean managedExternally,
-        final boolean allowsNull)
+        final boolean allowsNull,
+        final String value)
     {
         super(
             name,
@@ -78,7 +80,8 @@ public final class AttributeValueObject
             fieldType,
             tableName,
             managedExternally,
-            allowsNull);
+            allowsNull,
+            value);
     }
 }
 
