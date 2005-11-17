@@ -47,17 +47,17 @@ import org.acmsl.queryj.Field;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class StringField
+public class ClobField
     extends  Field
 {
     /**
-     * Creates a String field using given information.
+     * Creates a Clob field using given information.
      * @param name the field name.
      * @param table the table.
      * @precondition name != null
      * @precondition table != null
      */
-    public StringField(final String name, final Table table)
+    public ClobField(final String name, final Table table)
     {
         super(name, table);
     }
@@ -131,80 +131,6 @@ public class StringField
             conditionFactory.createCondition(
                 this,
                 conditionOperatorRepository.getNotEquals(),
-                "'" + value + "'");
-    }
-
-    /**
-     * Retrieves the condition to be able to filter for text patterns.
-     * @param value the value.
-     * @return such kind of condition.
-     */
-    public Condition like(final String value)
-    {
-        return
-            like(
-                value,
-                ConditionFactory.getInstance(),
-                ConditionOperatorRepository.getInstance());
-    }
-
-    /**
-     * Retrieves the condition to be able to filter for text patterns.
-     * @param value the value.
-     * @param conditionFactory the <code>ConditionFactory</code> instance.
-     * @param conditionOperatorRepository the
-     * <code>ConditionOperatorRepository</code> instance.
-     * @return such kind of condition.
-     * @precondition conditionFactory != null
-     * @precondition conditionOperatorRepository != null
-     */
-    protected Condition like(
-        final String value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
-    {
-        return
-            conditionFactory.createCondition(
-                this,
-                conditionOperatorRepository.getLike(),
-                "'" + value + "'");
-    }
-
-    /**
-     * Retrieves the condition to be able to filter for not containing
-     * text patterns.
-     * @param value the value.
-     * @return such kind of condition.
-     */
-    public Condition notLike(final String value)
-    {
-        return
-            like(
-                value,
-                ConditionFactory.getInstance(),
-                ConditionOperatorRepository.getInstance());
-    }
-
-    /**
-     * Retrieves the condition to be able to filter for not containing
-     * text patterns.
-     * @param value the value.
-     * @param conditionFactory the <code>ConditionFactory</code> instance.
-     * @param conditionOperatorRepository the
-     * <code>ConditionOperatorRepository</code> instance.
-     * @return such kind of condition.
-     * @precondition conditionFactory != null
-     * @precondition conditionOperatorRepository != null
-     */
-    protected Condition notLike(
-        final String value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
-    {
-        return
-            conditionFactory.createCondition(
-                this,
-                conditionOperatorRepository.getNotLike(),
                 "'" + value + "'");
     }
 }

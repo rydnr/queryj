@@ -226,4 +226,13 @@ public class TableTemplate
 
         return result;
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    public String getTemplateName()
+    {
+        return "Table";
+    }
 }

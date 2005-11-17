@@ -75,6 +75,7 @@ source(input) ::= <<
  */
 import org.acmsl.queryj.BigDecimalField;
 import org.acmsl.queryj.CalendarField;
+import org.acmsl.queryj.ClobField;
 import org.acmsl.queryj.DateField;
 import org.acmsl.queryj.DoubleField;
 import org.acmsl.queryj.Field;
@@ -262,6 +263,6 @@ constants(attr) ::= <<
 /**
  * The <attr.tableName>'s table <attr.name> field.
  */
-public final <attr.queryJFieldType> <attr.nameUppercased> =
-    new <attr.queryJFieldType>("<attr.name>", this) {};
+public final <attr.queryJFieldType>Field <attr.nameUppercased> =
+    new <attr.queryJFieldType>Field("<attr.name>", this) {};
 >>

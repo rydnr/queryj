@@ -700,6 +700,7 @@ public abstract class BasePerTableTemplate
         input.put("engine_version", engineVersion);
         input.put("timestamp", timestamp);
         input.put("vo_name_uppercased", voName.toUpperCase());
+        input.put("vo_name_lowercased", voName.toLowerCase());
 
         if  (staticTable)
         {

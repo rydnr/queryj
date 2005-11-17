@@ -169,7 +169,7 @@ public class AttributesStatementSetterTemplateWritingHandler
                     templates[t_iIndex],
                     retrieveOutputDir(
                         engineName,
-                        templates[t_iIndex].getTableTemplate().getTableName(),
+                        templates[t_iIndex].getTableName(),
                         parameters,
                         retrieveUseSubfoldersFlag(parameters)));
             }
@@ -194,7 +194,8 @@ public class AttributesStatementSetterTemplateWritingHandler
         return
             (AttributesStatementSetterTemplate[])
                 parameters.get(
-                    TemplateMappingManager.ATTRIBUTES_STATEMENT_SETTER_TEMPLATES);
+                    TemplateMappingManager
+                        .ATTRIBUTES_STATEMENT_SETTER_TEMPLATES);
     }
 
     /**

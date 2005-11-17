@@ -41,10 +41,10 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplateFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -126,32 +126,39 @@ public class AttributesStatementSetterTemplateGenerator
 
     /**
      * Generates a AttributesStatementSetter template.
-     * @param tableTemplate the table template.
+     * @param tableName the table name.
      * @param metadataManager the metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition tableTemplate != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
+     * @throws QueryJException if the input values are invalid.
      */
-    public AttributesStatementSetterTemplate createAttributesStatementSetterTemplate(
-        final TableTemplate tableTemplate,
+    public AttributesStatementSetterTemplate createTemplate(
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
         final String basePackageName,
         final String repositoryName)
       throws  QueryJException
     {
         return
             new AttributesStatementSetterTemplate(
-                tableTemplate,
+                tableName,
                 metadataManager,
+                customSqlProvider,
                 packageName,
+                engineName,
+                engineVersion,
+                quote,
                 basePackageName,
                 repositoryName);
     }
@@ -207,9 +214,7 @@ public class AttributesStatementSetterTemplateGenerator
             + File.separator
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    template
-                        .getTableTemplate()
-                            .getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase()),
                 '_')
             + "AttributesStatementSetter.java",
             template.generate());

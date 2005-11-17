@@ -478,4 +478,13 @@ public class BaseDAOTemplate
             new RowDecorator(
                 rowName, tableName, attributes, metadataTypeManager);
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    public String getTemplateName()
+    {
+        return "BaseDAO";
+    }
 }

@@ -229,7 +229,7 @@ public class AttributeDecorator
     protected String capitalize(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.capitalize(value);
+        return decorationUtils.capitalize(value.toLowerCase());
     }
     
     /**
@@ -493,4 +493,14 @@ public class AttributeDecorator
     {
         return metadataTypeManager.getQueryJFieldType(type);
     }
+
+    /**
+     * Retrieves the attribute's table in upper-case.
+     * @return such information.
+     */
+    public String getTableNameUppercased()
+    {
+        return upperCase(getTableName(), DecorationUtils.getInstance());
+    }
+
 }

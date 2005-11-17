@@ -103,4 +103,13 @@ public class DAOTemplate
     {
         return retrieveGroup("/org/acmsl/queryj/dao/DAO.stg");
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    public String getTemplateName()
+    {
+        return "DAO";
+    }
 }

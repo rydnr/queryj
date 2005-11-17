@@ -47,6 +47,7 @@ import org.acmsl.queryj.QueryResultSet;
  */
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Array;
@@ -497,6 +498,35 @@ public abstract class Query
     }
 
     // Helper methods //
+
+    /**
+     * Converts a clob to a string.
+     * @param clob the clob to convert.
+     * @return the clob contents.
+     * @throws SQLException if the clob cannot be processed.
+     * @precondition clob != null
+     */
+    protected String clobToString(final Clob clob)
+      throws  SQLException
+    {
+        return clobToString(clob, QueryUtils.getInstance());
+    }
+
+    /**
+     * Converts a clob to a string.
+     * @param clob the clob to convert.
+     * @param queryUtils the <code>QueryUtils</code> instance.
+     * @return the clob contents.
+     * @throws SQLException if the clob cannot be processed.
+     * @precondition clob != null
+     * @precondition queryUtils != null
+     */
+    protected String clobToString(
+        final Clob clob, final QueryUtils queryUtils)
+      throws  SQLException
+    {
+        return queryUtils.clobToString(clob);
+    }
 
     /**
      * Prepares a statement.
@@ -1339,6 +1369,21 @@ public abstract class Query
     }
 
     /**
+     * See java.sql.PreparedStatement#setClob(int,Clob).
+     * @see java.sql.PreparedStatement#setClob(int,java.sql.Clob)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setClob(final int index, final String value)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setCharacterStream(
+            index, new StringReader(value), value.length());
+    }
+
+    /**
      * See java.sql.PreparedStatement#setDate(int,Date).
      * @see java.sql.PreparedStatement#setDate(int,java.sql.Date)
      * @param index (Taken from Sun's Javadoc) the first parameter
@@ -2107,6 +2152,22 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
+    public void setString(final ClobField field, final String value)
+        throws  SQLException
+    {
+        setClob(field, value);
+    }
+
+    /**
+     * Specifies the value of a String parameter,
+     * associated with a previously specified variable condition for given
+     * field.
+     * @param field the field.
+     * @param value the String value.
+     * @see java.sql.PreparedStatement#setString(int,String)
+     * @throws SQLException if an error occurs.
+     * @precondition field != null
+     */
     public void setString(final Field field, final String value)
         throws  SQLException
     {
@@ -2411,6 +2472,22 @@ public abstract class Query
 
     /**
      * Specifies the value of a clob parameter,
+     * associated with a previously specified variable condition for given
+     * field.
+     * @param field the field.
+     * @param value the clob value.
+     * @see java.sql.PreparedStatement#setClob(int,java.sql.Clob)
+     * @throws SQLException if an error occurs.
+     * @precondition field != null
+     */
+    public void setClob(final Field field, final String value)
+        throws  SQLException
+    {
+        setClob(field.equals(), value);
+    }
+
+    /**
+     * Specifies the value of a clob parameter,
      * associated with a previously specified variable condition.
      * @param condition the variable condition.
      * @param value the clob value.
@@ -2419,6 +2496,21 @@ public abstract class Query
      * @precondition variableCondition != null
      */
     public void setClob(final VariableCondition condition, final Clob value)
+        throws  SQLException
+    {
+        setClob(retrieveIndex(getVariableConditions(), condition), value);
+    }
+
+    /**
+     * Specifies the value of a clob parameter,
+     * associated with a previously specified variable condition.
+     * @param condition the variable condition.
+     * @param value the clob value.
+     * @see java.sql.PreparedStatement#setClob(int,java.sql.Clob)
+     * @throws SQLException if an error occurs.
+     * @precondition variableCondition != null
+     */
+    public void setClob(final VariableCondition condition, final String value)
         throws  SQLException
     {
         setClob(retrieveIndex(getVariableConditions(), condition), value);

@@ -32,8 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create AttributesStatementSetter
- *              templates.
+ * Description: Represents entities able to create DAO templates.
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
@@ -42,12 +41,12 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /**
- * Represents entities able to create AttributesStatementSetter templates.
+ * Represents entities able to create DAO templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
@@ -55,18 +54,26 @@ public interface AttributesStatementSetterTemplateFactory
 {
     /**
      * Generates a AttributesStatementSetter template.
-     * @param tableTemplate the table template.
+     * @param tableName the table name.
      * @param metadataManager the metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
-    public AttributesStatementSetterTemplate createAttributesStatementSetterTemplate(
-        final TableTemplate tableTemplate,
+    public AttributesStatementSetterTemplate createTemplate(
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
         final String basePackageName,
         final String repositoryName)
       throws  QueryJException;

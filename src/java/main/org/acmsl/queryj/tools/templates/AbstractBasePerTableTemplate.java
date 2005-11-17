@@ -406,17 +406,26 @@ public abstract class AbstractBasePerTableTemplate
      */
     protected String buildHeader()
     {
-        return buildHeader(getTableName());
+        return buildHeader(getTemplateName(), getTableName());
     }
 
     /**
      * Builds the header for logging purposes.
+     * @param templateName the template name.
      * @param tableName the table name.
      * @return such header.
+     * @precondition templateName != null
      * @precondition tableName != null
      */
-    protected String buildHeader(final String tableName)
+    protected String buildHeader(
+        final String templateName, final String tableName)
     {
-        return "Generating DAO for " + tableName + ".";
+        return "Generating " + templateName + " for " + tableName + ".";
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    public abstract String getTemplateName();
 }

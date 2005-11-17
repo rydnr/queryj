@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -99,7 +100,6 @@ public class AttributesStatementSetterTemplateBuildHandler
         throws  BuildException
     {
         return handle(command.getAttributeMap());
-        
     }
 
     /**
@@ -110,7 +110,7 @@ public class AttributesStatementSetterTemplateBuildHandler
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-      throws  BuildException
+        throws  BuildException
     {
         return
             handle(
@@ -135,9 +135,12 @@ public class AttributesStatementSetterTemplateBuildHandler
 
         try
         {
-            handle(
-                parameters,
-                metaData.getDatabaseProductName());
+            result =
+                handle(
+                    parameters,
+                    metaData.getDatabaseProductName(),
+                    metaData.getDatabaseProductVersion(),
+                    fixQuote(metaData.getIdentifierQuoteString()));
         }
         catch  (final SQLException sqlException)
         {
@@ -151,53 +154,77 @@ public class AttributesStatementSetterTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
+     * @precondition quote != null
      */
     protected boolean handle(
-        final Map parameters, final String engineName)
+        final Map parameters,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
       throws  BuildException
     {
         return
             handle(
                 parameters,
                 engineName,
+                engineVersion,
+                quote,
                 retrieveMetadataManager(parameters),
+                retrieveCustomSqlProvider(parameters),
+                retrieveTemplateFactory(),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
-                AttributesStatementSetterTemplateGenerator.getInstance(),
                 retrieveTableTemplates(parameters));
+    }
+
+    /**
+     * Retrieves the DAO template factory.
+     * @return such instance.
+     */
+    protected AttributesStatementSetterTemplateFactory retrieveTemplateFactory()
+    {
+        return AttributesStatementSetterTemplateGenerator.getInstance();
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
      * @param metadataManager the database metadata manager.
-     * @param basePackageName the base package name.
-     * @param repository the repository.
+     * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
+     * @param projectPackage the project package.
+     * @param repository the repository.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
-     * @precondition metaDataManager != null
-     * @precondition packageName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
+     * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
      * @precondition templateFactory != null
+     * @precondition projectPackage != null
+     * @precondition repository != null
      * @precondition tableTemplates != null
      */
     protected boolean handle(
         final Map parameters,
         final String engineName,
+        final String engineVersion,
+        final String quote,
         final MetadataManager metadataManager,
-        final String basePackageName,
-        final String repositoryName,
+        final CustomSqlProvider customSqlProvider,
         final AttributesStatementSetterTemplateFactory templateFactory,
+        final String projectPackage,
+        final String repository,
         final TableTemplate[] tableTemplates)
       throws  BuildException
     {
@@ -210,20 +237,22 @@ public class AttributesStatementSetterTemplateBuildHandler
 
         try
         {
-            for  (int t_iIndex = 0;
-                      t_iIndex < t_iLength;
-                      t_iIndex++) 
+            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
             {
                 t_aTemplates[t_iIndex] =
-                    templateFactory.createAttributesStatementSetterTemplate(
-                        tableTemplates[t_iIndex],
+                    templateFactory.createTemplate(
+                        tableTemplates[t_iIndex].getTableName(),
                         metadataManager,
+                        customSqlProvider,
                         retrievePackage(
                             engineName,
                             tableTemplates[t_iIndex].getTableName(),
                             parameters),
-                        basePackageName,
-                        repositoryName);
+                        engineName,
+                        engineVersion,
+                        quote,
+                        projectPackage,
+                        repository);
             }
 
             storeTemplates(t_aTemplates, parameters);
@@ -286,20 +315,6 @@ public class AttributesStatementSetterTemplateBuildHandler
                 projectPackage,
                 engineName,
                 tableName);
-    }
-
-    /**
-     * Retrieves the repository name.
-     * @param parameters the parameters.
-     * @return the repository's name.
-     * @precondition parameters != null
-     */
-    protected String retrieveTableRepositoryName(final Map parameters)
-    {
-        return
-            (String)
-                parameters.get(
-                    ParameterValidationHandler.REPOSITORY);
     }
 
     /**

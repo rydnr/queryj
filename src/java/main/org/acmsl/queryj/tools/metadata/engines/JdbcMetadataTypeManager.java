@@ -208,6 +208,7 @@ public class JdbcMetadataTypeManager
             case Types.BINARY:
             case Types.VARBINARY:
             case Types.LONGVARBINARY:
+            case Types.CLOB:
                 result = "String";
                 break;
 
@@ -336,7 +337,7 @@ public class JdbcMetadataTypeManager
     {
         return
             stringUtils.capitalize(
-                getFieldType(dataType), '_')  + "Field";
+                getFieldType(dataType), '_');
     }
 
     /**
@@ -344,26 +345,9 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the QueryJ type.
      */
-    public String getStatementSetterFieldType(
-        final int dataType)
+    public String getStatementSetterFieldType(final int dataType)
     {
-        String result = null;
-
-        switch (dataType)
-        {
-            case Types.TIME:
-            case Types.DATE:
-            case Types.TIMESTAMP:
-            case 11:
-                result = "Timestamp";
-                break;
-
-            default:
-                result = getFieldType(dataType);
-                break;
-        }
-
-        return result;
+        return getFieldType(dataType);
     }
 
     /**
@@ -425,6 +409,10 @@ public class JdbcMetadataTypeManager
             case Types.VARBINARY:
             case Types.LONGVARBINARY:
                 result = "String";
+                break;
+
+            case Types.CLOB:
+                result = "Clob";
                 break;
 
             default:
