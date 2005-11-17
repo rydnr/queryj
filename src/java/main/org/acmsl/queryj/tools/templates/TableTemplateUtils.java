@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -118,20 +119,31 @@ public class TableTemplateUtils
     {
         return
             retrieveTableClassName(
-                table, StringUtils.getInstance());
+                table,
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance());
     }
 
     /**
      * Retrieves the name of the <code>Table</code> instance.
      * @param table the  table name.
      * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
      * @return such name.
      * @precondition table != null
      * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
      */
     protected String retrieveTableClassName(
-        final String table, final StringUtils stringUtils)
+        final String table,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils)
     {
-        return stringUtils.normalize(table.toLowerCase() , '_') + "Table";
+        return
+              stringUtils.capitalize(
+                  englishGrammarUtils.getSingular(
+                      table.toLowerCase()))
+            + "Table";
     }
 }

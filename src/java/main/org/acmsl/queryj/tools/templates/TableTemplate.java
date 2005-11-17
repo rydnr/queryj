@@ -45,20 +45,11 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Is able to create Table sources for each
@@ -69,16 +60,6 @@ import java.util.Map;
 public class TableTemplate
     extends  BasePerTableTemplate
 {
-    /**
-     * The field list.
-     */
-    private List m__lFields;
-
-    /**
-     * The field types.
-     */
-    private Map m__mFieldTypes;
-
     /**
      * Builds a <code>TableTemplate</code> using given information.
      * @param tableName the table name.
@@ -112,9 +93,6 @@ public class TableTemplate
             quote,
             basePackageName,
             repositoryName);
-
-        immutableSetFields(new ArrayList());
-        immutableSetFieldTypes(new HashMap());
     }
 
     /**
@@ -124,107 +102,5 @@ public class TableTemplate
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/sql/Table.stg");
-    }
-
-    /**
-     * Specifies the fields.
-     * @param fields the fields.
-     */
-    private void immutableSetFields(final List fields)
-    {
-        m__lFields = fields;
-    }
-
-    /**
-     * Specifies the fields.
-     * @param fields the fields.
-     */
-    protected void setFields(final List fields)
-    {
-        immutableSetFields(fields);
-    }
-
-    /**
-     * Retrieves the fields.
-     * @return such collection.
-     */
-    public List getFields()
-    {
-        return m__lFields;
-    }
-
-    /**
-     * Adds a new field.
-     * @param field the new field.
-     */
-    public void addField(final String field)
-    {
-        List t_lFields = getFields();
-
-        if  (t_lFields != null) 
-        {
-            t_lFields.add(field);
-        }
-    }
-
-    /**
-     * Specifies the field types.
-     * @param fieldTypes the field type.
-     */
-    private void immutableSetFieldTypes(final Map fieldTypes)
-    {
-        m__mFieldTypes = fieldTypes;
-    }
-
-    /**
-     * Specifies the field types.
-     * @param fieldTypes the field type.
-     */
-    protected void setFieldTypes(final Map fieldTypes)
-    {
-        immutableSetFieldTypes(fieldTypes);
-    }
-
-    /**
-     * Retrieves the field types.
-     * @return such collection.
-     */
-    public Map getFieldTypes()
-    {
-        return m__mFieldTypes;
-    }
-
-    /**
-     * Adds a new field type.
-     * @param field the field.
-     * @param type the field type.
-     */
-    public void addFieldType(final String field, String type)
-    {
-        Map t_mFieldTypes = getFieldTypes();
-
-        if  (t_mFieldTypes != null) 
-        {
-            t_mFieldTypes.put(field, type);
-        }
-    }
-
-    /**
-     * Retrieves the type of given field.
-     * @param field the field.
-     * @return the field type.
-     */
-    public String getFieldType(final String field)
-    {
-        String result = "Field";
-
-        Map t_mFieldTypes = getFieldTypes();
-
-        if  (t_mFieldTypes != null) 
-        {
-            result = (String) t_mFieldTypes.get(field);
-        }
-
-        return result;
     }
 }

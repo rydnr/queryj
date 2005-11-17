@@ -67,14 +67,8 @@ source(input) ::= <<
   packageNames=
   [
     input.base_package_name,
-    typeInitMap.baseDAOSubpackageName
+    typeInitMap.tableRepositorySubpackageName
   ])>
-
-
-<project_imports(
-  basePackageName=input.base_package_name,
-  voSubpackageName=typeInitMap.voSubpackageName,
-  voName=input.vo_name)>
 
 /*
  * Importing some ACM-SL classes.
@@ -105,7 +99,7 @@ first_line_description(tableName) ::= <<
   Generates the first line of the generated file description.
   @param tableName the table name.
 !>
-Represents the "<tableName>"
+Represents the "<tableName>" table
 >>
 
 second_line_description(tableName) ::= <<
@@ -114,20 +108,6 @@ second_line_description(tableName) ::= <<
   @param tableName the table name.
 !>
 in the persistence domain.
->>
-
-project_imports(basePackageName, voSubpackageName, voName) ::= <<
-<!
- Generates the project imports.
- @param basePackageName the base package name.
- @param voSubpackageName the value-object subpackage name.
- @param voName the value-object name.
-!>
-/*
- * Importing project classes.
- */
-import <basePackageName>.<voSubpackageName>.<voName>;
-import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
 >>
 
 class(input) ::= <<
@@ -150,14 +130,6 @@ public class <input.vo_name>Table
     extends  Table
 {
     <input.attributes:constants(attr=it); separator="\n\n">
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected <input.vo_name>Table()
-    {
-        super(NAME);
-    }
 
     /**
      * Singleton implemented as a weak reference.
@@ -200,7 +172,7 @@ public class <input.vo_name>Table
     }
 
     /**
-     * Retrieves a \<code\><input.vo_name>Table\</code\> instance.
+     * Retrieves a \<code><input.vo_name>Table\</code> instance.
      * @param alias the desired table alias.
      * @return such instance.
      */
@@ -254,19 +226,9 @@ public class <input.vo_name>Table
         return "<input.table_name>";
     }
 
-<if(attributes)>
+<if(input.attributes)>
     /**
-     * Retrieves <code>all</code> fields, which in these case is an empty
-     * set.
-     * @return such fields.
-     */
-    public Field[] getAll()
-    {
-        return new Field[0];
-    }
-<else>
-    /**
-     * Retrieves <code>all</code> fields
+     * Retrieves \<code>all\</code> fields
      * It's equivalent to a star in a query.
      * @return such fields.
      */
@@ -275,8 +237,18 @@ public class <input.vo_name>Table
         return
             new Field[]
             {
-                <attributes:{ attr | <attr.nameNormalizedUppercase> }; separator=",\n">
+                <input.attributes:{ attr | <attr.nameUppercased> }; separator=",\n">
             };
+    }
+<else>
+    /**
+     * Retrieves \<code>all\</code> fields, which in these case is an empty
+     * set.
+     * @return such fields.
+     */
+    public Field[] getAll()
+    {
+        return new Field[0];
     }
 <endif>
 }
@@ -289,7 +261,7 @@ constants(attr) ::= <<
 !>
 /**
  * The <attr.tableName>'s table <attr.name> field.
- +/
-public final <attr.queryJFieldType>Field <attr.nameNormalizedUppercase> =
-    new <attr.queryJFieldType>Field("<attr.name>", this) {};
+ */
+public final <attr.queryJFieldType> <attr.nameUppercased> =
+    new <attr.queryJFieldType>("<attr.name>", this) {};
 >>
