@@ -175,4 +175,29 @@ public class OracleMetadataTypeManager
 
         return result;
     }
+
+    /**
+     * Retrieves the type of given data type.
+     * @param dataType the data type.
+     * @param allowsNull whether the field allows null or not.
+     * @return the QueryJ type.
+     */
+    public String getFieldType(final int dataType, final boolean allowsNull)
+    {
+        String result = "";
+
+        switch  (dataType)
+        {
+            case Types.OTHER:
+            case Types.CLOB:
+                result = "String";
+                break;
+
+            default:
+                result = super.getFieldType(dataType, allowsNull);
+                break;
+        }
+
+        return result;
+    }
 }

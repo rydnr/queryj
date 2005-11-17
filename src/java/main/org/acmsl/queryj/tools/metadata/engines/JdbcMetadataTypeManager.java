@@ -382,9 +382,7 @@ public class JdbcMetadataTypeManager
      * @param allowsNull whether the field allows null or not.
      * @return the QueryJ type.
      */
-    public String getFieldType(
-        final int dataType,
-        final boolean allowsNull)
+    public String getFieldType(final int dataType, final boolean allowsNull)
     {
         String result = "";
 

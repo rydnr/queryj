@@ -257,6 +257,31 @@ public class TableTemplateBuildHandler
                         quote,
                         projectPackage,
                         repository);
+
+                t_astrColumnNames =
+                    metadataManager.getColumnNames(
+                        t_astrTableNames[t_iTableIndex]);
+
+                if  (t_astrColumnNames != null) 
+                {
+                    for  (int t_iColumnIndex = 0;
+                              t_iColumnIndex < t_astrColumnNames.length;
+                              t_iColumnIndex++) 
+                    {
+                        t_aTableTemplates[t_iTableIndex].addField(
+                            t_astrColumnNames[t_iColumnIndex]);
+
+                        t_iColumnType =
+                            metadataManager.getColumnType(
+                                t_astrTableNames[t_iTableIndex],
+                                t_astrColumnNames[t_iColumnIndex]);
+
+                        t_aTableTemplates[t_iTableIndex].addFieldType(
+                            t_astrColumnNames[t_iColumnIndex],
+                            t_MetadataTypeManager.getQueryJFieldType(
+                                t_iColumnType));
+                    }
+                }
             }
 
             storeTableNames(t_astrTableNames, parameters);
