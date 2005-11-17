@@ -110,8 +110,15 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
       return
           new org.acmsl.queryj.tools.templates.TableTemplate(
-              "com.foo.bar", // package name
-              "users"); // table name
+            "test", // table name
+            null, // database metadata manager
+            null, // custom sql provider
+            "com.foo.bar.rdb.mysql", // package name
+            "mysql", // engine name
+            "4.0.1", // engine version
+            "'", // quote
+            "com.foo.bar", // base package name
+            "bar"); // repository name
     // JUnitDoclet end method testcase.createInstance
   }
   

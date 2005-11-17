@@ -41,6 +41,9 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /**
@@ -52,10 +55,27 @@ public interface TableTemplateFactory
 {
     /**
      * Generates a table template.
-     * @param packageName the package name.
      * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
+     * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the name of the repository.
      * @return a template.
+     * @throws QueryJException if the input values are invalid.
      */
     public TableTemplate createTableTemplate(
-        final String packageName, final String tableName);
+        final String tableName,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName)
+      throws  QueryJException;
 }

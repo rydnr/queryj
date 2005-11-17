@@ -252,7 +252,7 @@ public class DAOTemplateBuildHandler
             {
                 t_aDAOTemplates[t_iDAOIndex] =
                     templateFactory.createDAOTemplate(
-                        tableTemplates[t_iDAOIndex],
+                        tableTemplates[t_iDAOIndex].getTableName(),
                         metadataManager,
                         customSqlProvider,
                         packageName,
@@ -271,45 +271,6 @@ public class DAOTemplateBuildHandler
         }
         
         return result;
-    }
-
-    /**
-     * Fixes given quote character.
-     * @param quote the quote.
-     * @return the correct one.
-     */
-    public static String fixQuote(final String quote)
-    {
-        String result = quote;
-
-        if  (result == null)
-        {
-            result = "\"";
-        }
-
-        if  (result.equals("\""))
-        {
-            result = "\\\"";
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the custom-sql provider from the attribute map.
-     * @param parameters the parameter map.
-     * @return the provider.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    public static CustomSqlProvider retrieveCustomSqlProvider(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (CustomSqlProvider)
-                parameters.get(
-                    CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
     }
 
     /**
@@ -350,20 +311,6 @@ public class DAOTemplateBuildHandler
         return
             packageUtils.retrieveDAOPackage(
                 projectPackage, engineName);
-    }
-
-    /**
-     * Retrieves the repository name.
-     * @param parameters the parameters.
-     * @return the repository's name.
-     * @precondition parameters != null
-     */
-    protected String retrieveTableRepositoryName(final Map parameters)
-    {
-        return
-            (String)
-                parameters.get(
-                    ParameterValidationHandler.REPOSITORY);
     }
 
     /**

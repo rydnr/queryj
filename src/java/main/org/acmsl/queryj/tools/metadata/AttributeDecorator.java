@@ -471,4 +471,26 @@ public class AttributeDecorator
             metadataManager.getExternallyManagedFieldRetrievalQuery(
                 tableName, name);
     }
+
+    /**
+     * Retrieves the QueryJ type.
+     * @return the QueryJ type.
+     */
+    public String getQueryJFieldType()
+    {
+        return getQueryJFieldType(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves the QueryJ type.
+     * @param type the type.
+     * @param metadataTypeManager the metadata type manager.
+     * @return the QueryJ type.
+     * @precondition metadataTypeManager != null
+     */
+    protected String getQueryJFieldType(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.getQueryJFieldType(type);
+    }
 }

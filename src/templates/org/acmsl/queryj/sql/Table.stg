@@ -1,0 +1,295 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate Table classes.
+//
+// Version: $Revision$ ($Author$ at $Date$)
+//
+// $Id$
+//
+group DAO;
+
+source(input) ::= <<
+<!
+  Generates a Table source file.
+  @param input.copyright_years the copyright's years.
+  @param input.table_name the table name.
+  @param input.package the package.
+  @param input.dao_class_name the DAO class name.
+  @param input.dao_factory_class_name the DAO factory class name.
+  @param input.dao_implementation_class_name the DAO implementation class name.
+  @params project_imports
+  @params class
+!>
+<java_header(
+  years=input.copyright_years,
+  description=
+    [
+      first_line_description(
+        tableName=input.table_name),
+      second_line_description(
+        tableName=input.table_name)
+    ],
+    timestamp=input.timestamp)>
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName
+  ])>
+
+
+<project_imports(
+  basePackageName=input.base_package_name,
+  voSubpackageName=typeInitMap.voSubpackageName,
+  voName=input.vo_name)>
+
+/*
+ * Importing some ACM-SL classes.
+ */
+import org.acmsl.queryj.BigDecimalField;
+import org.acmsl.queryj.CalendarField;
+import org.acmsl.queryj.DateField;
+import org.acmsl.queryj.DoubleField;
+import org.acmsl.queryj.Field;
+import org.acmsl.queryj.IntField;
+import org.acmsl.queryj.LongField;
+import org.acmsl.queryj.StringField;
+import org.acmsl.queryj.Table;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.math.BigDecimal;
+import java.lang.ref.WeakReference;
+import java.util.Calendar;
+import java.util.Date;
+
+<class(input=input)>
+>>
+
+first_line_description(tableName) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param tableName the table name.
+!>
+Represents the "<tableName>"
+>>
+
+second_line_description(tableName) ::= <<
+<!
+  Generates the second line of the generated file description.
+  @param tableName the table name.
+!>
+in the persistence domain.
+>>
+
+project_imports(basePackageName, voSubpackageName, voName) ::= <<
+<!
+ Generates the project imports.
+ @param basePackageName the base package name.
+ @param voSubpackageName the value-object subpackage name.
+ @param voName the value-object name.
+!>
+/*
+ * Importing project classes.
+ */
+import <basePackageName>.<voSubpackageName>.<voName>;
+import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
+>>
+
+class(input) ::= <<
+<!
+ Generates the class body.
+ @param input the input.
+!>
+/**
+ * <[
+      first_line_description(
+        tableName=input.table_name),
+      second_line_description(
+        tableName=input.table_name)
+    ]:{line |<line>}; separator="\n * ")>
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public class <input.vo_name>Table
+    extends  Table
+{
+    <input.attributes:constants(attr=it); separator="\n\n">
+
+    /**
+     * Protected constructor to avoid accidental instantiation.
+     */
+    protected <input.vo_name>Table()
+    {
+        super(NAME);
+    }
+
+    /**
+     * Singleton implemented as a weak reference.
+     */
+    private static WeakReference singleton;
+
+    /**
+     * Protected constructor to avoid accidental instantiation.
+     * @param alias the table alias.
+     */
+    protected <input.vo_name>Table(final String alias)
+    {
+        super("<input.table_name>", alias);
+    }
+
+    /**
+     * Protected constructor to avoid accidental instantiation.
+     */
+    protected <input.vo_name>Table()
+    {
+        this(null);
+    }
+
+    /**
+     * Specifies a new weak reference.
+     * @param table the table instance to use.
+     */
+    protected static void setReference(final <input.vo_name>Table table)
+    {
+        singleton = new WeakReference(table);
+    }
+
+    /**
+     * Retrieves the weak reference.
+     * @return such reference.
+     */
+    protected static WeakReference getReference()
+    {
+        return singleton;
+    }
+
+    /**
+     * Retrieves a \<code\><input.vo_name>Table\</code\> instance.
+     * @param alias the desired table alias.
+     * @return such instance.
+     */
+    public static <input.vo_name>Table getInstance(final String alias)
+    {
+        <input.vo_name>Table result = null;
+
+        if  (alias != null)
+        {
+            result = new <input.vo_name>Table(alias);
+        }
+        else
+        {
+            result = getInstance();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves a \<code><input.vo_name>Table\</code> instance.
+     * @return such instance.
+     */
+    public static <input.vo_name>Table getInstance()
+    {
+        <input.vo_name>Table result = null;
+
+        WeakReference reference = getReference();
+
+        if  (reference != null) 
+        {
+            result = (<input.vo_name>Table) reference.get();
+        }
+
+        if  (result == null) 
+        {
+            result = new <input.vo_name>Table();
+
+            setReference(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the table name.
+     * @return such name.
+     */
+    public String getTableName()
+    {
+        return "<input.table_name>";
+    }
+
+<if(attributes)>
+    /**
+     * Retrieves <code>all</code> fields, which in these case is an empty
+     * set.
+     * @return such fields.
+     */
+    public Field[] getAll()
+    {
+        return new Field[0];
+    }
+<else>
+    /**
+     * Retrieves <code>all</code> fields
+     * It's equivalent to a star in a query.
+     * @return such fields.
+     */
+    public Field[] getAll()
+    {
+        return
+            new Field[]
+            {
+                <attributes:{ attr | <attr.nameNormalizedUppercase> }; separator=",\n">
+            };
+    }
+<endif>
+}
+>>
+
+constants(attr) ::= <<
+<!
+ Writes the constant declaration for each attribute.
+ @param attr the attribute.
+!>
+/**
+ * The <attr.tableName>'s table <attr.name> field.
+ +/
+public final <attr.queryJFieldType>Field <attr.nameNormalizedUppercase> =
+    new <attr.queryJFieldType>Field("<attr.name>", this) {};
+>>

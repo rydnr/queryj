@@ -817,23 +817,6 @@ public class CustomSqlValidationHandler
     }
 
     /**
-     * Retrieves the <code>CustomSqlProvider</code> instance.
-     * @param parameters the parameter map.
-     * @return such instance.
-     * @throws BuildException if the provider cannot be stored for any reason.
-     * @precondition parameters != null
-     */
-    protected CustomSqlProvider retrieveCustomSqlProvider(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (CustomSqlProvider)
-                parameters.get(
-                    CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
-    }
-
-    /**
      * Retrieves the <code>Connection</code> instance.
      * @param parameters the parameter map.
      * @return such instance.

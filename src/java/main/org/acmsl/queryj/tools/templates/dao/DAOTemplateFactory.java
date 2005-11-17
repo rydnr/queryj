@@ -44,7 +44,6 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /**
  * Represents entities able to create DAO templates.
@@ -55,7 +54,7 @@ public interface DAOTemplateFactory
 {
     /**
      * Generates a DAO template.
-     * @param tableTemplate the table template.
+     * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
@@ -68,7 +67,7 @@ public interface DAOTemplateFactory
      * @throws QueryJException if the input values are invalid.
      */
     public DAOTemplate createDAOTemplate(
-        final TableTemplate tableTemplate,
+        final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,

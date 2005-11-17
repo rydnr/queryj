@@ -88,11 +88,11 @@ import org.apache.commons.logging.LogFactory;
  *         >Jose San Leandro</a>
  */
 public class BaseDAOTemplate
-    extends     DAOTemplate
+    extends  DAOTemplate
 {
     /**
      * Builds a <code>BaseDAOTemplate</code> using given information.
-     * @param tableTemplate the table template.
+     * @param tableName the table name.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
@@ -103,7 +103,7 @@ public class BaseDAOTemplate
      * @param repositoryName the repository name.
      */
     public BaseDAOTemplate(
-        final TableTemplate tableTemplate,
+        final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
@@ -114,7 +114,7 @@ public class BaseDAOTemplate
         final String repositoryName)
     {
         super(
-            tableTemplate,
+            tableName,
             metadataManager,
             customSqlProvider,
             packageName,

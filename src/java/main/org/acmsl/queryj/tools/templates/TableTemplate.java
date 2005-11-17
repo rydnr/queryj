@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -26,201 +27,204 @@
                     28660 Madrid
                     Spain
 
- ******************************************************************************
+ *****************************************************************************
  *
  * Filename: $RCSfile$
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate tables according to database
- *              metadata.
+ * Description: Is able to create Table sources for each
+ *              table in the persistence model.
  *
  */
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project-specific classes.
  */
-import org.acmsl.commons.utils.StringUtils;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.TableTemplate;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JDK classes.
  */
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Is able to generate tables according to database metadata.
+ * Is able to create Table sources for each
+ * table in the persistence model.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public class TableTemplate
-    extends  AbstractTableTemplate
-    implements  TableTemplateDefaults
+    extends  BasePerTableTemplate
 {
     /**
+     * The field list.
+     */
+    private List m__lFields;
+
+    /**
+     * The field types.
+     */
+    private Map m__mFieldTypes;
+
+    /**
      * Builds a <code>TableTemplate</code> using given information.
-     * @param packageName the package name.
      * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
+     * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
      */
     public TableTemplate(
-        final String packageName, final String tableName)
+        final String tableName,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName)
     {
         super(
-            DEFAULT_HEADER,
-            DEFAULT_PACKAGE_DECLARATION,
-            packageName,
             tableName,
-            DEFAULT_ACMSL_IMPORTS,
-            DEFAULT_JDK_IMPORTS,
-            DEFAULT_JAVADOC,
-            DEFAULT_CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            DEFAULT_SINGLETON_BODY,
-            DEFAULT_FIELD_JAVADOC,
-            DEFAULT_FIELD_DEFINITION,
-            DEFAULT_CLASS_CONSTRUCTOR,
-            DEFAULT_GETTABLENAME_METHOD,
-            DEFAULT_EMPTY_GETALL_METHOD,
-            DEFAULT_GETALL_METHOD_START,
-            DEFAULT_GETALL_METHOD_FIELD_SEPARATOR,
-            DEFAULT_GETALL_METHOD_END,
-            DEFAULT_CLASS_END);
+            metadataManager,
+            customSqlProvider,
+            packageName,
+            engineName,
+            engineVersion,
+            quote,
+            basePackageName,
+            repositoryName);
+
+        immutableSetFields(new ArrayList());
+        immutableSetFieldTypes(new HashMap());
     }
 
     /**
-     * Retrieves the source code of the generated field tableName.
-     * @return such source code.
+     * Retrieves the string template group.
+     * @return such instance.
      */
-    protected String generateOutput()
+    protected StringTemplateGroup retrieveGroup()
     {
-        return
-            generateOutput(
-                TableTemplateUtils.getInstance(), StringUtils.getInstance());
+        return retrieveGroup("/org/acmsl/queryj/sql/Table.stg");
     }
 
     /**
-     * Retrieves the source code of the generated field tableName.
-     * @param tableTemplateUtils the <code>TableTemplateUtils</code> instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @return such source code.
-     * @precondition tableTemplateUtils != null
-     * @precondition stringUtils != null
+     * Specifies the fields.
+     * @param fields the fields.
      */
-    protected String generateOutput(
-        final TableTemplateUtils tableTemplateUtils,
-        final StringUtils stringUtils)
+    private void immutableSetFields(final List fields)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        m__lFields = fields;
+    }
 
-        Object[] t_aTableName =
-            new Object[]
-            {
-                stringUtils.capitalize(getTableName().toLowerCase(), '_')
-            };
+    /**
+     * Specifies the fields.
+     * @param fields the fields.
+     */
+    protected void setFields(final List fields)
+    {
+        immutableSetFields(fields);
+    }
 
-        Object[] t_aPackageName = new Object[]{getPackageName()};
+    /**
+     * Retrieves the fields.
+     * @return such collection.
+     */
+    public List getFields()
+    {
+        return m__lFields;
+    }
 
-        MessageFormat t_Formatter = new MessageFormat(getHeader());
-        t_sbResult.append(t_Formatter.format(t_aTableName));
-
-        t_Formatter = new MessageFormat(getPackageDeclaration());
-        t_sbResult.append(t_Formatter.format(t_aPackageName));
-
-        t_sbResult.append(getAcmslImports());
-        t_sbResult.append(getJdkImports());
-
-        t_Formatter = new MessageFormat(getJavadoc());
-        t_sbResult.append(t_Formatter.format(t_aTableName));
-
-        t_Formatter = new MessageFormat(getClassDefinition());
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    tableTemplateUtils.retrieveTableClassName(getTableName())
-                }));
-
-        t_sbResult.append(getClassStart());
-
+    /**
+     * Adds a new field.
+     * @param field the new field.
+     */
+    public void addField(final String field)
+    {
         List t_lFields = getFields();
 
-        if  (t_lFields != null)
+        if  (t_lFields != null) 
         {
-            Iterator t_itFields = t_lFields.iterator();
+            t_lFields.add(field);
+        }
+    }
 
-            MessageFormat t_JavadocFormatter =
-                new MessageFormat(getFieldJavadoc());
+    /**
+     * Specifies the field types.
+     * @param fieldTypes the field type.
+     */
+    private void immutableSetFieldTypes(final Map fieldTypes)
+    {
+        m__mFieldTypes = fieldTypes;
+    }
 
-            MessageFormat t_DefinitionFormatter =
-                new MessageFormat(getFieldDefinition());
+    /**
+     * Specifies the field types.
+     * @param fieldTypes the field type.
+     */
+    protected void setFieldTypes(final Map fieldTypes)
+    {
+        immutableSetFieldTypes(fieldTypes);
+    }
 
-            while  (t_itFields.hasNext()) 
-            {
-                String t_strField = (String) t_itFields.next();
+    /**
+     * Retrieves the field types.
+     * @return such collection.
+     */
+    public Map getFieldTypes()
+    {
+        return m__mFieldTypes;
+    }
 
-                t_sbResult.append(
-                    t_JavadocFormatter.format(
-                        new Object[]{
-                            getTableName(),
-                            t_strField}));
+    /**
+     * Adds a new field type.
+     * @param field the field.
+     * @param type the field type.
+     */
+    public void addFieldType(final String field, String type)
+    {
+        Map t_mFieldTypes = getFieldTypes();
 
-                t_sbResult.append(
-                    t_DefinitionFormatter.format(
-                        new Object[]{
-                            getFieldType(t_strField),
-                            t_strField.toUpperCase(),
-                            t_strField}));
-            }
+        if  (t_mFieldTypes != null) 
+        {
+            t_mFieldTypes.put(field, type);
+        }
+    }
+
+    /**
+     * Retrieves the type of given field.
+     * @param field the field.
+     * @return the field type.
+     */
+    public String getFieldType(final String field)
+    {
+        String result = "Field";
+
+        Map t_mFieldTypes = getFieldTypes();
+
+        if  (t_mFieldTypes != null) 
+        {
+            result = (String) t_mFieldTypes.get(field);
         }
 
-        t_Formatter = new MessageFormat(getSingletonBody());
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    stringUtils.capitalize(getTableName().toLowerCase(), '_'),
-                    getTableName()
-                }));
-
-        t_Formatter = new MessageFormat(getGetTableNameMethod());
-        t_sbResult.append(t_Formatter.format(new Object[]{getTableName()}));
-
-        if  (t_lFields != null)
-        {
-            if  (t_lFields.size() == 0)
-            {
-                t_sbResult.append(getEmptyGetAllMethod());
-            }
-            else 
-            {
-                Iterator t_itFields = t_lFields.iterator();
-
-                if  (t_itFields.hasNext()) 
-                {
-                    t_sbResult.append(getGetAllMethodStart());
-
-                    t_sbResult.append(
-                        ((String) t_itFields.next()).toUpperCase());
-                }
-                
-                while  (t_itFields.hasNext()) 
-                {
-                    t_sbResult.append(getGetAllMethodFieldSeparator());
-                    t_sbResult.append(
-                        ((String) t_itFields.next()).toUpperCase());
-                }
-
-                t_sbResult.append(getGetAllMethodEnd());
-            }
-        }
-
-        t_sbResult.append(getClassEnd());
-
-        return t_sbResult.toString();
+        return result;
     }
 }

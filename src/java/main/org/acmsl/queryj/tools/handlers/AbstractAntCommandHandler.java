@@ -43,7 +43,10 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 
@@ -255,5 +258,58 @@ public abstract class AbstractAntCommandHandler
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);
+    }
+
+    /**
+     * Fixes given quote character.
+     * @param quote the quote.
+     * @return the correct one.
+     */
+    public static String fixQuote(final String quote)
+    {
+        String result = quote;
+
+        if  (result == null)
+        {
+            result = "\"";
+        }
+
+        if  (result.equals("\""))
+        {
+            result = "\\\"";
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the custom-sql provider from the attribute map.
+     * @param parameters the parameter map.
+     * @return the provider.
+     * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    public static CustomSqlProvider retrieveCustomSqlProvider(
+        final Map parameters)
+      throws  BuildException
+    {
+        return
+            (CustomSqlProvider)
+                parameters.get(
+                    CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
+    }
+
+    /**
+     * Retrieves the repository name.
+     * @param parameters the parameters.
+     * @return the repository's name.
+     * @precondition parameters != null
+     */
+    protected String retrieveTableRepositoryName(final Map parameters)
+    {
+        return
+            (String)
+                parameters.get(
+                    ParameterValidationHandler.REPOSITORY);
     }
 }

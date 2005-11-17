@@ -430,15 +430,6 @@ public class JdbcMetadataTypeManager
                 break;
 
             default:
-
-                Log t_Log = UniqueLogFactory.getLog(getClass());
-                
-                if  (t_Log != null)
-                {
-                    t_Log.warn(
-                        "Warning, column type unknown: " + dataType);
-                }
-
                 break;
         }
 

@@ -110,7 +110,7 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.dao.DAOTemplate(
-            null, // table template
+            "test", // table name
             null, // database metadata manager
             null, // custom sql provider
             "com.foo.bar.rdb.mysql", // package name

@@ -46,7 +46,6 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -127,7 +126,7 @@ public class DAOTemplateGenerator
 
     /**
      * Generates a DAO template.
-     * @param tableTemplate the table template.
+     * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
@@ -138,7 +137,7 @@ public class DAOTemplateGenerator
      * @param repositoryName the name of the repository.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
-     * @precondition tableTemplate != null
+     * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition engineName != null
@@ -148,7 +147,7 @@ public class DAOTemplateGenerator
      * @precondition repositoryName != null
      */
     public DAOTemplate createDAOTemplate(
-        final TableTemplate tableTemplate,
+        final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
@@ -161,7 +160,7 @@ public class DAOTemplateGenerator
     {
         return
             new DAOTemplate(
-                tableTemplate,
+                tableName,
                 metadataManager,
                 customSqlProvider,
                 packageName,
@@ -180,9 +179,7 @@ public class DAOTemplateGenerator
      * @precondition daoTemplate != null
      * @precondition outputDir != null
      */
-    public void write(
-        final DAOTemplate daoTemplate,
-        final File outputDir)
+    public void write(final DAOTemplate daoTemplate, final File outputDir)
       throws  IOException
     {
         write(
@@ -224,9 +221,7 @@ public class DAOTemplateGenerator
             + daoTemplate.getEngineName()
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    daoTemplate
-                        .getTableTemplate()
-                            .getTableName().toLowerCase()),
+                    daoTemplate.getTableName().toLowerCase()),
                 '_')
             + "DAO.java",
             daoTemplate.generate());
