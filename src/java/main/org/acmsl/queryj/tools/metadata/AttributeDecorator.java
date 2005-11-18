@@ -247,6 +247,20 @@ public class AttributeDecorator
     }
     
     /**
+     * Normalizes given value to lower-case.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the alternate version of the value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalizeLowercase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.normalizeLowercase(value);
+    }
+    
+    /**
      * Retrieves the name, in lower case.
      * @return such value.
      */
@@ -503,4 +517,13 @@ public class AttributeDecorator
         return upperCase(getTableName(), DecorationUtils.getInstance());
     }
 
+    /**
+     * Retrieves the attribute's table in upper-case.
+     * @return such information.
+     */
+    public String getTableNameNormalizedLowercased()
+    {
+        return
+            normalizeLowercase(getTableName(), DecorationUtils.getInstance());
+    }
 }

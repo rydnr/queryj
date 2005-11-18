@@ -147,7 +147,6 @@ public class DecorationUtils
     public String uncapitalize(final String value)
     {
         return uncapitalize(value, StringUtils.getInstance());
-        
     }
 
     /**
@@ -186,7 +185,7 @@ public class DecorationUtils
     protected String capitalize(
         final String value, final StringUtils stringUtils)
     {
-        return stringUtils.capitalize(value);
+        return stringUtils.capitalize(value.toLowerCase());
     }
 
     /**

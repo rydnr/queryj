@@ -127,7 +127,7 @@ class(input) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.vo_name>Table
+public class <input.table_name_capitalized>Table
     extends  Table
 {
     <input.attributes:constants(attr=it); separator="\n\n">
@@ -141,7 +141,7 @@ public class <input.vo_name>Table
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */
-    protected <input.vo_name>Table(final String alias)
+    protected <input.table_name_capitalized>Table(final String alias)
     {
         super("<input.table_name>", alias);
     }
@@ -149,7 +149,7 @@ public class <input.vo_name>Table
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected <input.vo_name>Table()
+    protected <input.table_name_capitalized>Table()
     {
         this(null);
     }
@@ -158,7 +158,8 @@ public class <input.vo_name>Table
      * Specifies a new weak reference.
      * @param table the table instance to use.
      */
-    protected static void setReference(final <input.vo_name>Table table)
+    protected static void setReference(
+        final <input.table_name_capitalized>Table table)
     {
         singleton = new WeakReference(table);
     }
@@ -173,17 +174,18 @@ public class <input.vo_name>Table
     }
 
     /**
-     * Retrieves a \<code><input.vo_name>Table\</code> instance.
+     * Retrieves a \<code><input.table_name_capitalized>Table\</code> instance.
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static <input.vo_name>Table getInstance(final String alias)
+    public static <input.table_name_capitalized>Table getInstance(
+        final String alias)
     {
-        <input.vo_name>Table result = null;
+        <input.table_name_capitalized>Table result = null;
 
         if  (alias != null)
         {
-            result = new <input.vo_name>Table(alias);
+            result = new <input.table_name_capitalized>Table(alias);
         }
         else
         {
@@ -194,23 +196,23 @@ public class <input.vo_name>Table
     }
 
     /**
-     * Retrieves a \<code><input.vo_name>Table\</code> instance.
+     * Retrieves a \<code><input.table_name_capitalized>Table\</code> instance.
      * @return such instance.
      */
-    public static <input.vo_name>Table getInstance()
+    public static <input.table_name_capitalized>Table getInstance()
     {
-        <input.vo_name>Table result = null;
+        <input.table_name_capitalized>Table result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (<input.vo_name>Table) reference.get();
+            result = (<input.table_name_capitalized>Table) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new <input.vo_name>Table();
+            result = new <input.table_name_capitalized>Table();
 
             setReference(result);
         }

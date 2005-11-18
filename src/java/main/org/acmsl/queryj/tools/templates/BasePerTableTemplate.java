@@ -713,6 +713,9 @@ public abstract class BasePerTableTemplate
         input.put(
             "table_name_normalized_lowercased",
             normalizeLowercase(tableName, DecorationUtils.getInstance()));
+        input.put(
+            "table_name_capitalized",
+            capitalize(tableName, DecorationUtils.getInstance()));
 
         input.put("pk_attributes", pkAttributes);
         input.put("nonpk_attributes", nonPkAttributes);
@@ -1450,5 +1453,19 @@ public abstract class BasePerTableTemplate
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such output.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String capitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
     }
 }

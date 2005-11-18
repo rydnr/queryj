@@ -70,7 +70,7 @@ source(input) ::= <<
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
     input.subpackage_name,
-    input.vo_name_lowercased
+    input.table_name_normalized_lowercased
   ])>
 
 
