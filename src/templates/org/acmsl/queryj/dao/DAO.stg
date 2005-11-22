@@ -1831,10 +1831,7 @@ fk_delete_method(foreignKey,input) ::= <<
     }
 >>
 
-custom_select(
-  cs,
-  input
-  ) ::= <<
+custom_select(cs, input) ::= <<
 <!
   Writes the code for a custom select query.
   @param cs the custom select.

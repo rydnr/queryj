@@ -332,7 +332,8 @@ public class SqlDecorator
                     if  (t_ParameterRef != null)
                     {
                         t_Parameter =
-                            customSqlProvider.resolveReference(t_ParameterRef);
+                            customSqlProvider.resolveReference(
+                                t_ParameterRef);
 
                         result.add(
                             new ParameterDecorator(

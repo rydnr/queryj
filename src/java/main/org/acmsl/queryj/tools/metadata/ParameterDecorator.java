@@ -179,4 +179,27 @@ public class ParameterDecorator
             metadataTypeManager.getFieldType(
                 metadataTypeManager.getJavaType(type));
     }
+
+    /**
+     * Retrieves the name, in lower case.
+     * @return such value.
+     */
+    public String getNameLowercased()
+    {
+        return lowerCase(getName(), DecorationUtils.getInstance());
+    }
+    
+    /**
+     * Converts given value to lower-case.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the alternate version of the value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String lowerCase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.lowerCase(value);
+    }
 }
