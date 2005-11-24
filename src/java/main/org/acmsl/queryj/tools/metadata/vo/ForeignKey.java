@@ -54,7 +54,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public class ForeignKey
-//    extends AbstractForeignKey
+    extends AbstractForeignKey
 {
     /**
      * Creates a <code>ForeignKey</code> with given information.
@@ -70,5 +70,6 @@ public class ForeignKey
         final Collection attributes,
         final String targetTableName)
     {
+        super(sourceTableName, attributes, targetTableName);
     }
 }
