@@ -1,4 +1,4 @@
- /*
+/*
                         QueryJ
 
     Copyright (C) 2002-2005  Jose San Leandro Armendariz

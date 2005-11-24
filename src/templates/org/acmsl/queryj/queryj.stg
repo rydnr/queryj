@@ -116,6 +116,15 @@ precondition_notnull(name) ::= <<
 * @precondition <name> != null
 >>
 
+precondition_instanceof(name, className) ::= <<
+<!
+  Writes the Javadoc precondition for a concrete parameter.
+  @param name the name of the parameter.
+  @param className the class name.
+!>
+* @precondition <name> instanceof <className>
+>>
+
 attribute_javadoc(name) ::= <<
 <!
   Writes the Javadoc for a attribute parameter.

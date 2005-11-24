@@ -33,7 +33,8 @@
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate AttributeStatementSetters.
+// Description: Defines the rules to generate AttributeStatementSetter for
+//              a foreign key.
 //
 // Version: $Revision$ ($Author$ at $Date$)
 //
@@ -43,10 +44,11 @@ group DAO;
 
 source(input) ::= <<
 <!
-  Generates an AttributeStatementSetter source file.
+  Generates a AttributeStatementSetter source file for a concrete foreign key.
   @param input.copyright_years the copyright's years.
   @param input.table_name the table name.
   @param input.package the package.
+  @param foreign_key the foreign key.
   @params project_imports
   @params class
 !>
@@ -59,7 +61,7 @@ source(input) ::= <<
       second_line_description(
         tableName=input.table_name),
       third_line_description(
-        tableName=input.table_name)
+        foreignKey=input.foreign_key)
     ],
     timestamp=input.timestamp)>
 <package_declaration(
@@ -119,7 +121,6 @@ first_line_description(tableName) ::= <<
   @param tableName the table name.
 !>
 Specifies the PreparedStatement values required
-DAO abstract layer responsible of retrieving
 >>
 
 second_line_description(tableName) ::= <<
@@ -127,17 +128,15 @@ second_line_description(tableName) ::= <<
   Generates the second line of the generated file description.
   @param tableName the table name.
 !>
-to perform any <tableName> operation expecting the
-        + " *              complete attribute set.\n"
-<tableName> structures from persistence layers.
+to perform any <tableName> operation expecting
 >>
 
-third_line_description(tableName) ::= <<
+third_line_description(foreignKey) ::= <<
 <!
   Generates the third line of the generated file description.
-  @param tableName the table name.
+  @param foreignKey the foreign key.
 !>
-complete attribute set.
+the foreign key (<foreignKey.attributes:{<it>}; separator="\n">)
 >>
 
 project_imports(
@@ -155,13 +154,15 @@ project_imports(
  */
 import <basePackageName>.<voSubpackageName>.<voName>;
 import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
+import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
 
-class(input) ::= <<
+class(input, foreignKey) ::= <<
 <!
  Generates the class body.
  @param input the input.
+ @param foreignKey the foreign key.
 !>
 /**
  * <[
@@ -170,17 +171,17 @@ class(input) ::= <<
       second_line_description(
         tableName=input.table_name),
       third_line_description(
-        tableName=input.table_name)
+        foreignKey=foreignKey)
     ]:{line |<line>}; separator="\n * ")>
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.vo_name>AttributesStatementSetter
+public class <input.vo_name>By<foreignKey.tableName>StatementSetter
     implements  PreparedStatementSetter,
                 <input.tr_name>TableRepository
 {
-    <input.attributes:attribute_member_declaration(attr=it); separator="\n">
+    <foreignKey.attributes:attribute_member_declaration(attr=it); separator="\n">
 
     /**
      * The update operation.
@@ -188,71 +189,18 @@ public class <input.vo_name>AttributesStatementSetter
     private boolean m__bUpdateOperation;
 
     /**
-     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
+     * Creates a \<code><input.vo_name>By<foreignKey.tableName>StatementSetter\</code>
      * instance.
-     <input.attributes:attribute_javadoc(name=it.nameLowercased);
+     <foreign_key.attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
-     * @param updateOperation whether the operation is an update.
      */
-    public <input.vo_name>AttributesStatementSetter(
-        <input.attributes:attribute_declaration(attr=it);
-          separator=",\n">,
-        final boolean updateOperation)
+    public <input.vo_name>By<foreignKey.tableName>StatementSetter(
+        <foreign_key.attributes:attribute_declaration(attr=it);
+          separator=",\n">)
     {
-        this(
-            <input.nonpk_attributes:{ attr | <attr.nameLowercased>};
-              separator=",\n">,
-            updateOperation);
-
-        <input.pk_attributes:
+        <foreign_key.attributes:
           { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
           separator="\n">
-    }
-
-    /**
-     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
-     * instance.
-     <input.nonpk_attributes:attribute_javadoc(name=it.nameLowercased);
-        separator="\n">
-     * @param updateOperation whether the operation is an update.
-     */
-    public <input.vo_name>AttributesStatementSetter(
-        <input.nonpk_attributes:attribute_declaration(attr=it);
-          separator=",\n">,
-        final boolean updateOperation)
-    {
-        <input.nonpk_attributes:
-          { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
-          separator="\n">
-        immutableSetUpdateOperation(updateOperation);
-    }
-
-    /**
-     * Specifies whether the operation is an update or not.
-     * @param updateOperation such information.
-     */
-    protected final  void immutableSetUpdateOperation(
-        final boolean updateOperation)
-    {
-        m__bUpdateOperation = updateOperation;
-    }
-
-    /**
-     * Specifies whether the operation is an update or not.
-     * @param updateOperation such information.
-     */
-    protected void setUpdateOperation(final boolean updateOperation)
-    {
-        immutableSetUpdateOperation(updateOperation);
-    }
-
-    /**
-     * Retrieves whether the operation is an update or not.
-     * @return such information.
-     */
-    public boolean isUpdateOperation()
-    {
-        return m__bUpdateOperation;
     }
 
     <input.attributes:attribute_accessor(attr=it); separator="\n">
@@ -269,37 +217,26 @@ public class <input.vo_name>AttributesStatementSetter
     {
         setValues(
             (Query) preparedStatement,
-            <input.attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
-            isUpdateOperation());
+            <foreignKey.attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">);
     }
 
     /**
      * Specifies the values on given \<code>PreparedStatement\</code>
      * @param preparedStatement the prepared statement.
-     <input.attributes:attribute_javadoc(name=it.nameLowercased);
+     <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
-     * @param updateOperation whether the operation is an update.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      <precondition_notnull("preparedStatement")>
      <precondition_notnull("query")>
      */
     protected void setValues(
         final Query query,
-        <input.attributes:attribute_declaration(attr=it);
-          separator=",\n">,
-        final boolean updateOperation)
+        <foreignKey.attributes:attribute_declaration(attr=it);
+          separator=",\n">)
       throws  SQLException
     {
-        if  (updateOperation)
-        {
-            <input.externally_managed_attributes:
-              attribute_query_specification(attr=it);
-                separator="\n">
-        }
-
-        <input.all_but_externally_managed_attributes:
-          attribute_query_specification(attr=it);
-            separator="\n">
+        <foreignKey.attributes:attribute_query_specification(attr=it);
+          separator="\n">
     }
 }
 >>
