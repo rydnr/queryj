@@ -262,7 +262,7 @@ public class <input.vo_name>AttributesStatementSetter
      * @param preparedStatement the prepared statement.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      <precondition_notnull("preparedStatement")>
-     <precondition_instanceof("preparedStatement", "Query")>
+     <precondition_instanceof(name="preparedStatement", className="Query")>
      */
     public void setValues(final PreparedStatement preparedStatement)
         throws  SQLException

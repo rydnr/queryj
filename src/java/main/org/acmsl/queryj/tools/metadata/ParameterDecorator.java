@@ -202,4 +202,29 @@ public class ParameterDecorator
     {
         return decorationUtils.lowerCase(value);
     }
+
+    /**
+     * Retrieves whether the attribute is a clob or not.
+     * return such information.
+     */
+    public boolean isClob()
+    {
+        return isClob(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is a clob or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * return such information.
+     * @precondition type != null
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isClob(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            metadataTypeManager.isClob(metadataTypeManager.getJavaType(type));
+    }
 }
