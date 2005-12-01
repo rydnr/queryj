@@ -1112,7 +1112,7 @@ public class <input.engine_name><input.vo_name>DAO
                 int index = 1;
 
 <input.pk_attributes:pk_resultset_extractor_parameter_retrieval(
-  javaName=it.javaName,
+  name=it.nameLowercased,
   getterMethod=it.getterMethod,
   objectType=it.objectType,
   isPrimitive=it.primitive)>
@@ -1512,17 +1512,17 @@ public class <input.engine_name><input.vo_name>DAO
 >>
 
 pk_resultset_extractor_parameter_retrieval(
-  javaName, getterMethod, objectType, isPrimitive) ::= <<
+  name, getterMethod, objectType, isPrimitive) ::= <<
 <!
   Generates the piece of code to build a concrete value-object attribute.
-  @param javaName the attribute name (Java version).
+  @param name the attribute name.
   @param getterMethod the getter method associated to such attribute.
   @param objectType the attribute type (Java version).
   @param isPrimitive whether the attribute is modelled as an instance or as
   a primitive type.
 !>
                 result.put(
-                    "<javaName>",
+                    "<name>",
 <if(isPrimitive)>
                     new <objectType>(resultSet.<getterMethod>(index++)));
 <else>
