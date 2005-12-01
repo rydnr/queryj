@@ -118,6 +118,7 @@ public abstract class AbstractAttribute
         immutableSetNativeType(nativeType);
         immutableSetFieldType(fieldType);
         immutableSetTableName(tableName);
+        immutableSetManagedExternally(managedExternally);
         immutableSetAllowsNull(allowsNull);
         immutableSetValue(value);
     }

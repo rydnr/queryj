@@ -65,7 +65,7 @@ import org.apache.commons.logging.LogFactory;
  *         >Jose San Leandro Armendariz</a>
  */
 public class ThreadAwareDataSourceWrapper
-    extends     TransactionAwareDataSourceProxy
+    extends     XTransactionAwareDataSourceProxy
 //    implements  SmartDataSource
     implements  DataSource
 {
