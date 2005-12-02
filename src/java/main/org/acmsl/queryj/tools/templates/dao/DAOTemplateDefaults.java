@@ -429,6 +429,8 @@ public interface DAOTemplateDefaults
         + "    '{'\n"
         + "        Query t_Query = buildFindByPrimaryKeyQuery();\n\n"
         + "        // Enabling transactions temporarily.\n"
+        + "        synchronized (DataSourceTransactionManager.class)\n"
+        + "        '{'\n"
         + "        DataSourceTransactionManager t_TransactionManager =\n"
         + "            new DataSourceTransactionManager(getDataSource());\n\n"
         + "        TransactionTemplate t_TransactionTemplate =\n"
@@ -452,6 +454,7 @@ public interface DAOTemplateDefaults
         + "                    {9}_EXTRACTOR);\n"
          // Upper case table name
         + "        */\n"
+        + "        '}'\n"
         + "    '}'\n\n"
         + "    // </find by primary key>\n\n";
 
@@ -500,6 +503,8 @@ public interface DAOTemplateDefaults
         + "    '{'\n"
         + "        Query t_Query = buildInsertQuery();\n\n"
         + "        // Enabling transactions temporarily.\n"
+        + "        synchronized (DataSourceTransactionManager.class)\n"
+        + "        '{'\n"
         + "        DataSourceTransactionManager t_TransactionManager =\n"
         + "            new DataSourceTransactionManager(getDataSource());\n\n"
         + "        TransactionTemplate t_TransactionTemplate =\n"
@@ -516,6 +521,7 @@ public interface DAOTemplateDefaults
         + "            new {0}AttributesStatementSetter({6},\n"
         + "                false));\n\n"
         + "        */\n\n"
+        + "        '}'\n"
         + "    '}'\n\n"
         + "    // </insert>\n\n";
 
@@ -617,6 +623,8 @@ public interface DAOTemplateDefaults
         + "    '{'\n"
         + "        {0}ValueObject result = null;\n\n"
         + "        // Enabling transactions temporarily.\n"
+        + "        synchronized (DataSourceTransactionManager.class)\n"
+        + "        '{'\n"
         + "        DataSourceTransactionManager t_TransactionManager =\n"
         + "            new DataSourceTransactionManager(dataSource);\n\n"
         + "        TransactionTemplate t_TransactionTemplate =\n"
@@ -653,6 +661,7 @@ public interface DAOTemplateDefaults
         + "        result =\n"
         + "            factory.create{0}ValueObject("
         + "{9});\n\n"
+        + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
         + "    // </create>\n\n";
@@ -727,6 +736,8 @@ public interface DAOTemplateDefaults
         + "    '{'\n"
         + "        Query t_Query = buildUpdateQuery();\n\n"
         + "        // Enabling transactions temporarily.\n"
+        + "        synchronized (DataSourceTransactionManager.class)\n"
+        + "        '{'\n"
         + "        DataSourceTransactionManager t_TransactionManager =\n"
         + "            new DataSourceTransactionManager(getDataSource());\n\n"
         + "        TransactionTemplate t_TransactionTemplate =\n"
@@ -743,6 +754,7 @@ public interface DAOTemplateDefaults
         + "            new {0}AttributesStatementSetter({7},\n"
         + "                true));\n\n"
         + "        */\n"
+        + "        '}'\n"
         + "    '}'\n\n"
         + "    // </update>\n\n";
 
@@ -799,6 +811,8 @@ public interface DAOTemplateDefaults
         + "    '{'\n"
         + "        Query t_Query = buildDeleteQuery();\n\n"
         + "        // Enabling transactions temporarily.\n"
+        + "        synchronized (DataSourceTransactionManager.class)\n"
+        + "        '{'\n"
         + "        DataSourceTransactionManager t_TransactionManager =\n"
         + "            new DataSourceTransactionManager(getDataSource());\n\n"
         + "        TransactionTemplate t_TransactionTemplate =\n"
@@ -813,6 +827,7 @@ public interface DAOTemplateDefaults
         + "            new QueryPreparedStatementCreator(t_Query),\n"
         + "            new {0}PkStatementSetter({6}));\n"
         + "        */\n"
+        + "        '}'\n"
         + "    '}'\n\n"
         + "    // </delete>\n\n";
 
@@ -948,6 +963,8 @@ public interface DAOTemplateDefaults
         + "    '{'\n"
         + "        Query t_Query = buildDeleteBy{2}Query();\n\n"
         + "        // Enabling transactions temporarily.\n"
+        + "        synchronized (DataSourceTransactionManager.class)\n"
+        + "        '{'\n"
         + "        DataSourceTransactionManager t_TransactionManager =\n"
         + "            new DataSourceTransactionManager(getDataSource());\n\n"
         + "        TransactionTemplate t_TransactionTemplate =\n"
@@ -962,6 +979,7 @@ public interface DAOTemplateDefaults
         + "            new QueryPreparedStatementCreator(t_Query),\n"
         + "            new {0}By{2}StatementSetter({5}));\n"
         + "        */\n"
+        + "        '}'\n"
         + "    '}'\n\n"
         + "    // </delete>\n\n";
 
@@ -1029,6 +1047,8 @@ public interface DAOTemplateDefaults
         + "{8}\n"
         + "            '}';\n\n"
         + "        // Enabling transactions temporarily.\n"
+        + "        synchronized (DataSourceTransactionManager.class)\n"
+        + "        '{'\n"
         + "        DataSourceTransactionManager t_TransactionManager =\n"
         + "            new DataSourceTransactionManager(getDataSource());\n\n"
         + "        TransactionTemplate t_TransactionTemplate =\n"
@@ -1037,13 +1057,13 @@ public interface DAOTemplateDefaults
         + "            ({3})\n"
         + "                t_TransactionTemplate.execute(\n"
         + "                    new QueryTransactionCallback(\n"
-        + "                    t_PreparedStatementCreatorFactory\n"
-        + "                        .newPreparedStatementCreator(t_aParams),\n"
-        + "                    null,\n"
-        + "                    // calls setXXX twice\n"
-        + "                    // t_PreparedStatementCreatorFactory\n"
-        + "                    //    .newPreparedStatementSetter(t_aParams),\n"
-        + "                    {9}_EXTRACTOR,\n"
+        + "                        t_PreparedStatementCreatorFactory\n"
+        + "                            .newPreparedStatementCreator(t_aParams),\n"
+        + "                        null,\n"
+        + "                        // calls setXXX twice\n"
+        + "                        // t_PreparedStatementCreatorFactory\n"
+        + "                        //    .newPreparedStatementSetter(t_aParams),\n"
+        + "                        {9}_EXTRACTOR,\n"
         + "                        this));\n"
         + "        /*\n"
         + "        result =\n"
@@ -1057,6 +1077,7 @@ public interface DAOTemplateDefaults
         + "                    //    .newPreparedStatementSetter(t_aParams),\n"
         + "                    {9}_EXTRACTOR);\n\n"
         + "         */\n"
+        + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n";
 
@@ -1139,6 +1160,8 @@ public interface DAOTemplateDefaults
         + "{7}\n"
         + "            '}';\n\n"
         + "        // Enabling transactions temporarily.\n"
+        + "        synchronized (DataSourceTransactionManager.class)\n"
+        + "        '{'\n"
         + "        DataSourceTransactionManager t_TransactionManager =\n"
         + "            new DataSourceTransactionManager(getDataSource());\n\n"
         + "        TransactionTemplate t_TransactionTemplate =\n"
@@ -1157,6 +1180,7 @@ public interface DAOTemplateDefaults
         + "            t_PreparedStatementCreatorFactory\n"
         + "                .newPreparedStatementSetter(t_aParams));\n"
         + "        */\n"
+        + "        '}'\n"
         + "    '}'\n\n";
 
     /**

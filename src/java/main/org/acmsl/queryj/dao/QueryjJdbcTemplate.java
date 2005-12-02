@@ -124,6 +124,15 @@ public class QueryjJdbcTemplate
     }
 
     /**
+     * Retrieves the data source.
+     * @return such instance.
+     */
+    public synchronized DataSource getSynchronizedDataSource()
+    {
+        return getDataSource();
+    }
+
+    /**
      * Executes a operation, taking into account a proper connection handling.
      * @param action the <code>ConnectionCallback</code> instance.
      * @return the result of the operation.
@@ -132,12 +141,19 @@ public class QueryjJdbcTemplate
     public Object execute(final ConnectionCallback action)
         throws DataAccessException
     {
-        return
-            execute(
-                action,
-                getDataSource(),
-                getNativeJdbcExtractor(),
-                getExceptionTranslator());
+        Object result = null;
+
+        synchronized (QueryjJdbcTemplate.class)
+        {
+            result =
+                execute(
+                    action,
+                    getDataSource(),
+                    getNativeJdbcExtractor(),
+                    getExceptionTranslator());
+        }
+
+        return result;
     }
 
     /**

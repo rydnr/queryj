@@ -2046,6 +2046,7 @@
         debug="on"
         destdir="${classes.dir}"
         encoding="ISO-8859-1"
+        target="1.4"
         deprecation="false">
 
         <src refid="java.source.path"/>
