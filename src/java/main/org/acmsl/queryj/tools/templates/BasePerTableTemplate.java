@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -98,11 +99,6 @@ import org.apache.commons.logging.LogFactory;
 public abstract class BasePerTableTemplate
     extends  AbstractBasePerTableTemplate
 {
-    /**
-     * An empty String array.
-     */
-    public static final String[] EMPTY_STRING_ARRAY = new String[0];
-
     /**
      * Builds a <code>BasePerTableTemplate</code> using given information.
      * @param tableName the table name.
@@ -179,7 +175,8 @@ public abstract class BasePerTableTemplate
                 StringValidator.getInstance(),
                 EnglishGrammarUtils.getInstance(),
                 DAOTemplateUtils.getInstance(),
-                MetaLanguageUtils.getInstance());
+                MetaLanguageUtils.getInstance(),
+                MetadataUtils.getInstance());
     }
 
     /**
@@ -201,6 +198,7 @@ public abstract class BasePerTableTemplate
      * @param englishGrammarUtils the EnglishGrammarUtils instance.
      * @param daoTemplateUtils the DAOTemplateUtils instance.
      * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @return such code.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -212,6 +210,7 @@ public abstract class BasePerTableTemplate
      * @precondition englishGrammarUtils != null
      * @precondition daoTemplateUtils != null
      * @precondition metaLanguageUtils != null
+     * @precondition metadataUtils != null
      */
     protected String generateOutput(
         final String tableName,
@@ -230,7 +229,8 @@ public abstract class BasePerTableTemplate
         final StringValidator stringValidator,
         final EnglishGrammarUtils englishGrammarUtils,
         final DAOTemplateUtils daoTemplateUtils,
-        final MetaLanguageUtils metaLanguageUtils)
+        final MetaLanguageUtils metaLanguageUtils,
+        final MetadataUtils metadataUtils)
     {
         String result = "";
 
@@ -288,36 +288,36 @@ public abstract class BasePerTableTemplate
         // getUncapitalizedTableName()
         // getAllowsNull()
         Collection t_cPrimaryKeyAttributes =
-            retrievePrimaryKeyAttributes(
+            metadataUtils.retrievePrimaryKeyAttributes(
                 tableName, metadataManager, metadataTypeManager);
         
         Collection t_cNonPrimaryKeyAttributes =
-            retrieveNonPrimaryKeyAttributes(
+            metadataUtils.retrieveNonPrimaryKeyAttributes(
                 tableName, metadataManager, metadataTypeManager);
         
         Collection t_cForeignKeyAttributes =
-            retrieveForeignKeyAttributes(
+            metadataUtils.retrieveForeignKeyAttributes(
                 tableName, metadataManager, metadataTypeManager);
 
         // A map of "fk_"referringTableName -> foreign_keys (list of lists)
         Map t_mReferringKeys =
-            retrieveReferingKeys(
+            metadataUtils.retrieveReferingKeys(
                 tableName, metadataManager, metadataTypeManager);
 
         Collection t_cAttributes =
-            retrieveAttributes(
+            metadataUtils.retrieveAttributes(
                 tableName, metadataManager, metadataTypeManager);
 
         Collection t_cExternallyManagedAttributes =
-            retrieveExternallyManagedAttributes(
+            metadataUtils.retrieveExternallyManagedAttributes(
                 tableName, metadataManager, metadataTypeManager);
         
         Collection t_cAllButExternallyManagedAttributes =
-            retrieveAllButExternallyManagedAttributes(
+            metadataUtils.retrieveAllButExternallyManagedAttributes(
                 tableName, metadataManager, metadataTypeManager);
         
         Collection t_cForeignKeys =
-            retrieveForeignKeys(
+            metadataUtils.retrieveForeignKeys(
                 tableName, metadataManager, metadataTypeManager);
 
         // items have to include the following methods:
@@ -762,533 +762,6 @@ public abstract class BasePerTableTemplate
             "static_attribute_name_capitalized",
             stringUtils.capitalize(staticAttributeName, '_'));
         input.put("static_attribute_type", staticAttributeType);
-    }
-
-    /**
-     * Retrieves the primary key attributes.
-     * @param tableName the table name.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @return the collection of attributes participating in the primary key.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection retrievePrimaryKeyAttributes(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildAttributes(
-                metadataManager.getPrimaryKey(tableName),
-                tableName,
-                metadataManager,
-                metadataTypeManager);
-    }
-    
-    /**
-     * Retrieves the non-primary key attributes.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the collection of attributes not participating in the primary
-     * key.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection retrieveNonPrimaryKeyAttributes(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        Collection t_cNonPkNames = new ArrayList();
-        
-        String[] t_astrColumnNames =
-            metadataManager.getColumnNames(tableName);
-
-        int t_iLength =
-            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            if  (!metadataManager.isPartOfPrimaryKey(
-                     tableName, t_astrColumnNames[t_iIndex]))
-            {
-                t_cNonPkNames.add(t_astrColumnNames[t_iIndex]);
-            }
-        }
-
-        return
-            buildAttributes(
-                (String[]) t_cNonPkNames.toArray(EMPTY_STRING_ARRAY),
-                tableName,
-                metadataManager,
-                metadataTypeManager);
-    }
-
-    /**
-     * Retrieves the foreign key attributes.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the foreign key attributes.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection retrieveForeignKeyAttributes(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        Collection result = new ArrayList();
-
-        String[][] t_aastrForeignKeys =
-            metadataManager.getForeignKeys(tableName);
-
-        int t_iLength =
-            (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            result.add(
-                buildAttributes(
-                    t_aastrForeignKeys[t_iIndex],
-                    tableName,
-                    metadataManager,
-                    metadataTypeManager));
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the complete attribute list.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the attributes.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection retrieveAttributes(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildAttributes(
-                metadataManager.getColumnNames(tableName),
-                tableName,
-                metadataManager,
-                metadataTypeManager);
-    }
-
-    /**
-     * Retrieves the externally-managed attributes.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the externally-managed attributes.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection retrieveExternallyManagedAttributes(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        Collection t_cExternallyManagedAttributeNames = new ArrayList();
-        
-        String[] t_astrColumnNames =
-            metadataManager.getColumnNames(tableName);
-
-        int t_iLength =
-            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            if  (metadataManager.isManagedExternally(
-                     tableName, t_astrColumnNames[t_iIndex]))
-            {
-                t_cExternallyManagedAttributeNames.add(
-                    t_astrColumnNames[t_iIndex]);
-            }
-        }
-
-        return
-            buildAttributes(
-                (String[])
-                    t_cExternallyManagedAttributeNames.toArray(
-                        EMPTY_STRING_ARRAY),
-                tableName,
-                metadataManager,
-                metadataTypeManager);
-    }
-
-    /**
-     * Retrieves all but the externally-managed attributes.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return all but the externally-managed attributes.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection retrieveAllButExternallyManagedAttributes(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        Collection t_cNonExternallyManagedAttributeNames = new ArrayList();
-        
-        String[] t_astrColumnNames =
-            metadataManager.getColumnNames(tableName);
-
-        int t_iLength =
-            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            if  (!metadataManager.isManagedExternally(
-                     tableName, t_astrColumnNames[t_iIndex]))
-            {
-                t_cNonExternallyManagedAttributeNames.add(
-                    t_astrColumnNames[t_iIndex]);
-            }
-        }
-
-        return
-            buildAttributes(
-                (String[])
-                    t_cNonExternallyManagedAttributeNames.toArray(
-                        EMPTY_STRING_ARRAY),
-                tableName,
-                metadataManager,
-                metadataTypeManager);
-    }
-
-    /**
-     * Retrieves the foreign key attributes.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the foreign key attributes (a list of attribute lists,
-     * grouped by referred tables.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection retrieveForeignKeys(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        Collection result = new ArrayList();
-
-        String[] t_astrReferredTables =
-            metadataManager.getReferredTables(tableName);
-
-        String[] t_astrReferredColumns = null;
-
-        int t_iLength =
-            (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
-
-        Collection t_cCurrentForeignKey = null;
-
-        String t_strReferredTable = null;
-
-        for  (int t_iRefTableIndex = 0;
-                  t_iRefTableIndex < t_iLength;
-                  t_iRefTableIndex++)
-        {
-            t_strReferredTable =
-                t_astrReferredTables[t_iRefTableIndex];
-
-            String[][] t_aastrForeignKeys =
-                metadataManager.getForeignKeys(
-                    t_strReferredTable, tableName);
-
-            int t_iFkLength =
-                (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
-
-            for  (int t_iIndex = 0; t_iIndex < t_iFkLength; t_iIndex++)
-            {
-                t_cCurrentForeignKey =
-                    buildAttributes(
-                        t_aastrForeignKeys[t_iIndex],
-                        t_strReferredTable,
-                    (metadataManager.allowsNull(
-                        t_strReferredTable, t_astrReferredColumns)
-                     ?  Boolean.TRUE : Boolean.FALSE),
-                    metadataManager,
-                    metadataTypeManager);
-
-                // Note: 'result' contains a list of lists.
-                result.add(t_cCurrentForeignKey);
-
-                t_cCurrentForeignKey = null;
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the refering keys.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the foreign keys of other tables pointing
-     * to this one: 
-     * a map of "fk_"referringTableName -> foreign_keys (list of attribute
-     * lists).
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Map retrieveReferingKeys(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        Map result = new HashMap();
-
-        String[] t_astrReferingTables =
-            metadataManager.getReferingTables(tableName);
-
-        String[][] t_aastrReferingColumns = null;
-
-        int t_iLength =
-            (t_astrReferingTables != null) ? t_astrReferingTables.length : 0;
-
-        Collection t_cReferingFks = null;
-
-        Collection t_cCurrentForeignKey = null;
-
-        String t_strReferingTable = null;
-
-        for  (int t_iRefTableIndex = 0;
-                  t_iRefTableIndex < t_iLength;
-                  t_iRefTableIndex++)
-        {
-            t_cReferingFks = new ArrayList();
-
-            t_strReferingTable =
-                t_astrReferingTables[t_iRefTableIndex];
-
-            t_aastrReferingColumns =
-                metadataManager.getForeignKeys(
-                    t_strReferingTable, tableName);
-
-            int t_iFkCount =
-                (t_aastrReferingColumns != null)
-                ?  t_aastrReferingColumns.length
-                :  0;
-
-            for  (int t_iFk = 0; t_iFk < t_iFkCount; t_iFk++)
-            {
-                t_cCurrentForeignKey =
-                    buildAttributes(
-                        t_aastrReferingColumns[t_iFk],
-                        t_strReferingTable,
-                        (metadataManager.allowsNull(
-                            t_strReferingTable,
-                            t_aastrReferingColumns[t_iFk])
-                         ?  Boolean.TRUE : Boolean.FALSE),
-                        metadataManager,
-                        metadataTypeManager);
-
-                // Note: 't_cReferingFks' contains a list of lists.
-                t_cReferingFks.add(t_cCurrentForeignKey);
-
-                t_cCurrentForeignKey = null;
-            }
-
-            result.put(t_strReferingTable, t_cReferingFks);
-        }
-
-        return result;
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection buildAttributes(
-        final String[] columnNames,
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildAttributes(
-                columnNames,
-                new String[columnNames.length],
-                tableName,
-                metadataManager,
-                metadataTypeManager);
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param columnValues the column values.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition columnValues != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection buildAttributes(
-        final String[] columnNames,
-        final String[] columnValues,
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildAttributes(
-                columnNames,
-                columnValues,
-                tableName,
-                null,
-                metadataManager,
-                metadataTypeManager);
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param tableName the table name.
-     * @param allowsNullAsAWhole whether given column names can be null
-     * as a whole or not.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
-     * instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection buildAttributes(
-        final String[] columnNames,
-        final String tableName,
-        final Boolean allowsNullAsAWhole,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildAttributes(
-                columnNames,
-                new String[columnNames.length],
-                tableName,
-                allowsNullAsAWhole,
-                metadataManager,
-                metadataTypeManager);
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param columnValues the column values.
-     * @param tableName the table name.
-     * @param allowsNullAsAWhole whether given column names can be null
-     * as a whole or not.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
-     * instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection buildAttributes(
-        final String[] columnNames,
-        final String[] columnValues,
-        final String tableName,
-        final Boolean allowsNullAsAWhole,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        Collection result = new ArrayList();
-        
-        int t_iLength = (columnNames != null) ? columnNames.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            int t_iType =
-                metadataManager.getColumnType(
-                    tableName, columnNames[t_iIndex]);
-
-            String t_strNativeType =
-                metadataTypeManager.getNativeType(t_iType);
-
-            boolean t_bAllowsNull = false;
-
-            if  (allowsNullAsAWhole != null)
-            {
-                t_bAllowsNull = allowsNullAsAWhole.booleanValue();
-            }
-            else
-            {
-                t_bAllowsNull =
-                    metadataManager.allowsNull(
-                        tableName, columnNames[t_iIndex]);
-            }
-
-            String t_strFieldType =
-                metadataTypeManager.getFieldType(t_iType, t_bAllowsNull);
-
-            boolean t_bManagedExternally =
-                metadataManager.isManagedExternally(
-                    tableName, columnNames[t_iIndex]);
-
-            result.add(
-                new AttributeDecorator(
-                    columnNames[t_iIndex],
-                    t_iType,
-                    t_strNativeType,
-                    t_strFieldType,
-                    tableName,
-                    t_bManagedExternally,
-                    t_bAllowsNull,
-                    columnValues[t_iIndex],
-                    metadataManager,
-                    metadataTypeManager));
-        }
-        
-        return result;
     }
 
     /**

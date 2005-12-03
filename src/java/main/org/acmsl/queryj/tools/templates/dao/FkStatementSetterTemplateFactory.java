@@ -43,8 +43,8 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /**
  * Represents entities able to create FkStatementSetter templates.
@@ -54,21 +54,29 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 public interface FkStatementSetterTemplateFactory
 {
     /**
-     * Generates a FkStatementSetter template.
-     * @param tableTemplate the table template.
-     * @param foreignKeys the foreign keys.
-     * @param metadataManager the metadata manager.
+     * Creates a FkStatementSetter template.
+     * @param foreignKey the foreign key.
+     * @param metadataManager the database metadata manager.
      * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
+     * @param repositoryName the repository name.
      * @return a template.
-     * @throws QueryJException if the input values are invalid.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition foreignKey != null
+     * @precondition metadataManager != null
+     * @precondition packageName != null
+     * @precondition repositoryName != null
      */
     public FkStatementSetterTemplate createFkStatementSetterTemplate(
-        final TableTemplate tableTemplate,
-        final String[] foreignKeys,
+        final ForeignKey foreignKey,
         final MetadataManager metadataManager,
         final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
         final String basePackageName,
         final String repositoryName)
       throws  QueryJException;

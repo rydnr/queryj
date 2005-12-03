@@ -74,7 +74,6 @@ source(input) ::= <<
     input.table_name_normalized_lowercased
   ])>
 
-
 <project_imports(
   basePackageName=input.base_package_name,
   voSubpackageName=typeInitMap.voSubpackageName,

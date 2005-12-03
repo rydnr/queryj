@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.RowDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
@@ -303,6 +304,7 @@ public class BaseDAOTemplate
                 columnCount,
                 metadataManager,
                 metadataTypeManager,
+                MetadataUtils.getInstance(),
                 metaData.getConnection());
         }
         catch  (final SQLException sqlException)
@@ -323,6 +325,7 @@ public class BaseDAOTemplate
      * @param columnCount the number of columns.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
+     * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @param connection the connection.
      * @throws InvalidTemplateException if the template is invalid.
      * @precondition tableName != null
@@ -330,6 +333,7 @@ public class BaseDAOTemplate
      * @precondition columnCount > 0
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition metadataUtils != null
      * @precondition connection != null
      */
     protected void queryContents(
@@ -339,6 +343,7 @@ public class BaseDAOTemplate
         final int columnCount,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final MetadataUtils metadataUtils,
         final Connection connection)
       throws  InvalidTemplateException
     {
@@ -398,7 +403,7 @@ public class BaseDAOTemplate
                         buildRow(
                             t_strRowName,
                             tableName,
-                            buildAttributes(
+                            metadataUtils.buildAttributes(
                                 t_astrColumnNames,
                                 t_astrColumnValues,
                                 tableName,

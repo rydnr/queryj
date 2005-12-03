@@ -169,7 +169,8 @@ public class FkStatementSetterTemplateWritingHandler
                     templates[t_iIndex],
                     retrieveOutputDir(
                         engineName,
-                        templates[t_iIndex].getTableTemplate().getTableName(),
+                        templates[t_iIndex]
+                            .getForeignKey().getSourceTableName(),
                         parameters));
             }
         }

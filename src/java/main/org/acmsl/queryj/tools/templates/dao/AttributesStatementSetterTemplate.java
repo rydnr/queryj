@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create engine-specific DAO interfaces for each
- *              table in the persistence model.
+ * Description: Generates AttributeStatementSetter sources for a concrete
+ *              entity in the persistence model.
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
@@ -52,8 +52,8 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /**
- * Is able to create engine-specific DAO interfaces for each
- * table in the persistence model.
+ * Generates <code>AttributeStatementSetter</code> sources for a concrete
+ * entity in the persistence model.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */

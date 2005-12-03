@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataUtils;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateFactory;
@@ -151,7 +153,9 @@ public class FkStatementSetterTemplateBuildHandler
         {
             handle(
                 parameters,
-                metaData.getDatabaseProductName());
+                metaData.getDatabaseProductName(),
+                metaData.getDatabaseProductVersion(),
+                fixQuote(metaData.getIdentifierQuoteString()));
         }
         catch  (final SQLException sqlException)
         {
@@ -165,35 +169,46 @@ public class FkStatementSetterTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      */
     protected boolean handle(
-        final Map parameters, final String engineName)
+        final Map parameters,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
       throws  BuildException
     {
         return
             handle(
                 parameters,
                 engineName,
+                engineVersion,
+                quote,
                 retrieveMetadataManager(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 FkStatementSetterTemplateGenerator.getInstance(),
-                retrieveTableTemplates(parameters));
+                retrieveTableTemplates(parameters),
+                MetadataUtils.getInstance());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote.
      * @param metadataManager the database metadata manager.
      * @param basePackageName the base package name.
      * @param repository the repository.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
+     * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -204,15 +219,19 @@ public class FkStatementSetterTemplateBuildHandler
      * @precondition repositoryName != null
      * @precondition templateFactory != null
      * @precondition tableTemplates != null
+     * @precondition metadataUtils != null
      */
     protected boolean handle(
         final Map parameters,
         final String engineName,
+        final String engineVersion,
+        final String quote,
         final MetadataManager metadataManager,
         final String basePackageName,
         final String repositoryName,
         final FkStatementSetterTemplateFactory templateFactory,
-        final TableTemplate[] tableTemplates)
+        final TableTemplate[] tableTemplates,
+        final MetadataUtils metadataUtils)
       throws  BuildException
     {
         boolean result = false;
@@ -221,92 +240,41 @@ public class FkStatementSetterTemplateBuildHandler
 
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
         
-        String[][] t_aastrFks = null;
-        
         int t_iFkCount = 0;
         
+        String t_strTableName = null;
+        String t_strPackageName = null;
+        ForeignKey[] t_aForeignKeys = null;
+
         try
         {
             for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
             {
-                t_aastrFks =
-                    metadataManager.getForeignKeys(
-                        tableTemplates[t_iIndex].getTableName());
-
-                t_iFkCount = (t_aastrFks != null) ? t_aastrFks.length : 0;
+                t_strTableName =
+                    tableTemplates[t_iIndex].getTableName();
                 
-                for  (int t_iFkIndex = 0;
-                          t_iFkIndex < t_iFkCount;
-                          t_iFkIndex++)
-                {
-                    String[] t_astrSimpleFks =
-                        retrieveSimpleFks(
-                            t_aastrFks[t_iFkIndex],
-                            tableTemplates[t_iIndex].getTableName(),
-                            metadataManager);
+                t_strPackageName =
+                    retrievePackage(engineName, t_strTableName, parameters);
 
-                    int t_iSimpleFkCount =
-                        (t_astrSimpleFks != null) ? t_astrSimpleFks.length : 0;
-
-                    for  (int t_iSimpleFkIndex = 0;
-                              t_iSimpleFkIndex < t_iSimpleFkCount;
-                              t_iSimpleFkIndex++)
-                    {
-                        t_cTemplates.add(
-                            templateFactory.createFkStatementSetterTemplate(
-                                tableTemplates[t_iIndex],
-                                new String[]
-                                {
-                                    t_astrSimpleFks[t_iSimpleFkIndex]
-                                },
-                                metadataManager,
-                                retrievePackage(
-                                    engineName,
-                                    tableTemplates[t_iIndex].getTableName(),
-                                    parameters),
-                                basePackageName,
-                                repositoryName));
-                    }
-                }
-
-                String[] t_astrReferredTables =
-                    retrieveReferredTablesByCompoundFks(
-                        tableTemplates[t_iIndex].getTableName(),
-                        metadataManager);
-
-                int t_iReferredTablesLength =
-                    (t_astrReferredTables != null)
-                    ?  t_astrReferredTables.length
-                    :  0;
-
-                for  (int t_iReferredTableIndex = 0;
-                          t_iReferredTableIndex < t_iReferredTablesLength;
-                          t_iReferredTableIndex++)
-                {
-                    t_aastrFks =
-                        metadataManager.getForeignKeys(
-                            t_astrReferredTables[t_iReferredTableIndex]);
-
-                    t_iFkCount =
-                        (t_aastrFks != null) ? t_aastrFks.length : 0;
+                t_aForeignKeys =
+                    metadataUtils.retrieveForeignKeys(
+                        t_strTableName, metadataManager);
                 
-                    for  (int t_iFkIndex = 0;
-                              t_iFkIndex < t_iFkCount;
-                              t_iFkIndex++)
-                    {
-                        t_cTemplates.add(
-                            templateFactory.createFkStatementSetterTemplate(
-                                tableTemplates[t_iIndex],
-                                t_aastrFks[t_iFkIndex],
-                                metadataManager,
-                                retrievePackage(
-                                    engineName,
-                                    tableTemplates[t_iIndex].getTableName(),
-                                    parameters),
-                                basePackageName,
-                                repositoryName));
-                    }
-                    
+                t_iFkCount =
+                    (t_aForeignKeys != null) ? t_aForeignKeys.length : 0;
+                
+                for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
+                {
+                    t_cTemplates.add(
+                        templateFactory.createFkStatementSetterTemplate(
+                            t_aForeignKeys[t_iFkIndex],
+                            metadataManager,
+                            t_strPackageName,
+                            engineName,
+                            engineVersion,
+                            quote,
+                            basePackageName,
+                            repositoryName));
                 }
             }
 

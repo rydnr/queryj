@@ -84,7 +84,7 @@ public class MetaLanguageUtils
     }
 
     /**
-     * Retrieves a <code>MetaLanguageUtils< instance.
+     * Retrieves a <code>MetaLanguageUtils</code> instance.
      * @return such instance.
      */
     public static MetaLanguageUtils getInstance()

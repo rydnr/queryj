@@ -72,7 +72,6 @@ source(input) ::= <<
     input.table_name_normalized_lowercased
   ])>
 
-
 <project_imports(
   basePackageName=input.base_package_name,
   voSubpackageName=typeInitMap.voSubpackageName,
@@ -119,7 +118,6 @@ first_line_description(tableName) ::= <<
   @param tableName the table name.
 !>
 Specifies the PreparedStatement values required
-DAO abstract layer responsible of retrieving
 >>
 
 second_line_description(tableName) ::= <<
@@ -128,8 +126,6 @@ second_line_description(tableName) ::= <<
   @param tableName the table name.
 !>
 to perform any <tableName> operation expecting the
-        + " *              complete attribute set.\n"
-<tableName> structures from persistence layers.
 >>
 
 third_line_description(tableName) ::= <<
