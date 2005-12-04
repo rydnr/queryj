@@ -233,7 +233,22 @@ public interface MetadataManager
     /**
      * Retrieves the foreign keys of given table.
      * @param tableName the table name.
-     * @return its foreign keys.
+     * @return its foreign keys, a structure of<br/>
+     * <pre>
+     * [referredTableName1]
+     *   {foreign-key1-attribute1,..foreign-key1-attributeN}
+     * [referredTableName1]
+     *   {foreign-key2-attribute1,..foreign-key2-attributeN}
+     * ..
+     * [referredTableName1]
+     *   {foreign-keyN-attribute1,..foreign-keyN-attributeN}
+     * ..
+     * [referredTableNameN]
+     *   {foreign-key1-attribute1,..foreign-key1-attributeN}
+     * ..
+     * [referredTableNameN]
+     *   {foreign-keyN-attribute1,..foreign-keyN-attributeN}
+     * </pre>
      */
     public String[][] getForeignKeys(final String tableName);
 

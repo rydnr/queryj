@@ -672,8 +672,59 @@ public class MetadataUtils
     public ForeignKey[] retrieveForeignKeys(
         final String tableName, final MetadataManager metadataManager)
     {
-        ForeignKey[] result = EMPTY_FOREIGNKEY_ARRAY;
+        return
+            retrieveFks(
+                tableName,
+                metadataManager,
+                metadataManager.getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves the foreign keys starting at given table.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return the foreign keys.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    protected ForeignKey[] retrieveFks(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        Collection result = new ArrayList();
         
-        return result;
+        String[] t_astrReferredTables =
+            metadataManager.getReferredTables(tableName);
+
+        int t_iLength =
+            (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            String[][] t_aastrForeignKeys =
+                metadataManager.getForeignKeys(
+                    tableName, t_astrReferredTables[t_iIndex]);
+
+            int t_iFkCount =
+                (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
+
+            for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
+            {
+                result.add(
+                    new ForeignKey(
+                        tableName,
+                        buildAttributes(
+                            t_aastrForeignKeys[t_iFkIndex],
+                            tableName,
+                            metadataManager,
+                            metadataTypeManager),
+                        t_astrReferredTables[t_iIndex]));
+            }
+        }
+
+        return (ForeignKey[]) result.toArray(EMPTY_FOREIGNKEY_ARRAY);
     }
 }
