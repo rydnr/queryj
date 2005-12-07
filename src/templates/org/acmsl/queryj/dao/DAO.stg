@@ -2047,18 +2047,34 @@ oracle8Insert(input) ::= <<
         transactionTemplate.execute(
             new UpdateTransactionCallback(
                 new PreparedStatementCreator(
-                    "insert into <input.table_name_uppercased>"
-                  + " ("
-                  <input.attributes:{+ "<it.nameUppercased>};
-                    separator=", \"\n">
-                  + ") VALUES ("
-                  <input.attributes:insert_attribute(attr=it); separator=" +\n">)",
+                    "insert into <input.table_name_uppercased>" +
+                    " (" +
+                    <input.attributes:{"<it.nameUppercased>};
+                      separator=", \" +\n">"
+                    ") VALUES (" +
+                    <input.attributes:insert_attribute(attr=it); separator=" +\n">),
                 new <input.vo_name>AttributesStatementSetter(
                     <input.all_but_lob_attributes:{<it.nameLowercased>};
                       separator=",\n">,
                     true),
                 this));
 
+        transactionTemplate.execute(
+            new PreparedStatementCreator(
+                "SELECT " +
+                <input.attributes:{"<it.nameUppercased>};
+                  separator=", \" +\n">" +
+                " FROM <input.table_name_uppercased>" +
+                " WHERE "
+                <input.pk_attributes:{"<it.nameUppercased> = ?};
+                  separator=" AND \" +\n">" +
+                " FOR UPDATE"),
+                // to-do
+                <input.table_name_uppercased>_EXTRACTOR,
+                new <input.vo_name>PkAttributesStatementSetter(
+                    <input.pk_attributes:{<it.nameLowercased>};
+                      separator=",\n">),
+                this));
     }
 >>
 
