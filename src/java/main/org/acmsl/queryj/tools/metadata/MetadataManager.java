@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -59,6 +60,12 @@ import java.sql.SQLException;
  */
 public interface MetadataManager
 {
+    /**
+     * Retrieves the name identifying the manager instance.
+     * @return such name.
+     */
+    public String getName();
+
     /**
      * Retrieves the metadata.
      * @throws SQLException if the database operation fails.
@@ -388,4 +395,10 @@ public interface MetadataManager
      * @return such instance.
      */
     public MetadataTypeManager getMetadataTypeManager();
+
+    /**
+     * Checks whether the engine requires specific CLOB handling.
+     * @return <code>true</code> in such case.
+     */
+    public boolean requiresCustomClobHandling();
 }

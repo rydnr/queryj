@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -189,5 +190,23 @@ public class JdbcMetadataManager
     public MetadataTypeManager getMetadataTypeManager()
     {
         return JdbcMetadataTypeManager.getInstance();
+    }
+
+    /**
+     * Retrieves the name identifying the manager instance.
+     * @return such name.
+     */
+    public String getName()
+    {
+        return "jdbc";
+    }
+
+    /**
+     * Checks whether the engine requires specific CLOB handling.
+     * @return <code>true</code> in such case.
+     */
+    public boolean requiresCustomClobHandling()
+    {
+        return false;
     }
 }

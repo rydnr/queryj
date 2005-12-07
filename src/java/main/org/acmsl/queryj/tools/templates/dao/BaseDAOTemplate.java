@@ -158,6 +158,8 @@ public class BaseDAOTemplate
      * managed externally.
      * @param allButExternallyManagedAttributes all but the attributes which
      * are managed externally.
+     * @param allButLobAttributes all but the attributes whose type is
+     * Clob or Blob.
      * @param foreignKeys the entities pointing to this instance's table.
      * @param staticAttributeName the name of the static attribute, or
      * <code>null</code> for non-static tables.
@@ -165,6 +167,7 @@ public class BaseDAOTemplate
      * <code>null</code> for non-static tables.
      * @param customSelects the custom selects.
      * @param customResults the custom results.
+     * @param metadataManager the database metadata manager.
      * @precondition input != null
      * @precondition voName != null
      * @precondition engineName != null
@@ -178,9 +181,11 @@ public class BaseDAOTemplate
      * @precondition attributes != null
      * @precondition externallyManagedAttributes != null
      * @precondition allButExternallyManagedAttributes != null
+     * @precondition allButLobAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
      * @precondition customResults != null
+     * @precondition metadataManager != null
      */
     protected void fillClassParameters(
         final Map input,
@@ -198,11 +203,13 @@ public class BaseDAOTemplate
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
+        final Collection allButLobAttributes,
         final Collection foreignKeys,
         final String staticAttributeName,
         final String staticAttributeType,
         final Collection customSelects,
-        final Collection customResults)
+        final Collection customResults,
+        final MetadataManager metadataManager)
     {
         super.fillClassParameters(
             input,
@@ -220,11 +227,13 @@ public class BaseDAOTemplate
             attributes,
             externallyManagedAttributes,
             allButExternallyManagedAttributes,
+            allButLobAttributes,
             foreignKeys,
             staticAttributeName,
             staticAttributeType,
             customSelects,
-            customResults);
+            customResults,
+            metadataManager);
 
         if  (staticTable) 
         {

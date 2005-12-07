@@ -1,4 +1,4 @@
-
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -1359,5 +1359,23 @@ public class OracleMetadataManager
     public MetadataTypeManager getMetadataTypeManager()
     {
         return OracleMetadataTypeManager.getInstance();
+    }
+
+    /**
+     * Retrieves the name identifying the manager instance.
+     * @return such name.
+     */
+    public String getName()
+    {
+        return "oracle";
+    }
+
+    /**
+     * Checks whether the engine requires specific CLOB handling.
+     * @return <code>true</code> in such case.
+     */
+    public boolean requiresCustomClobHandling()
+    {
+        return true;
     }
 }

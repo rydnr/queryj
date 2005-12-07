@@ -140,3 +140,12 @@ attribute_declaration(attr) ::= <<
 !>
 final <if(attr.clob)>String<else><attr.fieldType><endif> <attr.nameLowercased>
 >>
+
+indirect_template(name, input) ::= <<
+<!
+  Calls the template matching given name, passing the input as argument.
+  @param name the template name.
+  @param input the arguments.
+!>
+<(name)(input=input)>
+>>

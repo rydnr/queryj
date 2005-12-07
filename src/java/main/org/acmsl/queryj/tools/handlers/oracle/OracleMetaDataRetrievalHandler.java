@@ -41,13 +41,14 @@ package org.acmsl.queryj.tools.handlers.oracle;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.engines.oracle.OracleMetadataManager;
+import org.acmsl.queryj.tools.metadata.engines.oracle.Oracle8MetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
+import org.acmsl.commons.version.VersionUtils;
 
 /*
  * Importing some Ant classes.
@@ -89,7 +90,28 @@ public class OracleMetaDataRetrievalHandler
         final int majorVersion,
         final int minorVersion)
     {
-        return  (productName.indexOf("Oracle") > -1);
+        boolean result = (productName.indexOf("Oracle") > -1);
+
+        if  (result)
+        {
+            result = checkVersion(productVersion, VersionUtils.getInstance());
+        }
+        
+        return result;
+    }
+
+    /**
+     * Checks the engine version.
+     * @param version the version.
+     * @param versionUtils the <code>VersionUtils</code> instance.
+     * @return <code>true</code> if the version matches or is compatible with.
+     * @precondition version != null
+     * @precondition versionUtils != null
+     */
+    protected boolean checkVersion(
+        final String version, final VersionUtils versionUtils)
+    {
+        return versionUtils.matches(version, "8.x");
     }
 
     /**
@@ -129,7 +151,7 @@ public class OracleMetaDataRetrievalHandler
         try 
         {
             result =
-                new OracleMetadataManager(
+                new Oracle8MetadataManager(
                     tableNames,
                     procedureNames,
                     disableTableExtraction,

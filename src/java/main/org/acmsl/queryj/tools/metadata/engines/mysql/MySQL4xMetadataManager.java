@@ -1,4 +1,4 @@
-
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -149,5 +149,23 @@ public class MySQL4xMetadataManager
     public MetadataTypeManager getMetadataTypeManager()
     {
         return MySQL4xMetadataTypeManager.getInstance();
+    }
+
+    /**
+     * Retrieves the name identifying the manager instance.
+     * @return such name.
+     */
+    public String getName()
+    {
+        return "mysql4";
+    }
+
+    /**
+     * Checks whether the engine requires specific CLOB handling.
+     * @return <code>true</code> in such case.
+     */
+    public boolean requiresCustomClobHandling()
+    {
+        return false;
     }
 }

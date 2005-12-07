@@ -727,4 +727,45 @@ public class MetadataUtils
 
         return (ForeignKey[]) result.toArray(EMPTY_FOREIGNKEY_ARRAY);
     }
+
+    /**
+     * Retrieve all but the LOB attributes.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @return such attributes.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    public Collection retrieveAllButLobAttributes(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        Collection t_cLobAttributeNames = new ArrayList();
+        
+        String[] t_astrColumnNames =
+            metadataManager.getColumnNames(tableName);
+
+        int t_iLength =
+            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            if  (metadataTypeManager.isClob(
+                     metadataManager.getColumnType(
+                         tableName, t_astrColumnNames[t_iIndex])))
+            {
+                t_cLobAttributeNames.add(t_astrColumnNames[t_iIndex]);
+            }
+        }
+
+        return
+            buildAttributes(
+                (String[]) t_cLobAttributeNames.toArray(EMPTY_STRING_ARRAY),
+                tableName,
+                metadataManager,
+                metadataTypeManager);
+    }
 }
