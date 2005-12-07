@@ -84,7 +84,7 @@ public class OracleMetadataTypeManager
      * Specifies a new weak reference.
      * @param manager the manager instance to use.
      */
-    protected static void setReference(
+    private static void setReference(
         final OracleMetadataTypeManager manager)
     {
         singleton = new WeakReference(manager);
@@ -94,27 +94,27 @@ public class OracleMetadataTypeManager
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
 
     /**
-     * Retrieves an <code>OracleMetadataTypeManager< instance.
+     * Retrieves an <code>OracleMetadataTypeManager</code> instance.
      * @return such instance.
      */
     public static JdbcMetadataTypeManager getInstance()
     {
-        JdbcMetadataTypeManager result = null;
+        OracleMetadataTypeManager result = null;
 
-        WeakReference reference = getReference();
+        WeakReference t_Reference = getReference();
 
-        if  (reference != null) 
+        if  (t_Reference != null) 
         {
-            result = (OracleMetadataTypeManager) reference.get();
+            result = (OracleMetadataTypeManager) t_Reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new OracleMetadataTypeManager();
 

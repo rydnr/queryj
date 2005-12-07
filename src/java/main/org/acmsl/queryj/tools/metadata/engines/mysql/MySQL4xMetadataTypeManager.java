@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
 /*
  * Importing some JDK classes.
  */
+import java.lang.ref.WeakReference;
 import java.sql.Types;
 import java.util.Map;
 import java.util.HashMap;
@@ -60,10 +61,58 @@ public class MySQL4xMetadataTypeManager
     extends  JdbcMetadataTypeManager
 {
     /**
+     * Singleton implemented as a weak reference.
+     */
+    private static WeakReference singleton;
+
+    /**
      * Creates an empty <code>MySQL4xMetadataTypeManager</code>.
      */
     public MySQL4xMetadataTypeManager() {};
-    
+
+    /**
+     * Specifies a new weak reference.
+     * @param manager the manager instance to use.
+     */
+    private static void setReference(final MySQL4xMetadataTypeManager manager)
+    {
+        singleton = new WeakReference(manager);
+    }
+
+    /**
+     * Retrieves the weak reference.
+     * @return such reference.
+     */
+    private static WeakReference getReference()
+    {
+        return singleton;
+    }
+
+    /**
+     * Retrieves a <code>MySQL4xMetadataTypeManager</code> instance.
+     * @return such instance.
+     */
+    public static JdbcMetadataTypeManager getInstance()
+    {
+        MySQL4xMetadataTypeManager result = null;
+
+        WeakReference t_Reference = getReference();
+
+        if  (t_Reference != null)
+        {
+            result = (MySQL4xMetadataTypeManager) t_Reference.get();
+        }
+
+        if  (result == null)
+        {
+            result = new MySQL4xMetadataTypeManager();
+
+            setReference(result);
+        }
+
+        return result;
+    }
+
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.

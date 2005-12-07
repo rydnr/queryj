@@ -92,7 +92,7 @@ public class JdbcMetadataTypeManager
      * Specifies a new weak reference.
      * @param manager the manager instance to use.
      */
-    protected static void setReference(final JdbcMetadataTypeManager manager)
+    private static void setReference(final JdbcMetadataTypeManager manager)
     {
         singleton = new WeakReference(manager);
     }
@@ -101,24 +101,24 @@ public class JdbcMetadataTypeManager
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
 
     /**
-     * Retrieves a <code>JdbcMetadataTypeManager< instance.
+     * Retrieves a <code>JdbcMetadataTypeManager</code> instance.
      * @return such instance.
      */
     public static JdbcMetadataTypeManager getInstance()
     {
         JdbcMetadataTypeManager result = null;
 
-        WeakReference reference = getReference();
+        WeakReference t_Reference = getReference();
 
-        if  (reference != null) 
+        if  (t_Reference != null) 
         {
-            result = (JdbcMetadataTypeManager) reference.get();
+            result = (JdbcMetadataTypeManager) t_Reference.get();
         }
 
         if  (result == null) 
