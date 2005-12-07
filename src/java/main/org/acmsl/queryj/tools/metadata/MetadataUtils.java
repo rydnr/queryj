@@ -753,7 +753,7 @@ public class MetadataUtils
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            if  (metadataTypeManager.isClob(
+            if  (!metadataTypeManager.isClob(
                      metadataManager.getColumnType(
                          tableName, t_astrColumnNames[t_iIndex])))
             {

@@ -2050,11 +2050,11 @@ oracle8Insert(input) ::= <<
                     "insert into <input.table_name_uppercased>"
                   + " ("
                   <input.attributes:{+ "<it.nameUppercased>};
-                    separator=", \"\n">"
+                    separator=", \"\n">
                   + ") VALUES ("
                   <input.attributes:insert_attribute(attr=it); separator=" +\n">)",
                 new <input.vo_name>AttributesStatementSetter(
-                    <input.non_lob_attributes:{<it.nameLowercased>});
+                    <input.all_but_lob_attributes:{<it.nameLowercased>};
                       separator=",\n">,
                     true),
                 this));
