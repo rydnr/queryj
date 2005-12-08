@@ -219,9 +219,9 @@ nullable_attribute_extraction(attr) ::= <<
 <if(attr.allowsNull)>
 <attr.objectType> t_<attr.nameCapitalized>As<attr.objectType> =
 <if(attr.primitive)>
-<object_nullable_attribute_extractor(attr=attr)>
+    <object_nullable_attribute_extractor(attr=attr)>
 <else>
-<indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
+    <indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
 <endif>
 
 if  (resultSet.wasNull())
