@@ -907,6 +907,9 @@ public class JdbcMetadataTypeManager
             case Types.LONGVARBINARY:
                 result = true;
                 break;
+
+            default:
+                break;
         }
 
         return result;
@@ -932,6 +935,32 @@ public class JdbcMetadataTypeManager
             case Types.INTEGER:
                 result = true;
                 break;
+
+            default:
+                break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if given data type represents dates.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * date.
+     */
+    public boolean isDate(final int dataType)
+    {
+        boolean result = false;
+
+        switch (dataType)
+        {
+            case Types.DATE:
+                result = true;
+                break;
+
+            default:
+                break;
         }
 
         return result;
@@ -945,18 +974,23 @@ public class JdbcMetadataTypeManager
      */
     public boolean isTimestamp(final int dataType)
     {
-        boolean result = false;
+        boolean result = isDate(dataType);
 
-        switch (dataType)
+        if  (!result)
         {
-            case 11:
-            case Types.TIME:
-            case Types.DATE:
-            case Types.TIMESTAMP:
-                result = true;
-                break;
-        }
+            switch (dataType)
+            {
+                case 11:
+                case Types.TIME:
+                case Types.TIMESTAMP:
+                    result = true;
+                    break;
 
+                default:
+                    break;
+            }
+        }
+        
         return result;
     }
 
@@ -977,6 +1011,9 @@ public class JdbcMetadataTypeManager
             case Types.TIMESTAMP:
                 result = true;
                 break;
+
+            default:
+                break;
         }
 
         return result;
@@ -996,6 +1033,9 @@ public class JdbcMetadataTypeManager
         {
             case Types.BIT:
                 result = true;
+                break;
+
+            default:
                 break;
         }
 
@@ -1023,6 +1063,9 @@ public class JdbcMetadataTypeManager
             case Types.FLOAT:
             case Types.DOUBLE:
                 result = true;
+                break;
+
+            default:
                 break;
         }
 

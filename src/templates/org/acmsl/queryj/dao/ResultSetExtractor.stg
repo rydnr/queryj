@@ -1,0 +1,282 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate ResultSetExtractors.
+//
+// Version: $Revision$ ($Author$ at $Date$)
+//
+// $Id$
+//
+group DAO;
+
+source(input) ::= <<
+<!
+  Generates a ResultSetExtractor source file.
+  @param input.copyright_years the copyright's years.
+  @param input.table_name the table name.
+  @param input.package the package.
+  @params project_imports
+  @params class
+!>
+<java_header(
+  years=input.copyright_years,
+  description=
+    [
+      first_line_description(
+        tableName=input.table_name)
+    ],
+    timestamp=input.timestamp)>
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName,
+    input.subpackage_name,
+    input.table_name_normalized_lowercased
+  ])>
+
+<project_imports(
+  basePackageName=input.base_package_name,
+  voSubpackageName=typeInitMap.voSubpackageName,
+  voName=input.vo_name,
+  trSubpackageName=typeInitMap.tableRepositorySubpackageName,
+  trName=input.tr_name)>
+
+/*
+ * Importing some ACM-SL classes.
+ */
+import org.acmsl.queryj.QueryResultSet;
+
+/*
+ * Importing Spring classes.
+ */
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
+
+/*
+ * Importing some JDK extension classes
+ */
+import javax.sql.DataSource;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+
+/*
+ * Importing Jakarta Commons Logging classes
+ */
+import org.apache.commons.logging.LogFactory;
+
+<class(input=input)>
+>>
+
+first_line_description(tableName) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param tableName the table name.
+!>
+Extracts <tableName> entities from ResultSets.
+>>
+
+project_imports(
+  basePackageName, voSubpackageName, voName, trSubpackageName, trName) ::= <<
+<!
+ Generates the project imports.
+ @param basePackageName the base package name.
+ @param voSubpackageName the value-object subpackage name.
+ @param voName the value-object name.
+ @param trSubpackageName the table repository subpackage name.
+ @param trName the table repository name.
+!>
+/*
+ * Importing project classes.
+ */
+import <basePackageName>.<voSubpackageName>.<voName>;
+import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
+import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
+import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+>>
+
+class(input) ::= <<
+<!
+ Generates the class body.
+ @param input the input.
+!>
+/**
+ * <[
+      first_line_description(
+        tableName=input.table_name)
+    ]:{line |<line>}; separator="\n * ")>
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public class <input.vo_name>ResultSetExtractor
+    implements  ResultSetExtractor,
+                <input.tr_name>TableRepository
+{
+    /**
+     * Extracts \<i><input.vo_name>\</i> information from given result set.
+     * @param resultSet the result set.
+     * @return the \<code><input.vo_name>ValueObject\</code> or
+     * \<code>null\</code> if the operation returned no data.
+     * @throws SQLException intercepted by \<i>Spring\</i\>.
+     * @throws DataAccessException with information about any
+     * custom exception.
+     * @precondition resultSet != null
+     * @precondition resultSet instanceof QueryResultSet
+     */
+    public Object extractData(final ResultSet resultSet)
+        throws  SQLException,
+                DataAccessException
+    {
+        return
+            extractData(
+                (QueryResultSet) resultSet,
+                <input.vo_name>ValueObjectFactory.getInstance());
+    }
+
+    /**
+    * Extracts \<i><input.vo_name>\</i> information from given result set.
+     * @param resultSet the result set.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
+     * @return the \<code><input.vo_name>ValueObject\</code> or
+     * \<code>null\</code> if the operation returned no data.
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     * @throws DataAccessException with information about any
+     * custom exception.
+     * @precondition resultSet != null
+     * @precondition factory != null
+     */
+    protected <input.vo_name> extractData(
+        final QueryResultSet resultSet,
+        final <input.vo_name>ValueObjectFactory factory)
+      throws  SQLException,
+              DataAccessException
+    {
+        <input.vo_name>ValueObject result = null;
+
+        if  (resultSet.next())
+        {
+            <input.attributes:nullable_attribute_extraction(attr=it);
+               separator="\n\n">
+
+            result =
+                factory.create<input.vo_name>ValueObject(
+                    <input.attributes:attribute_extraction(attr=it);
+                      separator=",\n">);
+        }
+
+        return result;
+    }
+}
+>>
+
+nullable_attribute_extraction(attr) ::= <<
+<!
+ Generates the code to extract nullable attributes.
+ @param attr the attribute,
+!>
+<if(attr.allowsNull)>
+<attr.objectType> t_<attr.nameCapitalized>As<attr.objectType> =
+<if(attr.primitive)>
+<object_nullable_attribute_extractor(attr=attr)>
+<else>
+<indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
+<endif>
+
+if  (resultSet.wasNull())
+{
+    t_<attr.nameCapitalized>As<attr.objectType> = null;
+}
+<endif>
+>>
+
+String_nullable_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a String nullable attribute.
+!>
+<object_nullable_attribute_extractor(attr=input)>
+>>
+
+Date_nullable_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a Date nullable attribute.
+!>
+<object_nullable_attribute_extractor(attr=input)>
+>>
+
+Timestamp_nullable_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a Timestamp nullable attribute.
+!>
+<object_nullable_attribute_extractor(attr=input)>
+>>
+
+primitive_nullable_attribute_extractor(attr) ::= <<
+<!
+  Generates the code to extract a primitive nullable attribute.
+!>
+new <attr.objectType>(
+    resultSet.get<attr.objectType>(
+        <attr.tableNameUppercased>.<attr.nameUppercased>));
+>>
+
+object_nullable_attribute_extractor(attr) ::= <<
+<!
+  Generates the code to extract a non-primitive nullable attribute.
+!>
+resultSet.get<attr.objectType>(
+    <attr.tableNameUppercased>.<attr.nameUppercased>);
+>>
+
+attribute_extraction(attr) ::= <<
+<!
+ Generates the member declaration for a concrete attribute.
+ @param attr the attribute.
+!>
+<if(attr.allowsNull)>
+t_<attr.nameCapitalized>As<attr.objectType>
+<else>
+resultSet.get<attr.objectType>(<attr.tableNameUppercased>.<attr.nameUppercased>)
+<endif>
+>>

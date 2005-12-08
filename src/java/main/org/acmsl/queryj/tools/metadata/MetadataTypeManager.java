@@ -198,6 +198,14 @@ public interface MetadataTypeManager
     public boolean isInteger(final int dataType);
 
     /**
+     * Checks if given data type represents dates.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * date.
+     */
+    public boolean isDate(final int dataType);
+
+    /**
      * Checks if given data type represents timestamps.
      * @param dataType the data type.
      * @return <code>true</code> if such data type can be managed as a

@@ -440,6 +440,29 @@ public class AttributeDecorator
     }
 
     /**
+     * Retrieves whether the attribute is a date or not.
+     * return such information.
+     */
+    public boolean isDate()
+    {
+        return isDate(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is a date or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * return such information.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isDate(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isDate(type);
+    }
+
+    /**
      * Retrieves the query to retrieve the externally-managed value.
      * @return such information.
      */
