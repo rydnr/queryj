@@ -53,7 +53,7 @@ source(input) ::= <<
   years=input.copyright_years,
   description=
     [
-      first_line_description(voName=input.vo_name)
+      first_line_description(voName=input.vo_name),
       second_line_description(voName=input.vo_name)
     ],
     timestamp=input.timestamp)>
@@ -64,7 +64,18 @@ source(input) ::= <<
     typeInitMap.baseDAOSubpackageName
   ])>
 
-<project_imports(daoPackageName=input.dao_package_name, voName=input.vo_name)>
+<project_imports(
+  daoPackage=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName
+  ],
+  voName=input.vo_name,
+  daoChooserPackage=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName
+  ])>
 
 <class(input=input)>
 >>
@@ -74,7 +85,7 @@ first_line_description(voName) ::= <<
   Generates a description for the file.
   @param voName the value-object name.
 !>
-Defines the API used to create.
+Is able to create <voName>DAO instances,
 >>
 
 second_line_description(voName) ::= <<
@@ -82,25 +93,32 @@ second_line_description(voName) ::= <<
   Generates a description for the file.
   @param voName the value-object name.
 !>
- <voName>-specific DAO instances.
+following the Abstract Factory pattern.
 >>
 
-project_imports(daoPackageName, voName) ::= <<
+project_imports(daoPackage, voName, daoChooserPackage) ::= <<
 <!
   Generates the import statements for the project classes.
-  @param daoPackageName the DAO package name.
+  @param daoPackage the package parts of the DAO class.
   @param voName the value-object name.
+  @param daoChooserPackage the DAOChooser package.
 !>
 /*
  * Importing some project classes.
  */
-import <daoPackageName>.<voName>DAO;
+import <daoPackage:{<it>}; separator=".">.<voName>DAO;
+import <daoChooserPackage:{<it>}; separator=".">.DAOChooser;
 
 /*
- * Importing some QueryJ classes.
+ * Importing some JDK classes.
  */
-import org.acmsl.queryj.dao.JndiUtils;
-import org.acmsl.queryj.dao.ThreadAwareDataSourceWrapper;
+import java.lang.IllegalAccessException;
+import java.lang.InstantiationException;
+
+/*
+ * Importing some commons-logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
 >>
 
 class(input) ::= <<
@@ -113,19 +131,108 @@ class(input) ::= <<
 !>
 /**
  * <[
-      first_line_description(voName=input.vo_name)
+      first_line_description(voName=input.vo_name),
       second_line_description(voName=input.vo_name)
     ]:{ line |<line>}; separator="\n * ">
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public interface <input.vo_name>Factory
+public abstract class <input.vo_name>DAOFactory
 {
+    /**
+     * Retrieves a <input.vo_name>DAOFactory instance.
+     * @return such instance.
+     */
+    public static <input.vo_name>DAOFactory getInstance()
+    {
+        return getInstance(DAOChooser.getInstance());
+    }
+
+    /**
+     * Retrieves a <input.vo_name>DAOFactory instance.
+     * @param daoChooser the DAOChooser instance.
+     * @return such instance.
+     * @precondition daoChooser != null
+     */
+    protected static <input.vo_name>DAOFactory getInstance(final DAOChooser daoChooser)
+    {
+        <input.vo_name>DAOFactory result = null;
+
+        String t_str<input.vo_name>DAOFactoryClassName =
+            daoChooser.get<input.vo_name>DAOFactoryClassName();
+
+        if  (t_str<input.vo_name>DAOFactoryClassName != null)
+        {
+            try
+            {
+                Class t_FactoryClass =
+                    Class.forName(
+                        t_str<input.vo_name>DAOFactoryClassName);
+
+                result =
+                    (<input.vo_name>DAOFactory) t_FactoryClass.newInstance();
+            }
+            catch  (final ClassNotFoundException classNotFoundException)
+            {
+                try
+                {
+                    LogFactory.getLog(<input.vo_name>DAOFactory.class).error(
+                        "Cannot find <input.vo_name>DAOFactory implementation class",
+                        classNotFoundException);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+            catch  (final InstantiationException instantiationException)
+            {
+                try
+                {
+                    LogFactory.getLog(<input.vo_name>DAOFactory.class).error(
+                        "Cannot instantiate <input.vo_name>DAOFactory implementation",
+                        instantiationException);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+            catch  (final IllegalAccessException illegalAccessException)
+            {
+                try
+                {
+                    LogFactory.getLog(<input.vo_name>DAOFactory.class).error(
+                        "Cannot access <input.vo_name>DAOFactory implementation",
+                        illegalAccessException);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                LogFactory.getLog(<input.vo_name>DAOFactory.class).error(
+                    "<input.vo_name>DAOFactory implementation not specified");
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Creates a <input.table_name>-specific DAO instance.
      * @return such DAO.
      */
-    public <input.vo_name>DAO create<input.vo_name>DAO();
+    public abstract <input.vo_name>DAO create<input.vo_name>DAO();
 }
 >>

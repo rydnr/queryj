@@ -45,7 +45,7 @@ source(input) ::= <<
 <!
   Generates a DAOFactory source file.
   @param input.copyright_years the copyright's years.
-  @param input.vo_name the value-object name.
+  @param input.table_name the table name.
   @param input.package_name the package.
   @param input.dao_class_name the DAO class name.
   @param input.dao_factory_class_name the DAO factory class name.
@@ -75,8 +75,9 @@ source(input) ::= <<
 
 <project_imports(
   daoPackageName=input.dao_package_name,
-  voName=input.vo_name,
+  daoClassName=input.dao_class_name,
   daoFactoryPackageName=input.dao_factory_package_name,
+  daoFactoryClassName=input.dao_factory_class_name,
   daoImplementationPackageName=input.dao_implementation_package_name,
   daoImplementationClassName=input.dao_implementation_class_name)>
 
@@ -124,23 +125,25 @@ information in the <engineName>-based persistence domain.
 
 project_imports(
   daoPackageName,
-  voName,
+  daoClassName,
   daoFactoryPackageName,
+  daoFactoryClassName,
   daoImplementationPackageName,
   daoImplementationClassName) ::= <<
 <!
   Generates the import statements for the project classes.
   @param daoPackageName the DAO package name.
-  @param voName the value-object name.
+  @param daoClassName the DAO class name.
   @param daoFactoryPackageName the DAO factory package name.
+  @param daoFactoryClassName the DAO factory class name.
   @param daoImplementationPackageName the DAO implementation package name.
   @param daoImplementationClassName the DAO implementation class name.
 !>
 /*
  * Importing some project classes.
  */
-import <daoPackageName>.<voName>DAO;
-import <daoFactoryPackageName>.<voName>DAOFactory;
+import <daoPackageName>.<daoClassName>;
+import <daoFactoryPackageName>.<daoFactoryClassName>;
 import <daoImplementationPackageName>.<daoImplementationClassName>;
 
 /*
@@ -198,7 +201,7 @@ public class <input.class_name>
      * @param factory the new \<code\><input.class_name>\</code\>
      * instance.
      */
-    protected static void setReference(
+    private static void setReference(
         final <input.class_name> factory)
     {
         singleton = new WeakReference(factory);
@@ -208,7 +211,7 @@ public class <input.class_name>
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }

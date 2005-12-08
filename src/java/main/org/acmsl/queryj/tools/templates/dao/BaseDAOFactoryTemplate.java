@@ -107,7 +107,7 @@ public class BaseDAOFactoryTemplate
      */
     protected StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/BaseDAO.stg");
+        return retrieveGroup("/org/acmsl/queryj/dao/BaseDAOFactory.stg");
     }
 
     /**
@@ -116,6 +116,6 @@ public class BaseDAOFactoryTemplate
      */
     public String getTemplateName()
     {
-        return "ResultSetExtractor";
+        return "BaseDAOFactory";
     }
 }
