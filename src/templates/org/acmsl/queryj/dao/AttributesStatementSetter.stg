@@ -39,7 +39,7 @@
 //
 // $Id$
 //
-group DAO;
+group AttributesStatementSetter;
 
 source(input) ::= <<
 <!

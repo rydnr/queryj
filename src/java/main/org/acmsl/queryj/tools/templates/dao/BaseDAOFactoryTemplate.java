@@ -39,229 +39,83 @@
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing project-specific classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing StringTemplate classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
+import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JDK classes.
  */
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
- * Is able to generate base DAO factories according to
- * database metadata.
+ * Is able to create <code>DAOFactory</code> interfaces for each
+ * table in the persistence model.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  */
 public class BaseDAOFactoryTemplate
-    extends  AbstractBaseDAOFactoryTemplate
-    implements  BaseDAOFactoryTemplateDefaults
+    extends  BasePerTableTemplate
 {
     /**
-     * Builds a BaseDAOFactoryTemplate using given information.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
+     * Builds a <code>BaseDAOFactoryTemplate</code> using given
+     * information.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param projectPackageName the project package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
      */
     public BaseDAOFactoryTemplate(
-        final TableTemplate tableTemplate,
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String projectPackageName)
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName)
     {
         super(
-            DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
-            tableTemplate,
+            tableName,
             metadataManager,
+            customSqlProvider,
             packageName,
-            projectPackageName,
-            DEFAULT_PROJECT_IMPORTS,
-            DEFAULT_JDK_IMPORTS,
-            DEFAULT_COMMONS_LOGGING_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            DEFAULT_GET_INSTANCE_METHOD,
-            DEFAULT_FACTORY_METHOD,
-            DEFAULT_CLASS_END);
+            engineName,
+            engineVersion,
+            quote,
+            basePackageName,
+            repositoryName);
     }
 
     /**
-     * Retrieves the source code of the generated field tableName.
-     * @return such source code.
+     * Retrieves the string template group.
+     * @return such instance.
      */
-    protected String generateOutput()
+    protected StringTemplateGroup retrieveGroup()
     {
-        return
-            generateOutput(
-                getHeader(),
-                getPackageDeclaration(),
-                getTableTemplate(),
-                getMetadataManager(),
-                getPackageName(),
-                getProjectPackageName(),
-                getProjectImports(),
-                getJdkImports(),
-                getCommonsLoggingImports(),
-                getJavadoc(),
-                getClassDefinition(),
-                getClassStart(),
-                getGetInstanceMethod(),
-                getFactoryMethod(),
-                getClassEnd(),
-                StringUtils.getInstance(),
-                EnglishGrammarUtils.getInstance(),
-                PackageUtils.getInstance());
+        return retrieveGroup("/org/acmsl/queryj/dao/BaseDAO.stg");
     }
 
     /**
-     * Retrieves the source code of the generated field tableName.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
-     * @param packageName the package name.
-     * @param projectPackageName the project package name.
-     * @param projectImports the project imports.
-     * @param jdkImports the JDK imports.
-     * @param commonsLoggingImports the commons-logging imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param getInstanceMethod the getInstance method.
-     * @param factoryMethod the factory method.
-     * @param classEnd the class end.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
-     * instance.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return such source code.
-     * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
-     * @precondition packageUtils != null
+     * Retrieves the template name.
+     * @return such information.
      */
-    protected String generateOutput(
-        final String header,
-        final String packageDeclaration,
-        final TableTemplate tableTemplate,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String projectPackageName,
-        final String projectImports,
-        final String jdkImports,
-        final String commonsLoggingImports,
-        final String javadoc,
-        final String classDefinition,
-        final String classStart,
-        final String getInstanceMethod,
-        final String factoryMethod,
-        final String classEnd,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final PackageUtils packageUtils)
+    public String getTemplateName()
     {
-        StringBuffer t_sbResult = new StringBuffer();
-
-        MessageFormat t_Formatter = new MessageFormat(header);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    tableTemplate.getTableName()
-                }));
-
-        t_Formatter = new MessageFormat(packageDeclaration);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    packageName
-                }));
-
-        t_Formatter = new MessageFormat(projectImports);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    packageName,
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_'),
-                    packageUtils.retrieveDAOChooserPackage(
-                        projectPackageName)
-                }));
-
-        t_sbResult.append(jdkImports);
-        t_sbResult.append(commonsLoggingImports);
-
-        t_Formatter = new MessageFormat(javadoc);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    tableTemplate.getTableName()
-                }));
-
-        t_Formatter = new MessageFormat(classDefinition);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_')
-                }));
-
-        t_sbResult.append(classStart);
-
-        MessageFormat t_GetInstanceMethodFormatter =
-            new MessageFormat(getInstanceMethod);
-
-        t_sbResult.append(
-            t_GetInstanceMethodFormatter.format(
-                new Object[]
-                {
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_')
-                }));
-
-        List t_lFields = tableTemplate.getFields();
-
-        MessageFormat t_FactoryMethodFormatter =
-            new MessageFormat(factoryMethod);
-
-        t_sbResult.append(
-            t_FactoryMethodFormatter.format(
-                new Object[]
-                {
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_'),
-                }));
-
-        t_sbResult.append(classEnd);
-
-        return t_sbResult.toString();
+        return "ResultSetExtractor";
     }
 }

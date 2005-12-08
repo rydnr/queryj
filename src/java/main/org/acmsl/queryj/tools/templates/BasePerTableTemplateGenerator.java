@@ -32,17 +32,36 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create base DAO templates.
+ * Description: Represents entities able to create per-table templates.
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates;
+
+/*
+ * Importing some ACM-SL classes.
+ */
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.io.File;
+import java.io.IOException;
 
 /**
- * Is able to create base DAO templates.
+ * Represents entities able to write per-table templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface BaseDAOTemplateFactory
-    extends  DAOTemplateFactory
+public interface BasePerTableTemplateGenerator
 {
+    /**
+     * Writes a DAO template to disk.
+     * @param daoTemplate the DAO template to write.
+     * @param outputDir the output folder.
+     * @throws IOException if the file cannot be created.
+     */
+    public void write(
+        final BasePerTableTemplate template, final File outputDir)
+      throws  IOException;
 }

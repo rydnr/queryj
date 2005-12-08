@@ -1,0 +1,131 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate base DAO factories.
+//
+// Version: $Revision$ ($Author$ at $Date$)
+//
+// $Id$
+//
+group BaseDAOFactory;
+
+source(input) ::= <<
+<!
+  Generates a BaseDAOFactory source file.
+  @param input.copyright_years the copyright's years.
+  @param input.base_package_name the package.
+  @param input.vo_name the value-object name.
+  @params class
+!>
+<java_header(
+  years=input.copyright_years,
+  description=
+    [
+      first_line_description(voName=input.vo_name)
+      second_line_description(voName=input.vo_name)
+    ],
+    timestamp=input.timestamp)>
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName
+  ])>
+
+<project_imports(daoPackageName=input.dao_package_name, voName=input.vo_name)>
+
+<class(input=input)>
+>>
+
+first_line_description(voName) ::= <<
+<!
+  Generates a description for the file.
+  @param voName the value-object name.
+!>
+Defines the API used to create.
+>>
+
+second_line_description(voName) ::= <<
+<!
+  Generates a description for the file.
+  @param voName the value-object name.
+!>
+ <voName>-specific DAO instances.
+>>
+
+project_imports(daoPackageName, voName) ::= <<
+<!
+  Generates the import statements for the project classes.
+  @param daoPackageName the DAO package name.
+  @param voName the value-object name.
+!>
+/*
+ * Importing some project classes.
+ */
+import <daoPackageName>.<voName>DAO;
+
+/*
+ * Importing some QueryJ classes.
+ */
+import org.acmsl.queryj.dao.JndiUtils;
+import org.acmsl.queryj.dao.ThreadAwareDataSourceWrapper;
+>>
+
+class(input) ::= <<
+<!
+  Generates the class body.
+  @param input.engine_name the engine name.
+  @param input.timestamp the timestamp.
+  @param input.jndi_location the JNDI location.
+  @param input.table_name the table name.
+!>
+/**
+ * <[
+      first_line_description(voName=input.vo_name)
+      second_line_description(voName=input.vo_name)
+    ]:{ line |<line>}; separator="\n * ">
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public interface <input.vo_name>Factory
+{
+    /**
+     * Creates a <input.table_name>-specific DAO instance.
+     * @return such DAO.
+     */
+    public <input.vo_name>DAO create<input.vo_name>DAO();
+}
+>>

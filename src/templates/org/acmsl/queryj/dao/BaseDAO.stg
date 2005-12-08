@@ -40,7 +40,7 @@
 //
 // $Id$
 //
-group DAO;
+group BaseDAO;
 
 source(input) ::= <<
 <!

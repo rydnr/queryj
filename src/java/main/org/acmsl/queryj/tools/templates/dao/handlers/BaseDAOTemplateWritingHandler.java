@@ -40,14 +40,13 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some Ant classes.
@@ -66,50 +65,57 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class BaseDAOTemplateWritingHandler
-    extends    DAOTemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler
 {
     /**
-     * Creates a BaseDAOTemplateWritingHandler.
+     * Creates a <code>BaseDAOTemplateWritingHandler</code> instance.
      */
     public BaseDAOTemplateWritingHandler() {};
 
     /**
-     * Retrieves the DAO template generator.
+     * Retrieves the template generator.
      * @return such instance.
      */
-    protected DAOTemplateGenerator retrieveDAOTemplateGenerator()
+    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
     {
         return BaseDAOTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the base DAO templates from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
-     * @precondition parameters != null
      */
-    protected DAOTemplate[] retrieveDAOTemplates(
+    protected BasePerTableTemplate[] retrieveTemplates(
         final Map parameters)
       throws  BuildException
     {
         return
-            (DAOTemplate[])
-                parameters.get(
-                    TemplateMappingManager.BASE_DAO_TEMPLATES);
+            (BaseDAOTemplate[])
+                parameters.get(TemplateMappingManager.BASE_DAO_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param engineName the engine name, (optional).
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
+     * @precondition projectFolder != null
+     * @precondition projectPackage != null
+     * @precondition engineName != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
         final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)
@@ -117,8 +123,8 @@ public class BaseDAOTemplateWritingHandler
     {
         return
             packageUtils.retrieveBaseDAOFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters));
+                projectFolder,
+                projectPackage,
+                useSubfolders);
     }
 }

@@ -40,9 +40,8 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
 
 /**
@@ -53,18 +52,27 @@ import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
 public interface BaseDAOFactoryTemplateFactory
 {
     /**
-     * Generates a base DAO factory template.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
+     * Creates a <code>BaseDAOFactoryTemplate</code> using given
+     * information.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param projectPackageName the project package name.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
+     * @return the template.
      */
     public BaseDAOFactoryTemplate createBaseDAOFactoryTemplate(
-        final TableTemplate tableTemplate,
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String projectPackageName)
-      throws  QueryJException;
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName);
 }

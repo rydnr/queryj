@@ -45,8 +45,9 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplateFactory;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -69,7 +70,8 @@ import java.lang.ref.WeakReference;
            >Jose San Leandro</a>
  */
 public class DAOTemplateGenerator
-    implements  DAOTemplateFactory
+    implements  BasePerTableTemplateFactory,
+                BasePerTableTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -85,7 +87,7 @@ public class DAOTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(final DAOTemplateGenerator generator)
+    private static void setReference(final DAOTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -94,7 +96,7 @@ public class DAOTemplateGenerator
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
@@ -146,7 +148,7 @@ public class DAOTemplateGenerator
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
-    public DAOTemplate createDAOTemplate(
+    public BasePerTableTemplate createTemplate(
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
@@ -173,17 +175,18 @@ public class DAOTemplateGenerator
 
     /**
      * Writes a DAO template to disk.
-     * @param daoTemplate the DAO template to write.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition daoTemplate != null
+     * @precondition template instanceof DAOTemplate
      * @precondition outputDir != null
      */
-    public void write(final DAOTemplate daoTemplate, final File outputDir)
+    public void write(
+        final BasePerTableTemplate template, final File outputDir)
       throws  IOException
     {
         write(
-            daoTemplate,
+            template,
             outputDir, 
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
@@ -192,21 +195,21 @@ public class DAOTemplateGenerator
 
     /**
      * Writes a DAO template to disk.
-     * @param daoTemplate the DAO template to write.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition daoTemplate != null
+     * @precondition template instanceof DAOTemplate
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final DAOTemplate daoTemplate,
+        final BasePerTableTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
@@ -218,12 +221,12 @@ public class DAOTemplateGenerator
         fileUtils.writeFile(
             outputDir.getAbsolutePath()
             + File.separator
-            + daoTemplate.getEngineName()
+            + template.getEngineName()
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    daoTemplate.getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase()),
                 '_')
             + "DAO.java",
-            daoTemplate.generate());
+            template.generate());
     }
 }

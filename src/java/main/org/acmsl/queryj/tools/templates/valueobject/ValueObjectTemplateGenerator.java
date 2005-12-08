@@ -43,8 +43,6 @@ package org.acmsl.queryj.tools.templates.valueobject;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;

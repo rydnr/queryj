@@ -32,10 +32,10 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create DAO templates.
+ * Description: Represents entities able to create per-table templates.
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates;
 
 /*
  * Importing some ACM-SL classes.
@@ -43,17 +43,17 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 
 /**
- * Represents entities able to create DAO templates.
+ * Represents entities able to create per-table templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface DAOTemplateFactory
+public interface BasePerTableTemplateFactory
 {
     /**
-     * Generates a DAO template.
+     * Generates a <i>per-table</i> template.
      * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
@@ -66,7 +66,7 @@ public interface DAOTemplateFactory
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
-    public DAOTemplate createDAOTemplate(
+    public BasePerTableTemplate createTemplate(
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,

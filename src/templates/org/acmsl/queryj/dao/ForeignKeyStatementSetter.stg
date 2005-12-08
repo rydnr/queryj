@@ -40,7 +40,7 @@
 //
 // $Id$
 //
-group DAO;
+group ForeignKeyStatementSetter;
 
 source(input) ::= <<
 <!

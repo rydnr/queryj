@@ -41,11 +41,12 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
-import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -67,7 +68,8 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class BaseDAOFactoryTemplateGenerator
-    implements  BaseDAOFactoryTemplateFactory
+    implements  BasePerTableTemplateFactory,
+                BasePerTableTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -83,7 +85,7 @@ public class BaseDAOFactoryTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(
+    private static void setReference(
         final BaseDAOFactoryTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
@@ -93,7 +95,7 @@ public class BaseDAOFactoryTemplateGenerator
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
@@ -115,7 +117,7 @@ public class BaseDAOFactoryTemplateGenerator
 
         if  (result == null) 
         {
-            result = new BaseDAOFactoryTemplateGenerator() {};
+            result = new BaseDAOFactoryTemplateGenerator();
 
             setReference(result);
         }
@@ -124,238 +126,87 @@ public class BaseDAOFactoryTemplateGenerator
     }
 
     /**
-     * Adds a new template factory class.
-     * @param baseDAOFactoryName the base DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateFactoryClass the template factory.
-     * @precondition engineName != null
-     * @precondition templateFactoryClass != null
-     */
-    public void addTemplateFactoryClass(
-        final String baseDAOFactoryName,
-        final String engineName,
-        final String engineVersion,
-        final String templateFactoryClass)
-    {
-        addTemplateFactoryClass(
-            baseDAOFactoryName,
-            engineName,
-            engineVersion,
-            templateFactoryClass,
-            TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Adds a new template factory class.
-     * @param baseDAOFactoryName the base DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateFactoryClass the template factory.
-     * @param templateMappingManager the
-     * <code>TemplateMappingManager</code> instance.
-     * @precondition engineName != null
-     * @precondition templateFactoryClass != null
-     * @precondition templateMappingManager != null
-     */
-    protected void addTemplateFactoryClass(
-        final String baseDAOFactoryName,
-        final String engineName,
-        final String engineVersion,
-        final String templateFactoryClass,
-        final TemplateMappingManager templateMappingManager)
-    {
-        templateMappingManager.addTemplateFactoryClass(
-              TemplateMappingManager.BASE_DAO_FACTORY_TEMPLATE_PREFIX
-            + baseDAOFactoryName,
-            engineName,
-            engineVersion,
-            templateFactoryClass);
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param baseDAOFactoryName the base DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     */
-    protected String getTemplateFactoryClass(
-        final String baseDAOFactoryName,
-        final String engineName,
-        final String engineVersion)
-    {
-        return
-            getTemplateFactoryClass(
-                baseDAOFactoryName,
-                engineName,
-                engineVersion,
-                TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param baseDAOFactoryName the base DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     * @precondition templateMappingManager != null
-     */
-    protected String getTemplateFactoryClass(
-        final String baseDAOFactoryName,
-        final String engineName,
-        final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
-    {
-        return templateMappingManager.getTemplateFactoryClass(
-              TemplateMappingManager.BASE_DAO_FACTORY_TEMPLATE_PREFIX
-            + baseDAOFactoryName,
-            engineName,
-            engineVersion);
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param baseDAOFactoryName the base DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    protected BaseDAOFactoryTemplateFactory getTemplateFactory(
-        final String baseDAOFactoryName,
-        final String engineName,
-        final String engineVersion)
-        throws  QueryJException
-    {
-        return
-            getTemplateFactory(
-                baseDAOFactoryName,
-                engineName,
-                engineVersion,
-                TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param baseDAOFactoryName the base DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateMappingManager the
-     * <code>TemplateMappingManager</code> instance.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition templateMappingManager != null
-     */
-    protected BaseDAOFactoryTemplateFactory getTemplateFactory(
-        final String baseDAOFactoryName,
-        final String engineName,
-        final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
-        throws  QueryJException
-    {
-        BaseDAOFactoryTemplateFactory result = null;
-
-        Object t_TemplateFactory =
-            templateMappingManager.getTemplateFactoryClass(
-                  TemplateMappingManager.BASE_DAO_FACTORY_TEMPLATE_PREFIX
-                + baseDAOFactoryName,
-                engineName,
-                engineVersion);
-
-        if  (t_TemplateFactory != null)
-        {
-            if  (!(  t_TemplateFactory
-                   instanceof BaseDAOFactoryTemplateFactory))
-            {
-                throw
-                    new QueryJException(
-                        "invalid.base.dao.factory.template.factory");
-            }
-            else 
-            {
-                result = (BaseDAOFactoryTemplateFactory) t_TemplateFactory;
-            }
-        }
-        else
-        {
-            throw
-                new QueryJException(
-                    "base.dao.factory.template.factory.not.found");
-        }
-
-        return result;
-    }
-
-    /**
-     * Generates a base DAO factory template.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
+     * Creates a <code>BaseDAOFactoryTemplate</code> using given
+     * information.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param projectPackageName the project package name.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
-     * @precondition tableTemplate != null
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
+     * @return the fresh new template.
+     * @precondition tableName != null
      * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
      * @precondition packageName != null
-     * @precondition projectPackageName != null
+     * @precondition engineName != null
+     * @precondition basePackageName != null
+     * @precondition repositoryName != null
      */
-    public BaseDAOFactoryTemplate createBaseDAOFactoryTemplate(
-        final TableTemplate tableTemplate,
+    public BasePerTableTemplate createTemplate(
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String projectPackageName)
-      throws  QueryJException
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName)
     {
         return
             new BaseDAOFactoryTemplate(
-                tableTemplate,
+                tableName,
                 metadataManager,
+                customSqlProvider,
                 packageName,
-                projectPackageName);
+                engineName,
+                engineVersion,
+                quote,
+                basePackageName,
+                repositoryName);
     }
 
     /**
-     * Writes a base DAO factory template to disk.
-     * @param template the base DAO factory template to write.
+     * Writes a BaseDAOFactory template to disk.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
+     * @precondition template instanceof BaseDAOFactoryTemplate
      * @precondition outputDir != null
      */
     public void write(
-        final BaseDAOFactoryTemplate template, final File outputDir)
+        final BasePerTableTemplate template, final File outputDir)
       throws  IOException
     {
         write(
             template,
-            outputDir,
+            outputDir, 
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
             FileUtils.getInstance());
     }
 
     /**
-     * Writes a base DAO factory template to disk.
-     * @param template the base DAO factory template to write.
+     * Writes a BaseDAOFactory template to disk.
+     * @param template template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
+     * @precondition template instanceof BaseDAOFactoryTemplate
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final BaseDAOFactoryTemplate template,
+        final BasePerTableTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
@@ -369,7 +220,7 @@ public class BaseDAOFactoryTemplateGenerator
             + File.separator
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    template.getTableTemplate().getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase()),
                 '_')
             + "DAOFactory.java",
             template.generate());

@@ -45,7 +45,7 @@ source(input) ::= <<
 <!
   Generates a DAOFactory source file.
   @param input.copyright_years the copyright's years.
-  @param input.table_name the table name.
+  @param input.vo_name the value-object name.
   @param input.package_name the package.
   @param input.dao_class_name the DAO class name.
   @param input.dao_factory_class_name the DAO factory class name.
@@ -142,8 +142,8 @@ project_imports(
 /*
  * Importing some project classes.
  */
-import <daoPackageName>.<daoClassName>;
-import <daoFactoryPackageName>.<daoFactoryClassName>;
+import <daoPackageName>.<voName>DAO;
+import <daoFactoryPackageName>.<voName>DAOFactory;
 import <daoImplementationPackageName>.<daoImplementationClassName>;
 
 /*

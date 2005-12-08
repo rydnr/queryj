@@ -40,10 +40,11 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplateFactory;
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -62,35 +63,53 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class BaseDAOTemplateBuildHandler
-    extends  DAOTemplateBuildHandler
+    extends  BasePerTableTemplateBuildHandler
 {
     /**
-     * Creates a BaseDAOTemplateBuildHandler.
+     * Creates a <code>BaseDAOTemplateBuildHandler</code> instance.
      */
     public BaseDAOTemplateBuildHandler() {};
 
     /**
-     * Retrieves the DAO template factory.
+     * Retrieves the template factory.
      * @return such instance.
      */
-    protected DAOTemplateFactory retrieveDAOTemplateFactory()
+    protected BasePerTableTemplateFactory retrieveTemplateFactory()
     {
         return BaseDAOTemplateGenerator.getInstance();
     }
 
     /**
-     * Stores the base DAO template collection in given attribute map.
-     * @param baseDAOTemplates the base DAO templates.
-     * @param parameters the parameter map.
-     * @throws BuildException if the templates cannot be stored for any reason.
-     * @precondition baseDAOTemplates != null
-     * @precondition parameters != null
+     * Retrieves the package name.
+     * @param engineName the engine name.
+     * @param projectPackage the project package.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
      */
-    protected void storeDAOTemplates(
-        final DAOTemplate[] baseDAOTemplates, final Map parameters)
+    protected String retrievePackage(
+        final String engineName,
+        final String projectPackage,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
+        return
+            packageUtils.retrieveBaseDAOPackage(projectPackage);
+    }
+
+    /**
+     * Stores the template collection in given attribute map.
+     * @param templates the templates.
+     * @param parameters the parameter map.
+     * @precondition templates != null
+     * @precondition parameters != null
+     */
+    protected void storeTemplates(
+        final BasePerTableTemplate[] templates, final Map parameters)
+    {
         parameters.put(
-            TemplateMappingManager.BASE_DAO_TEMPLATES, baseDAOTemplates);
+            TemplateMappingManager.BASE_DAO_TEMPLATES, templates);
     }
 }
