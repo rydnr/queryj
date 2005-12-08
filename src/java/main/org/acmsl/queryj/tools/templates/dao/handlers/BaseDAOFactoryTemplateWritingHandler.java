@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
@@ -93,7 +92,7 @@ public class BaseDAOFactoryTemplateWritingHandler
       throws  BuildException
     {
         return
-            (BaseDAOFactoryTemplate[])
+            (BasePerTableTemplate[])
                 parameters.get(
                     TemplateMappingManager.BASE_DAO_FACTORY_TEMPLATES);
     }

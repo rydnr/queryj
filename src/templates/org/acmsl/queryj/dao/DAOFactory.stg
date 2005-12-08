@@ -75,9 +75,8 @@ source(input) ::= <<
 
 <project_imports(
   daoPackageName=input.dao_package_name,
-  daoClassName=input.dao_class_name,
+  voName=input.vo_name,
   daoFactoryPackageName=input.dao_factory_package_name,
-  daoFactoryClassName=input.dao_factory_class_name,
   daoImplementationPackageName=input.dao_implementation_package_name,
   daoImplementationClassName=input.dao_implementation_class_name)>
 
@@ -125,17 +124,15 @@ information in the <engineName>-based persistence domain.
 
 project_imports(
   daoPackageName,
-  daoClassName,
+  voName,
   daoFactoryPackageName,
-  daoFactoryClassName,
   daoImplementationPackageName,
   daoImplementationClassName) ::= <<
 <!
   Generates the import statements for the project classes.
   @param daoPackageName the DAO package name.
-  @param daoClassName the DAO class name.
+  @param voName the value-object name.
   @param daoFactoryPackageName the DAO factory package name.
-  @param daoFactoryClassName the DAO factory class name.
   @param daoImplementationPackageName the DAO implementation package name.
   @param daoImplementationClassName the DAO implementation class name.
 !>

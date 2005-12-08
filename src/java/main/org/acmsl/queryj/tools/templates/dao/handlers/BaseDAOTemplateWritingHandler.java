@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
@@ -92,7 +91,7 @@ public class BaseDAOTemplateWritingHandler
       throws  BuildException
     {
         return
-            (BaseDAOTemplate[])
+            (BasePerTableTemplate[])
                 parameters.get(TemplateMappingManager.BASE_DAO_TEMPLATES);
     }
 
