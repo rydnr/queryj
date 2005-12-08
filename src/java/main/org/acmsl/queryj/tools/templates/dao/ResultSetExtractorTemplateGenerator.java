@@ -41,11 +41,10 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplateFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some ACM-SL classes.
@@ -83,7 +82,7 @@ public class ResultSetExtractorTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(
+    private static void setReference(
         final ResultSetExtractorTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
@@ -93,7 +92,7 @@ public class ResultSetExtractorTemplateGenerator
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
@@ -125,33 +124,47 @@ public class ResultSetExtractorTemplateGenerator
     }
 
     /**
-     * Generates a ResultSetExtractor template.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
+     * Creates a <code>ResultSetExtractorTemplate</code> using given
+     * information.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition tableTemplate != null
+     * @param repositoryName the repository name.
+     * @return such template.
+     * @precondition tableName != null
      * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
      * @precondition packageName != null
+     * @precondition engineName != null
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
     public ResultSetExtractorTemplate createResultSetExtractorTemplate(
-        final TableTemplate tableTemplate,
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
         final String basePackageName,
         final String repositoryName)
       throws  QueryJException
     {
         return
             new ResultSetExtractorTemplate(
-                tableTemplate,
+                tableName,
                 metadataManager,
+                customSqlProvider,
                 packageName,
+                engineName,
+                engineVersion,
+                quote,
                 basePackageName,
                 repositoryName);
     }
@@ -207,9 +220,7 @@ public class ResultSetExtractorTemplateGenerator
             + File.separator
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    template
-                        .getTableTemplate()
-                            .getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase()),
                 '_')
             + "ResultSetExtractor.java",
             template.generate());

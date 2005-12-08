@@ -45,9 +45,7 @@ import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplateFactory;
@@ -112,10 +110,7 @@ public class ResultSetExtractorTemplateBuildHandler
     protected boolean handle(final Map parameters)
         throws  BuildException
     {
-        return
-            handle(
-                parameters,
-                retrieveDatabaseMetaData(parameters));
+        return handle(parameters, retrieveDatabaseMetaData(parameters));
     }
 
     /**
@@ -138,7 +133,9 @@ public class ResultSetExtractorTemplateBuildHandler
         {
             handle(
                 parameters,
-                metaData.getDatabaseProductName());
+                metaData.getDatabaseProductName(),
+                metaData.getDatabaseProductVersion(),
+                fixQuote(metaData.getIdentifierQuoteString()));
         }
         catch  (final SQLException sqlException)
         {
@@ -152,20 +149,28 @@ public class ResultSetExtractorTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      */
     protected boolean handle(
-        final Map parameters, final String engineName)
+        final Map parameters,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
       throws  BuildException
     {
         return
             handle(
                 parameters,
                 engineName,
+                engineVersion,
+                quote,
                 retrieveMetadataManager(parameters),
+                retrieveCustomSqlProvider(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 ResultSetExtractorTemplateGenerator.getInstance(),
@@ -178,7 +183,10 @@ public class ResultSetExtractorTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote symbol.
      * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param basePackageName the base package name.
      * @param repository the repository.
      * @param templateFactory the template factory.
@@ -188,6 +196,7 @@ public class ResultSetExtractorTemplateBuildHandler
      * @precondition parameters != null
      * @precondition engineName != null
      * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
      * @precondition packageName != null
      * @precondition basePackageName != null
      * @precondition repositoryName != null
@@ -197,7 +206,10 @@ public class ResultSetExtractorTemplateBuildHandler
     protected boolean handle(
         final Map parameters,
         final String engineName,
+        final String engineVersion,
+        final String quote,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String basePackageName,
         final String repositoryName,
         final ResultSetExtractorTemplateFactory templateFactory,
@@ -219,12 +231,16 @@ public class ResultSetExtractorTemplateBuildHandler
             {
                 t_aTemplates[t_iIndex] =
                     templateFactory.createResultSetExtractorTemplate(
-                        tableTemplates[t_iIndex],
+                        tableTemplates[t_iIndex].getTableName(),
                         metadataManager,
+                        customSqlProvider,
                         retrievePackage(
                             engineName,
                             tableTemplates[t_iIndex].getTableName(),
                             parameters),
+                        engineName,
+                        engineVersion,
+                        quote,
                         basePackageName,
                         repositoryName);
             }

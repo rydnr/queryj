@@ -169,7 +169,7 @@ public class ResultSetExtractorTemplateWritingHandler
                     templates[t_iIndex],
                     retrieveOutputDir(
                         engineName,
-                        templates[t_iIndex].getTableTemplate().getTableName(),
+                        templates[t_iIndex].getTableName(),
                         parameters));
             }
         }

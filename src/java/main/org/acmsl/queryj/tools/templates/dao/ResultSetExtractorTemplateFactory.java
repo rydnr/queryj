@@ -42,9 +42,9 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /**
  * Represents entities able to create ResultSetExtractor templates.
@@ -54,19 +54,27 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 public interface ResultSetExtractorTemplateFactory
 {
     /**
-     * Generates a ResultSetExtractor template.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
+     * Creates a <code>ResultSetExtractorTemplate</code> using given
+     * information.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
+     * @param repositoryName the repository name.
+     * @return such template.
      */
     public ResultSetExtractorTemplate createResultSetExtractorTemplate(
-        final TableTemplate tableTemplate,
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
         final String basePackageName,
         final String repositoryName)
       throws  QueryJException;
