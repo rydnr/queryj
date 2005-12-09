@@ -115,6 +115,8 @@ import org.acmsl.queryj.UpdateQuery;
  */
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ParameterDisposer;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -122,6 +124,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.object.SqlQuery;
+import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -134,6 +137,7 @@ import org.springframework.transaction.TransactionStatus;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.Calendar;
 import java.util.Date;
@@ -521,134 +525,6 @@ public class <input.engine_name><input.vo_name>DAO
 <else>
 <defaultInsert(input=input)>
 <endif>
-
-    /**
-     * Inserts and retrieves the newly-inserted
-     * \<code><input.vo_name>\</code> instance.
-     <input.all_but_externally_managed_attributes:attribute_javadoc(
-       name=it.nameLowercased); separator="\n">
-     * @throws DataAccessException if the operation fails.
-     */
-    public <input.vo_name> create(
-        <input.all_but_externally_managed_attributes:attribute_declaration(
-          attr=it); separator=",\n">)
-      throws DataAccessException
-    {
-        return
-            create(
-                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
-                buildInsertQuery(),
-                getDataSource(),
-                <input.vo_name>ValueObjectFactory.getInstance());
-    }
-
-    /**
-     * Inserts and retrieves the newly-inserted
-     * \<code><input.vo_name>\</code> instance."
-     <input.all_but_externally_managed_attributes:attribute_javadoc(
-       name=it.nameLowercased); separator="\n">
-     * @param query the query required to insert given information.
-     * @param dataSource the data source.
-     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
-     * instance.
-     * @throws DataAccessException if the operation fails.
-     <precondition_notnull("query")>
-     <precondition_notnull("dataSource")>
-     <precondition_notnull("factory")>
-     */
-    protected <input.vo_name> create(
-        <input.all_but_externally_managed_attributes:attribute_declaration(
-          attr=it); separator=",\n">,
-        final Query query,
-        final DataSource dataSource,
-        final <input.vo_name>ValueObjectFactory factory)
-      throws DataAccessException
-    {
-        return
-            create(
-                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
-                query,
-                new DataSourceTransactionManager(dataSource),
-                factory);
-    }
-
-    /**
-     * Inserts and retrieves the newly-inserted
-     * \<code><input.vo_name>\</code> instance."
-     <input.all_but_externally_managed_attributes:attribute_javadoc(
-       name=it.nameLowercased); separator="\n">
-     * @param query the query required to insert given information.
-     * @param transactionManager the \<code>PlatformTransactionManager\</code>
-     * instance.
-     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
-     * instance.
-     * @throws DataAccessException if the operation fails.
-     <precondition_notnull("query")>
-     <precondition_notnull("transactionManager")>
-     <precondition_notnull("factory")>
-     */
-    protected <input.vo_name> create(
-        <input.all_but_externally_managed_attributes:attribute_declaration(
-          attr=it); separator=",\n">,
-        final Query query,
-        final PlatformTransactionManager transactionManager,
-        final <input.vo_name>ValueObjectFactory factory)
-      throws DataAccessException
-    {
-        return
-            create(
-                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
-                query,
-                new TransactionTemplate(transactionManager),
-                factory);
-    }
-
-    /**
-     * Inserts and retrieves the newly-inserted
-     * \<code><input.vo_name>\</code> instance.
-     <input.all_but_externally_managed_attributes:attribute_javadoc(
-       name=it.nameLowercased); separator="\n">
-     * @param query the query required to insert given information.
-     * @param transactionTemplate the \<code>TransactionTemplate\<code>
-     * instance.
-     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
-     * instance.
-     * @throws DataAccessException if the operation fails.
-     <precondition_notnull("transactionTemplate")>
-     <precondition_notnull("factory")>
-     */
-    protected <input.vo_name> create(
-        <input.all_but_externally_managed_attributes:attribute_declaration(
-          attr=it); separator=",\n">,
-        final Query query,
-        final TransactionTemplate transactionTemplate,
-        final <input.vo_name>ValueObjectFactory factory)
-      throws DataAccessException
-    {
-        <input.vo_name> result = null;
-
-        Map t_mMap = null;
-
-        <input.externally_managed_attributes:em_attribute_value_retrieval(
-          query=it.query,
-          nativeType=it.nativeType,
-          nameLowercased=it.nameLowercased,
-          type=it.objectType); separator="\n">
-
-        transactionTemplate.execute(
-            new UpdateTransactionCallback(
-                new QueryPreparedStatementCreator(query),
-                new <input.vo_name>AttributesStatementSetter(
-                    <input.attributes:{<it.nameLowercased>}; separator=",\n">,
-                    true),
-                this));
-
-        result =
-            factory.create<input.vo_name>(
-                <input.attributes:{<it.nameLowercased>}; separator=",\n">);
-
-        return result;
-    }
 
     /**
      * Builds the query required to \<i>update\</i> a concrete
@@ -1390,7 +1266,14 @@ public class <input.engine_name><input.vo_name>DAO
      */
     protected static class SelectForUpdateTransactionCallback
         extends QueryTransactionCallback
+        implements PreparedStatementCallback
     {
+        /**
+         * The result of the query. This make the class stateful, so
+         * instances cannot be reused.
+         */
+        private <input.vo_name> m__Result;
+
         /**
          * Creates a transaction callback.
          * @param creator the \<code>PreparedStatementCreator\</code> instance.
@@ -1409,30 +1292,128 @@ public class <input.engine_name><input.vo_name>DAO
         }
 
         /**
+         * Specifies the result of the operation.
+         * @param operationResult such information.
+         */
+        protected final void immutableSetOperationResult(
+            final <input.vo_name> operationResult)
+        {
+            m__Result = operationResult;
+        }
+
+        /**
+         * Specifies the result of the operation.
+         * @param operationResult such information.
+         */
+        protected void setOperationResult(
+            final <input.vo_name> operationResult)
+        {
+            immutableSetOperationResult(operationResult);
+        }
+
+        /**
+         * Specifies the result of the operation.
+         * @param operationResult such information.
+         */
+        public <input.vo_name> getOperationResult()
+        {
+            return m__Result;
+        }
+
+        /**
+         * Executes the transactional operation.
+         * @param status the transaction status.
+         * @return the transaction result.
+         */
+        public Object doInTransaction(final TransactionStatus status)
+        {
+            return
+                doInTransaction(
+                    status,
+                    getPreparedStatementCreator(),
+                    get<input.engine_name><input.vo_name>DAO());
+        }
+
+        /**
          * Executes the transactional operation.
          * @param status the transaction status.
          * @param creator the \<code>PreparedStatementCreator\</code> instance.
-         * @param setter the \<code>PreparedStatementSetter\</code> instance.
          * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
          * @return the transaction result.
          */
         protected Object doInTransaction(
             final TransactionStatus status,
             final PreparedStatementCreator creator,
-            final PreparedStatementSetter setter,
             final <input.engine_name><input.vo_name>DAO dao)
         {
-            /*
+            return dao.execute(creator, (PreparedStatementCallback) this);
+        }
+
+        /**
+         * Manages the prepared statement logic.
+         * @param preparedStatement the statement.
+         * @return the result of the operation.
+         * @throws SQLException if it gets thrown as result of the operation.
+         * @throws DataAccessException if the data cannot be accessed for some
+         * reason.
+         */
+	public Object doInPreparedStatement(
+            final PreparedStatement preparedStatement)
+          throws SQLException,
+                 DataAccessException
+        {
             return
-                doInTransaction(
-                    status,
-                    creator,
-                    setter,
-                    getSQL(),
-                    getResultSetExtractor(),
-                    dao);
-            */
-            return null;
+                doInPreparedStatement(
+                    preparedStatement,
+                    getPreparedStatementSetter(),
+                    getResultSetExtractor());
+        }
+
+        /**
+         * Manages the prepared statement logic.
+         * @param preparedStatement the statement.
+         * @param preparedStatementSetter the prepared statement setter.
+         * @param resultSetExtractor the result set extractor.
+         * @return the result of the operation.
+         * @throws SQLException if it gets thrown as result of the operation.
+         * @throws DataAccessException if the data cannot be accessed for some
+         * reason.
+         */
+	protected Object doInPreparedStatement(
+            final PreparedStatement preparedStatement,
+            final PreparedStatementSetter preparedStatementSetter,
+            final ResultSetExtractor resultSetExtractor)
+          throws SQLException,
+                 DataAccessException
+        {
+            Object result = null;
+
+            // taken from JdbcTemplate, Spring 1.1.4
+            ResultSet t_ResultSet = null;
+
+            try
+            {
+                if  (preparedStatementSetter != null)
+                {
+                    preparedStatementSetter.setValues(preparedStatement);
+                }
+
+		t_ResultSet = preparedStatement.executeQuery();
+
+		result = resultSetExtractor.extractData(t_ResultSet);
+            }
+            finally
+            {
+                if  (preparedStatementSetter instanceof ParameterDisposer)
+                {
+                    ((ParameterDisposer) preparedStatementSetter)
+                        .cleanupParameters();
+                }
+
+		JdbcUtils.closeResultSet(t_ResultSet);
+            }
+
+            return result;
         }
     }
 <endif>
@@ -2072,6 +2053,134 @@ jdbcInsert(input) ::= <<
                     false),
                 this));
     }
+
+    /**
+     * Inserts and retrieves the newly-inserted
+     * \<code><input.vo_name>\</code> instance.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @throws DataAccessException if the operation fails.
+     */
+    public <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">)
+      throws DataAccessException
+    {
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+                buildInsertQuery(),
+                getDataSource(),
+                <input.vo_name>ValueObjectFactory.getInstance());
+    }
+
+    /**
+     * Inserts and retrieves the newly-inserted
+     * \<code><input.vo_name>\</code> instance."
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param query the query required to insert given information.
+     * @param dataSource the data source.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("dataSource")>
+     <precondition_notnull("factory")>
+     */
+    protected <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final Query query,
+        final DataSource dataSource,
+        final <input.vo_name>ValueObjectFactory factory)
+      throws DataAccessException
+    {
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new DataSourceTransactionManager(dataSource),
+                factory);
+    }
+
+    /**
+     * Inserts and retrieves the newly-inserted
+     * \<code><input.vo_name>\</code> instance."
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param query the query required to insert given information.
+     * @param transactionManager the \<code>PlatformTransactionManager\</code>
+     * instance.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionManager")>
+     <precondition_notnull("factory")>
+     */
+    protected <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final Query query,
+        final PlatformTransactionManager transactionManager,
+        final <input.vo_name>ValueObjectFactory factory)
+      throws DataAccessException
+    {
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager),
+                factory);
+    }
+
+    /**
+     * Inserts and retrieves the newly-inserted
+     * \<code><input.vo_name>\</code> instance.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param query the query required to insert given information.
+     * @param transactionTemplate the \<code>TransactionTemplate\<code>
+     * instance.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("transactionTemplate")>
+     <precondition_notnull("factory")>
+     */
+    protected <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final Query query,
+        final TransactionTemplate transactionTemplate,
+        final <input.vo_name>ValueObjectFactory factory)
+      throws DataAccessException
+    {
+        <input.vo_name> result = null;
+
+        Map t_mMap = null;
+
+        <input.externally_managed_attributes:em_attribute_value_retrieval(
+          query=it.query,
+          nativeType=it.nativeType,
+          nameLowercased=it.nameLowercased,
+          type=it.objectType); separator="\n">
+
+        transactionTemplate.execute(
+            new UpdateTransactionCallback(
+                new QueryPreparedStatementCreator(query),
+                new <input.vo_name>AttributesStatementSetter(
+                    <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+                    true),
+                this));
+
+        result =
+            factory.create<input.vo_name>(
+                <input.attributes:{<it.nameLowercased>}; separator=",\n">);
+
+        return result;
+    }
 >>
 
 oracle8Insert(input) ::= <<
@@ -2090,10 +2199,28 @@ oracle8Insert(input) ::= <<
           attr=it); separator=",\n">)
       throws DataAccessException
     {
-        insert(
+        create(
             <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
-              separator=",\n">,
-            getDataSource());
+              separator=",\n">);
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @return the newly-inserted entity.
+     * @throws DataAccessException if the operation fails.
+     */
+    public <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">)
+      throws DataAccessException
+    {
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+                  separator=",\n">,
+                getDataSource());
     }
 
     /**
@@ -2101,19 +2228,21 @@ oracle8Insert(input) ::= <<
      <input.all_but_externally_managed_attributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
      * @param dataSource the data source.
+     * @return the newly-inserted entity.
      * @throws DataAccessException if the operation fails.
      * @precondition dataSource != null
      */
-    public void insert(
+    protected <input.vo_name> create(
         <input.all_but_externally_managed_attributes:attribute_declaration(
           attr=it); separator=",\n">,
         final DataSource dataSource)
       throws DataAccessException
     {
-        insert(
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
-              separator=",\n">,
-            new DataSourceTransactionManager(dataSource));
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+                  separator=",\n">,
+                new DataSourceTransactionManager(dataSource));
     }
 
     /**
@@ -2121,19 +2250,21 @@ oracle8Insert(input) ::= <<
      <input.all_but_externally_managed_attributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
      * @param transactionManager the transaction manager.
+     * @return the newly-inserted entity.
      * @throws DataAccessException if the operation fails.
      * @precondition transactionManager != null
      */
-    public void insert(
+    protected <input.vo_name> create(
         <input.all_but_externally_managed_attributes:attribute_declaration(
           attr=it); separator=",\n">,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        insert(
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
-              separator=",\n">,
-            new TransactionTemplate(transactionManager));
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+                  separator=",\n">,
+                new TransactionTemplate(transactionManager));
     }
 
     /**
@@ -2141,14 +2272,17 @@ oracle8Insert(input) ::= <<
      <input.all_but_externally_managed_attributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
      * @param transactionTemplate the transaction template.
+     * @return the newly-inserted entity.
      * @throws DataAccessException if the operation fails.
      */
-    protected void insert(
+    protected <input.vo_name> create(
         <input.all_but_externally_managed_attributes:attribute_declaration(
           attr=it); separator=",\n">,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
     {
+        <input.vo_name> result = null;
+
         Map t_mMap = null;
 
         <input.externally_managed_attributes:em_attribute_value_retrieval(
@@ -2158,7 +2292,7 @@ oracle8Insert(input) ::= <<
           type=it.objectType); separator="\n">
 
         transactionTemplate.execute(
-            new SelectForUpdateTransactionCallback(
+            new UpdateTransactionCallback(
                 new QueryPreparedStatementCreator(
                     "insert into <input.table_name_uppercased>" +
                     " (" +
@@ -2169,10 +2303,11 @@ oracle8Insert(input) ::= <<
                 new <input.vo_name>AttributesStatementSetter(
                     <input.all_but_lob_attributes:{<it.nameLowercased>};
                       separator=",\n">,
+                    false,
                     true),
                 this));
 
-        transactionTemplate.execute(
+        SelectForUpdateTransactionCallback t_Callback =
             new SelectForUpdateTransactionCallback(
                 new QueryPreparedStatementCreator(
                     "SELECT " +
@@ -2183,14 +2318,20 @@ oracle8Insert(input) ::= <<
                     <input.pk_attributes:{"<it.nameUppercased> = ?};
                       separator=" AND \" +\n">" +
                     " FOR UPDATE"),
+                new <input.vo_name>PkStatementSetter(
+                    <input.pk_attributes:{<it.nameLowercased>};
+                      separator=",\n">),
                 new <input.vo_name>ResultSetExtractor(
                     <input.lob_attributes:{<it.nameLowercased>};
                       separator=",\n">,
                     true),
-                new <input.vo_name>PkAttributesStatementSetter(
-                    <input.pk_attributes:{<it.nameLowercased>};
-                      separator=",\n">),
-                this));
+                this);
+
+        result = (<input.vo_name>) transactionTemplate.execute(t_Callback);
+
+        //result = t_Callback.getResult();
+
+        return result;
     }
 >>
 

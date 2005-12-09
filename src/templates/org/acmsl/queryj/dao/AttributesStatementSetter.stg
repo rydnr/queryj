@@ -179,10 +179,17 @@ public class <input.vo_name>AttributesStatementSetter
     <input.attributes:attribute_member_declaration(attr=it); separator="\n">
 
     /**
-     * The update operation.
+     * The \<i>update\</i> operation.
      */
     private boolean m__bUpdateOperation;
 
+<if(input.clobHandling)>
+    /**
+     * The \<i>select for update\</i> operation.
+     */
+    private boolean m__bSelectForUpdateOperation;
+
+<endif>
     /**
      * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
      * instance.
@@ -223,6 +230,29 @@ public class <input.vo_name>AttributesStatementSetter
         immutableSetUpdateOperation(updateOperation);
     }
 
+<if(input.clobHandling)>
+    /**
+     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
+     * instance.
+     <input.nonpk_attributes:attribute_javadoc(name=it.nameLowercased);
+        separator="\n">
+     * @param updateOperation whether the operation is an update.
+     * @param selectForUpdateOperation whether the operation is a select-for-update.
+     */
+    public <input.vo_name>AttributesStatementSetter(
+        <input.all_but_lob_attributes:attribute_declaration(attr=it);
+          separator=",\n">,
+        final boolean updateOperation,
+        final boolean selectForUpdateOperation)
+    {
+        <input.nonpk_attributes:
+          { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
+          separator="\n">
+        immutableSetUpdateOperation(updateOperation);
+        immutableSetSelectForUpdateOperation(selectForUpdateOperation);
+    }
+
+<endif>
     /**
      * Specifies whether the operation is an update or not.
      * @param updateOperation such information.
@@ -251,6 +281,37 @@ public class <input.vo_name>AttributesStatementSetter
         return m__bUpdateOperation;
     }
 
+<if(input.clobHandling)>
+    /**
+     * Specifies whether the operation is a select-for-update or not.
+     * @param selectForUpdateOperation such information.
+     */
+    protected final  void immutableSetSelectForUpdateOperation(
+        final boolean selectForUpdateOperation)
+    {
+        m__bSelectForUpdateOperation = selectForUpdateOperation;
+    }
+
+    /**
+     * Specifies whether the operation is a select-for-update or not.
+     * @param selectForUpdateOperation such information.
+     */
+    protected void setSelectForUpdateOperation(
+        final boolean selectForUpdateOperation)
+    {
+        immutableSetSelectForUpdateOperation(selectForUpdateOperation);
+    }
+
+    /**
+     * Retrieves whether the operation is a select-for-update or not.
+     * @return such information.
+     */
+    public boolean isSelectForUpdateOperation()
+    {
+        return m__bSelectForUpdateOperation;
+    }
+
+<endif>
     <input.attributes:attribute_accessor(attr=it); separator="\n">
 
     /**
@@ -266,7 +327,12 @@ public class <input.vo_name>AttributesStatementSetter
         setValues(
             (Query) preparedStatement,
             <input.attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
+<if(input.clobHandling)>
+            isUpdateOperation(),
+            isSelectForUpdateOperation());
+<else>
             isUpdateOperation());
+<endif>
     }
 
     /**
@@ -275,6 +341,10 @@ public class <input.vo_name>AttributesStatementSetter
      <input.attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
      * @param updateOperation whether the operation is an update.
+<if(input.clobHandling)>
+     * @param selectForUpdateOperation whether the operation is a
+     * select-for-update.
+<endif>
      * @throws SQLException intercepted by \<i>Spring\</i>.
      <precondition_notnull("preparedStatement")>
      <precondition_notnull("query")>
@@ -283,19 +353,39 @@ public class <input.vo_name>AttributesStatementSetter
         final Query query,
         <input.attributes:attribute_declaration(attr=it);
           separator=",\n">,
+<if(input.clobHandling)>
+        final boolean updateOperation,
+        final boolean selectForUpdateOperation)
+<else>
         final boolean updateOperation)
+<endif>
       throws  SQLException
     {
         if  (updateOperation)
         {
             <input.externally_managed_attributes:
               attribute_query_specification(attr=it);
-                separator="\n">
+              separator="\n">
         }
 
+<if(input.clobHandling)>
+        if  (selectForUpdateOperation)
+        {
+           <input.all_but_lob_attributes:
+             attribute_query_specification(attr=it);
+             separator="\n">
+        }
+        else
+        {
+           <input.all_but_externally_managed_attributes:
+             attribute_query_specification(attr=it);
+             separator="\n">
+        }
+<else>
         <input.all_but_externally_managed_attributes:
           attribute_query_specification(attr=it);
-            separator="\n">
+          separator="\n">
+<endif>
     }
 }
 >>
