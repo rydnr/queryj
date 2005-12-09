@@ -316,6 +316,10 @@ public abstract class BasePerTableTemplate
             metadataUtils.retrieveAllButExternallyManagedAttributes(
                 tableName, metadataManager, metadataTypeManager);
         
+        Collection t_cLobAttributes =
+            metadataUtils.retrieveLobAttributes(
+                tableName, metadataManager, metadataTypeManager);
+        
         Collection t_cAllButLobAttributes =
             metadataUtils.retrieveAllButLobAttributes(
                 tableName, metadataManager, metadataTypeManager);
@@ -382,6 +386,7 @@ public abstract class BasePerTableTemplate
             t_cAttributes,
             t_cExternallyManagedAttributes,
             t_cAllButExternallyManagedAttributes,
+            t_cLobAttributes,
             t_cAllButLobAttributes,
             t_cForeignKeys,
             t_cCustomSelects,
@@ -491,6 +496,7 @@ public abstract class BasePerTableTemplate
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
+        final Collection lobAttributes,
         final Collection allButLobAttributes,
         final Collection foreignKeys,
         final Collection customSelects,
@@ -544,6 +550,7 @@ public abstract class BasePerTableTemplate
             attributes,
             externallyManagedAttributes,
             allButExternallyManagedAttributes,
+            lobAttributes,
             allButLobAttributes,
             foreignKeys,
             staticAttributeName,
@@ -567,6 +574,14 @@ public abstract class BasePerTableTemplate
 
         input.put("base_dao_class_name", baseDAOClassName);
         input.put("base_dao_package_name",  baseDAOPackageName);
+
+        // Check for CLOB stuff.
+        if  (   (metadataManager.requiresCustomClobHandling())
+             && (containsClobs(
+                     tableName, metadataManager, metadataTypeManager)))
+        {
+            input.put("clobHandling", metadataManager.getName());
+        }
     }
 
     /**
@@ -696,6 +711,7 @@ public abstract class BasePerTableTemplate
      * managed externally.
      * @param allButExternallyManagedAttributes all but the attributes which
      * are managed externally.
+     * @param lobAttributes all attributes whose type is Clob or Blob.
      * @param allButLobAttributes all but the attributes whose type is
      * Clob or Blob.
      * @param foreignKeys the entities pointing to this instance's table.
@@ -719,6 +735,7 @@ public abstract class BasePerTableTemplate
      * @precondition attributes != null
      * @precondition externallyManagedAttributes != null
      * @precondition allButExternallyManagedAttributes != null
+     * @precondition lobAttributes != null
      * @precondition allButLobAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
@@ -741,6 +758,7 @@ public abstract class BasePerTableTemplate
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
+        final Collection lobAttributes,
         final Collection allButLobAttributes,
         final Collection foreignKeys,
         final String staticAttributeName,
@@ -780,6 +798,7 @@ public abstract class BasePerTableTemplate
         input.put(
             "all_but_externally_managed_attributes",
             allButExternallyManagedAttributes);
+        input.put("lob_attributes", lobAttributes);
         input.put("all_but_lob_attributes", allButLobAttributes);
         input.put("foreign_keys", foreignKeys);
         input.put("foreign_keys_by_table", referingKeys);
@@ -1005,5 +1024,42 @@ public abstract class BasePerTableTemplate
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
+    }
+
+    /**
+     * Checks whether given table contains Clob attributes or not.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean containsClobs(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        boolean result = false;
+
+        String[] t_astrColumnNames = metadataManager.getColumnNames(tableName);
+
+        int t_iLength =
+            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            if  (metadataTypeManager.isClob(
+                     metadataManager.getColumnType(
+                         tableName, 
+                         t_astrColumnNames[t_iIndex])))
+            {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
     }
 }

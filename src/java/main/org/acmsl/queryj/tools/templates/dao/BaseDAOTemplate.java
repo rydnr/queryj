@@ -158,6 +158,8 @@ public class BaseDAOTemplate
      * managed externally.
      * @param allButExternallyManagedAttributes all but the attributes which
      * are managed externally.
+     * @param lobAttributes all but the attributes whose type is
+     * Clob or Blob.
      * @param allButLobAttributes all but the attributes whose type is
      * Clob or Blob.
      * @param foreignKeys the entities pointing to this instance's table.
@@ -181,6 +183,7 @@ public class BaseDAOTemplate
      * @precondition attributes != null
      * @precondition externallyManagedAttributes != null
      * @precondition allButExternallyManagedAttributes != null
+     * @precondition lobAttributes != null
      * @precondition allButLobAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
@@ -203,6 +206,7 @@ public class BaseDAOTemplate
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
+        final Collection lobAttributes,
         final Collection allButLobAttributes,
         final Collection foreignKeys,
         final String staticAttributeName,
@@ -227,6 +231,7 @@ public class BaseDAOTemplate
             attributes,
             externallyManagedAttributes,
             allButExternallyManagedAttributes,
+            lobAttributes,
             allButLobAttributes,
             foreignKeys,
             staticAttributeName,

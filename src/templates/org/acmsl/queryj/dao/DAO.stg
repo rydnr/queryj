@@ -1382,6 +1382,60 @@ public class <input.engine_name><input.vo_name>DAO
             return result;
         }
     }
+
+<if(input.clobHandling)>
+    /**
+     * Transaction callback implementation to perform a
+     * \<i>select for update\</code>.
+     */
+    protected static class SelectForUpdateTransactionCallback
+        extends QueryTransactionCallback
+    {
+        /**
+         * Creates a transaction callback.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param setter the \<code>PreparedStatementSetter\</code> instance.
+         * @param extractor the \<code>ResultSetExtractor\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code>
+         * instance.
+         */
+        public SelectForUpdateTransactionCallback(
+            final PreparedStatementCreator creator,
+            final PreparedStatementSetter setter,
+            final ResultSetExtractor extractor,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            super(creator, setter, extractor, dao);
+        }
+
+        /**
+         * Executes the transactional operation.
+         * @param status the transaction status.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param setter the \<code>PreparedStatementSetter\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         * @return the transaction result.
+         */
+        protected Object doInTransaction(
+            final TransactionStatus status,
+            final PreparedStatementCreator creator,
+            final PreparedStatementSetter setter,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            /*
+            return
+                doInTransaction(
+                    status,
+                    creator,
+                    setter,
+                    getSQL(),
+                    getResultSetExtractor(),
+                    dao);
+            */
+            return null;
+        }
+    }
+<endif>
 }
 >>
 
@@ -2036,6 +2090,65 @@ oracle8Insert(input) ::= <<
           attr=it); separator=",\n">)
       throws DataAccessException
     {
+        insert(
+            <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+              separator=",\n">,
+            getDataSource());
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param dataSource the data source.
+     * @throws DataAccessException if the operation fails.
+     * @precondition dataSource != null
+     */
+    public void insert(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final DataSource dataSource)
+      throws DataAccessException
+    {
+        insert(
+            <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+              separator=",\n">,
+            new DataSourceTransactionManager(dataSource));
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param transactionManager the transaction manager.
+     * @throws DataAccessException if the operation fails.
+     * @precondition transactionManager != null
+     */
+    public void insert(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final PlatformTransactionManager transactionManager)
+      throws DataAccessException
+    {
+        insert(
+            <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+              separator=",\n">,
+            new TransactionTemplate(transactionManager));
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param transactionTemplate the transaction template.
+     * @throws DataAccessException if the operation fails.
+     */
+    protected void insert(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final TransactionTemplate transactionTemplate)
+      throws DataAccessException
+    {
         Map t_mMap = null;
 
         <input.externally_managed_attributes:em_attribute_value_retrieval(
@@ -2045,12 +2158,12 @@ oracle8Insert(input) ::= <<
           type=it.objectType); separator="\n">
 
         transactionTemplate.execute(
-            new UpdateTransactionCallback(
-                new PreparedStatementCreator(
+            new SelectForUpdateTransactionCallback(
+                new QueryPreparedStatementCreator(
                     "insert into <input.table_name_uppercased>" +
                     " (" +
                     <input.attributes:{"<it.nameUppercased>};
-                      separator=", \" +\n">"
+                      separator=", \" +\n">" +
                     ") VALUES (" +
                     <input.attributes:insert_attribute(attr=it); separator=" +\n">),
                 new <input.vo_name>AttributesStatementSetter(
@@ -2060,17 +2173,20 @@ oracle8Insert(input) ::= <<
                 this));
 
         transactionTemplate.execute(
-            new PreparedStatementCreator(
-                "SELECT " +
-                <input.attributes:{"<it.nameUppercased>};
-                  separator=", \" +\n">" +
-                " FROM <input.table_name_uppercased>" +
-                " WHERE "
-                <input.pk_attributes:{"<it.nameUppercased> = ?};
-                  separator=" AND \" +\n">" +
-                " FOR UPDATE"),
-                // to-do
-                <input.table_name_uppercased>_EXTRACTOR,
+            new SelectForUpdateTransactionCallback(
+                new QueryPreparedStatementCreator(
+                    "SELECT " +
+                    <input.attributes:{"<it.nameUppercased>};
+                      separator=", \" +\n">" +
+                    " FROM <input.table_name_uppercased>" +
+                    " WHERE " +
+                    <input.pk_attributes:{"<it.nameUppercased> = ?};
+                      separator=" AND \" +\n">" +
+                    " FOR UPDATE"),
+                new <input.vo_name>ResultSetExtractor(
+                    <input.lob_attributes:{<it.nameLowercased>};
+                      separator=",\n">,
+                    true),
                 new <input.vo_name>PkAttributesStatementSetter(
                     <input.pk_attributes:{<it.nameLowercased>};
                       separator=",\n">),
@@ -2080,9 +2196,9 @@ oracle8Insert(input) ::= <<
 
 insert_attribute(attr) ::= <<
 <!
-  Generates the insert part corresponding to given attribute.
-  @param attr the attribute.
- !>
+ Generates the insert part corresponding to given attribute.
+ @param attr the attribute.
+!>
 <if(attr.clob)>
 "empty_clob()"
 <else>

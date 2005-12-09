@@ -729,7 +729,27 @@ public class MetadataUtils
     }
 
     /**
-     * Retrieve all but the LOB attributes.
+     * Retrieves the LOB attributes.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @return such attributes.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    public Collection retrieveLobAttributes(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            retrieveLobAttributes(
+                tableName, metadataManager, metadataTypeManager, true);
+    }
+
+    /**
+     * Retrieves all but the LOB attributes.
      * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
@@ -743,6 +763,28 @@ public class MetadataUtils
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager)
     {
+        return
+            retrieveLobAttributes(
+                tableName, metadataManager, metadataTypeManager, false);
+    }
+
+    /**
+     * Retrieves attributes depending on their LOB nature.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param includeLob whether to include or exclude the LOB attributes.
+     * @return such attributes.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    protected Collection retrieveLobAttributes(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final boolean includeLob)
+    {
         Collection t_cLobAttributeNames = new ArrayList();
         
         String[] t_astrColumnNames =
@@ -751,11 +793,18 @@ public class MetadataUtils
         int t_iLength =
             (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
 
+        boolean t_bCheck = false;
+
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            if  (!metadataTypeManager.isClob(
-                     metadataManager.getColumnType(
-                         tableName, t_astrColumnNames[t_iIndex])))
+            t_bCheck =
+                metadataTypeManager.isClob(
+                    metadataManager.getColumnType(
+                        tableName, t_astrColumnNames[t_iIndex]));
+
+            t_bCheck = includeLob ? t_bCheck : !t_bCheck;
+
+            if  (t_bCheck)
             {
                 t_cLobAttributeNames.add(t_astrColumnNames[t_iIndex]);
             }

@@ -153,6 +153,19 @@ public class <input.vo_name>ResultSetExtractor
     implements  ResultSetExtractor,
                 <input.tr_name>TableRepository
 {
+<if(input.clobHandling)>
+<indirect_template(name=input.clobHandling+"Extractor", input=input)>
+<else>
+<defaultExtractor(input=input)>
+<endif>
+}
+>>
+
+defaultExtractor(input) ::= <<
+<!
+ Generates the default logic for the extractor.
+ @param input the input.
+!>
     /**
      * Extracts \<i><input.vo_name>\</i> information from given result set.
      * @param resultSet the result set.
@@ -175,7 +188,7 @@ public class <input.vo_name>ResultSetExtractor
     }
 
     /**
-    * Extracts \<i><input.vo_name>\</i> information from given result set.
+     * Extracts \<i><input.vo_name>\</i> information from given result set.
      * @param resultSet the result set.
      * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
      * instance.
@@ -197,8 +210,8 @@ public class <input.vo_name>ResultSetExtractor
 
         if  (resultSet.next())
         {
-            <input.attributes:nullable_attribute_extraction(attr=it);
-               separator="\n\n">
+            <input.attributes:nullable_attribute_extraction(
+              attr=it, input=input)>
 
             result =
                 factory.create<input.vo_name>ValueObject(
@@ -208,10 +221,248 @@ public class <input.vo_name>ResultSetExtractor
 
         return result;
     }
+>>
+
+oracle8Extractor(input) ::= <<
+<!
+ Generates the constructor needed by Oracle8 LOB management.
+ @param input the input.
+!>
+    <input.lob_attributes:attribute_class_declaration(attr=it);
+      separator="\n\n">
+
+    /**
+     * The \<i>select for update\</i> mode.
+     */
+    private boolean m__bSelectForUpdateMode;
+
+    /**
+     * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
+     * to extract <input.vo_name> information, managing LOB stuff.
+     * @param selectForUpdateMode whether the result set is the result of
+     * the \<i>select for update\</code> (required to perform some operations
+     * such as \<b>insert\</b>s), or not.
+     */
+    protected <input.vo_name>ResultSetExtractor(
+        final boolean selectForUpdateMode)
+    {
+        immutableSetSelectForUpdateMode(selectForUpdateMode);
+    }
+
+    /**
+     * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
+     * to extract <input.vo_name> information, managing LOB stuff.
+     <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
+       separator=",\n">
+     * @param selectForUpdateMode whether the result set is the result of
+     * the \<i>select for update\</code> (required to perform some operations
+     * such as \<b>insert\</b>s), or not.
+     */
+    public <input.vo_name>ResultSetExtractor(
+        <input.lob_attributes:attribute_method_declaration(attr=it);
+          separator=",\n">,
+        final boolean selectForUpdateMode)
+    {
+        this(selectForUpdateMode);
+        <input.lob_attributes:attribute_setter_call(attr=it); separator="\n">
+    }
+
+    /**
+     * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
+     * to extract <input.vo_name> information, managing LOB stuff.
+     */
+    public <input.vo_name>ResultSetExtractor()
+    {
+        this(false);
+    }
+
+    <input.lob_attributes:attribute_accessors(attr=it); separator="\n\n">
+
+    /**
+     * Specifies whether the extractor is retrieving results of a
+     * \<i>select for update\</i> or not.
+     * @param selectForUpdate such behaviour.
+     */
+    protected final void immutableSetSelectForUpdateMode(
+        final boolean selectForUpdateMode)
+    {
+        m__bSelectForUpdateMode = selectForUpdateMode;
+    }
+
+    /**
+     * Specifies whether the extractor is retrieving results of a
+     * \<i>select for update\</i> or not.
+     * @param selectForUpdate such behaviour.
+     */
+    protected void setSelectForUpdateMode(final boolean selectForUpdateMode)
+    {
+        immutableSetSelectForUpdateMode(selectForUpdateMode);
+    }
+
+    /**
+     * Retrieves whether the extractor is retrieving results of a
+     * \<i>select for update\</i> or not.
+     * @return such behaviour.
+     */
+    public boolean getSelectForUpdateMode()
+    {
+        return m__bSelectForUpdateMode;
+    }
+
+    /**
+     * Extracts \<i><input.vo_name>\</i> information from given result set.
+     * @param resultSet the result set.
+     * @return the \<code><input.vo_name>ValueObject\</code> or
+     * \<code>null\</code> if the operation returned no data.
+     * @throws SQLException intercepted by \<i>Spring\</i\>.
+     * @throws DataAccessException with information about any
+     * custom exception.
+     * @precondition resultSet instanceof QueryResultSet
+     */
+    public Object extractData(final ResultSet resultSet)
+        throws  SQLException,
+                DataAccessException
+    {
+        return
+            extractData(
+                (QueryResultSet) resultSet,
+                <input.lob_attributes:{get<it.nameCapitalized>()};
+                  separator=",\n">,
+                getSelectForUpdateMode(),
+                <input.vo_name>ValueObjectFactory.getInstance());
+    }
+
+    /**
+     * Extracts \<i><input.vo_name>\</i> information from given result set.
+     * @param resultSet the result set.
+     <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
+       separator="\n">
+     * @param selectForUpdate whether the operation is a
+     * \<i>select for update\</i>.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
+     * @return the \<code><input.vo_name>ValueObject\</code> or
+     * \<code>null\</code> if the operation returned no data.
+     * @throws SQLException intercepted by \<i>Spring\</i\>.
+     * @throws DataAccessException with information about any
+     * custom exception.
+     * @precondition resultSet != null
+     * @precondition factory != null
+     */
+    protected Object extractData(
+        final QueryResultSet resultSet,
+        <input.lob_attributes:attribute_method_declaration(attr=it);
+          separator=",\n">,
+        final boolean selectForUpdateMode,
+        final <input.vo_name>ValueObjectFactory factory)
+      throws  SQLException,
+              DataAccessException
+    {
+        <input.vo_name>ValueObject result = null;
+
+        if  (resultSet.next())
+        {
+            <input.attributes:nullable_attribute_extraction(
+              attr=it, input=input)>
+            <input.lob_attributes:special_attribute_extraction(
+              attr=it, input=input)>
+
+            result =
+                factory.create<input.vo_name>ValueObject(
+                    <input.attributes:attribute_extraction(
+                      attr=it, input=input); separator=",\n">);
+        }
+
+        return result;
+    }
+
+>>
+
+attribute_class_declaration(attr) ::= <<
+<!
+ Generates the attribute class declaration.
+ @param attr the attribute.
+!>
+/**
+ * The <attr.name> attribute.
+ */
+private <attr.objectType> m__<attr.nameCapitalized>;
+>>
+
+attribute_javadoc_method_declaration(attr) ::= <<
+<!
+ Generates the attribute Javadoc method declaration.
+ @param attr the attribute.
+!>
+* @param <attr.nameLowercased> the \<i><attr.name>\</i> information.
+>>
+
+attribute_method_declaration(attr) ::= <<
+<!
+ Generates the attribute method declaration.
+ @param attr the attribute.
+!>
+final <attr.objectType> <attr.nameLowercased>
+>>
+
+attribute_setter_call(attr) ::= <<
+<!
+ Generates the attribute setter call.
+ @param attr the attribute.
+!>
+immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);
+>>
+
+attribute_accessors(attr) ::= <<
+<!
+ Generates the attribute accessors.
+ @param attr the attribute.
+!>
+/**
+ * Specifies the \<i><attr.name>\</i> information.
+ * @param <attr.nameLowercased> such value.
+ */
+protected final void immutableSet<attr.nameCapitalized>(
+    final <attr.objectType> <attr.nameLowercased>)
+{
+    m__<attr.nameCapitalized> = <attr.nameLowercased>;
+}
+
+/**
+ * Specifies the \<i><attr.name>\</i> information.
+ * @param <attr.nameLowercased> such value.
+ */
+protected void set<attr.nameCapitalized>(
+    final <attr.objectType> <attr.nameLowercased>)
+{
+    immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);
+}
+
+/**
+ * Specifies the \<i><attr.name>\</i> information.
+ * @param <attr.nameLowercased> such value.
+ */
+public <attr.objectType> get<attr.nameCapitalized>()
+{
+    return m__<attr.nameCapitalized>;
 }
 >>
 
-nullable_attribute_extraction(attr) ::= <<
+nullable_attribute_extraction(attr, input) ::= <<
+<!
+ Generates the code to extract nullable attributes.
+ @param attr the attribute.
+ @param input the input.
+!>
+<if(input.clobHandling)>
+<indirect_template(
+  name=input.clobHandling+"_nullable_attribute_extraction", input=attr)>
+<else>
+<default_nullable_attribute_extraction(attr=attr)>
+<endif>
+>>
+
+default_nullable_attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract nullable attributes.
  @param attr the attribute,
@@ -219,9 +470,9 @@ nullable_attribute_extraction(attr) ::= <<
 <if(attr.allowsNull)>
 <attr.objectType> t_<attr.nameCapitalized>As<attr.objectType> =
 <if(attr.primitive)>
-    <object_nullable_attribute_extractor(attr=attr)>
+<object_nullable_attribute_extractor(attr=attr)>
 <else>
-    <indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
+<indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
 <endif>
 
 if  (resultSet.wasNull())
@@ -269,7 +520,21 @@ resultSet.get<attr.objectType>(
     <attr.tableNameUppercased>.<attr.nameUppercased>);
 >>
 
-attribute_extraction(attr) ::= <<
+attribute_extraction(attr, input) ::= <<
+<!
+ Generates the code to extract attributes.
+ @param attr the attribute.
+ @param input the input.
+!>
+<if(input.clobHandling)>
+<indirect_template(
+  name=input.clobHandling+"_attribute_extraction", input=attr)>
+<else>
+<default_attribute_extraction(attr)>
+<endif>
+>>
+
+default_attribute_extraction(attr) ::= <<
 <!
  Generates the member declaration for a concrete attribute.
  @param attr the attribute.
@@ -278,5 +543,57 @@ attribute_extraction(attr) ::= <<
 t_<attr.nameCapitalized>As<attr.objectType>
 <else>
 resultSet.get<attr.objectType>(<attr.tableNameUppercased>.<attr.nameUppercased>)
+<endif>
+>>
+
+special_attribute_extraction(attr, input) ::= <<
+<!
+ Generates the code to extract special attributes.
+ @param attr the attribute.
+ @param input the input.
+!>
+<if(input.clobHandling)>
+<indirect_template(
+  name=input.clobHandling+"_special_attribute_extraction", input=attr)>
+<endif>
+>>
+
+oracle8_nullable_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract nullable attributes for Oracle8.
+ @param input the attribute.
+!>
+<if(!input.clob)>
+<default_nullable_attribute_extraction(attr=input)>
+<endif>
+>>
+
+oracle8_special_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract special attributes for Oracle8.
+ @param input the attribute.
+!>
+<if(input.clob)>
+oracle.sql.CLOB t_<input.nameCapitalized> =
+    (oracle.sql.CLOB) resultSet.getClob("<input.nameUppercased>");
+
+t_<input.nameCapitalized>.putString(1, <input.nameLowercased>);
+<else>
+if  (resultSet.wasNull())
+{
+    t_<input.nameCapitalized>As<input.objectType> = null;
+}
+<endif>
+>>
+
+oracle8_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract the attributes for Oracle8.
+ @param input the attribute.
+!>
+<if(input.clob)>
+<input.nameLowercased>
+<else>
+<default_attribute_extraction(attr=input)>
 <endif>
 >>
