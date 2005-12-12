@@ -325,7 +325,7 @@ oracle8Extractor(input) ::= <<
     {
         return
             extractData(
-                (QueryResultSet) resultSet,
+                resultSet,
                 <input.lob_attributes:{get<it.nameCapitalized>()};
                   separator=",\n">,
                 getSelectForUpdateMode(),
@@ -350,7 +350,7 @@ oracle8Extractor(input) ::= <<
      * @precondition factory != null
      */
     protected Object extractData(
-        final QueryResultSet resultSet,
+        final ResultSet resultSet,
         <input.lob_attributes:attribute_method_declaration(attr=it);
           separator=",\n">,
         final boolean selectForUpdateMode,
@@ -362,6 +362,8 @@ oracle8Extractor(input) ::= <<
 
         if  (resultSet.next())
         {
+            int t_iIndex = 1;
+
             <input.attributes:nullable_attribute_extraction(
               attr=it, input=input)>
             <input.lob_attributes:special_attribute_extraction(
@@ -458,21 +460,30 @@ nullable_attribute_extraction(attr, input) ::= <<
 <indirect_template(
   name=input.clobHandling+"_nullable_attribute_extraction", input=attr)>
 <else>
-<default_nullable_attribute_extraction(attr=attr)>
+<default_nullable_attribute_extraction(attr=attr, input=input)>
 <endif>
 >>
 
-default_nullable_attribute_extraction(attr) ::= <<
+default_nullable_attribute_extraction(attr, input) ::= <<
 <!
  Generates the code to extract nullable attributes.
- @param attr the attribute,
+ @param attr the attribute.
+ @param input the input.
 !>
 <if(attr.allowsNull)>
 <attr.objectType> t_<attr.nameCapitalized>As<attr.objectType> =
 <if(attr.primitive)>
+<if(input.clobhandling)>
+<object_nullable_clobyhandling_attribute_extractor(attr=attr)>
+<else>
 <object_nullable_attribute_extractor(attr=attr)>
+<endif>
+<else>
+<if(input.clobhandling)>
+<indirect_template(name=attr.objectType+"_nullable_clobhandling_attribute_extractor", input=attr)>
 <else>
 <indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
+<endif>
 <endif>
 
 if  (resultSet.wasNull())
@@ -489,6 +500,13 @@ String_nullable_attribute_extractor(input) ::= <<
 <object_nullable_attribute_extractor(attr=input)>
 >>
 
+String_nullable_clobhandling_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a String nullable attribute.
+!>
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
+>>
+
 Date_nullable_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
@@ -496,11 +514,25 @@ Date_nullable_attribute_extractor(input) ::= <<
 <object_nullable_attribute_extractor(attr=input)>
 >>
 
+Date_nullable_clobhandling_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a Date nullable attribute.
+!>
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
+>>
+
 Timestamp_nullable_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
 <object_nullable_attribute_extractor(attr=input)>
+>>
+
+Timestamp_nullable_clobhandling_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a Timestamp nullable attribute.
+!>
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
 >>
 
 primitive_nullable_attribute_extractor(attr) ::= <<
@@ -512,12 +544,27 @@ new <attr.objectType>(
         <attr.tableNameUppercased>.<attr.nameUppercased>));
 >>
 
+primitive_nullable_clobhandling_attribute_extractor(attr) ::= <<
+<!
+  Generates the code to extract a primitive nullable attribute.
+!>
+new <attr.objectType>(
+    resultSet.get<attr.objectType>(t_iIndex++));
+>>
+
 object_nullable_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a non-primitive nullable attribute.
 !>
 resultSet.get<attr.objectType>(
     <attr.tableNameUppercased>.<attr.nameUppercased>);
+>>
+
+object_nullable_clobhandling_attribute_extractor(attr) ::= <<
+<!
+  Generates the code to extract a non-primitive nullable attribute.
+!>
+resultSet.get<attr.objectType>(t_iIndex++);
 >>
 
 attribute_extraction(attr, input) ::= <<
@@ -543,6 +590,18 @@ default_attribute_extraction(attr) ::= <<
 t_<attr.nameCapitalized>As<attr.objectType>
 <else>
 resultSet.get<attr.objectType>(<attr.tableNameUppercased>.<attr.nameUppercased>)
+<endif>
+>>
+
+default_clobhandling_attribute_extraction(attr) ::= <<
+<!
+ Generates the member declaration for a concrete attribute.
+ @param attr the attribute.
+!>
+<if(attr.allowsNull)>
+t_<attr.nameCapitalized>As<attr.objectType>
+<else>
+resultSet.get<attr.objectType>(t_iIndex++)
 <endif>
 >>
 
@@ -575,7 +634,7 @@ oracle8_special_attribute_extraction(input) ::= <<
 !>
 <if(input.clob)>
 oracle.sql.CLOB t_<input.nameCapitalized> =
-    (oracle.sql.CLOB) resultSet.getClob("<input.nameUppercased>");
+    (oracle.sql.CLOB) resultSet.getClob(t_iIndex++);
 
 t_<input.nameCapitalized>.putString(1, <input.nameLowercased>);
 <else>
@@ -594,6 +653,6 @@ oracle8_attribute_extraction(input) ::= <<
 <if(input.clob)>
 <input.nameLowercased>
 <else>
-<default_attribute_extraction(attr=input)>
+<default_clobhandling_attribute_extraction(attr=input)>
 <endif>
 >>
