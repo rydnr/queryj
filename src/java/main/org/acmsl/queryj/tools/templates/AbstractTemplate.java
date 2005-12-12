@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeConstants;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.Template;
@@ -247,4 +248,32 @@ public abstract class AbstractTemplate
      */
     protected abstract String generateOutput()
       throws  InvalidTemplateException;
+
+    /**
+     * Normalizes given value, in lower-case.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such output.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalizeLowercase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.normalizeLowercase(value);
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such output.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String capitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
+    }
 }
