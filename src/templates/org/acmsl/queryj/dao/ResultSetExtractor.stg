@@ -362,8 +362,6 @@ oracle8Extractor(input) ::= <<
 
         if  (resultSet.next())
         {
-            int t_iIndex = 1;
-
             <input.attributes:nullable_attribute_extraction(
               attr=it, input=input)>
             <input.lob_attributes:special_attribute_extraction(
@@ -549,7 +547,7 @@ primitive_nullable_clobhandling_attribute_extractor(attr) ::= <<
   Generates the code to extract a primitive nullable attribute.
 !>
 new <attr.objectType>(
-    resultSet.get<attr.objectType>(t_iIndex++));
+    resultSet.get<attr.objectType>("<attr.nameUppercased>"));
 >>
 
 object_nullable_attribute_extractor(attr) ::= <<
@@ -564,7 +562,7 @@ object_nullable_clobhandling_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a non-primitive nullable attribute.
 !>
-resultSet.get<attr.objectType>(t_iIndex++);
+resultSet.get<attr.objectType>("<attr.nameUppercased>");
 >>
 
 attribute_extraction(attr, input) ::= <<
@@ -601,7 +599,7 @@ default_clobhandling_attribute_extraction(attr) ::= <<
 <if(attr.allowsNull)>
 t_<attr.nameCapitalized>As<attr.objectType>
 <else>
-resultSet.get<attr.objectType>(t_iIndex++)
+resultSet.get<attr.objectType>("<attr.nameUppercased>")
 <endif>
 >>
 
@@ -634,7 +632,7 @@ oracle8_special_attribute_extraction(input) ::= <<
 !>
 <if(input.clob)>
 oracle.sql.CLOB t_<input.nameCapitalized> =
-    (oracle.sql.CLOB) resultSet.getClob(t_iIndex++);
+    (oracle.sql.CLOB) resultSet.getClob("<attr.nameUppercased>");
 
 t_<input.nameCapitalized>.putString(1, <input.nameLowercased>);
 <else>

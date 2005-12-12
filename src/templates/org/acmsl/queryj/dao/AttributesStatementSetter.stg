@@ -246,7 +246,7 @@ public class <input.vo_name>AttributesStatementSetter
         final boolean updateOperation,
         final boolean selectForUpdateOperation)
     {
-        <input.nonpk_attributes:
+        <input.all_but_lob_attributes:
           { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
           separator="\n">
         immutableSetUpdateOperation(updateOperation);
