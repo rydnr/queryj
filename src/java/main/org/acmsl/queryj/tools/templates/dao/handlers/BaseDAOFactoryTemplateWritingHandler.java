@@ -103,6 +103,7 @@ public class BaseDAOFactoryTemplateWritingHandler
      * @param projectPackage the project base package.
      * @param useSubfolders whether to use subfolders for tests, or
      * using a different package naming scheme.
+     * @param tableName the table name.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
@@ -117,6 +118,7 @@ public class BaseDAOFactoryTemplateWritingHandler
         final File projectFolder,
         final String projectPackage,
         final boolean useSubfolders,
+        final String tableName,
         final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)

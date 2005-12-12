@@ -120,7 +120,9 @@ public abstract class BasePerTableTemplateWritingHandler
 
         try
         {
-            handle(parameters, metaData.getDatabaseProductName());
+            handle(
+                parameters,
+                metaData.getDatabaseProductName());
         }
         catch  (final SQLException sqlException)
         {
@@ -143,23 +145,26 @@ public abstract class BasePerTableTemplateWritingHandler
     {
         handle(
             retrieveTemplates(parameters),
-            retrieveOutputDir(engineName, parameters),
+            engineName,
+            parameters,
             retrieveTemplateGenerator());
     }
             
     /**
      * Handles given information.
      * @param templates the templates.
-     * @param outputDir the output dir.
+     * @param engineName the engine name.
+     * @param parameters the parameters.
      * @param templateGenerator the template generator.
      * @throws BuildException if the build process cannot be performed.
      * @precondition templates != null
-     * @precondition outputDir != null
+     * @precondition parameters != null
      * @precondition templateGenerator != null
      */
     protected void handle(
         final BasePerTableTemplate[] templates,
-        final File outputDir,
+        final String engineName,
+        final Map parameters,
         final BasePerTableTemplateGenerator templateGenerator)
       throws  BuildException
     {
@@ -168,7 +173,11 @@ public abstract class BasePerTableTemplateWritingHandler
             for  (int t_iIndex = 0; t_iIndex < templates.length; t_iIndex++)
             {
                 templateGenerator.write(
-                    templates[t_iIndex], outputDir);
+                    templates[t_iIndex],
+                    retrieveOutputDir(
+                        templates[t_iIndex].getTableName(),
+                        engineName,
+                        parameters));
             }
         }
         catch  (final IOException ioException)
@@ -195,6 +204,7 @@ public abstract class BasePerTableTemplateWritingHandler
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param tableName the table name.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
@@ -202,7 +212,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(
-        final String engineName, final Map parameters)
+        final String tableName, final String engineName, final Map parameters)
       throws  BuildException
     {
         return
@@ -210,6 +220,7 @@ public abstract class BasePerTableTemplateWritingHandler
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveUseSubfoldersFlag(parameters),
+                tableName,
                 engineName,
                 parameters,
                 PackageUtils.getInstance());
@@ -221,6 +232,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @param projectPackage the project base package.
      * @param useSubfolders whether to use subfolders for tests, or
      * using a different package naming scheme.
+     * @param tableName the table name.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
@@ -234,6 +246,7 @@ public abstract class BasePerTableTemplateWritingHandler
         final File projectFolder,
         final String projectPackage,
         final boolean useSubfolders,
+        final String tableName,
         final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)

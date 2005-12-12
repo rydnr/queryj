@@ -33,17 +33,17 @@
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate AttributeStatementSetters.
+// Description: Defines the rules to generate PkStatementSetters.
 //
 // Version: $Revision$ ($Author$ at $Date$)
 //
 // $Id$
 //
-group AttributesStatementSetter;
+group PkStatementSetter;
 
 source(input) ::= <<
 <!
-  Generates an AttributeStatementSetter source file.
+  Generates a PkStatementSetter source file.
   @param input.copyright_years the copyright's years.
   @param input.table_name the table name.
   @param input.package the package.
@@ -133,7 +133,7 @@ third_line_description(tableName) ::= <<
   Generates the third line of the generated file description.
   @param tableName the table name.
 !>
-complete attribute set.
+primary key attribute set .
 >>
 
 project_imports(
@@ -172,150 +172,29 @@ class(input) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.vo_name>AttributesStatementSetter
+public class <input.vo_name>PkStatementSetter
     implements  PreparedStatementSetter,
                 <input.tr_name>TableRepository
 {
-    <input.attributes:attribute_member_declaration(attr=it); separator="\n\n">
+    <input.pk_attributes:attribute_member_declaration(attr=it);
+      separator="\n\n">
 
     /**
-     * The \<i>update\</i> operation.
-     */
-    private boolean m__bUpdateOperation;
-
-<if(input.clobHandling)>
-    /**
-     * The \<i>select for update\</i> operation.
-     */
-    private boolean m__bSelectForUpdateOperation;
-
-
-<endif>
-    /**
-     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
+     * Creates a \<code><input.vo_name>PkStatementSetter\</code>
      * instance.
-     <input.attributes:attribute_javadoc(name=it.nameLowercased);
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
-     * @param updateOperation whether the operation is an update.
      */
-    public <input.vo_name>AttributesStatementSetter(
-        <input.attributes:attribute_declaration(attr=it);
-          separator=",\n">,
-        final boolean updateOperation)
+    public <input.vo_name>PkStatementSetter(
+        <input.pk_attributes:attribute_declaration(attr=it);
+          separator=",\n">)
     {
-        this(
-            <input.nonpk_attributes:{ attr | <attr.nameLowercased>};
-              separator=",\n">,
-            updateOperation);
-
         <input.pk_attributes:
           { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
           separator="\n">
     }
 
-    /**
-     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
-     * instance.
-     <input.nonpk_attributes:attribute_javadoc(name=it.nameLowercased);
-        separator="\n">
-     * @param updateOperation whether the operation is an update.
-     */
-    public <input.vo_name>AttributesStatementSetter(
-        <input.nonpk_attributes:attribute_declaration(attr=it);
-          separator=",\n">,
-        final boolean updateOperation)
-    {
-        <input.nonpk_attributes:
-          { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
-          separator="\n">
-        immutableSetUpdateOperation(updateOperation);
-    }
-
-<if(input.clobHandling)>
-    /**
-     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
-     * instance.
-     <input.nonpk_attributes:attribute_javadoc(name=it.nameLowercased);
-        separator="\n">
-     * @param updateOperation whether the operation is an update.
-     * @param selectForUpdateOperation whether the operation is a select-for-update.
-     */
-    public <input.vo_name>AttributesStatementSetter(
-        <input.all_but_lob_attributes:attribute_declaration(attr=it);
-          separator=",\n">,
-        final boolean updateOperation,
-        final boolean selectForUpdateOperation)
-    {
-        <input.nonpk_attributes:
-          { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
-          separator="\n">
-        immutableSetUpdateOperation(updateOperation);
-        immutableSetSelectForUpdateOperation(selectForUpdateOperation);
-    }
-
-<endif>
-
-    /**
-     * Specifies whether the operation is an update or not.
-     * @param updateOperation such information.
-     */
-    protected final void immutableSetUpdateOperation(
-        final boolean updateOperation)
-    {
-        m__bUpdateOperation = updateOperation;
-    }
-
-    /**
-     * Specifies whether the operation is an update or not.
-     * @param updateOperation such information.
-     */
-    protected void setUpdateOperation(final boolean updateOperation)
-    {
-        immutableSetUpdateOperation(updateOperation);
-    }
-
-    /**
-     * Retrieves whether the operation is an update or not.
-     * @return such information.
-     */
-    public boolean isUpdateOperation()
-    {
-        return m__bUpdateOperation;
-    }
-
-<if(input.clobHandling)>
-    /**
-     * Specifies whether the operation is a select-for-update or not.
-     * @param selectForUpdateOperation such information.
-     */
-    protected final  void immutableSetSelectForUpdateOperation(
-        final boolean selectForUpdateOperation)
-    {
-        m__bSelectForUpdateOperation = selectForUpdateOperation;
-    }
-
-    /**
-     * Specifies whether the operation is a select-for-update or not.
-     * @param selectForUpdateOperation such information.
-     */
-    protected void setSelectForUpdateOperation(
-        final boolean selectForUpdateOperation)
-    {
-        immutableSetSelectForUpdateOperation(selectForUpdateOperation);
-    }
-
-    /**
-     * Retrieves whether the operation is a select-for-update or not.
-     * @return such information.
-     */
-    public boolean isSelectForUpdateOperation()
-    {
-        return m__bSelectForUpdateOperation;
-    }
-
-
-<endif>
-    <input.attributes:attribute_accessor(attr=it); separator="\n\n">
+    <input.pk_attributes:attribute_accessor(attr=it); separator="\n\n">
 
     /**
      * Specifies the values on given \<code>PreparedStatement\</code>
@@ -335,15 +214,8 @@ public class <input.vo_name>AttributesStatementSetter
             (Query) preparedStatement,
 
 <endif>
-            <input.attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
-<if(input.clobHandling)>
-            isUpdateOperation(),
-            isSelectForUpdateOperation());
-
-<else>
-            isUpdateOperation());
-
-<endif>
+            <input.pk_attributes:{attr | get<attr.nameCapitalized>()};
+              separator=",\n">);
     }
 
     /**
@@ -355,14 +227,8 @@ public class <input.vo_name>AttributesStatementSetter
      * @param query the query.
 
 <endif>
-     <input.attributes:attribute_javadoc(name=it.nameLowercased);
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
-     * @param updateOperation whether the operation is an update.
-<if(input.clobHandling)>
-     * @param selectForUpdateOperation whether the operation is a
-     * select-for-update.
-
-<endif>
      * @throws SQLException intercepted by \<i>Spring\</i>.
 <if(input.clobHandling)>
      <precondition_notnull("preparedStatement")>
@@ -380,54 +246,19 @@ public class <input.vo_name>AttributesStatementSetter
         final Query query,
 
 <endif>
-        <input.attributes:attribute_declaration(attr=it);
-          separator=",\n">,
-<if(input.clobHandling)>
-        final boolean updateOperation,
-        final boolean selectForUpdateOperation)
-
-<else>
-        final boolean updateOperation)
-
-<endif>
+        <input.pk_attributes:attribute_declaration(attr=it);
+          separator=",\n">)
       throws  SQLException
     {
 <if(input.clobHandling)>
         int t_iIndex = 1;
 
-
-<endif>
-        if  (updateOperation)
-        {
-<if(input.clobHandling)>
-            <input.externally_managed_attributes:
-              attribute_preparedstatement_specification(attr=it);
-              separator="\n">
+        <input.pk_attributes:
+          attribute_preparedstatement_specification(attr=it);
+          separator="\n">
 
 <else>
-            <input.externally_managed_attributes:
-              attribute_query_specification(attr=it);
-              separator="\n">
-
-<endif>
-        }
-
-<if(input.clobHandling)>
-        if  (selectForUpdateOperation)
-        {
-           <input.all_but_lob_attributes:
-             attribute_preparedstatement_specification(attr=it);
-             separator="\n">
-        }
-        else
-        {
-           <input.all_but_externally_managed_attributes:
-             attribute_preparedstatement_specification(attr=it);
-             separator="\n">
-        }
-
-<else>
-        <input.all_but_externally_managed_attributes:
+        <input.pk_attributes:
           attribute_query_specification(attr=it);
           separator="\n">
 

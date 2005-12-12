@@ -2299,7 +2299,8 @@ oracle8Insert(input) ::= <<
                     <input.attributes:{"<it.nameUppercased>};
                       separator=", \" +\n">" +
                     ") VALUES (" +
-                    <input.attributes:insert_attribute(attr=it); separator=" +\n">),
+                    <input.attributes:insert_attribute(attr=it);
+                      separator=",\" +\n">)"),
                 new <input.vo_name>AttributesStatementSetter(
                     <input.all_but_lob_attributes:{<it.nameLowercased>};
                       separator=",\n">,
@@ -2341,8 +2342,8 @@ insert_attribute(attr) ::= <<
  @param attr the attribute.
 !>
 <if(attr.clob)>
-"empty_clob()"
+"EMPTY_CLOB()
 <else>
-"?"
+"?
 <endif>
 >>

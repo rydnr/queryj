@@ -41,11 +41,12 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplate;
-import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplateFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -67,7 +68,8 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class PkStatementSetterTemplateGenerator
-    implements  PkStatementSetterTemplateFactory
+    implements  BasePerTableTemplateFactory,
+                BasePerTableTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -83,7 +85,7 @@ public class PkStatementSetterTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(
+    private static void setReference(
         final PkStatementSetterTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
@@ -93,7 +95,7 @@ public class PkStatementSetterTemplateGenerator
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
@@ -125,48 +127,62 @@ public class PkStatementSetterTemplateGenerator
     }
 
     /**
-     * Generates a PkStatementSetter template.
-     * @param tableTemplate the table template.
+     * Generates a template.
+     * @param tableName the table name.
      * @param metadataManager the metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
-     * @precondition tableTemplate != null
+     * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition quote != null
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
-    public PkStatementSetterTemplate createPkStatementSetterTemplate(
-        final TableTemplate tableTemplate,
+    public BasePerTableTemplate createTemplate(
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
         final String basePackageName,
         final String repositoryName)
       throws  QueryJException
     {
         return
             new PkStatementSetterTemplate(
-                tableTemplate,
+                tableName,
                 metadataManager,
+                customSqlProvider,
                 packageName,
+                engineName,
+                engineVersion,
+                quote,
                 basePackageName,
                 repositoryName);
     }
 
     /**
-     * Writes a PkStatementSetter template to disk.
+     * Writes the template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
+     * @precondition template instanceof DAOTemplate
      * @precondition outputDir != null
      */
     public void write(
-        final PkStatementSetterTemplate template,
-        final File outputDir)
+        final BasePerTableTemplate template, final File outputDir)
       throws  IOException
     {
         write(
@@ -178,7 +194,7 @@ public class PkStatementSetterTemplateGenerator
     }
 
     /**
-     * Writes a PkStatementSetterCreator template to disk.
+     * Writes a DAO template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
@@ -186,14 +202,14 @@ public class PkStatementSetterTemplateGenerator
      * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
+     * @precondition template instanceof DAOTemplate
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final PkStatementSetterTemplate template,
+        final BasePerTableTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
@@ -207,9 +223,7 @@ public class PkStatementSetterTemplateGenerator
             + File.separator
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    template
-                        .getTableTemplate()
-                            .getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase()),
                 '_')
             + "PkStatementSetter.java",
             template.generate());

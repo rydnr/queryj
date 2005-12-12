@@ -67,7 +67,7 @@ public class DAOTemplateBuildHandler
     extends  BasePerTableTemplateBuildHandler
 {
     /**
-     * Creates a <code>DAOTemplateBuildHandler</code> instance..
+     * Creates a <code>DAOTemplateBuildHandler</code> instance.
      */
     public DAOTemplateBuildHandler() {};
 
@@ -82,6 +82,7 @@ public class DAOTemplateBuildHandler
 
     /**
      * Retrieves the package name.
+     * @param tableName the table name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
@@ -91,6 +92,7 @@ public class DAOTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
+        final String tableName,
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils)
