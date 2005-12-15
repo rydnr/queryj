@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create per-table templates.
+ * Description: Represents entities able to create per-repository templates.
  *
  */
 package org.acmsl.queryj.tools.templates;
@@ -40,28 +40,39 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.io.IOException;
+import java.util.Collection;
 
 /**
- * Represents entities able to write per-table templates.
+ * Represents entities able to create per-repository templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface BasePerTableTemplateGenerator
+public interface BasePerRepositoryTemplateFactory
 {
     /**
-     * Writes a per-table template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @throws IOException if the file cannot be created.
+     * Generates a <i>per-repository</i> template.
+     * @param metadataManager the metadata manager.
+     * @param packageName the package name.
+     * @param basePackageName the base package name.
+     * @param engineName the engine name.
+     * @param repositoryName the name of the repository.
+     * @param tables the tables.
+     * @return a template.
+     * @throws QueryJException if the input values are invalid.
      */
-    public void write(
-        final BasePerTableTemplate template, final File outputDir)
-      throws  IOException;
+    public BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
+        final String packageName,
+        final String basePackageName,
+        final String repositoryName,
+        final String engineName,
+        final Collection tables)
+      throws  QueryJException;
 }

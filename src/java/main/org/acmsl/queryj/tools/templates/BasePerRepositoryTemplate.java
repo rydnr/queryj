@@ -86,6 +86,7 @@ public abstract class BasePerRepositoryTemplate
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param engineName the engine name.
      * @param tables the tables.
      */
     public BasePerRepositoryTemplate(
@@ -93,6 +94,7 @@ public abstract class BasePerRepositoryTemplate
         final String packageName,
         final String basePackageName,
         final String repositoryName,
+        final String engineName,
         final Collection tables)
     {
         super(
@@ -100,6 +102,7 @@ public abstract class BasePerRepositoryTemplate
             packageName,
             basePackageName,
             repositoryName,
+            engineName,
             tables);
     }
 
@@ -115,6 +118,7 @@ public abstract class BasePerRepositoryTemplate
                 getSubpackageName(),
                 getBasePackageName(),
                 getRepositoryName(),
+                getEngineName(),
                 getTables(),
                 StringUtils.getInstance(),
                 PackageUtils.getInstance());
@@ -132,6 +136,7 @@ public abstract class BasePerRepositoryTemplate
      * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param engineName the engine name.
      * @param tables the tables.
      * @param stringUtils the StringUtils instance.
      * @param packageUtils the PackageUtils instance.
@@ -149,6 +154,7 @@ public abstract class BasePerRepositoryTemplate
         final String subpackageName,
         final String basePackageName,
         final String repositoryName,
+        final String engineName,
         final Collection tables,
         final StringUtils stringUtils,
         final PackageUtils packageUtils)
@@ -166,6 +172,7 @@ public abstract class BasePerRepositoryTemplate
             subpackageName,
             basePackageName,
             repositoryName,
+            engineName,
             tables,
             createTimestamp(),
             new Integer[]
@@ -189,6 +196,7 @@ public abstract class BasePerRepositoryTemplate
      * @param basePackageName the base package name.
      * @param timestamp the timestamp.
      * @param tableRepositoryName the table repository.
+     * @param engineName the engine name.
      * @param tables the table names.
      * @param timestamp the timestamp.
      * @param copyrightYears the copyright years.
@@ -211,6 +219,7 @@ public abstract class BasePerRepositoryTemplate
         final String subpackageName,
         final String basePackageName,
         final String tableRepositoryName,
+        final String engineName,
         final Collection tables,
         final String timestamp,
         final Integer[] copyrightYears,
@@ -218,11 +227,7 @@ public abstract class BasePerRepositoryTemplate
     {
         template.setAttribute("input", input);
 
-        fillJavaHeaderParameters(
-            input, copyrightYears, timestamp, metadataManager);
-
-        fillPackageDeclarationParameters(
-            input, basePackageName, subpackageName, metadataManager);
+        fillHeaderParameters(input, copyrightYears, timestamp);
 
         fillCoreParameters(
             input,
@@ -230,6 +235,7 @@ public abstract class BasePerRepositoryTemplate
             basePackageName,
             subpackageName,
             tableRepositoryName,
+            engineName,
             tables,
             timestamp,
             stringUtils);
@@ -240,41 +246,17 @@ public abstract class BasePerRepositoryTemplate
      * @param input the input.
      * @param copyrightYears the copyright years.
      * @param timestamp the timestamp.
-     * @param metadataManager the database metadata manager.
      * @precondition input != null
      * @precondition copyrightYears != null
      * @precondition timestamp != null
-     * @precondition metadataManager != null
      */
-    protected void fillJavaHeaderParameters(
+    protected void fillHeaderParameters(
         final Map input,
         final Integer[] copyrightYears,
-        final String timestamp,
-        final MetadataManager metadataManager)
+        final String timestamp)
     {
         input.put("copyright_years", copyrightYears);
         input.put("timestamp", timestamp);
-    }
-
-    /**
-     * Fills the parameters for <code>package_declaration</code> rule.
-     * @param input the input.
-     * @param basePackageName the base package name.
-     * @param subpackageName the subpackage.
-     * @param metadataManager the database metadata manager.
-     * @precondition input != null
-     * @precondition basePackageName != null
-     * @precondition subpackageName != null
-     * @precondition metadataManager != null
-     */
-    protected void fillPackageDeclarationParameters(
-        final Map input,
-        final String basePackageName,
-        final String subpackageName,
-        final MetadataManager metadataManager)
-    {
-        input.put("base_package_name", basePackageName);
-        input.put("subpackage_name", subpackageName);
     }
 
     /**
@@ -284,31 +266,19 @@ public abstract class BasePerRepositoryTemplate
      * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
      * @param tableRepositoryName the table repository name.
+     * @param engineName the engine name.
      * @param tables the tables.
      * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @precondition input != null
-     * @precondition metadataManager != null
-     * @precondition subpackageName != null
-     * @precondition basePackageName != null
-     * @precondition tableRepositoryName != null
-     * @precondition tables != null
-     * @precondition timestamp != null
-     * @precondition stringUtils != null
      */
-    protected void fillCoreParameters(
+    protected abstract void fillCoreParameters(
         final Map input,
         final MetadataManager metadataManager,
         final String subpackageName,
         final String basePackageName,
         final String tableRepositoryName,
+        final String engineName,
         final Collection tables,
         final String timestamp,
-        final StringUtils stringUtils)
-    {
-        input.put("timestamp", timestamp);
-
-        input.put("tr_name", tableRepositoryName);
-    }
-
+        final StringUtils stringUtils);
 }

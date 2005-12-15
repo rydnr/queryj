@@ -32,37 +32,36 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create configuration properties.
+ * Description: Represents entities able to create per-repository templates.
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.io.File;
+import java.io.IOException;
 
 /**
- * Represents entities able to create configuration properties.
+ * Represents entities able to write per-repository templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface ConfigurationPropertiesTemplateFactory
+public interface BasePerRepositoryTemplateGenerator
 {
     /**
-     * Generates a configuration property template.
-     * @param repository the repository name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param basePackageName the base package name.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
+     * Writes a per-repository template to disk.
+     * @param template the template to write.
+     * @param outputDir the output folder.
+     * @throws IOException if the file cannot be created.
      */
-    public ConfigurationPropertiesTemplate createConfigurationPropertiesTemplate(
-        final String repository,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName)
-      throws  QueryJException;
+    public void write(
+        final BasePerRepositoryTemplate template, final File outputDir)
+      throws  IOException;
 }

@@ -82,6 +82,11 @@ public abstract class AbstractBasePerRepositoryTemplate
     private String m__strRepositoryName;
     
     /**
+     * The engine name.
+     */
+    private String m__strEngineName;
+    
+    /**
      * The tables.
      */
     private Collection m__cTables;
@@ -93,6 +98,7 @@ public abstract class AbstractBasePerRepositoryTemplate
      * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param engineName the engine name.
      * @param tables the tables.
      */
     public AbstractBasePerRepositoryTemplate(
@@ -100,12 +106,14 @@ public abstract class AbstractBasePerRepositoryTemplate
         final String subpackageName,
         final String basePackageName,
         final String repositoryName,
+        final String engineName,
         final Collection tables)
     {
         immutableSetMetadataManager(metadataManager);
         immutableSetSubpackageName(subpackageName);
         immutableSetBasePackageName(basePackageName);
         immutableSetRepositoryName(repositoryName);
+        immutableSetEngineName(engineName);
         immutableSetTables(tables);
     }
 
@@ -219,6 +227,34 @@ public abstract class AbstractBasePerRepositoryTemplate
     public String getRepositoryName()
     {
         return m__strRepositoryName;
+    }
+
+    /**
+     * Specifies the engine name.
+     * @param engineName such information.
+     */
+    protected final void immutableSetEngineName(
+        final String engineName)
+    {
+        m__strEngineName = engineName;
+    }
+    
+    /**
+     * Specifies the engine name.
+     * @param engineName such information.
+     */
+    protected void setEngineName(final String engineName)
+    {
+        immutableSetEngineName(engineName);
+    }
+    
+    /**
+     * Retrieves the engine name.
+     * @return such information.
+     */
+    public String getEngineName()
+    {
+        return m__strEngineName;
     }
 
     /**

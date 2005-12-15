@@ -1,0 +1,143 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate configuration property
+//              files.
+//
+// Version: $Revision$ ($Author$ at $Date$)
+//
+// $Id$
+//
+group ConfigurationProperties;
+
+source(input) ::= <<
+<!
+ Generates configuration properties.
+ @param input.copyright_years the copyright's years.
+ @param input.tables the tables.
+ @param input.repository the repository.
+ @param input.daoFactoryPackage the DAOFactory package.
+!>
+<header(
+  years=input.copyright_years,
+  description=
+    [
+      "Defines the DAO settings."
+    ],
+    timestamp=input.timestamp)>
+<input.tables:dao_factory_property(
+  table=it,
+  repository=input.tr_name,
+  input.base_package_name,
+  typeInitMap.baseDAOSubpackageName,
+  typeInitMap.rdbSubpackageName,
+  input.dao_subpackage_name,
+  typeInitMap.xmlSubpackageName,
+  typeInitMap.mockSubpackageName)>
+ separator="\n\n">
+>>
+
+header(years,description,timestamp) ::= <<
+<! Generates the copyright header !>
+<! @param years the copyright years. !>
+<! @param description the description. !>
+<! @param timestamp the timestamp. !>
+#
+#                       QueryJ
+#
+#   Copyright (C) <years; separator="-"> Jose San Leandro Armendariz
+#                             chous@acm-sl.org
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public
+#   License as published by the Free Software Foundation; either
+#   version 2 of the License, or any later version.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   Thanks to ACM S.L. for distributing this library under the GPL license.
+#   Contact info: jose.sanleandro@acm-sl.com
+#   Postal Address: c/Playa de Lagoa, 1
+#                   Urb. Valdecabanas
+#                   Boadilla del monte
+#                   28660 Madrid
+#                   Spain
+#
+###############################################################################
+#
+#  Filename: <"$">RCSfile: $
+#
+#  Author: QueryJ
+#
+#  Description: <description:{line | <line>}; separator="\n#               ">
+#
+#  Last modified by: <"$">Author: $ at <"$">Date: $
+#
+#  <"$">Id: $
+#
+#  Generation timestamp: <timestamp>
+#
+>>
+
+dao_factory_property(
+  table,
+  repository, 
+  basePackageName,
+  baseDAOSubpackageName,
+  subpackageName,
+  xmlSubpackageName,
+  mockSubpackageName) ::= <<
+<!
+ Generates the properties asociated to a concrete DAO.
+ @param table the table.
+ @param repository the repository.
+ @param basePackageName the base package name.
+ @param baseDAOSubpackageName the base DAO subpackage name.
+ @param subpackageName the subpackage name.
+ @param xmlSubpackageName the subpackage for XML implementations.
+ @param mockSubpackageName the subpackage for Mock implementations.
+!>
+# <table.name> DAO implementation.
+<repository><table.nameLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName><engineName><table.voName>DAOFactory
+#<repository><table.nameLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<xmlSubpackageName>.Xml<table.voName>DAOFactory
+#<repository><table.nameLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<mockSubpackageName>.Mock<table.voName>DAOFactory
+>>

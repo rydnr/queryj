@@ -110,10 +110,12 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate(
+            null, // metadata manager
+            "dao", // the subpackage
+            "com.foo.bar", // base package name
             "queryj", // repository
             "mysql", // engine name
-            "4.1.1", // engine version
-            "com.foo.bar"); // base package name
+            new java.util.ArrayList());
     // JUnitDoclet end method testcase.createInstance
   }
   

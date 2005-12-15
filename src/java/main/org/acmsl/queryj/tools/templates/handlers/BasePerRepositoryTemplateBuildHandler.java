@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a per-table templates using database metadata.
+ * Description: Builds a per-repository templates using database metadata.
  *
  */
 package org.acmsl.queryj.tools.templates.handlers;
@@ -46,8 +46,8 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -68,21 +68,23 @@ import org.apache.tools.ant.BuildException;
 import java.io.File;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 /**
- * Builds a per-table template using database metadata.
+ * Builds a per-repository template using database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class BasePerTableTemplateBuildHandler
+public abstract class BasePerRepositoryTemplateBuildHandler
     extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
     /**
-     * Creates a <code>BasePerTableTemplateBuildHandler</code> instance.
+     * Creates a <code>BasePerRepositoryTemplateBuildHandler</code> instance.
      */
-    public BasePerTableTemplateBuildHandler() {};
+    public BasePerRepositoryTemplateBuildHandler() {};
 
     /**
      * Handles given command.
@@ -171,15 +173,16 @@ public abstract class BasePerTableTemplateBuildHandler
                 retrieveCustomSqlProvider(parameters),
                 retrieveTemplateFactory(),
                 retrieveProjectPackage(parameters),
+                retrievePackage(engineName, parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveTableTemplates(parameters));
     }
 
     /**
-     * Retrieves the template factory.
+     * Retrieves the per-repository template factory.
      * @return such instance.
      */
-    protected abstract BasePerTableTemplateFactory retrieveTemplateFactory();
+    protected abstract BasePerRepositoryTemplateFactory retrieveTemplateFactory();
 
     /**
      * Handles given information.
@@ -191,6 +194,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
      * @param projectPackage the project package.
+     * @param packageName the package name.
      * @param repository the repository.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
@@ -201,6 +205,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition customSqlProvider != null
      * @precondition templateFactory != null
      * @precondition projectPackage != null
+     * @precondition packageName != null
      * @precondition repository != null
      * @precondition tableTemplates != null
      */
@@ -211,42 +216,36 @@ public abstract class BasePerTableTemplateBuildHandler
         final String quote,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerTableTemplateFactory templateFactory,
+        final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
+        final String packageName,
         final String repository,
         final TableTemplate[] tableTemplates)
       throws  BuildException
     {
         boolean result = false;
 
+        Collection t_cTableNames = new ArrayList();
+
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
         
-        BasePerTableTemplate[] t_aTemplates =
-            new BasePerTableTemplate[t_iLength];
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
+        {
+            t_cTableNames.add(tableTemplates[t_iIndex].getTableName());
+        }
 
         try
         {
-            String t_strTableName = null;
+            BasePerRepositoryTemplate t_Template =
+                templateFactory.createTemplate(
+                    metadataManager,
+                    packageName,
+                    projectPackage,
+                    repository,
+                    engineName,
+                    t_cTableNames);
 
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
-            {
-                t_strTableName = tableTemplates[t_iIndex].getTableName();
-
-                t_aTemplates[t_iIndex] =
-                    templateFactory.createTemplate(
-                        t_strTableName,
-                        metadataManager,
-                        customSqlProvider,
-                        retrievePackage(
-                            t_strTableName, engineName, parameters),
-                        engineName,
-                        engineVersion,
-                        quote,
-                        projectPackage,
-                        repository);
-            }
-
-            storeTemplates(t_aTemplates, parameters);
+            storeTemplate(t_Template, parameters);
         }
         catch  (final QueryJException queryjException)
         {
@@ -258,7 +257,6 @@ public abstract class BasePerTableTemplateBuildHandler
 
     /**
      * Retrieves the package name from the attribute map.
-     * @param tableName the table name.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
@@ -266,12 +264,11 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrievePackage(
-        final String tableName, final String engineName, final Map parameters)
+        final String engineName, final Map parameters)
       throws  BuildException
     {
         return
             retrievePackage(
-                tableName,
                 engineName,
                 retrieveProjectPackage(parameters),
                 PackageUtils.getInstance());
@@ -279,7 +276,6 @@ public abstract class BasePerTableTemplateBuildHandler
 
     /**
      * Retrieves the package name.
-     * @param tableName the table name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
@@ -289,20 +285,19 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected abstract String retrievePackage(
-        final String tableName,
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils);
 
     /**
-     * Stores the template collection in given attribute map.
-     * @param templates the templates.
+     * Stores the template in given attribute map.
+     * @param template the template.
      * @param parameters the parameter map.
-     * @precondition templates != null
+     * @precondition template != null
      * @precondition parameters != null
      */
-    protected abstract void storeTemplates(
-        final BasePerTableTemplate[] templates, final Map parameters);
+    protected abstract void storeTemplate(
+        final BasePerRepositoryTemplate templates, final Map parameters);
 
     /**
      * Retrieves the table templates.

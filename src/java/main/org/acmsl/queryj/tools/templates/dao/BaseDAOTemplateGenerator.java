@@ -103,7 +103,7 @@ public class BaseDAOTemplateGenerator
     }
 
     /**
-     * Retrieves a DAOTemplateGenerator instance.
+     * Retrieves a <code>BaseDAOTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static BaseDAOTemplateGenerator getInstance()
