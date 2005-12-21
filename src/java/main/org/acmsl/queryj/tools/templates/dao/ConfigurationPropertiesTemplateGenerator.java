@@ -32,29 +32,28 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate configuration properties file.
+ * Description: Is able to generate ConfigurationProperties implementations
+ *              according to database metadata.
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some project-specific  classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
-import org.acmsl.queryj.tools.templates.dao
-    .ConfigurationPropertiesTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -62,14 +61,17 @@ import org.apache.tools.ant.Task;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 
 /**
- * Is able to generate configuration properties files.
+ * Is able to generate ConfigurationProperties implementations according
+ * to database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class ConfigurationPropertiesTemplateGenerator
-    implements  ConfigurationPropertiesTemplateFactory
+    implements  BasePerRepositoryTemplateFactory,
+                BasePerRepositoryTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -85,7 +87,7 @@ public class ConfigurationPropertiesTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(
+    private static void setReference(
         final ConfigurationPropertiesTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
@@ -95,13 +97,14 @@ public class ConfigurationPropertiesTemplateGenerator
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
 
     /**
-     * Retrieves a ConfigurationPropertiesTemplateGenerator instance.
+     * Retrieves a <code>ConfigurationPropertiesTemplateGenerator</code>
+     * instance.
      * @return such instance.
      */
     public static ConfigurationPropertiesTemplateGenerator getInstance()
@@ -117,7 +120,7 @@ public class ConfigurationPropertiesTemplateGenerator
 
         if  (result == null) 
         {
-            result = new ConfigurationPropertiesTemplateGenerator() {};
+            result = new ConfigurationPropertiesTemplateGenerator();
 
             setReference(result);
         }
@@ -126,74 +129,78 @@ public class ConfigurationPropertiesTemplateGenerator
     }
 
     /**
-     * Creates a ConfigurationProperties template instance.
-     * @param repository the repository.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
+     * Generates a ConfigurationProperties template.
+     * @param metadataManager the metadata manager.
+     * @param packageName the package name.
      * @param basePackageName the base package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return such template.
-     * @precondition repository != null
-     * @precondition engineName != null
+     * @param repositoryName the name of the repository.
+     * @param engineName the engine name.
+     * @param tables the table names.
+     * @return a template.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition metadataManager != null
+     * @precondition packageName != null
      * @precondition basePackageName != null
+     * @precondition repositoryName != null
+     * @precondition engineName != null
+     * @precondition tables != null
      */
-    public ConfigurationPropertiesTemplate createConfigurationPropertiesTemplate(
-        final String repository,
-        final String engineName,
-        final String engineVersion,
+    public BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
+        final String packageName,
         final String basePackageName,
-        final Project project,
-        final Task task)
+        final String repositoryName,
+        final String engineName,
+        final Collection tables)
+      throws  QueryJException
     {
         return
             new ConfigurationPropertiesTemplate(
-                repository,
-                engineName,
-                engineVersion,
+                metadataManager,
+                packageName,
                 basePackageName,
-                project,
-                task);
+                repositoryName,
+                engineName,
+                tables);
     }
 
     /**
-     * Writes a ConfigurationProperties to disk.
-     * @param configurationPropertiesTemplate the template to write.
+     * Writes a ConfigurationProperties template to disk.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition configurationPropertiesTemplate != null
+     * @precondition template instanceof ConfigurationPropertiesTemplate
      * @precondition outputDir != null
      */
     public void write(
-        final ConfigurationPropertiesTemplate configurationPropertiesTemplate,
-        final File outputDir)
+        final BasePerRepositoryTemplate template, final File outputDir)
       throws  IOException
     {
         write(
-            configurationPropertiesTemplate,
-            configurationPropertiesTemplate.getRepository(),
-            outputDir,
+            template,
+            template.getRepositoryName(),
+            outputDir, 
             DAOChooserTemplateUtils.getInstance(),
             FileUtils.getInstance());
     }
 
     /**
-     * Writes a <code>ConfigurationProperties</code> to disk.
-     * @param configurationPropertiesTemplate the template to write.
-     * @param repository the template repository.
+     * Writes a ConfigurationProperties template to disk.
+     * @param template template to write.
+     * @param repository the repository.
      * @param outputDir the output folder.
      * @param daoChooserTemplateUtils the <code>DAOChooserTemplateUtils</code>
      * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition configurationPropertiesTemplate != null
+     * @precondition template instanceof ConfigurationPropertiesTemplate
      * @precondition repository != null
      * @precondition outputDir != null
      * @precondition daoChooserTemplateUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final ConfigurationPropertiesTemplate configurationPropertiesTemplate,
+        final BasePerRepositoryTemplate template,
         final String repository,
         final File outputDir,
         final DAOChooserTemplateUtils daoChooserTemplateUtils,
@@ -203,10 +210,10 @@ public class ConfigurationPropertiesTemplateGenerator
         outputDir.mkdirs();
 
         fileUtils.writeFile(
-              outputDir.getAbsolutePath()
+            outputDir.getAbsolutePath()
             + File.separator
             + daoChooserTemplateUtils.retrievePropertiesFileName(
                   repository.toLowerCase()),
-              configurationPropertiesTemplate.generate());
+            template.generate());
     }
 }

@@ -46,13 +46,14 @@ import org.acmsl.queryj.tools.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.AntFieldElement;
 import org.acmsl.queryj.tools.AntTableElement;
 import org.acmsl.queryj.tools.AntTablesElement;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.utils.StringValidator;
 
@@ -60,7 +61,11 @@ import org.acmsl.commons.utils.StringValidator;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
+
+/*
+ * Importing some Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
@@ -75,7 +80,7 @@ import java.util.Map;
 
 /**
  * Retrieves the externally-managed fields declaration and
- * configures DatabaseMetaDataManager accordingly.
+ * configures MetadataManager accordingly.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
@@ -98,16 +103,22 @@ public class ExternallyManagedFieldsRetrievalHandler
 
         if  (command instanceof AntCommand) 
         {
+            AntCommand t_AntCommand = (AntCommand) command;
+            
             try 
             {
-                result = handle((AntCommand) command);
+                result = handle(t_AntCommand);
             }
             catch  (BuildException buildException)
             {
-                ((AntCommand) command).getProject().log(
-                    ((AntCommand) command).getTask(),
-                    buildException.getMessage(),
-                    Project.MSG_ERR);
+                Log t_Log = UniqueLogFactory.getLog(getClass());
+                
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot retrieve externally-managed fields.",
+                        buildException);
+                }
             }
         }
         
@@ -129,15 +140,15 @@ public class ExternallyManagedFieldsRetrievalHandler
         {
             Map t_mAttributes = command.getAttributeMap();
 
-            DatabaseMetaDataManager t_MetaDataManager =
-                retrieveDatabaseMetaDataManager(t_mAttributes);
+            MetadataManager t_MetadataManager =
+                retrieveMetadataManager(t_mAttributes);
 
             Collection t_cFieldElements = null;
 
             AntExternallyManagedFieldsElement t_ExternallyManagedFieldsElement =
-                    retrieveExternallyManagedFieldsElement(t_mAttributes);
+                retrieveExternallyManagedFieldsElement(t_mAttributes);
 
-            if  (   (t_MetaDataManager != null)
+            if  (   (t_MetadataManager != null)
                  && (t_ExternallyManagedFieldsElement != null))
             {
                 t_cFieldElements = t_ExternallyManagedFieldsElement.getFields();
@@ -179,7 +190,7 @@ public class ExternallyManagedFieldsRetrievalHandler
                                 }
                                 else 
                                 {
-                                    t_MetaDataManager.addExternallyManagedField(
+                                    t_MetadataManager.addExternallyManagedField(
                                         t_Field.getTableName(),
                                         t_Field.getName(),
                                         t_Field.getKeyword(),
@@ -196,49 +207,20 @@ public class ExternallyManagedFieldsRetrievalHandler
     }
 
     /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaDataManager result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-        }
-        
-        return result;
-    }
-
-    /**
      * Retrieves the externally-managed-fields XML element stored in the
      * attribute map.
      * @param parameters the parameter map.
      * @return the externally-managed-fields information.
      * @throws BuildException if the retrieval process cannot be performed.
+     * @precondition parameters != null
      */
     protected AntExternallyManagedFieldsElement
         retrieveExternallyManagedFieldsElement(final Map parameters)
         throws  BuildException
     {
-        AntExternallyManagedFieldsElement result = null;
-
-        if  (parameters != null) 
-        {
-            result =
-                (AntExternallyManagedFieldsElement)
-                    parameters.get(
-                        ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS);
-        }
-
-        return result;
+        return
+            (AntExternallyManagedFieldsElement)
+                parameters.get(
+                    ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS);
     }
 }

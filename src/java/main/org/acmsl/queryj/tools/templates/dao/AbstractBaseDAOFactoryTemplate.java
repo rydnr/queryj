@@ -41,15 +41,9 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /**
  * Contains the required subtemplates to generate base DAO factories
@@ -83,7 +77,7 @@ public abstract class AbstractBaseDAOFactoryTemplate
     /**
      * The metadata manager.
      */
-    private DatabaseMetaDataManager m__MetaDataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
      * The engine name.
@@ -156,7 +150,7 @@ public abstract class AbstractBaseDAOFactoryTemplate
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param projectPackageName the project package name.
      * @param projectImports the project imports.
@@ -168,14 +162,12 @@ public abstract class AbstractBaseDAOFactoryTemplate
      * @param getInstanceMethod the getInstance method.
      * @param factoryMethod the factory method.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractBaseDAOFactoryTemplate(
         final String header,
         final String packageDeclaration,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String projectPackageName,
         final String projectImports,
@@ -186,15 +178,12 @@ public abstract class AbstractBaseDAOFactoryTemplate
         final String classStart,
         final String getInstanceMethod,
         final String factoryMethod,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetTableTemplate(tableTemplate);
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
         immutableSetPackageName(packageName);
         immutableSetProjectPackageName(projectPackageName);
         immutableSetProjectImports(projectImports);
@@ -290,31 +279,31 @@ public abstract class AbstractBaseDAOFactoryTemplate
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
+     * @param metadataManager the new metadata manager.
      */
-    private void immutableSetMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager)
+    private void immutableSetMetadataManager(
+        final MetadataManager metadataManager)
     {
-        m__MetaDataManager = metaDataManager;
+        m__MetadataManager = metadataManager;
     }
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
+     * @param metadataManager the new metadata manager.
      */
-    protected void setMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager)
+    protected void setMetadataManager(
+        final MetadataManager metadataManager)
     {
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
     }
 
     /**
      * Retrieves the metadata manager.
      * @return such information.
      */
-    public DatabaseMetaDataManager getMetaDataManager()
+    public MetadataManager getMetadataManager()
     {
-        return m__MetaDataManager;
+        return m__MetadataManager;
     }
 
 

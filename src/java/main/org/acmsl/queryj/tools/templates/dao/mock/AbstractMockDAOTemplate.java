@@ -42,16 +42,9 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /**
  * Is able to create mock DAO implementations for each
@@ -71,7 +64,7 @@ public abstract class AbstractMockDAOTemplate
 
      * The database metadata manager.
      */
-    private DatabaseMetaDataManager m__MetaDataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
      * The header.
@@ -272,7 +265,7 @@ public abstract class AbstractMockDAOTemplate
      * Builds an <code>AbstractMockDAOTemplate</code> using
      * given information.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -314,12 +307,10 @@ public abstract class AbstractMockDAOTemplate
      * @param deleteWithFkDAODeleteRequest the delete with FK DAO delete request.
      * @param deleteWithFkPkValues the delete with FK PK values.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public AbstractMockDAOTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -357,17 +348,13 @@ public abstract class AbstractMockDAOTemplate
         final String deleteWithFkPkDeclaration,
         final String deleteWithFkDAODeleteRequest,
         final String deleteWithFkPkValues,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
-
         inmutableSetTableTemplate(
             tableTemplate);
 
-        inmutableSetMetaDataManager(
-            metaDataManager);
+        inmutableSetMetadataManager(
+            metadataManager);
 
         inmutableSetHeader(
             header);
@@ -514,31 +501,31 @@ public abstract class AbstractMockDAOTemplate
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      */
-    private void inmutableSetMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager)
+    private void inmutableSetMetadataManager(
+        final MetadataManager metadataManager)
     {
-        m__MetaDataManager = metaDataManager;
+        m__MetadataManager = metadataManager;
     }
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      */
-    protected void setMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager)
+    protected void setMetadataManager(
+        final MetadataManager metadataManager)
     {
-        inmutableSetMetaDataManager(metaDataManager);
+        inmutableSetMetadataManager(metadataManager);
     }
 
     /**
      * Retrieves the metadata manager.
      * @return such manager.
      */
-    public DatabaseMetaDataManager getMetaDataManager()
+    public MetadataManager getMetadataManager()
     {
-        return m__MetaDataManager;
+        return m__MetadataManager;
     }
 
     /**

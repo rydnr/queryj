@@ -127,8 +127,10 @@ public class XMLDAOTemplateWritingHandler
 
         try 
         {
+            int t_iLength = (templates != null) ? templates.length : 0;
+
             for  (int t_iXMLDAOIndex = 0;
-                      t_iXMLDAOIndex < templates.length;
+                      t_iXMLDAOIndex < t_iLength;
                       t_iXMLDAOIndex++)
             {
                 generator.write(templates[t_iXMLDAOIndex], outputDir);
@@ -172,12 +174,16 @@ public class XMLDAOTemplateWritingHandler
             retrieveOutputDir(
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters),
                 PackageUtils.getInstance());
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
+     * @param outputDir the output dir.
+     * @param projectPackage the project package.
+     * @param subFolders whether to use subfolders or not.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition outputDir != null
@@ -187,37 +193,12 @@ public class XMLDAOTemplateWritingHandler
     protected File retrieveOutputDir(
         final File outputDir,
         final String projectPackage,
+        final boolean subFolders,
         final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveXMLDAOFolder(
-                outputDir, projectPackage);
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveProjectOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
+                outputDir, projectPackage, subFolders);
     }
 }

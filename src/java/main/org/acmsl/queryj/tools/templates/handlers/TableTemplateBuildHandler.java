@@ -40,12 +40,14 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -56,12 +58,12 @@ import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
  */
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -98,69 +100,140 @@ public class TableTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     */
-    protected boolean handle(
-        final Map parameters,
-        final Project project,
-        final Task task)
-      throws  BuildException
-    {
-        handle(
-            parameters,
-            retrieveDatabaseMetaDataManager(parameters),
-            retrieveTablePackage(parameters),
-            TableTemplateGenerator.getInstance(),
-            MetaDataUtils.getInstance(),
-            project,
-            task);
-
-        return false;
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param databaseMetaDataManager the database metadata manager.
-     * @param tablePackage the table package.
-     * @param templateFactory the template factory.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
-     * @precondition databaseMetaDataManager != null
-     * @precondition tablePackage != null
-     * @precondition templateFactory != null
-     * @precondition metaDataUtils != null
      */
-    protected void handle(
-        final Map parameters,
-        final DatabaseMetaDataManager metaDataManager,
-        final String packageName,
-        final TableTemplateFactory templateFactory,
-        final MetaDataUtils metaDataUtils,
-        final Project project,
-        final Task task)
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveDatabaseMetaData(parameters));
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param metaData the database metadata.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     */
+    protected boolean handle(
+        final Map parameters, final DatabaseMetaData metaData)
       throws  BuildException
     {
-        String[] t_astrTableNames = metaDataManager.getTableNames();
+        boolean result = false;
+
+        try
+        {
+            result =
+                handle(
+                    parameters,
+                    metaData.getDatabaseProductName(),
+                    metaData.getDatabaseProductVersion(),
+                    fixQuote(metaData.getIdentifierQuoteString()));
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw new BuildException(sqlException);
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw new BuildException(queryjException);
+        }
+
+        return result;
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJException in case of error.
+     * @precondition parameters != null
+     * @precondition engineName != null
+     * @precondition quote != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
+      throws  BuildException,
+              QueryJException
+    {
+        return
+            handle(
+                parameters,
+                engineName,
+                engineVersion,
+                quote,
+                retrieveMetadataManager(parameters),
+                retrieveCustomSqlProvider(parameters),
+                TableTemplateGenerator.getInstance(),
+                retrieveProjectPackage(parameters),
+                retrievePackage(engineName, parameters),
+                retrieveTableRepositoryName(parameters));
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the custom sql provider.
+     * @param templateFactory the template factory.
+     * @param projectPackage the project package.
+     * @param packageName the package name.
+     * @param repository the repository.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJException in case of error.
+     * @precondition parameters != null
+     * @precondition engineName != null
+     * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
+     * @precondition templateFactory != null
+     * @precondition projectPackage != null
+     * @precondition packageName != null
+     * @precondition repository != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final TableTemplateFactory templateFactory,
+        final String projectPackage,
+        final String packageName,
+        final String repository)
+      throws  BuildException,
+              QueryJException
+    {
+        String[] t_astrTableNames = metadataManager.getTableNames();
 
         String[] t_astrColumnNames = null;
+
+        MetadataTypeManager t_MetadataTypeManager =
+            metadataManager.getMetadataTypeManager();
 
         int t_iColumnType = -1;
 
@@ -175,13 +248,18 @@ public class TableTemplateBuildHandler
             {
                 t_aTableTemplates[t_iTableIndex] =
                     templateFactory.createTableTemplate(
-                        packageName,
                         t_astrTableNames[t_iTableIndex],
-                        project,
-                        task);
+                        metadataManager,
+                        customSqlProvider,
+                        packageName,
+                        engineName,
+                        engineVersion,
+                        quote,
+                        projectPackage,
+                        repository);
 
                 t_astrColumnNames =
-                    metaDataManager.getColumnNames(
+                    metadataManager.getColumnNames(
                         t_astrTableNames[t_iTableIndex]);
 
                 if  (t_astrColumnNames != null) 
@@ -194,16 +272,14 @@ public class TableTemplateBuildHandler
                             t_astrColumnNames[t_iColumnIndex]);
 
                         t_iColumnType =
-                            metaDataManager.getColumnType(
+                            metadataManager.getColumnType(
                                 t_astrTableNames[t_iTableIndex],
                                 t_astrColumnNames[t_iColumnIndex]);
 
                         t_aTableTemplates[t_iTableIndex].addFieldType(
                             t_astrColumnNames[t_iColumnIndex],
-                            metaDataUtils.getQueryJFieldType(
-                                t_iColumnType,
-                                project,
-                                task));
+                            t_MetadataTypeManager.getQueryJFieldType(
+                                t_iColumnType));
                     }
                 }
             }
@@ -211,56 +287,23 @@ public class TableTemplateBuildHandler
             storeTableNames(t_astrTableNames, parameters);
             storeTableTemplates(t_aTableTemplates, parameters);
         }
-    }
 
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager instance.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaDataManager result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
+        return false;
     }
 
     /**
      * Retrieves the table package name from the attribute map.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected String retrieveTablePackage(final Map parameters)
+    protected String retrievePackage(
+        final String engineName, final Map parameters)
         throws  BuildException
     {
-        return retrieveTablePackage(parameters, PackageUtils.getInstance());
+        return retrievePackage(parameters, PackageUtils.getInstance());
     }
 
     /**
@@ -272,7 +315,7 @@ public class TableTemplateBuildHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
-    protected String retrieveTablePackage(
+    protected String retrievePackage(
         final Map parameters, final PackageUtils packageUtils)
         throws  BuildException
     {

@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateFactory;
 
@@ -49,12 +50,6 @@ import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateFactory;
  */
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -130,25 +125,21 @@ public class ProcedureRepositoryTemplateGenerator
      * Generates a procedure repository template.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param metadataTypeManager the metadata type manager instance.
      * @return such template.
      * @throws IOException if the file cannot be created.
      * @precondition packageName != null
      * @precondition repository != null
+     * @precondition metadataTypeManager != null
      */
     public ProcedureRepositoryTemplate createProcedureRepositoryTemplate(
         final String packageName,
         final String repository,
-        final Project project,
-        final Task task)
+        final MetadataTypeManager metadataTypeManager)
     {
         return
             new ProcedureRepositoryTemplate(
-                packageName,
-                repository,
-                project,
-                task);
+                packageName, repository, metadataTypeManager);
     }
 
     /**

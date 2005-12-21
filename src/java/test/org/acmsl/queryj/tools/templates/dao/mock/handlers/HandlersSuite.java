@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.
+*              org.acmsl.queryj.tools.templates.dao.mock.handlers.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers;
+package org.acmsl.queryj.tools.templates.dao.mock.handlers;
 
 
 /*
@@ -95,17 +95,17 @@ public class HandlersSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers");
+    new TestSuite("org.acmsl.queryj.tools.templates.dao.mock.handlers");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOFactoryTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateHandlerBundleTest.class);
     
     
     

@@ -35,7 +35,7 @@
  * Description: Indicates JUnit how to test PackageUtils class.
  *
  */
-package unittests.org.acmsl.queryj.tools;
+package org.acmsl.queryj.tools;
 
 /*
  * Importing some ACM-SL classes.
@@ -185,7 +185,8 @@ public class PackageUtilsTest
         assertNotNull(t_TestFile);
 
         File t_BaseDAOFolder = 
-            t_PackageUtils.retrieveBaseDAOFolder(t_TestFile, "com.foo.bar");
+            t_PackageUtils.retrieveBaseDAOFolder(
+                t_TestFile, "com.foo.bar", false);
 
         assertNotNull(t_BaseDAOFolder);
 
@@ -232,7 +233,8 @@ public class PackageUtilsTest
         assertNotNull(t_TestFile);
 
         File t_BaseDAOFactoryFolder = 
-            t_PackageUtils.retrieveBaseDAOFactoryFolder(t_TestFile, "com.foo.bar");
+            t_PackageUtils.retrieveBaseDAOFactoryFolder(
+                t_TestFile, "com.foo.bar", false);
 
         assertNotNull(t_BaseDAOFactoryFolder);
 
@@ -279,7 +281,8 @@ public class PackageUtilsTest
         assertNotNull(t_TestFile);
 
         File t_ValueObjectFolder = 
-            t_PackageUtils.retrieveValueObjectFolder(t_TestFile, "com.foo.bar");
+            t_PackageUtils.retrieveValueObjectFolder(
+                t_TestFile, "com.foo.bar", false);
 
         assertNotNull(t_ValueObjectFolder);
 
@@ -326,7 +329,8 @@ public class PackageUtilsTest
         assertNotNull(t_TestFile);
 
         File t_ValueObjectFactoryFolder = 
-            t_PackageUtils.retrieveValueObjectFactoryFolder(t_TestFile, "com.foo.bar");
+            t_PackageUtils.retrieveValueObjectFactoryFolder(
+                t_TestFile, "com.foo.bar", false);
 
         assertNotNull(t_ValueObjectFactoryFolder);
 
@@ -373,7 +377,8 @@ public class PackageUtilsTest
         assertNotNull(t_TestFile);
 
         File t_DataAccessManagerFolder = 
-            t_PackageUtils.retrieveDataAccessManagerFolder(t_TestFile, "com.foo.bar");
+            t_PackageUtils.retrieveDataAccessManagerFolder(
+                t_TestFile, "com.foo.bar", false);
 
         assertNotNull(t_DataAccessManagerFolder);
 
@@ -422,7 +427,8 @@ public class PackageUtilsTest
         assertNotNull(t_TestFile);
 
         File t_JdbcDAOFolder = 
-            t_PackageUtils.retrieveJdbcDAOFolder(t_TestFile, "com.foo.bar");
+            t_PackageUtils.retrieveJdbcDAOFolder(
+                t_TestFile, "com.foo.bar", false);
 
         assertNotNull(t_JdbcDAOFolder);
 
@@ -474,7 +480,8 @@ public class PackageUtilsTest
         assertNotNull(t_TestFile);
 
         File t_DAOFolder = 
-            t_PackageUtils.retrieveDAOFolder(t_TestFile, "com.foo.bar", "mysql");
+            t_PackageUtils.retrieveDAOFolder(
+                t_TestFile, "com.foo.bar", "mysql", false);
 
         assertNotNull(t_DAOFolder);
 
@@ -528,7 +535,8 @@ public class PackageUtilsTest
         assertNotNull(t_TestFile);
 
         File t_DAOFactoryFolder = 
-            t_PackageUtils.retrieveDAOFactoryFolder(t_TestFile, "com.foo.bar", "mysql");
+            t_PackageUtils.retrieveDAOFactoryFolder(
+                t_TestFile, "com.foo.bar", "mysql", false);
 
         assertNotNull(t_DAOFactoryFolder);
 
@@ -584,7 +592,8 @@ public class PackageUtilsTest
         assertNotNull(t_TestFile);
 
         File t_DAOFactoryFolder = 
-            t_PackageUtils.retrieveJdbcOperationsFolder(t_TestFile, "com.foo.bar", "mysql", "user");
+            t_PackageUtils.retrieveJdbcOperationsFolder(
+                t_TestFile, "com.foo.bar", "mysql", "user", false);
 
         assertNotNull(t_DAOFactoryFolder);
 

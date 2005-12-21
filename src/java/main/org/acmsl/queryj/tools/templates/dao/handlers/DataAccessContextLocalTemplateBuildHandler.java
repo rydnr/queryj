@@ -61,8 +61,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -96,31 +94,24 @@ public class DataAccessContextLocalTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters, final Project project, final Task task)
+    protected boolean handle(final Map parameters)
         throws  BuildException
     {
         return
             handle(
                 parameters,
                 buildDataAccessContextLocalTemplate(
-                    parameters, project, task));
+                    parameters));
     }
                 
     /**
@@ -152,15 +143,13 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @precondition parameters != null
      */
     protected DataAccessContextLocalTemplate buildDataAccessContextLocalTemplate(
-        final Map parameters, final Project project, final Task task)
+        final Map parameters)
       throws  BuildException
     {
         return
             buildDataAccessContextLocalTemplate(
                 parameters,
-                retrieveDatabaseMetaData(parameters),
-                project,
-                task);
+                retrieveDatabaseMetaData(parameters));
     }
 
     /**
@@ -169,8 +158,6 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @param parameters the parameter map.
      * @param metaData the database meta data.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the template instance.
      * @throws BuildException if the template cannot be created.
      * @precondition parameters != null
@@ -178,10 +165,7 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @preconditrion repository != null
      */
     protected DataAccessContextLocalTemplate buildDataAccessContextLocalTemplate(
-        final Map parameters,
-        final DatabaseMetaData metaData,
-        final Project project,
-        final Task task)
+        final Map parameters, final DatabaseMetaData metaData)
       throws  BuildException
     {
         DataAccessContextLocalTemplate result = null;
@@ -195,9 +179,7 @@ public class DataAccessContextLocalTemplateBuildHandler
                     metaData.getDatabaseProductName(),
                     metaData.getDatabaseProductVersion(),
                     retrieveProjectPackage(parameters),
-                    retrieveTableNames(parameters),
-                    project,
-                    task);
+                    retrieveTableNames(parameters));
         }
         catch  (final SQLException sqlException)
         {
@@ -216,8 +198,6 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param projectPackage the project package.
      * @param tableNames the table names.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the template instance.
      * @throws BuildException if the template cannot be created.
      * @precondition parameters != null
@@ -232,9 +212,7 @@ public class DataAccessContextLocalTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String projectPackage,
-        final String[] tableNames,
-        final Project project,
-        final Task task)
+        final String[] tableNames)
       throws  BuildException
     {
         DataAccessContextLocalTemplate result =
@@ -242,12 +220,12 @@ public class DataAccessContextLocalTemplateBuildHandler
                 jndiLocation,
                 engineName,
                 engineVersion,
-                projectPackage,
-                project,
-                task);
+                projectPackage);
 
+        int t_iLength = (tableNames != null) ? tableNames.length : 0;
+        
         for  (int t_iTableIndex = 0;
-                  t_iTableIndex < tableNames.length;
+                  t_iTableIndex < t_iLength;
                   t_iTableIndex++)
         {
             result.addTable(tableNames[t_iTableIndex]);
@@ -262,8 +240,6 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws BuildException whenever the template
      * information is not valid.
      * @precondition jndiLocation != null
@@ -274,9 +250,7 @@ public class DataAccessContextLocalTemplateBuildHandler
         final String jndiLocation,
         final String engineName,
         final String engineVersion,
-        final String basePackageName,
-        final Project project,
-        final Task task)
+        final String basePackageName)
       throws  BuildException
     {
         return
@@ -285,9 +259,7 @@ public class DataAccessContextLocalTemplateBuildHandler
                 engineName,
                 engineVersion,
                 basePackageName,
-                DataAccessContextLocalTemplateGenerator.getInstance(),
-                project,
-                task);
+                DataAccessContextLocalTemplateGenerator.getInstance());
     }
 
     /**
@@ -297,8 +269,6 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
      * @param templateFactory the template factory.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws BuildException whenever the template
      * information is not valid.
      * @precondition jndiLocation != null
@@ -311,9 +281,7 @@ public class DataAccessContextLocalTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String basePackageName,
-        final DataAccessContextLocalTemplateFactory templateFactory,
-        final Project project,
-        final Task task)
+        final DataAccessContextLocalTemplateFactory templateFactory)
       throws  BuildException
     {
         DataAccessContextLocalTemplate result = null;
@@ -325,9 +293,7 @@ public class DataAccessContextLocalTemplateBuildHandler
                     jndiLocation,
                     engineName,
                     engineVersion,
-                    basePackageName,
-                    project,
-                    task);
+                    basePackageName);
         }
         catch  (final QueryJException queryjException)
         {
@@ -347,32 +313,6 @@ public class DataAccessContextLocalTemplateBuildHandler
     {
         return
             (String) parameters.get(ParameterValidationHandler.JNDI_DATASOURCES);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(final Map parameters)
-    {
-        return
-            (DatabaseMetaData)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
     }
 
     /**

@@ -43,12 +43,12 @@ package org.acmsl.queryj.tools.templates.dao.xml.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -109,8 +109,8 @@ public class XMLValueObjectFactoryTemplateBuildHandler
                 DatabaseMetaData t_MetaData =
                     retrieveDatabaseMetaData(attributes);
 
-                DatabaseMetaDataManager t_MetaDataManager =
-                    retrieveDatabaseMetaDataManager(attributes);
+                MetadataManager t_MetadataManager =
+                    retrieveMetadataManager(attributes);
 
                 String t_strPackage = retrievePackage(attributes);
                 String t_strValueObjectPackage = retrieveValueObjectPackage(attributes);
@@ -118,43 +118,38 @@ public class XMLValueObjectFactoryTemplateBuildHandler
                 XMLValueObjectFactoryTemplateGenerator t_XMLValueObjectFactoryTemplateGenerator =
                     XMLValueObjectFactoryTemplateGenerator.getInstance();
 
-                if  (   (t_MetaData                               != null)
-                     && (t_MetaDataManager                        != null)
-                     && (t_XMLValueObjectFactoryTemplateGenerator != null))
+                TableTemplate[] t_aTableTemplates = retrieveTableTemplates(attributes);
+
+                if  (t_aTableTemplates != null)
                 {
-                    TableTemplate[] t_aTableTemplates = retrieveTableTemplates(attributes);
+                    XMLValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
+                        new XMLValueObjectFactoryTemplate[t_aTableTemplates.length];
 
-                    if  (t_aTableTemplates != null)
+                    for  (int t_iValueObjectFactoryIndex = 0;
+                              t_iValueObjectFactoryIndex < t_aValueObjectFactoryTemplates.length;
+                              t_iValueObjectFactoryIndex++) 
                     {
-                        XMLValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
-                            new XMLValueObjectFactoryTemplate[t_aTableTemplates.length];
+                        String t_strQuote = t_MetaData.getIdentifierQuoteString();
 
-                        for  (int t_iValueObjectFactoryIndex = 0;
-                                  t_iValueObjectFactoryIndex < t_aValueObjectFactoryTemplates.length;
-                                  t_iValueObjectFactoryIndex++) 
+                        if  (t_strQuote == null)
                         {
-                            String t_strQuote = t_MetaData.getIdentifierQuoteString();
-
-                            if  (t_strQuote == null)
-                            {
-                                t_strQuote = "\"";
-                            }
-
-                            if  (t_strQuote.equals("\""))
-                            {
-                                t_strQuote = "\\\"";
-                            }
-
-                            t_aValueObjectFactoryTemplates[t_iValueObjectFactoryIndex] =
-                                t_XMLValueObjectFactoryTemplateGenerator.createXMLValueObjectFactoryTemplate(
-                                    t_strPackage,
-                                    t_strValueObjectPackage,
-                                    t_aTableTemplates[t_iValueObjectFactoryIndex],
-                                    t_MetaDataManager);
+                            t_strQuote = "\"";
                         }
 
-                        storeXMLValueObjectFactoryTemplates(t_aValueObjectFactoryTemplates, attributes);
-                    }
+                        if  (t_strQuote.equals("\""))
+                        {
+                            t_strQuote = "\\\"";
+                        }
+
+                        t_aValueObjectFactoryTemplates[t_iValueObjectFactoryIndex] =
+                            t_XMLValueObjectFactoryTemplateGenerator.createXMLValueObjectFactoryTemplate(
+                                t_strPackage,
+                                t_strValueObjectPackage,
+                                t_aTableTemplates[t_iValueObjectFactoryIndex],
+                                t_MetadataManager);
+                        }
+
+                    storeXMLValueObjectFactoryTemplates(t_aValueObjectFactoryTemplates, attributes);
                 }
             }
             catch  (final SQLException sqlException)
@@ -188,29 +183,6 @@ public class XMLValueObjectFactoryTemplateBuildHandler
                 (DatabaseMetaData)
                     parameters.get(
                         DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaDataManager result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaDataManager)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
         }
         
         return result;

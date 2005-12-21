@@ -41,21 +41,13 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
-import org.acmsl.queryj.tools.ProcedureMetaData;
-import org.acmsl.queryj.tools.ProcedureParameterMetaData;
+import org.acmsl.queryj.tools.templates.AbstractKeywordRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateDefaults;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -83,10 +75,7 @@ public class KeywordRepositoryTemplate
      * @param repository the repository.
      */
     public KeywordRepositoryTemplate(
-        final String packageName,
-        final String repository,
-        final Project project,
-        final Task task)
+        final String packageName, final String repository)
     {
         super(
             DEFAULT_HEADER,
@@ -102,9 +91,7 @@ public class KeywordRepositoryTemplate
             DEFAULT_SINGLETON_BODY,
             DEFAULT_KEYWORD_RETRIEVAL_METHOD_JAVADOC,
             DEFAULT_KEYWORD_RETRIEVAL_METHOD_BODY,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

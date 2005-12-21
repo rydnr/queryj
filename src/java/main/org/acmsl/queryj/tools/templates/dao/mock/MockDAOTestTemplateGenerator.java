@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -54,12 +54,6 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -257,31 +251,27 @@ public class MockDAOTestTemplateGenerator
     /**
      * Generates a DAO test template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectPackageName the value object's package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition daoPackageName != null
      * @precondition valueObjectPackageName != null
      */
     public MockDAOTestTemplate createMockDAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String daoPackageName,
-        final String valueObjectPackageName,
-        final Project project,
-        final Task task)
+        final String valueObjectPackageName)
       throws  QueryJException
     {
         MockDAOTestTemplate result = null;
@@ -294,24 +284,20 @@ public class MockDAOTestTemplateGenerator
             result =
                 t_TemplateFactory.createMockDAOTestTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     daoPackageName,
-                    valueObjectPackageName,
-                    project,
-                    task);
+                    valueObjectPackageName);
         }
         else 
         {
             result =
                 new MockDAOTestTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     daoPackageName,
-                    valueObjectPackageName,
-                    project,
-                    task);
+                    valueObjectPackageName);
         }
 
         return result;
@@ -321,24 +307,18 @@ public class MockDAOTestTemplateGenerator
      * Writes a Mock DAO template to disk.
      * @param mockDAOTestTemplate the Mock DAO test template to write.
      * @param outputDir the output folder.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws IOException if the file cannot be created.
      * @precondition mockDAOTemplate != null
      * @precondition outputDir != null
      */
     public void write(
         final MockDAOTestTemplate mockDAOTestTemplate,
-        final File outputDir,
-        final Project project,
-        final Task task)
+        final File outputDir)
       throws  IOException
     {
         write(
             mockDAOTestTemplate,
             outputDir,
-            project,
-            task,
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
             FileUtils.getInstance());
@@ -348,8 +328,6 @@ public class MockDAOTestTemplateGenerator
      * Writes a Mock DAO template to disk.
      * @param mockDAOTestTemplate the Mock DAO test template to write.
      * @param outputDir the output folder.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
@@ -364,8 +342,6 @@ public class MockDAOTestTemplateGenerator
     protected void write(
         final MockDAOTestTemplate mockDAOTestTemplate,
         final File outputDir,
-        final Project project,
-        final Task task,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
         final FileUtils fileUtils)

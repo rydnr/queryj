@@ -57,12 +57,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -234,8 +228,6 @@ public class SystemFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the template factory is invalid.
      */
@@ -244,9 +236,7 @@ public class SystemFunctionsTestTemplateGenerator
         String  testedPackageName,
         String  engineName,
         String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
+        String  quote)
       throws  QueryJException
     {
         SystemFunctionsTestTemplate result = null;
@@ -268,27 +258,7 @@ public class SystemFunctionsTestTemplateGenerator
                         testedPackageName,
                         engineName,
                         engineVersion,
-                        quote,
-                        project,
-                        task);
-            }
-            else 
-            {
-                if  (project != null)
-                {
-                    project.log(
-                        task,
-                          "Invalid system functions test template "
-                        + "generator: " + t_TemplateFactory,
-                        Project.MSG_WARN);
-                }
-                
-                throw
-                    new QueryJException(
-                          "Cannot find system test functions' "
-                        + "template factory for "
-                        + engineName + "\n"
-                        + "Disable extractfunctions setting.");
+                        quote);
             }
         }
 

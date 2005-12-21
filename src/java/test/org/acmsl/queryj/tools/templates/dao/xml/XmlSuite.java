@@ -33,17 +33,17 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.dao.xml.
+*              org.acmsl.queryj.tools.templates.dao.xml.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.dao.xml;
+package org.acmsl.queryj.tools.templates.dao.xml;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.HandlersSuite;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.HandlersSuite;
 
 
 /*
@@ -96,15 +96,15 @@ public class XmlSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.dao.xml");
+    new TestSuite("org.acmsl.queryj.tools.templates.dao.xml");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLDAOBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.XMLDAOBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateGeneratorTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.dao.xml.handlers.HandlersSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.dao.xml.handlers.HandlersSuite.suite());
     
     
     // JUnitDoclet begin method suite

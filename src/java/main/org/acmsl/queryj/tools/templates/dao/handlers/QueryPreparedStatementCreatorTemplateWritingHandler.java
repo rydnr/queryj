@@ -173,6 +173,7 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
             retrieveOutputDir(
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters),
                 PackageUtils.getInstance());
     }
 
@@ -180,6 +181,7 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
+     * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
@@ -190,40 +192,14 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
     protected File retrieveOutputDir(
         final File projectOutputDir,
         final String projectPackage,
+        final boolean subFolders,
         final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveQueryPreparedStatementCreatorFolder(
                 projectOutputDir,
-                projectPackage);
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveProjectOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
+                projectPackage,
+                subFolders);
     }
 }

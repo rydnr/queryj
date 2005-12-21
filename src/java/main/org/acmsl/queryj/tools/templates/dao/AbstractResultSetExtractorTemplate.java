@@ -42,15 +42,9 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /**
  * Contains the elements required to create the ResultSetExtractor sources.
@@ -68,7 +62,7 @@ public abstract class AbstractResultSetExtractorTemplate
     /**
      * The database metadata manager.
      */
-    private DatabaseMetaDataManager m__MetaDataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
      * The header.
@@ -169,7 +163,7 @@ public abstract class AbstractResultSetExtractorTemplate
      * Builds an <code>AbstractResultSetExtractorTemplate</code> using
      * given information.
      * @param tableTemplate the table template.
-     * @param metaDataManager the database metadata manager.
+     * @param metadataManager the database metadata manager.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -192,19 +186,17 @@ public abstract class AbstractResultSetExtractorTemplate
      * @param valueObjectNullablePropertiesCheck the value object
      * nullable properties check.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractResultSetExtractorTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String header,
         final String packageDeclaration,
         final String packageName,
         final String basePackageName,
         final String repositoryName,
         final String projectImports, 
-       final String additionalImports,
+        final String additionalImports,
         final String acmslImports,
         final String jdkImports,
         final String jdkExtensionImports,
@@ -216,17 +208,13 @@ public abstract class AbstractResultSetExtractorTemplate
         final String valueObjectPropertiesSpecification,
         final String valueObjectNullablePropertiesSpecification,
         final String valueObjectNullablePropertiesCheck,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
-
         immutableSetTableTemplate(
             tableTemplate);
 
-        immutableSetMetaDataManager(
-            metaDataManager);
+        immutableSetMetadataManager(
+            metadataManager);
 
         immutableSetHeader(
             header);
@@ -314,31 +302,31 @@ public abstract class AbstractResultSetExtractorTemplate
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      */
-    private void immutableSetMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager)
+    private void immutableSetMetadataManager(
+        final MetadataManager metadataManager)
     {
-        m__MetaDataManager = metaDataManager;
+        m__MetadataManager = metadataManager;
     }
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      */
-    protected void setMetaDataManager(
-        final DatabaseMetaDataManager metaDataManager)
+    protected void setMetadataManager(
+        final MetadataManager metadataManager)
     {
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
     }
 
     /**
      * Retrieves the metadata manager.
      * @return such manager.
      */
-    public DatabaseMetaDataManager getMetaDataManager()
+    public MetadataManager getMetadataManager()
     {
-        return m__MetaDataManager;
+        return m__MetadataManager;
     }
 
     /**

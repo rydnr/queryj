@@ -42,13 +42,13 @@
   <name>QueryJ</name>
   <id>queryj</id>
   <groupId>org.acmsl.queryj</groupId>
-  <currentVersion>v24-1.9-synchr-1</currentVersion>
+  <currentVersion>v24-1.9-synchr-2-SNAPSHOT</currentVersion>
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>
     <logo>http://www.acm-sl.org/images/logo.png</logo>
   </organization>
-  <inceptionYear>2003</inceptionYear>
+  <inceptionYear>2001-2005</inceptionYear>
   <package>org.acmsl.queryj</package>
 
   <shortDescription>
@@ -135,9 +135,9 @@
 
     <dependency>
       <groupId>acmsl-commons</groupId>
-      <artifactId>commons</artifactId>
-      <version>0.5.7b4</version>
-      <url>http://maven.acm-sl.com/commons</url>
+      <artifactId>acmsl-commons</artifactId>
+      <version>0.5.7b8</version>
+      <url>http://www.acm-sl.org/commons</url>
       <properties>
         <required.to.compile>true</required.to.compile>
         <required.to.run>true</required.to.run>
@@ -151,6 +151,32 @@
       <artifactId>undigester</artifactId>
       <version>0.6b3</version>
       <url>http://maven.acm-sl.com/undigester</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>antmake</groupId>
+      <artifactId>antmake</artifactId>
+      <version>0.1.9b1</version>
+      <url>http://www.acm-sl.org/antmake</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>false</required.to.run>
+        <required.to.test>false</required.to.test>
+        <required.to.build>true</required.to.build>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>stringtemplate</groupId>
+      <artifactId>stringtemplate</artifactId>
+      <version>2.2</version>
+      <url>http://www.stringtemplate.org</url>
       <properties>
         <required.to.compile>true</required.to.compile>
         <required.to.run>true</required.to.run>
@@ -225,7 +251,7 @@
     </dependency>
 
     <dependency>
-      <groupId>mysql-connector-java</groupId>
+      <groupId>mysql-driver</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>2.0.14-bin</version>
       <url>http://www.mysql.com</url>
@@ -390,9 +416,9 @@
       jsanleandro@yahoo.es
     </nagEmailAddress>
 
-    <sourceDirectory>../../java/</sourceDirectory>
+    <sourceDirectory>../../java/main</sourceDirectory>
 
-    <unitTestSourceDirectory>../../java</unitTestSourceDirectory>
+    <unitTestSourceDirectory>../../java/test</unitTestSourceDirectory>
     <integrationUnitTestSourceDirectory/>
 
     <aspectSourceDirectory/>

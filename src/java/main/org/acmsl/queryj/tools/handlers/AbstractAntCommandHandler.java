@@ -43,7 +43,12 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
  * Importing some ACM-SL classes.
@@ -55,7 +60,13 @@ import org.acmsl.commons.patterns.CommandHandler;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
+
+/*
+ * Importing JDK classes.
+ */
+import java.io.File;
+import java.sql.DatabaseMetaData;
+import java.util.Map;
 
 /**
  * Inside a Chain Of Responsibility, these are the chain links.
@@ -69,6 +80,7 @@ public abstract class AbstractAntCommandHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
+     * @precondition command != null
      */
     public boolean handle(final Command command)
     {
@@ -76,16 +88,22 @@ public abstract class AbstractAntCommandHandler
 
         if  (command instanceof AntCommand) 
         {
+            AntCommand t_Command = (AntCommand) command;
+            
             try 
             {
-                result = handle((AntCommand) command);
+                result = handle(t_Command);
             }
             catch  (final BuildException buildException)
             {
-                ((AntCommand) command).getProject().log(
-                    ((AntCommand) command).getTask(),
-                    buildException.getMessage(),
-                    Project.MSG_ERR);
+                QueryJLog t_Log = t_Command.getLog();
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Chain step failed.",
+                        buildException);
+                }
             }
         }
         
@@ -101,4 +119,197 @@ public abstract class AbstractAntCommandHandler
      */
     public abstract boolean handle(final AntCommand command)
         throws  BuildException;
+
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param parameters the parameter map.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    protected File retrieveProjectOutputDir(final Map parameters)
+        throws  BuildException
+    {
+        return
+            (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
+    }
+
+    /**
+     * Retrieves the package name from the attribute map.
+     * @param parameters the parameter map.
+     * @return the package name.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters !0 null
+     */
+    protected String retrieveProjectPackage(final Map parameters)
+        throws  BuildException
+    {
+        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
+    }
+
+    /**
+     * Retrieves the database metadata from the attribute map.
+     * @param parameters the parameter map.
+     * @return the metadata.
+     * @throws BuildException if the metadata retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    protected DatabaseMetaData retrieveDatabaseMetaData(
+        final Map parameters)
+      throws  BuildException
+    {
+        return
+            (DatabaseMetaData)
+                parameters.get(
+                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
+    }
+
+
+    /**
+     * Retrieves the database metadata manager from the attribute map.
+     * @param parameters the parameter map.
+     * @return the manager.
+     * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    protected MetadataManager retrieveMetadataManager(
+        final Map parameters)
+      throws  BuildException
+    {
+        return
+            (MetadataManager)
+                parameters.get(
+                    DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
+    }
+
+    /**
+     * Retrieves whether to use subfolders or not.
+     * @param parameters the parameters.
+     * @return such flag.
+     * @precondition parameters != null
+     */
+    protected boolean retrieveUseSubfoldersFlag(final Map parameters)
+    {
+        boolean result = false;
+
+        Object t_Flag =
+            parameters.get(ParameterValidationHandler.OUTPUT_DIR_SUBFOLDERS);
+
+        if  (   (t_Flag != null)
+             && (t_Flag instanceof Boolean))
+        {
+            result = ((Boolean) t_Flag).booleanValue();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the JDBC driver from the attribute map.
+     * @param parameters the parameter map.
+     * @return the driver name.
+     * @throws BuildException if the driver retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    protected String retrieveJdbcDriver(final Map parameters)
+        throws  BuildException
+    {
+        return
+            (String) parameters.get(ParameterValidationHandler.JDBC_DRIVER);
+    }
+
+    /**
+     * Retrieves the JDBC url from the attribute map.
+     * @param parameters the parameter map.
+     * @return the url name.
+     * @throws BuildException if the url retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    protected String retrieveJdbcUrl(final Map parameters)
+        throws  BuildException
+    {
+        return
+            (String) parameters.get(ParameterValidationHandler.JDBC_URL);
+    }
+
+    /**
+     * Retrieves the JDBC username from the attribute map.
+     * @param parameters the parameter map.
+     * @return the username name.
+     * @throws BuildException if the username retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    protected String retrieveJdbcUsername(final Map parameters)
+        throws  BuildException
+    {
+        return
+            (String) parameters.get(ParameterValidationHandler.JDBC_USERNAME);
+    }
+
+    /**
+     * Retrieves the JDBC password from the attribute map.
+     * @param parameters the parameter map.
+     * @return the password name.
+     * @throws BuildException if the password retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    protected String retrieveJdbcPassword(final Map parameters)
+        throws  BuildException
+    {
+        return
+            (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);
+    }
+
+    /**
+     * Fixes given quote character.
+     * @param quote the quote.
+     * @return the correct one.
+     */
+    public static String fixQuote(final String quote)
+    {
+        String result = quote;
+
+        if  (result == null)
+        {
+            result = "\"";
+        }
+
+        if  (result.equals("\""))
+        {
+            result = "\\\"";
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the custom-sql provider from the attribute map.
+     * @param parameters the parameter map.
+     * @return the provider.
+     * @throws BuildException if the manager retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    public static CustomSqlProvider retrieveCustomSqlProvider(
+        final Map parameters)
+      throws  BuildException
+    {
+        return
+            (CustomSqlProvider)
+                parameters.get(
+                    CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
+    }
+
+    /**
+     * Retrieves the repository name.
+     * @param parameters the parameters.
+     * @return the repository's name.
+     * @precondition parameters != null
+     */
+    protected String retrieveTableRepositoryName(final Map parameters)
+    {
+        return
+            (String)
+                parameters.get(
+                    ParameterValidationHandler.REPOSITORY);
+    }
 }

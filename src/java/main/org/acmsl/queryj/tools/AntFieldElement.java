@@ -103,7 +103,7 @@ public class AntFieldElement
      * Specifies the field name.
      * @param name the field name.
      */
-    protected void setName(String name)
+    protected void setName(final String name)
     {
         m__strName = name;
     }
@@ -121,7 +121,7 @@ public class AntFieldElement
      * Specifies the field type.
      * @param type the field type.
      */
-    protected void setType(String type)
+    protected void setType(final String type)
     {
         m__strType = type;
     }
@@ -139,7 +139,7 @@ public class AntFieldElement
      * Specifies if the field is a primary key.
      * @param pk such information.
      */
-    public void setPk(String pk)
+    public void setPk(final String pk)
     {
         m__strPk = pk;
 
@@ -162,7 +162,7 @@ public class AntFieldElement
      * Specifies if the field is a primary key.
      * @param pk such information.
      */
-    protected void setIsPk(boolean pk)
+    protected void setIsPk(final boolean pk)
     {
         m__bPk = pk;
     }
@@ -180,7 +180,7 @@ public class AntFieldElement
      * Specifies the table name.
      * @param name the table name.
      */
-    protected void setTableName(String name)
+    protected void setTableName(final String name)
     {
         m__strTableName = name;
     }
@@ -198,7 +198,7 @@ public class AntFieldElement
      * Specifies the field's keyword.
      * @param keyword the keyword.
      */
-    protected void setKeyword(String keyword)
+    protected void setKeyword(final String keyword)
     {
         m__strKeyword = keyword;
     }
@@ -216,7 +216,7 @@ public class AntFieldElement
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    private void inmutableSetFieldFks(Collection fieldFks)
+    private void inmutableSetFieldFks(final Collection fieldFks)
     {
         m__cFieldFks = fieldFks;
     }
@@ -225,7 +225,7 @@ public class AntFieldElement
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    protected void setFieldFks(Collection fieldFks)
+    protected void setFieldFks(final Collection fieldFks)
     {
         inmutableSetFieldFks(fieldFks);
     }
@@ -271,7 +271,7 @@ public class AntFieldElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setDynamicAttribute(String name, String value)
+    public void setDynamicAttribute(final String name, final String value)
     {
         if  ("name".equals(name))
         {
@@ -310,7 +310,7 @@ public class AntFieldElement
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
-    public Object createDynamicElement(String name)
+    public Object createDynamicElement(final String name)
     {
         AntFieldFkElement result = null;
 

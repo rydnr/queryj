@@ -4988,6 +4988,45 @@ public class QueryResultSet
      * @return see getString(int)
      * @exception SQLException if an error occurs.
      */
+    public String getString(final ClobField field)
+        throws  SQLException
+    {
+        return
+            getString(
+                field, getQuery(), getResultSet(), QueryUtils.getInstance());
+    }
+
+    /**
+     * Retrieves a text value using the field reference.
+     * @param field the field.
+     * @param query the query.
+     * @param resultSet the result set.
+     * @param queryUtils the <code>QueryUtils</code> instance.
+     * @return see getString(int)
+     * @exception SQLException if an error occurs.
+     * @precondition field != null
+     * @precondition query != null
+     * @precondition resultSet != null
+     * @precondition queryUtils != null
+     */
+    protected String getString(
+        final ClobField field,
+        final Query query,
+        final ResultSet resultSet,
+        final QueryUtils queryUtils)
+      throws  SQLException
+    {
+        return
+            queryUtils.clobToString(
+                resultSet.getClob(query.getFieldIndex(field)));
+    }
+
+    /**
+     * Retrieves a text value using the field reference.
+     * @param field the field.
+     * @return see getString(int)
+     * @exception SQLException if an error occurs.
+     */
     public String getString(final Field field)
         throws  SQLException
     {

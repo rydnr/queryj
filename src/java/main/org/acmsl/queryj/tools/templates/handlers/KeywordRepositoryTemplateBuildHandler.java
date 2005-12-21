@@ -43,11 +43,11 @@ package org.acmsl.queryj.tools.templates.handlers;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.AntFieldElement;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.MetaDataUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate;
@@ -111,32 +111,20 @@ public class KeywordRepositoryTemplateBuildHandler
         return
             handle(
                 command.getAttributeMap(),
-                command.getProject(),
-                command.getTask(),
-                MetaDataUtils.getInstance(),
                 StringValidator.getInstance());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
-     * @precondition project != null
-     * @precondition task != null
-     * @precondition metaDataUtils != null
      * @precondition stringValidator != null
      */
     protected boolean handle(
         final Map parameters,
-        final Project project,
-        final Task task,
-        final MetaDataUtils metaDataUtils,
         final StringValidator stringValidator)
         throws  BuildException
     {
@@ -144,7 +132,7 @@ public class KeywordRepositoryTemplateBuildHandler
 
         KeywordRepositoryTemplate t_KeywordRepositoryTemplate =
             buildKeywordRepositoryTemplate(
-                parameters, project, task);
+                parameters);
 
         if  (t_KeywordRepositoryTemplate == null)
         {
@@ -157,14 +145,14 @@ public class KeywordRepositoryTemplateBuildHandler
 
             Collection t_cFieldElements = null;
 
-            DatabaseMetaDataManager t_MetaDataManager =
-                retrieveDatabaseMetaDataManager(parameters);
+            MetadataManager t_MetadataManager =
+                retrieveMetadataManager(parameters);
 
             AntExternallyManagedFieldsElement
                 t_ExternallyManagedFieldsElement =
                 retrieveExternallyManagedFieldsElement(parameters);
 
-            if  (t_MetaDataManager == null)
+            if  (t_MetadataManager == null)
             {
                 throw new BuildException(
                       "Cannot continue: "
@@ -172,6 +160,9 @@ public class KeywordRepositoryTemplateBuildHandler
             }
             else if  (t_ExternallyManagedFieldsElement != null)
             {
+                MetadataTypeManager t_MetadataTypeManager =
+                    t_MetadataManager.getMetadataTypeManager();
+                
                 t_cFieldElements =
                     t_ExternallyManagedFieldsElement.getFields();
 
@@ -193,12 +184,10 @@ public class KeywordRepositoryTemplateBuildHandler
                             {
                                 t_KeywordRepositoryTemplate.addKeyword(
                                     t_Field.getKeyword(),
-                                    metaDataUtils.getQueryJFieldType(
-                                        t_MetaDataManager.getColumnType(
+                                    t_MetadataTypeManager.getQueryJFieldType(
+                                        t_MetadataManager.getColumnType(
                                             t_Field.getTableName(),
-                                            t_Field.getName()),
-                                        project,
-                                        task));
+                                            t_Field.getName())));
                             }
                         }
                     }
@@ -207,23 +196,6 @@ public class KeywordRepositoryTemplateBuildHandler
         }
         
         return result;
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager instance.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
     }
 
     /**
@@ -305,22 +277,18 @@ public class KeywordRepositoryTemplateBuildHandler
      * Builds a procedure repository template using the information stored
      * in the attribute map.
      * @param parameters the parameter map.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the ProcedureRepositoryTemplate instance.
      * @throws BuildException if the repository cannot be created.
      * @precondition parameters != null
      */
     protected KeywordRepositoryTemplate buildKeywordRepositoryTemplate(
-        final Map parameters, final Project project, final Task task)
+        final Map parameters)
       throws  BuildException
     {
         return
             buildKeywordRepositoryTemplate(
                 retrievePackage(parameters),
                 retrieveRepository(parameters),
-                project,
-                task,
                 KeywordRepositoryTemplateGenerator.getInstance());
     }
 
@@ -328,8 +296,6 @@ public class KeywordRepositoryTemplateBuildHandler
      * Builds a procedure repository template using given information.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @param templateFactory the template factory.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
@@ -341,14 +307,12 @@ public class KeywordRepositoryTemplateBuildHandler
     protected KeywordRepositoryTemplate buildKeywordRepositoryTemplate(
         final String packageName,
         final String repository,
-        final Project project,
-        final Task task,
         final KeywordRepositoryTemplateFactory templateFactory)
       throws  BuildException
     {
         return
             templateFactory.createKeywordRepositoryTemplate(
-                packageName, repository, project, task);
+                packageName, repository);
     }
 
     /**

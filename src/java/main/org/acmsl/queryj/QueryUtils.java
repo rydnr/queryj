@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2004  Jose San Leandro Armend&aacute;riz
+    Copyright (C) 2002-2005  Jose San Leandro Armend&aacute;riz
                              chous@acm-sl.org
      
     This library is free software; you can redistribute it and/or
@@ -38,15 +38,25 @@
 package org.acmsl.queryj;
 
 /*
- * Importing ACM-SL classes.
+ * Importing project classes.
  */
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.SelectQuery;
 
 /*
+ * Importing ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Utils;
+
+/*
  * Importing some JDK classes.
  */
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.lang.ref.WeakReference;
+import java.sql.Clob;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -55,7 +65,8 @@ import java.util.Iterator;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro Armend&aacute;riz</a>
  */
-public abstract class QueryUtils
+public class QueryUtils
+    implements  Utils
 {
     /**
      * Singleton implemented as a weak reference.
@@ -71,7 +82,7 @@ public abstract class QueryUtils
      * Specifies a new weak reference.
      * @param utils the utils instance to use.
      */
-    protected static void setReference(QueryUtils utils)
+    protected static void setReference(final QueryUtils utils)
     {
         singleton = new WeakReference(utils);
     }
@@ -86,7 +97,7 @@ public abstract class QueryUtils
     }
 
     /**
-     * Retrieves a QueryUtils instance.
+     * Retrieves a <code>QueryUtils</code> instance.
      * @return such instance.
      */
     public static QueryUtils getInstance()
@@ -102,7 +113,7 @@ public abstract class QueryUtils
 
         if  (result == null) 
         {
-            result = new QueryUtils() {};
+            result = new QueryUtils();
 
             setReference(result);
         }
@@ -213,5 +224,48 @@ public abstract class QueryUtils
         }
 
         return result;
+    }
+
+    /**
+     * Converts a clob to a string.
+     * @param clob the clob to convert.
+     * @return the clob contents.
+     * @throws SQLException if the CLOB cannot be processed.
+     * @see <a href="http://www.opengroup.org/bookstore/catalog/c449.htm">SQL 2</a>.
+     * @precondition clob != null
+     */
+    public String clobToString(final Clob clob)
+        throws  SQLException
+    {
+        StringBuffer t_sbResult = new StringBuffer();
+
+        BufferedReader t_Reader =
+            new BufferedReader(clob.getCharacterStream());
+
+        try 
+        {
+            String t_strLine = t_Reader.readLine();
+
+            while  (t_strLine != null)
+            {
+                t_sbResult.append(t_strLine);
+
+                t_strLine = t_Reader.readLine();
+            } // end of while  ()
+            
+        }
+        catch  (final IOException ioException)
+        {
+            SQLException t_ExceptionToThrow =
+                new SQLException(
+                    "Cannot read clob",
+                    "22021"); // "Translation result not in target repertoire"
+
+            t_ExceptionToThrow.initCause(ioException);
+
+            throw t_ExceptionToThrow;
+        }
+
+        return t_sbResult.toString();
     }
 }

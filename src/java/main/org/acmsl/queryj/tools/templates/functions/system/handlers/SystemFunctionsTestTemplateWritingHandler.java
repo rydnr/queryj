@@ -83,35 +83,57 @@ public class SystemFunctionsTestTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                retrieveSystemFunctionsTestTemplate(parameters),
+                retrieveOutputDir(parameters),
+                SystemFunctionsTestTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Writes the test template for SystemFunctions.
+     * @param template the template to write.
+     * @param outputDir the output dir.
+     * @param generator the <code>SystemFunctionsTestTemplateGenerator</code>
+     * instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final SystemFunctionsTestTemplate template,
+        final File outputDir,
+        final SystemFunctionsTestTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        if  (template != null)
         {
             try 
             {
-                Map attributes = command.getAttributeMap();
-
-                SystemFunctionsTestTemplateGenerator t_SystemFunctionsTestTemplateGenerator =
-                    SystemFunctionsTestTemplateGenerator.getInstance();
-
-                SystemFunctionsTestTemplate t_SystemFunctionsTestTemplate =
-                    retrieveSystemFunctionsTestTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                          != null) 
-                     && (t_SystemFunctionsTestTemplate          != null)
-                     && (t_SystemFunctionsTestTemplateGenerator != null))
-                {
-                    t_SystemFunctionsTestTemplateGenerator.write(
-                        t_SystemFunctionsTestTemplate, t_OutputDir);
-                }
+                generator.write(template, outputDir);
             }
-            catch  (IOException ioException)
+            catch  (final IOException ioException)
             {
                 throw new BuildException(ioException);
             }
@@ -125,21 +147,16 @@ public class SystemFunctionsTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the test template.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected SystemFunctionsTestTemplate retrieveSystemFunctionsTestTemplate(Map parameters)
-        throws  BuildException
+    protected SystemFunctionsTestTemplate retrieveSystemFunctionsTestTemplate(
+        final Map parameters)
+      throws  BuildException
     {
-        SystemFunctionsTestTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (SystemFunctionsTestTemplate)
-                    parameters.get(
-                        TemplateMappingManager.SYSTEM_FUNCTIONS_TEST_TEMPLATE);
-        }
-        
-        return result;
+        return
+            (SystemFunctionsTestTemplate)
+                parameters.get(
+                    TemplateMappingManager.SYSTEM_FUNCTIONS_TEST_TEMPLATE);
     }
 
     /**
@@ -147,63 +164,31 @@ public class SystemFunctionsTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
+    protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveTestFunctionsFolder(
-                    retrieveProjectOutputDir(parameters),
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
 
     /**
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
      */
-    protected File retrieveProjectOutputDir(Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
     {
-        File result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveTestFunctionsFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

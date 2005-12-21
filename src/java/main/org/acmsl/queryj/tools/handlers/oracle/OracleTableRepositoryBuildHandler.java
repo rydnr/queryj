@@ -74,9 +74,7 @@ public class OracleTableRepositoryBuildHandler
     {
         storeTableRepositoryTemplate(
             buildTableRepositoryTemplate(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask()),
+                command.getAttributeMap()),
             command.getAttributeMap());
         
         return false;

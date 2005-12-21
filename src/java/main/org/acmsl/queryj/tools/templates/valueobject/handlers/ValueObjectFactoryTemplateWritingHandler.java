@@ -90,43 +90,61 @@ public class ValueObjectFactoryTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                retrieveValueObjectFactoryTemplates(parameters),
+                retrieveOutputDir(parameters),
+                ValueObjectFactoryTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Writes the ValueObjectFactory templates.
+     * @param templates the templates to write.
+     * @param generator the <code>ValueObjectFactoryTemplateGenerator</code>
+     * instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition templates != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final ValueObjectFactoryTemplate[] templates,
+        final File outputDir,
+        final ValueObjectFactoryTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
+            int t_iLength = (templates != null) ? templates.length : 0;
+
+            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
             {
-                Map attributes = command.getAttributeMap();
-
-                ValueObjectFactoryTemplateGenerator t_ValueObjectFactoryTemplateGenerator =
-                    ValueObjectFactoryTemplateGenerator.getInstance();
-
-                ValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
-                    retrieveValueObjectFactoryTemplates(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                           != null) 
-                     && (t_aValueObjectFactoryTemplates        != null)
-                     && (t_ValueObjectFactoryTemplateGenerator != null))
-                {
-                    for  (int t_iValueObjectFactoryIndex = 0;
-                              t_iValueObjectFactoryIndex < t_aValueObjectFactoryTemplates.length;
-                              t_iValueObjectFactoryIndex++)
-                    {
-                        t_ValueObjectFactoryTemplateGenerator.write(
-                            t_aValueObjectFactoryTemplates[t_iValueObjectFactoryIndex], t_OutputDir);
-                    }
-                }
+                generator.write(templates[t_iIndex], outputDir);
             }
-            catch  (final IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -137,24 +155,17 @@ public class ValueObjectFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected ValueObjectFactoryTemplate[] retrieveValueObjectFactoryTemplates(
         final Map parameters)
       throws  BuildException
     {
-        ValueObjectFactoryTemplate[] result =
-            EMPTY_VALUE_OBJECT_FACTORY_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (ValueObjectFactoryTemplate[])
-                    parameters.get(
-                        TemplateMappingManager
-                            .VALUE_OBJECT_FACTORY_TEMPLATES);
-        }
-        
-        return result;
+        return
+            (ValueObjectFactoryTemplate[])
+                parameters.get(
+                    TemplateMappingManager
+                        .VALUE_OBJECT_FACTORY_TEMPLATES);
     }
 
     /**
@@ -162,43 +173,31 @@ public class ValueObjectFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveValueObjectFolder(
-                    (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters));
-        }
-
-        return result;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the package name from the attribute map.
+     * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
      */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveValueObjectFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

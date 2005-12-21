@@ -44,12 +44,6 @@ package org.acmsl.queryj.tools.templates.functions.system.oracle;
 import org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplate;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.Map;
@@ -84,24 +78,18 @@ public class OracleSystemFunctionsTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public OracleSystemFunctionsTemplate(
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote,
-        final Project project,
-        final Task    task)
+        final String quote)
     {
         super(
             packageName,
             engineName,
             engineVersion,
-            quote,
-            project,
-            task);
+            quote);
     }
 
     /**

@@ -41,15 +41,8 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /**
  * Contains the subtemplates required to create abstract base JDBC DAO.
@@ -170,8 +163,6 @@ public abstract class AbstractJdbcDAOTemplate
      * @param transactionTokenFactoryMethods the transaction token factory
      * methods.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractJdbcDAOTemplate(
         final String header,
@@ -191,11 +182,8 @@ public abstract class AbstractJdbcDAOTemplate
         final String rollbackMethods,
         final String connectionClosingMethods,
         final String transactionTokenFactoryMethods,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

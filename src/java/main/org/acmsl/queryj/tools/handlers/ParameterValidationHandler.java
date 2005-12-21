@@ -19,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
+    Contact info: jose.sanleandro@acm-sl.com
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -41,28 +41,35 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.AntTablesElement;
+import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
+
+/*
+ * Importing Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * Validates the parameters of an Ant task.
@@ -180,6 +187,11 @@ public class ParameterValidationHandler
          "Specified Outputdir is not a folder.";
 
     /**
+     * The output-dir-subfolders attribute name.
+     */
+    public static final String OUTPUT_DIR_SUBFOLDERS = "outputdirsubfolders";
+
+    /**
      * The extract-tables attribute name.
      */
     public static final String EXTRACT_TABLES = "extract.tables";
@@ -261,6 +273,17 @@ public class ParameterValidationHandler
     public static final String CUSTOM_SQL_MODEL_XML = "xml";
 
     /**
+     * The grammar bundle name.
+     */
+    public static final String GRAMMAR_BUNDLE_NAME = "grammarBundle";
+    
+    /**
+     * The missing grammar bundle error message.
+     */
+    public static final String GRAMMAR_BUNDLE_NOT_FOUND =
+        "Specified grammar bundle cannot be found";
+    
+    /**
      * Creates a ParameterValidationHandler.
      */
     public ParameterValidationHandler() {};
@@ -282,10 +305,14 @@ public class ParameterValidationHandler
             }
             catch  (final BuildException buildException)
             {
-                ((AntCommand) command).getProject().log(
-                    ((AntCommand) command).getTask(),
-                    buildException.getMessage(),
-                    Project.MSG_ERR);
+                Log t_Log = UniqueLogFactory.getLog(getClass());
+                
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Error validating parameters.",
+                        buildException);
+                }
             }
         }
         
@@ -324,25 +351,27 @@ public class ParameterValidationHandler
         if  (parameters != null) 
         {
             validateParameters(
-                (String)           parameters.get(JDBC_DRIVER),
-                (String)           parameters.get(JDBC_URL),
-                (String)           parameters.get(JDBC_USERNAME),
-                (String)           parameters.get(JDBC_PASSWORD),
-                (String)           parameters.get(JDBC_CATALOG),
-                (String)           parameters.get(JDBC_SCHEMA),
-                (String)           parameters.get(REPOSITORY),
-                (String)           parameters.get(PACKAGE),
-                (Path)             parameters.get(CLASSPATH),
-                (File)             parameters.get(OUTPUT_DIR),
-                (Boolean)          parameters.get(EXTRACT_PROCEDURES),
-                (Boolean)          parameters.get(EXTRACT_FUNCTIONS),
-                (String)           parameters.get(JNDI_DATASOURCES),
-                (Boolean)          parameters.get(GENERATE_MOCK_DAO),
+                (String) parameters.get(JDBC_DRIVER),
+                (String) parameters.get(JDBC_URL),
+                (String) parameters.get(JDBC_USERNAME),
+                (String) parameters.get(JDBC_PASSWORD),
+                (String) parameters.get(JDBC_CATALOG),
+                (String) parameters.get(JDBC_SCHEMA),
+                (String) parameters.get(REPOSITORY),
+                (String) parameters.get(PACKAGE),
+                (Path) parameters.get(CLASSPATH),
+                (File) parameters.get(OUTPUT_DIR),
+                (Boolean) parameters.get(OUTPUT_DIR_SUBFOLDERS),
+                (Boolean) parameters.get(EXTRACT_PROCEDURES),
+                (Boolean) parameters.get(EXTRACT_FUNCTIONS),
+                (String) parameters.get(JNDI_DATASOURCES),
+                (Boolean) parameters.get(GENERATE_MOCK_DAO),
                 (AntTablesElement) parameters.get(TABLES),
                 (AntExternallyManagedFieldsElement)
                     parameters.get(EXTERNALLY_MANAGED_FIELDS),
-                (String)           parameters.get(CUSTOM_SQL_MODEL),
-                (File)             parameters.get(SQL_XML_FILE));
+                (String) parameters.get(CUSTOM_SQL_MODEL),
+                (File) parameters.get(SQL_XML_FILE),
+                (String) parameters.get(GRAMMAR_BUNDLE_NAME));
         }
     }
 
@@ -358,6 +387,7 @@ public class ParameterValidationHandler
      * @param packageName the package name.
      * @param classpath the classpath.
      * @param outputdir the output folder.
+     * @param outputdirsubfolders whether to use subfolders.
      * @param extractProcedures the extract-procedures setting.
      * @param extractFunctions the extract-functions setting.
      * @param jndiDataSources the JNDI location for data sources.
@@ -367,28 +397,31 @@ public class ParameterValidationHandler
      * information.
      * @param customSqlModel the model for custom-sql information.
      * @param sqlXmlFile the sql.xml file.
+     * @param grammarBundleName the grammar bundle name.
      * @throws BuildException whenever the required
      * parameters are not present or valid.
      */
     protected void validateParameters(
-        final String                            driver,
-        final String                            url,
-        final String                            username,
-        final String                            password,
-        final String                            catalog,
-        final String                            schema,
-        final String                            repository,
-        final String                            packageName,
-        final Path                              classpath,
-        final File                              outputdir,
-        final Boolean                           extractProcedures,
-        final Boolean                           extractFunctions,
-        final String                            jndiDataSources,
-        final Boolean                           generateMockDAO,
-        final AntTablesElement                  tables,
+        final String driver,
+        final String url,
+        final String username,
+        final String password,
+        final String catalog,
+        final String schema,
+        final String repository,
+        final String packageName,
+        final Path classpath,
+        final File outputdir,
+        final Boolean outputdirsubfolders,
+        final Boolean extractProcedures,
+        final Boolean extractFunctions,
+        final String jndiDataSources,
+        final Boolean generateMockDAO,
+        final AntTablesElement tables,
         final AntExternallyManagedFieldsElement externallyManagedFields,
-        final String                            customSqlModel,
-        final File                              sqlXmlFile)
+        final String customSqlModel,
+        final File sqlXmlFile,
+        final String grammarBundleName)
       throws  BuildException
     {
         if  (driver == null) 
@@ -487,6 +520,19 @@ public class ParameterValidationHandler
                  || (!sqlXmlFile.canRead())))
         {
             throw new BuildException(SQL_XML_FILE_MISSING);
+        }
+
+        // Not mandatory
+        if  (grammarBundleName != null)
+        {
+            try
+            {
+                ResourceBundle.getBundle(grammarBundleName);
+            }
+            catch  (final MissingResourceException missingResourceException)
+            {
+                throw new BuildException(GRAMMAR_BUNDLE_NOT_FOUND);
+            }
         }
     }
 }

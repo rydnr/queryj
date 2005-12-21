@@ -92,46 +92,64 @@ public class XMLDAOFactoryTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                retrieveXMLDAOFactoryTemplates(parameters),
+                retrieveOutputDir(parameters),
+                XMLDAOFactoryTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Writes the XMLDAOFactory templates.
+     * @param templates the templates.
+     * @param outputDir the output dir.
+     * @param generator the <code>XMLDAOFactoryTemplateGenerator</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition templates != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final XMLDAOFactoryTemplate[] templates,
+        final File outputDir,
+        final XMLDAOFactoryTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
+            int t_iLength = (templates != null) ? templates.length : 0;
+
+            for  (int t_iXMLDAOFactoryIndex = 0;
+                      t_iXMLDAOFactoryIndex < t_iLength;
+                      t_iXMLDAOFactoryIndex++)
             {
-                Map attributes = command.getAttributeMap();
-
-                XMLDAOFactoryTemplateGenerator
-                    t_XMLDAOFactoryTemplateGenerator =
-                        XMLDAOFactoryTemplateGenerator.getInstance();
-
-                XMLDAOFactoryTemplate[] t_aXMLDAOFactoryTemplates =
-                    retrieveXMLDAOFactoryTemplates(attributes);
-
-                if  (   (t_aXMLDAOFactoryTemplates        != null)
-                     && (t_XMLDAOFactoryTemplateGenerator != null))
-                {
-                    File t_OutputDir =
-                        retrieveOutputDir(attributes);
-
-                    for  (int t_iXMLDAOFactoryIndex = 0;
-                                t_iXMLDAOFactoryIndex
-                              < t_aXMLDAOFactoryTemplates.length;
-                              t_iXMLDAOFactoryIndex++)
-                    {
-                        t_XMLDAOFactoryTemplateGenerator.write(
-                            t_aXMLDAOFactoryTemplates[t_iXMLDAOFactoryIndex],
-                            t_OutputDir);
-                    }
-                }
+                generator.write(templates[t_iXMLDAOFactoryIndex], outputDir);
             }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -142,22 +160,16 @@ public class XMLDAOFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected XMLDAOFactoryTemplate[] retrieveXMLDAOFactoryTemplates(
         final Map parameters)
       throws  BuildException
     {
-        XMLDAOFactoryTemplate[] result = EMPTY_XML_DAO_FACTORY_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (XMLDAOFactoryTemplate[])
-                    parameters.get(
-                        TemplateMappingManager.XML_DAO_FACTORY_TEMPLATES);
-        }
-        
-        return result;
+        return
+            (XMLDAOFactoryTemplate[])
+                parameters.get(
+                    TemplateMappingManager.XML_DAO_FACTORY_TEMPLATES);
     }
 
     /**
@@ -165,44 +177,31 @@ public class XMLDAOFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveXMLDAOFactoryFolder(
-                    (File)
-                        parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the package name from the attribute map.
+     * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
      */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveXMLDAOFactoryFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

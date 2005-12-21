@@ -48,12 +48,6 @@ import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTestTemplate;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.Map;
@@ -63,7 +57,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class MySQLNumericFunctionsTestTemplate
+public class MySQLNumericFunctionsTestTemplate
     extends     NumericFunctionsTestTemplate
 {
     /**
@@ -73,26 +67,20 @@ public abstract class MySQLNumericFunctionsTestTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public MySQLNumericFunctionsTestTemplate(
         final String  packageName,
         final String  testedPackageName,
         final String  engineName,
         final String  engineVersion,
-        final String  quote,
-        final Project project,
-        final Task    task)
+        final String  quote)
     {
         super(
             packageName,
             testedPackageName,
             engineName,
             engineVersion,
-            quote,
-            project,
-            task);
+            quote);
     }
 
     /**

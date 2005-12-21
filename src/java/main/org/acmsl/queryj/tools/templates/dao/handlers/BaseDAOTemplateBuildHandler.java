@@ -40,40 +40,21 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
-import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateBuildHandler;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
 import java.util.Map;
 
 /**
@@ -82,230 +63,55 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class BaseDAOTemplateBuildHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateBuildHandler
+    extends  BasePerTableTemplateBuildHandler
 {
     /**
-     * Creates a BaseDAOTemplateBuildHandler.
+     * Creates a <code>BaseDAOTemplateBuildHandler</code> instance.
      */
     public BaseDAOTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * Retrieves the template factory.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerTableTemplateFactory retrieveTemplateFactory()
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return BaseDAOTemplateGenerator.getInstance();
     }
 
     /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     */
-    protected boolean handle(
-        final Map parameters,
-        final Project project,
-        final Task task)
-      throws  BuildException
-    {
-        return
-            handle(
-                parameters,
-                retrieveDatabaseMetaDataManager(parameters),
-                retrieveCustomSqlProvider(parameters),
-                retrievePackage(parameters),
-                retrieveValueObjectPackageName(parameters),
-                retrieveTableTemplates(parameters),
-                BaseDAOTemplateGenerator.getInstance(),
-                project,
-                task);
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param databaseMetaDataManager the manager instance
-     * of the database metadata.
-     * @param customSqlProvider the custom sql provider.
-     * @param packageName the package name.
-     * @param valueObjectPackageName the value object package name.
-     * @param tableTemplates the table templates.
-     * @param templateFactory the template factory.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition databaseMetaDataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition packageName != null
-     * @precondition valueObjectPackageName != null
-     * @precondition tableTemplates != null
-     * @precondition templateFactory != null
-     */
-    protected boolean handle(
-        final Map parameters,
-        final DatabaseMetaDataManager databaseMetaDataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String valueObjectPackageName,
-        final TableTemplate[] tableTemplates,
-        final BaseDAOTemplateFactory templateFactory,
-        final Project project,
-        final Task task)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        BaseDAOTemplate[] t_aBaseDAOTemplates =
-            new BaseDAOTemplate[tableTemplates.length];
-
-        try
-        {
-            for  (int t_iBaseDAOIndex = 0;
-                      t_iBaseDAOIndex < t_aBaseDAOTemplates.length;
-                      t_iBaseDAOIndex++) 
-            {
-                t_aBaseDAOTemplates[t_iBaseDAOIndex] =
-                    templateFactory.createBaseDAOTemplate(
-                        tableTemplates[t_iBaseDAOIndex],
-                        databaseMetaDataManager,
-                        customSqlProvider,
-                        packageName,
-                        valueObjectPackageName,
-                        project,
-                        task);
-            }
-
-            storeBaseDAOTemplates(t_aBaseDAOTemplates, parameters);
-        }
-        catch  (final QueryJException queryjException)
-        {
-            throw new BuildException(queryjException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the value object package name.
-     * @param parameters the parameters.
-     * @return such package name.
-     * @precondition parameters != null
-     */
-    protected String retrieveValueObjectPackageName(final Map parameters)
-    {
-        return ValueObjectTemplateBuildHandler.retrievePackage(parameters);
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrievePackage(final Map parameters)
-        throws  BuildException
-    {
-        return retrievePackage(parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
+     * Retrieves the package name.
+     * @param tableName the table name.
+     * @param engineName the engine name.
+     * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
+     * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final Map parameters, final PackageUtils packageUtils)
+        final String tableName,
+        final String engineName,
+        final String projectPackage,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
         return
-            packageUtils.retrieveBaseDAOPackage(
-                (String) parameters.get(ParameterValidationHandler.PACKAGE));
+            packageUtils.retrieveBaseDAOPackage(projectPackage);
     }
 
     /**
-     * Stores the base DAO template collection in given attribute map.
-     * @param baseDAOTemplates the base DAO templates.
+     * Stores the template collection in given attribute map.
+     * @param templates the templates.
      * @param parameters the parameter map.
-     * @throws BuildException if the templates cannot be stored for any reason.
-     * @precondition baseDAOTemplates != null
+     * @precondition templates != null
      * @precondition parameters != null
      */
-    protected void storeBaseDAOTemplates(
-        final BaseDAOTemplate[] baseDAOTemplates, final Map parameters)
-      throws  BuildException
+    protected void storeTemplates(
+        final BasePerTableTemplate[] templates, final Map parameters)
     {
         parameters.put(
-            TemplateMappingManager.BASE_DAO_TEMPLATES, baseDAOTemplates);
-    }
-
-    /**
-     * Retrieves the table templates.
-     * @param parameters the parameter map.
-     * @return such templates.
-     * @throws BuildException if the templates cannot be stored for any reason.
-     * @precondition parameters != null
-     */
-    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (TableTemplate[])
-                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-    }
-
-
-    /**
-     * Retrieves the custom-sql provider from the attribute map.
-     * @param parameters the parameter map.
-     * @return the provider.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    public static CustomSqlProvider retrieveCustomSqlProvider(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (CustomSqlProvider)
-                parameters.get(
-                    CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
+            TemplateMappingManager.BASE_DAO_TEMPLATES, templates);
     }
 }

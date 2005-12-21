@@ -1,0 +1,336 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate PkStatementSetters.
+//
+// Version: $Revision$ ($Author$ at $Date$)
+//
+// $Id$
+//
+group PkStatementSetter;
+
+source(input) ::= <<
+<!
+  Generates a PkStatementSetter source file.
+  @param input.copyright_years the copyright's years.
+  @param input.table_name the table name.
+  @param input.package the package.
+  @params project_imports
+  @params class
+!>
+<java_header(
+  years=input.copyright_years,
+  description=
+    [
+      first_line_description(
+        tableName=input.table_name),
+      second_line_description(
+        tableName=input.table_name),
+      third_line_description(
+        tableName=input.table_name)
+    ],
+    timestamp=input.timestamp)>
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName,
+    input.subpackage_name,
+    input.table_name_normalized_lowercased
+  ])>
+
+<project_imports(
+  basePackageName=input.base_package_name,
+  voSubpackageName=typeInitMap.voSubpackageName,
+  voName=input.vo_name,
+  trSubpackageName=typeInitMap.tableRepositorySubpackageName,
+  trName=input.tr_name)>
+
+/*
+ * Importing some ACM-SL classes.
+ */
+import org.acmsl.queryj.Query;
+
+/*
+ * Importing Spring classes.
+ */
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+
+/*
+ * Importing some JDK extension classes
+ */
+import javax.sql.DataSource;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+
+/*
+ * Importing Jakarta Commons Logging classes
+ */
+import org.apache.commons.logging.LogFactory;
+
+<class(input=input)>
+>>
+
+first_line_description(tableName) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param tableName the table name.
+!>
+Specifies the PreparedStatement values required
+>>
+
+second_line_description(tableName) ::= <<
+<!
+  Generates the second line of the generated file description.
+  @param tableName the table name.
+!>
+to perform any <tableName> operation expecting the
+>>
+
+third_line_description(tableName) ::= <<
+<!
+  Generates the third line of the generated file description.
+  @param tableName the table name.
+!>
+primary key attribute set .
+>>
+
+project_imports(
+  basePackageName, voSubpackageName, voName, trSubpackageName, trName) ::= <<
+<!
+ Generates the project imports.
+ @param basePackageName the base package name.
+ @param voSubpackageName the value-object subpackage name.
+ @param voName the value-object name.
+ @param trSubpackageName the table repository subpackage name.
+ @param trName the table repository name.
+!>
+/*
+ * Importing project classes.
+ */
+import <basePackageName>.<voSubpackageName>.<voName>;
+import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
+import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+>>
+
+class(input) ::= <<
+<!
+ Generates the class body.
+ @param input the input.
+!>
+/**
+ * <[
+      first_line_description(
+        tableName=input.table_name),
+      second_line_description(
+        tableName=input.table_name),
+      third_line_description(
+        tableName=input.table_name)
+    ]:{line |<line>}; separator="\n * ")>
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public class <input.vo_name>PkStatementSetter
+    implements  PreparedStatementSetter,
+                <input.tr_name>TableRepository
+{
+    <input.pk_attributes:attribute_member_declaration(attr=it);
+      separator="\n\n">
+
+    /**
+     * Creates a \<code><input.vo_name>PkStatementSetter\</code>
+     * instance.
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased);
+        separator="\n">
+     */
+    public <input.vo_name>PkStatementSetter(
+        <input.pk_attributes:attribute_declaration(attr=it);
+          separator=",\n">)
+    {
+        <input.pk_attributes:
+          { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
+          separator="\n">
+    }
+
+    <input.pk_attributes:attribute_accessor(attr=it); separator="\n\n">
+
+    /**
+     * Specifies the values on given \<code>PreparedStatement\</code>
+     * @param preparedStatement the prepared statement.
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     <precondition_notnull("preparedStatement")>
+     <precondition_instanceof(name="preparedStatement", className="Query")>
+     */
+    public void setValues(final PreparedStatement preparedStatement)
+        throws  SQLException
+    {
+        setValues(
+<if(input.clobHandling)>
+            preparedStatement,
+
+<else>
+            (Query) preparedStatement,
+
+<endif>
+            <input.pk_attributes:{attr | get<attr.nameCapitalized>()};
+              separator=",\n">);
+    }
+
+    /**
+     * Specifies the values on given \<code>PreparedStatement\</code>
+<if(input.clobHandling)>
+     * @param preparedStatement the prepared statement.
+
+<else>
+     * @param query the query.
+
+<endif>
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased);
+        separator="\n">
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+<if(input.clobHandling)>
+     <precondition_notnull("preparedStatement")>
+
+<else>
+     <precondition_notnull("query")>
+
+<endif>
+     */
+    protected void setValues(
+<if(input.clobHandling)>
+        final PreparedStatement preparedStatement,
+
+<else>
+        final Query query,
+
+<endif>
+        <input.pk_attributes:attribute_declaration(attr=it);
+          separator=",\n">)
+      throws  SQLException
+    {
+<if(input.clobHandling)>
+        int t_iIndex = 1;
+
+        <input.pk_attributes:
+          attribute_preparedstatement_specification(attr=it);
+          separator="\n">
+
+<else>
+        <input.pk_attributes:
+          attribute_query_specification(attr=it);
+          separator="\n">
+
+<endif>
+    }
+}
+>>
+
+attribute_member_declaration(attr) ::= <<
+<!
+ Generates the member declaration for a concrete attribute.
+ @param attr the attribute.
+!>
+/**
+ * The \<i><attr.name>\</i> information.
+ */
+private <if(attr.clob)>String<else><attr.fieldType><endif> <attr.nameLowercased>;
+>>
+
+attribute_accessor(attr) ::= <<
+<!
+ Generates the accessor for a concrete attribute.
+ @param attr the attribute.
+!>
+/**
+ * Specifies the \<i><attr.name>\</i> value.
+ <attribute_javadoc(name=attr.nameLowercased)>
+ */
+protected final void immutableSet<attr.nameCapitalized>(
+    <attribute_declaration(attr=attr)>)
+{
+    this.<attr.nameLowercased> = <attr.nameLowercased>;
+}
+
+/**
+ * Specifies the \<i><attr.name>\</i> value.
+ <attribute_javadoc(name=attr.nameLowercased)>
+ */
+protected void set<attr.nameCapitalized>(
+    <attribute_declaration(attr=attr)>)
+{
+    immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);
+}
+
+/**
+ * Retrieves the \<i><attr.name>\</i> value.
+ <attribute_javadoc(name=attr.nameLowercased)>
+ * @return such value.
+ */
+protected <if(attr.clob)>String<else><attr.fieldType><endif> get<attr.nameCapitalized>()
+{
+    return <attr.nameLowercased>;
+}
+>>
+
+attribute_query_specification(attr) ::= <<
+<!
+ Generates the code to specify the attribute into the query.
+ @param attr the attribute.
+!>
+query.set<attr.queryJFieldType>(
+    <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
+    <attr.nameLowercased>);
+>>
+
+attribute_preparedstatement_specification(attr) ::= <<
+<!
+ Generates the code to specify the attribute into the PreparedStatement.
+ @param attr the attribute.
+!>
+<if(!attr.clob)>
+preparedStatement.set<attr.queryJFieldType>(
+    t_iIndex++, <attr.nameLowercased>);
+<endif>
+>>

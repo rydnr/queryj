@@ -82,33 +82,55 @@ public class NumericFunctionsTestTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                retrieveNumericFunctionsTestTemplate(parameters),
+                retrieveOutputDir(parameters),
+                NumericFunctionsTestTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Writes the test template for Numeric functions.
+     * @param template the template to write.
+     * @param outputDir the output dir.
+     * @param generator the <code>NumericFunctionsTestTemplateGenerator</code>
+     * instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final NumericFunctionsTestTemplate template,
+        final File outputDir,
+        final NumericFunctionsTestTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        if  (template != null)
         {
             try 
             {
-                Map attributes = command.getAttributeMap();
-
-                NumericFunctionsTestTemplateGenerator t_NumericFunctionsTestTemplateGenerator =
-                    NumericFunctionsTestTemplateGenerator.getInstance();
-
-                NumericFunctionsTestTemplate t_NumericFunctionsTestTemplate =
-                    retrieveNumericFunctionsTestTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                             != null) 
-                     && (t_NumericFunctionsTestTemplate          != null)
-                     && (t_NumericFunctionsTestTemplateGenerator != null))
-                {
-                    t_NumericFunctionsTestTemplateGenerator.write(
-                        t_NumericFunctionsTestTemplate, t_OutputDir);
-                }
+                generator.write(template, outputDir);
             }
             catch  (final IOException ioException)
             {
@@ -124,21 +146,16 @@ public class NumericFunctionsTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the test template.
      * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected NumericFunctionsTestTemplate retrieveNumericFunctionsTestTemplate(Map parameters)
-        throws  BuildException
+    protected NumericFunctionsTestTemplate retrieveNumericFunctionsTestTemplate(
+        final Map parameters)
+      throws  BuildException
     {
-        NumericFunctionsTestTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (NumericFunctionsTestTemplate)
-                    parameters.get(
-                        TemplateMappingManager.NUMERIC_FUNCTIONS_TEST_TEMPLATE);
-        }
-        
-        return result;
+        return
+            (NumericFunctionsTestTemplate)
+                parameters.get(
+                    TemplateMappingManager.NUMERIC_FUNCTIONS_TEST_TEMPLATE);
     }
 
     /**
@@ -146,63 +163,32 @@ public class NumericFunctionsTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
+    protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveTestFunctionsFolder(
-                    retrieveProjectOutputDir(parameters),
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+        return
+            retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
 
     /**
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
      */
-    protected File retrieveProjectOutputDir(Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
     {
-        File result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveTestFunctionsFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

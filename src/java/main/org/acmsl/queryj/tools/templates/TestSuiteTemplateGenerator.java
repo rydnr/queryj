@@ -51,12 +51,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -129,8 +123,7 @@ public class TestSuiteTemplateGenerator
      * Generates a test suite template.
      * @param packageName the package name.
      * @param suiteName the suite name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param useSubfolders whether to use subfolders.
      * @return a template.
      * @precondition packageName != null
      * @precondition suiteName != null
@@ -138,15 +131,13 @@ public class TestSuiteTemplateGenerator
     public TestSuiteTemplate createTestSuiteTemplate(
         final String packageName,
         final String suiteName,
-        final Project project,
-        final Task task)
+        final boolean useSubfolders)
     {
         return
             createTestSuiteTemplate(
                 packageName,
                 suiteName,
-                project,
-                task,
+                useSubfolders,
                 PackageUtils.getInstance());
     }
 
@@ -154,8 +145,7 @@ public class TestSuiteTemplateGenerator
      * Generates a test suite template.
      * @param packageName the package name.
      * @param suiteName the suite name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param useSubfolders whether to use subfolders.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return a template.
      * @precondition packageName != null
@@ -165,17 +155,15 @@ public class TestSuiteTemplateGenerator
     protected TestSuiteTemplate createTestSuiteTemplate(
         final String packageName,
         final String suiteName,
-        final Project project,
-        final Task task,
+        final boolean useSubfolders,
         final PackageUtils packageUtils)
     {
         return
             new TestSuiteTemplate(
                 packageName,
-                packageUtils.retrieveBaseTestSuitePackage(packageName),
-                suiteName,
-                project,
-                task);
+                packageUtils.retrieveBaseTestSuitePackage(
+                    packageName, useSubfolders),
+                suiteName);
     }
 
     /**

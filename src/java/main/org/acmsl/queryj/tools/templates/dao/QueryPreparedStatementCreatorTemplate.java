@@ -43,11 +43,6 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.templates.dao.AbstractQueryPreparedStatementCreatorTemplate;
 import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateDefaults;
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -68,13 +63,9 @@ public class QueryPreparedStatementCreatorTemplate
      * Builds a <code>QueryPreparedStatementCreatorTemplate</code>
      * using given information.
      * @param packageName the package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public QueryPreparedStatementCreatorTemplate(
-        final String packageName,
-        final Project project,
-        final Task task)
+        final String packageName)
     {
         super(
             DEFAULT_HEADER,
@@ -88,9 +79,7 @@ public class QueryPreparedStatementCreatorTemplate
             DEFAULT_CLASS_START,
             DEFAULT_CLASS_CONSTRUCTOR,
             DEFAULT_CREATE_PREPARED_STATEMENT_METHOD,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

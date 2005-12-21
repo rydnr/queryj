@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.handlers.oracle.
+*              org.acmsl.queryj.tools.handlers.oracle.
 *
 */
-package unittests.org.acmsl.queryj.tools.handlers.oracle;
+package org.acmsl.queryj.tools.handlers.oracle;
 
 
 /*
@@ -95,10 +95,10 @@ public class OracleSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.handlers.oracle");
+    new TestSuite("org.acmsl.queryj.tools.handlers.oracle");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.oracle.OracleTableRepositoryBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.oracle.OracleTableRepositoryBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandlerTest.class);
     
     
     

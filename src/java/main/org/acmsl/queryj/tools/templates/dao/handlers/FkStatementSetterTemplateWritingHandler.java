@@ -161,15 +161,16 @@ public class FkStatementSetterTemplateWritingHandler
     {
         try 
         {
-            for  (int t_iIndex = 0;
-                      t_iIndex < templates.length;
-                      t_iIndex++)
+            int t_iLength = (templates != null) ? templates.length : 0;
+
+            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
             {
                 templateGenerator.write(
                     templates[t_iIndex],
                     retrieveOutputDir(
                         engineName,
-                        templates[t_iIndex].getTableTemplate().getTableName(),
+                        templates[t_iIndex]
+                            .getForeignKey().getSourceTableName(),
                         parameters));
             }
         }
@@ -217,6 +218,7 @@ public class FkStatementSetterTemplateWritingHandler
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
                 tableName,
+                retrieveUseSubfoldersFlag(parameters),
                 PackageUtils.getInstance());
     }
 
@@ -226,6 +228,7 @@ public class FkStatementSetterTemplateWritingHandler
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
      * @param tableName the table name.
+     * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
@@ -240,6 +243,7 @@ public class FkStatementSetterTemplateWritingHandler
         final File projectOutputDir,
         final String projectPackage,
         final String tableName,
+        final boolean subFolders,
         final PackageUtils packageUtils)
       throws  BuildException
     {
@@ -248,51 +252,7 @@ public class FkStatementSetterTemplateWritingHandler
                 projectOutputDir,
                 projectPackage,
                 engineName,
-                tableName);
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveProjectOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaData)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
+                tableName,
+                subFolders);
     }
 }

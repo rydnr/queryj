@@ -82,7 +82,7 @@ public interface KeywordRepositoryTemplateDefaults
      * The ACM-SL import template.
      */
     public static final String DEFAULT_ACMSL_IMPORT_TEMPLATE =
-        "import org.acmsl.queryj.{0};\n";
+        "import org.acmsl.queryj.{0}Field;\n";
     
     /**
      * The JDK imports.
@@ -177,9 +177,9 @@ public interface KeywordRepositoryTemplateDefaults
      * The keyword retrieval method body.
      */
     public static final String DEFAULT_KEYWORD_RETRIEVAL_METHOD_BODY =
-          "    public {0} {1}()\n"
+          "    public {0}Field {1}()\n"
         + "    '{'\n"
-        + "        return new {0}(\"{2}\", null) '{' '}';\n"
+        + "        return new {0}Field(\"{2}\", null) '{' '}';\n"
         + "    '}'\n\n";
 
     /**

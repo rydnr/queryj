@@ -1,0 +1,153 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the common template rules in QueryJ theme.
+//
+// Version: $Revision$ ($Author$ at $Date$)
+//
+// $Id$
+group queryj;
+
+typeInitMap ::= [
+  "empty":"",
+  "jdbcOperationsSubpackageName":"jdbc",
+  "baseDAOSubpackageName":"dao",
+  "voSubpackageName":"vo",
+  "voFactorySubpackageName":"vo",
+  "rdbSubpackageName":"rdb",
+  "tableRepositorySubpackageName":"tables",
+  "dataAccessManagerSubpackageName":"dao",
+  "foreignKeyStatementSetterSubpackageName":"dao.rdb",
+  "xmlSubpackageName":"xml",
+  "mockSubpackageName":"mock",
+]
+
+java_header(years,description,timestamp) ::= <<
+<! Generates the copyright header !>
+<! @param years the copyright years. !>
+<! @param description the description. !>
+<! @param timestamp the timestamp. !>
+//;-*- mode: java-*-
+/*
+                        QueryJ
+
+    Copyright (C) <years; separator="-"> Jose San Leandro Armendariz
+                              chous@acm-sl.org
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Thanks to ACM S.L. for distributing this library under the GPL license.
+    Contact info: jose.sanleandro@acm-sl.com
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecabanas
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
+
+ ******************************************************************************
+ *
+ * Filename: <"$">RCSfile: $
+ *
+ * Author: QueryJ
+ *
+ * Description: <description:{line | <line>}; separator="\n *              ">
+ *
+ * Last modified by: <"$">Author: $ at <"$">Date: $
+ *
+ * <"$">Id: $
+ *
+ * Generation timestamp: <timestamp>
+ */
+>>
+
+package_declaration(packageNames) ::= <<
+<! Generates the package declaration !>
+<! @param packageNames the package names !>
+package <packageNames; separator=".">;
+>>
+
+precondition_notnull(name) ::= <<
+<!
+  Writes the Javadoc precondition for a concrete parameter.
+  @param name the name of the parameter.
+!>
+* @precondition <name> != null
+>>
+
+precondition_instanceof(name, className) ::= <<
+<!
+  Writes the Javadoc precondition for a concrete parameter.
+  @param name the name of the parameter.
+  @param className the class name.
+!>
+* @precondition <name> instanceof <className>
+>>
+
+attribute_javadoc(name) ::= <<
+<!
+  Writes the Javadoc for a attribute parameter.
+  @param name the name of the attribute.
+!>
+* @param <name> the \<i><name>\</i> value.
+>>
+
+attribute_declaration(attr) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute.
+  @param attr the attribute.
+!>
+final <if(attr.clob)>String<else><attr.fieldType><endif> <attr.nameLowercased>
+>>
+
+indirect_template(name, input) ::= <<
+<!
+  Calls the template matching given name, passing the input as argument.
+  @param name the template name.
+  @param input the arguments.
+!>
+<(name)(input=input)>
+>>

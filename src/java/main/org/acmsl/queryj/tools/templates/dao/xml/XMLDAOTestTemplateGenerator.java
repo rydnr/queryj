@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -54,12 +54,6 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -253,31 +247,27 @@ public class XMLDAOTestTemplateGenerator
     /**
      * Generates a DAO test template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectPackageName the value object's package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition daoPackageName != null
      * @precondition valueObjectPackageName != null
      */
     public XMLDAOTestTemplate createXMLDAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String daoPackageName,
-        final String valueObjectPackageName,
-        final Project project,
-        final Task task)
+        final String valueObjectPackageName)
       throws  QueryJException
     {
         XMLDAOTestTemplate result = null;
@@ -290,24 +280,20 @@ public class XMLDAOTestTemplateGenerator
             result =
                 t_TemplateFactory.createXMLDAOTestTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     daoPackageName,
-                    valueObjectPackageName,
-                    project,
-                    task);
+                    valueObjectPackageName);
         }
         else 
         {
             result =
                 new XMLDAOTestTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     daoPackageName,
-                    valueObjectPackageName,
-                    project,
-                    task);
+                    valueObjectPackageName);
         }
 
         return result;
@@ -317,8 +303,6 @@ public class XMLDAOTestTemplateGenerator
      * Writes a XML DAO template to disk.
      * @param xmlDAOTestTemplate the XML DAO test template to write.
      * @param outputDir the output folder.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @throws IOException if the file cannot be created.
      * @precondition xmlDAOTemplate != null
      * @precondition outputDir != null

@@ -80,38 +80,57 @@ public class TestSuiteTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                retrieveTestSuiteTemplate(parameters),
+                retrieveOutputDir(parameters),
+                TestSuiteTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Writes the TestSuite template.
+     * @param template the template to write.
+     * @param outputDir the output dir.
+     * @param generator the <code>TestSuiteTemplateGenerator</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition template != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final TestSuiteTemplate template,
+        final File outputDir,
+        final TestSuiteTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
-            {
-                Map attributes = command.getAttributeMap();
-
-                TestSuiteTemplateGenerator t_TestSuiteTemplateGenerator =
-                    TestSuiteTemplateGenerator.getInstance();
-
-                TestSuiteTemplate t_TestSuiteTemplate =
-                    retrieveTestSuiteTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                  != null) 
-                     && (t_TestSuiteTemplate          != null)
-                     && (t_TestSuiteTemplateGenerator != null))
-                {
-                    t_TestSuiteTemplateGenerator.write(
-                        t_TestSuiteTemplate, t_OutputDir);
-                }
-            }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+            generator.write(template, outputDir);
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -122,61 +141,16 @@ public class TestSuiteTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected TestSuiteTemplate retrieveTestSuiteTemplate(Map parameters)
-        throws  BuildException
+    protected TestSuiteTemplate retrieveTestSuiteTemplate(
+        final Map parameters)
+      throws  BuildException
     {
-        TestSuiteTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (TestSuiteTemplate)
-                    parameters.get(
-                        TestSuiteTemplateBuildHandler.TEST_SUITE_TEMPLATE);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return the output dir.
-     * @throws BuildException if the output dir retrieval process if faulty.
-     */
-    protected File retrieveProjectFolder(Map parameters)
-        throws  BuildException
-    {
-        File result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-        }
-        
-        return result;
+        return
+            (TestSuiteTemplate)
+                parameters.get(
+                    TestSuiteTemplateBuildHandler.TEST_SUITE_TEMPLATE);
     }
 
     /**
@@ -184,23 +158,31 @@ public class TestSuiteTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
+    protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveBaseTestSuiteFolder(
-                    retrieveProjectFolder(parameters),
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
+     */
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
+    {
+        return
+            packageUtils.retrieveBaseTestSuiteFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

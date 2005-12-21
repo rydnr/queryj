@@ -289,8 +289,6 @@ public class TimeFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
@@ -301,9 +299,7 @@ public class TimeFunctionsTemplateGenerator
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote,
-        final Project project,
-        final Task   task)
+        final String quote)
       throws  QueryJException
     {
         TimeFunctionsTemplate result = null;
@@ -319,9 +315,7 @@ public class TimeFunctionsTemplateGenerator
                     packageName,
                     engineName,
                     engineVersion,
-                    quote,
-                    project,
-                    task);
+                    quote);
         }
         else 
         {

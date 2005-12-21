@@ -41,15 +41,9 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.ProcedureMetaData;
-import org.acmsl.queryj.tools.ProcedureParameterMetaData;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
+import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
 
 /*
  * Importing some JDK classes.
@@ -70,6 +64,13 @@ public abstract class AbstractProcedureRepositoryTemplate
     extends  AbstractTemplate
 {
     /**
+     * An empty array of <code>ProcedureParameterMetadata</code> instances.
+     */
+    protected final ProcedureParameterMetadata[]
+        EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY =
+            new ProcedureParameterMetadata[0];
+    
+    /**
      * The header.
      */
     private String m__strHeader;
@@ -89,6 +90,11 @@ public abstract class AbstractProcedureRepositoryTemplate
      */
     private String m__strRepository;
 
+    /**
+     * The metadata type manager instance.
+     */
+    private MetadataTypeManager m__MetadataTypeManager;
+    
     /**
      * The project import Javadoc.
      */
@@ -177,12 +183,12 @@ public abstract class AbstractProcedureRepositoryTemplate
     /**
      * The procedure metadata list.
      */
-    private List m__lProceduresMetaData;
+    private List m__lProceduresMetadata;
 
     /**
      * The procedure parameters metadata.
      */
-    private Map m__mProcedureParametersMetaData;
+    private Map m__mProcedureParametersMetadata;
 
     /**
      * Builds an <code>AbstractProcedureRepositoryTemplate</code> using
@@ -191,6 +197,7 @@ public abstract class AbstractProcedureRepositoryTemplate
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param metadataTypeManager the metadata type manager instance.
      * @param importsJavadoc the project imports javadoc.
      * @param projectImports the project imports.
      * @param acmslImports the ACM-SL imports.
@@ -214,6 +221,7 @@ public abstract class AbstractProcedureRepositoryTemplate
         final String packageDeclaration,
         final String packageName,
         final String repository,
+        final MetadataTypeManager metadataTypeManager,
         final String importsJavadoc,
         final String projectImports,
         final String acmslImports,
@@ -230,15 +238,13 @@ public abstract class AbstractProcedureRepositoryTemplate
         final String inParameterSpecification,
         final String outParameterRetrieval,
         final String valueObjectConstruction,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetRepository(repository);
+        immutableSetMetadataTypeManager(metadataTypeManager);
         immutableSetProjectImportsJavadoc(importsJavadoc);
         immutableSetProjectImports(projectImports);
         immutableSetAcmslImports(acmslImports);
@@ -257,8 +263,38 @@ public abstract class AbstractProcedureRepositoryTemplate
         immutableSetOutParameterRetrieval(outParameterRetrieval);
         immutableSetValueObjectConstruction(valueObjectConstruction);
         immutableSetClassEnd(classEnd);
-        immutableSetProceduresMetaData(new ArrayList());
-        immutableSetProcedureParametersMetaData(new HashMap());
+        immutableSetProceduresMetadata(new ArrayList());
+        immutableSetProcedureParametersMetadata(new HashMap());
+    }
+
+
+    /**
+     * Specifies the metadata type manager to use.
+     * @param metadataTypeManager such instance.
+     */
+    protected final void immutableSetMetadataTypeManager(
+        final MetadataTypeManager metadataTypeManager)
+    {
+        m__MetadataTypeManager = metadataTypeManager;
+    }
+
+    /**
+     * Specifies the metadata type manager to use.
+     * @param metadataTypeManager such instance.
+     */
+    protected void setMetadataTypeManager(
+        final MetadataTypeManager metadataTypeManager)
+    {
+        immutableSetMetadataTypeManager(metadataTypeManager);
+    }
+
+    /**
+     * Retrieves the metadata type manager to use.
+     * @return such instance.
+     */
+    protected MetadataTypeManager getMetadataTypeManager()
+    {
+        return m__MetadataTypeManager;
     }
 
     /**
@@ -843,118 +879,119 @@ public abstract class AbstractProcedureRepositoryTemplate
 
     /**
      * Specifies the procedures metadata.
-     * @param proceduresMetaData the procedures metadata.
+     * @param proceduresMetadata the procedures metadata.
      */
-    private void immutableSetProceduresMetaData(final List proceduresMetaData)
+    private void immutableSetProceduresMetadata(final List proceduresMetadata)
     {
-        m__lProceduresMetaData = proceduresMetaData;
+        m__lProceduresMetadata = proceduresMetadata;
     }
 
     /**
      * Specifies the procedures metadata.
-     * @param proceduresMetaData the procedures metaData.
+     * @param proceduresMetadata the procedures metadata.
      */
-    protected void setProceduresMetaData(final List proceduresMetaData)
+    protected void setProceduresMetadata(final List proceduresMetadata)
     {
-        immutableSetProceduresMetaData(proceduresMetaData);
+        immutableSetProceduresMetadata(proceduresMetadata);
     }
 
     /**
      * Retrieves the procedures metadata.
      * @return such collection.
      */
-    public List getProceduresMetaData()
+    public List getProceduresMetadata()
     {
-        return m__lProceduresMetaData;
+        return m__lProceduresMetadata;
     }
 
     /**
      * Adds a new procedure metadata.
-     * @param procedureMetaData the new procedure metadata.
+     * @param procedureMetadata the new procedure metadata.
      */
-    public void addProcedureMetaData(final ProcedureMetaData procedureMetaData)
+    public void addProcedureMetadata(final ProcedureMetadata procedureMetadata)
     {
-        if  (procedureMetaData != null)
+        if  (procedureMetadata != null)
         {
-            List t_lProceduresMetaData = getProceduresMetaData();
+            List t_lProceduresMetadata = getProceduresMetadata();
 
-            if  (t_lProceduresMetaData != null)
+            if  (t_lProceduresMetadata != null)
             {
-                t_lProceduresMetaData.add(procedureMetaData);
+                t_lProceduresMetadata.add(procedureMetadata);
             }
         }
     }
 
     /**
      * Specifies the procedure parameters metadata.
-     * @param parametersMetaData the parameters map.
+     * @param parametersMetadata the parameters map.
      */
-    private void immutableSetProcedureParametersMetaData(
-        final Map parametersMetaData)
+    private void immutableSetProcedureParametersMetadata(
+        final Map parametersMetadata)
     {
-        m__mProcedureParametersMetaData = parametersMetaData;
+        m__mProcedureParametersMetadata = parametersMetadata;
     }
 
     /**
      * Specifies the procedure parameters metadata.
-     * @param parametersMetaData the parameters map.
+     * @param parametersMetadata the parameters map.
      */
-    protected void setProcedureParametersMetaData(final Map parametersMetaData)
+    protected void setProcedureParametersMetadata(final Map parametersMetadata)
     {
-        immutableSetProcedureParametersMetaData(parametersMetaData);
+        immutableSetProcedureParametersMetadata(parametersMetadata);
     }
 
     /**
      * Retrieves the procedure parameters metadata.
      * @return such metadata.
      */
-    public Map getProcedureParametersMetaData()
+    public Map getProcedureParametersMetadata()
     {
-        return m__mProcedureParametersMetaData;
+        return m__mProcedureParametersMetadata;
     }
 
     /**
      * Adds a new procedure metadata.
-     * @param procedureMetaData the procedure metadata.
-     * @param parametersMetaData the parameters metadata.
+     * @param procedureMetadata the procedure metadata.
+     * @param parametersMetadata the parameters metadata.
      */
-    public void addProcedureParametersMetaData(
-        final ProcedureMetaData procedureMetaData,
-        final ProcedureParameterMetaData[] parametersMetaData)
+    public void addProcedureParametersMetadata(
+        final ProcedureMetadata procedureMetadata,
+        final ProcedureParameterMetadata[] parametersMetadata)
     {
-        if  (   (procedureMetaData  != null)
-             && (parametersMetaData != null))
+        if  (   (procedureMetadata  != null)
+             && (parametersMetadata != null))
         {
-            Map t_mParametersMetaData = getProcedureParametersMetaData();
+            Map t_mParametersMetadata = getProcedureParametersMetadata();
 
-            if  (t_mParametersMetaData != null)
+            if  (t_mParametersMetadata != null)
             {
-                t_mParametersMetaData.put(buildKey(procedureMetaData), parametersMetaData);
+                t_mParametersMetadata.put(
+                    buildKey(procedureMetadata), parametersMetadata);
             }
         }
     }
 
     /**
      * Retrieves the procedure parameters metadata.
-     * @param procedureMetaData the procedure metadata.
+     * @param procedureMetadata the procedure metadata.
      * @return the associated parameters metadata.
      */
-    public ProcedureParameterMetaData[] getProcedureParametersMetaData(
-        final ProcedureMetaData procedureMetaData)
+    public ProcedureParameterMetadata[] getProcedureParametersMetadata(
+        final ProcedureMetadata procedureMetadata)
     {
-        ProcedureParameterMetaData[] result =
-            DatabaseMetaDataManager.EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY;
+        ProcedureParameterMetadata[] result =
+            EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY;
 
-        if  (procedureMetaData != null)
+        if  (procedureMetadata != null)
         {
-            Map t_mParametersMetaData = getProcedureParametersMetaData();
+            Map t_mParametersMetadata = getProcedureParametersMetadata();
 
-            if  (t_mParametersMetaData != null)
+            if  (t_mParametersMetadata != null)
             {
                 result =
-                    (ProcedureParameterMetaData[])
-                        t_mParametersMetaData.get(
-                            buildKey(procedureMetaData));
+                    (ProcedureParameterMetadata[])
+                        t_mParametersMetadata.get(
+                            buildKey(procedureMetadata));
             }
         }
 
@@ -963,16 +1000,16 @@ public abstract class AbstractProcedureRepositoryTemplate
 
     /**
      * Builds the key based on the procedure metadata.
-     * @param procedureMetaData the procedure metadata.
+     * @param procedureMetadata the procedure metadata.
      * @return the associated key.
      */
-    protected Object buildKey(final ProcedureMetaData procedureMetaData)
+    protected Object buildKey(final ProcedureMetadata procedureMetadata)
     {
-        Object result = procedureMetaData;
+        Object result = procedureMetadata;
 
-        if  (procedureMetaData != null)
+        if  (procedureMetadata != null)
         {
-            result = "procedure." + procedureMetaData.getName();
+            result = "procedure." + procedureMetadata.getName();
         }
 
         return result;
@@ -984,18 +1021,18 @@ public abstract class AbstractProcedureRepositoryTemplate
      */
     public boolean isEmpty()
     {
-        return isEmpty(getProceduresMetaData());
+        return isEmpty(getProceduresMetadata());
     }
 
     /**
      * Checks whether the procedure repository generated would be empty.
-     * @param proceduresMetaData the metadata associated to the procedures.
+     * @param proceduresMetadata the metadata associated to the procedures.
      * @return <code>true</code> in such case.
      */
-    protected boolean isEmpty(final List proceduresMetaData)
+    protected boolean isEmpty(final List proceduresMetadata)
     {
         return
-            (   (proceduresMetaData == null)
-             || (proceduresMetaData.isEmpty()));
+            (   (proceduresMetadata == null)
+             || (proceduresMetadata.isEmpty()));
     }
 }

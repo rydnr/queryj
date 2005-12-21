@@ -1,0 +1,2349 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate DAO database-based
+//              implementations.
+//
+// Version: $Revision$ ($Author$ at $Date$)
+//
+// $Id$
+//
+group DAO;
+
+source(input) ::= <<
+<!
+  Generates a DAO database implementation source file.
+  @param input.copyright_years the copyright's years.
+  @param input.table_name the table name.
+  @param input.package the package.
+  @param input.dao_class_name the DAO class name.
+  @param input.dao_factory_class_name the DAO factory class name.
+  @param input.dao_implementation_class_name the DAO implementation class name.
+  @params project_imports
+  @params class
+!>
+<java_header(
+  years=input.copyright_years,
+  description=
+    [
+      first_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version),
+      second_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version),
+      third_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version)
+    ],
+    timestamp=input.timestamp)>
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName,
+    input.subpackage_name
+  ])>
+
+<project_imports(
+  basePackageName=input.base_package_name,
+  subpackageName=input.subpackage_name,
+  tableName=input.table_name,
+  tableNameLowercased=input.table_name_normalized_lowercased,
+  jdbcOperationsSubpackageName=typeInitMap.jdbcOperationsSubpackageName,
+  customResults=input.custom_results,
+  voSubpackageName=typeInitMap.voSubpackageName,
+  voName=input.vo_name,
+  voFactorySubpackageName=typeInitMap.voFactorySubpackageName,
+  rdbSubpackageName=typeInitMap.rdbSubpackageName,
+  trSubpackageName=typeInitMap.tableRepositorySubpackageName,
+  trName=input.tr_name,
+  damSubpackageName=typeInitMap.dataAccessManagerSubpackageName,
+  fkssSubpackageName=typeInitMap.foreignKeyStatementSetterSubpackageName,
+  fkAttributes=input.fk_attributes,
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName)>
+
+/*
+ * Importing some ACM-SL classes.
+ */
+import org.acmsl.queryj.DeleteQuery;
+import org.acmsl.queryj.dao.QueryjJdbcTemplate;
+import org.acmsl.queryj.InsertQuery;
+import org.acmsl.queryj.Query;
+import org.acmsl.queryj.QueryFactory;
+import org.acmsl.queryj.SelectQuery;
+import org.acmsl.queryj.UpdateQuery;
+
+/*
+ * Importing Spring classes.
+ */
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ParameterDisposer;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.object.SqlQuery;
+import org.springframework.jdbc.support.JdbcUtils;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.TransactionStatus;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.Types;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/*
+ * Importing some JDK extension classes
+ */
+import javax.sql.DataSource;
+
+/*
+ * Importing Jakarta Commons Logging classes
+ */
+import org.apache.commons.logging.LogFactory;
+
+<class(input=input,foreign_keys_by_table=input.foreign_keys_by_table)>
+>>
+
+first_line_description(tableName, engineName, engineVersion) ::= <<
+<!
+  Generates a description for the generated file.
+  @param tableName the table name.
+  @param engineName the engine name.
+  @param engineVersion the engine version.
+!>
+DAO implementation responsible of managing the access to
+>>
+
+second_line_description(tableName, engineName, engineVersion) ::= <<
+<!
+  Generates a description for the generated file.
+  @param tableName the table name.
+  @param engineName the engine name.
+  @param engineVersion the engine version.
+!>
+ <tableName> entities from <engineName>
+>>
+
+third_line_description(tableName, engineName, engineVersion) ::= <<
+<!
+  Generates a description for the generated file.
+  @param tableName the table name.
+  @param engineName the engine name.
+  @param engineVersion the engine version.
+!>
+(<engineVersion>) persistence layers.
+>>
+
+project_imports(
+  basePackageName,
+  subpackageName,
+  tableName,
+  tableNameLowercased,
+  jdbcOperationsSubpackageName,
+  customResults,
+  voSubpackageName,
+  voName,
+  voFactorySubpackageName,
+  rdbSubpackageName,
+  trSubpackageName,
+  trName,
+  damSubpackageName,
+  fkssSubpackageName,
+  fkAttributes,
+  baseDAOSubpackageName) ::= <<
+<!
+  Generates the project imports
+  @param basePackageName the base package name.
+  @param subpackageName the subpackage name.
+  @param tableName the table name.
+  @param tableNameLowercased the table name, in lower-case.
+  @param jdbcOperationsSubpackageName the subpackage for the JDBC operations.
+  @param customResults the results of the custom queries.
+  @param voSubpackageName the subpackage for the value 
+  @param voName the class name of the value-object.
+  @param voFactorySubpackageName the subpackage of the value object factories.
+  @param rdbSubpackageName the subpackage common of all RDBMs implementations.
+  @param trSubpackageName the subpackage of the table repository.
+  @param trName the name of the table repository.
+  @param damSubpackageName the subpackage of the DataAccessManager.
+  @param fkssSubpackageName the subpackage of the foreign key attribute
+  statement setter.
+  @param fkAttributes the foreign key attributes.
+  @param baseDAOSubpackageName the subpackage of the base DAO interface.
+!>
+/*
+ * Importing project-specific classes.
+ */
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>AttributesStatementSetter;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>PkStatementSetter;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>ResultSetExtractor;
+<customResults:resultset_extractor_import(
+  basePackageName=basePackageName,
+  baseDAOSubpackageName=baseDAOSubpackageName,
+  rdbSubpackageName=rdbSubpackageName,
+  subpackageName=subpackageName,
+  tableNameLowercased=tableNameLowercased,
+  crseIdCapitalized=it.idCapitalized); separator="\n">
+import <basePackageName>.<voSubpackageName>.<voName>;
+import <basePackageName>.<voFactorySubpackageName>.<voName>ValueObjectFactory;
+import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.QueryPreparedStatementCreator;
+import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+import <basePackageName>.<damSubpackageName>.DataAccessManager;
+<fkAttributes:foreignkey_statementsetter_import(
+  basePackageName=basePackageName,
+  fkssSubpackageName=fkssSubpackageName,
+  voName=voName,
+  referredVOName=it.voName); separator="\n">
+<fkAttributes:foreignkey_dao_import(
+  basePackageName=basePackageName,
+  baseDAOSubpackageName=baseDAOSubpackageName,
+  referredVOName=it.voName); separator="\n">
+>>
+
+resultset_extractor_import(
+  basePackageName,
+  baseDAOSubpackageName,
+  rdbSubpackageName,
+  subpackageName,
+  tableNameLowercased,
+  crseIdCapitalized) ::= <<
+<!
+  Generates the import statement of a custom resultset extractor.
+  @param basePackageName the base package.
+  @param baseDAOSubpackageName the base DAO subpackage.
+  @param rdbSubpackageName the rdb subpackage.
+  @param subpackageName the subpackage.
+  @param tableNameLowercased the table name, in lower case.
+  @param crseIdCapitalized the custom resultset extractor identifier, capitalized.
+!>
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<crseIdCapitalized>Extractor;
+>>
+
+foreignkey_statementsetter_import(
+  basePackageName,
+  fkssSubpackageName,
+  voName,
+  referredVOName) ::= <<
+<!
+  Generates the import statement of a foreign key statement setter.
+  @param basePackageName the base package.
+  @param fkssSubpackageName the subpackage of the foreign key attribute 
+  statement setter.
+  @param voName the value object name.
+  @param referredVOName the referred value object name.
+!>
+import <basePackageName>.<fkssSubpackageName>.<voName>By<referredVOName>StatementSetter;
+>>
+
+foreignkey_dao_import(
+  basePackageName,
+  baseDAOSubpackageName,
+  referredVOName) ::= <<
+<!
+  Generates the import statement of a foreign key DAO.
+  @param baseDAOSubpackageName the subpackage of the base DAO interface.
+  @param referredVOName the referred value object name.
+!>
+import <basePackageName>.<baseDAOSubpackageName>.<referredVOName>DAO;
+>>
+
+class(input,foreign_keys_by_table) ::= <<
+<!
+  Generates the class body.
+  @param input.vo_name the value object name.
+  @param input.engine_name the engine name.
+  @param input.engine_version the engine version.
+  @param input.timestamp the timestamp.
+  @param input.custom_results the results for the custom queries.
+  @param input.tr_name the table repository name.
+  @param foreign_keys_by_table a map of table-name->foreign_key
+!>
+/**
+ * <[
+      first_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version),
+      second_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version),
+      third_line_description(
+        tableName=input.table_name,
+        engineName=input.engine_name,
+        engineVersion=input.engine_version)
+    ]:{line |<line>}; separator="\n * ")>
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public class <input.engine_name><input.vo_name>DAO
+  extends     QueryjJdbcTemplate
+  implements  <input.vo_name>DAO,
+              <input.tr_name>TableRepository
+{
+    /**
+     * The result set extractor for \<i><input.vo_name>\</i>
+     * value objects.
+     */
+    public static final ResultSetExtractor
+        <input.table_name_uppercased>_EXTRACTOR =
+            new <input.vo_name>ResultSetExtractor();
+
+    /**
+     * The result set extractor for \<i><input.vo_name>\</i>
+     * primary keys (see inner class).
+     */
+    public static final ResultSetExtractor
+        <input.table_name_uppercased>_PK_EXTRACTOR =
+            new <input.vo_name>PkResultSetExtractor();
+
+    <input.custom_results:resultset_extractor_constants(
+      crseid=it.id,
+      crseidCapitalized=it.idCapitalized,
+      crseidNormalizedUppercased=it.idNormalizedUppercased); separator="\n\n">
+
+    /**
+     * Builds a \<code><input.class_name>\</code> instance
+     * with given data source.
+     * @param dataSource the required data source.
+     <precondition_notnull("dataSource")>
+     */
+    public <input.class_name>(final DataSource dataSource)
+    {
+        super(dataSource);
+    }
+
+<if(input.static_table)>
+<static_table(
+  voName=input.vo_name,
+  staticAttributeName=input.static_attribute_name,
+  staticAttributeNameLowercased=input.static_attribute_name_lowercased,
+  staticAttributeNameCapitalized=input.static_attribute_name_capitalized,
+  staticAttributeType=input.static_attribute_type)>
+<endif>
+
+    /**
+     * Builds the query for finding the \<i><input.vo_name>\</i>
+     * information searching by its primary key.
+     * @return the \<code>SelectQuery\</code> instance.
+     */
+    protected Query buildFindByPrimaryKeyQuery()
+    {
+        return buildFindByPrimaryKeyQuery(QueryFactory.getInstance());
+    }
+
+    /**
+     * Creates the query for finding the \<i><input.table_name>\</i>
+     * information searching by its primary key.
+     * @param queryFactory the \<code>QueryFactory\</code> instance.
+     * @return the \<code>SelectQuery\</code> instance.
+     <precondition_notnull("queryFactory")>
+     */
+    protected Query buildFindByPrimaryKeyQuery(
+        final QueryFactory queryFactory)
+    {
+        SelectQuery result = queryFactory.createSelectQuery();
+
+        buildFindByPrimaryKeyQuery(result);
+
+        return result;
+    }
+
+    /**
+     * Builds the query for finding the \<i><input.table_name>\</i>
+     * information searching by its primary key.
+     * @param query the \<code>SelectQuery\</code> to configure.
+     <precondition_notnull("query")>
+     */
+    protected void buildFindByPrimaryKeyQuery(final SelectQuery query)
+    {
+        query.select(<input.table_name_uppercased>.getAll());
+        query.from(<input.table_name_uppercased>);
+        <input.pk_attributes:attribute_query_filter(
+          tableRepositoryName=input.tr_name,
+          tableNameUppercased=input.table_name_uppercased,
+          nameUppercased=it.nameUppercased); separator="\n">
+    }
+
+    /**
+     * Retrieves \<code><input.vo_name>\</code> information
+     * filtering by its primary key.
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @return the \<code><input.vo_name>\</code> matching given
+     * primary key.
+     * @throws DataAccessException if the operation fails.
+     */
+    public <input.vo_name> findByPrimaryKey(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
+      throws DataAccessException
+    {
+        return
+            findByPrimaryKey(
+                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                buildFindByPrimaryKeyQuery(),
+                getDataSource());
+    }
+
+    /**
+     * Retrieves \<code><input.vo_name>\</code> information
+     * filtering by its primary key.
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the query to find by primary key.
+     * @param dataSource the \<code>DataSource\</code> instance.
+     * @return the \<code><input.vo_name>\</code> matching given
+     * primary key.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("dataSource")>
+     */
+    protected <input.vo_name> findByPrimaryKey(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final DataSource dataSource)
+      throws DataAccessException
+    {
+        return
+            findByPrimaryKey(
+                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new DataSourceTransactionManager(dataSource));
+    }
+
+    /**
+     * Retrieves \<code><input.vo_name>\</code> information
+     * filtering by its primary key.
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the query to find by primary key.
+     * @param transactionManager the \<code>PlatformTransactionManager\</code>
+     * instance.
+     * @return the \<code><input.vo_name>\</code> matching given
+     * primary key.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionManager")>
+     */
+    protected <input.vo_name> findByPrimaryKey(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final PlatformTransactionManager transactionManager)
+      throws DataAccessException
+    {
+        return
+            findByPrimaryKey(
+                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager));
+    }
+
+    /**
+     * Retrieves \<code><input.vo_name>\</code> information
+     * filtering by its primary key.
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the query to find by primary key.
+     * @param transactionTemplate the \<code>TransactionTemplate\</code>
+     * instance.
+     * @return the \<code><input.vo_class_name>\</code> matching given
+     * primary key.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionTemplate")>
+     */
+    protected <input.vo_name> findByPrimaryKey(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final TransactionTemplate transactionTemplate)
+      throws DataAccessException
+    {
+        return
+            (<input.vo_name>)
+                transactionTemplate.execute(
+                    new QueryTransactionCallback(
+                        new QueryPreparedStatementCreator(query),
+                        new <input.vo_name>PkStatementSetter(
+                            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
+                        <input.table_name_uppercased>_EXTRACTOR,
+                        this));
+    }
+
+<if(input.clobHandling)>
+<indirect_template(name=input.clobHandling+"Insert", input=input)>
+<else>
+<defaultInsert(input=input)>
+<endif>
+
+    /**
+     * Builds the query required to \<i>update\</i> a concrete
+     * \<code><input.vo_name>\</code> entity, determined by its primary key.
+     * @return the \<code>UpdateQuery\</code> instance.
+     */
+    protected Query buildUpdateQuery()
+    {
+        return buildUpdateQuery(QueryFactory.getInstance());
+    }
+
+    /**
+     * Builds the query required to \<i>update\</i> a concrete
+     * \<code><input.vo_name>\</code> entity, determined by its primary key.
+     * @param queryFactory the \<code>QueryFactory\</code> instance.
+     * @return the \<code>UpdateQuery\</code> instance.
+     <precondition_notnull("queryFactory")>
+     */
+    protected Query buildUpdateQuery(final QueryFactory queryFactory)
+    {
+        UpdateQuery result = queryFactory.createUpdateQuery();
+
+        buildUpdateQuery(result);
+
+        return result;
+    }
+
+    /**
+     * Builds the query required to \<i>update\</i> a concrete
+     * \<code><input.vo_name>\</code> entity, determined by its primary key.
+     * @param query the \<code>UpdateQuery\</code> instance to set up.
+     <precondition_notnull("query")>
+     */
+    protected void buildUpdateQuery(final UpdateQuery query)
+    {
+        query.update(<input.table_name_uppercased>);
+        <input.nonpk_attributes:attribute_query_update(
+          tableRepositoryName=input.tr_name,
+          tableNameUppercased=input.table_name_uppercased,
+          nameUppercased=it.nameUppercased); separator="\n">
+        <input.pk_attributes:attribute_query_filter(
+          tableRepositoryName=input.tr_name,
+          tableNameUppercased=input.table_name_uppercased,
+          nameUppercased=it.nameUppercased); separator="\n">
+    }
+
+    /**
+     * Updates \<code><input.vo_name>\</code> information.
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @throws DataAccessException if the operation fails.
+     */
+    public void update(
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">)
+      throws DataAccessException
+    {
+        update(
+            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+            buildUpdateQuery(),
+            getDataSource());
+    }
+
+    /**
+     * Updates \<code><input.vo_name>\</code> information.
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the query used to perform the update operation.
+     * @param dataSource the \<code>DataSource\<code> instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("dataSource")>
+     */
+    protected void update(
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final DataSource dataSource)
+      throws DataAccessException
+    {
+        update(
+            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+            query,
+            new DataSourceTransactionManager(dataSource));
+    }
+
+    /**
+     * Updates \<code><input.vo_name>\</code> information.
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the query used to perform the update operation.
+     * @param transactionManager the \<code>PlatformTransactionManager\<code>
+     * instance. 
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionManager")>
+     */
+    protected void update(
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final PlatformTransactionManager transactionManager)
+      throws DataAccessException
+    {
+        update(
+            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+            query,
+            new TransactionTemplate(transactionManager));
+    }
+
+    /**
+     * Updates \<code><input.vo_name>\</code> information.
+     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the query used to perform the update operation.
+     * @param transactionManager the \<code>PlatformTransactionManager\<code>
+     * instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionManager")>
+     */
+    protected void update(
+        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final TransactionTemplate transactionTemplate)
+      throws DataAccessException
+    {
+        transactionTemplate.execute(
+            new UpdateTransactionCallback(
+                new QueryPreparedStatementCreator(query),
+                new <input.vo_name>AttributesStatementSetter(
+                    <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+                    true),
+                this));
+    }
+
+    /**
+     * Builds the query required to \<i>delete\</i> a concrete
+     * \<code><input.vo_name>\</code> entity, determined by its primary key.
+     * @return the \<code>DeleteQuery\</code> instance.
+     */
+    protected Query buildDeleteQuery()
+    {
+        return buildDeleteQuery(QueryFactory.getInstance());
+    }
+
+    /**
+     * Builds the query required to \<i>delete\</i> a concrete
+     * \<code><input.vo_name>\</code> entity, determined by its primary key.
+     * @param queryFactory the \<code>QueryFactory\</code>
+     * instance.
+     * @return the \<code>DeleteQuery\</code> instance.
+     <precondition_notnull("queryFactory")>
+     */
+    protected Query buildDeleteQuery(
+        final QueryFactory queryFactory)
+    {
+        DeleteQuery result = queryFactory.createDeleteQuery();
+
+        buildDeleteQuery(result);
+
+        return result;
+    }
+
+    /**
+     * Builds the query required to \<i>delete\</i> a concrete
+     * \<code><input.vo_name>\</code> entity, determined by its primary key.
+     * @param query the \<code>DeleteQuery\</code> instance.
+     <precondition_notnull("query")>
+     */
+    protected void buildDeleteQuery(final DeleteQuery query)
+    {
+        query.deleteFrom(<input.table_name_uppercased>);
+        <input.pk_attributes:attribute_query_filter(
+          tableRepositoryName=input.tr_name,
+          tableNameUppercased=input.table_name_uppercased,
+          nameUppercased=it.nameUppercased); separator="\n">
+    }
+
+    /**
+     * Deletes \<code><input.vo_name>\</code> information."
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     */
+    protected void deleteNoFk(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
+    {
+        deleteNoFk(
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            buildDeleteQuery(),
+            getDataSource());
+    }
+
+    /**
+     * Deletes \<code><input.vo_name>\</code> information."
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the query used to perform the delete operation.
+     * @param dataSource the \<code>DataSource\<code> instance.
+     <precondition_notnull("query")>
+     <precondition_notnull("dataSource")>
+     */
+    protected void deleteNoFk(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final DataSource dataSource)
+    {
+        deleteNoFk(
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            query,
+            new DataSourceTransactionManager(dataSource));
+    }
+
+    /**
+     * Deletes \<code><input.vo_name>\</code> information."
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the query used to perform the delete operation.
+     * @param transactionManager the \<code>PlatformTransactionManager\<code>
+     * instance.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionManager")>
+     */
+    protected void deleteNoFk(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final PlatformTransactionManager transactionManager)
+    {
+        deleteNoFk(
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            query,
+            new TransactionTemplate(transactionManager));
+    }
+
+    /**
+     * Deletes \<code><input.vo_name>\</code> information."
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the query used to perform the delete operation.
+     * @param transactionTemplate the \<code>TransactionTemplate\<code>
+     * instance.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionTemplate")>
+     */
+    protected void deleteNoFk(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final TransactionTemplate transactionTemplate)
+    {
+        transactionTemplate.execute(
+            new UpdateTransactionCallback(
+                new QueryPreparedStatementCreator(query),
+                new <input.vo_name>PkStatementSetter(
+                    <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
+                this));
+    }
+
+    /**
+     * Deletes \<code><input.vo_name>\</code> information.
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     */
+    public void delete(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
+      throws DataAccessException
+    {
+<if(input.fk_attributes)>
+        delete(
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            DataAccessManager.getInstance());
+    }
+
+    /**
+     * Deletes \<code><input.vo_name>\</code> information.
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param dataAccessManager the \<code>DataAccessManager\</code> instance.
+     <precondition_notnull("dataAccessManager")>
+     */
+    protected void delete(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        final DataAccessManager dataAccessManager)
+    {
+        delete(
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <input.fk_attributes:{dataAccessManager.get<it.tableName>DAO()}
+              ; separator=",\n">);
+    }
+
+    /**
+     * Deletes \<code><input.vo_name>\</code> information.
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <input.fk_attributes:dao_javadoc(
+       name=it.tableName,
+       uncapitalizedName=it.uncapitalizedTableName)
+       ; separator="\n">
+     <input.fk_attributes:precondition_notnull(name=it.tableName); separator="\n">
+     */
+    protected void delete(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <input.fk_attributes:dao_declaration(
+          name=it.tableName,
+          uncapitalizedName=it.uncapitalizedTableName)
+          ; separator=",\n">)
+    {
+        <input.fk_attributes:fk_dao_delete_call(
+            foreignTableName=it.tableName,
+            foreignKey=foreign_keys_by_table.(table_name),
+            allowsNull=it.allowsNull); separator="\n\n">
+<endif>
+
+        deleteNoFk(
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
+    }
+<input.foreign_keys:fk_delete_method(
+  foreignKey=it, input=input); separator="\n">
+
+<input.custom_selects:custom_select(
+  cs=it,
+  input=input); separator="\n">
+
+    /**
+     * Extracts \<i><input.vo_name>\</i> value objects from result sets.
+     * @author \<a href="http://maven.acm-sl.org/queryj">QueryJ\</a>
+     */
+    public static class <input.vo_name>PkResultSetExtractor
+        implements  ResultSetExtractor
+    {
+        // \<extract data>
+        /**
+         * Extracts \<i><input.vo_name>\</i> information from given result set.
+         * @param resultSet the result set.
+         * @return the \<code><input.vo_name>\</code> or \<code>null\</code>
+         * if the operation returned no data.
+         * @throws SQLException intercepted by \<i>Spring\</i>.
+         * @throws DataAccessException with information about any
+         * custom exception.
+         <precondition_notnull("resultSet")>
+         */
+        public Object extractData(final ResultSet resultSet)
+            throws  SQLException,
+                    DataAccessException
+        {
+            Map result = new HashMap();
+
+            if  (resultSet.next())
+            {
+                int index = 1;
+
+<input.pk_attributes:pk_resultset_extractor_parameter_retrieval(
+  name=it.nameLowercased,
+  getterMethod=it.getterMethod,
+  objectType=it.objectType,
+  isPrimitive=it.primitive)>
+            }
+
+            return result;
+        }
+        // \</extract data>
+    }
+
+    /**
+     * Executes the update method on JdbcTemplate class.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     */
+    public int update(
+        final PreparedStatementCreator creator,
+        final PreparedStatementSetter setter)
+    {
+        return super.update(creator, setter);
+    }
+
+    /**
+     * Executes the query method on JdbcTemplate class.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param extractor the \<code>ResultSetExtractor\</code> instance.
+     */
+    public Object query(
+        final PreparedStatementCreator creator,
+        final PreparedStatementSetter setter,
+        final ResultSetExtractor extractor)
+    {
+        return super.query(creator, setter, extractor);
+    }
+
+    /**
+     * Transaction callback implementation to perform
+     * \<code>JdbcTemplate.update(PreparedStatementCreator, PreparedStatementSetter)\</code>.
+     */
+    protected static class AbstractTransactionCallback
+        implements TransactionCallback
+    {
+        /**
+         * The \<code>PreparedStatementCreator\</code>.
+         */
+        private PreparedStatementCreator m__PreparedStatementCreator;
+
+        /**
+         * The \<code>PreparedStatementSetter\</code>.
+         */
+        private PreparedStatementSetter m__PreparedStatementSetter;
+
+        /**
+         * The \<code><input.engine_name><input.vo_name>DAO\</code>.
+         */
+        private <input.engine_name><input.vo_name>DAO m__<input.engine_name><input.vo_name>DAO;
+
+        /**
+         * Creates a transaction callback.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param setter the \<code>PreparedStatementSetter\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         */
+        public AbstractTransactionCallback(
+            final PreparedStatementCreator creator,
+            final PreparedStatementSetter setter,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            immutableSetPreparedStatementCreator(creator);
+            immutableSetPreparedStatementSetter(setter);
+            immutableSet<input.engine_name><input.vo_name>DAO(dao);
+        }
+
+        /**
+         * Specifies the \<code>PreparedStatementCreator\</code> instance.
+         * @param creator such instance.
+         */
+        private void immutableSetPreparedStatementCreator(
+            final PreparedStatementCreator creator)
+        {
+            m__PreparedStatementCreator = creator;
+        }
+
+        /**
+         * Specifies the \<code>PreparedStatementCreator\</code> instance.
+         * @param creator such instance.
+         */
+        protected void setPreparedStatementCreator(
+            final PreparedStatementCreator creator)
+        {
+            immutableSetPreparedStatementCreator(creator);
+        }
+
+        /**
+         * Retrieves the \<code>PreparedStatementCreator\</code> instance.
+         * @return such instance.
+         */
+        public PreparedStatementCreator getPreparedStatementCreator()
+        {
+            return m__PreparedStatementCreator;
+        }
+
+        /**
+         * Specifies the \<code>PreparedStatementSetter\</code> instance.
+         * @param setter such instance.
+         */
+        private void immutableSetPreparedStatementSetter(
+            final PreparedStatementSetter setter)
+        {
+            m__PreparedStatementSetter = setter;
+        }
+
+        /**
+         * Specifies the \<code>PreparedStatementSetter\</code> instance.
+         * @param setter such instance.
+         */
+        protected void setPreparedStatementSetter(
+            final PreparedStatementSetter setter)
+        {
+            immutableSetPreparedStatementSetter(setter);
+        }
+
+        /**
+         * Retrieves the \<code>PreparedStatementSetter\</code> instance.
+         * @return such instance.
+         */
+        public PreparedStatementSetter getPreparedStatementSetter()
+        {
+            return m__PreparedStatementSetter;
+        }
+
+        /**
+         * Specifies the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         * @param dao the DAO instance.
+         */
+        private void immutableSet<input.engine_name><input.vo_name>DAO(final <input.engine_name><input.vo_name>DAO dao)
+        {
+            m__<input.engine_name><input.vo_name>DAO = dao;
+        }
+
+        /**
+         * Specifies the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         * @param dao the DAO instance.
+         */
+        protected void set<input.engine_name><input.vo_name>DAO(final <input.engine_name><input.vo_name>DAO dao)
+        {
+            immutableSet<input.engine_name><input.vo_name>DAO(dao);
+        }
+
+        /**
+         * Retrieves the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         * @return such DAO.
+         */
+        public <input.engine_name><input.vo_name>DAO get<input.engine_name><input.vo_name>DAO()
+        {
+            return m__<input.engine_name><input.vo_name>DAO;
+        }
+
+        /**
+         * Executes the transactional operation.
+         * @param status the transaction status.
+         * @return the transaction result.
+         */
+        public Object doInTransaction(final TransactionStatus status)
+        {
+            return
+                doInTransaction(
+                    status,
+                    getPreparedStatementCreator(),
+                    getPreparedStatementSetter(),
+                    get<input.engine_name><input.vo_name>DAO());
+        }
+
+        /**
+         * Executes the transactional operation.
+         * @param status the transaction status.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param setter the \<code>PreparedStatementSetter\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         * @return \<code>null\</code> in either case (this method is meant
+         * to be overriden by subclasses, but cannot be defined \<i>abstract\</i>
+         * since the inner class is \<i>static\</i>.
+         */
+        protected Object doInTransaction(
+            final TransactionStatus status,
+            final PreparedStatementCreator creator,
+            final PreparedStatementSetter setter,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Transaction callback implementation to perform
+     * \<code>JdbcTemplate.update(PreparedStatementCreator, PreparedStatementSetter)\</code>.
+     */
+    protected static class UpdateTransactionCallback
+        extends AbstractTransactionCallback
+    {
+        /**
+         * Creates a transaction callback.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param setter the \<code>PreparedStatementSetter\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         */
+        public UpdateTransactionCallback(
+            final PreparedStatementCreator creator,
+            final PreparedStatementSetter setter,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            super(creator, setter, dao);
+        }
+
+        /**
+         * Executes the transactional operation.
+         * @param status the transaction status.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param setter the \<code>PreparedStatementSetter\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         * @return the transaction result.
+         */
+        protected Object doInTransaction(
+            final TransactionStatus status,
+            final PreparedStatementCreator creator,
+            final PreparedStatementSetter setter,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            return new Integer(dao.update(creator, setter));
+        }
+    }
+
+    /**
+     * Transaction callback implementation to perform
+     * \<code>JdbcTemplate.query(PreparedStatementCreator, PreparedStatementSetter)\</code>.
+     */
+    protected static class QueryTransactionCallback
+        extends AbstractTransactionCallback
+    {
+        /**
+         * The optional SQL.
+         */
+        private String m__strSQL;
+
+        /**
+         * The \<code>ResultSetExtractor\</code>.
+         */
+        private ResultSetExtractor m__ResultSetExtractor;
+
+        /**
+         * Creates a transaction callback.
+         * @param sql the SQL sentence.
+         * @param extractor the \<code>ResultSetExtractor\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         */
+        public QueryTransactionCallback(
+            final String sql,
+            final ResultSetExtractor extractor,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            super(null, null, dao);
+            immutableSetSQL(sql);
+            immutableSetResultSetExtractor(extractor);
+        }
+
+        /**
+         * Creates a transaction callback.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param setter the \<code>PreparedStatementSetter\</code> instance.
+         * @param extractor the \<code>ResultSetExtractor\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         */
+        public QueryTransactionCallback(
+            final PreparedStatementCreator creator,
+            final PreparedStatementSetter setter,
+            final ResultSetExtractor extractor,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            super(creator, setter, dao);
+            immutableSetResultSetExtractor(extractor);
+        }
+
+        /**
+         * Specifies the SQL sentence.
+         * @param sql such sentence.
+         */
+        private void immutableSetSQL(final String sql)
+        {
+            m__strSQL = sql;
+        }
+
+        /**
+         * Specifies the SQL sentence.
+         * @param sql such sentence.
+         */
+        protected void setSQL(final String sql)
+        {
+            immutableSetSQL(sql);
+        }
+
+        /**
+         * Retrieves the SQL sentence.
+         * @return such sentence.
+         */
+        public String getSQL()
+        {
+            return m__strSQL;
+        }
+
+        /**
+         * Specifies the \<code>ResultSetExtractor\</code> instance.
+         * @param extractor such instance.
+         */
+        private void immutableSetResultSetExtractor(
+            final ResultSetExtractor extractor)
+        {
+            m__ResultSetExtractor = extractor;
+        }
+
+        /**
+         * Specifies the \<code>ResultSetExtractor\</code> instance.
+         * @param extractor such instance.
+         */
+        protected void setResultSetExtractor(
+            final ResultSetExtractor extractor)
+        {
+            immutableSetResultSetExtractor(extractor);
+        }
+
+        /**
+         * Retrieves the \<code>ResultSetExtractor\</code> instance.
+         * @return such instance.
+         */
+        public ResultSetExtractor getResultSetExtractor()
+        {
+            return m__ResultSetExtractor;
+        }
+
+        /**
+         * Executes the transactional operation.
+         * @param status the transaction status.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param setter the \<code>PreparedStatementSetter\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         * @return the transaction result.
+         */
+        protected Object doInTransaction(
+            final TransactionStatus status,
+            final PreparedStatementCreator creator,
+            final PreparedStatementSetter setter,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            return
+                doInTransaction(
+                    status,
+                    creator,
+                    setter,
+                    getSQL(),
+                    getResultSetExtractor(),
+                    dao);
+        }
+
+        /**
+         * Executes the transactional operation.
+         * @param status the transaction status.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param setter the \<code>PreparedStatementSetter\</code> instance.
+         * @param sql the sql (optional).
+         * @param extractor the \<code>ResultSetExtractor\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         * @result the transaction result.
+         */
+        protected Object doInTransaction(
+            final TransactionStatus status,
+            final PreparedStatementCreator creator,
+            final PreparedStatementSetter setter,
+            final String sql,
+            final ResultSetExtractor extractor,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            Object result = null;
+
+            if  (sql == null)
+            {
+                result = dao.query(creator, setter, extractor);
+            }
+            else
+            {
+                result = dao.query(sql, extractor);
+            }
+
+            return result;
+        }
+    }
+
+<if(input.clobHandling)>
+    /**
+     * Transaction callback implementation to perform a
+     * \<i>select for update\</code>.
+     */
+    protected static class SelectForUpdateTransactionCallback
+        extends QueryTransactionCallback
+        implements PreparedStatementCallback
+    {
+        /**
+         * The result of the query. This make the class stateful, so
+         * instances cannot be reused.
+         */
+        private <input.vo_name> m__Result;
+
+        /**
+         * Creates a transaction callback.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param setter the \<code>PreparedStatementSetter\</code> instance.
+         * @param extractor the \<code>ResultSetExtractor\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code>
+         * instance.
+         */
+        public SelectForUpdateTransactionCallback(
+            final PreparedStatementCreator creator,
+            final PreparedStatementSetter setter,
+            final ResultSetExtractor extractor,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            super(creator, setter, extractor, dao);
+        }
+
+        /**
+         * Specifies the result of the operation.
+         * @param operationResult such information.
+         */
+        protected final void immutableSetOperationResult(
+            final <input.vo_name> operationResult)
+        {
+            m__Result = operationResult;
+        }
+
+        /**
+         * Specifies the result of the operation.
+         * @param operationResult such information.
+         */
+        protected void setOperationResult(
+            final <input.vo_name> operationResult)
+        {
+            immutableSetOperationResult(operationResult);
+        }
+
+        /**
+         * Specifies the result of the operation.
+         * @param operationResult such information.
+         */
+        public <input.vo_name> getOperationResult()
+        {
+            return m__Result;
+        }
+
+        /**
+         * Executes the transactional operation.
+         * @param status the transaction status.
+         * @return the transaction result.
+         */
+        public Object doInTransaction(final TransactionStatus status)
+        {
+            return
+                doInTransaction(
+                    status,
+                    getPreparedStatementCreator(),
+                    get<input.engine_name><input.vo_name>DAO());
+        }
+
+        /**
+         * Executes the transactional operation.
+         * @param status the transaction status.
+         * @param creator the \<code>PreparedStatementCreator\</code> instance.
+         * @param dao the \<code><input.engine_name><input.vo_name>DAO\</code> instance.
+         * @return the transaction result.
+         */
+        protected Object doInTransaction(
+            final TransactionStatus status,
+            final PreparedStatementCreator creator,
+            final <input.engine_name><input.vo_name>DAO dao)
+        {
+            return dao.execute(creator, (PreparedStatementCallback) this);
+        }
+
+        /**
+         * Manages the prepared statement logic.
+         * @param preparedStatement the statement.
+         * @return the result of the operation.
+         * @throws SQLException if it gets thrown as result of the operation.
+         * @throws DataAccessException if the data cannot be accessed for some
+         * reason.
+         */
+	public Object doInPreparedStatement(
+            final PreparedStatement preparedStatement)
+          throws SQLException,
+                 DataAccessException
+        {
+            return
+                doInPreparedStatement(
+                    preparedStatement,
+                    getPreparedStatementSetter(),
+                    getResultSetExtractor());
+        }
+
+        /**
+         * Manages the prepared statement logic.
+         * @param preparedStatement the statement.
+         * @param preparedStatementSetter the prepared statement setter.
+         * @param resultSetExtractor the result set extractor.
+         * @return the result of the operation.
+         * @throws SQLException if it gets thrown as result of the operation.
+         * @throws DataAccessException if the data cannot be accessed for some
+         * reason.
+         */
+	protected Object doInPreparedStatement(
+            final PreparedStatement preparedStatement,
+            final PreparedStatementSetter preparedStatementSetter,
+            final ResultSetExtractor resultSetExtractor)
+          throws SQLException,
+                 DataAccessException
+        {
+            Object result = null;
+
+            // taken from JdbcTemplate, Spring 1.1.4
+            ResultSet t_ResultSet = null;
+
+            try
+            {
+                if  (preparedStatementSetter != null)
+                {
+                    preparedStatementSetter.setValues(preparedStatement);
+                }
+
+		t_ResultSet = preparedStatement.executeQuery();
+
+		result = resultSetExtractor.extractData(t_ResultSet);
+            }
+            finally
+            {
+                if  (preparedStatementSetter instanceof ParameterDisposer)
+                {
+                    ((ParameterDisposer) preparedStatementSetter)
+                        .cleanupParameters();
+                }
+
+		JdbcUtils.closeResultSet(t_ResultSet);
+            }
+
+            return result;
+        }
+    }
+<endif>
+}
+>>
+
+pk_resultset_extractor_parameter_retrieval(
+  name, getterMethod, objectType, isPrimitive) ::= <<
+<!
+  Generates the piece of code to build a concrete value-object attribute.
+  @param name the attribute name.
+  @param getterMethod the getter method associated to such attribute.
+  @param objectType the attribute type (Java version).
+  @param isPrimitive whether the attribute is modelled as an instance or as
+  a primitive type.
+!>
+                result.put(
+                    "<name>",
+<if(isPrimitive)>
+                    new <objectType>(resultSet.<getterMethod>(index++)));
+<else>
+                    resultSet.<getterMethod>(index++));
+<endif>
+>>
+
+resultset_extractor_constants(
+  crseid,
+  crseidCapitalized,
+  crseidNormalizedUppercased) ::= <<
+<!
+  Generates the class constants for a custom resultset extractor.
+  @param crseId the custom resultset extractor identifier.
+  @param crseIdCapitalized the capitalized identifier of the custom resultset
+  extractor.
+  @param crseIdNormalizedUppercased the normalized, upper-cased identifier
+  of the custom resultset extractor.
+!>
+/**
+ * The result set extractor for \<i><crseid>\</i> custom query.
+ */
+public static final ResultSetExtractor
+    <crseidNormalizedUppercased>_EXTRACTOR =
+        new <crseidCapitalized>Extractor();
+>>
+
+static_table(
+  voName,
+  staticAttributeName,
+  staticAttributeNameLowercased,
+  staticAttributeNameCapitalized,
+  staticAttributeType) ::= <<
+<!
+  Generates the method to operate directly on defined constants.
+  @param voName the value object name.
+  @param staticAttributeName the static attribute name.
+  @param staticAttributeNameLowercased the static attribute name, in lower
+  case.
+  @param staticAttributeNameCapitalized the static attribute name,
+  capitalized.
+  @param staticAttributeType the static attribute type.
+!>
+    /**
+     * Loads \<i><voName>\</i> information from the constant pool,
+     * filtering by <staticAttributeName>.
+     * @param <staticAttributeNameLowercased> the <staticAttributeName>
+     * to filter.
+     * @return the \<code><voName>\</code> instance.
+     <precondition_notnull(staticAttributeName)>
+     */
+    public <voName> findConstantBy<staticAttributeNameCapitalized>(
+        final <staticAttributeType> <staticAttributeNameLowercased>)
+    {
+        <voName> result = null;
+
+        int t_iLength =
+            (_ALL_QUERYJ_CONSTANTS_ != null)
+            ?  _ALL_QUERYJ_CONSTANTS_.length
+            :  0;
+
+        for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
+        {
+            <voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
+
+            if  (   (t_CurrentItem != null)
+                 && (<staticAttributeNameLowercased>.equals(
+                        t_CurrentItem.get<staticAttributeNameCapitalized>())))
+            {
+                result = t_CurrentItem;
+                break;
+            }
+        }
+
+        return result;
+    }
+>>
+
+attribute_query_filter(
+  tableRepositoryName,
+  tableNameUppercased,
+  nameUppercased) ::= <<
+<!
+  Writes the sentence to configure a query to filter by a concrete attribute.
+  @param tableRepositoryName the name of the table repository.
+  @param tableNameUppercased the table name, in upper-case.
+  @param nameUppercased the attribute name, in upper-case.
+!>
+query.where(<tableNameUppercased>.<nameUppercased>.equals());
+>>
+
+attribute_query_insert(
+  tableRepositoryName,
+  tableNameUppercased,
+  nameUppercased) ::= <<
+<!
+  Writes the sentence to specify an attribute value inside an insert query.
+  @param tableRepositoryName the name of the table repository.
+  @param tableNameUppercased the table name, in upper-case.
+  @param nameUppercased the attribute name, in upper-case.
+!>
+query.value(<tableNameUppercased>.<nameUppercased>);
+>>
+
+em_attribute_value_retrieval(
+  query,
+  nativeType,
+  nameLowercased,
+  type) ::= <<
+<!
+  Writes the sentence to retrieve an externally-managed value.
+  @param query the query to retrieve the externally-managed value.
+  @param nativeType the native type of the attribute (Java-specific).
+  @param nameLowercased the attribute name, in lower-case.
+  @param type the type.
+!>
+t_mMap =
+    (Map)
+        transactionTemplate.execute(
+            new QueryTransactionCallback(
+                "<query>",
+                <input.table_name_uppercased>_PK_EXTRACTOR,
+                this));
+
+<nativeType> <nameLowercased> =
+    ((<type>) t_mMap.get("<nameLowercased>")).<nativeType>Value();
+>>
+
+attribute_query_update(
+  tableRepositoryName,
+  tableNameUppercased,
+  nameUppercased) ::= <<
+<!
+  Writes the sentence to specify an attribute value inside an update query.
+  @param tableRepositoryName the name of the table repository.
+  @param tableNameUppercased the table name, in upper-case.
+  @param nameUppercased the attribute name, in upper-case.
+!>
+query.set(<tableNameUppercased>.<nameUppercased>);
+>>
+
+fk_dao_delete_call(
+  foreignTableName,
+  foreignKey,
+  allowsNull) ::= <<
+<!
+  Writes the code needed to use the DAO associated to a
+  concrete foreign key to perform a delete operation.
+  @param foreignTableName the name of the referred table.
+  @param foreignKey the foreign key.
+  @param allowsNull whether the referred table allows null
+  references.
+!>
+<if(allowsNull)>
+t_<foreignTableName>DAO.discardRelationTo<foreignKey:{attr |<attr.nameCapitalized>}>DAO(
+<else>
+t_<foreignTableName>DAO.deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>DAO(
+<endif>
+    <foreignKey:{attr |<attr.name>}; separator=",\n">);
+>>
+
+dao_javadoc(name,uncapitalizedName) ::= <<
+<!
+  Writes the Javadoc for a DAO parameter.
+  @param name the name of the DAO.
+  @param uncapitalizedName the name of the DAO, uncapitalized.
+!>
+* @param <uncapitalizedName>DAO the \<i><name>DAO\</i> instance.
+>>
+
+dao_declaration(name,uncapitalizedName) ::= <<
+<!
+  Writes the Javadoc for a DAO parameter.
+  @param name the name of the DAO.
+  @param uncapitalizedName the name of the DAO, uncapitalized.
+!>
+final <name>DAO <uncapitalizedName>DAO
+>>
+
+fk_delete_method(foreignKey,input) ::= <<
+<!
+  Writes the deleteByXX method for a concrete foreign key.
+  @param input.table_name the table name.
+  @param foreignKey the foreign key.
+!>
+    /**
+     * Builds the query required to \<i>delete\</i> a concrete
+     * \<code><input.table_name>\</code> entity, determined by a foreign key.
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @return the \<code>DeleteQuery\</code> instance.
+     */
+    protected Query buildDeleteBy<foreignKey:{<it.nameCapitalized>}>Query()
+    {
+        return buildDeleteBy<foreignKey:{<it.nameCapitalized>}>Query(QueryFactory.getInstance());
+    }
+
+    /**
+     * Builds the query required to \<i>delete\</i> a concrete
+     * \<code><input.table_name>\</code> entity, determined by a foreign key.
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @return the \<code>DeleteQuery\</code> instance.
+     */
+    protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query()
+    {
+        DeleteQuery result = queryFactory.createDeleteQuery();
+
+        buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(result);
+
+        return result;
+    }
+
+    /**
+     * Builds the query required to \<i>delete\</i> a concrete
+     * \<code><input.table_name>\</code> entity, determined by a concrete foreign key.
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the query to initialize.
+     <precondition_notnull("query")>
+     */
+    protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(
+        final DeleteQuery query)
+    {
+        query.deleteFrom(<input.table_name_uppercased>);
+
+        <foreignKey:attribute_query_filter(
+          tableRepositoryName=input.table_repository_name,
+          tableNameUppercased=input.table_name_uppercased,
+          nameUppercased=it.nameUppercased); separator="\n">
+    }
+
+    /**
+     * Deletes <input.table_name> information from the persistence layer filtering
+     * by given foreign keys.
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     */
+    public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
+        <foreignKey:attribute_declaration(attr=it); separator=",\n">)
+    {
+        deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
+            <foreignKey:{<it.nameLowercased>}; separator=",\n">,
+            buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query,
+            getDataSource());
+    }
+
+    /**
+     * Deletes <input.table_name> information from the persistence layer filtering
+     * by given foreign keys.
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the delete query.
+     * @param dataSource the \<code>DataSource\<code> instance.
+     <precondition_notnull("query")>
+     <precondition_notnull("dataSource")>
+     */
+    protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
+        <foreignKey:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final DataSource dataSource)
+    {
+        deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
+            <foreignKey:{<it.nameLowercased>}; separator=",\n">,
+            query,
+            new DataSourceTransactionManager(dataSource));
+    }
+
+    /**
+     * Deletes <input.table_name> information from the persistence layer filtering
+     * by given foreign keys.
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the delete query.
+     * @param transactionManager the
+     * \<code>PlaformTransactionManager\<code> instance.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionManager")>
+     */
+    protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
+        <foreignKey:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final PlatformTransactionManager transactionManager)
+    {
+        deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
+            <foreignKey:{<it.nameLowercased>}; separator=",\n">,
+            query,
+            new TransactionTemplate(transactionManager));
+    }
+
+    /**
+     * Deletes <input.table_name> information from the persistence layer filtering
+     * by given foreign keys.
+     <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param query the delete query.
+     * @param transactionTemplate the \<code>TransactionTemplate\<code>
+     * instance.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionTemplate")>
+     */
+    protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
+        <foreignKey:attribute_declaration(attr=it); separator=",\n">,
+        final Query query,
+        final TransactionTemplate transactionTemplate)
+    {
+        transactionTemplate.execute(
+            new UpdateTransactionCallback(
+                new QueryPreparedStatementCreator(query),
+                new <input.vo_name>By<foreignKey:{attr |<attr.nameCapitalized>}>StatementSetter(
+                    <foreignKey:{attr |<attr.name>}; separator=",\n">),
+                this));
+    }
+>>
+
+custom_select(cs, input) ::= <<
+<!
+  Writes the code for a custom select query.
+  @param cs the custom select.
+  @param input the input.
+!>
+    /**
+     * Custom select \<i><cs.id>\</i>:\<br/>
+     * \<b><cs.description>\<b>.
+     <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @return the \<i><cs.resultClass>\</i> information retrieved.
+     * @throws DataAccessException if the operation fails.
+     */
+    public <cs.resultClass> <cs.nameUncapitalized>(
+        <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+      throws DataAccessException
+    {
+        return
+            <cs.nameUncapitalized>(
+                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
+                new PreparedStatementCreatorFactory(
+                    <cs.splittedQuotedValue; separator=" +\n">),
+                new Object[]
+                {
+                    <cs.parameters:custom_select_parameter_value(
+                      name=it.nameLowercased,
+                      objectType=it.objectType); separator=",\n">
+                },
+                getDataSource());
+    }
+
+    /**
+     * Custom select \<i><cs.id>\</i>:\<br/>
+     * \<b><cs.description>\<b>.
+     <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param preparedStatementCreatorFactory the
+     * \<code>PreparedStatementCreatorFactory\</code> instance
+     * specific for this operation.
+     * @param params the query parameters.
+     * @param dataSource the \<code>DataSource\<code> instance.
+     * @return the \<i><cs.resultClass>\</i> information retrieved.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("preparedStatementCreatorFactory")>
+     <precondition_notnull("params")>
+     <precondition_notnull("dataSource")>
+     */
+    protected <cs.resultClass> <cs.nameUncapitalized>(
+        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
+        final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+        final Object[] params,
+        final DataSource dataSource)
+      throws DataAccessException
+    {
+        return
+            <cs.nameUncapitalized>(
+                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
+                preparedStatementCreatorFactory,
+                params,
+                new DataSourceTransactionManager(dataSource));
+    }
+
+    /**
+     * Custom select \<i><cs.id>\</i>:\<br/>
+     * \<b><cs.description>\<b>.
+     <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param preparedStatementCreatorFactory the
+     * \<code>PreparedStatementCreatorFactory\</code> instance
+     * specific for this operation.
+     * @param params the query parameters.
+     * @param transactionManager the \<code>PlatformTransactionManager\<code>
+     * instance.
+     * @return the \<i><cs.resultClass>\</i> information retrieved.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("preparedStatementCreatorFactory")>
+     <precondition_notnull("params")>
+     <precondition_notnull("transactionManager")>
+     */
+    protected <cs.resultClass> <cs.nameUncapitalized>(
+        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
+        final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+        final Object[] params,
+        final PlatformTransactionManager transactionManager)
+      throws DataAccessException
+    {
+        return
+            <cs.nameUncapitalized>(
+                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
+                preparedStatementCreatorFactory,
+                params,
+                new TransactionTemplate(transactionManager));
+    }
+
+    /**
+     * Custom select \<i><cs.id>\</i>:\<br/>
+     * \<b><cs.description>\<b>.
+     <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @param preparedStatementCreatorFactory the
+     * \<code>PreparedStatementCreatorFactory\</code> instance
+     * specific for this operation.
+     * @param params the query parameters.
+     * @param transactionTemplate the \<code>TransactionTemplate\<code>
+     * instance.
+     * @return the \<i><cs.resultClass>\</i> information retrieved.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("preparedStatementCreatorFactory")>
+     <precondition_notnull("params")>
+     <precondition_notnull("transactionTemplate")>
+     */
+    protected <cs.resultClass> <cs.nameUncapitalized>(
+        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
+        final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+        final Object[] params,
+        final TransactionTemplate transactionTemplate)
+      throws DataAccessException
+    {
+        <cs.resultClass> result = null;
+
+       /*
+        preparedStatementCreatorFactory.setResultSetType(..);
+        preparedStatementCreatorFactory.setUpdatableResults(..);
+        preparedStatementCreatorFactory.setReturnGeneratedKeys(..);
+        preparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
+        */
+
+        <cs.parameters:custom_select_parameter_type_specification(
+          type=it.sqlType); separator="\n">
+
+        result =
+            (<cs.resultClass>)
+                transactionTemplate.execute(
+                    new QueryTransactionCallback(
+                        preparedStatementCreatorFactory
+                            .newPreparedStatementCreator(params),
+                        null,
+                        // calls setXXX twice
+                        // preparedStatementCreatorFactory
+                        //     .newPreparedStatementSetter(t_aParams),
+                        <cs.resultIdAsConstant>_EXTRACTOR,
+                        this));
+
+        return result;
+    }
+>>
+
+custom_select_parameter_type_specification(
+  type) ::= <<
+<!
+  Specifies the type of the parameter of a custom select.
+  @param type the SQL type.
+!>
+preparedStatementCreatorFactory.addParameter(
+    new SqlParameter(Types.<type>));
+>>
+
+custom_select_parameter_value(
+  name,
+  objectType) ::= <<
+<!
+  Writes the value for a parameter of a custom select.
+  @param name the parameter name.
+  @param objectType the object type of the parameter.
+!>
+<if(objectType)>
+new <objectType>(<name>)
+<else>
+<name>
+<endif>
+>>
+
+defaultInsert(input) ::= <<
+<!
+ Generates the default insert logic.
+ @param input the input.
+ !>
+<jdbcInsert(input=input)>
+>>
+
+jdbcInsert(input) ::= <<
+<!
+ Generates the JDBC insert logic.
+ @param input the input.
+ !>
+    /**
+     * Builds the query required to \<i>insert\</i> a concrete
+     * \<code><input.table_name>\</code> instance.
+     * @return the \<code>InsertQuery\</code> instance.
+     */
+    protected Query buildInsertQuery()
+    {
+        return buildInsertQuery(QueryFactory.getInstance());
+    }
+
+    /**
+     * Builds the query required to \<i>insert\</i> a concrete
+     * \<code><input.table_name>\</code> instance.
+     * @param queryFactory the \<code>QueryFactory\</code> instance.
+     * @return the \<code>InsertQuery\</code> instance.
+     <precondition_notnull("queryFactory")>
+     */
+    protected Query buildInsertQuery(final QueryFactory queryFactory)
+    {
+        InsertQuery result = queryFactory.createInsertQuery();
+
+        buildInsertQuery(result);
+
+        return result;
+    }
+
+    /**
+     * Builds the query required to \<i>insert\</i> a concrete
+     * \<code><input.vo_name>\</code> instance.
+     * @param query the \<code>InsertQuery\</code> instance.
+     <precondition_notnull("queryFactory")>
+     */
+    protected void buildInsertQuery(final InsertQuery query)
+    {
+        query.insertInto(<input.table_name_uppercased>);
+        <input.attributes:attribute_query_insert(
+          tableRepositoryName=input.tr_name,
+          tableNameUppercased=input.table_name_uppercased,
+          nameUppercased=it.nameUppercased); separator="\n">
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @throws DataAccessException if the operation fails.
+     */
+    public void insert(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">)
+      throws DataAccessException
+    {
+        insert(
+            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+            buildInsertQuery(),
+            getDataSource());
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param query the query to insert the values.
+     * @param dataSource the \<code>DataSource\</code> instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("dataSource")>
+     */
+    protected void insert(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final Query query,
+        final DataSource dataSource)
+      throws DataAccessException
+    {
+        insert(
+            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+            query,
+            new DataSourceTransactionManager(dataSource));
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information."
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param query the query to insert the values.
+     * @param transactionManager the \<code>PlatformTransactionManager\</code>
+     * instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionManager")>
+     */
+    protected void insert(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final Query query,
+        final PlatformTransactionManager transactionManager)
+      throws DataAccessException
+    {
+        insert(
+            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+            query,
+            new TransactionTemplate(transactionManager));
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param query the query to insert the values.
+     * @param transactionTemplate the \<code>TransactionTemplate\</code>
+     * instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionTemplate")>
+     */
+    protected void insert(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final Query query,
+        final TransactionTemplate transactionTemplate)
+      throws DataAccessException
+    {
+        transactionTemplate.execute(
+            new UpdateTransactionCallback(
+                new QueryPreparedStatementCreator(query),
+                new <input.vo_name>AttributesStatementSetter(
+                    <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+                    false),
+                this));
+    }
+
+    /**
+     * Inserts and retrieves the newly-inserted
+     * \<code><input.vo_name>\</code> instance.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @throws DataAccessException if the operation fails.
+     */
+    public <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">)
+      throws DataAccessException
+    {
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+                buildInsertQuery(),
+                getDataSource(),
+                <input.vo_name>ValueObjectFactory.getInstance());
+    }
+
+    /**
+     * Inserts and retrieves the newly-inserted
+     * \<code><input.vo_name>\</code> instance."
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param query the query required to insert given information.
+     * @param dataSource the data source.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("dataSource")>
+     <precondition_notnull("factory")>
+     */
+    protected <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final Query query,
+        final DataSource dataSource,
+        final <input.vo_name>ValueObjectFactory factory)
+      throws DataAccessException
+    {
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new DataSourceTransactionManager(dataSource),
+                factory);
+    }
+
+    /**
+     * Inserts and retrieves the newly-inserted
+     * \<code><input.vo_name>\</code> instance."
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param query the query required to insert given information.
+     * @param transactionManager the \<code>PlatformTransactionManager\</code>
+     * instance.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("query")>
+     <precondition_notnull("transactionManager")>
+     <precondition_notnull("factory")>
+     */
+    protected <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final Query query,
+        final PlatformTransactionManager transactionManager,
+        final <input.vo_name>ValueObjectFactory factory)
+      throws DataAccessException
+    {
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager),
+                factory);
+    }
+
+    /**
+     * Inserts and retrieves the newly-inserted
+     * \<code><input.vo_name>\</code> instance.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param query the query required to insert given information.
+     * @param transactionTemplate the \<code>TransactionTemplate\<code>
+     * instance.
+     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+     * instance.
+     * @throws DataAccessException if the operation fails.
+     <precondition_notnull("transactionTemplate")>
+     <precondition_notnull("factory")>
+     */
+    protected <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final Query query,
+        final TransactionTemplate transactionTemplate,
+        final <input.vo_name>ValueObjectFactory factory)
+      throws DataAccessException
+    {
+        <input.vo_name> result = null;
+
+        Map t_mMap = null;
+
+        <input.externally_managed_attributes:em_attribute_value_retrieval(
+          query=it.query,
+          nativeType=it.nativeType,
+          nameLowercased=it.nameLowercased,
+          type=it.objectType); separator="\n">
+
+        transactionTemplate.execute(
+            new UpdateTransactionCallback(
+                new QueryPreparedStatementCreator(query),
+                new <input.vo_name>AttributesStatementSetter(
+                    <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+                    true),
+                this));
+
+        result =
+            factory.create<input.vo_name>(
+                <input.attributes:{<it.nameLowercased>}; separator=",\n">);
+
+        return result;
+    }
+>>
+
+oracle8Insert(input) ::= <<
+<!
+  Generates the insert logic for Oracle8.
+  @param input the input.
+!>
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @throws DataAccessException if the operation fails.
+     */
+    public void insert(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">)
+      throws DataAccessException
+    {
+        create(
+            <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+              separator=",\n">);
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @return the newly-inserted entity.
+     * @throws DataAccessException if the operation fails.
+     */
+    public <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">)
+      throws DataAccessException
+    {
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+                  separator=",\n">,
+                getDataSource());
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param dataSource the data source.
+     * @return the newly-inserted entity.
+     * @throws DataAccessException if the operation fails.
+     * @precondition dataSource != null
+     */
+    protected <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final DataSource dataSource)
+      throws DataAccessException
+    {
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+                  separator=",\n">,
+                new DataSourceTransactionManager(dataSource));
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param transactionManager the transaction manager.
+     * @return the newly-inserted entity.
+     * @throws DataAccessException if the operation fails.
+     * @precondition transactionManager != null
+     */
+    protected <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final PlatformTransactionManager transactionManager)
+      throws DataAccessException
+    {
+        return
+            create(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+                  separator=",\n">,
+                new TransactionTemplate(transactionManager));
+    }
+
+    /**
+     * Persists \<code><input.vo_name>\</code> information.
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
+     * @param transactionTemplate the transaction template.
+     * @return the newly-inserted entity.
+     * @throws DataAccessException if the operation fails.
+     */
+    protected <input.vo_name> create(
+        <input.all_but_externally_managed_attributes:attribute_declaration(
+          attr=it); separator=",\n">,
+        final TransactionTemplate transactionTemplate)
+      throws DataAccessException
+    {
+        <input.vo_name> result = null;
+
+        Map t_mMap = null;
+
+        <input.externally_managed_attributes:em_attribute_value_retrieval(
+          query=it.query,
+          nativeType=it.nativeType,
+          nameLowercased=it.nameLowercased,
+          type=it.objectType); separator="\n">
+
+        transactionTemplate.execute(
+            new UpdateTransactionCallback(
+                new QueryPreparedStatementCreator(
+                    "insert into <input.table_name_uppercased>" +
+                    " (" +
+                    <input.attributes:{"<it.nameUppercased>};
+                      separator=", \" +\n">" +
+                    ") VALUES (" +
+                    <input.attributes:insert_attribute(attr=it);
+                      separator=",\" +\n">)"),
+                new <input.vo_name>AttributesStatementSetter(
+                    <input.all_but_lob_attributes:{<it.nameLowercased>};
+                      separator=",\n">,
+                    false,
+                    true),
+                this));
+
+        SelectForUpdateTransactionCallback t_Callback =
+            new SelectForUpdateTransactionCallback(
+                new QueryPreparedStatementCreator(
+                    "SELECT " +
+                    <input.attributes:{"<it.nameUppercased>};
+                      separator=", \" +\n">" +
+                    " FROM <input.table_name_uppercased>" +
+                    " WHERE " +
+                    <input.pk_attributes:{"<it.nameUppercased> = ?};
+                      separator=" AND \" +\n">" +
+                    " FOR UPDATE"),
+                new <input.vo_name>PkStatementSetter(
+                    <input.pk_attributes:{<it.nameLowercased>};
+                      separator=",\n">),
+                new <input.vo_name>ResultSetExtractor(
+                    <input.lob_attributes:{<it.nameLowercased>};
+                      separator=",\n">,
+                    true),
+                this);
+
+        result = (<input.vo_name>) transactionTemplate.execute(t_Callback);
+
+        //result = t_Callback.getResult();
+
+        return result;
+    }
+>>
+
+insert_attribute(attr) ::= <<
+<!
+ Generates the insert part corresponding to given attribute.
+ @param attr the attribute.
+!>
+<if(attr.clob)>
+"EMPTY_CLOB()
+<else>
+"?
+<endif>
+>>

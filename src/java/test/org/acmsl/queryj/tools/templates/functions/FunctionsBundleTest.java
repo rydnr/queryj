@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.functions.
+*              org.acmsl.queryj.tools.templates.functions.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.functions;
+package org.acmsl.queryj.tools.templates.functions;
 
 /*
 * Importing project classes.

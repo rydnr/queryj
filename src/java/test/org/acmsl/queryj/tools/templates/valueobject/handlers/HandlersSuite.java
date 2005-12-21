@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.
+*              org.acmsl.queryj.tools.templates.valueobject.handlers.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.valueobject.handlers;
+package org.acmsl.queryj.tools.templates.valueobject.handlers;
 
 
 /*
@@ -95,14 +95,14 @@ public class HandlersSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.valueobject.handlers");
+    new TestSuite("org.acmsl.queryj.tools.templates.valueobject.handlers");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateBuildHandlerTest.class);
     
     
     

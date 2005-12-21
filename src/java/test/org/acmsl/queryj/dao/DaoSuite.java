@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.dao.
+*              org.acmsl.queryj.dao.
 *
 */
-package unittests.org.acmsl.queryj.dao;
+package org.acmsl.queryj.dao;
 
 
 /*
@@ -95,11 +95,11 @@ public class DaoSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.dao");
+    new TestSuite("org.acmsl.queryj.dao");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.dao.AutoCommitDisabledMockConnectionTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.dao.MockConnectionTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.dao.MockDataSourceTest.class);
+    suite.addTestSuite(org.acmsl.queryj.dao.AutoCommitDisabledMockConnectionTest.class);
+    suite.addTestSuite(org.acmsl.queryj.dao.MockConnectionTest.class);
+    suite.addTestSuite(org.acmsl.queryj.dao.MockDataSourceTest.class);
     
     
     

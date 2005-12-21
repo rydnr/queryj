@@ -35,7 +35,7 @@
  * Description: Indicates JUnit how to test DeleteQuery classes.
  *
  */
-package unittests.org.acmsl.queryj;
+package org.acmsl.queryj;
 
 /*
  * Importing some ACM-SL classes.

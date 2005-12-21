@@ -45,11 +45,6 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 /**
  * Importing some JDK classes.
  */
@@ -115,8 +110,6 @@ public abstract class AbstractDataAccessContextLocalTemplate
      * @param basePackageName the base package name.
      * @param resourceDefinition the resource definitions subtemplate.
      * @param daoDefinition the DAO definitions subtemplate.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractDataAccessContextLocalTemplate(
         final String header,
@@ -125,11 +118,8 @@ public abstract class AbstractDataAccessContextLocalTemplate
         final String engineVersion,
         final String basePackageName,
         final String resourceDefinition,
-        final String daoDefinition,
-        final Project project,
-        final Task task)
+        final String daoDefinition)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetJNDILocation(jndiLocation);
         immutableSetEngineName(engineName);

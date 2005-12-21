@@ -41,10 +41,10 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -53,12 +53,6 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -131,45 +125,43 @@ public class FkStatementSetterTemplateGenerator
     }
 
     /**
-     * Generates a FkStatementSetter template.
-     * @param tableTemplate the table template.
-     * @param foreignKeys the foreign keys.
-     * @param metaDataManager the metadata manager.
+     * Creates a FkStatementSetter template.
+     * @param foreignKey the foreign key.
+     * @param metadataManager the database metadata manager.
      * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param repositoryName the repository name.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
-     * @precondition tableTemplate != null
-     * @precondition foreignKeys != null
-     * @precondition metaDataManager != null
+     * @precondition foreignKey != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
-     * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
     public FkStatementSetterTemplate createFkStatementSetterTemplate(
-        final TableTemplate tableTemplate,
-        final String[] foreignKeys,
-        final DatabaseMetaDataManager metaDataManager,
+        final ForeignKey foreignKey,
+        final MetadataManager metadataManager,
         final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
         final String basePackageName,
-        final String repositoryName,
-        final Project project,
-        final Task task)
+        final String repositoryName)
       throws  QueryJException
     {
         return
             new FkStatementSetterTemplate(
-                tableTemplate,
-                foreignKeys,
-                metaDataManager,
+                foreignKey,
+                metadataManager,
                 packageName,
+                engineName,
+                engineVersion,
+                quote,
                 basePackageName,
-                repositoryName,
-                project,
-                task);
+                repositoryName);
     }
 
     /**
@@ -188,31 +180,30 @@ public class FkStatementSetterTemplateGenerator
         write(
             template,
             outputDir,
-            template.getTableTemplate());
+            template.getForeignKey());
     }
 
     /**
      * Writes a FkStatementSetter template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
-     * @param tableTemplate the table template.
+     * @param foreignKey the foreign key.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
-     * @precondition tableTemplate != null
+     * @precondition foreignKey != null
      */
     public void write(
         final FkStatementSetterTemplate template,
         final File outputDir,
-        final TableTemplate tableTemplate)
+        final ForeignKey foreignKey)
       throws  IOException
     {
         write(
             template,
             outputDir,
-            tableTemplate.getTableName(),
-            template.getForeignKeys(),
-            template.getMetaDataManager(),
+            foreignKey.getSourceTableName(),
+            foreignKey.getTargetTableName(),
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
             FileUtils.getInstance());
@@ -221,9 +212,8 @@ public class FkStatementSetterTemplateGenerator
     /**
      * Writes a FkStatementSetterCreator template to disk.
      * @param template the template to write.
-     * @param tableName the table name.
-     * @param foreignKeys the foreign keys.
-     * @param metaDataManager the database metadata manager.
+     * @param sourceTableName the source table name.
+     * @param targetTableName the target table name.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
@@ -231,9 +221,8 @@ public class FkStatementSetterTemplateGenerator
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
-     * @precondition tableName != null
-     * @precondition foreignKeys != null
-     * @precondition metaDataManager != null
+     * @precondition sourceTableName != null
+     * @precondition targetTableName != null
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
@@ -242,9 +231,8 @@ public class FkStatementSetterTemplateGenerator
     protected void write(
         final FkStatementSetterTemplate template,
         final File outputDir,
-        final String tableName,
-        final String[] foreignKeys,
-        final DatabaseMetaDataManager metaDataManager,
+        final String sourceTableName,
+        final String targetTableName,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
         final FileUtils fileUtils)
@@ -257,14 +245,12 @@ public class FkStatementSetterTemplateGenerator
             + File.separator
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    tableName.toLowerCase()),
+                    sourceTableName.toLowerCase()),
                 '_')
             + "By"
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    metaDataManager.getReferredTable(
-                        tableName,
-                        foreignKeys[0]).toLowerCase()),
+                    targetTableName.toLowerCase()),
                 '_')
             + "StatementSetter.java",
             template.generate());

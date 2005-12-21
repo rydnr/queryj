@@ -45,12 +45,6 @@ import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
@@ -117,8 +111,6 @@ public abstract class AbstractTestSuiteTemplate
      * test case to the suite.
      * @param addingTestSuiteToSuiteStatement the statement for adding
      * test suites to the suite.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractTestSuiteTemplate(
         final String packageName,
@@ -127,11 +119,8 @@ public abstract class AbstractTestSuiteTemplate
         final String testSuiteTemplate,
         final String testCaseImportStatement,
         final String addingTestCaseToSuiteStatement,
-        final String addingTestSuiteToSuiteStatement,
-        final Project project,
-        final Task task)
+        final String addingTestSuiteToSuiteStatement)
     {
-        super(project, task);
         immutableSetPackageName(packageName);
         immutableSetTestPackageName(testPackageName);
         immutableSetSuiteName(suiteName);

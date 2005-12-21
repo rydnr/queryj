@@ -33,17 +33,17 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.dao.mock.
+*              org.acmsl.queryj.tools.templates.dao.mock.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.dao.mock;
+package org.acmsl.queryj.tools.templates.dao.mock;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.HandlersSuite;
+import org.acmsl.queryj.tools.templates.dao.mock.handlers.HandlersSuite;
 
 
 /*
@@ -96,14 +96,14 @@ public class MockSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.dao.mock");
+    new TestSuite("org.acmsl.queryj.tools.templates.dao.mock");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.MockDAOBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.MockDAOBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateGeneratorTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.dao.mock.handlers.HandlersSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.dao.mock.handlers.HandlersSuite.suite());
     
     
     // JUnitDoclet begin method suite

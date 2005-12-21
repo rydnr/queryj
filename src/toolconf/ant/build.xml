@@ -611,6 +611,11 @@
       -->
       <property name="shellscripts.dir" value="${src.dir}/shellscripts"/>
 
+      <!--
+         Templates configuration files are placed in this folder.
+      -->
+      <property name="templates.dir" value="${src.dir}/templates"/>
+
 <!--         END OF FOLDER STRUCTURE SECTION                                -->
 
 <!--         BEGIN MISC PROPERTIES DEFINITION SECTION                       -->
@@ -2314,6 +2319,14 @@
              DTD
             -->
             <fileset dir="${xml.dir}" includes="**/*.dtd"/>
+
+            <!--
+             Templates
+            -->
+            <fileset dir="${templates.dir}">
+              <include name="**/*"/>
+              <exclude name="**/CVS"/>
+            </fileset>
 
         </copy>
 

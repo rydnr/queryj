@@ -39,12 +39,6 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -190,8 +184,6 @@ public abstract class AbstractTableTemplate
      * separator.
      * @param getAllMethodEnd the "getAll" method end.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractTableTemplate(
         final String header,
@@ -212,11 +204,8 @@ public abstract class AbstractTableTemplate
         final String getAllMethodStart,
         final String getAllMethodFieldSeparator,
         final String getAllMethodEnd,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.dao.
+*              org.acmsl.queryj.tools.templates.dao.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.dao;
 
 /*
 * Importing project classes.
@@ -111,9 +111,7 @@ extends TestCase
     return
         new org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate(
             "com.foo.bar", // package name
-            "queryj", // repository
-            null,
-            null);
+            "queryj"); // repository
     // JUnitDoclet end method testcase.createInstance
   }
   

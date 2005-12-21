@@ -44,8 +44,10 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplate;
+import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -59,8 +61,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 
 /*
@@ -95,28 +95,21 @@ public class JdbcDAOTemplateBuildHandler
         return
             handle(
                 command.getAttributeMap(),
-                command.getProject(),
-                command.getTask(),
                 JdbcDAOTemplateGenerator.getInstance());
     }
                 
     /**
      * Handles given information.
      * @param parameters the attributes.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @param jdbcDAOTemplateGenerator the
-     * <code>JdbcDAOTemplateGenerator</code> instance.
+     * @param jdbcDAOTemplateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
-     * @precondition jdbcDAOTemplateGenerator != null
+     * @precondition jdbcDAOTemplateFactory != null
      */
     protected boolean handle(
         final Map parameters,
-        final Project project,
-        final Task task,
-        final JdbcDAOTemplateGenerator jdbcDAOTemplateGenerator)
+        final JdbcDAOTemplateFactory jdbcDAOTemplateFactory)
       throws  BuildException
     {
         boolean result = false;
@@ -124,8 +117,8 @@ public class JdbcDAOTemplateBuildHandler
         try
         {
             storeJdbcDAOTemplate(
-                jdbcDAOTemplateGenerator.createJdbcDAOTemplate(
-                    retrievePackage(parameters), project, task),
+                jdbcDAOTemplateFactory.createJdbcDAOTemplate(
+                    retrievePackage(parameters)),
                 parameters);
         }
         catch  (final QueryJException queryjException)
@@ -165,7 +158,7 @@ public class JdbcDAOTemplateBuildHandler
     {
         return
             packageUtils.retrieveJdbcDAOPackage(
-                (String) parameters.get(ParameterValidationHandler.PACKAGE));
+                retrieveProjectPackage(parameters));
     }
 
     /**

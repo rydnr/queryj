@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -54,12 +54,6 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -256,26 +250,22 @@ public class XMLDAOTemplateGenerator
     /**
      * Generates a XML DAO template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      */
     public XMLDAOTemplate createXMLDAOTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String basePackageName,
-        final String repositoryName,
-        final Project project,
-        final Task task)
+        final String repositoryName)
       throws  QueryJException
     {
         XMLDAOTemplate result = null;
@@ -289,24 +279,20 @@ public class XMLDAOTemplateGenerator
             result =
                 t_TemplateFactory.createXMLDAOTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     basePackageName,
-                    repositoryName,
-                    project,
-                    task);
+                    repositoryName);
         }
         else 
         {
             result =
                 new XMLDAOTemplate(
                     tableTemplate,
-                    metaDataManager,
+                    metadataManager,
                     packageName,
                     basePackageName,
-                    repositoryName,
-                    project,
-                    task);
+                    repositoryName);
         }
 
         return result;
@@ -314,19 +300,19 @@ public class XMLDAOTemplateGenerator
 
     /**
      * Writes a XML DAO template to disk.
-     * @param mockDAOTemplate the XML DAO template to write.
+     * @param xmlDAOTemplate the XML DAO template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition mockDAOTemplate != null
+     * @precondition xmlDAOTemplate != null
      * @precondition outputDir != null
      */
     public void write(
-        final XMLDAOTemplate mockDAOTemplate,
+        final XMLDAOTemplate xmlDAOTemplate,
         final File outputDir)
       throws  IOException
     {
         write(
-            mockDAOTemplate,
+            xmlDAOTemplate,
             outputDir,
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
@@ -335,21 +321,21 @@ public class XMLDAOTemplateGenerator
 
     /**
      * Writes a XML DAO template to disk.
-     * @param mockDAOTemplate the XML DAO template to write.
+     * @param xmlDAOTemplate the XML DAO template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition mockDAOTemplate != null
+     * @precondition xmlDAOTemplate != null
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final XMLDAOTemplate mockDAOTemplate,
+        final XMLDAOTemplate xmlDAOTemplate,
         final File outputDir,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
@@ -364,11 +350,11 @@ public class XMLDAOTemplateGenerator
             + "XML"
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    mockDAOTemplate
+                    xmlDAOTemplate
                         .getTableTemplate()
                             .getTableName().toLowerCase()),
                 '_')
             + "DAO.java",
-            mockDAOTemplate.generate());
+            xmlDAOTemplate.generate());
     }
 }

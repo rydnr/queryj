@@ -33,20 +33,18 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.
+*              org.acmsl.queryj.tools.
 *
 */
-package unittests.org.acmsl.queryj.tools;
+package org.acmsl.queryj.tools;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.tools.customsql.CustomsqlSuite;
-import unittests.org.acmsl.queryj.tools.handlers.HandlersSuite;
-import unittests.org.acmsl.queryj.tools.oracle.OracleSuite;
-import unittests.org.acmsl.queryj.tools.templates.TemplatesSuite;
+import org.acmsl.queryj.tools.handlers.HandlersSuite;
+import org.acmsl.queryj.tools.templates.TemplatesSuite;
 
 
 /*
@@ -99,24 +97,19 @@ public class ToolsSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools");
+    new TestSuite("org.acmsl.queryj.tools");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.QueryJTaskTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntFieldFkElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntTableElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntFieldElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.PackageUtilsTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.ProcedureMetaDataTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntTablesElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntExternallyManagedFieldsElementTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.AntCommandTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.ProcedureParameterMetaDataTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.DatabaseMetaDataManagerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.QueryJTaskTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.AntFieldFkElementTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.AntTableElementTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.AntFieldElementTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.PackageUtilsTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.AntTablesElementTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.AntExternallyManagedFieldsElementTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.AntCommandTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.tools.customsql.CustomsqlSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.handlers.HandlersSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.oracle.OracleSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.TemplatesSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.handlers.HandlersSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.TemplatesSuite.suite());
     
     
     // JUnitDoclet begin method suite

@@ -41,28 +41,27 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.metadata.TableDecorator;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
+ * Importing StringTemplate classes.
  */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JDK classes.
  */
-import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -72,163 +71,148 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class ConfigurationPropertiesTemplate
-    extends  AbstractConfigurationPropertiesTemplate
-    implements  ConfigurationPropertiesTemplateDefaults
+    extends  BasePerRepositoryTemplate
 {
     /**
      * Builds a <code>ConfigurationPropertiesTemplate</code> using given
      * information.
-     * @param repository the repository.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
+     * @param metadataManager the database metadata manager.
+     * @param packageName the package name.
      * @param basePackageName the base package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param repositoryName the repository name.
+     * @param engineName the engine name.
+     * @param tables the tables.
      */
     public ConfigurationPropertiesTemplate(
-        final String repository,
-        final String engineName,
-        final String engineVersion,
+        final MetadataManager metadataManager,
+        final String packageName,
         final String basePackageName,
-        final Project project,
-        final Task task)
+        final String repositoryName,
+        final String engineName,
+        final Collection tables)
     {
         super(
-            DEFAULT_HEADER,
-            repository,
-            engineName,
-            engineVersion,
+            metadataManager,
+            packageName,
             basePackageName,
-            DEFAULT_DAO_FACTORY_SETTING,
-            project,
-            task);
+            repositoryName,
+            engineName,
+            tables);
     }
 
     /**
-     * Builds the header for logging purposes.
-     * @return such header.
+     * Retrieves the string template group.
+     * @return such instance.
      */
-    protected String buildHeader()
+    protected StringTemplateGroup retrieveGroup()
     {
-        return
-            buildHeader(
-                getRepository(),
-                DAOChooserTemplateUtils.getInstance());
+        return retrieveGroup("/org/acmsl/queryj/ConfigurationProperties.stg");
     }
 
     /**
-     * Builds the header for logging purposes.
-     * @param repository the repository.
-     * @param daoChooserTemplateUtils the <code>DAOChooserTemplateUtils</code>
-     * instance.
-     * @return such header.
-     * @precondition repository != null
-     * @precondition daoChooserTemplateUtils != null
+     * Retrieves the template name.
+     * @return such information.
      */
-    protected String buildHeader(
-        final String repository,
-        final DAOChooserTemplateUtils daoChooserTemplateUtils)
+    public String getTemplateName()
     {
-        return
-              "Generating "
-            + daoChooserTemplateUtils.retrievePropertiesFileName(
-                  repository.toLowerCase())
-            + ".";
+        return "ConfigurationProperties";
     }
 
     /**
-     * Retrieves the source code of the generated field tableName.
-     * @return such source code.
-     */
-    protected String generateOutput()
-    {
-        return
-            generateOutput(
-                getHeader(),
-                getRepository(),
-                getEngineName(),
-                getEngineVersion(),
-                getBasePackageName(),
-                getDAOFactorySetting(),
-                getTables(),
-                PackageUtils.getInstance(),
-                EnglishGrammarUtils.getInstance(),
-                StringUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the source code of the generated field tableName.
-     * @param header the header.
-     * @param repository the repository.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
+     * Fills the core parameters.
+     * @param input the input.
+     * @param metadataManager the database metadata manager.
+     * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
-     * @param daoFactorySetting the DAO factory setting.
+     * @param tableRepositoryName the table repository name.
+     * @param engineName the engine name.
      * @param tables the tables.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
-     * instance.
+     * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @return such source code.
-     * @precondition packageUtils != null
-     * @precondition englishGrammarUtils != null
+     * @precondition input != null
+     * @precondition metadataManager != null
+     * @precondition subpackageName != null
+     * @precondition basePackageName != null
+     * @precondition tableRepositoryName != null
+     * @precondition tables != null
+     * @precondition timestamp != null
      * @precondition stringUtils != null
      */
-    protected String generateOutput(
-        final String header,
-        final String repository,
-        final String engineName,
-        final String engineVersion,
+    protected void fillCoreParameters(
+        final Map input,
+        final MetadataManager metadataManager,
+        final String subpackageName,
         final String basePackageName,
-        final String daoFactorySetting,
+        final String tableRepositoryName,
+        final String engineName,
         final Collection tables,
-        final PackageUtils packageUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
+        final String timestamp,
         final StringUtils stringUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        input.put("tr_name", tableRepositoryName);
 
-        t_sbResult.append(header);
+        input.put(
+            "dao_subpackage_name",
+            retrieveDAOSubpackageName(
+                basePackageName, engineName, PackageUtils.getInstance()));
 
-        MessageFormat t_DAOFactorySettingFormatter =
-            new MessageFormat(daoFactorySetting);
+        input.put("tables", decorateTables(tables, metadataManager));
+    }
 
-        Iterator t_itTables = tables.iterator();
+    /**
+     * Retrieves the DAO subpackage name.
+     * @param basePackageName the base package name.
+     * @param engineName the engine name.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such information.
+     */
+    protected String retrieveDAOSubpackageName(
+        final String basePackageName,
+        final String engineName,
+        final PackageUtils packageUtils)
+    {
+        return packageUtils.retrieveDAOPackage(basePackageName, engineName);
+    }
 
-        while  (   (t_itTables != null)
-                && (t_itTables.hasNext()))
+    /**
+     * Decorates the tables.
+     * @param tables the tables.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated tables.
+     * @precondition tables != null
+     * @precondition metadataManager != null
+     */
+    protected Collection decorateTables(
+        final Collection tables, final MetadataManager metadataManager)
+    {
+        Collection result = new ArrayList();
+
+        Iterator t_itTableIterator = tables.iterator();
+        
+        if  (t_itTableIterator != null)
         {
-            String t_strTable = (String) t_itTables.next();
-
-            if  (t_strTable != null)
+            while  (t_itTableIterator.hasNext())
             {
-                String t_strCapitalizedTable =
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            t_strTable.toLowerCase()),
-                        '_');
-
-                t_sbResult.append(
-                    t_DAOFactorySettingFormatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedTable,
-                            repository,
-                            t_strCapitalizedTable.toLowerCase(),
-                            packageUtils.retrieveDAOFactoryPackage(
-                                basePackageName,
-                                engineName),
-                            stringUtils.capitalize(
-                                engineName,
-                                '_'),
-                            packageUtils.retrieveMockDAOFactoryPackage(
-                                basePackageName),
-                            packageUtils.retrieveXMLDAOFactoryPackage(
-                                basePackageName)
-                        }));
+                result.add(
+                    decorate(
+                        (String) t_itTableIterator.next(), metadataManager));
             }
         }
+        
+        return result;
+    }
 
-        return t_sbResult.toString();
+    /**
+     * Decorates given table.
+     * @param table the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated table.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     */
+    protected TableDecorator decorate(
+        final String table, final MetadataManager metadataManager)
+    {
+        return new TableDecorator(table, metadataManager);
     }
 }

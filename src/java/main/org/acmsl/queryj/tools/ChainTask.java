@@ -76,7 +76,7 @@ import org.apache.tools.ant.types.Reference;
 /**
  * Manages a sequential chain of Ant actions.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  */
 public abstract class ChainTask
     extends  Task
@@ -92,14 +92,14 @@ public abstract class ChainTask
     public ChainTask()
     {
         super(); // redundant
-        inmutableSetChain(new ArrayListChainAdapter());
+        immutableSetChain(new ArrayListChainAdapter());
     }
 
     /**
      * Specifies the chain.
      * @param chain the new chain.
      */
-    private void inmutableSetChain(Chain chain)
+    private void immutableSetChain(final Chain chain)
     {
         m__Chain = chain;
     }
@@ -108,9 +108,9 @@ public abstract class ChainTask
      * Specifies the chain.
      * @param chain the new chain.
      */
-    protected void setChain(Chain chain)
+    protected void setChain(final Chain chain)
     {
-        inmutableSetChain(chain);
+        immutableSetChain(chain);
     }
 
     /**
@@ -132,7 +132,7 @@ public abstract class ChainTask
     {
         process(
             buildChain(getChain()),
-            buildCommand(new AntCommand(getProject(), this)));
+            buildCommand(new AntCommand(getProject())));
     }
 
     /**
@@ -147,7 +147,7 @@ public abstract class ChainTask
      * @param command the command to be initialized.
      * @return the initialized command.
      */
-    protected abstract AntCommand buildCommand(AntCommand command);
+    protected abstract AntCommand buildCommand(final AntCommand command);
 
     /**
      * Retrieves the link of the chain just after the one given command
@@ -155,10 +155,11 @@ public abstract class ChainTask
      * @param chain the concrete chain.
      * @param commandHandler the handler just before the desired link.
      * @return the next hanlder in the chain.
+     * @precondition chain != null
      */
     public AntCommandHandler getNextChainLink(
-        Chain             chain,
-        AntCommandHandler commandHandler)
+        final Chain chain,
+        final AntCommandHandler commandHandler)
     {
         AntCommandHandler result = null;
 
@@ -192,10 +193,11 @@ public abstract class ChainTask
      * @return <code>true</code> if the command is processed by the chain.
      * @throws BuildException if the build process cannot be performed.
      */
-    protected boolean process(Chain chain, AntCommand command)
-        throws  BuildException
+    protected boolean process(
+        final Chain chain, final AntCommand command)
+      throws  BuildException
     {
-    	boolean result = false;
+        boolean result = false;
 
         try 
         {
@@ -221,7 +223,7 @@ public abstract class ChainTask
             throw buildException;
         }
 
-    	return result;
+        return result;
     }
 
     /**
@@ -230,5 +232,5 @@ public abstract class ChainTask
      * @param command the command.
      */
     protected abstract void cleanUpOnError(
-        BuildException buildException, AntCommand command);
+        final BuildException buildException, final AntCommand command);
 }

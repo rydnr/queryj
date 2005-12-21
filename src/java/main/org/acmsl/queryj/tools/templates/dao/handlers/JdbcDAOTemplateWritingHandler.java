@@ -180,21 +180,8 @@ public class JdbcDAOTemplateWritingHandler
     {
         return
             packageUtils.retrieveJdbcDAOFolder(
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                retrieveProjectPackage(parameters));
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

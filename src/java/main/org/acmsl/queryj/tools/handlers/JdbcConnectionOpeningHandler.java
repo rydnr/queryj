@@ -45,8 +45,9 @@ import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
 
 /*
@@ -54,6 +55,11 @@ import org.acmsl.commons.patterns.Command;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+
+/*
+ * Importing some Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
@@ -91,16 +97,22 @@ public class JdbcConnectionOpeningHandler
 
         if  (command instanceof AntCommand) 
         {
+            AntCommand t_AntCommand = (AntCommand) command;
+            
             try 
             {
-                result = handle((AntCommand) command);
+                result = handle(t_AntCommand);
             }
             catch  (final BuildException buildException)
             {
-                ((AntCommand) command).getProject().log(
-                    ((AntCommand) command).getTask(),
-                    buildException.getMessage(),
-                    Project.MSG_ERR);
+                Log t_Log = UniqueLogFactory.getLog(getClass());
+                
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot open JDBC connection.",
+                        buildException);
+                }
             }
         }
         

@@ -48,12 +48,6 @@ import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
  */
 import java.util.Map;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Is able to generate system function repositories according to database
  * metadata.
@@ -90,16 +84,12 @@ public abstract class SystemFunctionsTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public SystemFunctionsTemplate(
         final String  packageName,
         final String  engineName,
         final String  engineVersion,
-        final String  quote,
-        final Project project,
-        final Task    task)
+        final String  quote)
     {
         super(
             "system",
@@ -107,8 +97,6 @@ public abstract class SystemFunctionsTemplate
             packageName,
             engineName,
             engineVersion,
-            quote,
-            project,
-            task);
+            quote);
     }
 }

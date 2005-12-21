@@ -33,19 +33,19 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.dao.
+*              org.acmsl.queryj.tools.templates.dao.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.dao;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.tools.templates.dao.handlers.HandlersSuite;
-import unittests.org.acmsl.queryj.tools.templates.dao.mock.MockSuite;
-import unittests.org.acmsl.queryj.tools.templates.dao.xml.XmlSuite;
+import org.acmsl.queryj.tools.templates.dao.handlers.HandlersSuite;
+import org.acmsl.queryj.tools.templates.dao.mock.MockSuite;
+import org.acmsl.queryj.tools.templates.dao.xml.XmlSuite;
 
 
 /*
@@ -98,29 +98,29 @@ public class DaoSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.dao");
+    new TestSuite("org.acmsl.queryj.tools.templates.dao");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOTemplateUtilsTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateUtilsTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.dao.DAOTemplateTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOTemplateUtilsTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateUtilsTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOTemplateTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.dao.handlers.HandlersSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.dao.mock.MockSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.dao.xml.XmlSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.dao.handlers.HandlersSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.dao.mock.MockSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.dao.xml.XmlSuite.suite());
     
     
     // JUnitDoclet begin method suite

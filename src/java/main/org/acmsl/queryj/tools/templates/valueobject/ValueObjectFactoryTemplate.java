@@ -40,8 +40,8 @@ package org.acmsl.queryj.tools.templates.valueobject;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -49,12 +49,6 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -80,21 +74,19 @@ public class ValueObjectFactoryTemplate
      * Builds a ValueObjectFactoryTemplate using given information.
      * @param packageName the package name.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      */
     public ValueObjectFactoryTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
-        final Project project,
-        final Task task)
+        final MetadataManager metadataManager)
     {
         super(
             DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             packageName,
             tableTemplate,
-            metaDataManager,
+            metadataManager,
             DEFAULT_PROJECT_IMPORTS,
             DEFAULT_JDK_IMPORTS,
             DEFAULT_JAVADOC,
@@ -106,9 +98,7 @@ public class ValueObjectFactoryTemplate
             DEFAULT_FACTORY_METHOD_FIELD_DECLARATION,
             DEFAULT_FACTORY_METHOD_VALUE_OBJECT_BUILD,
             DEFAULT_FACTORY_ALIAS_METHOD,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**
@@ -117,10 +107,21 @@ public class ValueObjectFactoryTemplate
      */
     protected String generateOutput()
     {
+        return generateOutput(getMetadataManager());
+    }
+    
+    /**
+     * Retrieves the source code of the generated value object factory.
+     * @param metadataManager the metadata manager.
+     * @return such source code.
+     * @precondition metadataManager != null
+     */
+    protected String generateOutput(final MetadataManager metadataManager)
+    {
         return
             generateOutput(
                 getTableTemplate(),
-                getMetaDataManager(),
+                metadataManager,
                 getPackageName(),
                 getHeader(),
                 getPackageDeclaration(),
@@ -136,7 +137,7 @@ public class ValueObjectFactoryTemplate
                 getFactoryMethodFieldDefinition(),
                 getFactoryMethodValueObjectBuild(),
                 getClassEnd(),
-                MetaDataUtils.getInstance(),
+                metadataManager.getMetadataTypeManager(),
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance());
     }
@@ -144,7 +145,7 @@ public class ValueObjectFactoryTemplate
     /**
      * Retrieves the source code of the generated value object factory.
      * @param tableTemplate the table template.
-     * @param metaDataManager the <code>DatabaseMetaDataManager</code> instance.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param header the header.
      * @param packageDeclaration the package declaration.
@@ -156,17 +157,20 @@ public class ValueObjectFactoryTemplate
      * @param singletonBody the singleton body.
      * @param factoryMethod the factory method.
      * @param factoryAliasMethod the factory alias method.
-     * @param factoryMethodFieldJavadoc the field Javadoc for the factory method.
+     * @param factoryMethodFieldJavadoc the field Javadoc for the factory
+     * method.
      * @param factoryMethodFieldDefinition the field definition for the factory
      * method.
-     * @param factoryMethodValueObjectBuild the factory method value object build.
+     * @param factoryMethodValueObjectBuild the factory method value object
+     * build.
      * @param classEnd the class end.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
      * @return such source code.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition header != null
      * @precondition packageDeclaration != null
@@ -182,13 +186,13 @@ public class ValueObjectFactoryTemplate
      * @precondition factoryMethodFieldDefinition != null
      * @precondition factoryMethodValueObjectBuild != null
      * @precondition classEnd != null
-     * @precondition metaDataUtils != null
+     * @precondition metadataTypeManager != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      */
     protected String generateOutput(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String header,
         final String packageDeclaration,
@@ -204,7 +208,7 @@ public class ValueObjectFactoryTemplate
         final String factoryMethodFieldDefinition,
         final String factoryMethodValueObjectBuild,
         final String classEnd,
-        final MetaDataUtils metaDataUtils,
+        final MetadataTypeManager metadataTypeManager,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils)
     {
@@ -306,32 +310,32 @@ public class ValueObjectFactoryTemplate
                 String t_strField = (String) t_itFields.next();
 
                 int t_iColumnType =
-                    metaDataManager.getColumnType(
+                    metadataManager.getColumnType(
                         tableTemplate.getTableName(),
                         t_strField);
 
                 boolean t_bAllowsNull = false;
 
                 boolean t_bIsPrimaryKey =
-                    metaDataManager.isPrimaryKey(
+                    metadataManager.isPartOfPrimaryKey(
                         tableTemplate.getTableName(),
                         t_strField);
 
                 if  (!t_bIsPrimaryKey)
                 {
                     t_bAllowsNull =
-                        metaDataManager.allowsNull(
+                        metadataManager.allowsNull(
                             tableTemplate.getTableName(),
                             t_strField);
                 }
 
                 String t_strFieldType =
-                    metaDataUtils.getNativeType(t_iColumnType, t_bAllowsNull);
+                    metadataTypeManager.getNativeType(t_iColumnType, t_bAllowsNull);
 
                 if  (t_bAllowsNull)
                 {
                     t_strFieldType =
-                        metaDataUtils.getSmartObjectType(t_iColumnType);
+                        metadataTypeManager.getSmartObjectType(t_iColumnType);
                 }
 
                 t_sbFactoryMethodFieldJavadoc.append(

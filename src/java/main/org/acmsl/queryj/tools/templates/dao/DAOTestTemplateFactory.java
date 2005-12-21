@@ -41,15 +41,9 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /**
  * Is able to create DAO test templates.
@@ -61,7 +55,7 @@ public interface DAOTestTemplateFactory
     /**
      * Generates a DAO test template.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -72,14 +66,12 @@ public interface DAOTestTemplateFactory
      * @param jdbcUrl the JDBC URL.
      * @param jdbcUsername the JDBC username.
      * @param jdbcPassword the JDBC password.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
     public DAOTestTemplate createDAOTestTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -89,8 +81,6 @@ public interface DAOTestTemplateFactory
         final String jdbcDriver,
         final String jdbcUrl,
         final String jdbcUsername,
-        final String jdbcPassword,
-        final Project project,
-        final Task task)
+        final String jdbcPassword)
       throws QueryJException;
 } 

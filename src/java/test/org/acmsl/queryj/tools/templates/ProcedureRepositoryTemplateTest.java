@@ -33,16 +33,17 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.
+*              org.acmsl.queryj.tools.templates.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates;
+package org.acmsl.queryj.tools.templates;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
+import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
 // JUnitDoclet end import
 
 /*
@@ -111,10 +112,9 @@ extends TestCase
     return
         new org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate(
             "com.foo.bar", // package name
-            "queryj",
-            null,
-            null); // repository
-    // JUnitDoclet end method testcase.createInstance
+            "queryj", // repository
+            JdbcMetadataTypeManager.getInstance());
+        // JUnitDoclet end method testcase.createInstance
   }
   
   /**

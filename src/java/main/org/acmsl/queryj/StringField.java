@@ -67,27 +67,35 @@ public class StringField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition equals(String value)
+    public Condition equals(final String value)
     {
-        Condition result = null;
+        return
+            equals(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getEquals(),
-                    "'" + value + "'");
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for equality.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition equals(
+        final String value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getEquals(),
+                "'" + value + "'");
     }
 
     /**
@@ -95,27 +103,35 @@ public class StringField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition notEquals(String value)
+    public Condition notEquals(final String value)
     {
-        Condition result = null;
+        return
+            notEquals(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getNotEquals(),
-                    "'" + value + "'");
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for non-equality.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition notEquals(
+        final String value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getNotEquals(),
+                "'" + value + "'");
     }
 
     /**
@@ -123,27 +139,35 @@ public class StringField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition like(String value)
+    public Condition like(final String value)
     {
-        Condition result = null;
+        return
+            like(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getLike(),
-                    "'" + value + "'");
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for text patterns.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition like(
+        final String value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getLike(),
+                "'" + value + "'");
     }
 
     /**
@@ -152,26 +176,35 @@ public class StringField
      * @param value the value.
      * @return such kind of condition.
      */
-    public Condition notLike(String value)
+    public Condition notLike(final String value)
     {
-        Condition result = null;
+        return
+            like(
+                value,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
 
-        ConditionFactory t_ConditionFactory =
-            ConditionFactory.getInstance();
-
-        ConditionOperatorRepository t_ConditionOperatorRepository =
-            ConditionOperatorRepository.getInstance();
-
-        if  (   (t_ConditionFactory            != null) 
-             && (t_ConditionOperatorRepository != null))
-        {
-            result =
-                t_ConditionFactory.createCondition(
-                    this,
-                    t_ConditionOperatorRepository.getNotLike(),
-                    "'" + value + "'");
-        }
-
-        return result;
+    /**
+     * Retrieves the condition to be able to filter for not containing
+     * text patterns.
+     * @param value the value.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected Condition notLike(
+        final String value,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getNotLike(),
+                "'" + value + "'");
     }
 }

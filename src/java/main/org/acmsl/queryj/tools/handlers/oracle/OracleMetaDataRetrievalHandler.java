@@ -40,21 +40,20 @@ package org.acmsl.queryj.tools.handlers.oracle;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.oracle.OracleMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.engines.oracle.Oracle8MetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
+import org.acmsl.commons.version.VersionUtils;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -70,11 +69,51 @@ import java.util.Map;
 /**
  * Retrieves the Oracle metadata.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
+ * @version $Revision$ ($Author$ at $Date$)
  */
 public class OracleMetaDataRetrievalHandler
     extends  DatabaseMetaDataRetrievalHandler
 {
+    /**
+     * Checks whether the database vendor matches this handler.
+     * @param product the product name.
+     * @param version the product version.
+     * @param major the major version number.
+     * @param minor the minor version number.
+     * @return <code>true</code> in case it matches.
+     * @precondition product != null
+     */
+    protected boolean checkVendor(
+        final String productName,
+        final String productVersion,
+        final int majorVersion,
+        final int minorVersion)
+    {
+        boolean result = (productName.indexOf("Oracle") > -1);
+
+        if  (result)
+        {
+            result = checkVersion(productVersion, VersionUtils.getInstance());
+        }
+        
+        return result;
+    }
+
+    /**
+     * Checks the engine version.
+     * @param version the version.
+     * @param versionUtils the <code>VersionUtils</code> instance.
+     * @return <code>true</code> if the version matches or is compatible with.
+     * @precondition version != null
+     * @precondition versionUtils != null
+     */
+    protected boolean checkVersion(
+        final String version, final VersionUtils versionUtils)
+    {
+        return versionUtils.matches(version, "8.x");
+    }
+
     /**
      * Builds a database metadata manager.
      * @param tableNames the table names.
@@ -90,14 +129,12 @@ public class OracleMetaDataRetrievalHandler
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return the metadata manager instance.
      * @throws org.apache.tools.ant.BuildException whenever the required
      * parameters are not present or valid.
      * @precondition metaData != null
      */
-    protected DatabaseMetaDataManager buildMetaDataManager(
+    protected MetadataManager buildMetadataManager(
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -106,17 +143,15 @@ public class OracleMetaDataRetrievalHandler
         final boolean lazyProcedureExtraction,
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema,
-        final Project project,
-        final Task task)
+        final String schema)
         throws  BuildException
     {
-        DatabaseMetaDataManager result = null;
+        MetadataManager result = null;
 
         try 
         {
             result =
-                new OracleMetaDataManager(
+                new Oracle8MetadataManager(
                     tableNames,
                     procedureNames,
                     disableTableExtraction,
@@ -125,9 +160,7 @@ public class OracleMetaDataRetrievalHandler
                     lazyProcedureExtraction,
                     metaData,
                     catalog,
-                    schema,
-                    project,
-                    task);
+                    schema);
         }
         catch  (final Exception exception)
         {

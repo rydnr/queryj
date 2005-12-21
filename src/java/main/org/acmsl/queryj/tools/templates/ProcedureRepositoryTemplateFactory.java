@@ -40,13 +40,8 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /**
  * Is able to create procedure repository templates.
@@ -59,13 +54,11 @@ public interface ProcedureRepositoryTemplateFactory
      * Generates a procedure repository template.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param metadataTypeManager the metadata type manager instance.
      * @return such template.
      */
     public ProcedureRepositoryTemplate createProcedureRepositoryTemplate(
         final String packageName,
         final String repository,
-        final Project project,
-        final Task task);
+        final MetadataTypeManager metadataTypeManager);
 }

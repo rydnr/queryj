@@ -41,9 +41,8 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -53,19 +52,15 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
+ * Importing StringTemplate classes.
  */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JDK classes.
  */
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -75,58 +70,31 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class DAOFactoryTemplate
-    extends  AbstractDAOFactoryTemplate
-    implements  DAOFactoryTemplateDefaults
+     extends AbstractDAOFactoryTemplate
 {
     /**
      * Builds a <code>DAOFactoryTemplate</code> using given information.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public DAOFactoryTemplate(
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String engineName,
-        final String engineVersion,
-        final String quote,
         final String basePackageName,
-        final String jndiDataSource,
-        final Project project,
-        final Task task)
+        final String jndiDataSource)
     {
         super(
-            DEFAULT_HEADER,
-            PACKAGE_DECLARATION,
             tableTemplate,
-            metaDataManager,
             packageName,
             engineName,
-            engineVersion,
-            quote,
+            null,
+            null,
             basePackageName,
-            jndiDataSource,
-            DEFAULT_PROJECT_IMPORTS,
-            DEFAULT_JDK_IMPORTS,
-            DEFAULT_EXTENSION_IMPORTS,
-            DEFAULT_COMMONS_LOGGING_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            DEFAULT_SINGLETON_BODY,
-            DEFAULT_FACTORY_METHOD,
-            DEFAULT_DATA_SOURCE_RETRIEVAL_METHOD,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            jndiDataSource);
     }
 
     /**
@@ -137,201 +105,214 @@ public class DAOFactoryTemplate
     {
         return
             generateOutput(
-                getHeader(),
-                getPackageDeclaration(),
                 getTableTemplate(),
-                getMetaDataManager(),
                 getPackageName(),
                 getEngineName(),
-                getEngineVersion(),
-                getQuote(),
                 getBasePackageName(),
                 getJNDIDataSource(),
-                getProjectImports(),
-                getJdkImports(),
-                getExtensionImports(),
-                getCommonsLoggingImports(),
-                getJavadoc(),
-                getClassDefinition(),
-                getClassStart(),
-                getSingletonBody(),
-                getFactoryMethod(),
-                getDataSourceRetrievalMethod(),
-                getClassEnd(),
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance(),
-                MetaDataUtils.getInstance(),
+                DefaultThemeUtils.getInstance(),
                 PackageUtils.getInstance());
     }
 
     /**
      * Retrieves the source code of the generated field tableName.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
-     * @param projectImports the project imports.
-     * @param jdkImports the JDK imports.
-     * @param extensionImports the extension imports.
-     * @param commonsLoggingImports the commons-logging imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param singletonBody the singleton body.
-     * @param factoryMethod the factory method.
-     * @param dataSourceRetrievalMethod the data source retrieval method.
-     * @param classEnd the class end.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
-     * @param metaDataUtils the <code>MetaDataUtils</code> instance.
+     * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such source code.
      * @precondition tableTemplate != null
-     * @precondition metaDataManager != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
-     * @precondition metaDataUtils != null
+     * @precondition defaultThemeUtils != null
      * @precondition packageUtils != null
      */
     protected String generateOutput(
-        final String header,
-        final String packageDeclaration,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
         final String packageName,
         final String engineName,
-        final String engineVersion,
-        final String quote,
         final String basePackageName,
         final String jndiDataSource,
-        final String projectImports,
-        final String jdkImports,
-        final String extensionImports,
-        final String commonsLoggingImports,
-        final String javadoc,
-        final String classDefinition,
-        final String classStart,
-        final String singletonBody,
-        final String factoryMethod,
-        final String dataSourceRetrievalMethod,
-        final String classEnd,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
-        final MetaDataUtils metaDataUtils,
+        final DefaultThemeUtils defaultThemeUtils,
         final PackageUtils packageUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        String result = "";
 
-        MessageFormat t_Formatter = new MessageFormat(header);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    tableTemplate.getTableName()
-                }));
+        String t_strTableName = tableTemplate.getTableName();
 
-        t_Formatter = new MessageFormat(packageDeclaration);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    packageName
-                }));
+        String t_strSingularName =
+            stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    t_strTableName.toLowerCase()),
+                '_');
 
-        t_Formatter = new MessageFormat(projectImports);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    packageUtils.retrieveBaseDAOPackage(
-                        basePackageName),
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_'),
-                    packageUtils.retrieveBaseDAOFactoryPackage(
-                        basePackageName),
-                    packageUtils.retrieveDAOPackage(
-                        basePackageName,
-                        engineName),
-                    engineName
-                }));
+        StringTemplateGroup t_Group = retrieveGroup();
 
-        t_sbResult.append(jdkImports);
-        t_sbResult.append(extensionImports);
-        t_sbResult.append(commonsLoggingImports);
+        StringTemplate t_Template = retrieveTemplate(t_Group);
 
-        t_Formatter = new MessageFormat(javadoc);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    engineName,
-                    tableTemplate.getTableName()
-                }));
+        String t_strCapitalizedEngine =
+            stringUtils.capitalize(engineName, '_');
+        
+        fillParameters(
+            t_Template,
+            new Integer[]
+            {
+                STARTING_YEAR,
+                new Integer(retrieveCurrentYear())
+            },
+            t_strTableName,
+            engineName,
+            basePackageName,
+            packageUtils.retrieveDAOSubpackage(engineName),
+            createTimestamp(),
+            defaultThemeUtils.buildDAOFactoryImplementationClassName(
+                t_strCapitalizedEngine, t_strSingularName),
+            packageUtils.retrieveDAOFactoryPackage(
+                basePackageName, engineName),
+            defaultThemeUtils.buildDAOClassName(t_strSingularName),
+            packageUtils.retrieveBaseDAOPackage(basePackageName),
+            defaultThemeUtils.buildDAOFactoryClassName(t_strSingularName),
+            packageUtils.retrieveBaseDAOFactoryPackage(
+                basePackageName),
+            defaultThemeUtils.buildDAOImplementationClassName(
+                t_strCapitalizedEngine, t_strSingularName),
+            packageUtils.retrieveDAOPackage(
+                basePackageName, engineName),
+            jndiDataSource);
+        
+        result = t_Template.toString();
 
-        t_Formatter = new MessageFormat(classDefinition);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    engineName,
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_')
-                }));
+        return result;
+    }
+    
+    /**
+     * Fills the template parameters.
+     * @param template the template.
+     * @param copyrightYears the copyright years.
+     * @param tableName the table name.
+     * @param engineName the engine name.
+     * @param basePackageName the base package name.
+     * @param subpackageName the subpackage.
+     * @param timestamp the timestamp.
+     * @param daoFactoryImplementationClassName the class name
+     * of the factory implementation.
+     * @param daoFactoryImplementationPackageName the package name
+     * of the factory implementation.
+     * @param daoClassName the class name of the DAO.
+     * @param daoPackageName the DAO package.
+     * @param daoFactoryClassName the class name of the
+     * DAO factory.
+     * @param daoFactoryPackageName the package
+     * of the DAO factory.
+     * @param daoImplementationClassName the class name
+     * of the DAO implementation.
+     * @param daoImplementationPackageName the package
+     * of the DAO implementation.
+     * @param jndiLocation the JNDI location.
+     * @precondition template != null
+     * @precondition copyrightYears != null
+     * @precondition tableName != null
+     * @precondition engineName != null
+     * @precondition basePackageName != null
+     * @precondition subpackageName != null
+     * @precondition timestamp != null
+     * @precondition daoFactoryImplementationClassName != null
+     * @precondition daoFactoryImplementationPackageName != null
+     * @precondition daoClassName != null
+     * @precondition daoPackageName != null
+     * @precondition daoFactoryClassName != null
+     * @precondition daoFactoryPackageName != null
+     * @precondition daoImplementationClassName != null
+     * @precondition daoImplementationPackageName != null
+     * @precondition jndiLocation != null
+     */
+    protected void fillParameters(
+        final StringTemplate template,
+        final Integer[] copyrightYears,
+        final String tableName,
+        final String engineName,
+        final String basePackageName,
+        final String subpackageName,
+        final String timestamp,
+        final String daoFactoryImplementationClassName,
+        final String daoFactoryImplementationPackageName,
+        final String daoClassName,
+        final String daoPackageName,
+        final String daoFactoryClassName,
+        final String daoFactoryPackageName,
+        final String daoImplementationClassName,
+        final String daoImplementationPackageName,
+        final String jndiLocation)
+    {
+        Map input = new HashMap();
 
-        t_Formatter = new MessageFormat(classStart);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    jndiDataSource
-                }));
+        template.setAttribute("input", input);
 
+        fillPackageDeclarationParameters(
+            input, basePackageName, subpackageName);
+        
+        input.put("copyright_years", copyrightYears);
 
-        MessageFormat t_SingletonBodyFormatter =
-            new MessageFormat(singletonBody);
+        input.put("table_name",  tableName);
+        input.put("engine_name", engineName);
+        input.put("timestamp", timestamp);
+        
+        input.put("class_name", daoFactoryImplementationClassName);
 
-        t_sbResult.append(
-            t_SingletonBodyFormatter.format(
-                new Object[]
-                {
-                    engineName,
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_')
-                }));
+        input.put("dao_class_name", daoClassName);
+        
+        input.put("dao_package_name",  daoPackageName);
+        
+        input.put(
+            "dao_factory_class_name", daoFactoryClassName);
+        
+        input.put(
+            "dao_factory_package_name", daoFactoryPackageName);
+        
+        input.put(
+            "dao_implementation_class_name", daoImplementationClassName);
 
-        List t_lFields = tableTemplate.getFields();
+        input.put(
+            "dao_implementation_package_name", daoImplementationPackageName);
 
-        MessageFormat t_FactoryMethodFormatter =
-            new MessageFormat(factoryMethod);
+        input.put("jndi_location", jndiLocation);
+    }
 
-        t_sbResult.append(
-            t_FactoryMethodFormatter.format(
-                new Object[]
-                {
-                    engineName,
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
-                        '_'),
-                }));
+    /**
+     * Fills the parameters for <code>package_declaration</code> rule.
+     * @param input the input.
+     * @param basePackageName the base package name.
+     * @param subpackageName the subpackage.
+     * @precondition input != null
+     * @precondition basePackageName != null
+     * @precondition subpackageName != null
+     */
+    protected void fillPackageDeclarationParameters(
+        final Map input,
+        final String basePackageName,
+        final String subpackageName)
+    {
+        input.put("base_package_name", basePackageName);
+        input.put("subpackage_name", subpackageName);
+    }
 
-        t_sbResult.append(dataSourceRetrievalMethod);
-
-        t_sbResult.append(classEnd);
-
-        return t_sbResult.toString();
+    /**
+     * Retrieves the string template group.
+     * @return such instance.
+     */
+    protected StringTemplateGroup retrieveGroup()
+    {
+        return retrieveGroup("/org/acmsl/queryj/dao/DAOFactory.stg");
     }
 }

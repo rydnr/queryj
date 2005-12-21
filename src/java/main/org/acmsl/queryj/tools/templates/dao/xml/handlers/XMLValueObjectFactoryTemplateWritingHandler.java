@@ -88,47 +88,70 @@ public class XMLValueObjectFactoryTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given command.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                retrieveXMLValueObjectFactoryTemplates(parameters),
+                retrieveOutputDir(parameters),
+                XMLValueObjectFactoryTemplateGenerator.getInstance());
+    }
+                
+    /**
+     * Writes the XMLValueObjectFactory templates.
+     * @param templates the templates.
+     * @param outputDir the output dir.
+     * @param generator the <code>XMLValueObjectFactoryTemplateGenerator</code>
+     * instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition templates != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final XMLValueObjectFactoryTemplate[] templates,
+        final File outputDir,
+        final XMLValueObjectFactoryTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
+            int t_iLength = (templates != null) ? templates.length : 0;
+
+            for  (int t_iValueObjectFactoryIndex = 0;
+                      t_iValueObjectFactoryIndex < t_iLength;
+                      t_iValueObjectFactoryIndex++)
             {
-                Map attributes = command.getAttributeMap();
-
-                XMLValueObjectFactoryTemplateGenerator t_ValueObjectFactoryTemplateGenerator =
-                    XMLValueObjectFactoryTemplateGenerator.getInstance();
-
-                XMLValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
-                    retrieveXMLValueObjectFactoryTemplates(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                           != null) 
-                     && (t_aValueObjectFactoryTemplates        != null)
-                     && (t_ValueObjectFactoryTemplateGenerator != null))
-                {
-                    for  (int t_iValueObjectFactoryIndex = 0;
-                              t_iValueObjectFactoryIndex < t_aValueObjectFactoryTemplates.length;
-                              t_iValueObjectFactoryIndex++)
-                    {
-                        t_ValueObjectFactoryTemplateGenerator.write(
-                            t_aValueObjectFactoryTemplates[t_iValueObjectFactoryIndex], t_OutputDir);
-                    }
-                }
+                generator.write(
+                    templates[t_iValueObjectFactoryIndex], outputDir);
             }
-            catch  (final IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
-            catch  (final Throwable throwable)
-            {
-                throwable.printStackTrace(System.out);
-            }
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
+        }
+        catch  (final Throwable throwable)
+        {
+            throw new BuildException(throwable);
         }
         
         return result;
@@ -164,43 +187,31 @@ public class XMLValueObjectFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveXMLValueObjectFactoryFolder(
-                    (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters));
-        }
-
-        return result;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the package name from the attribute map.
+     * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
      */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveXMLValueObjectFactoryFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

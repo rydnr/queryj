@@ -40,19 +40,12 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -69,20 +62,15 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class JdbcDAOTemplate
+public class JdbcDAOTemplate
     extends  AbstractJdbcDAOTemplate
     implements JdbcDAOTemplateDefaults
 {
     /**
      * Builds a JdbcDAOTemplate using given information.
      * @param packageName the package name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
-    public JdbcDAOTemplate(
-        final String packageName,
-        final Project project,
-        final Task task)
+    public JdbcDAOTemplate(final String packageName)
     {
         super(
             DEFAULT_HEADER,
@@ -102,9 +90,7 @@ public abstract class JdbcDAOTemplate
             DEFAULT_ROLLBACK_METHODS,
             DEFAULT_CONNECTION_CLOSING_METHODS,
             DEFAULT_TRANSACTION_TOKEN_FACTORY_METHODS,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

@@ -46,12 +46,6 @@ import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplate;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.Map;
@@ -61,7 +55,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class MySQLTextFunctionsTestTemplate
+public class MySQLTextFunctionsTestTemplate
     extends  TextFunctionsTestTemplate
 {
     /**
@@ -71,26 +65,20 @@ public abstract class MySQLTextFunctionsTestTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public MySQLTextFunctionsTestTemplate(
         String  packageName,
         String  testedPackageName,
         String  engineName,
         String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
+        String  quote)
     {
         super(
             packageName,
             testedPackageName,
             engineName,
             engineVersion,
-            quote,
-            project,
-            task);
+            quote);
     }
 
     /**

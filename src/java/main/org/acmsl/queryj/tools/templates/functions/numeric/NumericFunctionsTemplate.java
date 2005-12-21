@@ -49,12 +49,6 @@ import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -90,8 +84,6 @@ public abstract class NumericFunctionsTemplate
      * @param classConstructor the class constructor.
      * @param innerClass the inner class.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public NumericFunctionsTemplate(
         final String  header,
@@ -108,9 +100,7 @@ public abstract class NumericFunctionsTemplate
         final String  singletonBody,
         final String  classConstructor,
         final String  innerClass,
-        final String  classEnd,
-        final Project project,
-        final Task    task)
+        final String  classEnd)
     {
         super(
             "numeric",
@@ -129,9 +119,7 @@ public abstract class NumericFunctionsTemplate
             singletonBody,
             classConstructor,
             innerClass,
-            classEnd,
-            project,
-            task);
+            classEnd);
     }
 
     /**
@@ -140,16 +128,12 @@ public abstract class NumericFunctionsTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public NumericFunctionsTemplate(
         final String  packageName,
         final String  engineName,
         final String  engineVersion,
-        final String  quote,
-        final Project project,
-        final Task    task)
+        final String  quote)
     {
         super(
             "numeric",
@@ -157,8 +141,6 @@ public abstract class NumericFunctionsTemplate
             packageName,
             engineName,
             engineVersion,
-            quote,
-            project,
-            task);
+            quote);
     }
 }

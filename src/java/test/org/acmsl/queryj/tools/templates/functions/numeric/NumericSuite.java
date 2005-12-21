@@ -33,19 +33,19 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.functions.numeric.
+*              org.acmsl.queryj.tools.templates.functions.numeric.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.functions.numeric;
+package org.acmsl.queryj.tools.templates.functions.numeric;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers.HandlersSuite;
-import unittests.org.acmsl.queryj.tools.templates.functions.numeric.mysql.MysqlSuite;
-import unittests.org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleSuite;
+import org.acmsl.queryj.tools.templates.functions.numeric.handlers.HandlersSuite;
+import org.acmsl.queryj.tools.templates.functions.numeric.mysql.MysqlSuite;
+import org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleSuite;
 
 
 /*
@@ -98,14 +98,14 @@ public class NumericSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions.numeric");
+    new TestSuite("org.acmsl.queryj.tools.templates.functions.numeric");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateGeneratorTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateGeneratorTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGeneratorTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers.HandlersSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.numeric.mysql.MysqlSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.functions.numeric.handlers.HandlersSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.functions.numeric.mysql.MysqlSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleSuite.suite());
     
     
     // JUnitDoclet begin method suite

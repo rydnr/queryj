@@ -33,17 +33,17 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.handlers.
+*              org.acmsl.queryj.tools.handlers.
 *
 */
-package unittests.org.acmsl.queryj.tools.handlers;
+package org.acmsl.queryj.tools.handlers;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.tools.handlers.oracle.OracleSuite;
+import org.acmsl.queryj.tools.handlers.oracle.OracleSuite;
 
 
 /*
@@ -96,19 +96,19 @@ public class HandlersSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.handlers");
+    new TestSuite("org.acmsl.queryj.tools.handlers");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.MetaDataBasedTableRepositoryBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.CompositeAntCommandHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.ParameterValidationHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.handlers.DatabaseEngineHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.MetaDataBasedTableRepositoryBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.CompositeAntCommandHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.ParameterValidationHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.DatabaseEngineHandlerTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.tools.handlers.oracle.OracleSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.handlers.oracle.OracleSuite.suite());
     
     
     // JUnitDoclet begin method suite

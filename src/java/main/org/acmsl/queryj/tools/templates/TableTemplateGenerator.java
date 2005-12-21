@@ -41,6 +41,9 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplateFactory;
 
@@ -49,12 +52,6 @@ import org.acmsl.queryj.tools.templates.TableTemplateFactory;
  */
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -126,21 +123,41 @@ public class TableTemplateGenerator
 
     /**
      * Generates a table template.
-     * @param packageName the package name.
      * @param tableName the table name.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
+     * @param metadataManager the metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
+     * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the name of the repository.
      * @return a template.
-     * @precondition packageName != null
-     * @precondition tableName != null
+     * @throws QueryJException if the input values are invalid.
      */
     public TableTemplate createTableTemplate(
-        final String packageName,
         final String tableName,
-        final Project project,
-        final Task task)
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName)
+      throws  QueryJException
     {
-        return new TableTemplate(packageName, tableName, project, task);
+        return
+            new TableTemplate(
+                tableName,
+                metadataManager,
+                customSqlProvider,
+                packageName,
+                engineName,
+                engineVersion,
+                quote,
+                basePackageName,
+                repositoryName);
     }
 
     /**

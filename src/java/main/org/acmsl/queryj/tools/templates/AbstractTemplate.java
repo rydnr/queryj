@@ -40,14 +40,37 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
+import org.acmsl.queryj.tools.templates.DefaultThemeConstants;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.Template;
 
 /*
- * Importing some Ant classes.
+ * Importing some ACM-SL Commons classes.
  */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
+import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
+import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Represents generic templates.
@@ -55,82 +78,131 @@ import org.apache.tools.ant.Task;
  *         >Jose San Leandro</a>
  */
 public abstract class AbstractTemplate
-    implements  Template
+    implements  Template,
+                DefaultThemeConstants
 {
     /**
-     * The reference to the project, for logging purposes.
+     * Builds an empty <code>AbstractTemplate</code>.
      */
-    private Project m__Project;
-
-    /**
-     * The reference to the task, for logging purposes.
-     */
-    private Task m__Task;
-
-    /**
-     * Builds an <code>AbstractTemplate</code> using
-     * given information.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     */
-    public AbstractTemplate(final Project project, final Task task)
+    protected AbstractTemplate()
     {
-        immutableSetProject(project);
-        immutableSetTask(task);
     }
 
     /**
-     * Specifies the project.
-     * @param project the project.
-     */
-    private void immutableSetProject(final Project project)
-    {
-        m__Project = project;
-    }
-
-    /**
-     * Specifies the project.
-     * @param project the project.
-     */
-    protected void setProject(final Project project)
-    {
-        immutableSetProject(project);
-    }
-
-    /**
-     * Retrieves the project.
+     * Retrieves the string template group.
+     * @param path the path.
      * @return such instance.
+     * @precondition path != null
      */
-    public Project getProject()
+    protected StringTemplateGroup retrieveGroup(final String path)
     {
-        return m__Project;
+        return retrieveGroup(path, "/org/acmsl/queryj/queryj.stg");
     }
-
+    
     /**
-     * Specifies the task.
-     * @param task the task.
-     */
-    private void immutableSetTask(final Task task)
-    {
-        m__Task = task;
-    }
-
-    /**
-     * Specifies the task.
-     * @param task the task.
-     */
-    protected void setTask(final Task task)
-    {
-        immutableSetTask(task);
-    }
-
-    /**
-     * Retrieves the task.
+     * Retrieves the string template group.
+     * @param path the path.
+     * @param theme the theme.
      * @return such instance.
+     * @precondition path != null
+     * @precondition theme != null
      */
-    public Task getTask()
+    protected StringTemplateGroup retrieveGroup(
+        final String path, final String theme)
     {
-        return m__Task;
+        StringTemplateGroup result = null;
+        
+        InputStream themeInput =
+            getClass().getResourceAsStream(theme);
+
+        InputStream groupInput =
+            getClass().getResourceAsStream(path);
+
+        StringTemplateGroup themeGroup =
+            new StringTemplateGroup(
+                new InputStreamReader(themeInput),
+                AngleBracketTemplateLexer.class);
+
+        result =
+            new StringTemplateGroup(
+                new InputStreamReader(groupInput),
+                AngleBracketTemplateLexer.class);
+
+        result.setSuperGroup(themeGroup);
+
+        return result;
+    }
+
+    /**
+     * Configures given <code>StringTemplate</code> instance.
+     * @param stringTemplate such template.
+     * @precondition stringTemplate != null
+     */
+    protected void configure(final StringTemplate stringTemplate)
+    {
+        stringTemplate.setPassThroughAttributes(true);
+        stringTemplate.setLintMode(true);
+    }
+
+    /**
+     * Retrieves the template in given group.
+     * @param group the StringTemplate group.
+     * @return the template.
+     * @precondition group != null
+     */
+    protected StringTemplate retrieveTemplate(final StringTemplateGroup group)
+    {
+        StringTemplate result = null;
+        
+        if  (group != null)
+        {
+            result = group.getInstanceOf(TEMPLATE_NAME);
+        }
+
+        return result;
+    }
+    
+    /**
+     * Retrieves the current year.
+     * @return such value.
+     */
+    protected int retrieveCurrentYear()
+    {
+        return retrieveYear(Calendar.getInstance());
+    }
+    
+    /**
+     * Retrieves the year defined in given date.
+     * @param calendar the calendar.
+     * @return such value.
+     * @precondition calendar != null
+     */
+    protected int retrieveYear(final Calendar calendar)
+    {
+        return calendar.get(Calendar.YEAR);
+    }
+
+    /**
+     * Creates a timestamp.
+     * @return such timestamp.
+     */
+    protected String createTimestamp()
+    {
+        return createTimestamp(new Date(), TIMESTAMP_FORMATTER);
+    }
+    
+    /**
+     * Formats given date.
+     * @param date the date.
+     * @param formatter the formatter.
+     * @return the formatted date.
+     * @precondition date != null
+     * @precondition formatter != null
+     */
+    protected String createTimestamp(
+        final Date date, final DateFormat formatter)
+    {
+        return formatter.format(date);
     }
 
     /**
@@ -141,42 +213,23 @@ public abstract class AbstractTemplate
     public String generate()
       throws  InvalidTemplateException
     {
-        return generate(getProject(), getTask());
-    }
-
-    /**
-     * Generates the source code.
-     * @param project the project.
-     * @param task the task.
-     * @return such output.
-     * @throws InvalidTemplateException if the template cannot be generated.
-     */
-    protected final String generate(final Project project, final Task task)
-      throws  InvalidTemplateException
-    {
-        if   (   (project != null)
-              && (task    != null))
-        {
-            logHeader(project, task);
-        }
+        logHeader(buildHeader());
 
         return generateOutput();
     }
 
     /**
      * Logs a custom header.
-     * @param project the project.
-     * @param task the task.
-     * @precondition project != null
-     * @precondition task != null
+     * @param header the header.
      */
-    protected void logHeader(final Project project, final Task task)
+    protected void logHeader(final String header)
     {
-        project.log(
-            task,
-            buildHeader(),
-            Project.MSG_VERBOSE);
-
+        Log t_Log = UniqueLogFactory.getLog(getClass());
+        
+        if  (t_Log != null)
+        {
+            t_Log.trace(header);
+        }
     }
 
     /**
@@ -195,4 +248,32 @@ public abstract class AbstractTemplate
      */
     protected abstract String generateOutput()
       throws  InvalidTemplateException;
+
+    /**
+     * Normalizes given value, in lower-case.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such output.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalizeLowercase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.normalizeLowercase(value);
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such output.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String capitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
+    }
 }

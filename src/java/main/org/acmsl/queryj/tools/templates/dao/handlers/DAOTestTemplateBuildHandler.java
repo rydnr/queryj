@@ -42,13 +42,14 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
+import org.acmsl.queryj.tools.templates.dao.DAOTestTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -89,150 +90,145 @@ public class DAOTestTemplateBuildHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            try
-            {
-                Map attributes = command.getAttributeMap();
-
-                DatabaseMetaData t_MetaData =
-                    retrieveDatabaseMetaData(attributes);
-
-                DatabaseMetaDataManager t_MetaDataManager =
-                    retrieveDatabaseMetaDataManager(attributes);
-
-                String t_strPackage =
-                    retrieveDAOTestPackage(
-                        t_MetaData.getDatabaseProductName(),
-                        attributes);
-
-                DAOTestTemplateGenerator t_DAOTestTemplateGenerator =
-                    DAOTestTemplateGenerator.getInstance();
-
-                if  (   (t_MetaData                 != null)
-                     && (t_MetaDataManager          != null)
-                     && (t_DAOTestTemplateGenerator != null))
-                {
-                    TableTemplate[] t_aTableTemplates =
-                        retrieveTableTemplates(attributes);
-
-                    if  (t_aTableTemplates != null)
-                    {
-                        DAOTestTemplate[] t_aDAOTestTemplates =
-                            new DAOTestTemplate[t_aTableTemplates.length];
-
-                        String t_strQuote =
-                            t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
-                        {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
-                        for  (int t_iDAOTestIndex = 0;
-                                  t_iDAOTestIndex < t_aDAOTestTemplates.length;
-                                  t_iDAOTestIndex++) 
-                        {
-                            t_aDAOTestTemplates[t_iDAOTestIndex] =
-                                t_DAOTestTemplateGenerator
-                                    .createDAOTestTemplate(
-                                        t_aTableTemplates[t_iDAOTestIndex],
-                                        t_MetaDataManager,
-                                        t_strPackage,
-                                        t_MetaData.getDatabaseProductName(),
-                                        t_MetaData.getDatabaseProductVersion(),
-                                        t_strQuote,
-                                        retrieveDAOPackage(
-                                            t_MetaData
-                                                .getDatabaseProductName(),
-                                            attributes),
-                                        retrieveValueObjectPackage(attributes),
-                                        retrieveJdbcDriver(attributes),
-                                        retrieveJdbcUrl(attributes),
-                                        retrieveJdbcUsername(attributes),
-                                        retrieveJdbcPassword(attributes),
-                                        command.getProject(),
-                                        command.getTask());
-
-                            storeTestTemplate(
-                                t_aDAOTestTemplates[t_iDAOTestIndex],
-                                attributes);
-                        }
-
-                        storeDAOTestTemplates(t_aDAOTestTemplates, attributes);
-                    }
-                }
-            }
-            catch  (final SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-            catch  (final QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
-        }
-        
-        return result;
+        return handle(command.getAttributeMap());
     }
-
+    
     /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaData)
-            parameters.get(
-                DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-    }
-
-    /**
-     * Retrieves the database metadata manager from the attribute map.
-     * @param parameters the parameter map.
-     * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaDataManager retrieveDatabaseMetaDataManager(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaDataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA_MANAGER);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
+    protected boolean handle(final Map parameters)
         throws  BuildException
     {
         return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
+            handle(
+                parameters,
+                retrieveDatabaseMetaData(parameters),
+                retrieveMetadataManager(parameters));
+    }
+    
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param metaData the database metadata.
+     * @param metadataManager the database metadata manager.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     * @precondition metadataManager != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaData metaData,
+        final MetadataManager metadataManager)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                metaData,
+                metadataManager,
+                retrieveTableTemplates(parameters),
+                DAOTestTemplateGenerator.getInstance());
+    }
+    
+    /**
+     * Builds the DAO test templates.
+     * @param parameters the parameters.
+     * @param metaData the database metadata.
+     * @param metadataManager the database metadata manager.
+     * @param tableTemplates the table templates.
+     * @param templateFactory the template factory.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     * @precondition metadataManager != null
+     * @precondition tableTemplates != null
+     * @precondition templateFactory != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DatabaseMetaData metaData,
+        final MetadataManager metadataManager,
+        final TableTemplate[] tableTemplates,
+        final DAOTestTemplateFactory factory)
+      throws  BuildException
+    {
+        boolean result = false;
+
+        try
+        {
+            int t_iLength =
+                (tableTemplates != null) ? tableTemplates.length : 0;
+
+            String t_strPackage =
+                retrieveDAOTestPackage(
+                    metaData.getDatabaseProductName(),
+                    parameters);
+
+            DAOTestTemplate[] t_aDAOTestTemplates =
+                new DAOTestTemplate[t_iLength];
+
+            String t_strQuote = metaData.getIdentifierQuoteString();
+
+            if  (t_strQuote == null)
+            {
+                t_strQuote = "\"";
+            }
+
+            if  (t_strQuote.equals("\""))
+            {
+                t_strQuote = "\\\"";
+            }
+
+            for  (int t_iDAOTestIndex = 0;
+                      t_iDAOTestIndex < t_iLength;
+                      t_iDAOTestIndex++) 
+            {
+                t_aDAOTestTemplates[t_iDAOTestIndex] =
+                    factory.createDAOTestTemplate(
+                        tableTemplates[t_iDAOTestIndex],
+                        metadataManager,
+                        t_strPackage,
+                        metaData.getDatabaseProductName(),
+                        metaData.getDatabaseProductVersion(),
+                        t_strQuote,
+                        retrieveDAOPackage(
+                            metaData.getDatabaseProductName(),
+                            parameters),
+                        retrieveValueObjectPackage(parameters),
+                        retrieveJdbcDriver(parameters),
+                        retrieveJdbcUrl(parameters),
+                        retrieveJdbcUsername(parameters),
+                        retrieveJdbcPassword(parameters));
+
+                storeTestTemplate(
+                    t_aDAOTestTemplates[t_iDAOTestIndex],
+                    parameters);
+            }
+
+            storeDAOTestTemplates(t_aDAOTestTemplates, parameters);
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw new BuildException(sqlException);
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw new BuildException(queryjException);
+        }
+        
+        return result;
     }
 
     /**
@@ -273,7 +269,8 @@ public class DAOTestTemplateBuildHandler
         return
             packageUtils.retrieveDAOTestPackage(
                 retrieveProjectPackage(parameters),
-                engineName);
+                engineName,
+                retrieveUseSubfoldersFlag(parameters));
     }
 
     /**
@@ -350,62 +347,6 @@ public class DAOTestTemplateBuildHandler
         return
             packageUtils.retrieveValueObjectPackage(
                 retrieveProjectPackage(parameters));
-    }
-
-    /**
-     * Retrieves the JDBC driver from the attribute map.
-     * @param parameters the parameter map.
-     * @return the driver name.
-     * @throws BuildException if the driver retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveJdbcDriver(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.JDBC_DRIVER);
-    }
-
-    /**
-     * Retrieves the JDBC url from the attribute map.
-     * @param parameters the parameter map.
-     * @return the url name.
-     * @throws BuildException if the url retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveJdbcUrl(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.JDBC_URL);
-    }
-
-    /**
-     * Retrieves the JDBC username from the attribute map.
-     * @param parameters the parameter map.
-     * @return the username name.
-     * @throws BuildException if the username retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveJdbcUsername(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.JDBC_USERNAME);
-    }
-
-    /**
-     * Retrieves the JDBC password from the attribute map.
-     * @param parameters the parameter map.
-     * @return the password name.
-     * @throws BuildException if the password retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveJdbcPassword(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);
     }
 
     /**

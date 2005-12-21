@@ -1,0 +1,352 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate DAO factories.
+//
+// Version: $Revision$ ($Author$ at $Date$)
+//
+// $Id$
+//
+group DAOFactory;
+
+source(input) ::= <<
+<!
+  Generates a DAOFactory source file.
+  @param input.copyright_years the copyright's years.
+  @param input.table_name the table name.
+  @param input.package_name the package.
+  @param input.dao_class_name the DAO class name.
+  @param input.dao_factory_class_name the DAO factory class name.
+  @param input.dao_implementation_class_name the DAO implementation class name.
+  @params class
+!>
+<java_header(
+  years=input.copyright_years,
+  description=
+    [
+      first_line_description(
+        className=input.dao_implementation_class_name,
+        engineName=input.engine_name),
+      second_line_description(
+        className=input.dao_implementation_class_name,
+        engineName=input.engine_name)
+    ],
+    timestamp=input.timestamp)>
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName,
+    input.subpackage_name
+  ])>
+
+<project_imports(
+  daoPackageName=input.dao_package_name,
+  daoClassName=input.dao_class_name,
+  daoFactoryPackageName=input.dao_factory_package_name,
+  daoFactoryClassName=input.dao_factory_class_name,
+  daoImplementationPackageName=input.dao_implementation_package_name,
+  daoImplementationClassName=input.dao_implementation_class_name)>
+
+/*
+ + Importing some JDK classes.
+ */
+import java.lang.ref.WeakReference;
+
+/*
+ * Importing some Spring classes.
+ */
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+
+/*
+ * Importing some extension classes.
+ */
+import javax.sql.DataSource;
+
+/*
+ * Importing some commons-logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+
+<class(input=input)>
+>>
+
+first_line_description(className, engineName) ::= <<
+<!
+  Generates a description for the file.
+  @param className the class name.
+  @param engineName the engine name.
+!>
+Is able to create <className> instances according to
+>>
+
+second_line_description(className, engineName) ::= <<
+<!
+  Generates a description for the file.
+  @param className the class name.
+  @param engineName the engine name.
+!>
+information in the <engineName>-based persistence domain.
+>>
+
+project_imports(
+  daoPackageName,
+  daoClassName,
+  daoFactoryPackageName,
+  daoFactoryClassName,
+  daoImplementationPackageName,
+  daoImplementationClassName) ::= <<
+<!
+  Generates the import statements for the project classes.
+  @param daoPackageName the DAO package name.
+  @param daoClassName the DAO class name.
+  @param daoFactoryPackageName the DAO factory package name.
+  @param daoFactoryClassName the DAO factory class name.
+  @param daoImplementationPackageName the DAO implementation package name.
+  @param daoImplementationClassName the DAO implementation class name.
+!>
+/*
+ * Importing some project classes.
+ */
+import <daoPackageName>.<daoClassName>;
+import <daoFactoryPackageName>.<daoFactoryClassName>;
+import <daoImplementationPackageName>.<daoImplementationClassName>;
+
+/*
+ * Importing some QueryJ classes.
+ */
+import org.acmsl.queryj.dao.JndiUtils;
+import org.acmsl.queryj.dao.ThreadAwareDataSourceWrapper;
+>>
+
+class(input) ::= <<
+<!
+  Generates the class body.
+  @param input.dao_factory_implementation_class_name the class name.
+  @param input.engine_name the engine name.
+  @param input.timestamp the timestamp.
+  @param input.dao_factory_implementation_class_name the DAO factory
+  implementation class name.
+  @param input.dao_factory_class_name the DAO factory class name.
+  @param input.jndi_location the JNDI location.
+  @param input.table_name the table name.
+!>
+/**
+ * <[
+      first_line_description(
+        className=input.dao_implementation_class_name,
+        engineName=input.engine_name),
+      second_line_description(
+        className=input.dao_implementation_class_name,
+        engineName=input.engine_name)
+    ]:{ line |<line>}; separator="\n * ">
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public class <input.class_name>
+    extends  <input.dao_factory_class_name>
+{
+    /**
+     * The data source JNDI location.
+     */
+    public static final String JNDI_LOCATION = "<input.jndi_location>";
+
+    /**
+     * Singleton implemented as a weak reference.
+     */
+    private static WeakReference singleton;
+
+    /**
+     * Public constructor to allow reflective instantiation.
+     */
+    public <input.class_name>() {};
+
+    /**
+     * Specifies a new weak reference.
+     * @param factory the new \<code\><input.class_name>\</code\>
+     * instance.
+     */
+    private static void setReference(
+        final <input.class_name> factory)
+    {
+        singleton = new WeakReference(factory);
+    }
+
+    /**
+     * Retrieves the weak reference.
+     * @return such reference.
+     */
+    private static WeakReference getReference()
+    {
+        return singleton;
+    }
+
+    /**
+     * Retrieves a \<code\><input.dao_factory_implementation_class_name>\</code\>
+     * instance.
+     * @return such instance.
+     */
+    public static <input.class_name> get<input.engine_name>Instance()
+    {
+        <input.class_name> result = null;
+
+        WeakReference reference = getReference();
+
+        if  (reference != null) 
+        {
+            result = (<input.class_name>) reference.get();
+        }
+
+        if  (result == null) 
+        {
+            result = new <input.class_name>();
+
+            setReference(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Creates <input.engine_name>-specific <input.table_name> DAO.
+     * @return such DAO.
+     */
+    public <input.dao_class_name> create<input.dao_class_name>()
+    {
+        return create<input.dao_class_name>(getDataSource());
+    }
+
+    /**
+     * Creates <input.engine_name>-specific <input.table_name> DAO
+     * using given data source.
+     * @param dataSource the data source.
+     * @return such DAO.
+     * @precondition dataSource != null
+     */
+    protected <input.dao_class_name> create<input.dao_class_name>(final DataSource dataSource)
+    {
+        <input.dao_implementation_class_name> result = null;
+
+        if  (dataSource != null)
+        {
+            result = new <input.dao_implementation_class_name>(dataSource);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the data source.
+     * @return such data source.
+     */
+    protected DataSource getDataSource()
+    {
+        return getDataSource(JndiUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the data source.
+     * @param jndiUtils the \<code\>JndiUtils\</code\> instance.
+     * @return such data source.
+     * @precondition jndiUtils != null
+     */
+    protected DataSource getDataSource(final JndiUtils jndiUtils)
+    {
+        DataSource result = null;
+
+        try
+        {
+            result = jndiUtils.getDataSourceFromJndi(JNDI_LOCATION);
+        }
+        catch  (final CannotGetJdbcConnectionException cannotGetJdbcConnection)
+        {
+            // Assuming JNDI not available. The only way to retrieve
+            // the DataSource is reduced to transactional (thread-based)
+            // operations.
+            try
+            {
+                LogFactory.getLog(getClass()).info(
+                      "DataSource not present in JNDI context. "
+                    + "Assuming JNDI is not enabled.");
+            }
+            catch  (final Throwable throwable)
+            {
+                // Class loading problem.
+            }
+        }
+
+        if  (result == null)
+        {
+            result = new ThreadAwareDataSourceWrapper();
+        }
+        else
+        {
+            try
+            {
+                result = new ThreadAwareDataSourceWrapper(result);
+            }
+            catch  (final CannotGetJdbcConnectionException exception)
+            {
+                try
+                {
+                    LogFactory.getLog(getClass()).error(
+                        "Cannot retrieve connection", exception);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+            catch  (final Throwable throwable)
+            {
+                try
+                {
+                    LogFactory.getLog(getClass()).error(
+                        "Cannot retrieve data source", throwable);
+                }
+                catch  (final Throwable anotherThrowable)
+                {
+                    // class-loading problem.
+                }
+            }
+        }
+
+        return result;
+    }
+}
+>>

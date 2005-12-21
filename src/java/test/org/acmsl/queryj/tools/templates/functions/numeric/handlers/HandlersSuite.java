@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers.
+*              org.acmsl.queryj.tools.templates.functions.numeric.handlers.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers;
+package org.acmsl.queryj.tools.templates.functions.numeric.handlers;
 
 
 /*
@@ -95,15 +95,15 @@ public class HandlersSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers");
+    new TestSuite("org.acmsl.queryj.tools.templates.functions.numeric.handlers");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateHandlerBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateBuildHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsBundleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateWritingHandlerTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateHandlerBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateBuildHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTestTemplateWritingHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.handlers.NumericFunctionsTemplateWritingHandlerTest.class);
     
     
     

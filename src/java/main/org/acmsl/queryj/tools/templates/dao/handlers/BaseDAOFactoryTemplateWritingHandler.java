@@ -40,15 +40,12 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 
 /*
  * Importing some Ant classes.
@@ -68,136 +65,69 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class BaseDAOFactoryTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler
 {
     /**
-     * A cached empty base DAO factory template array.
-     */
-    public static final BaseDAOFactoryTemplate[]
-        EMPTY_BASE_DAO_FACTORY_TEMPLATE_ARRAY = new BaseDAOFactoryTemplate[0];
-
-    /**
-     * Creates a BaseDAOFactoryTemplateWritingHandler.
+     * Creates a <code>BaseDAOFactoryTemplateWritingHandler</code> instance.
      */
     public BaseDAOFactoryTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
     {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            try 
-            {
-                Map attributes = command.getAttributeMap();
-
-                BaseDAOFactoryTemplateGenerator
-                    t_BaseDAOFactoryTemplateGenerator =
-                        BaseDAOFactoryTemplateGenerator.getInstance();
-
-                BaseDAOFactoryTemplate[] t_aBaseDAOFactoryTemplates =
-                    retrieveBaseDAOFactoryTemplates(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                       != null) 
-                     && (t_aBaseDAOFactoryTemplates        != null)
-                     && (t_BaseDAOFactoryTemplateGenerator != null))
-                {
-                    for  (int t_iBaseDAOFactoryIndex = 0;
-                                t_iBaseDAOFactoryIndex
-                              < t_aBaseDAOFactoryTemplates.length;
-                              t_iBaseDAOFactoryIndex++)
-                    {
-                        t_BaseDAOFactoryTemplateGenerator.write(
-                            t_aBaseDAOFactoryTemplates[t_iBaseDAOFactoryIndex],
-                            t_OutputDir);
-                    }
-                }
-            }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
-        }
-        
-        return result;
+        return BaseDAOFactoryTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the base DAO factory templates from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
      */
-    protected BaseDAOFactoryTemplate[] retrieveBaseDAOFactoryTemplates(
-            Map parameters)
-        throws  BuildException
+    protected BasePerTableTemplate[] retrieveTemplates(
+        final Map parameters)
+      throws  BuildException
     {
-        BaseDAOFactoryTemplate[] result =
-            EMPTY_BASE_DAO_FACTORY_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (BaseDAOFactoryTemplate[])
-                    parameters.get(
-                        TemplateMappingManager.BASE_DAO_FACTORY_TEMPLATES);
-        }
-        
-        return result;
+        return
+            (BasePerTableTemplate[])
+                parameters.get(
+                    TemplateMappingManager.BASE_DAO_FACTORY_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param tableName the table name.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition projectFolder != null
+     * @precondition projectPackage != null
+     * @precondition engineName != null
+     * @precondition packageUtils != null
      */
-    protected File retrieveOutputDir(Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
+        final String tableName,
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
+      throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveBaseDAOFactoryFolder(
-                    (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters));
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveBaseDAOFactoryFolder(
+                projectFolder,
+                projectPackage,
+                useSubfolders);
     }
 }

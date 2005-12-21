@@ -82,38 +82,55 @@ public class DAOChooserTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @param command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given command.
+     * @param parameters the parameters.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @param parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                retrieveDAOChooserTemplate(parameters),
+                retrieveOutputDir(parameters),
+                DAOChooserTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Handles given command.
+     * @param parameters the parameters.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @param parameters != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final DAOChooserTemplate template,
+        final File outputDir,
+        final DAOChooserTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
-            {
-                Map attributes = command.getAttributeMap();
-
-                DAOChooserTemplateGenerator t_DAOChooserTemplateGenerator =
-                    DAOChooserTemplateGenerator.getInstance();
-
-                DAOChooserTemplate t_DAOChooserTemplate =
-                    retrieveDAOChooserTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                   != null) 
-                     && (t_DAOChooserTemplate          != null)
-                     && (t_DAOChooserTemplateGenerator != null))
-                {
-                    t_DAOChooserTemplateGenerator.write(
-                        t_DAOChooserTemplate, t_OutputDir);
-                }
-            }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+            generator.write(template, outputDir);
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -124,21 +141,15 @@ public class DAOChooserTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the repository instance.
      * @throws BuildException if the DAOChooser template process if faulty.
+     * @precondition parameters != null
      */
-    protected DAOChooserTemplate retrieveDAOChooserTemplate(Map parameters)
+    protected DAOChooserTemplate retrieveDAOChooserTemplate(final Map parameters)
         throws  BuildException
     {
-        DAOChooserTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DAOChooserTemplate)
-                    parameters.get(
-                        TemplateMappingManager.DAO_CHOOSER_TEMPLATE);
-        }
-        
-        return result;
+        return
+            (DAOChooserTemplate)
+                parameters.get(
+                    TemplateMappingManager.DAO_CHOOSER_TEMPLATE);
     }
 
     /**
@@ -146,43 +157,31 @@ public class DAOChooserTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(final Map parameters)
+      throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveDAOChooserFolder(
-                    (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters));
-        }
-
-        return result;
+        return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the package name from the attribute map.
+     * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
      */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-
-        return result;
+        return
+            packageUtils.retrieveDAOChooserFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

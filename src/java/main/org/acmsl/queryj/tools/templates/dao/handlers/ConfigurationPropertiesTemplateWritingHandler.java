@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the ConfigurationProperties template.
+ * Description: Writes ConfigurationProperties templates.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -40,13 +40,11 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
+import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.ConfigurationPropertiesTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -58,107 +56,71 @@ import org.apache.tools.ant.BuildException;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
- * Writes the DAO chooser template.
+ * Writes ConfigurationProperties templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class ConfigurationPropertiesTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
-     * Creates a ConfigurationPropertiesTemplateWritingHandler.
+     * Creates a <code>ConfigurationPropertiesTemplateWritingHandler</code>
+     * instance.
      */
     public ConfigurationPropertiesTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            try 
-            {
-                Map attributes = command.getAttributeMap();
-
-                ConfigurationPropertiesTemplateGenerator
-                    t_ConfigurationPropertiesTemplateGenerator =
-                        ConfigurationPropertiesTemplateGenerator.getInstance();
-
-                ConfigurationPropertiesTemplate
-                    t_ConfigurationPropertiesTemplate =
-                        retrieveConfigurationPropertiesTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                                != null) 
-                     && (t_ConfigurationPropertiesTemplate          != null)
-                     && (t_ConfigurationPropertiesTemplateGenerator != null))
-                {
-                    t_ConfigurationPropertiesTemplateGenerator.write(
-                        t_ConfigurationPropertiesTemplate, t_OutputDir);
-                }
-            }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
-        }
-        
-        return result;
+        return ConfigurationPropertiesTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the ConfigurationProperties template from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
-     * @return the repository instance.
-     * @throws BuildException if the ConfigurationProperties template process if faulty.
+     * @return the template.
+     * @throws BuildException if the template retrieval process if faulty.
      */
-    protected ConfigurationPropertiesTemplate
-        retrieveConfigurationPropertiesTemplate(Map parameters)
-        throws  BuildException
+    protected BasePerRepositoryTemplate retrieveTemplate(final Map parameters)
+      throws  BuildException
     {
-        ConfigurationPropertiesTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (ConfigurationPropertiesTemplate)
-                    parameters.get(
-                        TemplateMappingManager.CONFIGURATION_PROPERTIES_TEMPLATE);
-        }
-        
-        return result;
+        return
+            (BasePerRepositoryTemplate)
+                parameters.get(
+                    TemplateMappingManager.CONFIGURATION_PROPERTIES_TEMPLATE);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition projectFolder != null
+     * @precondition projectPackage != null
+     * @precondition engineName != null
+     * @precondition packageUtils != null
      */
-    protected File retrieveOutputDir(Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
+      throws  BuildException
     {
-        File result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-        }
-
-        return result;
+        return projectFolder;
     }
 }

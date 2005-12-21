@@ -81,38 +81,57 @@ public class DataAccessManagerTemplateWritingHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
      */
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters)
+        throws  BuildException
+    {
+        return
+            handle(
+                retrieveDataAccessManagerTemplate(parameters),
+                retrieveOutputDir(parameters),
+                DataAccessManagerTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Writes the DataAccessManager template.
+     * @param template the template.
+     * @param outputDir the output dir.
+     * @param generator the <code>DataAccessManagerTemplateGenerator</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition template != null
+     * @precondition outputDir != null
+     * @precondition generator != null
+     */
+    protected boolean handle(
+        final DataAccessManagerTemplate template,
+        final File outputDir,
+        final DataAccessManagerTemplateGenerator generator)
+      throws  BuildException
+    {
         boolean result = false;
 
-        if  (command != null) 
+        try 
         {
-            try 
-            {
-                Map attributes = command.getAttributeMap();
-
-                DataAccessManagerTemplateGenerator t_DataAccessManagerTemplateGenerator =
-                    DataAccessManagerTemplateGenerator.getInstance();
-
-                DataAccessManagerTemplate t_DataAccessManagerTemplate =
-                    retrieveDataAccessManagerTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                          != null) 
-                     && (t_DataAccessManagerTemplate          != null)
-                     && (t_DataAccessManagerTemplateGenerator != null))
-                {
-                    t_DataAccessManagerTemplateGenerator.write(
-                        t_DataAccessManagerTemplate, t_OutputDir);
-                }
-            }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
+            generator.write(template, outputDir);
+        }
+        catch  (final IOException ioException)
+        {
+            throw new BuildException(ioException);
         }
         
         return result;
@@ -123,21 +142,16 @@ public class DataAccessManagerTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the repository instance.
      * @throws BuildException if the data access manager template process if faulty.
+     * @precondition parameters != null
      */
-    protected DataAccessManagerTemplate retrieveDataAccessManagerTemplate(Map parameters)
-        throws  BuildException
+    protected DataAccessManagerTemplate retrieveDataAccessManagerTemplate(
+        final Map parameters)
+      throws  BuildException
     {
-        DataAccessManagerTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DataAccessManagerTemplate)
-                    parameters.get(
-                        TemplateMappingManager.DATA_ACCESS_MANAGER_TEMPLATE);
-        }
-        
-        return result;
+        return
+            (DataAccessManagerTemplate)
+                parameters.get(
+                    TemplateMappingManager.DATA_ACCESS_MANAGER_TEMPLATE);
     }
 
     /**
@@ -145,43 +159,32 @@ public class DataAccessManagerTemplateWritingHandler
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected File retrieveOutputDir(Map parameters)
+    protected File retrieveOutputDir(final Map parameters)
         throws  BuildException
     {
-        File result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveDataAccessManagerFolder(
-                    (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR),
-                    retrieveProjectPackage(parameters));
-        }
-
-        return result;
+        return
+            retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the package name from the attribute map.
+     * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such folder.
+     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition parameters != null
+     * @precondition packageUtils != null
      */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final Map parameters, final PackageUtils packageUtils)
+      throws  BuildException
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            packageUtils.retrieveDataAccessManagerFolder(
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters));
     }
 }

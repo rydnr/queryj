@@ -44,12 +44,6 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing JDK classes.
  */
 import java.util.ArrayList;
@@ -156,8 +150,6 @@ public abstract class AbstractDataAccessManagerTemplate
      * @param singletonBody the singleton body.
      * @param daoMethods the DAO methods.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     protected AbstractDataAccessManagerTemplate(
         final String header,
@@ -173,11 +165,8 @@ public abstract class AbstractDataAccessManagerTemplate
         final String daoReference,
         final String singletonBody,
         final String daoMethods,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

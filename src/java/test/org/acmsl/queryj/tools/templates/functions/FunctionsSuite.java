@@ -33,20 +33,20 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.templates.functions.
+*              org.acmsl.queryj.tools.templates.functions.
 *
 */
-package unittests.org.acmsl.queryj.tools.templates.functions;
+package org.acmsl.queryj.tools.templates.functions;
 
 
 /*
 * Importing project classes.
 */
 
-import unittests.org.acmsl.queryj.tools.templates.functions.numeric.NumericSuite;
-import unittests.org.acmsl.queryj.tools.templates.functions.system.SystemSuite;
-import unittests.org.acmsl.queryj.tools.templates.functions.text.TextSuite;
-import unittests.org.acmsl.queryj.tools.templates.functions.time.TimeSuite;
+import org.acmsl.queryj.tools.templates.functions.numeric.NumericSuite;
+import org.acmsl.queryj.tools.templates.functions.system.SystemSuite;
+import org.acmsl.queryj.tools.templates.functions.text.TextSuite;
+import org.acmsl.queryj.tools.templates.functions.time.TimeSuite;
 
 
 /*
@@ -99,14 +99,14 @@ public class FunctionsSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.templates.functions");
+    new TestSuite("org.acmsl.queryj.tools.templates.functions");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.templates.functions.FunctionsBundleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.FunctionsBundleTest.class);
     
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.numeric.NumericSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.system.SystemSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.text.TextSuite.suite());
-    suite.addTest(unittests.org.acmsl.queryj.tools.templates.functions.time.TimeSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.functions.numeric.NumericSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.functions.system.SystemSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.functions.text.TextSuite.suite());
+    suite.addTest(org.acmsl.queryj.tools.templates.functions.time.TimeSuite.suite());
     
     
     // JUnitDoclet begin method suite

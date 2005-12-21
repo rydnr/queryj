@@ -45,12 +45,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
-/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -74,10 +68,7 @@ public class DAOChooserTemplate
      * @param repository the repository.
      */
     public DAOChooserTemplate(
-        final String packageName,
-        final String repository,
-        final Project project,
-        final Task task)
+        final String packageName, final String repository)
     {
         super(
             DEFAULT_HEADER,
@@ -95,9 +86,7 @@ public class DAOChooserTemplate
             DEFAULT_PROPERTIES_ACCESSORS,
             DEFAULT_HELPER_METHODS,
             DEFAULT_GETDAOFACTORY_METHOD,
-            DEFAULT_CLASS_END,
-            project,
-            task);
+            DEFAULT_CLASS_END);
     }
 
     /**

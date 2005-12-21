@@ -41,16 +41,9 @@ package org.acmsl.queryj.tools.templates.valueobject;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-
-/*
- * Importing Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /**
  * Contains the subtemplates used to generate basic value objects
@@ -84,7 +77,7 @@ public abstract class AbstractValueObjectImplTemplate
     /**
      * The metadata manager.
      */
-    private DatabaseMetaDataManager m__MetaDataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
      * The ACM-SL import statements.
@@ -157,7 +150,7 @@ public abstract class AbstractValueObjectImplTemplate
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param tableTemplate the table template.
-     * @param metaDataManager the metadata manager.
+     * @param metadataManager the metadata manager.
      * @param acmslImports the ACM-SL imports.
      * @param jdkImports the JDK imports.
      * @param javadoc the class Javadoc.
@@ -171,15 +164,13 @@ public abstract class AbstractValueObjectImplTemplate
      * @param fieldValueSetterMethod the field value setter method.
      * @param fieldValueGetterMethod the field value getter method.
      * @param classEnd the class end.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      */
     public AbstractValueObjectImplTemplate(
         final String header,
         final String packageDeclaration,
         final String packageName,
         final TableTemplate tableTemplate,
-        final DatabaseMetaDataManager metaDataManager,
+        final MetadataManager metadataManager,
         final String acmslImports,
         final String jdkImports,
         final String javadoc,
@@ -192,17 +183,13 @@ public abstract class AbstractValueObjectImplTemplate
         final String constructorFieldValueSetter,
         final String fieldValueSetterMethod,
         final String fieldValueGetterMethod,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetTableTemplate(tableTemplate);
-        immutableSetMetaDataManager(metaDataManager);
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
         immutableSetAcmslImports(acmslImports);
         immutableSetJdkImports(jdkImports);
         immutableSetJavadoc(javadoc);
@@ -327,31 +314,31 @@ public abstract class AbstractValueObjectImplTemplate
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
+     * @param metadataManager the new metadata manager.
      */
-    private void immutableSetMetaDataManager(
-        DatabaseMetaDataManager metaDataManager)
+    private void immutableSetMetadataManager(
+        final MetadataManager metadataManager)
     {
-        m__MetaDataManager = metaDataManager;
+        m__MetadataManager = metadataManager;
     }
 
     /**
      * Specifies the metadata manager.
-     * @param metaDataManager the new metadata manager.
+     * @param metadataManager the new metadata manager.
      */
-    protected void setMetaDataManager(
-        DatabaseMetaDataManager metaDataManager)
+    protected void setMetadataManager(
+        final MetadataManager metadataManager)
     {
-        immutableSetMetaDataManager(metaDataManager);
+        immutableSetMetadataManager(metadataManager);
     }
 
     /**
      * Retrieves the metadata manager.
      * @return such information.
      */
-    public DatabaseMetaDataManager getMetaDataManager()
+    public MetadataManager getMetadataManager()
     {
-        return m__MetaDataManager;
+        return m__MetadataManager;
     }
 
     /**

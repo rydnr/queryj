@@ -41,21 +41,12 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.DatabaseMetaDataManager;
-import org.acmsl.queryj.tools.MetaDataUtils;
-import org.acmsl.queryj.tools.ProcedureMetaData;
-import org.acmsl.queryj.tools.ProcedureParameterMetaData;
+import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -188,11 +179,8 @@ public abstract class AbstractKeywordRepositoryTemplate
         final String singletonBody,
         final String keywordRetrievalMethodJavadoc,
         final String keywordRetrievalMethodBody,
-        final String classEnd,
-        final Project project,
-        final Task task)
+        final String classEnd)
     {
-        super(project, task);
         inmutableSetHeader(header);
         inmutableSetPackageDeclaration(packageDeclaration);
         inmutableSetPackageName(packageName);

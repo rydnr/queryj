@@ -46,12 +46,6 @@ import org.acmsl.queryj.tools.templates.TemplateFactory;
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplate;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-
 /**
  * Is able to generate JUnit templates test the Database's
  * text functions.
@@ -68,8 +62,6 @@ public interface TextFunctionsTestTemplateFactory
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return a template.
      * @throws QueryJException if the provided information is
      * invalid.
@@ -79,8 +71,6 @@ public interface TextFunctionsTestTemplateFactory
         String  testedPackageName,
         String  engineName,
         String  engineVersion,
-        String  quote,
-        Project project,
-        Task    task)
+        String  quote)
       throws  QueryJException;
 }

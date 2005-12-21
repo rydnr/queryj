@@ -33,10 +33,10 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              unittests.org.acmsl.queryj.tools.customsql.xml.
+*              org.acmsl.queryj.tools.customsql.xml.
 *
 */
-package unittests.org.acmsl.queryj.tools.customsql.xml;
+package org.acmsl.queryj.tools.customsql.xml;
 
 
 /*
@@ -95,28 +95,28 @@ public class XmlSuite
     TestSuite suite;
     
     suite =
-    new TestSuite("unittests.org.acmsl.queryj.tools.customsql.xml");
+    new TestSuite("org.acmsl.queryj.tools.customsql.xml");
     
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.PropertyRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ParameterElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.PropertyElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.StatementFlagsRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.SqlElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRuleTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.StatementFlagsElementFactoryTest.class);
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsRefElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.PropertyRefElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.ParameterElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsRefElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.ResultElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.PropertyElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.StatementFlagsRefElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.SqlElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.UntrimmedCallMethodRuleTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.StatementFlagsElementFactoryTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsRefElementFactoryTest.class);
     
     
     
     // JUnitDoclet begin method suite
-    suite.addTestSuite(unittests.org.acmsl.queryj.tools.customsql.xml.SqlXmlParserTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.customsql.xml.SqlXmlParserTest.class);
     // JUnitDoclet end method suite
     
     return suite;

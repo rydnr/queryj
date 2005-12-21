@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplate;
 import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateFactory;
@@ -62,8 +63,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -97,33 +96,24 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                command.getProject(),
-                command.getTask());
+        return handle(command.getAttributeMap());
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(
-        final Map parameters, final Project project, final Task task)
-      throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  BuildException
     {
         return
             handle(
                 parameters,
                 retrievePackage(parameters),
-                QueryPreparedStatementCreatorTemplateGenerator.getInstance(),
-                project,
-                task);
+                QueryPreparedStatementCreatorTemplateGenerator.getInstance());
     }
 
     /**
@@ -131,8 +121,6 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
      * @param parameters the parameters.
      * @param packageName the package name.
      * @param templateFactory the template factory.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -142,9 +130,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
     protected boolean handle(
         final Map parameters,
         final String packageName,
-        final QueryPreparedStatementCreatorTemplateFactory templateFactory,
-        final Project project,
-        final Task task)
+        final QueryPreparedStatementCreatorTemplateFactory templateFactory)
       throws  BuildException
     {
         boolean result = false;
@@ -153,9 +139,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
         {
             QueryPreparedStatementCreatorTemplate t_Template =
                 templateFactory.createQueryPreparedStatementCreatorTemplate(
-                    packageName,
-                    project,
-                    task);
+                    packageName);
 
             storeTemplate(t_Template, parameters);
         }
@@ -165,20 +149,6 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
         }
         
         return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**
