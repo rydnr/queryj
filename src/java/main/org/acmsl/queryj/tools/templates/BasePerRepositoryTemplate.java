@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.TableDecorator;
 
 /*
  * Importing some ACM-SL classes.
@@ -259,6 +260,7 @@ public abstract class BasePerRepositoryTemplate
         input.put("timestamp", timestamp);
     }
 
+
     /**
      * Fills the core parameters.
      * @param input the input.
@@ -270,8 +272,16 @@ public abstract class BasePerRepositoryTemplate
      * @param tables the tables.
      * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
+     * @precondition input != null
+     * @precondition metadataManager != null
+     * @precondition subpackageName != null
+     * @precondition basePackageName != null
+     * @precondition tableRepositoryName != null
+     * @precondition tables != null
+     * @precondition timestamp != null
+     * @precondition stringUtils != null
      */
-    protected abstract void fillCoreParameters(
+    protected void fillCoreParameters(
         final Map input,
         final MetadataManager metadataManager,
         final String subpackageName,
@@ -280,5 +290,72 @@ public abstract class BasePerRepositoryTemplate
         final String engineName,
         final Collection tables,
         final String timestamp,
-        final StringUtils stringUtils);
+        final StringUtils stringUtils)
+    {
+        input.put("tr_name", tableRepositoryName);
+
+        input.put(
+            "dao_subpackage_name",
+            retrieveDAOSubpackageName(
+                basePackageName, engineName, PackageUtils.getInstance()));
+
+        input.put("tables", decorateTables(tables, metadataManager));
+    }
+
+    /**
+     * Retrieves the DAO subpackage name.
+     * @param basePackageName the base package name.
+     * @param engineName the engine name.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such information.
+     */
+    protected String retrieveDAOSubpackageName(
+        final String basePackageName,
+        final String engineName,
+        final PackageUtils packageUtils)
+    {
+        return packageUtils.retrieveDAOPackage(basePackageName, engineName);
+    }
+
+    /**
+     * Decorates the tables.
+     * @param tables the tables.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated tables.
+     * @precondition tables != null
+     * @precondition metadataManager != null
+     */
+    protected Collection decorateTables(
+        final Collection tables, final MetadataManager metadataManager)
+    {
+        Collection result = new ArrayList();
+
+        Iterator t_itTableIterator = tables.iterator();
+        
+        if  (t_itTableIterator != null)
+        {
+            while  (t_itTableIterator.hasNext())
+            {
+                result.add(
+                    decorate(
+                        (String) t_itTableIterator.next(), metadataManager));
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Decorates given table.
+     * @param table the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated table.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     */
+    protected TableDecorator decorate(
+        final String table, final MetadataManager metadataManager)
+    {
+        return new TableDecorator(table, metadataManager);
+    }
 }

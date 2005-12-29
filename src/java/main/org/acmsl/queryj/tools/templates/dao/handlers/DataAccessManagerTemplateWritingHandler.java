@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the data access manager template.
+ * Description: Writes DataAccessManager templates.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -40,14 +40,11 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplate;
 import org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -59,132 +56,73 @@ import org.apache.tools.ant.BuildException;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
- * Writes the data access manager template.
+ * Writes DataAccessManager templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class DataAccessManagerTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
-     * Creates a DataAccessManagerTemplateWritingHandler.
+     * Creates a <code>DataAccessManagerTemplateWritingHandler</code>
+     * instance.
      */
     public DataAccessManagerTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        return handle(command.getAttributeMap());
+        return DataAccessManagerTemplateGenerator.getInstance();
     }
 
     /**
-     * Handles given parameters.
-     * @param parameters the parameters to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     */
-    protected boolean handle(final Map parameters)
-        throws  BuildException
-    {
-        return
-            handle(
-                retrieveDataAccessManagerTemplate(parameters),
-                retrieveOutputDir(parameters),
-                DataAccessManagerTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Writes the DataAccessManager template.
-     * @param template the template.
-     * @param outputDir the output dir.
-     * @param generator the <code>DataAccessManagerTemplateGenerator</code> instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition generator != null
-     */
-    protected boolean handle(
-        final DataAccessManagerTemplate template,
-        final File outputDir,
-        final DataAccessManagerTemplateGenerator generator)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try 
-        {
-            generator.write(template, outputDir);
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the data access manager template from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
-     * @return the repository instance.
-     * @throws BuildException if the data access manager template process if faulty.
-     * @precondition parameters != null
+     * @return the template.
+     * @throws BuildException if the template retrieval process if faulty.
      */
-    protected DataAccessManagerTemplate retrieveDataAccessManagerTemplate(
-        final Map parameters)
+    protected BasePerRepositoryTemplate retrieveTemplate(final Map parameters)
       throws  BuildException
     {
         return
-            (DataAccessManagerTemplate)
+            (BasePerRepositoryTemplate)
                 parameters.get(
                     TemplateMappingManager.DATA_ACCESS_MANAGER_TEMPLATE);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return
-            retrieveOutputDir(parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
+     * @precondition projectFolder != null
+     * @precondition projectPackage != null
+     * @precondition engineName != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveDataAccessManagerFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters));
+                projectFolder, projectPackage, useSubfolders);
     }
 }
