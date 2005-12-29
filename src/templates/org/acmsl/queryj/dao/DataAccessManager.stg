@@ -1,0 +1,237 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate the DataAccessManager class.
+//
+// Version: $Revision$ ($Author$ at $Date$)
+//
+// $Id$
+//
+group DataAccessManager;
+
+source(input) ::= <<
+<!
+ Generates the DataAccessManager.
+ @param input.copyright_years the copyright's years.
+ @param input.tables the tables.
+ @param input.repository the repository.
+!>
+<java_header(
+  years=input.copyright_years,
+  description=
+    [
+      first_line_description(model=input.repository),
+      second_line_description(model=input.repository)
+    ],
+    timestamp=input.timestamp)>
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName
+  ])>
+
+/*
+ * Importing project-specific classes.
+ */
+<tables:dao_import(table=it);
+
+/*
+ * Importing some JDK classes.
+ */
+import java.lang.ref.WeakReference;
+
+<class(input=input,foreign_keys_by_table=input.foreign_keys_by_table)>
+>>
+
+first_line_description(model) ::= <<
+<!
+ Writes the first line of the description.
+ @param model the repository name.
+!>
+Facade to facilitate access to all DAOs in
+>>
+
+second_line_description(model) ::= <<
+<!
+ Writes the second line of the description.
+ @param model the repository name.
+!>
+<model> model.
+>>
+
+dao_import(table) ::= <<
+<!
+ Writes the import statements for each DAO.
+ @param table the table.
+!>
+import <typeInitMap.baseDAOSubpackageName>.<table.voName>DAO;
+import <typeInitMap.baseDAOSubpackageName>.<table.voName>DAOFactory;
+>>
+
+class(input) ::= <<
+<!
+ Generates the class' source code.
+ @param input the input.
+!>
+/**
+ * <[
+      first_line_description(model=input.repository),
+      second_line_description(model=input.repository)
+    ]:{line |<line>}; separator="\n * ")>
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public class <input.repository>DataAccessManager
+{
+    /**
+     * Singleton implemented as a weak reference.
+     */
+    private static WeakReference singleton;
+
+    <input.tables:dao_attribute_declaration(table=it); separator="\n\n">
+
+    /**
+     * Protected constructor to avoid accidental instantiation.
+     */
+    protected DataAccessManager() {};
+
+    /**
+     * Specifies a new weak reference.
+     * @param manager the new manager instance.
+     */
+    private static void setReference(final DataAccessManager manager)
+    {
+        singleton = new WeakReference(manager);
+    }
+
+    /**
+     * Retrieves the weak reference.
+     * @return such reference.
+     */
+    private static WeakReference getReference()
+    {
+        return singleton;
+    }
+
+    /**
+     * Retrieves a \<code>DataAccessManager\</code> instance.
+     * @return such instance.
+     */
+    public static DataAccessManager getInstance()
+    {
+        DataAccessManager result = null;
+
+        WeakReference reference = getReference();
+
+        if  (reference != null) 
+        {
+            result = (DataAccessManager) reference.get();
+        }
+
+        if  (result == null) 
+        {
+            result = new DataAccessManager();
+
+            setReference(result);
+        }
+
+        return result;
+    }
+
+    <input.tables:dao_methods(table=it); separator="\n\n">
+}
+>>
+
+dao_attribute_declaration(table) ::= <<
+<!
+ Generates the attribute declaration for each DAO.
+ @param table the table.
+!>
+/**
+ * The \<code><table.voName>DAO\</code> reference (cached whereas Manager
+ * instance is not garbage collected).
+ */
+private <table.voName>DAO m__<table.voName>DAO;
+>>
+
+dao_methods(table) ::= <<
+<!
+ Generates the DAO-specific methods for each table.
+ @param table the table.
+!>
+/**
+ * Specifies the new \<code><table.voName>DAO\</code> reference to keep.
+ * @param dao the new DAO.
+ */
+protected void set<table.voName>DAOReference(final <table.voName>DAO dao)
+{
+    m__<table.voName>DAO = dao;
+}
+
+/**
+ * Retrieves the existing \<code><table.voName>DAO\</code> reference.
+ * @return a DAO instance for accessing <table.name> information.
+ */
+protected <table.voName>DAO get<table.voName>DAOReference()
+{
+    return m__<table.voName>DAO;
+}
+
+/**
+ * Retrieves a \<code><table.voName>DAO\</code>.
+ * @return a DAO instance for accessing <table.name> information.
+ */
+public <table.voName>DAO get<table.voName>DAO()
+{
+    <table.voName>DAO result = get<table.voName>DAOReference();
+
+    if  (result == null)
+    {
+        <table.voName>DAOFactory t_<table.voName>DAOFactory =
+            <table.voName>DAOFactory.getInstance();
+
+        if  (t_<table.voName>DAOFactory != null)
+        {
+            result = t_<table.voName>DAOFactory.create<table.voName>DAO();
+
+            set<table.voName>DAOReference(result);
+        }
+    }
+
+    return result;
+}
+>>
