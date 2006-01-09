@@ -1,0 +1,342 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate CustomResultSetExtractors.
+//
+// Version: $Revision$ ($Author$ at $Date$)
+//
+// $Id$
+//
+group AttributesStatementSetter;
+
+source(input) ::= <<
+<!
+  Generates a CustomResultSetExtractor source file.
+  @param input.copyright_years the copyright's years.
+  @param input.table_name the table name.
+  @param input.package the package.
+  @params project_imports
+  @params class
+!>
+<java_header(
+  years=input.copyright_years,
+  description=
+    [
+      first_line_description(result=input.result),
+      second_line_description(result=input.result)
+    ],
+    timestamp=input.timestamp)>
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName,
+    input.subpackage_name,
+    input.table_name_normalized_lowercased
+  ])>
+
+<project_imports(
+  result=input.result,
+  basePackageName=input.base_package_name,
+  trSubpackageName=typeInitMap.tableRepositorySubpackageName,
+  trName=input.tr_name)>
+
+/*
+ * Importing some ACM-SL classes.
+ */
+import org.acmsl.queryj.QueryResultSet;
+
+/*
+ * Importing Spring classes.
+ */
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
+
+/*
+ * Importing some JDK extension classes
+ */
+import javax.sql.DataSource;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+
+/*
+ * Importing Jakarta Commons Logging classes
+ */
+import org.apache.commons.logging.LogFactory;
+
+<class(result=input.result, input=input)>
+>>
+
+first_line_description(result) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param result the result.
+!>
+Extracts <result.name> instances
+>>
+
+second_line_description(result) ::= <<
+<!
+  Generates the second line of the generated file description.
+  @param result the result.
+!>
+ from java.sql.ResultSets.
+>>
+
+project_imports(result, basePackageName, trSubpackageName, trName) ::= <<
+<!
+ Generates the project imports.
+ @param result the result instance.
+ @param basePackageName the base package name.
+ @param trSubpackageName the table repository subpackage name.
+ @param trName the table repository name.
+!>
+/*
+ * Importing project classes.
+ */
+import <result.classValue>;
+import <result.classValue>Factory;
+import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+>>
+
+class(result, input) ::= <<
+<!
+ Generates the class body.
+ @param result the result.
+ @param input the input.
+!>
+/**
+ * <[
+      first_line_description(result=result),
+      second_line_description(result=result)
+    ]:{line |<line>}; separator="\n * ")>
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public class <result.idCapitalized>Extractor
+    implements  ResultSetExtractor,
+                <input.tr_name>TableRepository
+{
+<if(result.multiple)>
+<extract_data_with_multiple_result(result)>
+<else>
+<extract_data_with_single_result(result)>
+<endif>
+}
+>>
+
+extract_data_with_single_result(result) ::= <<
+<!
+ Generates the method to extract a single instance.
+ @param result the result entity in the model.
+!>
+// <extract data>
+/**
+ * Extracts \<i><result.name>\</i> information from given result set.
+ * @param resultSet the result set.
+ * @return the \<i><input.name>\</i> or \<code>null\</code>
+ * if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ <precondition_not_null(resultSet)>
+ */
+public Object extractData(final ResultSet resultSet)
+    throws  SQLException,
+            DataAccessException
+{
+    return
+        extractData(
+            resultSet, <result.classValue>Factory.getInstance());
+}
+
+/**
+ * Extracts \<i><result.name>\</i> information from given result set.
+ * @param resultSet the result set.
+ * @param factory the value object factory.
+ * @return the \<i><input.name>\</i> or \<code>null\</code>
+ * if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ <precondition_not_null(resultSet)>
+ */
+protected Object extractData(
+    final ResultSet resultSet, final <result.classValue>Factory factory)
+  throws  SQLException,
+          DataAccessException
+{
+    <input.classValue> result = null;
+
+    Long t_LongAux = null;
+    Integer t_IntAux = null;
+    Double t_DoubleAux = null;
+
+    if  (resultSet.next())
+    {
+        <result.properties:property_retrieval(property=it); separator="\n\n">
+
+        result =
+            factory.create<result.nameCapitalized>(
+                <result.properties:property_specification(property=it);
+                separator=",\n">));
+    }
+
+    return result;
+}
+>>
+
+extract_data_with_multiple_result(result) ::= <<
+<!
+ Generates the method to extract multiple instances.
+ @param result the result entity in the model.
+!>
+// <extract data>
+/**
+ * Extracts \<i><result.name>\</i> information from given result set.
+ * @param resultSet the result set.
+ * @return the list of retrieved \<code><result.classValue>\</code> instances.
+ * @throws SQLException intercepted by \<i>Spring\</i>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ <precondition_not_null(resultSet)>
+ */
+public Object extractData(final ResultSet resultSet)
+    throws  SQLException,
+            DataAccessException
+{
+    return
+        extractData(
+            resultSet,
+            <result.classValue>Factory.getInstance());
+}
+
+/**
+ * Extracts \<i><result.name>\</i> information from given result set.
+ * @param resultSet the result set.
+ * @param factory the value object factory.
+ * @return the list of retrieved \<i><result.name>\</i> instances.
+ * @throws SQLException intercepted by \<i>Spring\</i>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ <precondition_not_null(resultSet)>
+ <precondition_not_null(factory)>
+ */
+protected Object extractData(
+    final ResultSet resultSet,
+    final <result.classValue>Factory factory)
+  throws  SQLException,
+          DataAccessException
+{
+    Collection result = new ArrayList();
+
+    while  (resultSet.next())
+    {
+        <result.properties:property_retrieval(property=it); separator="\n\n">
+
+        result.add(
+            factory.create<result.nameCapitalized>(
+                <result.properties:property_specification(property=it);
+                separator=",\n">));
+    }
+
+    return result;
+}
+>>
+
+non_nullable_property_specification(property) ::= <<
+<!
+ Generates the code to retrieve and specify a value object's property.
+ @param property the property.
+!>
+resultSet.get<property.type>("<property.name>");
+>>
+
+nullable_property_retrieval(property) ::= <<
+<!
+ Generates the code to retrieve a nullable property.
+ @param property the property.
+!>
+<property.type> t_<property.type><property.nameLowercased> =
+    new <property.type>(
+        resultSet.get<property.type>(
+            "<property.name>"));
+
+if  (resultSet.wasNull())
+{
+    t_<property.type><property.nameLowercased> = null;
+}
+>>
+
+nullable_property_specification(property) ::= <<
+<!
+ Generaters the code to specify the value of a nullable value object's
+ property.
+ @param property the property.
+!>
+t_<property.type><property.nameLowercased>
+>>
+
+property_retrieval(property) ::= <<
+<!
+ Generates the code to specify a property.
+ @param property the property.
+!>
+<if(property.nullable)>
+<nullable_property_retrieval(property=property)>
+<endif>
+>>
+
+property_specification(property) ::= <<
+<!
+ Generates the code to specify a property.
+ @param property the property.
+!>
+<if(property.nullable)>
+<nullable_property_specification(property=property)>
+<else>
+<non_nullable_property_specification(property=property)>
+<endif>
+>>
