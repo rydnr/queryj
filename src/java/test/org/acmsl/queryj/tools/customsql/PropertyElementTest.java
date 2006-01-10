@@ -108,7 +108,9 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.customsql.PropertyElement("pp1", "column_name", 1, "name", "int");
+    return
+        new org.acmsl.queryj.tools.customsql.PropertyElement(
+            "pp1", "column_name", 1, "name", "int", true);
     // JUnitDoclet end method testcase.createInstance
   }
   

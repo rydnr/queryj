@@ -231,8 +231,7 @@ public class ResultDecorator
                         t_Property =
                             customSqlProvider.resolveReference(t_PropertyRef);
 
-                        result.add(t_Property);
-                            //new PropertyDecorator(t_Property));
+                        result.add(new PropertyDecorator(t_Property));
                     }
                     else
                     {
@@ -254,5 +253,4 @@ public class ResultDecorator
 
         return result;
     }
-
 }

@@ -294,38 +294,16 @@ public abstract class BasePerForeignKeyTemplate
         fillPackageDeclarationParameters(
             input, basePackageName, subpackageName);
 
-        /*
         fillProjectImportsParameters(
-            input,
-            basePackageName,
-            subpackageName,
-            tableName,
-            customResults,
-            voName,
-            foreignKeyAttributes);
+            input, basePackageName, subpackageName);
 
         fillClassParameters(
             input,
-            voName,
+            foreignKey,
             engineName,
             engineVersion,
             timestamp,
-            (staticAttributeName != null),
-            tableRepositoryName,
-            tableName,
-            primaryKeyAttributes,
-            nonPrimaryKeyAttributes,
-            foreignKeyAttributes,
-            referingKeys,
-            attributes,
-            externallyManagedAttributes,
-            allButExternallyManagedAttributes,
-            foreignKeys,
-            staticAttributeName,
-            staticAttributeType,
-            customSelects,
-            customResults);
-        */
+            tableRepositoryName);
     }
 
     /**
@@ -345,9 +323,7 @@ public abstract class BasePerForeignKeyTemplate
         final String engineName,
         final String engineVersion)
     {
-        /*
-        input.put("table_name",  tableName);
-        */
+        input.put("table_name",  foreignKey.getSourceTableName());
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);
     }
@@ -393,35 +369,17 @@ public abstract class BasePerForeignKeyTemplate
      * @param input the input.
      * @param basePackageName the base package.
      * @param subpackageName the name of the subpackage.
-     * @param tableName the table name.
-     * @param customResults the custom results.
-     * @param voName the name of the value object.
-     * @param fkAttributes the foreign-key attributes.
      * @precondition input != null
      * @precondition basePackageName != null
      * @precondition subpackageName != null
-     * @precondition tableName != null
-     * @precondition customResults != null
-     * @precondition voName != null
-     * @precondition fkAttributes != null
      */
     protected void fillProjectImportsParameters(
         final Map input,
         final String basePackageName,
-        final String subpackageName,
-        final String tableName,
-        final Collection customResults,
-        final String voName,
-        final Collection fkAttributes)
+        final String subpackageName)
     {
-        /*
         input.put("base_package_name", basePackageName);
         input.put("subpackage_name", subpackageName);
-        input.put("table_name", tableName);
-        input.put("custom_results", customResults);
-        input.put("vo_name", voName);
-        input.put("fk_attributes", fkAttributes);
-        */
     }
 
     /**
@@ -445,7 +403,6 @@ public abstract class BasePerForeignKeyTemplate
         final String engineName,
         final String engineVersion,
         final String timestamp,
-        final boolean staticTable,
         final String tableRepositoryName)
     {
         input.put("engine_name", engineName);
@@ -471,27 +428,12 @@ public abstract class BasePerForeignKeyTemplate
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager)
     {
-        Collection result = new ArrayList();
-
-        /*
-        String[][] t_aastrForeignKeys =
-            metadataManager.getForeignKeys(tableName);
-
-        int t_iLength =
-            (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            result.add(
-                buildAttributes(
-                    t_aastrForeignKeys[t_iIndex],
-                    tableName,
-                    metadataManager,
-                    metadataTypeManager));
-        }
-        */
-
-        return result;
+        return
+            buildAttributes(
+                foreignKey.getAttributes(),
+                foreignKey.getSourceTableName(),
+                metadataManager,
+                metadataTypeManager);
     }
 
     /**
