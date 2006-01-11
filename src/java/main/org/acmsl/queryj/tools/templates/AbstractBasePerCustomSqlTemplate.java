@@ -41,7 +41,8 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
@@ -56,17 +57,22 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Base logic for all per-table templates.
+ * Logicless container for all templates to be processed once per custom SQL.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class AbstractBasePerForeignKeyTemplate
+public abstract class AbstractBasePerCustomSqlTemplate
     extends  AbstractTemplate
 {
     /**
-     * The foreign key.
+     * The sql.
      */
-    private ForeignKey m__ForeignKey;
+    private SqlElement m__Sql;
+
+    /**
+     * The custom SQL provider.
+     */
+    private CustomSqlProvider m__CustomSqlProvider;
     
     /**
      * The database metadata manager.
@@ -89,11 +95,6 @@ public abstract class AbstractBasePerForeignKeyTemplate
     private String m__strEngineVersion;
 
     /**
-     * The quote.
-     */
-    private String m__strQuote;
-
-    /**
      * The base package name.
      */
     private String m__strBasePackageName;
@@ -104,64 +105,93 @@ public abstract class AbstractBasePerForeignKeyTemplate
     private String m__strRepositoryName;
 
     /**
-     * Builds a <code>AbstractBasePerForeignKeyTemplate</code> using
+     * Builds a <code>AbstractBasePerCustomSqlTemplate</code> using
      * given information.
-     * @param foreignKey the foreign key.
+     * @param sql the sql.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      */
-    public AbstractBasePerForeignKeyTemplate(
-        final ForeignKey foreignKey,
+    public AbstractBasePerCustomSqlTemplate(
+        final SqlElement sql,
+        final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote,
         final String basePackageName,
         final String repositoryName)
     {
-        immutableSetForeignKey(foreignKey);
+        immutableSetSql(sql);
+        immutableSetCustomSqlProvider(customSqlProvider);
         immutableSetMetadataManager(metadataManager);
         immutableSetPackageName(packageName);
         immutableSetEngineName(engineName);
         immutableSetEngineVersion(engineVersion);
-        immutableSetQuote(quote);
         immutableSetBasePackageName(basePackageName);
         immutableSetRepositoryName(repositoryName);
     }
 
     /**
-     * Specifies the foreign key.
-     * @param foreignKey the foreign key.
+     * Specifies the sql.
+     * @param sql the custom sql.
      */
-    protected final void immutableSetForeignKey(final ForeignKey foreignKey)
+    protected final void immutableSetSql(final SqlElement sql)
     {
-        m__ForeignKey = foreignKey;
+        m__Sql = sql;
     }
     
     /**
-     * Specifies the foreign key.
-     * @param foreignKey the foreign key.
+     * Specifies the sql.
+     * @param sql the custom sql.
      */
-    protected void setForeignKey(final ForeignKey foreignKey)
+    protected void setSql(final SqlElement sql)
     {
-        immutableSetForeignKey(foreignKey);
+        immutableSetSql(sql);
     }
     
     /**
-     * Retrieves the foreign key.
+     * Retrieves the sql.
      * @return such information.
      */
-    public ForeignKey getForeignKey()
+    public SqlElement getSql()
     {
-        return m__ForeignKey;
+        return m__Sql;
     }
 
+    /**
+     * Specifies the custom sql provider.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     */
+    protected final void immutableSetCustomSqlProvider(
+        final CustomSqlProvider customSqlProvider)
+    {
+        m__CustomSqlProvider = customSqlProvider;
+    }
+    
+    /**
+     * Specifies the custom sql provider.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     */
+    protected void setCustomSqlProvider(
+        final CustomSqlProvider customSqlProvider)
+    {
+        immutableSetCustomSqlProvider(customSqlProvider);
+    }
+
+    /**
+     * Retrieves the custom sql provider.
+     * @return such instance.
+     */
+    public CustomSqlProvider getCustomSqlProvider()
+    {
+        return m__CustomSqlProvider;
+    }
+    
     /**
      * Specifies the metadata manager.
      * @param metadataManager the metadata manager.
@@ -273,33 +303,6 @@ public abstract class AbstractBasePerForeignKeyTemplate
     }
 
     /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    private void immutableSetQuote(final String quote)
-    {
-        m__strQuote = quote;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    protected void setQuote(final String quote)
-    {
-        immutableSetQuote(quote);
-    }
-
-    /**
-     * Retrieves the identifier quote string.
-     * @return such identifier.
-     */
-    public String getQuote()
-    {
-        return m__strQuote;
-    }
-
-    /**
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
@@ -359,26 +362,22 @@ public abstract class AbstractBasePerForeignKeyTemplate
      */
     protected String buildHeader()
     {
-        return buildHeader(getTemplateName(), getForeignKey());
+        return buildHeader(getTemplateName(), getSql());
     }
 
     /**
      * Builds the header for logging purposes.
      * @param templateName the template name.
-     * @param foreignKey the foreign key.
+     * @param sql the sql.
      * @return such header.
      * @precondition templateName != null
-     * @precondition foreignKey != null
+     * @precondition sql != null
      */
     protected String buildHeader(
-        final String templateName, final ForeignKey foreignKey)
+        final String templateName, final SqlElement sql)
     {
         return
-              "Generating " + templateName + " for "
-            + foreignKey.getSourceTableName()
-            + "(" + concat(foreignKey.getAttributes(), ",") + ")"
-            + "->"
-            + foreignKey.getTargetTableName();
+              "Generating " + templateName + " for " + sql.getName();
     }
 
     /**
@@ -386,31 +385,4 @@ public abstract class AbstractBasePerForeignKeyTemplate
      * @return such information.
      */
     public abstract String getTemplateName();
-
-    /**
-     * Concatenates given list.
-     * @param list the list.
-     * @param separator the separator.
-     * @precondition list != null
-     */
-    protected String concat(final Collection list, final String separator)
-    {
-        return concat(list, separator, StringUtils.getInstance());
-    }
-
-    /**
-     * Concatenates given list.
-     * @param list the list.
-     * @param separator the separator.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @precondition list != null
-     * @precondition stringUtils != null
-     */
-    protected String concat(
-        final Collection list,
-        final String separator,
-        final StringUtils stringUtils)
-    {
-        return stringUtils.concatenate(list, separator);
-    }
 }
