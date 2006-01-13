@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 /*
  * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /**
@@ -241,12 +242,39 @@ public class TableDecorator
     }
 
     /**
-     * Retrieves the table's table in upper-case.
+     * Retrieves the table's name in lower-case, once normalized.
      * @return such information.
      */
     public String getNameNormalizedLowercased()
     {
         return
             normalizeLowercase(getName(), DecorationUtils.getInstance());
+    }
+
+
+    /**
+     * Retrieves the table's name in lower-case, once normalized.
+     * @return such information.
+     */
+    public String getSingularNameNormalizedLowercased()
+    {
+        return
+            normalizeLowercase(
+                getSingular(getName(), EnglishGrammarUtils.getInstance()),
+                DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the singular of given word.
+     * @param word the word.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code> instance.
+     * @return the singular.
+     * @precondition word != null
+     * @precondition englishGrammarUtils != null
+     */
+    protected String getSingular(
+        final String word, final EnglishGrammarUtils englishGrammarUtils)
+    {
+        return englishGrammarUtils.getSingular(word);
     }
 }

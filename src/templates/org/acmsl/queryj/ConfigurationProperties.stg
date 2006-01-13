@@ -65,7 +65,7 @@ source(input) ::= <<
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   subpackageName=typeInitMap.rdbSubpackageName,
   xmlSubpackageName=typeInitMap.xmlSubpackageName,
-  mockSubpackageName=typeInitMap.mockSubpackageName)>
+  mockSubpackageName=typeInitMap.mockSubpackageName);
  separator="\n\n">
 >>
 
@@ -139,7 +139,7 @@ dao_factory_property(
  @param mockSubpackageName the subpackage for Mock implementations.
 !>
 # <table.name> DAO implementation.
-<repository><table.nameLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName><engineName><table.voName>DAOFactory
-#<repository><table.nameLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<xmlSubpackageName>.Xml<table.voName>DAOFactory
-#<repository><table.nameLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<mockSubpackageName>.Mock<table.voName>DAOFactory
+<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineName><table.voName>DAOFactory
+#<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<xmlSubpackageName>.Xml<table.voName>DAOFactory
+#<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<mockSubpackageName>.Mock<table.voName>DAOFactory
 >>

@@ -151,6 +151,8 @@ public class ConfigurationPropertiesTemplate
     {
         input.put("tr_name", tableRepositoryName);
 
+        input.put("base_package_name", basePackageName);
+
         input.put(
             "dao_subpackage_name",
             retrieveDAOSubpackageName(
