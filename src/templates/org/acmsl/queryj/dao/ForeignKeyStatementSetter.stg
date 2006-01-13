@@ -55,15 +55,12 @@ source(input) ::= <<
 <java_header(
   years=input.copyright_years,
   description=
-    [
-      first_line_description(
-        tableName=input.table_name),
-      second_line_description(
-        tableName=input.table_name),
-      third_line_description(
-        foreignKey=input.foreign_key)
-    ],
-    timestamp=input.timestamp)>
+  [
+    first_line_description(tableName=input.table_name),
+    second_line_description(tableName=input.table_name),
+    third_line_description(foreignKey=input.foreign_key)
+  ],
+  timestamp=input.timestamp)>
 <package_declaration(
   packageNames=
   [
@@ -165,13 +162,10 @@ class(input, foreignKey) ::= <<
 !>
 /**
  * <[
-      first_line_description(
-        tableName=input.table_name),
-      second_line_description(
-        tableName=input.table_name),
-      third_line_description(
-        foreignKey=foreignKey)
-    ]:{line |<line>}; separator="\n * ")>
+      first_line_description(tableName=input.table_name),
+      second_line_description(tableName=input.table_name),
+      third_line_description(foreignKey=foreignKey)
+    ]:{line |<line>}; separator="\n * ">
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>

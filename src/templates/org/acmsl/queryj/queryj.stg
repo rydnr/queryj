@@ -51,7 +51,7 @@ typeInitMap ::= [
   "dataAccessManagerSubpackageName":"dao",
   "foreignKeyStatementSetterSubpackageName":"dao.rdb",
   "xmlSubpackageName":"xml",
-  "mockSubpackageName":"mock",
+  "mockSubpackageName":"mock"
 ]
 
 java_header(years,description,timestamp) ::= <<

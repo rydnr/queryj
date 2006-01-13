@@ -52,11 +52,11 @@ source(input) ::= <<
 <java_header(
   years=input.copyright_years,
   description=
-    [
-      first_line_description(voName=input.vo_name),
-      second_line_description(voName=input.vo_name)
-    ],
-    timestamp=input.timestamp)>
+  [
+    first_line_description(voName=input.vo_name),
+    second_line_description(voName=input.vo_name)
+  ],
+  timestamp=input.timestamp)>
 <package_declaration(
   packageNames=
   [
