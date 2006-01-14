@@ -40,7 +40,7 @@ package org.acmsl.queryj.tools.metadata.vo;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 
 /*
  * Importing JDK classes.
@@ -53,6 +53,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public abstract class AbstractForeignKey
+    implements ForeignKey
 {
     /**
      * The source table name.

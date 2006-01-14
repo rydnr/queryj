@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKeyValueObject;
 
 /*
  * Importing ACM-SL Commons classes.
@@ -714,7 +715,7 @@ public class MetadataUtils
             for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
             {
                 result.add(
-                    new ForeignKey(
+                    new ForeignKeyValueObject(
                         tableName,
                         buildAttributes(
                             t_aastrForeignKeys[t_iFkIndex],

@@ -140,13 +140,12 @@ public interface MetadataManager
         final int columnType);
 
     /**
-     * Retrieves the allow null.
+     * Retrieves whether the attribute allows null values.
      * @param tableName the table name.
-     * @param allowName the allow name.
-     * @return the allow null.
+     * @param columnName the column name.
+     * @return such condition.
      */
-    public boolean allowsNull(
-        final String tableName, final String allowName);
+    public boolean allowsNull(final String tableName, final String columnName);
     
     /**
      * Retrieves the allow null.
@@ -251,10 +250,10 @@ public interface MetadataManager
      *   {foreign-keyN-attribute1,..foreign-keyN-attributeN}
      * ..
      * [referredTableNameN]
-     *   {foreign-key1-attribute1,..foreign-key1-attributeN}
+     *   {foreign-keyM-attribute1,..foreign-keyM-attributeN}
      * ..
      * [referredTableNameN]
-     *   {foreign-keyN-attribute1,..foreign-keyN-attributeN}
+     *   {foreign-keyM-attribute1,..foreign-keyM-attributeN}
      * </pre>
      */
     public String[][] getForeignKeys(final String tableName);

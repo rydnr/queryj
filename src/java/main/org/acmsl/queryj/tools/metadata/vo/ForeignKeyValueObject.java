@@ -33,10 +33,15 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents foreign keys.
+ * Description: Logicless foreign key implementation.
  *
  */
 package org.acmsl.queryj.tools.metadata.vo;
+
+/*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.metadata.vo.AbstractForeignKey;
 
 /*
  * Importing JDK classes.
@@ -44,27 +49,27 @@ package org.acmsl.queryj.tools.metadata.vo;
 import java.util.Collection;
 
 /**
- * Represents foreign keys.
+ * Logicless foreign key implementation.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface ForeignKey
+public class ForeignKeyValueObject
+    extends  AbstractForeignKey
 {
     /**
-     * Retrieves the source table name.
-     * @return such table name.
+     * Creates a <code>ForeignKey</code> with given information.
+     * @param sourceTableName the source table name.
+     * @param attributes the attributes.
+     * @param targetTableName the target table name.
+     * @precondition sourceTableName the source table name.
+     * @precondition attributes != null
+     * @precondition targetTableName != null
      */
-    public String getSourceTableName();
-
-    /**
-     * Retrieves the attributes.
-     * @return such information.
-     */
-    public Collection getAttributes();
-
-    /**
-     * Retrieves the target table name.
-     * @return such table name.
-     */
-    public String getTargetTableName();
+    public ForeignKeyValueObject(
+        final String sourceTableName,
+        final Collection attributes,
+        final String targetTableName)
+    {
+        super(sourceTableName, attributes, targetTableName);
+    }
 }

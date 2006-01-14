@@ -79,8 +79,7 @@ public class AttributeDecorator
      * @precondition metadataManager != null
      */
     public AttributeDecorator(
-        final Attribute attribute,
-        final MetadataManager metadataManager)
+        final Attribute attribute, final MetadataManager metadataManager)
     {
         this(
             attribute.getName(),
