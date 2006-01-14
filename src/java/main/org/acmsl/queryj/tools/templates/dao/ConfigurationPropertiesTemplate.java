@@ -122,8 +122,8 @@ public class ConfigurationPropertiesTemplate
      * Fills the core parameters.
      * @param input the input.
      * @param metadataManager the database metadata manager.
-     * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
+     * @param subpackageName the subpackage name.
      * @param tableRepositoryName the table repository name.
      * @param engineName the engine name.
      * @param tables the tables.
@@ -141,8 +141,8 @@ public class ConfigurationPropertiesTemplate
     protected void fillCoreParameters(
         final Map input,
         final MetadataManager metadataManager,
-        final String subpackageName,
         final String basePackageName,
+        final String subpackageName,
         final String tableRepositoryName,
         final String engineName,
         final Collection tables,
