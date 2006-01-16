@@ -186,6 +186,20 @@ public class TableDecorator
     }
     
     /**
+     * Normalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the alternate version of the value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.normalize(value);
+    }
+    
+    /**
      * Retrieves the name, in lower case.
      * @return such value.
      */
@@ -265,6 +279,30 @@ public class TableDecorator
     }
 
     /**
+     * Retrieves the table's name in lower-case, once normalized.
+     * @return such information.
+     */
+    public String getNameNormalized()
+    {
+        return
+            normalize(getName(), DecorationUtils.getInstance());
+    }
+
+
+    /**
+     * Retrieves the table's name once normalized.
+     * @return such information.
+     */
+    public String getSingularNameCapitalized()
+    {
+        return
+            capitalize(
+                getSingular(
+                    lowercase(getName()), EnglishGrammarUtils.getInstance()),
+                DecorationUtils.getInstance());
+    }
+
+    /**
      * Retrieves the singular of given word.
      * @param word the word.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code> instance.
@@ -276,5 +314,16 @@ public class TableDecorator
         final String word, final EnglishGrammarUtils englishGrammarUtils)
     {
         return englishGrammarUtils.getSingular(word);
+    }
+
+    /**
+     * Converts given value to lower case.
+     * @param value the value.
+     * @return the lower-cased value.
+     * @precondition value != null
+     */
+    protected String lowercase(final String value)
+    {
+        return value.toLowerCase();
     }
 }

@@ -139,7 +139,7 @@ dao_factory_property(
  @param mockSubpackageName the subpackage for Mock implementations.
 !>
 # <table.name> DAO implementation.
-<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineName><table.voName>DAOFactory
-#<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<xmlSubpackageName>.Xml<table.voName>DAOFactory
-#<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<mockSubpackageName>.Mock<table.voName>DAOFactory
+<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineName><table.singularNameCapitalized>DAOFactory
+#<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<xmlSubpackageName>.Xml<table.singularNameCapitalized>DAOFactory
+#<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<mockSubpackageName>.Mock<table.singularNameCapitalized>DAOFactory
 >>
