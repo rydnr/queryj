@@ -60,6 +60,7 @@ source(input) ::= <<
 <input.tables:dao_factory_property(
   table=it,
   engineName=input.engine_name,
+  engineNameLowercased=input.engine_name_lowercased,
   repository=input.tr_name,
   basePackageName=input.base_package_name,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
@@ -121,6 +122,7 @@ header(years,description,timestamp) ::= <<
 dao_factory_property(
   table,
   engineName,
+  engineNameLowercased,
   repository, 
   basePackageName,
   baseDAOSubpackageName,
@@ -131,6 +133,7 @@ dao_factory_property(
  Generates the properties asociated to a concrete DAO.
  @param table the table.
  @param engineName the engine name.
+ @param engineNameLowercased the engine name, in lower case.
  @param repository the repository.
  @param basePackageName the base package name.
  @param baseDAOSubpackageName the base DAO subpackage name.
@@ -139,7 +142,7 @@ dao_factory_property(
  @param mockSubpackageName the subpackage for Mock implementations.
 !>
 # <table.name> DAO implementation.
-<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineName><table.singularNameCapitalized>DAOFactory
+<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineNameLowercased>.<engineName><table.singularNameCapitalized>DAOFactory
 #<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<xmlSubpackageName>.Xml<table.singularNameCapitalized>DAOFactory
 #<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<mockSubpackageName>.Mock<table.singularNameCapitalized>DAOFactory
 >>

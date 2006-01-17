@@ -151,6 +151,9 @@ public class ConfigurationPropertiesTemplate
     {
         input.put("tr_name", tableRepositoryName);
 
+        input.put("engine_name", engineName);
+        input.put("engine_name_lowercased", engineName.toLowerCase());
+
         input.put("base_package_name", basePackageName);
 
         input.put(
