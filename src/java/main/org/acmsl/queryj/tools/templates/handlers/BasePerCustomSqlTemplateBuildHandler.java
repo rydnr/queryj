@@ -72,6 +72,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -205,7 +206,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
         final String engineVersion,
         final String quote,
         final MetadataManager metadataManager,
-        final CustomSqlProvider customSQlProvider)
+        final CustomSqlProvider customSqlProvider)
       throws  BuildException
     {
         return
@@ -219,7 +220,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
                 retrieveTemplateFactory(),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
-                retrieveCustomSqlItems(
+                retrieveCustomSql(
                     parameters, customSqlProvider, metadataManager));
     }
     
@@ -283,7 +284,9 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
                 t_aTemplates[t_iIndex] =
                     templateFactory.createTemplate(
                         t_SqlElement,
+                        customSqlProvider,
                         metadataManager,
+                        retrievePackage(t_SqlElement, engineName, parameters),
                         engineName,
                         engineVersion,
                         projectPackage,
@@ -302,20 +305,21 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
 
     /**
      * Retrieves the package name from the attribute map.
-     * @param tableName the table name.
+     * @param customSql the custom SQL.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition customSql != null
      * @precondition parameters != null
      */
     protected String retrievePackage(
-        final String tableName, final String engineName, final Map parameters)
+        final SqlElement customSql, final String engineName, final Map parameters)
       throws  BuildException
     {
         return
             retrievePackage(
-                tableName,
+                customSql,
                 engineName,
                 retrieveProjectPackage(parameters),
                 PackageUtils.getInstance());
@@ -323,17 +327,15 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
 
     /**
      * Retrieves the package name.
-     * @param tableName the table name.
+     * @param customSql the custom SQL.
      * @param engineName the engine name.
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
      */
     protected abstract String retrievePackage(
-        final String tableName,
+        final SqlElement customSql,
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils);
@@ -360,13 +362,13 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
-    protected CustomSql[] retrieveCustomSql(
+    protected SqlElement[] retrieveCustomSql(
         final Map parameters,
-        final CustomSqlProvider,
+        final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
       throws  BuildException
     {
-        CustomSql[] result = (CustomSql[]) parameters.get(CUSTOM_SQL);
+        SqlElement[] result = (SqlElement[]) parameters.get(CUSTOM_SQL);
 
         if  (result == null)
         {
@@ -397,12 +399,34 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
-    protected SqlElement[] retrieveForeignKeys(
+    protected SqlElement[] retrieveCustomSqlElements(
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
     {
-        SqlElement[] result = EMPTY_SQL_ARRAY;
+        Collection t_cResult = new ArrayList();
+        
+        Collection t_cCollection = customSqlProvider.getCollection();
 
-        return result;
+        if  (t_cCollection != null)
+        {
+            Iterator t_itElements = t_cCollection.iterator();
+            
+            if  (t_itElements != null)
+            {
+                Object t_Item = null;
+
+                while  (t_itElements.hasNext())
+                {
+                    t_Item = t_itElements.next();
+                    
+                    if  (t_Item instanceof SqlElement)
+                    {
+                        t_cResult.add(t_Item);
+                    }
+                }
+            }
+        }
+        
+        return (SqlElement[]) t_cResult.toArray(EMPTY_SQL_ARRAY);
     }
 }
