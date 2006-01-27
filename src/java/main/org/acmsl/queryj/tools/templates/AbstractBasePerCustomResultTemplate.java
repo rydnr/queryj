@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Base logic for all per-custom sql templates.
+ * Description: Base logic for all per-custom result templates.
  *
  */
 package org.acmsl.queryj.tools.templates;
@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 
@@ -57,20 +57,20 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Logicless container for all templates to be processed once per custom SQL.
+ * Logicless container for all templates to be processed once per custom result.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class AbstractBasePerCustomSqlTemplate
+public abstract class AbstractBasePerCustomResultTemplate
     extends  AbstractTemplate
 {
     /**
-     * The sql.
+     * The result.
      */
-    private SqlElement m__Sql;
+    private ResultElement m__Result;
 
     /**
-     * The custom SQL provider.
+     * The custom result provider.
      */
     private CustomSqlProvider m__CustomSqlProvider;
     
@@ -105,9 +105,9 @@ public abstract class AbstractBasePerCustomSqlTemplate
     private String m__strRepositoryName;
 
     /**
-     * Builds a <code>AbstractBasePerCustomSqlTemplate</code> using
+     * Builds a <code>AbstractBasePerCustomResultTemplate</code> using
      * given information.
-     * @param sql the sql.
+     * @param result the result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
      * @param packageName the package name.
@@ -116,8 +116,8 @@ public abstract class AbstractBasePerCustomSqlTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      */
-    public AbstractBasePerCustomSqlTemplate(
-        final SqlElement sql,
+    public AbstractBasePerCustomResultTemplate(
+        final ResultElement result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String packageName,
@@ -126,7 +126,7 @@ public abstract class AbstractBasePerCustomSqlTemplate
         final String basePackageName,
         final String repositoryName)
     {
-        immutableSetSql(sql);
+        immutableSetResult(result);
         immutableSetCustomSqlProvider(customSqlProvider);
         immutableSetMetadataManager(metadataManager);
         immutableSetPackageName(packageName);
@@ -137,34 +137,34 @@ public abstract class AbstractBasePerCustomSqlTemplate
     }
 
     /**
-     * Specifies the sql.
-     * @param sql the custom sql.
+     * Specifies the result.
+     * @param result the custom result.
      */
-    protected final void immutableSetSql(final SqlElement sql)
+    protected final void immutableSetResult(final ResultElement result)
     {
-        m__Sql = sql;
+        m__Result = result;
     }
     
     /**
-     * Specifies the sql.
-     * @param sql the custom sql.
+     * Specifies the result.
+     * @param result the custom result.
      */
-    protected void setSql(final SqlElement sql)
+    protected void setResult(final ResultElement result)
     {
-        immutableSetSql(sql);
+        immutableSetResult(result);
     }
     
     /**
-     * Retrieves the sql.
+     * Retrieves the result.
      * @return such information.
      */
-    public SqlElement getSql()
+    public ResultElement getResult()
     {
-        return m__Sql;
+        return m__Result;
     }
 
     /**
-     * Specifies the custom sql provider.
+     * Specifies the custom result provider.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      */
     protected final void immutableSetCustomSqlProvider(
@@ -174,7 +174,7 @@ public abstract class AbstractBasePerCustomSqlTemplate
     }
     
     /**
-     * Specifies the custom sql provider.
+     * Specifies the custom result provider.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      */
     protected void setCustomSqlProvider(
@@ -184,7 +184,7 @@ public abstract class AbstractBasePerCustomSqlTemplate
     }
 
     /**
-     * Retrieves the custom sql provider.
+     * Retrieves the custom result provider.
      * @return such instance.
      */
     public CustomSqlProvider getCustomSqlProvider()
@@ -362,22 +362,22 @@ public abstract class AbstractBasePerCustomSqlTemplate
      */
     protected String buildHeader()
     {
-        return buildHeader(getTemplateName(), getSql());
+        return buildHeader(getTemplateName(), getResult());
     }
 
     /**
      * Builds the header for logging purposes.
      * @param templateName the template name.
-     * @param sql the sql.
+     * @param result the result.
      * @return such header.
      * @precondition templateName != null
-     * @precondition sql != null
+     * @precondition result != null
      */
     protected String buildHeader(
-        final String templateName, final SqlElement sql)
+        final String templateName, final ResultElement result)
     {
         return
-              "Generating " + templateName + " for " + sql.getName();
+              "Generating " + templateName + " for " + result.getId();
     }
 
     /**

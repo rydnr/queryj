@@ -32,7 +32,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create per-custom sql templates.
+ * Description: Represents entities able to create per-custom result
+ *             templates.
  *
  */
 package org.acmsl.queryj.tools.templates;
@@ -40,38 +41,29 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.SqlElement;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerCustomSqlTemplate;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
+
+
+/*
+ * Importing some JDK classes.
+ */
+import java.io.File;
+import java.io.IOException;
 
 /**
- * Represents entities able to create per-<i>custom sql</i> templates.
+ * Represents entities able to write per-custom result templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface BasePerCustomSqlTemplateFactory
+public interface BasePerCustomResultTemplateGenerator
 {
     /**
-     * Creates a per-<i>custom sql</i> template.
-     * @param sql the sql.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the database metadata manager.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
+     * Writes a per-custom result template to disk.
+     * @param template the template to write.
+     * @param outputDir the output folder.
+     * @throws IOException if the file cannot be created.
      */
-    public BasePerCustomSqlTemplate createTemplate(
-        final SqlElement sql,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName)
-      throws  QueryJException;
+    public void write(
+        final BasePerCustomResultTemplate template, final File outputDir)
+      throws  IOException;
 }

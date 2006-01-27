@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create per-custom sql templates.
+ * Description: Represents entities able to create per-custom result templates.
  *
  */
 package org.acmsl.queryj.tools.templates;
@@ -42,20 +42,20 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerCustomSqlTemplate;
 
 /**
- * Represents entities able to create per-<i>custom sql</i> templates.
+ * Represents entities able to create per-<i>custom result</i> templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface BasePerCustomSqlTemplateFactory
+public interface BasePerCustomResultTemplateFactory
 {
     /**
-     * Creates a per-<i>custom sql</i> template.
-     * @param sql the sql.
+     * Creates a per-<i>custom result</i> template.
+     * @param customResult the custom result.
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the database metadata manager.
      * @param packageName the package name.
@@ -64,8 +64,8 @@ public interface BasePerCustomSqlTemplateFactory
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      */
-    public BasePerCustomSqlTemplate createTemplate(
-        final SqlElement sql,
+    public BasePerCustomResultTemplate createTemplate(
+        final ResultElement customResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String packageName,
