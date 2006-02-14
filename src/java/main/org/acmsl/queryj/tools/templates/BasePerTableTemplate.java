@@ -57,7 +57,6 @@ import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.AbstractDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;

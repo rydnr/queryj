@@ -169,7 +169,8 @@ public class CustomResultSetExtractorTemplateWritingHandler
                     templates[t_iIndex],
                     retrieveOutputDir(
                         engineName,
-                        templates[t_iIndex].getTableTemplate().getTableName(),
+                        //TODO
+                        "", //templates[t_iIndex].getTableTemplate().getTableName(),
                         parameters,
                         retrieveUseSubfoldersFlag(parameters)));
             }

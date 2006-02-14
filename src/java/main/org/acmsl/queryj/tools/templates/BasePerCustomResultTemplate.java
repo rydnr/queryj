@@ -236,6 +236,7 @@ public abstract class BasePerCustomResultTemplate
             },
             customResult,
             customSqlProvider,
+            metadataManager,
             engineName,
             engineVersion,
             basePackageName,
@@ -256,6 +257,7 @@ public abstract class BasePerCustomResultTemplate
      * @param copyrightYears the copyright years.
      * @param result the result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the database metadata manager.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
@@ -269,6 +271,7 @@ public abstract class BasePerCustomResultTemplate
      * @precondition copyrightYears != null
      * @precondition result != null
      * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
      * @precondition engineName != null
      * @precondition engineVersion != null
      * @precondition basePackageName != null
@@ -283,6 +286,7 @@ public abstract class BasePerCustomResultTemplate
         final Integer[] copyrightYears,
         final ResultElement customResult,
         final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
         final String engineName,
         final String engineVersion,
         final String basePackageName,
@@ -293,7 +297,13 @@ public abstract class BasePerCustomResultTemplate
     {
         template.setAttribute("input", input);
 
-        fillCommonParameters(input, customResult, engineName, engineVersion);
+        fillCommonParameters(
+            input,
+            customResult,
+            customSqlProvider,
+            metadataManager,
+            engineName,
+            engineVersion);
 
         fillJavaHeaderParameters(input, copyrightYears, timestamp);
 
@@ -317,16 +327,22 @@ public abstract class BasePerCustomResultTemplate
      * Fills the common parameters.
      * @param input the input.
      * @param result the result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the database metadata manager.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @precondition input != null
      * @precondition result != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
      * @precondition engineName != null
      * @precondition engineVersion != null
      */
     protected void fillCommonParameters(
         final Map input,
         final ResultElement result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
         final String engineName,
         final String engineVersion)
     {

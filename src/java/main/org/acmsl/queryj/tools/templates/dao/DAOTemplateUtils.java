@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.IdentifiableElement;
 import org.acmsl.queryj.tools.customsql.ConnectionFlagsElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.ResultElement;
@@ -50,11 +51,6 @@ import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
 import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
-
-/*
- * Importing ACM-SL Commons classes.
- */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
  * Importing some JDK classes.
@@ -81,13 +77,13 @@ public class DAOTemplateUtils
      * An empty SqlElement array.
      */
     public static final SqlElement[] EMPTY_SQLELEMENT_ARRAY =
-        new SqlElement[0];
+        CustomResultUtils.EMPTY_SQLELEMENT_ARRAY;
 
     /**
      * An empty ResultElement array.
      */
     public static final ResultElement[] EMPTY_RESULTELEMENT_ARRAY =
-        new ResultElement[0];
+        CustomResultUtils.EMPTY_RESULTELEMENT_ARRAY;
 
     /**
      * An empty PropertyElement array.
@@ -593,48 +589,6 @@ public class DAOTemplateUtils
     }
 
     /**
-     * Checks whether given result element is suitable of being
-     * included in the DAO layer associated to a concrete table.
-     * @param resultElement the result element.
-     * @param tableName the table name.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @return <code>true</code> if it should be included.
-     * @precondition resultElement != null
-     * @precondition tableName != null
-     * @precondition customSqlProvider != null
-     */
-    public boolean matches(
-        final ResultElement resultElement,
-        final String tableName,
-        final CustomSqlProvider customSqlProvider)
-    {
-        boolean result = false;
-
-        SqlElement[] t_aSqlElements =
-            findSqlElementsByResultId(
-                resultElement.getId(), customSqlProvider);
-
-        if  (t_aSqlElements != null)
-        {
-            for  (int t_iIndex = 0;
-                      t_iIndex < t_aSqlElements.length;
-                      t_iIndex++)
-            {
-                if  (matches(
-                         tableName,
-                         t_aSqlElements[t_iIndex].getDao(),
-                         EnglishGrammarUtils.getInstance()))
-                {
-                    result = true;
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Finds all <code>SqlElement</code> instances associated to given
      * result element.
      * @param resultId such id.
@@ -647,40 +601,34 @@ public class DAOTemplateUtils
         final String resultId,
         final CustomSqlProvider customSqlProvider)
     {
-        Collection t_cResult = new ArrayList();
-
-        Collection t_cElements = customSqlProvider.getCollection();
-
-        if  (t_cElements != null)
-        {
-            Iterator t_itElements = t_cElements.iterator();
-
-            if  (t_itElements != null)
-            {
-                Object t_CurrentItem = null;
-
-                while  (t_itElements.hasNext())
-                {
-                    t_CurrentItem = t_itElements.next();
-
-                    if  (t_CurrentItem instanceof SqlElement)
-                    {
-                        ResultRefElement t_ResultRefElement =
-                            ((SqlElement) t_CurrentItem).getResultRef();
-
-                        if  (   (t_ResultRefElement != null)
-                             && (resultId.equals(t_ResultRefElement.getId())))
-                        {
-                            t_cResult.add(t_CurrentItem);
-                        }
-                    }
-                }
-            }
-        }
-
-        return (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+        return
+            findSqlElementsByResultId(
+                resultId,
+                customSqlProvider,
+                CustomResultUtils.getInstance());
     }
 
+    /**
+     * Finds all <code>SqlElement</code> instances associated to given
+     * result element.
+     * @param resultId such id.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @return all such entities.
+     * @precondition resultId != null
+     * @precondition customSqlProvider != null
+     * @precondition customResultUtils != null
+     */
+    protected SqlElement[] findSqlElementsByResultId(
+        final String resultId,
+        final CustomSqlProvider customSqlProvider,
+        final CustomResultUtils customResultUtils)
+    {
+        return
+            customResultUtils.findSqlElementsByResultId(
+                resultId, customSqlProvider);
+    }
+    
     /**
      * Checks whether given table name matches the DAO id.
      * @param tableName the table name.
@@ -692,48 +640,26 @@ public class DAOTemplateUtils
     public boolean matches(
         final String tableName, final String daoId)
     {
-        return matches(tableName, daoId, EnglishGrammarUtils.getInstance());
+        return matches(tableName, daoId, CustomResultUtils.getInstance());
     }
 
     /**
      * Checks whether given table name matches the DAO id.
      * @param tableName the table name.
      * @param daoId the DAO id.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param customResultUtils the <code>CustomResultUtils</code>
      * instance.
      * @return <code>true</code> if they match.
      * @precondition tableName != null
      * @precondition daoId != null
-     * @precondition englishGrammarUtils != null
+     * @precondition customResultUtils != null
      */
     protected boolean matches(
         final String tableName,
         final String daoId,
-        final EnglishGrammarUtils englishGrammarUtils)
+        final CustomResultUtils customResultUtils)
     {
-        boolean result = false;
-
-        String t_strTableInLowerCase = tableName.trim().toLowerCase();
-
-        result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
-
-        if  (!result)
-        {
-            String t_strSingularName =
-                englishGrammarUtils.getSingular(t_strTableInLowerCase);
-
-            result = daoId.equalsIgnoreCase(t_strSingularName);
-        }
-
-        if  (!result)
-        {
-            String t_strPluralName =
-                englishGrammarUtils.getPlural(t_strTableInLowerCase);
-
-            result = daoId.equalsIgnoreCase(t_strPluralName);
-        }
-
-        return result;
+        return customResultUtils.matches(tableName, daoId);
     }
 
     /**
@@ -747,38 +673,29 @@ public class DAOTemplateUtils
         final CustomSqlProvider customSqlProvider,
         final String type)
     {
-        Collection t_cResult = new ArrayList();
-
-        Collection t_cElements = null;
-
-        if  (customSqlProvider != null)
-        {
-            t_cElements = customSqlProvider.getCollection();
-        }
-
-        if  (t_cElements != null)
-        {
-            Iterator t_itElements = t_cElements.iterator();
-
-            if  (t_itElements != null)
-            {
-                Object t_CurrentItem = null;
-
-                while  (t_itElements.hasNext())
-                {
-                    t_CurrentItem = t_itElements.next();
-
-                    if  (   (t_CurrentItem instanceof SqlElement)
-                         && (type.equals(((SqlElement) t_CurrentItem).getType())))
-                    {
-                        t_cResult.add(t_CurrentItem);
-                    }
-                }
-            }
-        }
-
         return
-            (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+            retrieveSqlElementsByType(
+                customSqlProvider, type, CustomResultUtils.getInstance());
+    }
+
+    /**
+     * Retrieves all <code>SqlElement</code> instances of given type.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @param type the type.
+     * @return such elements.
+     * @precondition customSqlProvider != null
+     * @precondition type != null
+     * @precondition customResultUtils != null
+     */
+    protected SqlElement[] retrieveSqlElementsByType(
+        final CustomSqlProvider customSqlProvider,
+        final String type,
+        final CustomResultUtils customResultUtils)
+    {
+        return
+            customResultUtils.retrieveSqlElementsByType(
+                customSqlProvider, type);
     }
 
     /**
@@ -794,40 +711,32 @@ public class DAOTemplateUtils
         final CustomSqlProvider customSqlProvider,
         final String resultId)
     {
-        Collection t_cResult = new ArrayList();
-
-        Collection t_cElements = customSqlProvider.getCollection();
-
-        if  (t_cElements != null)
-        {
-            Iterator t_itElements = t_cElements.iterator();
-
-            if  (t_itElements != null)
-            {
-                Object t_CurrentItem = null;
-
-                ResultRefElement t_ResultRef = null;
-
-                while  (t_itElements.hasNext())
-                {
-                    t_CurrentItem = t_itElements.next();
-
-                    if  (t_CurrentItem instanceof SqlElement)
-                    {
-                        t_ResultRef = ((SqlElement) t_CurrentItem).getResultRef();
-
-                        if  (   (t_ResultRef != null)
-                             && (resultId.equals(t_ResultRef.getId())))
-                        {
-                            t_cResult.add(t_CurrentItem);
-                        }
-                    }
-                }
-            }
-        }
-
         return
-            (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+            retrieveSqlElementsByResultId(
+                customSqlProvider,
+                resultId,
+                CustomResultUtils.getInstance());
+    }
+
+    /**
+     * Retrieves all <code>SqlElement</code> instances associated to
+     * given result id.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param resultId the result id.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @return such elements.
+     * @precondition sqlProvider != null
+     * @precondition resultId != null
+     * @precondition customResultUtils != null
+     */
+    protected SqlElement[] retrieveSqlElementsByResultId(
+        final CustomSqlProvider customSqlProvider,
+        final String resultId,
+        final CustomResultUtils customResultUtils)
+    {
+        return
+            customResultUtils.retrieveSqlElementsByResultId(
+                customSqlProvider, resultId);
     }
 
     /**
@@ -842,27 +751,29 @@ public class DAOTemplateUtils
         final CustomSqlProvider customSqlProvider,
         final String type)
     {
-        Collection t_cResult = new ArrayList();
-
-        SqlElement[] t_aSqlElements =
-            retrieveSqlElementsByType(customSqlProvider, type);
-
-        ResultElement t_CurrentElement = null;
-
-        for  (int t_iIndex = 0; t_iIndex < t_aSqlElements.length; t_iIndex++)
-        {
-            t_CurrentElement =
-                customSqlProvider.resolveReference(
-                    t_aSqlElements[t_iIndex].getResultRef());
-
-            if  (t_CurrentElement != null)
-            {
-                t_cResult.add(t_CurrentElement);
-            }
-        }
-
         return
-            (ResultElement[]) t_cResult.toArray(EMPTY_RESULTELEMENT_ARRAY);
+            retrieveResultElementsByType(
+                customSqlProvider, type, CustomResultUtils.getInstance());
+    }
+
+    /**
+     * Retrieves all <code>ResultElement</code> instances of given type.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param type the type.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @return such elements.
+     * @precondition sqlProvider != null
+     * @precondition type != null
+     * @precondition customResultUtils != null
+     */
+    protected ResultElement[] retrieveResultElementsByType(
+        final CustomSqlProvider customSqlProvider,
+        final String type,
+        final CustomResultUtils customResultUtils)
+    {
+        return
+            customResultUtils.retrieveResultElementsByType(
+                customSqlProvider, type);
     }
 
     /**

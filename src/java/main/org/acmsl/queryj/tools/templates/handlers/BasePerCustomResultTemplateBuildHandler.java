@@ -286,7 +286,12 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                         t_ResultElement,
                         customSqlProvider,
                         metadataManager,
-                        retrievePackage(t_ResultElement, engineName, parameters),
+                        retrievePackage(
+                            t_ResultElement,
+                            customSqlProvider,
+                            metadataManager,
+                            engineName,
+                            parameters),
                         engineName,
                         engineVersion,
                         projectPackage,
@@ -306,6 +311,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * Retrieves the package name from the attribute map.
      * @param customResult the custom RESULT.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the database metadata manager.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
@@ -314,12 +321,18 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrievePackage(
-        final ResultElement customResult, final String engineName, final Map parameters)
+        final ResultElement customResult,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final String engineName,
+        final Map parameters)
       throws  BuildException
     {
         return
             retrievePackage(
                 customResult,
+                customSqlProvider,
+                metadataManager,
                 engineName,
                 retrieveProjectPackage(parameters),
                 PackageUtils.getInstance());
@@ -327,7 +340,9 @@ public abstract class BasePerCustomResultTemplateBuildHandler
 
     /**
      * Retrieves the package name.
-     * @param customResult the custom RESULT.
+     * @param customResult the custom result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the database metadata manager.
      * @param engineName the engine name.
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
@@ -336,6 +351,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     protected abstract String retrievePackage(
         final ResultElement customResult,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils);
