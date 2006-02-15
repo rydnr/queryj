@@ -3,7 +3,7 @@
  @license
                              QueryJ
 
-    Copyright (C) 2001-2005  Jose San Leandro Armend&aacute;riz
+    Copyright (C) 2001-2006  Jose San Leandro Armend&aacute;riz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@
   <name>QueryJ</name>
   <id>queryj</id>
   <groupId>org.acmsl.queryj</groupId>
-  <currentVersion>v24-1.9-synchr-4-SNAPSHOT</currentVersion>
+  <currentVersion>v24-1.9-synchr-4</currentVersion>
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>
