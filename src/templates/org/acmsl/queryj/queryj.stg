@@ -143,6 +143,14 @@ attribute_declaration(attr) ::= <<
 final <if(attr.clob)>String<else><attr.fieldType><endif> <attr.nameLowercased>
 >>
 
+attribute_isolated_declaration(attr) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute, isolated.
+  @param attr the attribute.
+!>
+<attribute_declaration(attr=attr)>,
+>>
+
 indirect_template(name, input) ::= <<
 <!
   Calls the template matching given name, passing the input as argument.

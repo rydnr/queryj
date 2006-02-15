@@ -124,13 +124,17 @@ public class MetaLanguageUtils
      * staticly.
      * @param tableComment the table's comment.
      * @return such attribute.
-     * @precondition tableCOmment != null
      */
     public String retrieveStaticAttribute(final String tableComment)
     {
         String result = null;
         
-        int t_iKeyIndex = tableComment.lastIndexOf("@static");
+        int t_iKeyIndex = -1;
+
+        if  (tableComment != null)
+        {
+            t_iKeyIndex = tableComment.lastIndexOf("@static");
+        }
 
         if  (t_iKeyIndex >= 0)
         {

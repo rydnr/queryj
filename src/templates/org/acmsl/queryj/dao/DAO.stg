@@ -1455,7 +1455,7 @@ resultset_extractor_constants(
  * The result set extractor for \<i><crseid>\</i> custom query.
  */
 public static final ResultSetExtractor
-    <crseidNormalizedUppercased>_EXTRACTOR =
+    <crseidNormalizedUppercased>_CUSTOM_EXTRACTOR =
         new <crseidCapitalized>Extractor();
 >>
 
@@ -1759,7 +1759,7 @@ custom_select(cs, input) ::= <<
     {
         return
             <cs.nameUncapitalized>(
-                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
+                <cs.parameters:{<it.nameLowercased>,}; separator="\n">
                 new PreparedStatementCreatorFactory(
                     <cs.splittedQuotedValue; separator=" +\n">),
                 new Object[]
@@ -1787,7 +1787,7 @@ custom_select(cs, input) ::= <<
      <precondition_notnull("dataSource")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
-        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
+        <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final DataSource dataSource)
@@ -1795,7 +1795,7 @@ custom_select(cs, input) ::= <<
     {
         return
             <cs.nameUncapitalized>(
-                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
+                <cs.parameters:{<it.nameLowercased>,}; separator="\n">
                 preparedStatementCreatorFactory,
                 params,
                 new DataSourceTransactionManager(dataSource));
@@ -1818,7 +1818,7 @@ custom_select(cs, input) ::= <<
      <precondition_notnull("transactionManager")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
-        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
+        <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final PlatformTransactionManager transactionManager)
@@ -1826,7 +1826,7 @@ custom_select(cs, input) ::= <<
     {
         return
             <cs.nameUncapitalized>(
-                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
+                <cs.parameters:{<it.nameLowercased>,}; separator="\n">
                 preparedStatementCreatorFactory,
                 params,
                 new TransactionTemplate(transactionManager));
@@ -1849,7 +1849,7 @@ custom_select(cs, input) ::= <<
      <precondition_notnull("transactionTemplate")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
-        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
+        <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final TransactionTemplate transactionTemplate)
@@ -1877,7 +1877,7 @@ custom_select(cs, input) ::= <<
                         // calls setXXX twice
                         // preparedStatementCreatorFactory
                         //     .newPreparedStatementSetter(t_aParams),
-                        <cs.resultIdAsConstant>_EXTRACTOR,
+                        <cs.resultIdAsConstant>_CUSTOM_EXTRACTOR,
                         this));
 
         return result;

@@ -67,6 +67,11 @@ public class ResultDecorator
     extends  ResultElement
 {
     /**
+     * The result element.
+     */
+    private ResultElement m__Result;
+
+    /**
      * The custom sql provider.
      * @todo remove this.
      */
@@ -87,8 +92,36 @@ public class ResultDecorator
             result.getId(),
             result.getClassValue(),
             result.getMatches());
+        immutableSetResult(result);
         immutableSetPropertyRefs(result.getPropertyRefs());
         immutableSetCustomSqlProvider(customSqlProvider);
+    }
+
+    /**
+     * Specifies the result.
+     * @param result the result.
+     */
+    protected final void immutableSetResult(final ResultElement result)
+    {
+        m__Result = result;
+    }
+
+    /**
+     * Specifies the result.
+     * @param result the result.
+     */
+    protected void setResult(final ResultElement result)
+    {
+        immutableSetResult(result);
+    }
+
+    /**
+     * Retrieves the result.
+     * @return such element.
+     */
+    public ResultElement getResult()
+    {
+        return m__Result;
     }
 
     /**
@@ -255,4 +288,54 @@ public class ResultDecorator
         return result;
     }
 
+    /**
+     * Retrieves the hashcode.
+     * @return such value.
+     */
+    public int hashCode()
+    {
+        return hashCode(getResult());
+    }
+
+    /**
+     * Retrieves the hashcode.
+     * @param result the result element.
+     * @return such value.
+     * @precondition result != null
+     */
+    protected int hashCode(final ResultElement result)
+    {
+        return result.hashCode();
+    }
+
+    /**
+     * Checks whether given instance is semantically equivalent to this one.
+     * @param instance the instance to compare with.
+     * @return the result of the check.
+     */
+    public boolean equals(final Object instance)
+    {
+        return equals(instance, getResult());
+    }
+
+    /**
+     * Checks whether given instance is semantically equivalent to this one.
+     * @param instance the instance to compare with.
+     * @param wrappedResult the wrapped result.
+     * @return the result of the check.
+     * @precondition wrappedResult != null
+     */
+    protected boolean equals(
+        final Object instance, final ResultElement wrappedResult)
+    {
+        boolean result = false;
+
+        if  (   (instance != null)
+             && (instance instanceof ResultElement))
+        {
+            result = instance.equals(wrappedResult);
+        }
+        
+        return result;
+    }
 }

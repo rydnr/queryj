@@ -222,6 +222,84 @@ public class ResultElement
     }
 
     /**
+     * Retrieves the hashcode.
+     * @return such value.
+     */
+    public int hashCode()
+    {
+        return
+            hashCode(
+                getId(), getClassValue(), getMatches(), getPropertyRefs());
+    }
+
+    /**
+     * Retrieves the hashcode.
+     * @param id the <i>id</i> attribute.
+     * @param classValue the <i>class</i> attribute.
+     * @param matches the <i>matches</i> attribute.
+     * @param propertyRefs the <i>property-ref</i> elements.
+     * @return such value.
+     */
+    protected int hashCode(
+        final String id,
+        final String classValue,
+        final String matches,
+        final Collection propertyRefs)
+    {
+        return
+            (id + "@#" + classValue + "#@" + matches + "@#" + propertyRefs)
+            .toLowerCase().hashCode();
+    }
+
+    /**
+     * Checks whether given instance is semantically equal to this one.
+     * @param instance the instance.
+     * @return <code>true</code> in such case.
+     */
+    public boolean equals(final Object instance)
+    {
+        return
+            equals(
+                instance,
+                getId(),
+                getClassValue(),
+                getMatches(),
+                getPropertyRefs());
+    }
+
+    /**
+     * Checks whether given instance is semantically equal to this one.
+     * @param id the <i>id</i> attribute.
+     * @param classValue the <i>class</i> attribute.
+     * @param matches the <i>matches</i> attribute.
+     * @param propertyRefs the <i>property-ref</i> elements.
+     * @return <code>true</code> in such case.
+     */
+    public boolean equals(
+        final Object instance,
+        final String id,
+        final String classValue,
+        final String matches,
+        final Collection propertyRefs)
+    {
+        boolean result = false;
+
+        if  (instance instanceof ResultElement)
+        {
+            ResultElement candidate = (ResultElement) instance;
+
+            result =
+                (   (id.equalsIgnoreCase(candidate.getId())
+                 && (classValue.equals(candidate.getClassValue()))
+                 && (matches.equalsIgnoreCase(candidate.getMatches()))
+                 && ("" + propertyRefs).equals(
+                         "" + candidate.getPropertyRefs())));
+        }
+        
+        return result;
+    }
+
+    /**
      * Provides a text information about this instance.
      * @return such information.
      */
