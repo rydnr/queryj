@@ -483,11 +483,19 @@ public class <input.engine_name><input.vo_name>DAO
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        return
-            findByPrimaryKey(
-                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-                query,
-                new TransactionTemplate(transactionManager));
+        <input.vo_name> result = null;
+
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            result =
+                findByPrimaryKey(
+                    <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                    query,
+                    new TransactionTemplate(transactionManager));
+        }
+
+        return result;
     }
 
     /**
@@ -623,10 +631,14 @@ public class <input.engine_name><input.vo_name>DAO
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        update(
-            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
-            query,
-            new TransactionTemplate(transactionManager));
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            update(
+                <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager));
+        }
     }
 
     /**
@@ -743,10 +755,14 @@ public class <input.engine_name><input.vo_name>DAO
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
-        deleteNoFk(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-            query,
-            new TransactionTemplate(transactionManager));
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            deleteNoFk(
+                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager));
+        }
     }
 
     /**
@@ -1710,10 +1726,14 @@ fk_delete_method(foreignKey,input) ::= <<
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
-        deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-            <foreignKey:{<it.nameLowercased>}; separator=",\n">,
-            query,
-            new TransactionTemplate(transactionManager));
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
+                <foreignKey:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager));
+        }
     }
 
     /**
@@ -1824,12 +1844,20 @@ custom_select(cs, input) ::= <<
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        return
-            <cs.nameUncapitalized>(
-                <cs.parameters:{<it.nameLowercased>,}; separator="\n">
-                preparedStatementCreatorFactory,
-                params,
-                new TransactionTemplate(transactionManager));
+        <cs.resultClass> result = null;
+
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            result =
+                <cs.nameUncapitalized>(
+                    <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+                    preparedStatementCreatorFactory,
+                    params,
+                    new TransactionTemplate(transactionManager));
+        }
+
+        return result;
     }
 
     /**
@@ -2021,10 +2049,14 @@ jdbcInsert(input) ::= <<
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        insert(
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
-            query,
-            new TransactionTemplate(transactionManager));
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            insert(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager));
+        }
     }
 
     /**
@@ -2260,11 +2292,19 @@ oracle8Insert(input) ::= <<
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        return
-            create(
-                <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
-                  separator=",\n">,
-                new TransactionTemplate(transactionManager));
+        <input.vo_name> result = null;
+
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            result =
+                create(
+                    <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+                      separator=",\n">,
+                    new TransactionTemplate(transactionManager));
+        }
+
+        return result;
     }
 
     /**
