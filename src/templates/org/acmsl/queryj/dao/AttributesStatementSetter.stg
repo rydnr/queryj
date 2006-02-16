@@ -193,13 +193,13 @@ public class <input.vo_name>AttributesStatementSetter
      * @param updateOperation whether the operation is an update.
      */
     public <input.vo_name>AttributesStatementSetter(
-        <input.attributes:attribute_declaration(attr=it);
-          separator=",\n">,
+        <input.attributes:attribute_isolated_declaration(attr=it);
+          separator="\n">
         final boolean updateOperation)
     {
         this(
-            <input.nonpk_attributes:{ attr | <attr.nameLowercased>};
-              separator=",\n">,
+            <input.nonpk_attributes:{ attr | <attr.nameLowercased>,};
+              separator="\n">
             updateOperation);
 
         <input.pk_attributes:
@@ -215,8 +215,8 @@ public class <input.vo_name>AttributesStatementSetter
      * @param updateOperation whether the operation is an update.
      */
     public <input.vo_name>AttributesStatementSetter(
-        <input.nonpk_attributes:attribute_declaration(attr=it);
-          separator=",\n">,
+        <input.nonpk_attributes:attribute_isolated_declaration(attr=it);
+          separator="\n">
         final boolean updateOperation)
     {
         <input.nonpk_attributes:
@@ -235,8 +235,8 @@ public class <input.vo_name>AttributesStatementSetter
      * @param selectForUpdateOperation whether the operation is a select-for-update.
      */
     public <input.vo_name>AttributesStatementSetter(
-        <input.all_but_lob_attributes:attribute_declaration(attr=it);
-          separator=",\n">,
+        <input.all_but_lob_attributes:attribute_isolated_declaration(attr=it);
+          separator="\n">
         final boolean updateOperation,
         final boolean selectForUpdateOperation)
     {
@@ -374,8 +374,8 @@ public class <input.vo_name>AttributesStatementSetter
         final Query query,
 
 <endif>
-        <input.attributes:attribute_declaration(attr=it);
-          separator=",\n">,
+        <input.attributes:attribute_isolated_declaration(attr=it);
+          separator="\n">
 <if(input.clobHandling)>
         final boolean updateOperation,
         final boolean selectForUpdateOperation)

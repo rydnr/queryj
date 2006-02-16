@@ -139,6 +139,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Types;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -247,12 +248,12 @@ import <basePackageName>.<damSubpackageName>.DataAccessManager;
 <fkAttributes:foreignkey_statementsetter_import(
   basePackageName=basePackageName,
   fkssSubpackageName=fkssSubpackageName,
-  voName=voName,
-  referredVOName=it.voName); separator="\n">
+  voName=it.sourceVoName,
+  referredVOName=it.targetVoName); separator="\n">
 <fkAttributes:foreignkey_dao_import(
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
-  referredVOName=it.voName); separator="\n">
+  referredVOName=it.sourceVoName); separator="\n">
 >>
 
 resultset_extractor_import(
@@ -813,7 +814,7 @@ public class <input.engine_name><input.vo_name>DAO
     {
         delete(
             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-            <input.fk_attributes:{dataAccessManager.get<it.tableName>DAO()}
+            <input.fk_attributes:{dataAccessManager.get<it.sourceVoName>DAO()}
               ; separator=",\n">);
     }
 
@@ -821,22 +822,21 @@ public class <input.engine_name><input.vo_name>DAO
      * Deletes \<code><input.vo_name>\</code> information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      <input.fk_attributes:dao_javadoc(
-       name=it.tableName,
-       uncapitalizedName=it.uncapitalizedTableName)
+       name=it.sourceTableName,
+       uncapitalizedName=it.sourceTableNameUncapitalized)
        ; separator="\n">
-     <input.fk_attributes:precondition_notnull(name=it.tableName); separator="\n">
+     <input.fk_attributes:precondition_notnull(name=it.sourceVoName);
+       separator="\n">
      */
     protected void delete(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         <input.fk_attributes:dao_declaration(
-          name=it.tableName,
-          uncapitalizedName=it.uncapitalizedTableName)
+          name=it.sourceVoName,
+          uncapitalizedName=it.sourceTableNameUncapitalized)
           ; separator=",\n">)
     {
-        <input.fk_attributes:fk_dao_delete_call(
-            foreignTableName=it.tableName,
-            foreignKey=foreign_keys_by_table.(table_name),
-            allowsNull=it.allowsNull); separator="\n\n">
+        <input.fk_attributes:fk_dao_delete_call(foreignKey=it);
+          separator="\n\n">
 <endif>
 
         deleteNoFk(
@@ -1589,24 +1589,19 @@ attribute_query_update(
 query.set(<tableNameUppercased>.<nameUppercased>);
 >>
 
-fk_dao_delete_call(
-  foreignTableName,
-  foreignKey,
-  allowsNull) ::= <<
+fk_dao_delete_call(foreignKey) ::= <<
 <!
   Writes the code needed to use the DAO associated to a
   concrete foreign key to perform a delete operation.
-  @param foreignTableName the name of the referred table.
   @param foreignKey the foreign key.
-  @param allowsNull whether the referred table allows null
   references.
 !>
-<if(allowsNull)>
-t_<foreignTableName>DAO.discardRelationTo<foreignKey:{attr |<attr.nameCapitalized>}>DAO(
+<if(foreignKey.allowsNull)>
+<foreignKey.targetVoName>DAO.discardRelationTo<foreignKey.sourceVoName>DAO(
 <else>
-t_<foreignTableName>DAO.deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>DAO(
+<foreignKey.targetVoName>DAO.deleteBy<foreignKey.sourceVoName>DAO(
 <endif>
-    <foreignKey:{attr |<attr.name>}; separator=",\n">);
+    <foreignKey.attributes:{attr |<attr.name>}; separator=",\n">);
 >>
 
 dao_javadoc(name,uncapitalizedName) ::= <<

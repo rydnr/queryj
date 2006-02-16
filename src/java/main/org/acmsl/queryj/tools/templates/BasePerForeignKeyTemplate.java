@@ -294,38 +294,19 @@ public abstract class BasePerForeignKeyTemplate
         fillPackageDeclarationParameters(
             input, basePackageName, subpackageName);
 
-        /*
         fillProjectImportsParameters(
             input,
             basePackageName,
             subpackageName,
-            tableName,
-            customResults,
-            voName,
-            foreignKeyAttributes);
+            foreignKey.getAttributes());
 
         fillClassParameters(
             input,
-            voName,
+            foreignKey,
             engineName,
             engineVersion,
             timestamp,
-            (staticAttributeName != null),
-            tableRepositoryName,
-            tableName,
-            primaryKeyAttributes,
-            nonPrimaryKeyAttributes,
-            foreignKeyAttributes,
-            referingKeys,
-            attributes,
-            externallyManagedAttributes,
-            allButExternallyManagedAttributes,
-            foreignKeys,
-            staticAttributeName,
-            staticAttributeType,
-            customSelects,
-            customResults);
-        */
+            tableRepositoryName);
     }
 
     /**
@@ -345,9 +326,7 @@ public abstract class BasePerForeignKeyTemplate
         final String engineName,
         final String engineVersion)
     {
-        /*
-        input.put("table_name",  tableName);
-        */
+        input.put("foreign_key", foreignKey);
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);
     }
@@ -393,35 +372,22 @@ public abstract class BasePerForeignKeyTemplate
      * @param input the input.
      * @param basePackageName the base package.
      * @param subpackageName the name of the subpackage.
-     * @param tableName the table name.
-     * @param customResults the custom results.
-     * @param voName the name of the value object.
      * @param fkAttributes the foreign-key attributes.
      * @precondition input != null
      * @precondition basePackageName != null
      * @precondition subpackageName != null
      * @precondition tableName != null
-     * @precondition customResults != null
-     * @precondition voName != null
      * @precondition fkAttributes != null
      */
     protected void fillProjectImportsParameters(
         final Map input,
         final String basePackageName,
         final String subpackageName,
-        final String tableName,
-        final Collection customResults,
-        final String voName,
         final Collection fkAttributes)
     {
-        /*
         input.put("base_package_name", basePackageName);
         input.put("subpackage_name", subpackageName);
-        input.put("table_name", tableName);
-        input.put("custom_results", customResults);
-        input.put("vo_name", voName);
         input.put("fk_attributes", fkAttributes);
-        */
     }
 
     /**
@@ -445,7 +411,6 @@ public abstract class BasePerForeignKeyTemplate
         final String engineName,
         final String engineVersion,
         final String timestamp,
-        final boolean staticTable,
         final String tableRepositoryName)
     {
         input.put("engine_name", engineName);
@@ -453,227 +418,6 @@ public abstract class BasePerForeignKeyTemplate
         input.put("timestamp", timestamp);
 
         input.put("tr_name", tableRepositoryName);
-    }
-
-    /**
-     * Retrieves the foreign key attributes.
-     * @param foreignKey the foreign key.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the foreign key attributes.
-     * @precondition foreignKey != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection retrieveForeignKeyAttributes(
-        final ForeignKey foreignKey,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        Collection result = new ArrayList();
-
-        /*
-        String[][] t_aastrForeignKeys =
-            metadataManager.getForeignKeys(tableName);
-
-        int t_iLength =
-            (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            result.add(
-                buildAttributes(
-                    t_aastrForeignKeys[t_iIndex],
-                    tableName,
-                    metadataManager,
-                    metadataTypeManager));
-        }
-        */
-
-        return result;
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection buildAttributes(
-        final String[] columnNames,
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildAttributes(
-                columnNames,
-                new String[columnNames.length],
-                tableName,
-                metadataManager,
-                metadataTypeManager);
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param columnValues the column values.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition columnValues != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection buildAttributes(
-        final String[] columnNames,
-        final String[] columnValues,
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildAttributes(
-                columnNames,
-                columnValues,
-                tableName,
-                null,
-                metadataManager,
-                metadataTypeManager);
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param tableName the table name.
-     * @param allowsNullAsAWhole whether given column names can be null
-     * as a whole or not.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
-     * instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection buildAttributes(
-        final String[] columnNames,
-        final String tableName,
-        final Boolean allowsNullAsAWhole,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            buildAttributes(
-                columnNames,
-                new String[columnNames.length],
-                tableName,
-                allowsNullAsAWhole,
-                metadataManager,
-                metadataTypeManager);
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param columnValues the column values.
-     * @param tableName the table name.
-     * @param allowsNullAsAWhole whether given column names can be null
-     * as a whole or not.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
-     * instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    protected Collection buildAttributes(
-        final String[] columnNames,
-        final String[] columnValues,
-        final String tableName,
-        final Boolean allowsNullAsAWhole,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        Collection result = new ArrayList();
-        
-        int t_iLength = (columnNames != null) ? columnNames.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            int t_iType =
-                metadataManager.getColumnType(
-                    tableName, columnNames[t_iIndex]);
-
-            String t_strNativeType =
-                metadataTypeManager.getNativeType(t_iType);
-
-            boolean t_bAllowsNull = false;
-
-            if  (allowsNullAsAWhole != null)
-            {
-                t_bAllowsNull = allowsNullAsAWhole.booleanValue();
-            }
-            else
-            {
-                t_bAllowsNull =
-                    metadataManager.allowsNull(
-                        tableName, columnNames[t_iIndex]);
-            }
-
-            String t_strFieldType =
-                metadataTypeManager.getFieldType(t_iType, t_bAllowsNull);
-
-            boolean t_bManagedExternally =
-                metadataManager.isManagedExternally(
-                    tableName, columnNames[t_iIndex]);
-
-            result.add(
-                new AttributeDecorator(
-                    columnNames[t_iIndex],
-                    t_iType,
-                    t_strNativeType,
-                    t_strFieldType,
-                    tableName,
-                    t_bManagedExternally,
-                    t_bAllowsNull,
-                    columnValues[t_iIndex],
-                    metadataManager,
-                    metadataTypeManager));
-        }
-        
-        return result;
-    }
-
-    /**
-     * Normalizes given value, in lower-case.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return such output.
-     * @precondition value != null
-     * @precondition decorationUtils != null
-     */
-    protected String normalizeLowercase(
-        final String value, final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalizeLowercase(value);
     }
 
     /**

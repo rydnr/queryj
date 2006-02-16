@@ -108,7 +108,7 @@ import java.util.Date;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(input=input)>
+<class(input=input, foreignKey=input.foreign_key)>
 >>
 
 first_line_description(tableName) ::= <<
@@ -148,9 +148,6 @@ project_imports(
 /*
  * Importing project classes.
  */
-import <basePackageName>.<voSubpackageName>.<voName>;
-import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
-import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
 
@@ -170,7 +167,7 @@ class(input, foreignKey) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.vo_name>By<foreignKey.tableName>StatementSetter
+public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
     implements  PreparedStatementSetter,
                 <input.tr_name>TableRepository
 {
@@ -182,16 +179,16 @@ public class <input.vo_name>By<foreignKey.tableName>StatementSetter
     private boolean m__bUpdateOperation;
 
     /**
-     * Creates a \<code><input.vo_name>By<foreignKey.tableName>StatementSetter\</code>
+     * Creates a \<code><foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter\</code>
      * instance.
-     <foreign_key.attributes:attribute_javadoc(name=it.nameLowercased);
+     <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
      */
-    public <input.vo_name>By<foreignKey.tableName>StatementSetter(
-        <foreign_key.attributes:attribute_declaration(attr=it);
+    public <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter(
+        <foreignKey.attributes:attribute_declaration(attr=it);
           separator=",\n">)
     {
-        <foreign_key.attributes:
+        <foreignKey.attributes:
           { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
           separator="\n">
     }
@@ -203,7 +200,7 @@ public class <input.vo_name>By<foreignKey.tableName>StatementSetter
      * @param preparedStatement the prepared statement.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      <precondition_notnull("preparedStatement")>
-     <precondition_instanceof("preparedStatement", "Query")>
+     <precondition_instanceof(name="preparedStatement", className="Query")>
      */
     public void setValues(final PreparedStatement preparedStatement)
         throws  SQLException

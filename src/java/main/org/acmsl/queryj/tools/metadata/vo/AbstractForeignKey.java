@@ -53,6 +53,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public abstract class AbstractForeignKey
+    implements  ForeignKey
 {
     /**
      * The source table name.
@@ -70,10 +71,16 @@ public abstract class AbstractForeignKey
     private String m__strTargetTableName;
     
     /**
+     * Whether the foreign key allows null values.
+     */
+    private boolean m__bAllowsNull;
+
+    /**
      * Creates an <code>AbstractForeignKey</code> with given information.
      * @param sourceTableName the source table name.
      * @param attributes the attributes.
      * @param targetTableName the target table name.
+     * @param allowsNull whether the foreign key can take null values.
      * @precondition sourceTableName the source table name.
      * @precondition attributes != null
      * @precondition targetTableName != null
@@ -81,11 +88,13 @@ public abstract class AbstractForeignKey
     protected AbstractForeignKey(
         final String sourceTableName,
         final Collection attributes,
-        final String targetTableName)
+        final String targetTableName,
+        final boolean allowsNull)
     {
         immutableSetSourceTableName(sourceTableName);
         immutableSetAttributes(attributes);
         immutableSetTargetTableName(targetTableName);
+        immutableSetAllowsNull(allowsNull);
     }
 
     /**
@@ -167,5 +176,32 @@ public abstract class AbstractForeignKey
     public String getTargetTableName()
     {
         return m__strTargetTableName;
+    }
+
+    /**
+     * Specifies whether the foreign key can take null values.
+     * @param allowsNull whether it allows null.
+     */
+    protected final void immutableSetAllowsNull(final boolean allowsNull)
+    {
+        m__bAllowsNull = allowsNull;
+    }
+
+    /**
+     * Specifies whether the foreign key can take null values.
+     * @param allowsNull whether it allows null.
+     */
+    protected void setAllowsNull(final boolean allowsNull)
+    {
+        immutableSetAllowsNull(allowsNull);
+    }
+
+    /**
+     * Retrieves wheter the foreign key can take null values.
+     * @return such information.
+     */
+    public boolean getAllowsNull()
+    {
+        return m__bAllowsNull;
     }
 }

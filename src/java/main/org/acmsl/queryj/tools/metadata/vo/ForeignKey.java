@@ -39,11 +39,6 @@
 package org.acmsl.queryj.tools.metadata.vo;
 
 /*
- * Importing project classes.
- */
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
-
-/*
  * Importing JDK classes.
  */
 import java.util.Collection;
@@ -53,23 +48,29 @@ import java.util.Collection;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class ForeignKey
-    extends AbstractForeignKey
+public interface ForeignKey
 {
     /**
-     * Creates a <code>ForeignKey</code> with given information.
-     * @param sourceTableName the source table name.
-     * @param attributes the attributes.
-     * @param targetTableName the target table name.
-     * @precondition sourceTableName the source table name.
-     * @precondition attributes != null
-     * @precondition targetTableName != null
+     * Retrieves the source table name.
+     * @return such table name.
      */
-    public ForeignKey(
-        final String sourceTableName,
-        final Collection attributes,
-        final String targetTableName)
-    {
-        super(sourceTableName, attributes, targetTableName);
-    }
+    public String getSourceTableName();
+    
+    /**
+     * Retrieves the attributes.
+     * @return such information.
+     */
+    public Collection getAttributes();
+    
+    /**
+     * Retrieves the target table name.
+     * @return such table name.
+     */
+    public String getTargetTableName();
+
+    /**
+     * Retrieves wheter the foreign key can take null values.
+     * @return such information.
+     */
+    public boolean getAllowsNull();
 }

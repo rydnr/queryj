@@ -953,13 +953,15 @@ public abstract class BasePerTableTemplate
                                     customSqlProvider.resolveReference(
                                         t_ResultRefElement);
 
-                                if  (   (t_ResultElement != null)
-                                     && (!result.contains(t_ResultElement)))
+                                if  (t_ResultElement != null)
                                 {
-                                    result.add(
-                                        new ResultDecorator(
-                                            t_ResultElement,
-                                            customSqlProvider));
+                                    if  (!result.contains(t_ResultElement))
+                                    {
+                                        result.add(
+                                            new ResultDecorator(
+                                                t_ResultElement,
+                                                customSqlProvider));
+                                    }
                                 }
                                 else
                                 {

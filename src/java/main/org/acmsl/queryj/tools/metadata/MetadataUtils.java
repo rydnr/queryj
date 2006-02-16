@@ -43,8 +43,10 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
+import org.acmsl.queryj.tools.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 
 /*
@@ -223,14 +225,48 @@ public class MetadataUtils
         int t_iLength =
             (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
 
+        Collection t_cAttributes = null;
+        Iterator t_itAttributeIterator = null;
+        ForeignKey t_CurrentFk = null;
+        Attribute t_FirstAttribute = null;
+        boolean t_bAllowsNullAsAWhole = false;
+
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            result.add(
+            t_cAttributes =
                 buildAttributes(
                     t_aastrForeignKeys[t_iIndex],
                     tableName,
                     metadataManager,
-                    metadataTypeManager));
+                    metadataTypeManager);
+
+            if  (   (t_cAttributes != null)
+                 && (t_cAttributes.size() > 0))
+            {
+                t_bAllowsNullAsAWhole =
+                    allowsNullAsAWhole(t_cAttributes);
+
+                t_itAttributeIterator = t_cAttributes.iterator();
+
+                if  (   (t_itAttributeIterator != null)
+                     && (t_itAttributeIterator.hasNext()))
+                {
+                    t_FirstAttribute =
+                        (Attribute) t_itAttributeIterator.next();
+
+                    if  (t_FirstAttribute != null)
+                    {
+                        t_CurrentFk =
+                            new ForeignKeyDecorator(
+                                t_FirstAttribute.getTableName(),
+                                t_cAttributes,
+                                tableName,
+                                t_bAllowsNullAsAWhole);
+
+                        result.add(t_CurrentFk);
+                    }
+                }
+            }
         }
 
         return result;
@@ -524,6 +560,36 @@ public class MetadataUtils
     /**
      * Builds the attributes associated to given column names.
      * @param columnNames the column names.
+     * @param allowsNullAsAWhole whether the attributes allow null.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code>
+     * instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return the attribute collection.
+     * @precondition columnNames != null
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    public Collection buildAttributes(
+        final String[] columnNames,
+        final String tableName,
+        final boolean allowsNullAsAWhole,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            buildAttributes(
+                columnNames,
+                tableName,
+                (allowsNullAsAWhole) ? Boolean.TRUE : Boolean.FALSE,
+                metadataManager,
+                metadataTypeManager);
+    }
+
+    /**
+     * Builds the attributes associated to given column names.
+     * @param columnNames the column names.
      * @param columnValues the column values.
      * @param tableName the table name.
      * @param metadataManager the <code>MetadataManager</code>
@@ -662,6 +728,76 @@ public class MetadataUtils
     }
 
     /**
+     * Checks whether the foreign key allows null or not.
+     * @param attributes the attributes.
+     * @return such information.
+     * @precondition attributes != null
+     */
+    public boolean allowsNullAsAWhole(final Collection attributes)
+    {
+        boolean result = false;
+
+        if  (attributes != null)
+        {
+            Iterator t_itAttributes = attributes.iterator();
+
+            if  (t_itAttributes != null)
+            {
+                Attribute t_CurrentAttribute = null;
+
+                while  (t_itAttributes.hasNext())
+                {
+                    t_CurrentAttribute = (Attribute) t_itAttributes.next();
+
+                    if  (   (t_CurrentAttribute != null)
+                         && (t_CurrentAttribute.getAllowsNull()))
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether the foreign key allows null or not.
+     * @param columnNames the column names.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code>
+     * instance.
+     * @return such information.
+     * @precondition columnNames != null
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     */
+    public boolean allowsNullAsAWhole(
+        final String[] columnNames,
+        final String tableName,
+        final MetadataManager metadataManager)
+    {
+        boolean result = false;
+        
+        int t_iLength = (columnNames != null) ? columnNames.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            result =
+                metadataManager.allowsNull(
+                    tableName, columnNames[t_iIndex]);
+
+            if  (result)
+            {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the foreign keys starting at given table.
      * @param tableName the table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
@@ -713,15 +849,23 @@ public class MetadataUtils
 
             for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
             {
+                boolean t_bAllowsNullAsAWhole = 
+                    allowsNullAsAWhole(
+                        t_aastrForeignKeys[t_iFkIndex],
+                        tableName,
+                        metadataManager);
+
                 result.add(
-                    new ForeignKey(
+                    new ForeignKeyDecorator(
                         tableName,
                         buildAttributes(
                             t_aastrForeignKeys[t_iFkIndex],
                             tableName,
+                            t_bAllowsNullAsAWhole,
                             metadataManager,
                             metadataTypeManager),
-                        t_astrReferredTables[t_iIndex]));
+                        t_astrReferredTables[t_iIndex],
+                        t_bAllowsNullAsAWhole));
             }
         }
 
