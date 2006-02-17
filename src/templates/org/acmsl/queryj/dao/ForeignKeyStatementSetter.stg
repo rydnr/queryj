@@ -193,7 +193,7 @@ public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
           separator="\n">
     }
 
-    <input.attributes:attribute_accessor(attr=it); separator="\n">
+    <foreignKey.attributes:attribute_accessor(attr=it); separator="\n">
 
     /**
      * Specifies the values on given \<code>PreparedStatement\</code>

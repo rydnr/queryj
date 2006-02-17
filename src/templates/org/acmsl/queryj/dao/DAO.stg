@@ -248,8 +248,7 @@ import <basePackageName>.<damSubpackageName>.DataAccessManager;
 <fkAttributes:foreignkey_statementsetter_import(
   basePackageName=basePackageName,
   fkssSubpackageName=fkssSubpackageName,
-  voName=it.sourceVoName,
-  referredVOName=it.targetVoName); separator="\n">
+  foreignKey=it); separator="\n">
 <fkAttributes:foreignkey_dao_import(
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
@@ -278,17 +277,15 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackage
 foreignkey_statementsetter_import(
   basePackageName,
   fkssSubpackageName,
-  voName,
-  referredVOName) ::= <<
+  foreignKey) ::= <<
 <!
   Generates the import statement of a foreign key statement setter.
   @param basePackageName the base package.
   @param fkssSubpackageName the subpackage of the foreign key attribute 
   statement setter.
-  @param voName the value object name.
-  @param referredVOName the referred value object name.
+  @param foreignKey the foreign key.
 !>
-import <basePackageName>.<fkssSubpackageName>.<voName>By<referredVOName>StatementSetter;
+//import <basePackageName>.<fkssSubpackageName>.<foreignKey.targetVoName>By<foreignKey.sourceVoName>StatementSetter;
 >>
 
 foreignkey_dao_import(
@@ -835,7 +832,8 @@ public class <input.engine_name><input.vo_name>DAO
           uncapitalizedName=it.sourceTableNameUncapitalized)
           ; separator=",\n">)
     {
-        <input.fk_attributes:fk_dao_delete_call(foreignKey=it);
+        <input.fk_attributes:fk_dao_delete_call(
+          foreignKey=it, pkAttributes=input.pk_attributes);
           separator="\n\n">
 <endif>
 
@@ -1589,19 +1587,19 @@ attribute_query_update(
 query.set(<tableNameUppercased>.<nameUppercased>);
 >>
 
-fk_dao_delete_call(foreignKey) ::= <<
+fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
 <!
   Writes the code needed to use the DAO associated to a
   concrete foreign key to perform a delete operation.
   @param foreignKey the foreign key.
-  references.
+  @param pkAttributes the pk attributes.  
 !>
 <if(foreignKey.allowsNull)>
-<foreignKey.targetVoName>DAO.discardRelationTo<foreignKey.sourceVoName>DAO(
+//<foreignKey.targetVoName>DAO.discardRelationTo<foreignKey.sourceVoName>(
 <else>
-<foreignKey.targetVoName>DAO.deleteBy<foreignKey.sourceVoName>DAO(
+//<foreignKey.targetVoName>DAO.deleteBy<foreignKey.sourceVoName>(
 <endif>
-    <foreignKey.attributes:{attr |<attr.name>}; separator=",\n">);
+<!    <pkAttributes:{<it.nameLowercased>}; separator=",\n">); !>
 >>
 
 dao_javadoc(name,uncapitalizedName) ::= <<
@@ -1781,7 +1779,8 @@ custom_select(cs, input) ::= <<
                 {
                     <cs.parameters:custom_select_parameter_value(
                       name=it.nameLowercased,
-                      objectType=it.objectType); separator=",\n">
+                      objectType=it.objectType,
+                      object=it.object); separator=",\n">
                 },
                 getDataSource());
     }
@@ -1919,16 +1918,18 @@ preparedStatementCreatorFactory.addParameter(
 
 custom_select_parameter_value(
   name,
-  objectType) ::= <<
+  objectType,
+  object) ::= <<
 <!
   Writes the value for a parameter of a custom select.
   @param name the parameter name.
   @param objectType the object type of the parameter.
+  @param object whether the parameter type is a class or a primitive.
 !>
-<if(objectType)>
-new <objectType>(<name>)
-<else>
+<if(object)>
 <name>
+<else>
+new <objectType>(<name>)
 <endif>
 >>
 
