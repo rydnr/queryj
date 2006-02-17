@@ -211,6 +211,17 @@ public class DecorationUtils
     }
     
     /**
+     * Normalizes given value, in upper case.
+     * @param value the value.
+     * @return the normalized value.
+     * @precondition value != null
+     */
+    public String softNormalizeUppercase(final String value)
+    {
+        return softNormalize(value).toUpperCase();
+    }
+    
+    /**
      * Normalizes given value,.
      * @param value the value.
      * @return the normalized value.
@@ -233,6 +244,31 @@ public class DecorationUtils
         final String value, final StringUtils stringUtils)
     {
         return stringUtils.normalize(value, '_');
+    }
+
+    /**
+     * Soft-normalizes given value.
+     * @param value the value.
+     * @return the normalized value.
+     * @precondition value != null
+     */
+    public String softNormalize(final String value)
+    {
+        return softNormalize(value, StringUtils.getInstance());
+    }
+    
+    /**
+     * Soft-normalizes given value.
+     * @param value the value.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the normalized value.
+     * @precondition value != null
+     * @precondition stringUtils != null
+     */
+    protected String softNormalize(
+        final String value, final StringUtils stringUtils)
+    {
+        return stringUtils.softNormalize(value);
     }
 
     /**

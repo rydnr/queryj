@@ -136,7 +136,7 @@
     <dependency>
       <groupId>acmsl-commons</groupId>
       <artifactId>acmsl-commons</artifactId>
-      <version>0.5.7b8</version>
+      <version>0.5.7b9-SNAPSHOT</version>
       <url>http://www.acm-sl.org/commons</url>
       <properties>
         <required.to.compile>true</required.to.compile>

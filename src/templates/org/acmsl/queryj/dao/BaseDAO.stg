@@ -146,7 +146,8 @@ public interface <input.vo_name>DAO
     public static final <input.vo_name>[] _ALL_QUERYJ_CONSTANTS_ =
         new <input.vo_name>[]
         {
-            <input.cached_rows:{<it.nameNormalizedUppercased>}; separator=",\n">
+            <input.cached_rows:{<it.nameNormalizedUppercased>};
+              separator=",\n">
         };
 
     <find_constant_method(
