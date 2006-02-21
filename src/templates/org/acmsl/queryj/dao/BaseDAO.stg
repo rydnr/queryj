@@ -215,6 +215,12 @@ public interface <input.vo_name>DAO
 
     <input.custom_selects:custom_select(
       cs=it, input=input); separator="\n">
+
+    <input.custom_updates_or_inserts:custom_update_or_insert(
+      cs=it, input=input); separator="\n">
+
+    <input.custom_selects_for_update:custom_select_for_update(
+      cs=it, input=input); separator="\n">
 }
 >>
 
@@ -300,3 +306,39 @@ public <cs.resultClass> <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException;
 >>
+
+custom_update_or_insert(cs, input) ::= <<
+<!
+ Writes the subtemplate for custom updates or inserts.
+  @param cs the custom sql.
+  @param input the input.
+!>
+/**
+ * Custom sql \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @throws DataAccessException if the operation fails.
+ */
+public void <cs.nameUncapitalized>(
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException;
+>>
+
+custom_select_for_update(cs, input) ::= <<
+<!
+  Writes the code for a custom select for update.
+  @param cs the custom sql.
+  @param input the input.
+!>
+/**
+ * Custom select for update \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+public <cs.resultClass> <cs.nameUncapitalized>(
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException;
+>>
+

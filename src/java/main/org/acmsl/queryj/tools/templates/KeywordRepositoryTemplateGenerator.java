@@ -175,8 +175,8 @@ public class KeywordRepositoryTemplateGenerator
         outputDir.mkdirs();
 
         String t_strNormalizedRepository =
-            stringUtils.normalize(
-                keywordRepositoryTemplate.getRepository(), '_');
+            stringUtils.capitalize(
+                keywordRepositoryTemplate.getRepository());
 
         fileUtils.writeFile(
               outputDir.getAbsolutePath()

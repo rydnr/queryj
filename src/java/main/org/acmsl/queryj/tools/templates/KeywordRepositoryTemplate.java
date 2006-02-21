@@ -161,10 +161,12 @@ public class KeywordRepositoryTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        String t_strRepository = stringUtils.capitalize(repository);
+
         Object[] t_aRepository =
             new Object[]
             {
-                stringUtils.normalize(repository, '_')
+                t_strRepository
             };
 
         Object[] t_aPackageName = new Object[]{packageName};
@@ -221,7 +223,7 @@ public class KeywordRepositoryTemplate
                         new Object[]
                         {
                             t_strFieldType,
-                            stringUtils.normalize(t_strKeyword, '_'),
+                            stringUtils.capitalize(t_strKeyword),
                             t_strKeyword
                         }));
             }
@@ -245,8 +247,7 @@ public class KeywordRepositoryTemplate
             t_Formatter.format(
                 new Object[]
                 {
-                    stringUtils.normalize(repository, '_')
-                    + "KeywordRepository"
+                    t_strRepository + "KeywordRepository"
                 }));
 
         t_sbResult.append(classStart);
@@ -256,8 +257,7 @@ public class KeywordRepositoryTemplate
             t_Formatter.format(
                 new Object[]
                 {
-                    stringUtils.normalize(repository, '_')
-                    + "KeywordRepository"
+                    t_strRepository + "KeywordRepository"
                 }));
 
         t_sbResult.append(t_sbKeywordRetrievalMethods);

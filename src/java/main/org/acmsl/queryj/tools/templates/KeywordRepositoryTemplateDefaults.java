@@ -127,7 +127,7 @@ public interface KeywordRepositoryTemplateDefaults
         + "     * Specifies a new weak reference.\n"
         + "     * @param repository the instance to use.\n"
         + "     */\n"
-        + "    public static void setReference({0} repository)\n"
+        + "    public static void setReference(final {0} repository)\n"
          // class name
         + "    '{'\n"
         + "        singleton = new WeakReference(repository);\n"

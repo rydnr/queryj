@@ -190,7 +190,7 @@ public class TableRepositoryTemplate
         Object[] t_aRepository =
             new Object[]
             {
-                stringUtils.normalize(repository, '_')
+                stringUtils.capitalize(repository)
             };
 
         Object[] t_aPackageName = new Object[]{packageName};

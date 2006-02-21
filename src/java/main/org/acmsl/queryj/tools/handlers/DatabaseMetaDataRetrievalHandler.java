@@ -1421,7 +1421,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 if  (t_Log != null)
                 {
-                    t_Log.warn(
+                    t_Log.info(
                         "Cannot retrieve database vendor's product version.",
                         sqlException);
                 }
@@ -1435,7 +1435,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 if  (t_Log != null)
                 {
-                    t_Log.warn(
+                    t_Log.debug(
                           "Cannot retrieve database vendor's major version "
                         + "number.",
                         sqlException);
@@ -1450,8 +1450,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 if  (t_Log != null)
                 {
-                    t_Log.warn(
-                          "Cannot retrieve database vendor's major version "
+                    t_Log.debug(
+                          "Cannot retrieve database vendor's minor version "
                         + "number.",
                         sqlException);
                 }

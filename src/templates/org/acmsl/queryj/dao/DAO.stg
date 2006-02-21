@@ -847,6 +847,10 @@ public class <input.engine_name><input.vo_name>DAO
   cs=it,
   input=input); separator="\n">
 
+<input.custom_updates_or_inserts:custom_update_or_insert(
+  cs=it,
+  input=input); separator="\n">
+
     /**
      * Extracts \<i><input.vo_name>\</i> value objects from result sets.
      * @author \<a href="http://maven.acm-sl.org/queryj">QueryJ\</a>
@@ -1906,8 +1910,7 @@ custom_select(cs, input) ::= <<
     }
 >>
 
-custom_select_parameter_type_specification(
-  type) ::= <<
+custom_select_parameter_type_specification(type) ::= <<
 <!
   Specifies the type of the parameter of a custom select.
   @param type the SQL type.
@@ -1931,6 +1934,70 @@ custom_select_parameter_value(
 <else>
 new <objectType>(<name>)
 <endif>
+>>
+
+custom_update_or_insert(cs, input) ::= <<
+<!
+ Writes the subtemplate for custom updates or inserts.
+  @param cs the custom sql.
+  @param input the input.
+!>
+/**
+ * Custom sql \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @throws DataAccessException if the operation fails.
+ */
+public void <cs.nameUncapitalized>(
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException
+{
+    PreparedStatementCreatorFactory
+        t_PreparedStatementCreatorFactory =
+            new PreparedStatementCreatorFactory(
+                <cs.splittedQuotedValue; separator=" +\n">);
+
+    /*
+    t_PreparedStatementCreatorFactory.setResultSetType(..);
+    t_PreparedStatementCreatorFactory.setUpdatableResults(..);
+    t_PreparedStatementCreatorFactory.setReturnGeneratedKeys(..);
+    t_PreparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
+     */
+
+    Object[] t_aParams =
+       new Object[]
+       {
+           <cs.parameters:custom_select_parameter_value(
+             name=it.nameLowercased,
+             objectType=it.objectType,
+             object=it.object); separator=",\n">
+        };
+
+    // Enabling transactions temporarily.
+    synchronized (DataSourceTransactionManager.class)
+    {
+       DataSourceTransactionManager t_TransactionManager =
+           new DataSourceTransactionManager(getDataSource());
+       TransactionTemplate t_TransactionTemplate =
+           new TransactionTemplate(t_TransactionManager);
+
+       t_TransactionTemplate.execute(
+           new UpdateTransactionCallback(
+               t_PreparedStatementCreatorFactory
+                  .newPreparedStatementCreator(t_aParams),
+               t_PreparedStatementCreatorFactory
+                  .newPreparedStatementSetter(t_aParams),
+               this));
+
+       /*
+       update(
+           t_PreparedStatementCreatorFactory
+              .newPreparedStatementCreator(t_aParams),
+           t_PreparedStatementCreatorFactory
+             .newPreparedStatementSetter(t_aParams));
+        */
+    }
+}
 >>
 
 defaultInsert(input) ::= <<
@@ -2382,4 +2449,49 @@ insert_attribute(attr) ::= <<
 <else>
 "?
 <endif>
+>>
+
+custom_select_for_update(cs, input) ::= <<
+<!
+  Writes the code for a custom select for update.
+  @param cs the custom select.
+  @param input the input.
+!>
+/**
+ * Custom select for update \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+<if(cs.resultClass)>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<else>
+public void <cs.nameUncapitalized>(
+<endif>
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException
+{
+<if(cs.resultClass)>
+    <cs.resultClass> result = null;
+<endif>
+    SqlQuery t_Query =
+        new SqlQuery(
+            getDataSource(),
+            <cs.splittedQuotedValue; separator=" +\n">);
+
+<if(cs.resultClass)>
+    List t_lResult = t_Query.execute();
+
+    if  (   (t_lResult != null)
+         && (t_lResult.size() > 0))
+    {
+        result = (<cs.resultClass>) t_lResult.get(0);
+    }
+
+    return result;
+<else>
+    t_Query.execute();
+<endif>
+}
 >>

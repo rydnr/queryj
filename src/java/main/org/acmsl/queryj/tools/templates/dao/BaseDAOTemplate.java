@@ -168,6 +168,8 @@ public class BaseDAOTemplate
      * @param staticAttributeType the type of the static attribute, or
      * <code>null</code> for non-static tables.
      * @param customSelects the custom selects.
+     * @param customUpdatesOrInserts the custom updates and inserts.
+     * @param customSelectsForUpdate the custom selects for update.
      * @param customResults the custom results.
      * @param metadataManager the database metadata manager.
      * @precondition input != null
@@ -187,6 +189,8 @@ public class BaseDAOTemplate
      * @precondition allButLobAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
+     * @precondition customUpdatesOrInserts != null
+     * @precondition customSelectsForUpdate != null
      * @precondition customResults != null
      * @precondition metadataManager != null
      */
@@ -212,6 +216,8 @@ public class BaseDAOTemplate
         final String staticAttributeName,
         final String staticAttributeType,
         final Collection customSelects,
+        final Collection customUpdatesOrInserts,
+        final Collection customSelectsForUpdate,
         final Collection customResults,
         final MetadataManager metadataManager)
     {
@@ -237,6 +243,8 @@ public class BaseDAOTemplate
             staticAttributeName,
             staticAttributeType,
             customSelects,
+            customUpdatesOrInserts,
+            customSelectsForUpdate,
             customResults,
             metadataManager);
 
