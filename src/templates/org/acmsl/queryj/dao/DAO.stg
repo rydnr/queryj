@@ -1953,7 +1953,7 @@ public void <cs.nameUncapitalized>(
   throws DataAccessException
 {
     PreparedStatementCreatorFactory
-        t_PreparedStatementCreatorFactory =
+        preparedStatementCreatorFactory =
             new PreparedStatementCreatorFactory(
                 <cs.splittedQuotedValue; separator=" +\n">);
 
@@ -1964,7 +1964,10 @@ public void <cs.nameUncapitalized>(
     t_PreparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
      */
 
-    Object[] t_aParams =
+    <cs.parameters:custom_select_parameter_type_specification(
+      type=it.sqlType); separator="\n">
+
+    Object[] params =
        new Object[]
        {
            <cs.parameters:custom_select_parameter_value(
@@ -1976,25 +1979,25 @@ public void <cs.nameUncapitalized>(
     // Enabling transactions temporarily.
     synchronized (DataSourceTransactionManager.class)
     {
-       DataSourceTransactionManager t_TransactionManager =
+       DataSourceTransactionManager transactionManager =
            new DataSourceTransactionManager(getDataSource());
-       TransactionTemplate t_TransactionTemplate =
-           new TransactionTemplate(t_TransactionManager);
+       TransactionTemplate transactionTemplate =
+           new TransactionTemplate(transactionManager);
 
-       t_TransactionTemplate.execute(
+       transactionTemplate.execute(
            new UpdateTransactionCallback(
-               t_PreparedStatementCreatorFactory
-                  .newPreparedStatementCreator(t_aParams),
-               t_PreparedStatementCreatorFactory
-                  .newPreparedStatementSetter(t_aParams),
+               preparedStatementCreatorFactory
+                  .newPreparedStatementCreator(params),
+               preparedStatementCreatorFactory
+                  .newPreparedStatementSetter(params),
                this));
 
        /*
        update(
            t_PreparedStatementCreatorFactory
-              .newPreparedStatementCreator(t_aParams),
+              .newPreparedStatementCreator(params),
            t_PreparedStatementCreatorFactory
-             .newPreparedStatementSetter(t_aParams));
+             .newPreparedStatementSetter(params));
         */
     }
 }
