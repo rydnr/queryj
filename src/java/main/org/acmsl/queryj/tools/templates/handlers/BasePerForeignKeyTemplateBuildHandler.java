@@ -499,20 +499,34 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
         MetadataTypeManager t_TypeManager =
             metadataManager.getMetadataTypeManager();
-        
+
+        Attribute t_Attribute = null;
+        boolean t_bAllowsNull = false;
+
         for  (int t_iIndex = 0; t_iIndex < t_iAttributeLength; t_iIndex++)
         {
-            t_cAttributes.add(
+            t_Attribute =
                 buildAttribute(
                     attributes[t_iIndex],
                     sourceTable,
                     metadataManager,
-                    t_TypeManager));
+                    t_TypeManager);
+
+            if  (t_Attribute != null)
+            {
+                t_cAttributes.add(t_Attribute);
+
+                if  (   (!t_bAllowsNull)
+                     && (t_Attribute.getAllowsNull()))
+                {
+                    t_bAllowsNull = true;
+                }
+            }
         }
 
         result =
             new ForeignKeyValueObject(
-                sourceTable, t_cAttributes, targetTable);
+                sourceTable, t_cAttributes, targetTable, t_bAllowsNull);
 
         return result;
     }

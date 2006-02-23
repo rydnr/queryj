@@ -55,16 +55,22 @@ public interface ForeignKey
      * @return such table name.
      */
     public String getSourceTableName();
-
+    
     /**
      * Retrieves the attributes.
      * @return such information.
      */
     public Collection getAttributes();
-
+    
     /**
      * Retrieves the target table name.
      * @return such table name.
      */
     public String getTargetTableName();
+
+    /**
+     * Retrieves wheter the foreign key can take null values.
+     * @return such information.
+     */
+    public boolean getAllowsNull();
 }

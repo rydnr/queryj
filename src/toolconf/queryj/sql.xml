@@ -85,16 +85,16 @@
 
 <sql-list>
   <sql
-    id="find-bank-accounts-by-user-id"
-    dao="um_bank_account"
-    name="find-bank-account-by-user-id"
+    id="test-query"
+    dao="q_sql"
+    name="test-query"
     type="select"
     implementation="all"
     validate="true">
-    <description>Retrieves the bank accounts of a user</description>
-    <value>select * from um_bank_accounts where user_id = ?</value>
+    <description>Test query</description>
+    <value>select * from q_sql where sql_id = ?</value>
     <parameter-ref id="long-parameter-1"/>
-    <result-ref id="find-bank-account-by-user-id.result"/>
+    <result-ref id="multiple.q_sql.result"/>
   </sql>
 
   <parameter-list>
@@ -108,72 +108,60 @@
 
   <result-list>
     <result
-      id="find-bank-account-by-user-id.result"
-      class="com.foo.bar.vo.UmBankAccountValueObject"
+      id="multiple.q_sql.result"
+      class="org.acmsl.queryj.tools.customsql.QSqlValueObject"
       matches="multiple">
       <property-ref
-        id="find-bank-account-by-user-id.bank-account-id.property"/>
+        id="q_sql.sql_id.property"/>
       <property-ref
-        id="find-bank-account-by-user-id.bank-account-type-id.property"/>
+        id="q_sql.implementation_id.property"/>
       <property-ref
-        id="find-bank-account-by-user-id.bank-account-user-id.property"/>
+        id="q_sql.query_type_id.property"/>
       <property-ref
-        id="find-bank-account-by-user-id.bank-account-payment-method-status-id.property"/>
+        id="q_sql.result_id.property"/>
       <property-ref
-        id="find-bank-account-by-user-id.bank-account-bank-code.property"/>
+        id="q_sql.validate.property"/>
       <property-ref
-        id="find-bank-account-by-user-id.bank-account-branch.property"/>
+        id="q_sql.value.property"/>
       <property-ref
-        id="find-bank-account-by-user-id.bank-account-control-digit.property"/>
+        id="q_sql.last_modified.property"/>
       <property-ref
-        id="find-bank-account-by-user-id.bank-account-account-number.property"/>
-      <property-ref
-        id="find-bank-account-by-user-id.bank-account-lastmodified.property"/>
-      <property-ref
-        id="find-bank-account-by-user-id.bank-account-creationdate.property"/>
+        id="q_sql.creation_date.property"/>
     </result>
   </result-list>
 
   <property-list>
     <property
-      id="find-bank-account-by-user-id.bank-account-id.property"
-      column_name="bank_account_id"
+      id="q_sql.sql_id.property"
+      column_name="sql_id"
       type="long"/>
     <property
-      id="find-bank-account-by-user-id.bank-account-type-id.property"
-      column_name="bank_account_type_id"
+      id="q_sql.implementation_id.property"
+      column_name="implementation_id"
       type="long"/>
     <property
-      id="find-bank-account-by-user-id.bank-account-user-id.property"
-      column_name="user_id"
+      id="q_sql.query_type_id.property"
+      column_name="query_type_id"
       type="long"/>
     <property
-      id="find-bank-account-by-user-id.bank-account-payment-method-status-id.property"
-      column_name="payment_method_status_id"
+      id="q_sql.result_id.property"
+      column_name="result_id"
       type="long"/>
     <property
-      id="find-bank-account-by-user-id.bank-account-bank-code.property"
-      column_name="bank_code"
+      id="q_sql.validate.property"
+      column_name="validate"
+      type="int"/>
+    <property
+      id="q_sql.value.property"
+      column_name="value"
       type="String"/>
     <property
-      id="find-bank-account-by-user-id.bank-account-branch.property"
-      column_name="branch"
-      type="String"/>
-    <property
-      id="find-bank-account-by-user-id.bank-account-control-digit.property"
-      column_name="control_digit"
-      type="String"/>
-    <property
-      id="find-bank-account-by-user-id.bank-account-account-number.property"
-      column_name="account_number"
-      type="String"/>
-    <property
-      id="find-bank-account-by-user-id.bank-account-lastmodified.property"
-      column_name="lastmodified"
+      id="q_sql.last_modified.property"
+      column_name="last_modified"
       type="Date"/>
     <property
-      id="find-bank-account-by-user-id.bank-account-creationdate.property"
-      column_name="creationdate"
+      id="q_sql.creation_date.property"
+      column_name="creation_date"
       type="Date"/>
   </property-list>
 

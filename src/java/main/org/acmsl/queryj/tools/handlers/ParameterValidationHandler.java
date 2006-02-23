@@ -71,7 +71,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-
 /**
  * Validates the parameters of an Ant task.
  * @author <a href="mailto:chous@acm-sl.org"

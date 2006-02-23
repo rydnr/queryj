@@ -18,7 +18,7 @@
       </p>
       <subsection name="Status">
         <p>
-          <strong>QueryJ</strong> 0.6 supports:
+          <strong>QueryJ</strong> currently supports:
           <ul>
             <li>Custom queries,</li>
             <li>Safe validation of custom queries at generation-time,</li>
@@ -73,6 +73,52 @@
         <tr>
           <td>
             $Date$
+          </td>
+          <td>
+            <i>DAOFactory</i> instances now support JNDI-less environments, if
+            a transactional flow is provided.<br/>
+            Released <b>v24-1.9</b>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/08/11 15:21:16
+          </td>
+          <td>
+            Fixed a minor <a href="${issue.url}626">issue</a> in <i>findConstantBy</i> methods.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/07/04 08:51:50
+          </td>
+          <td>
+            Found and fixed a <a href="${issue.url}625">bug</a> in <i>deleteByFk</i> methods.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/06/09 09:43:24
+          </td>
+          <td>
+            Removed CVS keywords which made the generated sources very unconvenient
+            to be managed by CVS.<br/>
+            QueryJ now supports composite foreign keys (<a href="${issue.url}616">616</a>).<br/>
+            Released <b>v24-1.4</b>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/06/02 18:17:47
+          </td>
+          <td>
+            Added defensive logging to avoid problems when
+            Commons-Logging gives ClassCastExceptions.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2005/05/29 19:13:04
           </td>
           <td>
             Commercially-specific bundle for a concrete customer: <b>0.6</b>.

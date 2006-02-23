@@ -155,6 +155,6 @@ public class RowDecorator
     protected String normalizeUppercase(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.normalizeUppercase(value);
+        return decorationUtils.softNormalizeUppercase(value);
     }
 }

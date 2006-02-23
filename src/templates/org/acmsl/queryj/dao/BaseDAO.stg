@@ -57,20 +57,17 @@ source(input) ::= <<
 <java_header(
   years=input.copyright_years,
   description=
-    [
-      first_line_description(
-        tableName=input.table_name),
-      second_line_description(
-        tableName=input.table_name)
-    ],
-    timestamp=input.timestamp)>
+  [
+    first_line_description(tableName=input.table_name),
+    second_line_description(tableName=input.table_name)
+  ],
+  timestamp=input.timestamp)>
 <package_declaration(
   packageNames=
   [
     input.base_package_name,
     typeInitMap.baseDAOSubpackageName
   ])>
-
 
 <project_imports(
   basePackageName=input.base_package_name,
@@ -130,11 +127,9 @@ class(input) ::= <<
 !>
 /**
  * <[
-      first_line_description(
-        tableName=input.table_name),
-      second_line_description(
-        tableName=input.table_name)
-    ]:{line |<line>}; separator="\n * ")>
+      first_line_description(tableName=input.table_name),
+      second_line_description(tableName=input.table_name)
+    ]:{line |<line>}; separator="\n * ">
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
@@ -151,7 +146,8 @@ public interface <input.vo_name>DAO
     public static final <input.vo_name>[] _ALL_QUERYJ_CONSTANTS_ =
         new <input.vo_name>[]
         {
-            <input.cached_rows:{<it.nameNormalizedUppercased>}; separator=",\n">
+            <input.cached_rows:{<it.nameNormalizedUppercased>};
+              separator=",\n">
         };
 
     <find_constant_method(
@@ -218,6 +214,12 @@ public interface <input.vo_name>DAO
       foreignKey=it, input=input); separator="\n">
 
     <input.custom_selects:custom_select(
+      cs=it, input=input); separator="\n">
+
+    <input.custom_updates_or_inserts:custom_update_or_insert(
+      cs=it, input=input); separator="\n">
+
+    <input.custom_selects_for_update:custom_select_for_update(
       cs=it, input=input); separator="\n">
 }
 >>
@@ -304,3 +306,39 @@ public <cs.resultClass> <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException;
 >>
+
+custom_update_or_insert(cs, input) ::= <<
+<!
+ Writes the subtemplate for custom updates or inserts.
+  @param cs the custom sql.
+  @param input the input.
+!>
+/**
+ * Custom sql \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @throws DataAccessException if the operation fails.
+ */
+public void <cs.nameUncapitalized>(
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException;
+>>
+
+custom_select_for_update(cs, input) ::= <<
+<!
+  Writes the code for a custom select for update.
+  @param cs the custom sql.
+  @param input the input.
+!>
+/**
+ * Custom select for update \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+public <cs.resultClass> <cs.nameUncapitalized>(
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException;
+>>
+

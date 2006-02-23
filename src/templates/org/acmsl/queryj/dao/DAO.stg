@@ -57,21 +57,21 @@ source(input) ::= <<
 <java_header(
   years=input.copyright_years,
   description=
-    [
-      first_line_description(
-        tableName=input.table_name,
-        engineName=input.engine_name,
-        engineVersion=input.engine_version),
-      second_line_description(
-        tableName=input.table_name,
-        engineName=input.engine_name,
-        engineVersion=input.engine_version),
-      third_line_description(
-        tableName=input.table_name,
-        engineName=input.engine_name,
-        engineVersion=input.engine_version)
-    ],
-    timestamp=input.timestamp)>
+  [
+    first_line_description(
+      tableName=input.table_name,
+      engineName=input.engine_name,
+      engineVersion=input.engine_version),
+    second_line_description(
+      tableName=input.table_name,
+      engineName=input.engine_name,
+      engineVersion=input.engine_version),
+    third_line_description(
+      tableName=input.table_name,
+      engineName=input.engine_name,
+      engineVersion=input.engine_version)
+  ],
+  timestamp=input.timestamp)>
 <package_declaration(
   packageNames=
   [
@@ -139,6 +139,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Types;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -247,12 +248,11 @@ import <basePackageName>.<damSubpackageName>.DataAccessManager;
 <fkAttributes:foreignkey_statementsetter_import(
   basePackageName=basePackageName,
   fkssSubpackageName=fkssSubpackageName,
-  voName=voName,
-  referredVOName=it.voName); separator="\n">
+  foreignKey=it); separator="\n">
 <fkAttributes:foreignkey_dao_import(
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
-  referredVOName=it.voName); separator="\n">
+  referredVOName=it.sourceVoName); separator="\n">
 >>
 
 resultset_extractor_import(
@@ -277,17 +277,15 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackage
 foreignkey_statementsetter_import(
   basePackageName,
   fkssSubpackageName,
-  voName,
-  referredVOName) ::= <<
+  foreignKey) ::= <<
 <!
   Generates the import statement of a foreign key statement setter.
   @param basePackageName the base package.
   @param fkssSubpackageName the subpackage of the foreign key attribute 
   statement setter.
-  @param voName the value object name.
-  @param referredVOName the referred value object name.
+  @param foreignKey the foreign key.
 !>
-import <basePackageName>.<fkssSubpackageName>.<voName>By<referredVOName>StatementSetter;
+//import <basePackageName>.<fkssSubpackageName>.<foreignKey.targetVoName>By<foreignKey.sourceVoName>StatementSetter;
 >>
 
 foreignkey_dao_import(
@@ -327,7 +325,7 @@ class(input,foreign_keys_by_table) ::= <<
         tableName=input.table_name,
         engineName=input.engine_name,
         engineVersion=input.engine_version)
-    ]:{line |<line>}; separator="\n * ")>
+    ]:{line |<line>}; separator="\n * ">
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
@@ -483,11 +481,19 @@ public class <input.engine_name><input.vo_name>DAO
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        return
-            findByPrimaryKey(
-                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-                query,
-                new TransactionTemplate(transactionManager));
+        <input.vo_name> result = null;
+
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            result =
+                findByPrimaryKey(
+                    <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                    query,
+                    new TransactionTemplate(transactionManager));
+        }
+
+        return result;
     }
 
     /**
@@ -623,10 +629,14 @@ public class <input.engine_name><input.vo_name>DAO
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        update(
-            <input.attributes:{<it.nameLowercased>}; separator=",\n">,
-            query,
-            new TransactionTemplate(transactionManager));
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            update(
+                <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager));
+        }
     }
 
     /**
@@ -743,10 +753,14 @@ public class <input.engine_name><input.vo_name>DAO
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
-        deleteNoFk(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-            query,
-            new TransactionTemplate(transactionManager));
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            deleteNoFk(
+                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager));
+        }
     }
 
     /**
@@ -797,7 +811,7 @@ public class <input.engine_name><input.vo_name>DAO
     {
         delete(
             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-            <input.fk_attributes:{dataAccessManager.get<it.tableName>DAO()}
+            <input.fk_attributes:{dataAccessManager.get<it.sourceVoName>DAO()}
               ; separator=",\n">);
     }
 
@@ -805,22 +819,22 @@ public class <input.engine_name><input.vo_name>DAO
      * Deletes \<code><input.vo_name>\</code> information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      <input.fk_attributes:dao_javadoc(
-       name=it.tableName,
-       uncapitalizedName=it.uncapitalizedTableName)
+       name=it.sourceTableName,
+       uncapitalizedName=it.sourceTableNameUncapitalized)
        ; separator="\n">
-     <input.fk_attributes:precondition_notnull(name=it.tableName); separator="\n">
+     <input.fk_attributes:precondition_notnull(name=it.sourceVoName);
+       separator="\n">
      */
     protected void delete(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         <input.fk_attributes:dao_declaration(
-          name=it.tableName,
-          uncapitalizedName=it.uncapitalizedTableName)
+          name=it.sourceVoName,
+          uncapitalizedName=it.sourceTableNameUncapitalized)
           ; separator=",\n">)
     {
         <input.fk_attributes:fk_dao_delete_call(
-            foreignTableName=it.tableName,
-            foreignKey=foreign_keys_by_table.(table_name),
-            allowsNull=it.allowsNull); separator="\n\n">
+          foreignKey=it, pkAttributes=input.pk_attributes);
+          separator="\n\n">
 <endif>
 
         deleteNoFk(
@@ -830,6 +844,10 @@ public class <input.engine_name><input.vo_name>DAO
   foreignKey=it, input=input); separator="\n">
 
 <input.custom_selects:custom_select(
+  cs=it,
+  input=input); separator="\n">
+
+<input.custom_updates_or_inserts:custom_update_or_insert(
   cs=it,
   input=input); separator="\n">
 
@@ -1357,7 +1375,7 @@ public class <input.engine_name><input.vo_name>DAO
          * @throws DataAccessException if the data cannot be accessed for some
          * reason.
          */
-	public Object doInPreparedStatement(
+        public Object doInPreparedStatement(
             final PreparedStatement preparedStatement)
           throws SQLException,
                  DataAccessException
@@ -1379,7 +1397,7 @@ public class <input.engine_name><input.vo_name>DAO
          * @throws DataAccessException if the data cannot be accessed for some
          * reason.
          */
-	protected Object doInPreparedStatement(
+        protected Object doInPreparedStatement(
             final PreparedStatement preparedStatement,
             final PreparedStatementSetter preparedStatementSetter,
             final ResultSetExtractor resultSetExtractor)
@@ -1398,9 +1416,9 @@ public class <input.engine_name><input.vo_name>DAO
                     preparedStatementSetter.setValues(preparedStatement);
                 }
 
-		t_ResultSet = preparedStatement.executeQuery();
+                t_ResultSet = preparedStatement.executeQuery();
 
-		result = resultSetExtractor.extractData(t_ResultSet);
+                result = resultSetExtractor.extractData(t_ResultSet);
             }
             finally
             {
@@ -1410,7 +1428,7 @@ public class <input.engine_name><input.vo_name>DAO
                         .cleanupParameters();
                 }
 
-		JdbcUtils.closeResultSet(t_ResultSet);
+                JdbcUtils.closeResultSet(t_ResultSet);
             }
 
             return result;
@@ -1455,7 +1473,7 @@ resultset_extractor_constants(
  * The result set extractor for \<i><crseid>\</i> custom query.
  */
 public static final ResultSetExtractor
-    <crseidNormalizedUppercased>_EXTRACTOR =
+    <crseidNormalizedUppercased>_CUSTOM_EXTRACTOR =
         new <crseidCapitalized>Extractor();
 >>
 
@@ -1573,24 +1591,19 @@ attribute_query_update(
 query.set(<tableNameUppercased>.<nameUppercased>);
 >>
 
-fk_dao_delete_call(
-  foreignTableName,
-  foreignKey,
-  allowsNull) ::= <<
+fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
 <!
   Writes the code needed to use the DAO associated to a
   concrete foreign key to perform a delete operation.
-  @param foreignTableName the name of the referred table.
   @param foreignKey the foreign key.
-  @param allowsNull whether the referred table allows null
-  references.
+  @param pkAttributes the pk attributes.  
 !>
-<if(allowsNull)>
-t_<foreignTableName>DAO.discardRelationTo<foreignKey:{attr |<attr.nameCapitalized>}>DAO(
+<if(foreignKey.allowsNull)>
+//<foreignKey.targetVoName>DAO.discardRelationTo<foreignKey.sourceVoName>(
 <else>
-t_<foreignTableName>DAO.deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>DAO(
+//<foreignKey.targetVoName>DAO.deleteBy<foreignKey.sourceVoName>(
 <endif>
-    <foreignKey:{attr |<attr.name>}; separator=",\n">);
+<!    <pkAttributes:{<it.nameLowercased>}; separator=",\n">); !>
 >>
 
 dao_javadoc(name,uncapitalizedName) ::= <<
@@ -1710,10 +1723,14 @@ fk_delete_method(foreignKey,input) ::= <<
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
-        deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-            <foreignKey:{<it.nameLowercased>}; separator=",\n">,
-            query,
-            new TransactionTemplate(transactionManager));
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
+                <foreignKey:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager));
+        }
     }
 
     /**
@@ -1759,14 +1776,15 @@ custom_select(cs, input) ::= <<
     {
         return
             <cs.nameUncapitalized>(
-                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
+                <cs.parameters:{<it.nameLowercased>,}; separator="\n">
                 new PreparedStatementCreatorFactory(
                     <cs.splittedQuotedValue; separator=" +\n">),
                 new Object[]
                 {
                     <cs.parameters:custom_select_parameter_value(
                       name=it.nameLowercased,
-                      objectType=it.objectType); separator=",\n">
+                      objectType=it.objectType,
+                      object=it.object); separator=",\n">
                 },
                 getDataSource());
     }
@@ -1787,7 +1805,7 @@ custom_select(cs, input) ::= <<
      <precondition_notnull("dataSource")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
-        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
+        <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final DataSource dataSource)
@@ -1795,7 +1813,7 @@ custom_select(cs, input) ::= <<
     {
         return
             <cs.nameUncapitalized>(
-                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
+                <cs.parameters:{<it.nameLowercased>,}; separator="\n">
                 preparedStatementCreatorFactory,
                 params,
                 new DataSourceTransactionManager(dataSource));
@@ -1818,18 +1836,26 @@ custom_select(cs, input) ::= <<
      <precondition_notnull("transactionManager")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
-        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
+        <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        return
-            <cs.nameUncapitalized>(
-                <cs.parameters:{<it.nameLowercased>}; separator=",\n">,
-                preparedStatementCreatorFactory,
-                params,
-                new TransactionTemplate(transactionManager));
+        <cs.resultClass> result = null;
+
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            result =
+                <cs.nameUncapitalized>(
+                    <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+                    preparedStatementCreatorFactory,
+                    params,
+                    new TransactionTemplate(transactionManager));
+        }
+
+        return result;
     }
 
     /**
@@ -1849,7 +1875,7 @@ custom_select(cs, input) ::= <<
      <precondition_notnull("transactionTemplate")>
      */
     protected <cs.resultClass> <cs.nameUncapitalized>(
-        <cs.parameters:attribute_declaration(attr=it); separator=",\n">,
+        <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
         final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
         final Object[] params,
         final TransactionTemplate transactionTemplate)
@@ -1877,15 +1903,14 @@ custom_select(cs, input) ::= <<
                         // calls setXXX twice
                         // preparedStatementCreatorFactory
                         //     .newPreparedStatementSetter(t_aParams),
-                        <cs.resultIdAsConstant>_EXTRACTOR,
+                        <cs.resultIdAsConstant>_CUSTOM_EXTRACTOR,
                         this));
 
         return result;
     }
 >>
 
-custom_select_parameter_type_specification(
-  type) ::= <<
+custom_select_parameter_type_specification(type) ::= <<
 <!
   Specifies the type of the parameter of a custom select.
   @param type the SQL type.
@@ -1896,17 +1921,86 @@ preparedStatementCreatorFactory.addParameter(
 
 custom_select_parameter_value(
   name,
-  objectType) ::= <<
+  objectType,
+  object) ::= <<
 <!
   Writes the value for a parameter of a custom select.
   @param name the parameter name.
   @param objectType the object type of the parameter.
+  @param object whether the parameter type is a class or a primitive.
 !>
-<if(objectType)>
-new <objectType>(<name>)
-<else>
+<if(object)>
 <name>
+<else>
+new <objectType>(<name>)
 <endif>
+>>
+
+custom_update_or_insert(cs, input) ::= <<
+<!
+ Writes the subtemplate for custom updates or inserts.
+  @param cs the custom sql.
+  @param input the input.
+!>
+/**
+ * Custom sql \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @throws DataAccessException if the operation fails.
+ */
+public void <cs.nameUncapitalized>(
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException
+{
+    PreparedStatementCreatorFactory
+        preparedStatementCreatorFactory =
+            new PreparedStatementCreatorFactory(
+                <cs.splittedQuotedValue; separator=" +\n">);
+
+    /*
+    t_PreparedStatementCreatorFactory.setResultSetType(..);
+    t_PreparedStatementCreatorFactory.setUpdatableResults(..);
+    t_PreparedStatementCreatorFactory.setReturnGeneratedKeys(..);
+    t_PreparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
+     */
+
+    <cs.parameters:custom_select_parameter_type_specification(
+      type=it.sqlType); separator="\n">
+
+    Object[] params =
+       new Object[]
+       {
+           <cs.parameters:custom_select_parameter_value(
+             name=it.nameLowercased,
+             objectType=it.objectType,
+             object=it.object); separator=",\n">
+        };
+
+    // Enabling transactions temporarily.
+    synchronized (DataSourceTransactionManager.class)
+    {
+       DataSourceTransactionManager transactionManager =
+           new DataSourceTransactionManager(getDataSource());
+       TransactionTemplate transactionTemplate =
+           new TransactionTemplate(transactionManager);
+
+       transactionTemplate.execute(
+           new UpdateTransactionCallback(
+               preparedStatementCreatorFactory
+                  .newPreparedStatementCreator(params),
+               preparedStatementCreatorFactory
+                  .newPreparedStatementSetter(params),
+               this));
+
+       /*
+       update(
+           t_PreparedStatementCreatorFactory
+              .newPreparedStatementCreator(params),
+           t_PreparedStatementCreatorFactory
+             .newPreparedStatementSetter(params));
+        */
+    }
+}
 >>
 
 defaultInsert(input) ::= <<
@@ -2021,10 +2115,14 @@ jdbcInsert(input) ::= <<
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        insert(
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
-            query,
-            new TransactionTemplate(transactionManager));
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            insert(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager));
+        }
     }
 
     /**
@@ -2260,11 +2358,19 @@ oracle8Insert(input) ::= <<
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        return
-            create(
-                <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
-                  separator=",\n">,
-                new TransactionTemplate(transactionManager));
+        <input.vo_name> result = null;
+
+        // Enabling transactions temporarily.
+        synchronized (DataSourceTransactionManager.class)
+        {
+            result =
+                create(
+                    <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
+                      separator=",\n">,
+                    new TransactionTemplate(transactionManager));
+        }
+
+        return result;
     }
 
     /**
@@ -2346,4 +2452,49 @@ insert_attribute(attr) ::= <<
 <else>
 "?
 <endif>
+>>
+
+custom_select_for_update(cs, input) ::= <<
+<!
+  Writes the code for a custom select for update.
+  @param cs the custom select.
+  @param input the input.
+!>
+/**
+ * Custom select for update \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+<if(cs.resultClass)>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<else>
+public void <cs.nameUncapitalized>(
+<endif>
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException
+{
+<if(cs.resultClass)>
+    <cs.resultClass> result = null;
+<endif>
+    SqlQuery t_Query =
+        new SqlQuery(
+            getDataSource(),
+            <cs.splittedQuotedValue; separator=" +\n">);
+
+<if(cs.resultClass)>
+    List t_lResult = t_Query.execute();
+
+    if  (   (t_lResult != null)
+         && (t_lResult.size() > 0))
+    {
+        result = (<cs.resultClass>) t_lResult.get(0);
+    }
+
+    return result;
+<else>
+    t_Query.execute();
+<endif>
+}
 >>

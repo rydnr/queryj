@@ -41,8 +41,20 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.metadata.TableDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing StringTemplate classes.
@@ -52,7 +64,10 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Is able to generate the configuration file for configuring
@@ -106,5 +121,108 @@ public class ConfigurationPropertiesTemplate
     public String getTemplateName()
     {
         return "ConfigurationProperties";
+    }
+
+    /**
+     * Fills the core parameters.
+     * @param input the input.
+     * @param metadataManager the database metadata manager.
+     * @param basePackageName the base package name.
+     * @param subpackageName the subpackage name.
+     * @param tableRepositoryName the table repository name.
+     * @param engineName the engine name.
+     * @param tables the tables.
+     * @param timestamp the timestamp.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @precondition input != null
+     * @precondition metadataManager != null
+     * @precondition subpackageName != null
+     * @precondition basePackageName != null
+     * @precondition tableRepositoryName != null
+     * @precondition tables != null
+     * @precondition timestamp != null
+     * @precondition stringUtils != null
+     */
+    protected void fillCoreParameters(
+        final Map input,
+        final MetadataManager metadataManager,
+        final String basePackageName,
+        final String subpackageName,
+        final String tableRepositoryName,
+        final String engineName,
+        final Collection tables,
+        final String timestamp,
+        final StringUtils stringUtils)
+    {
+        input.put("tr_name", tableRepositoryName);
+
+        input.put("engine_name", engineName);
+        input.put("engine_name_lowercased", engineName.toLowerCase());
+
+        input.put("base_package_name", basePackageName);
+
+        input.put(
+            "dao_subpackage_name",
+            retrieveDAOSubpackageName(
+                basePackageName, engineName, PackageUtils.getInstance()));
+
+        input.put("tables", decorateTables(tables, metadataManager));
+    }
+
+    /**
+     * Retrieves the DAO subpackage name.
+     * @param basePackageName the base package name.
+     * @param engineName the engine name.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return such information.
+     */
+    protected String retrieveDAOSubpackageName(
+        final String basePackageName,
+        final String engineName,
+        final PackageUtils packageUtils)
+    {
+        return packageUtils.retrieveDAOPackage(basePackageName, engineName);
+    }
+
+    /**
+     * Decorates the tables.
+     * @param tables the tables.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated tables.
+     * @precondition tables != null
+     * @precondition metadataManager != null
+     */
+    protected Collection decorateTables(
+        final Collection tables, final MetadataManager metadataManager)
+    {
+        Collection result = new ArrayList();
+
+        Iterator t_itTableIterator = tables.iterator();
+        
+        if  (t_itTableIterator != null)
+        {
+            while  (t_itTableIterator.hasNext())
+            {
+                result.add(
+                    decorate(
+                        (String) t_itTableIterator.next(), metadataManager));
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Decorates given table.
+     * @param table the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated table.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     */
+    protected TableDecorator decorate(
+        final String table, final MetadataManager metadataManager)
+    {
+        return new TableDecorator(table, metadataManager);
     }
 }

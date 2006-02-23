@@ -65,10 +65,6 @@ public interface FkStatementSetterTemplateFactory
      * @param repositoryName the repository name.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
-     * @precondition foreignKey != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition repositoryName != null
      */
     public FkStatementSetterTemplate createFkStatementSetterTemplate(
         final ForeignKey foreignKey,

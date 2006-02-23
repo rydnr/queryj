@@ -6,11 +6,34 @@
   </properties>
   <body>
     <release
-      version="0.6"
-      date="2005/03/23 07:32:21"
+      version="v24-1.9"
+      date="$Date$"
       description="Commercial release">
       <action
         dev="$Author$"
+        type="update">
+        <i>DAOFactory</i> instances now support JNDI-less environments, if
+        a transactional flow is provided.<br/>
+      </action>
+    </release>
+    <release
+      version="v24-1.4"
+      date="2005/06/09 09:43:24"
+      description="Commercial release">
+      <action
+        dev="chous"
+        type="update">
+        Removed CVS keywords which made the generated sources very unconvenient
+        to be managed by CVS.<br/>
+        Added support for composite foreign keys (<a href="${issue.url}616">616</a>).
+      </action>
+    </release>
+    <release
+      version="0.6"
+      date="2005/04/13 07:32:21"
+      description="Commercial release">
+      <action
+        dev="chous"
         type="update">
         Commercially-specific bundle for a concrete customer.
       </action>

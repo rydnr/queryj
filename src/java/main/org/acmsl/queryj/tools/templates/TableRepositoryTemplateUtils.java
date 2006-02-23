@@ -133,6 +133,6 @@ public class TableRepositoryTemplateUtils
     protected String retrieveTableRepositoryClassName(
         final String repository, final StringUtils stringUtils)
     {
-        return stringUtils.normalize(repository, '_') + "TableRepository";
+        return stringUtils.capitalize(repository, '_') + "TableRepository";
     }
 }

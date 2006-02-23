@@ -141,7 +141,6 @@ public class CustomResultSetExtractorTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      * @precondition resultElement != null
      * @precondition customSqlProvider != null
-     * @precondition tableTemplate != null
      * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition basePackageName != null

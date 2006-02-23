@@ -295,7 +295,10 @@ public abstract class BasePerForeignKeyTemplate
             input, basePackageName, subpackageName);
 
         fillProjectImportsParameters(
-            input, basePackageName, subpackageName);
+            input,
+            basePackageName,
+            subpackageName,
+            foreignKey.getAttributes());
 
         fillClassParameters(
             input,
@@ -324,6 +327,7 @@ public abstract class BasePerForeignKeyTemplate
         final String engineVersion)
     {
         input.put("table_name",  foreignKey.getSourceTableName());
+        input.put("foreign_key", foreignKey);
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);
     }
@@ -369,17 +373,22 @@ public abstract class BasePerForeignKeyTemplate
      * @param input the input.
      * @param basePackageName the base package.
      * @param subpackageName the name of the subpackage.
+     * @param fkAttributes the foreign-key attributes.
      * @precondition input != null
      * @precondition basePackageName != null
      * @precondition subpackageName != null
+     * @precondition tableName != null
+     * @precondition fkAttributes != null
      */
     protected void fillProjectImportsParameters(
         final Map input,
         final String basePackageName,
-        final String subpackageName)
+        final String subpackageName,
+        final Collection fkAttributes)
     {
         input.put("base_package_name", basePackageName);
         input.put("subpackage_name", subpackageName);
+        input.put("fk_attributes", fkAttributes);
     }
 
     /**
@@ -413,6 +422,7 @@ public abstract class BasePerForeignKeyTemplate
     }
 
     /**
+<<<<<<< BasePerForeignKeyTemplate.java
      * Retrieves the foreign key attributes.
      * @param foreignKey the foreign key.
      * @param metadataManager the <code>MetadataManager</code>

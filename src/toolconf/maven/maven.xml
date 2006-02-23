@@ -14,12 +14,6 @@
                Don't change this file to suit your concrete
                environment, use "build.properties" instead.
 
-  Last modified by: $Author$ at $Date$
-
-  Version: $Revision$
-
-  $Id$
-
 -->
 <project default="xdoc:jelly-transform" xmlns:ant="jelly:ant">
 
@@ -107,7 +101,7 @@
     </ant:replaceregexp>
 
     <!--ant:replaceregexp byline="true">
-      <ant:regexp pattern="\$Name$"/>
+      <ant:regexp pattern="\$(Name:)\s(.*?)\$"/>
       <ant:substitution expression="\1-\2.\3"/>
       <ant:fileset dir="../../../target/docs">
         <ant:include name="*.html"/>

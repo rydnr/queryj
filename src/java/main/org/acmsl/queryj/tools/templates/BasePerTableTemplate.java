@@ -348,6 +348,22 @@ public abstract class BasePerTableTemplate
                 metadataTypeManager,
                 daoTemplateUtils);
 
+        Collection t_cCustomUpdatesOrInserts =
+            retrieveCustomUpdatesOrInserts(
+                tableName,
+                customSqlProvider,
+                metadataManager,
+                metadataTypeManager,
+                daoTemplateUtils);
+
+        Collection t_cCustomSelectsForUpdate =
+            retrieveCustomSelectsForUpdate(
+                tableName,
+                customSqlProvider,
+                metadataManager,
+                metadataTypeManager,
+                daoTemplateUtils);
+
         // items must contain
         // getId()
         // getIdNormalized()
@@ -389,6 +405,8 @@ public abstract class BasePerTableTemplate
             t_cAllButLobAttributes,
             t_cForeignKeys,
             t_cCustomSelects,
+            t_cCustomUpdatesOrInserts,
+            t_cCustomSelectsForUpdate,
             t_cCustomResults,
             t_strStaticAttributeName,
             t_strStaticAttributeType,
@@ -435,6 +453,8 @@ public abstract class BasePerTableTemplate
      * Clob or Blob.
      * @param foreignKeys the entities pointing to this instance's table.
      * @param customSelects the custom selects.
+     * @param customUpdatesOrInserts the custom updates or inserts.
+     * @param customSelectsForUpdate the custom selects for update.
      * @param customResults the custom results.
      * @param staticAttributeName the name of the static attribute, or
      * <code>null</code> for non-static tables.
@@ -467,6 +487,8 @@ public abstract class BasePerTableTemplate
      * @precondition allButLobAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
+     * @precondition customUpdatesOrInserts != null
+     * @precondition customSelectsForUpdate != null
      * @precondition customResults != null
      * @precondition tableRepositoryName != null
      * @precondition metadataManager != null
@@ -499,6 +521,8 @@ public abstract class BasePerTableTemplate
         final Collection allButLobAttributes,
         final Collection foreignKeys,
         final Collection customSelects,
+        final Collection customUpdatesOrInserts,
+        final Collection customSelectsForUpdate,
         final Collection customResults,
         final String staticAttributeName,
         final String staticAttributeType,
@@ -555,6 +579,8 @@ public abstract class BasePerTableTemplate
             staticAttributeName,
             staticAttributeType,
             customSelects,
+            customUpdatesOrInserts,
+            customSelectsForUpdate,
             customResults,
             metadataManager);
 
@@ -719,6 +745,8 @@ public abstract class BasePerTableTemplate
      * @param staticAttributeType the type of the static attribute, or
      * <code>null</code> for non-static tables.
      * @param customSelects the custom selects.
+     * @param customUpdatesOrInserts the custom updates and inserts.
+     * @param customSelectsForUpdate the custom selects for update.
      * @param customResults the custom results.
      * @param metadataManager the database metadata manager.
      * @precondition input != null
@@ -738,6 +766,8 @@ public abstract class BasePerTableTemplate
      * @precondition allButLobAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
+     * @precondition customUpdatesOrInserts != null
+     * @precondition customSelectsForUpdate != null
      * @precondition customResults != null
      * @precondition metadataManager != null
      */
@@ -763,6 +793,8 @@ public abstract class BasePerTableTemplate
         final String staticAttributeName,
         final String staticAttributeType,
         final Collection customSelects,
+        final Collection customUpdatesOrInserts,
+        final Collection customSelectsForUpdate,
         final Collection customResults,
         final MetadataManager metadataManager)
     {
@@ -802,6 +834,8 @@ public abstract class BasePerTableTemplate
         input.put("foreign_keys", foreignKeys);
         input.put("foreign_keys_by_table", referingKeys);
         input.put("custom_selects", customSelects);
+        input.put("custom_updates_or_inserts", customUpdatesOrInserts);
+        input.put("custom_selects_for_update", customSelectsForUpdate);
         input.put("custom_results", customResults);
     }
 
@@ -861,6 +895,113 @@ public abstract class BasePerTableTemplate
         final MetadataTypeManager metadataTypeManager,
         final DAOTemplateUtils daoTemplateUtils)
     {
+        return
+            retrieveCustomSql(
+                new String[]
+                {
+                    SqlElement.SELECT,
+                },
+                tableName,
+                customSqlProvider,
+                metadataManager,
+                metadataTypeManager,
+                daoTemplateUtils);
+    }
+
+    /**
+     * Retrieves the custom updates or inserts.
+     * @param tableName the table name.
+     * @param customSqlProvider the provider.
+     * @param metadataManager the database metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @return the custom sql.
+     * @precondition tableName != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition daoTemplateUtils != null
+     */
+    protected Collection retrieveCustomUpdatesOrInserts(
+        final String tableName,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final DAOTemplateUtils daoTemplateUtils)
+    {
+        return
+            retrieveCustomSql(
+                new String[]
+                {
+                    SqlElement.INSERT,
+                    SqlElement.UPDATE,
+                    SqlElement.DELETE
+                },
+                tableName,
+                customSqlProvider,
+                metadataManager,
+                metadataTypeManager,
+                daoTemplateUtils);
+    }
+                
+    /**
+     * Retrieves the custom selects.
+     * @param tableName the table name.
+     * @param customSqlProvider the provider.
+     * @param metadataManager the database metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @return the custom selects.
+     * @precondition tableName != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition daoTemplateUtils != null
+     */
+    protected Collection retrieveCustomSelectsForUpdate(
+        final String tableName,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final DAOTemplateUtils daoTemplateUtils)
+    {
+        return
+            retrieveCustomSql(
+                new String[]
+                {
+                    SqlElement.SELECT_FOR_UPDATE,
+                },
+                tableName,
+                customSqlProvider,
+                metadataManager,
+                metadataTypeManager,
+                daoTemplateUtils);
+    }
+
+    /**
+     * Retrieves the custom sql.
+     * @param types the sql types.
+     * @param tableName the table name.
+     * @param customSqlProvider the provider.
+     * @param metadataManager the database metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @return the custom sql.
+     * @precondition sqlTypes != null
+     * @precondition tableName != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition daoTemplateUtils != null
+     */
+    protected Collection retrieveCustomSql(
+        final String[] types,
+        final String tableName,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final DAOTemplateUtils daoTemplateUtils)
+    {
         Collection result = new ArrayList();
 
         Collection t_cContents = customSqlProvider.getCollection();
@@ -871,6 +1012,8 @@ public abstract class BasePerTableTemplate
 
             if  (t_itContentIterator != null)
             {
+                int t_iTypes = (types != null) ? types.length : 0;
+
                 while  (t_itContentIterator.hasNext())
                 {
                     Object t_Content = t_itContentIterator.next();
@@ -879,16 +1022,35 @@ public abstract class BasePerTableTemplate
                     {
                         SqlElement t_SqlElement = (SqlElement) t_Content;
 
-                        if  (   (SqlElement.SELECT.equals(
-                                     t_SqlElement.getType()))
-                             && (daoTemplateUtils.matches(
-                                     tableName, t_SqlElement.getDao())))
+                        if  (daoTemplateUtils.matches(
+                                 tableName, t_SqlElement.getDao()))
                         {
-                            result.add(
-                                new SqlDecorator(
-                                    t_SqlElement,
-                                    customSqlProvider,
-                                    metadataTypeManager));
+                            boolean t_bAdd = false;
+
+                            String t_strCurrentType = null;
+
+                            for  (int t_iIndex = 0;
+                                      t_iIndex < t_iTypes;
+                                      t_iIndex++)
+                            {
+                                t_strCurrentType = types[t_iIndex];
+
+                                if  (   (t_strCurrentType != null)
+                                     && (t_strCurrentType.equals(
+                                             t_SqlElement.getType())))
+                                {
+                                    t_bAdd = true;
+                                }
+                            }
+
+                            if  (t_bAdd)
+                            {
+                                result.add(
+                                    new SqlDecorator(
+                                        t_SqlElement,
+                                        customSqlProvider,
+                                        metadataTypeManager));
+                            }
                         }
                     }
                 }
@@ -954,10 +1116,13 @@ public abstract class BasePerTableTemplate
 
                                 if  (t_ResultElement != null)
                                 {
-                                    result.add(
-                                        new ResultDecorator(
-                                            t_ResultElement,
-                                            customSqlProvider));
+                                    if  (!result.contains(t_ResultElement))
+                                    {
+                                        result.add(
+                                            new ResultDecorator(
+                                                t_ResultElement,
+                                                customSqlProvider));
+                                    }
                                 }
                                 else
                                 {

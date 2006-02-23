@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Logicless foreign key implementation.
+ * Description: Models foreign keys.
  *
  */
 package org.acmsl.queryj.tools.metadata.vo;
@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.metadata.vo;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.metadata.vo.AbstractForeignKey;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
  * Importing JDK classes.
@@ -49,18 +49,19 @@ import org.acmsl.queryj.tools.metadata.vo.AbstractForeignKey;
 import java.util.Collection;
 
 /**
- * Logicless foreign key implementation.
+ * Models foreign keys.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public class ForeignKeyValueObject
-    extends  AbstractForeignKey
+    extends AbstractForeignKey
 {
     /**
-     * Creates a <code>ForeignKey</code> with given information.
+     * Creates a <code>ForeignKeyValueObject</code> with given information.
      * @param sourceTableName the source table name.
      * @param attributes the attributes.
      * @param targetTableName the target table name.
+     * @param allowsNull whether the foreign key allows null values.
      * @precondition sourceTableName the source table name.
      * @precondition attributes != null
      * @precondition targetTableName != null
@@ -68,8 +69,9 @@ public class ForeignKeyValueObject
     public ForeignKeyValueObject(
         final String sourceTableName,
         final Collection attributes,
-        final String targetTableName)
+        final String targetTableName,
+        final boolean allowsNull)
     {
-        super(sourceTableName, attributes, targetTableName);
+        super(sourceTableName, attributes, targetTableName, allowsNull);
     }
 }

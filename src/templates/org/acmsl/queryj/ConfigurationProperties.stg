@@ -53,19 +53,20 @@ source(input) ::= <<
 <header(
   years=input.copyright_years,
   description=
-    [
-      "Defines the DAO settings."
-    ],
-    timestamp=input.timestamp)>
+  [
+    "Defines the DAO settings."
+  ],
+  timestamp=input.timestamp)>
 <input.tables:dao_factory_property(
   table=it,
+  engineName=input.engine_name,
+  engineNameLowercased=input.engine_name_lowercased,
   repository=input.tr_name,
-  input.base_package_name,
-  typeInitMap.baseDAOSubpackageName,
-  typeInitMap.rdbSubpackageName,
-  input.dao_subpackage_name,
-  typeInitMap.xmlSubpackageName,
-  typeInitMap.mockSubpackageName)>
+  basePackageName=input.base_package_name,
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
+  subpackageName=typeInitMap.rdbSubpackageName,
+  xmlSubpackageName=typeInitMap.xmlSubpackageName,
+  mockSubpackageName=typeInitMap.mockSubpackageName);
  separator="\n\n">
 >>
 
@@ -120,6 +121,8 @@ header(years,description,timestamp) ::= <<
 
 dao_factory_property(
   table,
+  engineName,
+  engineNameLowercased,
   repository, 
   basePackageName,
   baseDAOSubpackageName,
@@ -129,6 +132,8 @@ dao_factory_property(
 <!
  Generates the properties asociated to a concrete DAO.
  @param table the table.
+ @param engineName the engine name.
+ @param engineNameLowercased the engine name, in lower case.
  @param repository the repository.
  @param basePackageName the base package name.
  @param baseDAOSubpackageName the base DAO subpackage name.
@@ -137,7 +142,7 @@ dao_factory_property(
  @param mockSubpackageName the subpackage for Mock implementations.
 !>
 # <table.name> DAO implementation.
-<repository><table.nameLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName><engineName><table.voName>DAOFactory
-#<repository><table.nameLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<xmlSubpackageName>.Xml<table.voName>DAOFactory
-#<repository><table.nameLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<mockSubpackageName>.Mock<table.voName>DAOFactory
+<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineNameLowercased>.<engineName><table.singularNameCapitalized>DAOFactory
+#<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<xmlSubpackageName>.Xml<table.singularNameCapitalized>DAOFactory
+#<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<mockSubpackageName>.Mock<table.singularNameCapitalized>DAOFactory
 >>

@@ -51,7 +51,7 @@ typeInitMap ::= [
   "dataAccessManagerSubpackageName":"dao",
   "foreignKeyStatementSetterSubpackageName":"dao.rdb",
   "xmlSubpackageName":"xml",
-  "mockSubpackageName":"mock",
+  "mockSubpackageName":"mock"
 ]
 
 java_header(years,description,timestamp) ::= <<
@@ -141,6 +141,14 @@ attribute_declaration(attr) ::= <<
   @param attr the attribute.
 !>
 final <if(attr.clob)>String<else><attr.fieldType><endif> <attr.nameLowercased>
+>>
+
+attribute_isolated_declaration(attr) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute, isolated.
+  @param attr the attribute.
+!>
+<attribute_declaration(attr=attr)>,
 >>
 
 indirect_template(name, input) ::= <<

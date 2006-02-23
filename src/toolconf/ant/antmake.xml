@@ -203,6 +203,8 @@
       <!--
        Using externally-defined properties.
       -->
+      <property file="src/toolconf/ant/version.properties"/>
+      <property file="src/toolconf/ant/project.properties"/>
       <property file="src/toolconf/ant/antmake.properties"/>
 
       <!--
@@ -316,8 +318,8 @@
         classpathref="java.compile.class.path"
         liblicensepathref="lib.licenses.path"
         destinationfolder="${antmake.outputdir}"
-        projectname="AntMake"
-        projectversion="0.1.8"
+        projectname="${project.beautified.name}"
+        projectversion="${project.version}"
         readmefile="${readme.file}"
         authorsfile="${authors.file}"
         copyingfile="${copying.file}"/>
