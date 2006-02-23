@@ -32,8 +32,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create CustomResultSetExtractor implementation for each
- *              custom query requiring so.
+ * Description: Is able to create CustomResultSetExtractor implementation
+ *              for each custom query requiring so.
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -46,6 +46,11 @@ import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JDK classes.
@@ -156,5 +161,23 @@ public class CustomResultSetExtractorTemplate
         return
             customResultUtils.retrieveTable(
                 resultElement, customSqlProvider, metadataManager);
+    }
+
+    /**
+     * Retrieves the string template group.
+     * @return such instance.
+     */
+    protected StringTemplateGroup retrieveGroup()
+    {
+        return retrieveGroup("/org/acmsl/queryj/dao/ResultSetExtractor.stg");
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    public String getTemplateName()
+    {
+        return "ResultSetExtractor";
     }
 }

@@ -128,14 +128,15 @@ public class CustomResultSetExtractorTemplateBuildHandler
         final String projectPackage,
         final PackageUtils packageUtils)
     {
-        packageUtils.retrieveResultSetExtractorPackage(
-            projectPackage,
-            engineName,
-            retrieveTableName(
-                customResult,
-                customSqlProvider,
-                metadataManager,
-                CustomResultUtils.getInstance()));
+        return
+            packageUtils.retrieveResultSetExtractorPackage(
+                projectPackage,
+                engineName,
+                retrieveTableName(
+                    customResult,
+                    customSqlProvider,
+                    metadataManager,
+                    CustomResultUtils.getInstance()));
     }
 
     /**
