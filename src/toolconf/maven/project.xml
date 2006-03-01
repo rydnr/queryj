@@ -42,7 +42,7 @@
   <name>QueryJ</name>
   <id>queryj</id>
   <groupId>org.acmsl.queryj</groupId>
-  <currentVersion>v24-1.9-synchr-8-SNAPSHOT</currentVersion>
+  <currentVersion>v24-1.9-synchr-8</currentVersion>
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>
@@ -136,7 +136,7 @@
     <dependency>
       <groupId>acmsl-commons</groupId>
       <artifactId>acmsl-commons</artifactId>
-      <version>0.5.7b9</version>
+      <version>0.5.7b11</version>
       <url>http://www.acm-sl.org/commons</url>
       <properties>
         <required.to.compile>true</required.to.compile>

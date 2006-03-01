@@ -483,15 +483,19 @@ public class <input.engine_name><input.vo_name>DAO
     {
         <input.vo_name> result = null;
 
+        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
+        */
             result =
                 findByPrimaryKey(
                     <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                     query,
                     new TransactionTemplate(transactionManager));
+        /*
         }
+        */
 
         return result;
     }
@@ -629,14 +633,18 @@ public class <input.engine_name><input.vo_name>DAO
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
+        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
+        */
             update(
                 <input.attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new TransactionTemplate(transactionManager));
+        /*
         }
+        */
     }
 
     /**
@@ -753,14 +761,18 @@ public class <input.engine_name><input.vo_name>DAO
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
+        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
+        */
             deleteNoFk(
                 <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new TransactionTemplate(transactionManager));
+        /*
         }
+        */
     }
 
     /**
@@ -1723,14 +1735,18 @@ fk_delete_method(foreignKey,input) ::= <<
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
+        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
+        */
             deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
                 <foreignKey:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new TransactionTemplate(transactionManager));
+        /*
         }
+        */
     }
 
     /**
@@ -1844,16 +1860,20 @@ custom_select(cs, input) ::= <<
     {
         <cs.resultClass> result = null;
 
+        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
+        */
             result =
                 <cs.nameUncapitalized>(
                     <cs.parameters:{<it.nameLowercased>,}; separator="\n">
                     preparedStatementCreatorFactory,
                     params,
                     new TransactionTemplate(transactionManager));
+        /*
         }
+        */
 
         return result;
     }
@@ -1976,9 +1996,11 @@ public void <cs.nameUncapitalized>(
              object=it.object); separator=",\n">
         };
 
+        /*
     // Enabling transactions temporarily.
     synchronized (DataSourceTransactionManager.class)
     {
+        */
        DataSourceTransactionManager transactionManager =
            new DataSourceTransactionManager(getDataSource());
        TransactionTemplate transactionTemplate =
@@ -1999,7 +2021,9 @@ public void <cs.nameUncapitalized>(
            t_PreparedStatementCreatorFactory
              .newPreparedStatementSetter(params));
         */
+        /*
     }
+        */
 }
 >>
 
@@ -2115,14 +2139,18 @@ jdbcInsert(input) ::= <<
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
+        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
+        */
             insert(
                 <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new TransactionTemplate(transactionManager));
+        /*
         }
+        */
     }
 
     /**
@@ -2368,15 +2396,19 @@ oracle8Insert(input) ::= <<
     {
         <input.vo_name> result = null;
 
+        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
+        */
             result =
                 create(
                     <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
                       separator=",\n">,
                     new TransactionTemplate(transactionManager));
+        /*
         }
+        */
 
         return result;
     }
