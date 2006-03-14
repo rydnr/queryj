@@ -347,7 +347,7 @@ public class JdbcMetadataTypeManager
      */
     public String getStatementSetterFieldType(final int dataType)
     {
-        return getFieldType(dataType);
+        return getFieldType(dataType, true);
     }
 
     /**
