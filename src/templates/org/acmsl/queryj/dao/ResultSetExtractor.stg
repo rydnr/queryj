@@ -552,7 +552,7 @@ object_nullable_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a non-primitive nullable attribute.
 !>
-resultSet.get<attr.objectType>(
+resultSet.get<attr.statementSetterFieldType>(
     <attr.tableNameUppercased>.<attr.nameUppercased>);
 >>
 
@@ -560,7 +560,7 @@ object_nullable_clobhandling_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a non-primitive nullable attribute.
 !>
-resultSet.get<attr.objectType>("<attr.nameUppercased>");
+resultSet.get<attr.statementSetterFieldType>("<attr.nameUppercased>");
 >>
 
 attribute_extraction(attr, input) ::= <<
@@ -585,7 +585,7 @@ default_attribute_extraction(attr) ::= <<
 <if(attr.allowsNull)>
 t_<attr.nameCapitalized>As<attr.objectType>
 <else>
-resultSet.get<attr.objectType>(<attr.tableNameUppercased>.<attr.nameUppercased>)
+resultSet.get<attr.statementSetterFieldType>(<attr.tableNameUppercased>.<attr.nameUppercased>)
 <endif>
 >>
 
@@ -597,7 +597,7 @@ default_clobhandling_attribute_extraction(attr) ::= <<
 <if(attr.allowsNull)>
 t_<attr.nameCapitalized>As<attr.objectType>
 <else>
-resultSet.get<attr.objectType>("<attr.nameUppercased>")
+resultSet.get<attr.statementSetterFieldType>("<attr.nameUppercased>")
 <endif>
 >>
 
