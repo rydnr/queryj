@@ -482,7 +482,7 @@ attribute_query_specification(attr) ::= <<
  Generates the code to specify the attribute into the query.
  @param attr the attribute.
 !>
-query.set<attr.queryJFieldType>(
+query.set<attr.statementSetterFieldType>(
     <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
     <attr.nameLowercased>);
 >>

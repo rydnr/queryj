@@ -96,7 +96,7 @@ public class OracleMetaDataRetrievalHandler
         {
             result = checkVersion(productVersion, VersionUtils.getInstance());
         }
-        
+
         return result;
     }
 

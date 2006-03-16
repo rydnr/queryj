@@ -531,6 +531,30 @@ public class AttributeDecorator
     }
 
     /**
+     * Retrieves the QueryJ type for statement setters.
+     * @return the QueryJ type.
+     */
+    public String getStatementSetterFieldType()
+    {
+        return
+            getStatementSetterFieldType(
+                getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves the QueryJ type for statement setters.
+     * @param type the type.
+     * @param metadataTypeManager the metadata type manager.
+     * @return the QueryJ type.
+     * @precondition metadataTypeManager != null
+     */
+    protected String getStatementSetterFieldType(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.getStatementSetterFieldType(type);
+    }
+
+    /**
      * Retrieves the attribute's table in upper-case.
      * @return such information.
      */

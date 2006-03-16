@@ -130,13 +130,27 @@ public class CustomResultSetExtractorTemplate
             metadataManager,
             engineName,
             engineVersion);
-        
+
         input.put(
             "table",
             retrieveTable(
                 result,
                 customSqlProvider,
                 metadataManager,
+                CustomResultUtils.getInstance()));
+    }
+
+    /**
+     * Retrieves the table associated to the result.
+     * @return the table name.
+     */
+    public String retrieveTable()
+    {
+        return
+            retrieveTable(
+                getResult(),
+                getCustomSqlProvider(),
+                getMetadataManager(),
                 CustomResultUtils.getInstance()));
     }
 
@@ -157,6 +171,7 @@ public class CustomResultSetExtractorTemplate
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final CustomResultUtils customResultUtils)
+      throws  InvalidTemplateException
     {
         return
             customResultUtils.retrieveTable(

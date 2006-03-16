@@ -422,7 +422,6 @@ public abstract class BasePerForeignKeyTemplate
     }
 
     /**
-<<<<<<< BasePerForeignKeyTemplate.java
      * Retrieves the foreign key attributes.
      * @param foreignKey the foreign key.
      * @param metadataManager the <code>MetadataManager</code>
@@ -566,7 +565,7 @@ public abstract class BasePerForeignKeyTemplate
         final MetadataTypeManager metadataTypeManager)
     {
         Collection result = new ArrayList();
-        
+
         int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
@@ -611,7 +610,7 @@ public abstract class BasePerForeignKeyTemplate
                     metadataManager,
                     metadataTypeManager));
         }
-        
+
         return result;
     }
 

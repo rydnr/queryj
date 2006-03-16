@@ -181,7 +181,7 @@ public class DAOFactoryTemplateWritingHandler
         {
             throw new BuildException(ioException);
         }
-        
+
         return result;
     }
 

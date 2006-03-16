@@ -2143,12 +2143,20 @@ jdbcInsert(input) ::= <<
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
     {
+        Map t_mMap = null;
+
+        <input.externally_managed_attributes:em_attribute_value_retrieval(
+          query=it.query,
+          nativeType=it.nativeType,
+          nameLowercased=it.nameLowercased,
+          type=it.objectType); separator="\n">
+
         transactionTemplate.execute(
             new UpdateTransactionCallback(
                 new QueryPreparedStatementCreator(query),
                 new <input.vo_name>AttributesStatementSetter(
-                    <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
-                    false),
+                    <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+                    true),
                 this));
     }
 
