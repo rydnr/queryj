@@ -1402,7 +1402,7 @@ public abstract class Query
      * previously specified variable condition.
      * @param condition the variable condition.
      * @param value the time value.
-     * @see java.sql.PreparedStatement#setTime(int,java.sql.Time)
+     * @see java.sql.PreparedStatement#setDate(int,java.sql.Time)
      * @throws SQLException if an error occurs.
      * @precondition variableCondition != null
      */
@@ -1441,7 +1441,34 @@ public abstract class Query
     public void setDate(final int index, final java.util.Date value)
         throws  SQLException
     {
-        retrievePreparedStatement().setDate(index, new Date(value.getTime()));
+        setDate(index, value, retrievePreparedStatement());
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setDate(int,Date).
+     * @see java.sql.PreparedStatement#setDate(int,java.util.Date)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param preparedStatement the prepared statement.
+     * @throws SQLException if an error occurs.
+     * @precondition value != null
+     * @precondition preparedStatement != null
+     */
+    protected void setDate(
+        final int index,
+        final java.util.Date value,
+        final PreparedStatement preparedStatement)
+      throws  SQLException
+    {
+        if  (value != null)
+        {
+            preparedStatement.setDate(index, new Date(value.getTime()));
+        }
+        else
+        {
+            preparedStatement.setNull(index, Types.DATE);
+        }
     }
 
     /**
@@ -1572,7 +1599,34 @@ public abstract class Query
     public void setTimestamp(final int index, final java.util.Date value)
         throws  SQLException
     {
-        retrievePreparedStatement().setTimestamp(index, new Timestamp(value.getTime()));
+        setTimestamp(index, value, retrievePreparedStatement());
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setTimestamp(int,Timestamp).
+     * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param preparedStatement the prepared statement.
+     * @throws SQLException if an error occurs.
+     * @precondition preparedStatement != null
+     */
+    protected void setTimestamp(
+        final int index,
+        final java.util.Date value,
+        final PreparedStatement preparedStatement)
+        throws  SQLException
+    {
+        if  (value != null)
+        {
+            preparedStatement.setTimestamp(
+                index, new Timestamp(value.getTime()));
+        }
+        else
+        {
+            preparedStatement.setNull(index, Types.TIMESTAMP);
+        }
     }
 
     /**
@@ -1589,8 +1643,35 @@ public abstract class Query
         final int index, final java.util.Date value, final Calendar calendar)
       throws  SQLException
     {
-        retrievePreparedStatement().setTimestamp(
-            index, new Timestamp(value.getTime()), calendar);
+        setTimestamp(index, value, calendar, retrievePreparedStatement());
+    }
+    
+    /**
+     * See java.sql.PreparedStatement#setTimestamp(int,Timestamp,Calendar).
+     * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp,java.util.Calendar)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param calendar (Taken from Sun's Javadoc) the Calendar object
+     * the driver will use to construct the time.
+     * @throws SQLException if an error occurs.
+     */
+    protected void setTimestamp(
+        final int index,
+        final java.util.Date value,
+        final Calendar calendar,
+        final PreparedStatement preparedStatement)
+      throws  SQLException
+    {
+        if  (value != null)
+        {
+            preparedStatement.setTimestamp(
+                index, new Timestamp(value.getTime()), calendar);
+        }
+        else
+        {
+            preparedStatement.setNull(index, Types.DATE);
+        }
     }
 
     /**
@@ -1794,13 +1875,33 @@ public abstract class Query
     public void setInt(final int index, final Integer value)
         throws  SQLException
     {
-        if  (value == null)
+        setInt(index, value, retrievePreparedStatement());
+    }
+    
+    /**
+     * Specifies an integer value, or <code>null</code>, depending
+     * on given value.
+     * @see java.sql.PreparedStatement#setInt(int,int)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param preparedStatement != null
+     * @throws SQLException if an error occurs.
+     * @precondition preparedStatement != null
+     */
+    protected void setInt(
+        final int index,
+        final Integer value,
+        final PreparedStatement preparedStatement)
+        throws  SQLException
+    {
+        if  (value != null)
         {
-            retrievePreparedStatement().setNull(index, Types.INTEGER);
+            preparedStatement.setInt(index, value.intValue());
         }
         else
         {
-            retrievePreparedStatement().setInt(index, value.intValue());
+            preparedStatement.setNull(index, Types.INTEGER);
         }
     }
 
@@ -1876,13 +1977,33 @@ public abstract class Query
     public void setLong(final int index, final Long value)
         throws  SQLException
     {
-        if  (value == null)
+        setLong(index, value, retrievePreparedStatement());
+    }
+    
+    /**
+     * Specifies a long value, or <code>null</code>, depending
+     * on given value.
+     * @see java.sql.PreparedStatement#setLong(int,long)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param preparedStatement the prepared statement.
+     * @throws SQLException if an error occurs.
+     * @precondition preparedStatement != null
+     */
+    protected void setLong(
+        final int index,
+        final Long value,
+        final PreparedStatement preparedStatement)
+      throws  SQLException
+    {
+        if  (value != null)
         {
-            retrievePreparedStatement().setNull(index, Types.BIGINT);
+            preparedStatement.setLong(index, value.longValue());
         }
         else
         {
-            retrievePreparedStatement().setLong(index, value.longValue());
+            preparedStatement.setNull(index, Types.BIGINT);
         }
     }
 
@@ -1989,13 +2110,33 @@ public abstract class Query
     public void setDouble(final int index, final Double value)
         throws  SQLException
     {
-        if  (value == null)
+        setDouble(index, value, retrievePreparedStatement());
+    }
+    
+    /**
+     * Specifies a double value, or <code>null</code>, depending
+     * on given value.
+     * @see java.sql.PreparedStatement#setDouble(int,double)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param preparedStatement the prepared statement.
+     * @throws SQLException if an error occurs.
+     * @precondition preparedStatement != null
+     */
+    protected void setDouble(
+        final int index,
+        final Double value,
+        final PreparedStatement preparedStatement)
+      throws  SQLException
+    {
+        if  (value != null)
         {
-            retrievePreparedStatement().setNull(index, Types.REAL);
+            preparedStatement.setDouble(index, value.doubleValue());
         }
         else
         {
-            retrievePreparedStatement().setDouble(index, value.doubleValue());
+            preparedStatement.setNull(index, Types.REAL);
         }
     }
 
@@ -2824,7 +2965,9 @@ public abstract class Query
         final Field field, final java.util.Date value)
       throws  SQLException
     {
-        setTimestamp(field.equals(), new Timestamp(value.getTime()));
+        setTimestamp(
+            field.equals(),
+            (value != null) ? new Timestamp(value.getTime()) : null);
     }
 
     /**
@@ -2835,7 +2978,6 @@ public abstract class Query
      * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
      * @throws SQLException if an error occurs.
      * @precondition variableCondition != null
-     * @precondition value != null
      */
     public void setTimestamp(
         final VariableCondition condition, final java.util.Date value)
@@ -2844,7 +2986,7 @@ public abstract class Query
         setTimestamp(
             retrieveIndex(
                 getVariableConditions(), condition),
-            new java.util.Date(value.getTime()));
+            (value != null) ? new java.util.Date(value.getTime()) : null);
     }
 
     /**
@@ -2857,7 +2999,6 @@ public abstract class Query
      * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
      * @throws SQLException if an error occurs.
      * @precondition field != null
-     * @precondition value != null
      */
     public void setTimestamp(
         final Field field,
@@ -2865,7 +3006,10 @@ public abstract class Query
         final Calendar calendar)
       throws  SQLException
     {
-        setTimestamp(field.equals(), new Timestamp(value.getTime()), calendar);
+        setTimestamp(
+            field.equals(),
+            (value != null) ? new Timestamp(value.getTime()) : null,
+            calendar);
     }
 
     /**
@@ -2878,7 +3022,6 @@ public abstract class Query
      * @see java.sql.PreparedStatement#setTimestamp(int,java.sql.Timestamp)
      * @throws SQLException if an error occurs.
      * @precondition variableCondition != null
-     * @precondition value != null
      */
     public void setTimestamp(
         final VariableCondition condition,
@@ -2888,7 +3031,7 @@ public abstract class Query
     {
         setTimestamp(
             retrieveIndex(getVariableConditions(), condition),
-            new Timestamp(value.getTime()),
+            (value != null) ? new Timestamp(value.getTime()) : null,
             calendar);
     }
 
