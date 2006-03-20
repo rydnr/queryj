@@ -127,6 +127,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils)
+      throws BuildException
     {
         return
             packageUtils.retrieveResultSetExtractorPackage(
@@ -146,6 +147,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @param metadataManager the database metadata manager.
      * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @return the table name.
+     * @throws BuildException if there's no table associated to the result.
      * @precondition resultElement != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
@@ -156,10 +158,22 @@ public class CustomResultSetExtractorTemplateBuildHandler
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final CustomResultUtils customResultUtils)
+      throws  BuildException
     {
-        return
+        String result =
             customResultUtils.retrieveTable(
                 resultElement, customSqlProvider, metadataManager);
+
+        if  (result == null)
+        {
+            throw
+                new BuildException(
+                      "Specified result element "
+                    + resultElement.getId()
+                    + " is not associated to any table in the model.");
+        }
+
+        return result;
     }
 
     /**

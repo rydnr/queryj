@@ -2441,9 +2441,12 @@
       description="Copies the latest jar file to the local Maven repository, if it's installed."
       if="maven.available.locally">
 
-        <copy
-          file="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
-          tofile="${env.MAVEN_HOME}/repository/${project.name}/jars/${project.name}-${project.version}${project.status}.jar"/>
+      <delete
+        file="${env.MAVEN_HOME}/repository/${project.name}/jars/${project.name}-${project.version}${project.status}.jar"/>
+
+      <copy
+        file="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
+        tofile="${env.MAVEN_HOME}/repository/${project.name}/jars/${project.name}-${project.version}${project.status}.jar"/>
 
     </target>
 
@@ -2459,28 +2462,28 @@
       description="Creates symbolic links for project's latest jar file."
       if="isUnix">
 
-        <property environment="env"/>
+      <property environment="env"/>
 
-        <!--
-         Creates symlinks for latest jar file.
-        -->
-        <symlink
-          action="single"
-          overwrite="true"
-          resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
-          link="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}.jar"/>
+      <!--
+       Creates symlinks for latest jar file.
+      -->
+      <symlink
+        action="single"
+        overwrite="true"
+        resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
+        link="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}.jar"/>
 
-        <!--symlink
-          action="single"
-          overwrite="true"
-          resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
-          link="${basedir}/${build.dir}/${project.name}.jar"/-->
+      <!--symlink
+        action="single"
+        overwrite="true"
+        resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
+        link="${basedir}/${build.dir}/${project.name}.jar"/-->
 
-        <condition property="maven.available.locally">
-          <available type="dir" file="${env.MAVEN_HOME}/repository"/>
-        </condition>
+      <condition property="maven.available.locally">
+        <available type="dir" file="${env.MAVEN_HOME}/repository"/>
+      </condition>
 
-        <antcall target="_jar.symlink.to.maven"/>
+      <antcall target="_jar.symlink.to.maven"/>
 
     </target>
 
@@ -2497,11 +2500,18 @@
       description="Creates symlinks to the latest jar file in the local Maven repository, if it's installed."
       if="maven.available.locally">
 
-        <symlink
-          action="single"
-          overwrite="true"
-          resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
-          link="${env.MAVEN_HOME}/repository/${project.group}/jars/${project.name}-${project.version}${project.status}.jar"/>
+      <delete
+        file="${env.MAVEN_HOME}/repository/${project.group}/jars/${project.name}-${project.version}${project.status}.jar"/>
+
+      <move
+        file="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
+        toFile="${env.MAVEN_HOME}/repository/${project.group}/jars/${project.name}-${project.version}${project.status}.jar"/>
+
+      <symlink
+        action="single"
+        overwrite="true"
+        resource="${env.MAVEN_HOME}/repository/${project.group}/jars/${project.name}-${project.version}${project.status}.jar"
+        link="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"/>
 
     </target>
 

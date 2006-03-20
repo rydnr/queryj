@@ -151,7 +151,7 @@ public class CustomResultSetExtractorTemplate
                 getResult(),
                 getCustomSqlProvider(),
                 getMetadataManager(),
-                CustomResultUtils.getInstance()));
+                CustomResultUtils.getInstance());
     }
 
     /**
