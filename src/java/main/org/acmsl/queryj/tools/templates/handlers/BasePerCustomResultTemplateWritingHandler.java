@@ -41,7 +41,10 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
@@ -142,30 +145,59 @@ public abstract class BasePerCustomResultTemplateWritingHandler
       throws  BuildException
     {
         handle(
-            retrieveTemplate(parameters),
-            retrieveOutputDir(engineName, parameters),
-            retrieveTemplateGenerator());
+            retrieveTemplates(parameters),
+            retrieveTemplateGenerator(),
+            retrieveCustomSqlProvider(parameters),
+            retrieveMetadataManager(parameters),
+            engineName,
+            parameters);
     }
             
     /**
      * Handles given information.
      * @param template the template.
-     * @param outputDir the output dir.
      * @param templateGenerator the template generator.
+     * @param customSqlProvider the custom sql provider.
+     * @param metadataManager the metadata manager.
+     * @param engineName the engine name.
+     * @param parameters the parameter map.
      * @throws BuildException if the build process cannot be performed.
      * @precondition template != null
-     * @precondition outputDir != null
      * @precondition templateGenerator != null
+     * @precondition engineName != null
+     * @precondition parameters != null
      */
     protected void handle(
-        final BasePerCustomResultTemplate template,
-        final File outputDir,
-        final BasePerCustomResultTemplateGenerator templateGenerator)
+        final BasePerCustomResultTemplate[] templates,
+        final BasePerCustomResultTemplateGenerator templateGenerator,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final String engineName,
+        final Map parameters)
       throws  BuildException
     {
+        int t_iCount = (templates != null) ? templates.length : 0;
+
+        BasePerCustomResultTemplate t_Template = null;
+        
         try 
         {
-            templateGenerator.write(template, outputDir);
+            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                t_Template = templates[t_iIndex];
+
+                if  (t_Template != null)
+                {
+                    templateGenerator.write(
+                        t_Template,
+                        retrieveOutputDir(
+                            t_Template.getResult(),
+                            customSqlProvider,
+                            metadataManager,
+                            engineName,
+                            parameters));
+                }
+            }
         }
         catch  (final IOException ioException)
         {
@@ -180,29 +212,40 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     protected abstract BasePerCustomResultTemplateGenerator retrieveTemplateGenerator();
 
     /**
-     * Retrieves the template from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
-     * @return the template.
+     * @return the templates.
      * @throws BuildException if the template retrieval process if faulty.
      */
-    protected abstract BasePerCustomResultTemplate retrieveTemplate(
+    protected abstract BasePerCustomResultTemplate[] retrieveTemplates(
         final Map parameters)
       throws  BuildException;
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param resultElement the result element.
+     * @param customSqlProvider the custom sql provider.
+     * @param metadataManager the metadata manager.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
+     * @precondition resultElement != null
      */
     protected File retrieveOutputDir(
-        final String engineName, final Map parameters)
+        final ResultElement resultElement,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final String engineName,
+        final Map parameters)
       throws  BuildException
     {
         return
             retrieveOutputDir(
+                resultElement,
+                customSqlProvider,
+                metadataManager,
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveUseSubfoldersFlag(parameters),
@@ -213,6 +256,9 @@ public abstract class BasePerCustomResultTemplateWritingHandler
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param resultElement the result element.
+     * @param customSqlProvider the custom sql provider.
+     * @param metadataManager the metadata manager.
      * @param projectFolder the project folder.
      * @param projectPackage the project base package.
      * @param useSubfolders whether to use subfolders for tests, or
@@ -222,11 +268,11 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition engineName != null
-     * @precondition parameters != null
-     * @precondition packageUtils != null
      */
     protected abstract File retrieveOutputDir(
+        final ResultElement resultElement,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
         final File projectFolder,
         final String projectPackage,
         final boolean useSubfolders,

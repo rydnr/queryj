@@ -86,7 +86,7 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class CustomResultSetExtractorTemplateBuildHandler
-    extends    BasePerCustomResultTemplateBuildHandler
+    extends  BasePerCustomResultTemplateBuildHandler
 {
     /**
      * An empty template array.

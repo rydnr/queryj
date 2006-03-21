@@ -40,13 +40,17 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.handlers.CustomResultSetExtractorTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -60,8 +64,6 @@ import org.apache.tools.ant.Project;
  */
 import java.io.File;
 import java.io.IOException;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -70,8 +72,7 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class CustomResultSetExtractorTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerCustomResultTemplateWritingHandler
 {
     /**
      * Creates a CustomResultSetExtractorTemplateWritingHandler.
@@ -79,105 +80,12 @@ public class CustomResultSetExtractorTemplateWritingHandler
     public CustomResultSetExtractorTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerCustomResultTemplateGenerator retrieveTemplateGenerator()
     {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     */
-    protected boolean handle(final Map parameters)
-      throws  BuildException
-    {
-        return
-            handle(
-                parameters,
-                retrieveDatabaseMetaData(parameters));
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected boolean handle(
-        final Map parameters, final DatabaseMetaData metaData)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try
-        {
-            handle(
-                parameters,
-                metaData.getDatabaseProductName(),
-                retrieveTemplates(parameters),
-                CustomResultSetExtractorTemplateGenerator.getInstance());
-        }
-        catch  (final SQLException sqlException)
-        {
-            throw new BuildException(sqlException);
-        }
-
-        return result;
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param templates the templates.
-     * @param templateGenerator the template generator.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition templates != null
-     * @precondition templateGenerator != null
-     */
-    protected void handle(
-        final Map parameters,
-        final String engineName,
-        final CustomResultSetExtractorTemplate[] templates,
-        final CustomResultSetExtractorTemplateGenerator templateGenerator)
-      throws  BuildException
-    {
-        try 
-        {
-            int t_iLength = (templates != null) ? templates.length : 0;
-
-            for  (int t_iIndex = 0;
-                      t_iIndex < t_iLength;
-                      t_iIndex++)
-            {
-                templateGenerator.write(
-                    templates[t_iIndex],
-                    retrieveOutputDir(
-                        engineName,
-                        templates[t_iIndex].retrieveTable(),
-                        parameters,
-                        retrieveUseSubfoldersFlag(parameters)));
-            }
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
+        return CustomResultSetExtractorTemplateGenerator.getInstance();
     }
 
     /**
@@ -185,53 +93,88 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the templates.
      * @throws BuildException if the template retrieval process if faulty.
-     * @precondition parameters != null
      */
-    protected CustomResultSetExtractorTemplate[] retrieveTemplates(
+    protected BasePerCustomResultTemplate[] retrieveTemplates(
         final Map parameters)
-      throws  BuildException
+        throws  BuildException
     {
         return
-            (CustomResultSetExtractorTemplate[])
+            (BasePerCustomResultTemplate[])
                 parameters.get(
                     TemplateMappingManager.CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param resultElement the result element.
+     * @param customSqlProvider the custom sql provider.
+     * @param metadataManager the metadata manager.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
      * @param engineName the engine name.
-     * @param tableName the table name.
      * @param parameters the parameter map.
-     * @param useSubfolders whether to use subfolders or not.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition engineName != null
-     * @precondition tableName != null
-     * @precondition parameters != null
      */
     protected File retrieveOutputDir(
+        final ResultElement resultElement,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
         final String engineName,
-        final String tableName,
         final Map parameters,
-        final boolean subFolders)
+        final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             retrieveOutputDir(
+                retrieveTableName(
+                    resultElement,
+                    customSqlProvider,
+                    metadataManager,
+                    CustomResultUtils.getInstance()),
+                projectFolder,
+                projectPackage,
+                useSubfolders,
                 engineName,
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                tableName,
-                subFolders,
-                PackageUtils.getInstance());
+                packageUtils);
+    }
+
+    /**
+     * Retrieves the table name.
+     * @param resultElement the result element.
+     * @param customSqlProvider the custom sql provider.
+     * @param metadataManager the metadata manager.
+     * @param customResultUtils the <code>CustomResultUtils</code>
+     * instance.
+     * @return the table name.
+     * @precondition resultElement != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition customResultUtils != null
+     */
+    protected String retrieveTableName(
+        final ResultElement resultElement,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final CustomResultUtils customResultUtils)
+    {
+        return
+            customResultUtils.retrieveTable(
+                resultElement, customSqlProvider, metadataManager);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param tableName the table name.
      * @param engineName the engine name.
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
-     * @param tableName the table name.
      * @param useSubfolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
@@ -243,11 +186,11 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final String engineName,
+        final String tableName,
         final File projectOutputDir,
         final String projectPackage,
-        final String tableName,
         final boolean useSubfolders,
+        final String engineName,
         final PackageUtils packageUtils)
       throws  BuildException
     {

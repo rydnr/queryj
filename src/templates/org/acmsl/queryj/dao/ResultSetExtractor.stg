@@ -531,6 +531,20 @@ Timestamp_nullable_clobhandling_attribute_extractor(input) ::= <<
 <object_nullable_clobhandling_attribute_extractor(attr=input)>
 >>
 
+BigDecimal_nullable_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a BigDecimal nullable attribute.
+!>
+<object_nullable_attribute_extractor(attr=input)>
+>>
+
+BigDecimal_nullable_clobhandling_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a BigDecimal nullable attribute.
+!>
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
+>>
+
 primitive_nullable_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a primitive nullable attribute.
