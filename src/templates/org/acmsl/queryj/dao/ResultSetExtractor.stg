@@ -521,14 +521,16 @@ Timestamp_nullable_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
-<object_nullable_attribute_extractor(attr=input)>
+resultSet.get<attr.objectType>(
+    <attr.tableNameUppercased>.<attr.nameUppercased>);
 >>
 
 Timestamp_nullable_clobhandling_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+resultSet.get<attr.objectType>(
+    <attr.tableNameUppercased>.<attr.nameUppercased>);
 >>
 
 primitive_nullable_attribute_extractor(attr) ::= <<
