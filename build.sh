@@ -10,6 +10,8 @@ usage () {
 [ -z "$1" ] && usage
 
 if  [[ "x$1" == "x-d" ]]; then
+shift
+[ -z "$1" ] && usage
 for last_command in "cd src/toolconf/maven && mkdir -p ../emacs 2> /dev/null" "cd src/toolconf/maven && maven $ACM_OPTS antdep"; do
   echo "$last_command" | sh
   if [[ ! $? == 0 ]]; then

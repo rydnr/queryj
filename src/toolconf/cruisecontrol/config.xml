@@ -1,0 +1,24 @@
+<cruisecontrol>
+  <project name="QueryJ-head">
+    <modificationset>
+      <svn localWorkingCopy="work/queryj/trunk" />
+    </modificationset>
+    <schedule>
+      <exec
+        command="work/queryj/trunk/build.sh"
+        args="-d rebuild"
+        workingdir="work/queryj/trunk"/>
+    </schedule>
+    <!--log logDir="logs" logXmlEncoding="ascii" /-->
+    <!--listeners>
+      <currentbuildstatuslistener file="buildstatus" />
+    </listeners-->
+    <!--publishers>
+      <email
+        mailHost="mail.acm-sl.org" returnaddress="cruisecontrol@acm-sl.org">
+        <map />
+        <failure address="chous@acm-sl.org" reportwhenfixed="true" />
+      </email>
+    </publishers-->
+  </project>
+</cruisecontrol>
