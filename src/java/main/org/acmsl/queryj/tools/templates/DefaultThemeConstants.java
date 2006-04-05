@@ -59,7 +59,7 @@ public interface DefaultThemeConstants
      * The timestamp formatter.
      */
     public static final DateFormat TIMESTAMP_FORMATTER =
-        new SimpleDateFormat("HH:ss yyyy/MM/dd");
+        new SimpleDateFormat("HH:mm:ss.SSS yyyy/MM/dd");
 
     /**
      * The template name.
