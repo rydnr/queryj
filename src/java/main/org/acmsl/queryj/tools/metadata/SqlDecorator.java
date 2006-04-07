@@ -67,7 +67,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class SqlDecorator
+public abstract class SqlDecorator
     extends  SqlElement
 {
     /**

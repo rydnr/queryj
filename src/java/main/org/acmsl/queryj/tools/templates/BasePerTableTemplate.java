@@ -51,6 +51,7 @@ import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.CachingResultDecorator;
+import org.acmsl.queryj.tools.metadata.CachingSqlDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -1048,7 +1049,7 @@ public abstract class BasePerTableTemplate
                             if  (t_bAdd)
                             {
                                 result.add(
-                                    new SqlDecorator(
+                                    new CachingSqlDecorator(
                                         t_SqlElement,
                                         customSqlProvider,
                                         metadataTypeManager));
