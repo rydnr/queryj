@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.metadata;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
+import org.acmsl.queryj.tools.metadata.CachingAttributeDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -711,7 +712,7 @@ public class MetadataUtils
                     tableName, columnNames[t_iIndex]);
 
             result.add(
-                new AttributeDecorator(
+                new CachingAttributeDecorator(
                     columnNames[t_iIndex],
                     t_iType,
                     t_strNativeType,
