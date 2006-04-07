@@ -44,12 +44,6 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.utils.StringUtils;
 
 /**
  * Adds a simple caching mechanism while decorating <code>Attribute</code>
