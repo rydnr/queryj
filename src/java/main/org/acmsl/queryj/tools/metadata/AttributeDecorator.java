@@ -57,7 +57,7 @@ import org.acmsl.commons.utils.StringUtils;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class AttributeDecorator
+public class AttributeDecorator
     extends AbstractAttribute
 {
     /**

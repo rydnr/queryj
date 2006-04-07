@@ -57,7 +57,7 @@ import java.util.Collection;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class RowDecorator
+public class RowDecorator
     extends AbstractRow
 {
     /**

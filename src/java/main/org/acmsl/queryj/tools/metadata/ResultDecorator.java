@@ -63,7 +63,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class ResultDecorator
+public class ResultDecorator
     extends  ResultElement
 {
     /**

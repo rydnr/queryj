@@ -48,7 +48,7 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class ParameterDecorator
+public class ParameterDecorator
     extends  ParameterElement
 {
     /**
