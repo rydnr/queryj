@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Decorates 'Row' instances to provide required
- *              alternate representations of the information stored therein.
+ * Description: Adds a simple caching mechanism while decorating 'Row'
+ *              instances.
  *
  */
 package org.acmsl.queryj.tools.metadata;
@@ -42,49 +42,45 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.metadata.vo.AbstractRow;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.RowDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Row;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
- * Importing JDK classes.
+ * Importing some JDK classes.
  */
 import java.util.Collection;
 
 /**
- * Decorates <code>Row</code> instances to provide required alternate
- * representations of the information stored therein.
+ * Adds a simple caching mechanism while decorating <code>Row</code>
+ * instances.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class RowDecorator
-    extends AbstractRow
+public class CachingRowDecorator
+    extends  RowDecorator
 {
     /**
-     * The metadata type manager.
+     * The cached normalized uppercased name.
      */
-    private MetadataTypeManager m__MetadataTypeManager;
+    private String m__strCachedNameNormalizedUppercased;
 
     /**
-     * Creates a <code>RowDecorator</code> with the
+     * Creates a <code>CachingRowDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param row the row.
      * @param metadataManager the metadata manager.
      * @precondition attribute != null
      * @precondition metadataManager != null
      */
-    public RowDecorator(
+    public CachingRowDecorator(
         final Row row, final MetadataManager metadataManager)
     {
-        this(
-            row.getName(),
-            row.getTableName(),
-            row.getAttributes(),
-            metadataManager.getMetadataTypeManager());
+        super(row, metadataManager);
     }
 
     /**
-     * Creates a <code>RowDecorator</code> with the following
+     * Creates a <code>CachingRowDecorator</code> with the following
      * information.
      * @param name the name.
      * @param tableName the table name.
@@ -95,44 +91,41 @@ public class RowDecorator
      * @precondition attributes != null
      * @precondition metadataTypeManager != null
      */
-    public RowDecorator(
+    public CachingRowDecorator(
         final String name,
         final String tableName,
         final Collection attributes,
         final MetadataTypeManager metadataTypeManager)
     {
-        super(name, tableName, attributes);
-
-        immutableSetMetadataTypeManager(metadataTypeManager);
+        super(name, tableName, attributes, metadataTypeManager);
     }
 
     /**
-     * Specifies the metadata type manager.
-     * @param metadataTypeManager such instance.
+     * Specifies the cached normalized uppercased name.
+     * @param value the value to cache.
      */
-    protected final void immutableSetMetadataTypeManager(
-        final MetadataTypeManager metadataTypeManager)
+    protected final void immutableSetCachedNameNormalizedUppercased(
+        final String value)
     {
-        m__MetadataTypeManager = metadataTypeManager;
+        m__strCachedNameNormalizedUppercased = value;
+    }
+    
+    /**
+     * Specifies the cached normalized uppercased name.
+     * @param value the value to cache.
+     */
+    protected void setCachedNameNormalizedUppercased(final String value)
+    {
+        immutableSetCachedNameNormalizedUppercased(value);
     }
 
     /**
-     * Specifies the metadata type manager.
-     * @param metadataTypeManager such instance.
+     * Retrieves the cached normalized uppercased name.
+     * @return such value.
      */
-    protected void setMetadataTypeManager(
-        final MetadataTypeManager metadataTypeManager)
+    public String getCachedNameNormalizedUppercased()
     {
-        immutableSetMetadataTypeManager(metadataTypeManager);
-    }
-
-    /**
-     * Retrieves the metadata type manager.
-     * @return such instance.
-     */
-    protected MetadataTypeManager getMetadataTypeManager()
-    {
-        return m__MetadataTypeManager;
+        return m__strCachedNameNormalizedUppercased;
     }
 
     /**
@@ -141,20 +134,14 @@ public class RowDecorator
      */
     public String getNameNormalizedUppercased()
     {
-        return normalizeUppercase(getName(), DecorationUtils.getInstance());
-    }
-    
-    /**
-     * Normalizes given value, in upper-case.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return such information.
-     * @precondition value != null
-     * @precondition decorationUtils != null
-     */
-    protected String normalizeUppercase(
-        final String value, final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.softNormalizeUppercase(value);
+        String result = getCachedNameNormalizedUppercased();
+        
+        if  (result == null)
+        {
+            result = super.getNameNormalizedUppercased();
+            setCachedNameNormalizedUppercased(result);
+        }
+        
+        return result;
     }
 }

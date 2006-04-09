@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.CachingRowDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
@@ -502,7 +503,7 @@ public class BaseDAOTemplate
         final MetadataTypeManager metadataTypeManager)
     {
         return
-            new RowDecorator(
+            new CachingRowDecorator(
                 rowName, tableName, attributes, metadataTypeManager);
     }
 

@@ -19,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
+    Contact info: jose.sanleandro@acm-sl.com
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.customsql.ParameterRefElement;
 import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.metadata.CachingParameterDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ParameterDecorator;
 
@@ -336,7 +337,7 @@ public class SqlDecorator
                                 t_ParameterRef);
 
                         result.add(
-                            new ParameterDecorator(
+                            new CachingParameterDecorator(
                                 t_Parameter, metadataTypeManager));
                     }
                     else

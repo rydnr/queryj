@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.metadata;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
+import org.acmsl.queryj.tools.metadata.CachingAttributeDecorator;
+import org.acmsl.queryj.tools.metadata.CachingForeignKeyDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -258,7 +260,7 @@ public class MetadataUtils
                     if  (t_FirstAttribute != null)
                     {
                         t_CurrentFk =
-                            new ForeignKeyDecorator(
+                            new CachingForeignKeyDecorator(
                                 t_FirstAttribute.getTableName(),
                                 t_cAttributes,
                                 tableName,
@@ -712,7 +714,7 @@ public class MetadataUtils
                     tableName, columnNames[t_iIndex]);
 
             result.add(
-                new AttributeDecorator(
+                new CachingAttributeDecorator(
                     columnNames[t_iIndex],
                     t_iType,
                     t_strNativeType,
@@ -857,7 +859,7 @@ public class MetadataUtils
                         metadataManager);
 
                 result.add(
-                    new ForeignKeyDecorator(
+                    new CachingForeignKeyDecorator(
                         tableName,
                         buildAttributes(
                             t_aastrForeignKeys[t_iFkIndex],

@@ -150,12 +150,13 @@ public interface <input.vo_name>DAO
               separator=",\n">
         };
 
-    <find_constant_method(
+    <find_constant_methods(
       voName=input.vo_name,
       staticAttributeName=input.static_attribute_name,
       staticAttributeNameLowercased=input.static_attribute_name_lowercased,
       staticAttributeNameCapitalized=input.static_attribute_name_capitalized,
-      staticAttributeType=input.static_attribute_type)>
+      staticAttributeType=input.static_attribute_type,
+      primaryKeyAttributes=input.pk_attributes)>
 <endif>
 
     /**
@@ -246,14 +247,15 @@ attribute_specification(attr) ::= <<
 <if(attr.string)>"<attr.value>"<else><attr.value><endif>
 >>
 
-find_constant_method(
+find_constant_methods(
   voName,
   staticAttributeName,
   staticAttributeNameLowercased,
   staticAttributeNameCapitalized,
-  staticAttributeType) ::= <<
+  staticAttributeType,
+  primaryKeyAttributes) ::= <<
 <!
-  Declares the method to operate directly on defined constants.
+  Declares the methods to operate directly on defined constants.
   @param voName the value object name.
   @param staticAttributeName the static attribute name.
   @param staticAttributeNameLowercased the static attribute name, in lower
@@ -261,6 +263,7 @@ find_constant_method(
   @param staticAttributeNameCapitalized the static attribute name,
   capitalized.
   @param staticAttributeType the static attribute type.
+  @param primaryKeyAttributes the primary key attributes.
 !>
 /**
  * Loads \<i><voName>\</i> information from the constant pool,
@@ -272,6 +275,16 @@ find_constant_method(
  */
 public <voName> findConstantBy<staticAttributeNameCapitalized>(
     final <staticAttributeType> <staticAttributeNameLowercased>);
+
+/**
+ * Loads \<i><voName>\</i> information from the constant pool,
+ * filtering by the primary key.
+ <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the \<code><voName>\</code> instance.
+ */
+public <voName> findConstantByPk(
+  <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">);
+
 >>
 
 fk_delete_method(foreignKey,input) ::= <<
@@ -341,4 +354,3 @@ public <cs.resultClass> <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException;
 >>
-
