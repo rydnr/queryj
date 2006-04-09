@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeConstants;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
+import org.acmsl.queryj.tools.templates.STUtils;
 import org.acmsl.queryj.tools.templates.Template;
 
 /*
@@ -58,9 +59,9 @@ import org.apache.commons.logging.Log;
 /*
  * Importing StringTemplate classes.
  */
+import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 
 /*
  * Importing some JDK classes.
@@ -110,27 +111,23 @@ public abstract class AbstractTemplate
     protected StringTemplateGroup retrieveGroup(
         final String path, final String theme)
     {
-        StringTemplateGroup result = null;
-        
-        InputStream themeInput =
-            getClass().getResourceAsStream(theme);
+        return retrieveGroup(path, theme, STUtils.getInstance());
+    }
 
-        InputStream groupInput =
-            getClass().getResourceAsStream(path);
-
-        StringTemplateGroup themeGroup =
-            new StringTemplateGroup(
-                new InputStreamReader(themeInput),
-                AngleBracketTemplateLexer.class);
-
-        result =
-            new StringTemplateGroup(
-                new InputStreamReader(groupInput),
-                AngleBracketTemplateLexer.class);
-
-        result.setSuperGroup(themeGroup);
-
-        return result;
+    /**
+     * Retrieves the string template group.
+     * @param path the path.
+     * @param theme the theme.
+     * @param stUtils the <code>STUtils</code> instance.
+     * @return such instance.
+     * @precondition path != null
+     * @precondition theme != null
+     * @precondition stUtils != null
+     */
+    protected StringTemplateGroup retrieveGroup(
+        final String path, final String theme, final STUtils stUtils)
+    {
+        return stUtils.retrieveGroup(path, theme);
     }
 
     /**
