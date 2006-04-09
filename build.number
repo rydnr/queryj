@@ -1,11 +1,6 @@
 #Build Number for ANT. Do not edit!
-<<<<<<< .working
-#Wed Mar 22 09:44:06 CET 2006
-build.number=1352
-=======
-#Fri Apr 07 11:23:17 CEST 2006
-build.number=1353
->>>>>>>=1.49.2.28.2.2
+#Sun Apr 09 10:13:14 CEST 2006
+build.number=1354
+>>>>>>>=.merge-right.r538
 =\=\=\=\=\=\=
 <<<<<<<=build.number
->>>>>>> .merge-right.r538
