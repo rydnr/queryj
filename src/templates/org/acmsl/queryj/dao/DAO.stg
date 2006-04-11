@@ -485,7 +485,6 @@ public class <input.engine_name><input.vo_name>DAO
         <input.vo_name> result = null;
 
         // Enabling transactions temporarily.
-        */
         synchronized (DataSourceTransactionManager.class)
         {
             result =
@@ -632,7 +631,6 @@ public class <input.engine_name><input.vo_name>DAO
       throws DataAccessException
     {
         // Enabling transactions temporarily.
-        */
         synchronized (DataSourceTransactionManager.class)
         {
             update(
@@ -757,7 +755,6 @@ public class <input.engine_name><input.vo_name>DAO
         final PlatformTransactionManager transactionManager)
     {
         // Enabling transactions temporarily.
-        */
         synchronized (DataSourceTransactionManager.class)
         {
             deleteNoFk(
@@ -1815,7 +1812,6 @@ fk_delete_method(foreignKey,input) ::= <<
         final PlatformTransactionManager transactionManager)
     {
         // Enabling transactions temporarily.
-        */
         synchronized (DataSourceTransactionManager.class)
         {
             deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
@@ -1937,7 +1933,6 @@ custom_select(cs, input) ::= <<
         <cs.resultClass> result = null;
 
         // Enabling transactions temporarily.
-        */
         synchronized (DataSourceTransactionManager.class)
         {
             result =
@@ -2070,7 +2065,6 @@ public void <cs.nameUncapitalized>(
         };
 
     // Enabling transactions temporarily.
-        */
     synchronized (DataSourceTransactionManager.class)
     {
        DataSourceTransactionManager transactionManager =
@@ -2210,7 +2204,6 @@ jdbcInsert(input) ::= <<
       throws DataAccessException
     {
         // Enabling transactions temporarily.
-        */
         synchronized (DataSourceTransactionManager.class)
         {
             insert(
@@ -2464,7 +2457,6 @@ oracle8Insert(input) ::= <<
         <input.vo_name> result = null;
 
         // Enabling transactions temporarily.
-        */
         synchronized (DataSourceTransactionManager.class)
         {
             result =
