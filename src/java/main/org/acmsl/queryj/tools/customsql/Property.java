@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -27,39 +26,57 @@
                     28660 Madrid
                     Spain
 
- *****************************************************************************
+ ******************************************************************************
  *
  * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Defines the ways an Attribute can be decorated.
+ * Description: Models <property> elements in custom-sql models.
  *
  */
-package org.acmsl.queryj.tools.metadata;
-
-/*
- * Importing project classes.
- */
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Decorator;
+package org.acmsl.queryj.tools.customsql;
 
 /**
- * Defines the ways an <code>Attribute</code> can be decorated.
+ * Models &lt;property&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface AttributeDecorator
-    extends  Attribute,
-             Decorator
+public interface Property
 {
     /**
-     * Retrieves the decorated <code>Attribute</code>.
-     * @return such instance.
+     * Retrieves the <i>id</i> value.
+     * @return such information.
      */
-    public Attribute getAttribute();
+    public String getId();
+
+    /**
+     * Retrieves the <i>column_name</i> attribute.
+     * @return such information.
+     */
+    public String getColumnName();
+
+    /**
+     * Retrieves the <i>index</i> attribute.
+     * @return such information.
+     */
+    public int getIndex();
+
+    /**
+     * Retrieves the <i>name</i> attribute.
+     * @return such information.
+     */
+    public String getName();
+
+    /**
+     * Retrieves the <i>type</i> attribute.
+     * @return such information.
+     */
+    public String getType();
+
+    /**
+     * Retrieves ehether the property is nullable or not.
+     * @return such condition.
+     */
+    public boolean isNullable();
 }

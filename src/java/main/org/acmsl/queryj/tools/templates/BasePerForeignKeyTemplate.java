@@ -41,11 +41,12 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
+import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
@@ -159,6 +160,7 @@ public abstract class BasePerForeignKeyTemplate
                 getBasePackageName(),
                 getRepositoryName(),
                 metadataManager.getMetadataTypeManager(),
+                getDecoratorFactory(),
                 StringUtils.getInstance(),
                 DefaultThemeUtils.getInstance(),
                 PackageUtils.getInstance(),
@@ -178,6 +180,7 @@ public abstract class BasePerForeignKeyTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param metadataTypeManager the metadata type manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param stringUtils the StringUtils instance.
      * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
      * @param packageUtils the PackageUtils instance.
@@ -188,6 +191,7 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition foreignKey != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      * @precondition stringUtils != null
      * @precondition defaultThemeUtils != null
      * @precondition packageUtils != null
@@ -205,6 +209,7 @@ public abstract class BasePerForeignKeyTemplate
         final String basePackageName,
         final String repositoryName,
         final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory,
         final StringUtils stringUtils,
         final DefaultThemeUtils defaultThemeUtils,
         final PackageUtils packageUtils,
@@ -239,6 +244,7 @@ public abstract class BasePerForeignKeyTemplate
             packageUtils.retrieveDAOSubpackage(engineName),
             createTimestamp(),
             t_strRepositoryName,
+            decoratorFactory,
             stringUtils);
 
         result = t_Template.toString();
@@ -259,6 +265,7 @@ public abstract class BasePerForeignKeyTemplate
      * @param timestamp the timestamp.
      * @param className the class name of the DAO.
      * @param tableRepositoryName the table repository.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @precondition input != null
      * @precondition template != null
@@ -270,6 +277,7 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition subpackageName != null
      * @precondition timestamp != null
      * @precondition tableRepositoryName != null
+     * @precondition decoratorFactory != null
      * @precondition stringUtils != null
      */
     protected void fillParameters(
@@ -283,6 +291,7 @@ public abstract class BasePerForeignKeyTemplate
         final String subpackageName,
         final String timestamp,
         final String tableRepositoryName,
+        final DecoratorFactory decoratorFactory,
         final StringUtils stringUtils)
     {
         template.setAttribute("input", input);
@@ -427,15 +436,18 @@ public abstract class BasePerForeignKeyTemplate
      * @param metadataManager the <code>MetadataManager</code>
      * instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the foreign key attributes.
      * @precondition foreignKey != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      */
     protected Collection retrieveForeignKeyAttributes(
         final ForeignKey foreignKey,
         final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -443,7 +455,8 @@ public abstract class BasePerForeignKeyTemplate
                     foreignKey.getAttributes().toArray(EMPTY_STRING_ARRAY),
                 foreignKey.getSourceTableName(),
                 metadataManager,
-                metadataTypeManager);
+                metadataTypeManager,
+                decoratorFactory);
     }
 
     /**
@@ -453,17 +466,20 @@ public abstract class BasePerForeignKeyTemplate
      * @param metadataManager the <code>MetadataManager</code>
      * instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the attribute collection.
      * @precondition columnNames != null
      * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      */
     protected Collection buildAttributes(
         final String[] columnNames,
         final String tableName,
         final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -471,7 +487,8 @@ public abstract class BasePerForeignKeyTemplate
                 new String[columnNames.length],
                 tableName,
                 metadataManager,
-                metadataTypeManager);
+                metadataTypeManager,
+                decoratorFactory);
     }
 
     /**
@@ -482,19 +499,22 @@ public abstract class BasePerForeignKeyTemplate
      * @param metadataManager the <code>MetadataManager</code>
      * instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the attribute collection.
      * @precondition columnNames != null
      * @precondition columnValues != null
      * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      */
     protected Collection buildAttributes(
         final String[] columnNames,
         final String[] columnValues,
         final String tableName,
         final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -503,7 +523,8 @@ public abstract class BasePerForeignKeyTemplate
                 tableName,
                 null,
                 metadataManager,
-                metadataTypeManager);
+                metadataTypeManager,
+                decoratorFactory);
     }
 
     /**
@@ -516,18 +537,21 @@ public abstract class BasePerForeignKeyTemplate
      * instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code>
      * instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the attribute collection.
      * @precondition columnNames != null
      * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      */
     protected Collection buildAttributes(
         final String[] columnNames,
         final String tableName,
         final Boolean allowsNullAsAWhole,
         final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -536,7 +560,8 @@ public abstract class BasePerForeignKeyTemplate
                 tableName,
                 allowsNullAsAWhole,
                 metadataManager,
-                metadataTypeManager);
+                metadataTypeManager,
+                decoratorFactory);
     }
 
     /**
@@ -550,11 +575,13 @@ public abstract class BasePerForeignKeyTemplate
      * instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code>
      * instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the attribute collection.
      * @precondition columnNames != null
      * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      */
     protected Collection buildAttributes(
         final String[] columnNames,
@@ -562,7 +589,8 @@ public abstract class BasePerForeignKeyTemplate
         final String tableName,
         final Boolean allowsNullAsAWhole,
         final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory)
     {
         Collection result = new ArrayList();
 
@@ -598,17 +626,17 @@ public abstract class BasePerForeignKeyTemplate
                     tableName, columnNames[t_iIndex]);
 
             result.add(
-                new AttributeDecorator(
-                    columnNames[t_iIndex],
-                    t_iType,
-                    t_strNativeType,
-                    t_strFieldType,
-                    tableName,
-                    t_bManagedExternally,
-                    t_bAllowsNull,
-                    columnValues[t_iIndex],
-                    metadataManager,
-                    metadataTypeManager));
+                decoratorFactory.createDecorator(
+                    new AttributeValueObject(
+                        columnNames[t_iIndex],
+                        t_iType,
+                        t_strNativeType,
+                        t_strFieldType,
+                        tableName,
+                        t_bManagedExternally,
+                        t_bAllowsNull,
+                        columnValues[t_iIndex]),
+                    metadataManager));
         }
 
         return result;

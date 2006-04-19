@@ -45,6 +45,8 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
 
 /*
@@ -90,9 +92,12 @@ public class CachingResultDecorator
      * @precondition customSqlProvider != null
      */
     public CachingResultDecorator(
-        final ResultElement result, final CustomSqlProvider customSqlProvider)
+        final ResultElement result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
-        super(result, customSqlProvider);
+        super(result, customSqlProvider, metadataManager, decoratorFactory);
     }
 
     /**

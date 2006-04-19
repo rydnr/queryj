@@ -40,7 +40,9 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.DefaultThemeConstants;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.STUtils;
@@ -87,6 +89,15 @@ public abstract class AbstractTemplate
      */
     protected AbstractTemplate()
     {
+    }
+
+    /**
+     * Retrieves the <code>DecoratorFactory</code> instance.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

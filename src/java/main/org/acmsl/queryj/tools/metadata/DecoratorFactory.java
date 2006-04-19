@@ -32,52 +32,48 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create per-fk templates.
+ * Description: Abstract factory for template-specific decorators.
  *
  */
-package org.acmsl.queryj.tools.templates;
+package org.acmsl.queryj.tools.metadata;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
-import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Factory;
 
 /**
- * Represents entities able to create per-<i>foreign key</i> templates.
+ * Abstract factory for template-specific decorators.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface BasePerForeignKeyTemplateFactory
+public interface DecoratorFactory
+    extends  Factory
 {
     /**
-     * Creates a per-<i>foreign key</i> template.
-     * @param foreignKey the foreign key.
-     * @param metadataManager the database metadata manager.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
+     * Creates an <code>AttributeDecorator</code> for given
+     * attribute instance.
+     * @param attribute the attribute.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated attribute for the concrete template.
      */
-    public BasePerForeignKeyTemplate createTemplate(
-        final ForeignKey foreignKey,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName)
-      throws  QueryJException;
+    public AttributeDecorator createDecorator(
+        final Attribute attribute, final MetadataManager metadataManager);
 
     /**
-     * Retrieves the decorator factory for each template.
-     * @return such instance.
+     * Creates a <code>PropertyDecorator</code> for given
+     * property instance.
+     * @param property the attribute.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated property for the concrete template.
      */
-    public DecoratorFactory getDecoratorFactory();
+    public PropertyDecorator createDecorator(
+        final Property property, final MetadataManager metadataManager);
 }

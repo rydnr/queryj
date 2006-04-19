@@ -76,17 +76,33 @@ public class ResultDecorator
      * @todo remove this.
      */
     private CustomSqlProvider m__CustomSqlProvider;
+
+    /**
+     * The metadata manager.
+     */
+    private MetadataManager m__MetadataManager;
+    
+    /**
+     * The decorator factory.
+     */
+    private DecoratorFactory m__DecoratorFactory;
     
     /**
      * Creates a <code>ResultElementDecorator</code> with given instance.
      * @param result the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
      * to decorate referred parameters.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition result != null
      * @precondition customSqlProvider != null
+     * @precondition decoratorFactory != null
      */
     public ResultDecorator(
-        final ResultElement result, final CustomSqlProvider customSqlProvider)
+        final ResultElement result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         super(
             result.getId(),
@@ -95,6 +111,8 @@ public class ResultDecorator
         immutableSetResult(result);
         immutableSetPropertyRefs(result.getPropertyRefs());
         immutableSetCustomSqlProvider(customSqlProvider);
+        immutableSetMetadataManager(metadataManager);
+        immutableSetDecoratorFactory(decoratorFactory);
     }
 
     /**
@@ -151,6 +169,64 @@ public class ResultDecorator
     protected CustomSqlProvider getCustomSqlProvider()
     {
         return m__CustomSqlProvider;
+    }
+
+    /**
+     * Specifies the metadata manager.
+     * @param metadataManager such instance.
+     */
+    protected final void immutableSetMetadataManager(
+        final MetadataManager metadataManager)
+    {
+        m__MetadataManager = metadataManager;
+    }
+
+    /**
+     * Specifies the metadata manager.
+     * @param metadataManager such instance.
+     */
+    protected void setMetadataManager(
+        final MetadataManager metadataManager)
+    {
+        immutableSetMetadataManager(metadataManager);
+    }
+
+    /**
+     * Retrieves the metadata manager.
+     * @return such instance.
+     */
+    public MetadataManager getMetadataManager()
+    {
+        return m__MetadataManager;
+    }
+    
+    /**
+     * Specifies the decorator factory.
+     * @param factory such instance.
+     */
+    protected final void immutableSetDecoratorFactory(
+        final DecoratorFactory factory)
+    {
+        m__DecoratorFactory = factory;
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param factory such instance.
+     */
+    protected void setDecoratorFactory(
+        final DecoratorFactory factory)
+    {
+        immutableSetDecoratorFactory(factory);
+    }
+    
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return m__DecoratorFactory;
     }
 
     /**
@@ -228,7 +304,12 @@ public class ResultDecorator
      */
     public Collection getProperties()
     {
-        return getProperties(getPropertyRefs(), getCustomSqlProvider());
+        return
+            getProperties(
+                getPropertyRefs(),
+                getCustomSqlProvider(),
+                getMetadataManager(),
+                getDecoratorFactory());
     }
     
     /**
@@ -236,12 +317,18 @@ public class ResultDecorator
      * @todo fix reference to customSqlProvider.
      * @param propertyRefs the property references.
      * @param customSqlProvider the <code>CustomSqlProvider</code>.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such information.
      * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     public Collection getProperties(
         final Collection propertyRefs,
-        final CustomSqlProvider customSqlProvider)
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         Collection result = new ArrayList();
 
@@ -264,7 +351,9 @@ public class ResultDecorator
                         t_Property =
                             customSqlProvider.resolveReference(t_PropertyRef);
 
-                        result.add(new PropertyDecorator(t_Property));
+                        result.add(
+                            decoratorFactory.createDecorator(
+                                t_Property, metadataManager));
                     }
                     else
                     {

@@ -52,6 +52,7 @@ import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.CachingResultDecorator;
 import org.acmsl.queryj.tools.metadata.CachingSqlDecorator;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -170,6 +171,7 @@ public abstract class BasePerTableTemplate
                 getQuote(),
                 getBasePackageName(),
                 getRepositoryName(),
+                getDecoratorFactory(),
                 StringUtils.getInstance(),
                 DefaultThemeUtils.getInstance(),
                 PackageUtils.getInstance(),
@@ -192,6 +194,7 @@ public abstract class BasePerTableTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param stringUtils the StringUtils instance.
      * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
      * @param packageUtils the PackageUtils instance.
@@ -204,6 +207,7 @@ public abstract class BasePerTableTemplate
      * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      * @precondition stringUtils != null
      * @precondition defaultThemeUtils != null
      * @precondition packageUtils != null
@@ -224,6 +228,7 @@ public abstract class BasePerTableTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
+        final DecoratorFactory decoratorFactory,
         final StringUtils stringUtils,
         final DefaultThemeUtils defaultThemeUtils,
         final PackageUtils packageUtils,
@@ -290,44 +295,74 @@ public abstract class BasePerTableTemplate
         // getAllowsNull()
         Collection t_cPrimaryKeyAttributes =
             metadataUtils.retrievePrimaryKeyAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cNonPrimaryKeyAttributes =
             metadataUtils.retrieveNonPrimaryKeyAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cForeignKeyAttributes =
             metadataUtils.retrieveForeignKeyAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
 
         // A map of "fk_"referringTableName -> foreign_keys (list of lists)
         Map t_mReferringKeys =
             metadataUtils.retrieveReferingKeys(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
 
         Collection t_cAttributes =
             metadataUtils.retrieveAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
 
         Collection t_cExternallyManagedAttributes =
             metadataUtils.retrieveExternallyManagedAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cAllButExternallyManagedAttributes =
             metadataUtils.retrieveAllButExternallyManagedAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cLobAttributes =
             metadataUtils.retrieveLobAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cAllButLobAttributes =
             metadataUtils.retrieveAllButLobAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cForeignKeys =
             metadataUtils.retrieveForeignKeys(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
 
         // items have to include the following methods:
         // getId()
@@ -375,6 +410,7 @@ public abstract class BasePerTableTemplate
                 tableName,
                 customSqlProvider,
                 metadataManager,
+                decoratorFactory,
                 daoTemplateUtils);
 
         fillParameters(
@@ -1067,17 +1103,20 @@ public abstract class BasePerTableTemplate
      * @param tableName the table name.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom results.
      * @precondition tableName != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
     protected Collection retrieveCustomResults(
         final String tableName,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final DAOTemplateUtils daoTemplateUtils)
     {
         Collection result = new ArrayList();
@@ -1123,7 +1162,9 @@ public abstract class BasePerTableTemplate
                                         result.add(
                                             new CachingResultDecorator(
                                                 t_ResultElement,
-                                                customSqlProvider));
+                                                customSqlProvider,
+                                                metadataManager,
+                                                decoratorFactory));
                                     }
                                 }
                                 else

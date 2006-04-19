@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
@@ -189,10 +190,39 @@ public class FkStatementSetterTemplateBuildHandler
                 engineName,
                 engineVersion,
                 quote,
+                FkStatementSetterTemplateGenerator.getInstance());
+    }
+    
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition engineName != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final FkStatementSetterTemplateFactory templateFactory)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                engineName,
+                engineVersion,
+                quote,
                 retrieveMetadataManager(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
-                FkStatementSetterTemplateGenerator.getInstance(),
+                templateFactory,
+                templateFactory.getDecoratorFactory(),
                 retrieveTableTemplates(parameters),
                 MetadataUtils.getInstance());
     }
@@ -230,6 +260,7 @@ public class FkStatementSetterTemplateBuildHandler
         final String basePackageName,
         final String repositoryName,
         final FkStatementSetterTemplateFactory templateFactory,
+        final DecoratorFactory decoratorFactory,
         final TableTemplate[] tableTemplates,
         final MetadataUtils metadataUtils)
       throws  BuildException
@@ -258,7 +289,7 @@ public class FkStatementSetterTemplateBuildHandler
 
                 t_aForeignKeys =
                     metadataUtils.retrieveForeignKeys(
-                        t_strTableName, metadataManager);
+                        t_strTableName, metadataManager, decoratorFactory);
                 
                 t_iFkCount =
                     (t_aForeignKeys != null) ? t_aForeignKeys.length : 0;
@@ -266,7 +297,7 @@ public class FkStatementSetterTemplateBuildHandler
                 for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
                 {
                     t_cTemplates.add(
-                        templateFactory.createFkStatementSetterTemplate(
+                        templateFactory.createTemplate(
                             t_aForeignKeys[t_iFkIndex],
                             metadataManager,
                             t_strPackageName,

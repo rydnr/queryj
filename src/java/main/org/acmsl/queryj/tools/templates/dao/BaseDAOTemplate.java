@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingRowDecorator;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
@@ -256,7 +257,8 @@ public class BaseDAOTemplate
                 tableName,
                 staticAttributeName,
                 attributes.size(),
-                getMetadataManager());
+                getMetadataManager(),
+                getDecoratorFactory());
         }
     }
 
@@ -267,18 +269,21 @@ public class BaseDAOTemplate
      * @param staticAttributeName the name of the static attribute.
      * @param columnCount the number of columns.
      * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @throws InvalidTemplateException if the template is invalid.
      * @precondition tableName != null
      * @precondition staticAttributeName != null
      * @precondition columnCount > 0
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     protected void queryContents(
         final Map input,
         final String tableName,
         final String staticAttributeName,
         final int columnCount,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
       throws  InvalidTemplateException
     {
         queryContents(
@@ -288,6 +293,7 @@ public class BaseDAOTemplate
             columnCount,
             metadataManager,
             metadataManager.getMetadataTypeManager(),
+            decoratorFactory,
             metadataManager.getMetaData());
     }
 
@@ -299,6 +305,7 @@ public class BaseDAOTemplate
      * @param columnCount the number of columns.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param metaData the metadata.
      * @throws InvalidTemplateException if the template is invalid.
      * @precondition tableName != null
@@ -306,6 +313,7 @@ public class BaseDAOTemplate
      * @precondition columnCount > 0
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      * @precondition metaData != null
      */
     protected void queryContents(
@@ -315,6 +323,7 @@ public class BaseDAOTemplate
         final int columnCount,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory,
         final DatabaseMetaData metaData)
       throws  InvalidTemplateException
     {
@@ -327,6 +336,7 @@ public class BaseDAOTemplate
                 columnCount,
                 metadataManager,
                 metadataTypeManager,
+                decoratorFactory,
                 MetadataUtils.getInstance(),
                 metaData.getConnection());
         }
@@ -348,6 +358,7 @@ public class BaseDAOTemplate
      * @param columnCount the number of columns.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @param connection the connection.
      * @throws InvalidTemplateException if the template is invalid.
@@ -356,6 +367,7 @@ public class BaseDAOTemplate
      * @precondition columnCount > 0
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      * @precondition metadataUtils != null
      * @precondition connection != null
      */
@@ -366,6 +378,7 @@ public class BaseDAOTemplate
         final int columnCount,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory,
         final MetadataUtils metadataUtils,
         final Connection connection)
       throws  InvalidTemplateException
@@ -431,7 +444,8 @@ public class BaseDAOTemplate
                                 t_astrColumnValues,
                                 tableName,
                                 metadataManager,
-                                metadataTypeManager),
+                                metadataTypeManager,
+                                decoratorFactory),
                             metadataTypeManager));
                 }
             }

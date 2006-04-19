@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  */
 public class PropertyElement
     extends  AbstractParameterElement
+    implements  Property
 {
     /**
      * Whether the property allows nulls or not.

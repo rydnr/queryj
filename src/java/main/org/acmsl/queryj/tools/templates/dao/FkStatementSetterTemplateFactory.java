@@ -44,6 +44,8 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 
 /**
@@ -52,28 +54,6 @@ import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
  *         >Jose San Leandro</a>
  */
 public interface FkStatementSetterTemplateFactory
+    extends  BasePerForeignKeyTemplateFactory
 {
-    /**
-     * Creates a FkStatementSetter template.
-     * @param foreignKey the foreign key.
-     * @param metadataManager the database metadata manager.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    public FkStatementSetterTemplate createFkStatementSetterTemplate(
-        final ForeignKey foreignKey,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName)
-      throws  QueryJException;
 }

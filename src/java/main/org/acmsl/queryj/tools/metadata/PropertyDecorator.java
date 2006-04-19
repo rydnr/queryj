@@ -40,77 +40,31 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.customsql.Property;
 
 /**
  * Decorates &lt;property&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class PropertyDecorator
-    extends  PropertyElement
+public interface PropertyDecorator
+    extends  Property
 {
     /**
-     * Creates a PropertyDecorator to decorate given property..
-     * @param property the property to decorate.
-     * @precondition property != null
+     * Retrieves the property.
+     * @return such instance.
      */
-    public PropertyDecorator(final PropertyElement property)
-    {
-        super(
-            property.getId(),
-            property.getColumnName(),
-            property.getIndex(),
-            property.getName(),
-            property.getType(),
-            property.isNullable());
-    }
-
-    /**
-     * Retrieves the Java type of the property.
-     * @return such information.
-     */
-    public String getJavaType()
-    {
-        return getJavaType(getType(), JdbcMetadataTypeManager.getInstance());
-    }
+    public Property getProperty();
     
     /**
      * Retrieves the Java type of the property.
-     * @param type the type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
-     * instance.
      * @return such information.
-     * @precondition type != null
-     * @precondition metadataTypeManager != null
      */
-    protected String getJavaType(
-        final String type, final MetadataTypeManager metadataTypeManager)
-    {
-        return
-            metadataTypeManager.getObjectType(
-                metadataTypeManager.getJavaType(type));
-    }
+    public String getJavaType();
 
     /**
      * Retrieves the name, in lower case.
      * @return such information.
      */
-    public String getNameLowercased()
-    {
-        return lowercase(getName());
-    }
-
-    /**
-     * Lowers the case of given value.
-     * @param value the value.
-     * @return the value, after being processed.
-     * @precondition value != null
-     */
-    protected String lowercase(final String value)
-    {
-        return value.toLowerCase();
-    }
+    public String getNameLowercased();
 }

@@ -44,9 +44,10 @@ package org.acmsl.queryj.tools.templates.handlers;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.AttributeDecorator;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKeyValueObject;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
@@ -184,7 +185,8 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                 engineName,
                 engineVersion,
                 quote,
-                retrieveMetadataManager(parameters));
+                retrieveMetadataManager(parameters),
+                retrieveTemplateFactory());
     }
 
     /**
@@ -194,18 +196,58 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param quote the quote character.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      * @precondition metadataManager != null
+     * @precondition templateFactory != null
      */
     protected boolean handle(
         final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final BasePerForeignKeyTemplateFactory templateFactory)
+      throws  BuildException
+    {
+        return
+            handle(
+                parameters,
+                engineName,
+                engineVersion,
+                quote,
+                retrieveMetadataManager(parameters),
+                templateFactory,
+                templateFactory.getDecoratorFactory());
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
+     * @param metadataManager the database metadata manager.
+     * @param templateFactory the template factory.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition engineName != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected boolean handle(
+        final Map parameters,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final MetadataManager metadataManager,
+        final BasePerForeignKeyTemplateFactory templateFactory,
+        final DecoratorFactory decoratorFactory)
       throws  BuildException
     {
         return
@@ -216,10 +258,11 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                 quote,
                 metadataManager,
                 retrieveCustomSqlProvider(parameters),
-                retrieveTemplateFactory(),
+                templateFactory,
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
-                retrieveForeignKeys(parameters, metadataManager));
+                retrieveForeignKeys(
+                    parameters, metadataManager, decoratorFactory));
     }
     
     /**
@@ -356,15 +399,19 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * Retrieves the foreign keys.
      * @param parameters the parameter map.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such templates.
      * @throws BuildException if the templates cannot be retrieved for any
      * reason.
      * @precondition parameters != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     protected ForeignKey[] retrieveForeignKeys(
-        final Map parameters, final MetadataManager metadataManager)
-        throws  BuildException
+        final Map parameters,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+      throws  BuildException
     {
         ForeignKey[] result = (ForeignKey[]) parameters.get(FOREIGN_KEYS);
 
@@ -372,7 +419,8 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         {
             Collection t_cForeignKeys = new ArrayList();
             
-            ForeignKey[] t_aFks = retrieveForeignKeys(metadataManager);
+            ForeignKey[] t_aFks =
+                retrieveForeignKeys(metadataManager, decoratorFactory);
 
             int t_iLength = (t_aFks != null) ? t_aFks.length : 0;
             
@@ -391,11 +439,14 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     /**
      * Retrieves the foreign keys.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such foreign keys.
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     protected ForeignKey[] retrieveForeignKeys(
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         ForeignKey[] result = EMPTY_FOREIGNKEY_ARRAY;
 
@@ -460,7 +511,8 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                             t_aastrForeignKeys[t_iForeignKeyIndex],
                             t_strSourceTable,
                             t_strReferredTable,
-                            metadataManager));
+                            metadataManager,
+                            decoratorFactory));
                 }
             }
         }
@@ -479,17 +531,20 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param sourceTable the source table.
      * @param targetTable the target table.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the foreign key.
      * @precondition attributes != null
      * @precondition sourceTable != null
      * @precondition targetTable != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     protected ForeignKey buildForeignKey(
         final String[] attributes,
         final String sourceTable,
         final String targetTable,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         ForeignKey result = null;
 
@@ -510,7 +565,8 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                     attributes[t_iIndex],
                     sourceTable,
                     metadataManager,
-                    t_TypeManager);
+                    t_TypeManager,
+                    decoratorFactory);
 
             if  (t_Attribute != null)
             {
@@ -537,17 +593,20 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param tableName the source table.
      * @param metadataManager the database metadata manager.
      * @param metadataTypeManager the metadata type manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the attribute.
      * @precondition attributeName != null
      * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      */
     protected Attribute buildAttribute(
         final String attributeName,
         final String tableName,
         final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory)
     {
         Attribute result = null;
 
@@ -565,17 +624,17 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             metadataManager.isManagedExternally(tableName, attributeName);
         
         result =
-            new AttributeDecorator(
-                attributeName,
-                t_iType,
-                t_strNativeType,
-                t_strFieldType,
-                tableName,
-                t_bManagedExternally,
-                t_bAllowsNull,
-                null, // value
-                metadataManager,
-                metadataTypeManager);
+            decoratorFactory.createDecorator(
+                new AttributeValueObject(
+                    attributeName,
+                    t_iType,
+                    t_strNativeType,
+                    t_strFieldType,
+                    tableName,
+                    t_bManagedExternally,
+                    t_bAllowsNull,
+                    null), // value
+                metadataManager);
         
         return result;
     }
