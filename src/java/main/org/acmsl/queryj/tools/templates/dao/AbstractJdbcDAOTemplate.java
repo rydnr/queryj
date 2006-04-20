@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -144,6 +145,7 @@ public abstract class AbstractJdbcDAOTemplate
 
     /**
      * Builds an <code>AbstractJdbcDAOTemplate</code> using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -165,6 +167,7 @@ public abstract class AbstractJdbcDAOTemplate
      * @param classEnd the class end.
      */
     protected AbstractJdbcDAOTemplate(
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -184,6 +187,7 @@ public abstract class AbstractJdbcDAOTemplate
         final String transactionTokenFactoryMethods,
         final String classEnd)
     {
+        super(decoratorFactory);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

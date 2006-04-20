@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates;
 * Importing project classes.
 */
 // JUnitDoclet begin import
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 // JUnitDoclet end import
 
@@ -113,6 +114,7 @@ extends TestCase
             "test", // table name
             null, // database metadata manager
             null, // custom sql provider
+            CachingDecoratorFactory.getInstance(),
             "com.foo.bar.rdb.mysql", // package name
             "mysql", // engine name
             "4.0.1", // engine version

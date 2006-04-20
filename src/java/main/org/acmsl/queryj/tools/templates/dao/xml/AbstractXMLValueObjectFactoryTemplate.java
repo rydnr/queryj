@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -163,6 +164,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
      * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param projectImports the project imports.
      * @param acmSlImports the ACM-SL imports.
      * @param jdkImports the JDK imports.
@@ -186,6 +188,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
         final String valueObjectPackageName,
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String projectImports,
         final String acmSlImports,
         final String jdkImports,
@@ -201,6 +204,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
         final String extraMethods,
         final String classEnd)
     {
+        super(decoratorFactory);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

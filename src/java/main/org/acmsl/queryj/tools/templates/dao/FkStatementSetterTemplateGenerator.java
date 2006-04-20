@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
@@ -159,6 +159,7 @@ public class FkStatementSetterTemplateGenerator
             new FkStatementSetterTemplate(
                 foreignKey,
                 metadataManager,
+                getDecoratorFactory(),
                 packageName,
                 engineName,
                 engineVersion,

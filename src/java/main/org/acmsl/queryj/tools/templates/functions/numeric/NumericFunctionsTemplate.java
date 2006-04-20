@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.functions.numeric;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
 
 /*
@@ -69,6 +70,7 @@ public abstract class NumericFunctionsTemplate
 {
     /**
      * Builds a <code>NumericFunctionsTemplate</code> using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -86,6 +88,7 @@ public abstract class NumericFunctionsTemplate
      * @param classEnd the class end.
      */
     public NumericFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  header,
         final String  packageDeclaration,
         final String  packageName,
@@ -103,6 +106,7 @@ public abstract class NumericFunctionsTemplate
         final String  classEnd)
     {
         super(
+            decoratorFactory,
             "numeric",
             "Numeric",
             header,
@@ -124,18 +128,21 @@ public abstract class NumericFunctionsTemplate
 
     /**
      * Builds a <code>NumericFunctionsTemplate</code> using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      */
     public NumericFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  packageName,
         final String  engineName,
         final String  engineVersion,
         final String  quote)
     {
         super(
+            decoratorFactory,
             "numeric",
             "Numeric",
             packageName,

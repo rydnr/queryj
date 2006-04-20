@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -97,6 +98,8 @@ public abstract class BasePerCustomSqlTemplate
      * information.
      * @param sql the custom sql.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -104,11 +107,14 @@ public abstract class BasePerCustomSqlTemplate
      * @param repositoryName the repository name.
      * @precondition sql != null
      * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     public BasePerCustomSqlTemplate(
         final SqlElement sql,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -119,6 +125,7 @@ public abstract class BasePerCustomSqlTemplate
             sql,
             customSqlProvider,
             metadataManager,
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

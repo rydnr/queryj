@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -181,6 +182,7 @@ public abstract class AbstractCustomResultSetExtractorTemplate
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -212,6 +214,7 @@ public abstract class AbstractCustomResultSetExtractorTemplate
         final CustomSqlProvider customSqlProvider,
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -233,6 +236,8 @@ public abstract class AbstractCustomResultSetExtractorTemplate
         final String valueObjectNullablePropertiesCheck,
         final String classEnd)
     {
+        super(decoratorFactory);
+
         immutableSetResultElement(resultElement);
 
         immutableSetCustomSqlProvider(

@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.functions.numeric;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.TestTemplate;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTestTemplate;
 import org.acmsl.queryj.tools.templates.functions.numeric
@@ -71,6 +72,7 @@ public abstract class NumericFunctionsTestTemplate
 {
     /**
      * Builds a NumericFunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -96,6 +98,7 @@ public abstract class NumericFunctionsTestTemplate
      * @param classEnd the class end.
      */
     public NumericFunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         String  header,
         String  packageDeclaration,
         String  packageName,
@@ -120,6 +123,7 @@ public abstract class NumericFunctionsTestTemplate
         String  classEnd)
     {
         super(
+            decoratorFactory,
             "numeric",
             "Numeric",
             header,
@@ -148,6 +152,7 @@ public abstract class NumericFunctionsTestTemplate
 
     /**
      * Builds a NumericFunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
      * @param engineName the engine name.
@@ -155,6 +160,7 @@ public abstract class NumericFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public NumericFunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         String packageName,
         String testedPackageName,
         String engineName,
@@ -162,6 +168,7 @@ public abstract class NumericFunctionsTestTemplate
         String quote)
     {
         super(
+            decoratorFactory,
             "numeric",
             "Numeric",
             packageName,

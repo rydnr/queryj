@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.functions.text;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
 
 /*
@@ -59,6 +60,7 @@ public abstract class TextFunctionsTemplate
 {
     /**
      * Builds a TextFunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -76,6 +78,7 @@ public abstract class TextFunctionsTemplate
      * @param classEnd the class end.
      */
     public TextFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  header,
         final String  packageDeclaration,
         final String  packageName,
@@ -93,6 +96,7 @@ public abstract class TextFunctionsTemplate
         final String  classEnd)
     {
         super(
+            decoratorFactory,
             "text",
             "Text",
             header,
@@ -114,18 +118,21 @@ public abstract class TextFunctionsTemplate
 
     /**
      * Builds a TextFunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      */
     public TextFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  packageName,
         final String  engineName,
         final String  engineVersion,
         final String  quote)
     {
         super(
+            decoratorFactory,
             "text",
             "Text",
             packageName,

@@ -85,10 +85,39 @@ public abstract class AbstractTemplate
                 DefaultThemeConstants
 {
     /**
-     * Builds an empty <code>AbstractTemplate</code>.
+     * The decorator factory.
      */
-    protected AbstractTemplate()
+    private DecoratorFactory m__DecoratorFactory;
+
+    /**
+     * Builds a <code>AbstractTemplate</code> with given
+     * decorator factory.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition decoratorFactory != null
+     */
+    protected AbstractTemplate(final DecoratorFactory decoratorFactory)
     {
+        immutableSetDecoratorFactory(decoratorFactory);
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     */
+    protected final void immutableSetDecoratorFactory(
+        final DecoratorFactory factory)
+    {
+        m__DecoratorFactory = factory;
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     */
+    protected void setDecoratorFactory(
+        final DecoratorFactory factory)
+    {
+        immutableSetDecoratorFactory(factory);
     }
 
     /**
@@ -97,7 +126,7 @@ public abstract class AbstractTemplate
      */
     public DecoratorFactory getDecoratorFactory()
     {
-        return CachingDecoratorFactory.getInstance();
+        return m__DecoratorFactory;
     }
 
     /**

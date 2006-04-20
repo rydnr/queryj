@@ -106,6 +106,7 @@ public abstract class BasePerTableTemplate
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -117,6 +118,7 @@ public abstract class BasePerTableTemplate
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -128,6 +130,7 @@ public abstract class BasePerTableTemplate
             tableName,
             metadataManager,
             customSqlProvider,
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

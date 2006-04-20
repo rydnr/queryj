@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
@@ -78,6 +79,7 @@ public class DAOTestTemplate
      * Builds a <code>DAOTestTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -92,6 +94,7 @@ public class DAOTestTemplate
     public DAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -106,6 +109,7 @@ public class DAOTestTemplate
         super(
             tableTemplate,
             metadataManager,
+            decoratorFactory,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,

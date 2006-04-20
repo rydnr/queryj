@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.functions;
 
 /*
- * Importing project-specific classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
 
@@ -117,6 +118,7 @@ public abstract class FunctionsTestTemplate
 
     /**
      * Builds a FunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
      * @param header the header.
@@ -143,6 +145,7 @@ public abstract class FunctionsTestTemplate
      * @param classEnd the class end.
      */
     public FunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         final String classDescription,
         final String classPrefix,
         final String header,
@@ -169,6 +172,7 @@ public abstract class FunctionsTestTemplate
         final String classEnd)
     {
         super(
+            decoratorFactory,
             classDescription,
             classPrefix,
             header,
@@ -199,6 +203,7 @@ public abstract class FunctionsTestTemplate
 
     /**
      * Builds a FunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
      * @param packageName the package name.
@@ -208,6 +213,7 @@ public abstract class FunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public FunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         final String classDescription,
         final String classPrefix,
         final String packageName,
@@ -217,6 +223,7 @@ public abstract class FunctionsTestTemplate
         final String quote)
     {
         this(
+            decoratorFactory,
             classDescription,
             classPrefix,
             FunctionsTestTemplateDefaults.DEFAULT_HEADER,

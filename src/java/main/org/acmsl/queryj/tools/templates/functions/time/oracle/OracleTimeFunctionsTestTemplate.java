@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.functions.time.oracle;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.time.oracle
     .OracleTimeFunctionsTemplate;
 
@@ -63,6 +64,7 @@ public class OracleTimeFunctionsTestTemplate
 {
     /**
      * Builds an OracleTimeFunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
      * @param engineName the engine name.
@@ -70,6 +72,7 @@ public class OracleTimeFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public OracleTimeFunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String testedPackageName,
         final String engineName,
@@ -77,6 +80,7 @@ public class OracleTimeFunctionsTestTemplate
         final String quote)
     {
         super(
+            decoratorFactory,
             packageName,
             testedPackageName,
             engineName,

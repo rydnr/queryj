@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.functions.numeric.mysql;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTemplate;
 
@@ -104,18 +105,21 @@ public class MySQLNumericFunctionsTemplate
 
     /**
      * Builds a MySQLNumericFunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      */
     public MySQLNumericFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         String  packageName,
         String  engineName,
         String  engineVersion,
         String  quote)
     {
         super(
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

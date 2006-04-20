@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -127,6 +128,7 @@ public abstract class AbstractXMLDAOFactoryTemplate
     /**
      * Builds a <code>AbstractXMLDAOFactoryTemplate</code> using given
      * information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param tableTemplate the table template.
@@ -143,6 +145,7 @@ public abstract class AbstractXMLDAOFactoryTemplate
      * @param classEnd the class end.
      */
     public AbstractXMLDAOFactoryTemplate(
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final TableTemplate tableTemplate,
@@ -158,6 +161,7 @@ public abstract class AbstractXMLDAOFactoryTemplate
         final String factoryMethod,
         final String classEnd)
     {
+        super(decoratorFactory);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetTableTemplate(tableTemplate);

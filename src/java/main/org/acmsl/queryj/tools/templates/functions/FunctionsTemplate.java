@@ -38,8 +38,9 @@
 package org.acmsl.queryj.tools.templates.functions;
 
 /*
- * Importing project classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
 /*
@@ -189,6 +190,7 @@ public abstract class FunctionsTemplate
 
     /**
      * Builds a <code>FunctionsTemplate</code> using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
      * @param header the header.
@@ -208,6 +210,7 @@ public abstract class FunctionsTemplate
      * @param classEnd the class end.
      */
     protected FunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  classDescription,
         final String  classPrefix,
         final String  header,
@@ -226,6 +229,7 @@ public abstract class FunctionsTemplate
         final String  innerClass,
         final String  classEnd)
     {
+        super(decoratorFactory);
         immutableSetClassDescription(classDescription);
         immutableSetClassPrefix(classPrefix);
         immutableSetHeader(header);
@@ -248,6 +252,7 @@ public abstract class FunctionsTemplate
 
     /**
      * Builds a FunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
      * @param packageName the package name.
@@ -256,6 +261,7 @@ public abstract class FunctionsTemplate
      * @param quote the identifier quote string.
      */
     protected FunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String classDescription,
         final String classPrefix,
         final String packageName,
@@ -264,6 +270,7 @@ public abstract class FunctionsTemplate
         final String quote)
     {
         this(
+            decoratorFactory,
             classDescription,
             classPrefix,
             DEFAULT_HEADER,

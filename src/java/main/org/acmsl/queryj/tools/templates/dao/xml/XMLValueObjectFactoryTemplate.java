@@ -38,8 +38,9 @@
 package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
- * Importing project-specific classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -77,12 +78,14 @@ public class XMLValueObjectFactoryTemplate
      * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      */
     public XMLValueObjectFactoryTemplate(
         final String packageName,
         final String valueObjectPackageName,
         final TableTemplate tableTemplate,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         super(
             DEFAULT_HEADER,
@@ -91,6 +94,7 @@ public class XMLValueObjectFactoryTemplate
             valueObjectPackageName,
             tableTemplate,
             metadataManager,
+            decoratorFactory,
             DEFAULT_PROJECT_IMPORTS,
             DEFAULT_ACMSL_IMPORTS,
             DEFAULT_JDK_IMPORTS,

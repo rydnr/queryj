@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -109,6 +110,7 @@ public abstract class BasePerCustomResultTemplate
         final ResultElement result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -119,6 +121,7 @@ public abstract class BasePerCustomResultTemplate
             result,
             customSqlProvider,
             metadataManager,
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

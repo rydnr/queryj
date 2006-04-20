@@ -41,6 +41,8 @@ package org.acmsl.queryj.tools.templates.functions.numeric.mysql;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.numeric.mysql
     .MySQLNumericFunctionsTemplate;
 
@@ -150,6 +152,7 @@ public class MySQLNumericFunctionsTemplateGenerator
         {
             result =
                 new MySQLNumericFunctionsTemplate(
+                    getDecoratorFactory(),
                     packageName,
                     engineName,
                     engineVersion,
@@ -157,5 +160,14 @@ public class MySQLNumericFunctionsTemplateGenerator
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 }

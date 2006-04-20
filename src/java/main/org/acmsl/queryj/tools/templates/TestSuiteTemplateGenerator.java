@@ -41,6 +41,8 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.TestSuiteTemplate;
 
@@ -160,10 +162,20 @@ public class TestSuiteTemplateGenerator
     {
         return
             new TestSuiteTemplate(
+                getDecoratorFactory(),
                 packageName,
                 packageUtils.retrieveBaseTestSuitePackage(
                     packageName, useSubfolders),
                 suiteName);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

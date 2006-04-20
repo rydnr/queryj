@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.templates.functions.time.oracle;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateGenerator;
 
@@ -146,6 +148,7 @@ public class OracleTimeFunctionsTemplateGenerator
         {
             result =
                 new OracleTimeFunctionsTemplate(
+                    getDecoratorFactory(),
                     packageName,
                     engineName,
                     engineVersion,
@@ -153,5 +156,14 @@ public class OracleTimeFunctionsTemplateGenerator
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 }

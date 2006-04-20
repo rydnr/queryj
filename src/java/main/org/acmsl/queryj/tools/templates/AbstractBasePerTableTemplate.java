@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
@@ -106,6 +107,7 @@ public abstract class AbstractBasePerTableTemplate
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -117,6 +119,7 @@ public abstract class AbstractBasePerTableTemplate
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -124,6 +127,8 @@ public abstract class AbstractBasePerTableTemplate
         final String basePackageName,
         final String repositoryName)
     {
+        super(decoratorFactory);
+
         immutableSetTableName(
             tableName);
 

@@ -38,8 +38,9 @@
 package org.acmsl.queryj.tools.templates.functions.system.mysql;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.system.mysql
     .MySQLSystemFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.system
@@ -61,6 +62,7 @@ public class MySQLSystemFunctionsTestTemplate
     /**
      * Builds a <code>SystemFunctionsTestTemplate</code> using given 
      * information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
      * @param engineName the engine name.
@@ -68,6 +70,7 @@ public class MySQLSystemFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public MySQLSystemFunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  packageName,
         final String  testedPackageName,
         final String  engineName,
@@ -75,6 +78,7 @@ public class MySQLSystemFunctionsTestTemplate
         final String  quote)
     {
         super(
+            decoratorFactory,
             packageName,
             testedPackageName,
             engineName,

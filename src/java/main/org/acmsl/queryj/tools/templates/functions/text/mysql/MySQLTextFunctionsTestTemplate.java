@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.functions.text.mysql;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplate;
@@ -60,6 +61,7 @@ public class MySQLTextFunctionsTestTemplate
 {
     /**
      * Builds a MySQLTextFunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
      * @param engineName the engine name.
@@ -67,6 +69,7 @@ public class MySQLTextFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public MySQLTextFunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         String  packageName,
         String  testedPackageName,
         String  engineName,
@@ -74,6 +77,7 @@ public class MySQLTextFunctionsTestTemplate
         String  quote)
     {
         super(
+            decoratorFactory,
             packageName,
             testedPackageName,
             engineName,

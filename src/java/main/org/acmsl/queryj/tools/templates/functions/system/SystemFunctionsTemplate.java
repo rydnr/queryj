@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.functions.system;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
 
 /*
@@ -80,18 +81,21 @@ public abstract class SystemFunctionsTemplate
 
     /**
      * Builds a SystemFunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      */
     public SystemFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  packageName,
         final String  engineName,
         final String  engineVersion,
         final String  quote)
     {
         super(
+            decoratorFactory,
             "system",
             "System",
             packageName,

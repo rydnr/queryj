@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -74,6 +75,7 @@ public class DAOFactoryTemplate
 {
     /**
      * Builds a <code>DAOFactoryTemplate</code> using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param tableTemplate the table template.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -81,6 +83,7 @@ public class DAOFactoryTemplate
      * @param jndiDataSource the JNDI location of the data source.
      */
     public DAOFactoryTemplate(
+        final DecoratorFactory decoratorFactory,
         final TableTemplate tableTemplate,
         final String packageName,
         final String engineName,
@@ -88,6 +91,7 @@ public class DAOFactoryTemplate
         final String jndiDataSource)
     {
         super(
+            decoratorFactory,
             tableTemplate,
             packageName,
             engineName,

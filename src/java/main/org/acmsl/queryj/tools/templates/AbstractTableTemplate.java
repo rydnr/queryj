@@ -39,6 +39,11 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
+ * Importing some project-specific classes.
+ */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+
+/*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
@@ -164,6 +169,7 @@ public abstract class AbstractTableTemplate
 
     /**
      * Builds a <code>AbstractTableTemplate</code> using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -186,6 +192,7 @@ public abstract class AbstractTableTemplate
      * @param classEnd the class end.
      */
     protected AbstractTableTemplate(
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -206,6 +213,7 @@ public abstract class AbstractTableTemplate
         final String getAllMethodEnd,
         final String classEnd)
     {
+        super(decoratorFactory);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

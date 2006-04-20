@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
 
@@ -102,6 +103,7 @@ public abstract class AbstractTestSuiteTemplate
     /**
      * Builds an <code>AbstractTestSuiteTemplate</code> using
      * given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the tested package name.
      * @param testPackageName the test package name.
      * @param suiteName the suite name.
@@ -113,6 +115,7 @@ public abstract class AbstractTestSuiteTemplate
      * test suites to the suite.
      */
     protected AbstractTestSuiteTemplate(
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String testPackageName,
         final String suiteName,
@@ -121,6 +124,7 @@ public abstract class AbstractTestSuiteTemplate
         final String addingTestCaseToSuiteStatement,
         final String addingTestSuiteToSuiteStatement)
     {
+        super(decoratorFactory);
         immutableSetPackageName(packageName);
         immutableSetTestPackageName(testPackageName);
         immutableSetSuiteName(suiteName);

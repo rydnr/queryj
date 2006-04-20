@@ -41,8 +41,9 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
 
 /*
@@ -64,6 +65,7 @@ public class FkStatementSetterTemplate
      * information.
      * @param foreignKey the foreign key.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -74,6 +76,7 @@ public class FkStatementSetterTemplate
     public FkStatementSetterTemplate(
         final ForeignKey foreignKey,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -84,6 +87,7 @@ public class FkStatementSetterTemplate
         super(
             foreignKey,
             metadataManager,
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

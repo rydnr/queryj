@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
@@ -71,6 +72,8 @@ public class CustomResultSetExtractorTemplate
      * information.
      * @param result the custom result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -78,11 +81,14 @@ public class CustomResultSetExtractorTemplate
      * @param repositoryName the repository name.
      * @precondition result != null
      * @precondition customSqlProvider != null
+     * @precondition metadataNanager != null
+     * @precondition decoratorFactory != null
      */
     public CustomResultSetExtractorTemplate(
         final ResultElement result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -93,6 +99,7 @@ public class CustomResultSetExtractorTemplate
             result,
             customSqlProvider,
             metadataManager,
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

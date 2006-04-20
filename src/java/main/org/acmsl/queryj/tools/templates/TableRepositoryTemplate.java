@@ -39,6 +39,11 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
+ * Importing some project-specific classes.
+ */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+
+/*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
@@ -62,14 +67,17 @@ public class TableRepositoryTemplate
 {
     /**
      * Builds a <code>TableRepositoryTemplate</code> using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param repository the repository.
      */
     public TableRepositoryTemplate(
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String repository)
     {
         super(
+            decoratorFactory,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,

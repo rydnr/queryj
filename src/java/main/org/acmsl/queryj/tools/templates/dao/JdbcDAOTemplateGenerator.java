@@ -41,6 +41,8 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -259,10 +261,20 @@ public class JdbcDAOTemplateGenerator
         else 
         {
             result =
-                new JdbcDAOTemplate(packageName);
+                new JdbcDAOTemplate(
+                    getDecoratorFactory(), packageName);
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractKeywordRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateDefaults;
 
@@ -71,13 +72,17 @@ public class KeywordRepositoryTemplate
 {
     /**
      * Builds a KeywordRepositoryTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param repository the repository.
      */
     public KeywordRepositoryTemplate(
-        final String packageName, final String repository)
+        final DecoratorFactory decoratorFactory,
+        final String packageName,
+        final String repository)
     {
         super(
+            decoratorFactory,
             DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             packageName,

@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.functions.numeric.mysql;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTemplate;
 
@@ -62,6 +63,7 @@ public class MySQLNumericFunctionsTestTemplate
 {
     /**
      * Builds a MySQLNumericFunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
      * @param engineName the engine name.
@@ -69,6 +71,7 @@ public class MySQLNumericFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public MySQLNumericFunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  packageName,
         final String  testedPackageName,
         final String  engineName,
@@ -76,6 +79,7 @@ public class MySQLNumericFunctionsTestTemplate
         final String  quote)
     {
         super(
+            decoratorFactory,
             packageName,
             testedPackageName,
             engineName,

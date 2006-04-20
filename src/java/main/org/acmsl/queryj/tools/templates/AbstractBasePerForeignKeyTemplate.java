@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
@@ -108,6 +109,7 @@ public abstract class AbstractBasePerForeignKeyTemplate
      * given information.
      * @param foreignKey the foreign key.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -118,6 +120,7 @@ public abstract class AbstractBasePerForeignKeyTemplate
     public AbstractBasePerForeignKeyTemplate(
         final ForeignKey foreignKey,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -125,6 +128,7 @@ public abstract class AbstractBasePerForeignKeyTemplate
         final String basePackageName,
         final String repositoryName)
     {
+        super(decoratorFactory);
         immutableSetForeignKey(foreignKey);
         immutableSetMetadataManager(metadataManager);
         immutableSetPackageName(packageName);

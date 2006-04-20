@@ -39,6 +39,11 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
+ * Importing some project-specific classes.
+ */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+
+/*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
@@ -148,6 +153,7 @@ public abstract class AbstractTableRepositoryTemplate
      * @param classEnd the class end.
      */
     public AbstractTableRepositoryTemplate(
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -162,6 +168,7 @@ public abstract class AbstractTableRepositoryTemplate
         final String tableDefinition,
         final String classEnd)
     {
+        super(decoratorFactory);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

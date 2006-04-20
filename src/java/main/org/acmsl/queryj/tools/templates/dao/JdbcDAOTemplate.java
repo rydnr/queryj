@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -68,11 +69,15 @@ public class JdbcDAOTemplate
 {
     /**
      * Builds a JdbcDAOTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      */
-    public JdbcDAOTemplate(final String packageName)
+    public JdbcDAOTemplate(
+        final DecoratorFactory decoratorFactory,
+        final String packageName)
     {
         super(
+            decoratorFactory,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,

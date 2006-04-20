@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
@@ -95,6 +96,7 @@ public abstract class AbstractBasePerRepositoryTemplate
      * Builds an <code>AbstractBasePerRepositoryTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
@@ -103,12 +105,14 @@ public abstract class AbstractBasePerRepositoryTemplate
      */
     public AbstractBasePerRepositoryTemplate(
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
         final String repositoryName,
         final String engineName,
         final Collection tables)
     {
+        super(decoratorFactory);
         immutableSetMetadataManager(metadataManager);
         immutableSetSubpackageName(subpackageName);
         immutableSetBasePackageName(basePackageName);

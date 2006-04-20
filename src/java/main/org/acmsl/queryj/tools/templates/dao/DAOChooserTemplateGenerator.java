@@ -39,8 +39,10 @@
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some project-specific  classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateFactory;
 
@@ -131,7 +133,18 @@ public class DAOChooserTemplateGenerator
     public DAOChooserTemplate createDAOChooserTemplate(
         final String packageName, final String repository)
     {
-        return new DAOChooserTemplate(packageName, repository);
+        return
+            new DAOChooserTemplate(
+                getDecoratorFactory(), packageName, repository);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

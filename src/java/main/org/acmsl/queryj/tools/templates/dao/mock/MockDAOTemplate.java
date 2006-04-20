@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -78,6 +79,7 @@ public class MockDAOTemplate
      * Builds a <code>MockDAOTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
@@ -85,6 +87,7 @@ public class MockDAOTemplate
     public MockDAOTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String basePackageName,
         final String repositoryName)
@@ -92,6 +95,7 @@ public class MockDAOTemplate
         super(
             tableTemplate,
             metadataManager,
+            decoratorFactory,
             DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             packageName,

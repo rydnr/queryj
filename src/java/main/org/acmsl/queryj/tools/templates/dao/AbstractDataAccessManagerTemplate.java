@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
 /*
@@ -136,6 +137,7 @@ public abstract class AbstractDataAccessManagerTemplate
     /**
      * Builds an <code>AbstractDataAccessManagerTemplate</code>
      * using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -152,6 +154,7 @@ public abstract class AbstractDataAccessManagerTemplate
      * @param classEnd the class end.
      */
     protected AbstractDataAccessManagerTemplate(
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -167,6 +170,7 @@ public abstract class AbstractDataAccessManagerTemplate
         final String daoMethods,
         final String classEnd)
     {
+        super(decoratorFactory);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

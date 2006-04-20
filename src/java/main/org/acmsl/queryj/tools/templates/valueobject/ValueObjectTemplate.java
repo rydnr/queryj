@@ -38,8 +38,9 @@
 package org.acmsl.queryj.tools.templates.valueobject;
 
 /*
- * Importing project-specific classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
@@ -79,7 +80,8 @@ public class ValueObjectTemplate
     public ValueObjectTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         super(
             DEFAULT_HEADER,
@@ -87,6 +89,7 @@ public class ValueObjectTemplate
             packageName,
             tableTemplate,
             metadataManager,
+            decoratorFactory,
             ACMSL_IMPORTS,
             JDK_IMPORTS,
             DEFAULT_JAVADOC,

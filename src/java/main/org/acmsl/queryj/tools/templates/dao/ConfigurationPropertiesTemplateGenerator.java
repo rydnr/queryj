@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
@@ -157,11 +159,21 @@ public class ConfigurationPropertiesTemplateGenerator
         return
             new ConfigurationPropertiesTemplate(
                 metadataManager,
+                getDecoratorFactory(),
                 packageName,
                 basePackageName,
                 repositoryName,
                 engineName,
                 tables);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

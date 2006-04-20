@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.templates.functions.text.oracle;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.text.oracle
     .OracleTextFunctionsTestTemplate;
 
@@ -154,6 +156,7 @@ public class OracleTextFunctionsTestTemplateGenerator
         {
             result =
                 new OracleTextFunctionsTestTemplate(
+                    getDecoratorFactory(),
                     packageName,
                     testedPackageName,
                     engineName,
@@ -162,5 +165,14 @@ public class OracleTextFunctionsTestTemplateGenerator
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 }

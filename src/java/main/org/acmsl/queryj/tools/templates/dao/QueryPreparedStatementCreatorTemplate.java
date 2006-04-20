@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.AbstractQueryPreparedStatementCreatorTemplate;
 import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateDefaults;
 
@@ -62,12 +63,15 @@ public class QueryPreparedStatementCreatorTemplate
     /**
      * Builds a <code>QueryPreparedStatementCreatorTemplate</code>
      * using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      */
     public QueryPreparedStatementCreatorTemplate(
+        final DecoratorFactory decoratorFactory,
         final String packageName)
     {
         super(
+            decoratorFactory,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,

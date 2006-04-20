@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
@@ -81,6 +82,7 @@ public class XMLDAOTestTemplate
      * Builds a <code>XMLDAOTestTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectsPackageName the value objects' package name.
@@ -88,6 +90,7 @@ public class XMLDAOTestTemplate
     public XMLDAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String daoPackageName,
         final String valueObjectsPackageName)
@@ -95,6 +98,7 @@ public class XMLDAOTestTemplate
         super(
             tableTemplate,
             metadataManager,
+            decoratorFactory,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,

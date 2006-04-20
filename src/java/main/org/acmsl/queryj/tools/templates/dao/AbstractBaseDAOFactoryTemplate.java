@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -151,6 +152,7 @@ public abstract class AbstractBaseDAOFactoryTemplate
      * @param packageDeclaration the package declaration.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param projectPackageName the project package name.
      * @param projectImports the project imports.
@@ -168,6 +170,7 @@ public abstract class AbstractBaseDAOFactoryTemplate
         final String packageDeclaration,
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String projectPackageName,
         final String projectImports,
@@ -180,6 +183,7 @@ public abstract class AbstractBaseDAOFactoryTemplate
         final String factoryMethod,
         final String classEnd)
     {
+        super(decoratorFactory);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetTableTemplate(tableTemplate);

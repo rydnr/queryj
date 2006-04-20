@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -266,6 +267,7 @@ public abstract class AbstractMockDAOTemplate
      * given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -311,6 +313,7 @@ public abstract class AbstractMockDAOTemplate
     public AbstractMockDAOTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -350,6 +353,8 @@ public abstract class AbstractMockDAOTemplate
         final String deleteWithFkPkValues,
         final String classEnd)
     {
+        super(decoratorFactory);
+
         inmutableSetTableTemplate(
             tableTemplate);
 

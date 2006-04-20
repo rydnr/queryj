@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.templates.functions.time.mysql;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.time.mysql
     .MySQLTimeFunctionsTestTemplate;
 
@@ -157,6 +159,7 @@ public class MySQLTimeFunctionsTestTemplateGenerator
         {
             result =
                 new MySQLTimeFunctionsTestTemplate(
+                    getDecoratorFactory(),
                     packageName,
                     testedPackageName,
                     engineName,
@@ -165,5 +168,14 @@ public class MySQLTimeFunctionsTestTemplateGenerator
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 }

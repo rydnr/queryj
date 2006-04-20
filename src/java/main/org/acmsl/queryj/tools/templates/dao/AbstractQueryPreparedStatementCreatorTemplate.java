@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
 /**
@@ -115,6 +116,7 @@ public abstract class AbstractQueryPreparedStatementCreatorTemplate
     /**
      * Builds an <code>AbstractQueryPreparedStatementCreatorTemplate</code>
      * using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -129,6 +131,7 @@ public abstract class AbstractQueryPreparedStatementCreatorTemplate
      * @param classEnd the class end.
      */
     protected AbstractQueryPreparedStatementCreatorTemplate(
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -142,6 +145,8 @@ public abstract class AbstractQueryPreparedStatementCreatorTemplate
         final String createPreparedStatementMethod,
         final String classEnd)
     {
+        super(decoratorFactory);
+
         immutableSetHeader(
             header);
 

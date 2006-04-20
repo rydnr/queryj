@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
 * Importing project classes.
 */
 // JUnitDoclet begin import
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 // JUnitDoclet end import
 
@@ -110,6 +111,7 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate(
+            CachingDecoratorFactory.getInstance(),
             "com.foo.bar", // package name
             "queryj"); // repository
     // JUnitDoclet end method testcase.createInstance

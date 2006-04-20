@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
 * Importing project classes.
 */
 // JUnitDoclet begin import
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
 // JUnitDoclet end import
 
@@ -113,6 +114,7 @@ extends TestCase
             null, // table template
             null, // database metadata manager
             null, // custom sql provider
+            CachingDecoratorFactory.getInstance(),
             "com.foo.bar.dao", // package name
             "unknown", // engine name
             "unknown", // engine version

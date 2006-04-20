@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -315,11 +317,21 @@ public class DAOFactoryTemplateGenerator
     {
         return
             new DAOFactoryTemplate(
+                getDecoratorFactory(),
                 tableTemplate,
                 packageName,
                 engineName,
                 basePackageName,
                 jndiDataSource);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

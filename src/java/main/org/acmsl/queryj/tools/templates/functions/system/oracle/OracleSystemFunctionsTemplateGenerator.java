@@ -41,6 +41,8 @@ package org.acmsl.queryj.tools.templates.functions.system.oracle;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.system.oracle
     .OracleSystemFunctionsTemplate;
 
@@ -147,9 +149,19 @@ public class OracleSystemFunctionsTemplateGenerator
     {
         return
             new OracleSystemFunctionsTemplate(
+                getDecoratorFactory(),
                 packageName,
                 engineName,
                 engineVersion,
                 quote);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 }

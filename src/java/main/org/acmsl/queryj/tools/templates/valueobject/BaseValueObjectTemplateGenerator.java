@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.templates.valueobject;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -317,7 +319,17 @@ public class BaseValueObjectTemplateGenerator
             new BaseValueObjectTemplate(
                 packageName,
                 tableTemplate,
-                metadataManager);
+                metadataManager,
+                getDecoratorFactory());
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

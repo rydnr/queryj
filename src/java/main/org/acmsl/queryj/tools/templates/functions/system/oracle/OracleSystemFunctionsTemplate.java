@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.functions.system.oracle;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplate;
 
 /*
@@ -74,18 +75,21 @@ public class OracleSystemFunctionsTemplate
 
     /**
      * Builds a OracleSystemFunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      */
     public OracleSystemFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
         final String quote)
     {
         super(
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

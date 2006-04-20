@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates;
 * Importing project classes.
 */
 // JUnitDoclet begin import
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
 // JUnitDoclet end import
@@ -111,6 +112,7 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate(
+            CachingDecoratorFactory.getInstance(),
             "com.foo.bar", // package name
             "queryj", // repository
             JdbcMetadataTypeManager.getInstance());
