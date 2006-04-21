@@ -157,22 +157,22 @@ public interface MetadataManager
         final String tableName, final String[] allowNames);
 
     /**
-     * Retrieves the allow null.
+     * Retrieves whether given attribute allows nulls.
      * @param tableName the table name.
-     * @param allowName the allow name.
-     * @return the allow null.
+     * @param attributeName the attribute name.
+     * @return such information.
      */
     public boolean getAllowNull(
-        final String tableName, final String allowName);
+        final String tableName, final String attributeName);
 
     /**
-     * Retrieves the allow null.
+     * Retrieves whether given attributes allow nulls.
      * @param tableName the table name.
-     * @param allowNames the allow names.
-     * @return the allow null.
+     * @param attributeNames the attribute names.
+     * @return such information.
      */
     public boolean getAllowNull(
-        final String tableName, final String[] allowNames);
+        final String tableName, final String[] attributeNames);
 
     /**
      * Adds a null flag.

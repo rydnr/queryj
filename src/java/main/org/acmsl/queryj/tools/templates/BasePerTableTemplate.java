@@ -59,6 +59,7 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
+import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
@@ -454,6 +455,7 @@ public abstract class BasePerTableTemplate
             t_strRepositoryName,
             metadataManager,
             metadataTypeManager,
+            decoratorFactory,
             metadataUtils,
             stringUtils);
         
@@ -504,6 +506,7 @@ public abstract class BasePerTableTemplate
      * @param tableRepositoryName the table repository.
      * @param metadataManager the database metadata manager.
      * @param metadataTypeManager the metadata type manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @precondition input != null
@@ -534,6 +537,7 @@ public abstract class BasePerTableTemplate
      * @precondition tableRepositoryName != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      * @precondition metadataUtils != null
      * @precondition stringUtils != null
      */
@@ -570,6 +574,7 @@ public abstract class BasePerTableTemplate
         final String tableRepositoryName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory,
         final MetadataUtils metadataUtils,
         final StringUtils stringUtils)
     {
@@ -629,11 +634,18 @@ public abstract class BasePerTableTemplate
         {
             fillStaticTableParameters(
                 input,
-                voName,
                 staticAttributeName,
                 staticAttributeType,
+                tableName,
+                metadataUtils.contain(
+                    externallyManagedAttributes,
+                    staticAttributeName,
+                    tableName),
+                metadataManager.getAllowNull(
+                    tableName, staticAttributeName),
                 metadataManager,
-                stringUtils);
+                metadataTypeManager,
+                decoratorFactory);
         }
 
         input.put("class_name", className);
@@ -884,35 +896,46 @@ public abstract class BasePerTableTemplate
      * Provides the parameters required by
      * <code>static_table</code> rule.
      * @param input the input.
-     * @param voName the value object name.
      * @param staticAttributeName the static attribute name.
      * @param staticAttributeType the static attribute type.
-     * @param metadataManager the database metadata manager.
-     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param tableName the table name.
+     * @param managedExternally whether the attribute is managed
+     * externally.
+     * @param allowsNull if the attribute allows nulls.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition input != null
-     * @precondition voName != null
      * @precondition staticAttributeName != null
      * @precondition staticAttributeType != null
      * @precondition metadataManager != null
-     * @precondition stringUtils != null
+     * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      */
     protected void fillStaticTableParameters(
         final Map input,
-        final String voName,
         final String staticAttributeName,
         final String staticAttributeType,
+        final String tableName,
+        final boolean managedExternally,
+        final boolean allowsNull,
         final MetadataManager metadataManager,
-        final StringUtils stringUtils)
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory)
     {
-        input.put("vo_name", voName);
-        input.put("static_attribute_name", staticAttributeName);
         input.put(
-            "static_attribute_name_lowercased",
-            staticAttributeName.toLowerCase());
-        input.put(
-            "static_attribute_name_capitalized",
-            stringUtils.capitalize(staticAttributeName, '_'));
-        input.put("static_attribute_type", staticAttributeType);
+            "static_attribute",
+            decoratorFactory.createDecorator(
+                new AttributeValueObject(
+                    staticAttributeName,
+                    metadataTypeManager.getJavaType(staticAttributeType),
+                    staticAttributeType,
+                    staticAttributeType,
+                    tableName,
+                    managedExternally,
+                    allowsNull,
+                    null),
+                metadataManager));
     }
 
     /**

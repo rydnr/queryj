@@ -174,7 +174,7 @@ public class FkStatementSetterTemplateGenerator
      */
     public DecoratorFactory getDecoratorFactory()
     {
-        return CachingDecoratorFactory.getInstance();
+        return FkStatementSetterDecoratorFactory.getInstance();
     }
 
     /**

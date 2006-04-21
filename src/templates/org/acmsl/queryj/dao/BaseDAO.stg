@@ -150,12 +150,8 @@ public interface <input.vo_name>DAO
               separator=",\n">
         };
 
-    <find_constant_methods(
-      voName=input.vo_name,
-      staticAttributeName=input.static_attribute_name,
-      staticAttributeNameLowercased=input.static_attribute_name_lowercased,
-      staticAttributeNameCapitalized=input.static_attribute_name_capitalized,
-      staticAttributeType=input.static_attribute_type,
+    <input.static_attribute:find_constant_methods(
+      attr=it,
       primaryKeyAttributes=input.pk_attributes)>
 <endif>
 

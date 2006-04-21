@@ -1042,4 +1042,78 @@ public class MetadataUtils
                 metadataTypeManager,
                 decoratorFactory);
     }
+
+    /**
+     * Checks whether given collection contains an attribute belonging
+     * to given table, with a concrete name.
+     * @param attributes the attribute collection.
+     * @param attributeName the attribute name.
+     * @param tableName the table name.
+     * @return <code>true</code> in such case.
+     * @precondition attributes != null
+     * @precondition attributeName != null
+     * @precondition tableName != null
+     */
+    public boolean contain(
+        final Collection attributes,
+        final String attributeName,
+        final String tableName)
+    {
+        boolean result = false;
+
+        Iterator t_Iterator =
+            (attributes != null) ? attributes.iterator() : null;
+
+        if  (t_Iterator != null)
+        {
+            Object t_CurrentItem = null;
+
+            while  (t_Iterator.hasNext())
+            {
+                t_CurrentItem = t_Iterator.next();
+
+                if  (   (t_CurrentItem != null)
+                     && (t_CurrentItem instanceof Attribute))
+                {
+                    result =
+                        match(
+                            (Attribute) t_CurrentItem, attributeName, tableName);
+
+                    if  (result)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given attribute match the name and belongs to given table.
+     * @param attribute the attribute to match.
+     * @param name the attribute name.
+     * @param tableName the table name.
+     * @return <code>true</code> in such case.
+     * @precondition attribute != null
+     * @precondition name != null
+     * @precondition tableName != null
+     */
+    public boolean match(
+        final Attribute attribute,
+        final String name,
+        final String tableName)
+    {
+        boolean result = false;
+
+        if  (   (attribute != null)
+             && (name.equalsIgnoreCase(attribute.getName()))
+             && (tableName.equalsIgnoreCase(attribute.getTableName())))
+        {
+            result = true;
+        }
+
+        return result;
+    }
 }

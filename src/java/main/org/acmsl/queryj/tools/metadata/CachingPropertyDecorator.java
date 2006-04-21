@@ -64,7 +64,7 @@ public class CachingPropertyDecorator
     private String m__strCachedNameLowercased;
 
     /**
-     * Creates an <code>AbstractPropertyDecorator</code> to decorate given property.
+     * Creates a <code>CachingPropertyDecorator</code> to decorate given property.
      * @param property the property to decorate.
      * @precondition property != null
      * @precondition metadataManager != null

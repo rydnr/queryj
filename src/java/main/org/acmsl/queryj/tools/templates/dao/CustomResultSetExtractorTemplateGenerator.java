@@ -178,7 +178,7 @@ public class CustomResultSetExtractorTemplateGenerator
      */
     public DecoratorFactory getDecoratorFactory()
     {
-        return CachingDecoratorFactory.getInstance();
+        return CustomResultSetExtractorDecoratorFactory.getInstance();
     }
 
     /**

@@ -299,14 +299,14 @@ nullable_property_retrieval(property) ::= <<
  Generates the code to retrieve a nullable property.
  @param property the property.
 !>
-<property.javaType> t_<property.javaType><property.nameLowercased> =
-    new <property.javaType>(
-        resultSet.get<property.javaType>(
+<property.javaType> t_<property.javaTypeCapitalized><property.nameLowercased> =
+    new <property.objectType>(
+        resultSet.get<property.objectType>(
             "<property.name>"));
 
 if  (resultSet.wasNull())
 {
-    t_<property.javaType><property.nameLowercased> = null;
+    t_<property.javaTypeCapitalized><property.nameLowercased> = null;
 }
 >>
 
@@ -316,7 +316,7 @@ nullable_property_specification(property) ::= <<
  property.
  @param property the property.
 !>
-t_<property.javaType><property.nameLowercased>
+t_<property.javaTypeCapitalized><property.nameLowercased>
 >>
 
 property_retrieval(property) ::= <<

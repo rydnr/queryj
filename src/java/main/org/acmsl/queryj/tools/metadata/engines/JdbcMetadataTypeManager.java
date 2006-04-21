@@ -188,8 +188,11 @@ public class JdbcMetadataTypeManager
                 result = (allowsNull) ? "Long" : "long";
                 break;
 
-            case Types.REAL:
             case Types.FLOAT:
+                result = (allowsNull) ? "Float" : "float";
+                break;
+
+            case Types.REAL:
             case Types.DOUBLE:
                 result = (allowsNull) ? "Double" : "double";
                 break;

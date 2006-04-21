@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
@@ -225,5 +226,41 @@ public abstract class AbstractPropertyDecorator
     protected String lowercase(final String value)
     {
         return value.toLowerCase();
+    }
+
+    /**
+     * Uppers the case of given value.
+     * @param value the value.
+     * @return the value, after being processed.
+     * @precondition value != null
+     */
+    protected String uppercase(final String value)
+    {
+        return value.toUpperCase();
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @return the alternate version of the value.
+     * @precondition value != null
+     */
+    protected String capitalize(final String value)
+    {
+        return capitalize(value, DecorationUtils.getInstance());
+    }
+    
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the alternate version of the value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String capitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
     }
 }
