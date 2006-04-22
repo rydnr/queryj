@@ -587,7 +587,12 @@
       <!--
          Java source folder.
       -->
-      <property name="java.src.dir" value="${src.dir}/java"/>
+      <property name="java.src.dir" value="${src.dir}/java/main"/>
+
+      <!--
+         Java source folder.
+      -->
+      <property name="java.test.dir" value="${src.dir}/java/test"/>
 
       <!--
          JDK version-specific Java source folder.
@@ -1135,6 +1140,18 @@
          Source files.
         -->
         <pathelement location="${jdk.X.Y.src.dir}"/>
+
+      </path>
+
+      <!--
+       Java-only test path.
+      -->
+      <path id="java.test.path">
+
+        <!--
+         Source files.
+        -->
+        <pathelement location="${java.test.dir}"/>
 
       </path>
 
@@ -2075,6 +2092,53 @@
     </target>
 
     <!--
+     Compiles the Java tests.
+     @depends init to take some basic initial steps in the build
+     process.
+     @depends clean to clean-up previously-generated files.
+     @param classes.dir the classes folder.
+     @param java.source.path the Java source files folder(s).
+     @param java.compile.class.path the classpath needed for compilation.
+     @calls javac to compile the sources.
+     @calls update.build.number to update the build number.
+     @return the compilation of specified classes.
+    -->
+    <target
+      name="compile.tests"
+      depends="init, clean"
+      description="Compiles the source files.">
+
+      <!--
+       Compile the java code from ${java.source.path} into ${classes.dir}.
+      -->
+      <javac
+        debug="on"
+        destdir="${classes.dir}"
+        encoding="ISO-8859-1"
+        target="1.4"
+        deprecation="false">
+
+        <src refid="java.test.path"/>
+
+        <classpath refid="java.compile.class.path"/>
+
+      </javac>
+
+      <!--
+       Copy resources to ${classes.dir}
+      -->
+      <copy todir="${classes.dir}" flatten="true" includeEmptyDirs="false">
+        <fileset dir="${conf.dir}"/>
+      </copy>
+
+      <!--
+       In case of success, update the build count.
+      <antcall target="update.build.number" inheritRefs="true"/>
+      -->
+
+    </target>
+
+    <!--
      Compiles the source files with optimization settings activated.
      @depends init to take some basic initial steps in the build process.
      @param classes.dir the classes folder.
@@ -2686,7 +2750,7 @@
     -->
     <target
         name="unit.tests"
-        depends="junitdoclet,compile"
+        depends="junitdoclet,compile,compile.tests"
         description="Executes all defined unit tests.">
 
         <!--

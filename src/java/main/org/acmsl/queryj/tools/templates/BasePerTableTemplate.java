@@ -273,9 +273,6 @@ public abstract class BasePerTableTemplate
         int t_iPrimaryKeysLength =
             (t_astrPrimaryKeys != null) ? t_astrPrimaryKeys.length : 0;
 
-        String[] t_astrColumnNames =
-            metadataManager.getColumnNames(tableName);
-
         String t_strTableComment =
             metadataManager.getTableComment(tableName);
 
@@ -1151,8 +1148,6 @@ public abstract class BasePerTableTemplate
 
         if  (t_cContents != null)
         {
-            Collection t_cSql = new ArrayList();
-
             Object t_Content = null;
             SqlElement t_SqlElement = null;
             ResultRefElement t_ResultRefElement = null;

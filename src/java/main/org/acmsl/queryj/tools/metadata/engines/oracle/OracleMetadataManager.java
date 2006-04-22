@@ -398,7 +398,7 @@ public class OracleMetadataManager
         try
         {
             for  (int t_iTableIndex = 0;
-                      t_iTableIndex < tableNames.length;
+                      t_iTableIndex < t_iLength;
                       t_iTableIndex++) 
             {
                 try

@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Decorates attributes for FkStatementSetter template.
+ * Description: Decorates attributes for DAO template.
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
@@ -48,11 +48,11 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /**
- * Decorates attributes for FkStatementSetter template.
+ * Decorates attributes for DAO template.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class FkStatementSetterAttributeDecorator
+public class DAOAttributeDecorator
     extends  CachingAttributeDecorator
 {
     /**
@@ -61,14 +61,14 @@ public class FkStatementSetterAttributeDecorator
     private String m__strCachedJavaType;
     
     /**
-     * Creates a <code>FkStatementSetterAttributeDecorator</code> with the
+     * Creates a <code>DAOAttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
      * @param metadataManager the metadata manager.
      * @precondition attribute != null
      * @precondition metadataManager != null
      */
-    public FkStatementSetterAttributeDecorator(
+    public DAOAttributeDecorator(
         final Attribute attribute,
         final MetadataManager metadataManager)
     {
@@ -156,7 +156,6 @@ public class FkStatementSetterAttributeDecorator
                 MetadataTypeUtils.getInstance());
     }
 
-
     /**
      * Retrieves the Java type of the attribute, which would be
      * only a primitive Java type if the attribute type matches,
@@ -183,69 +182,5 @@ public class FkStatementSetterAttributeDecorator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the Object type of the attribute, which would be
-     * only a primitive Object type if the attribute type matches,
-     * and the column allows nulls.
-     * @return such information.
-     */
-    public String getObjectType()
-    {
-        String result = getCachedObjectType();
-        
-        if  (result == null)
-        {
-            result = retrieveObjectType();
-            setCachedObjectType(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the Object type of the attribute, which would be
-     * only a primitive Object type if the attribute type matches,
-     * and the column allows nulls.
-     * @return such information.
-     */
-    protected String retrieveObjectType()
-    {
-        return
-            retrieveObjectType(getType(), getMetadataManager());
-    }
-
-    /**
-     * Retrieves the Object type of the attribute, which would be
-     * only a primitive Object type if the attribute type matches,
-     * and the column allows nulls.
-     * @param type the type.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return such information.
-     * @precondition metadataManager != null
-     */
-    protected String retrieveObjectType(
-        final int type, final MetadataManager metadataManager)
-    {
-        return
-            retrieveObjectType(
-                type,
-                metadataManager.getMetadataTypeManager());
-    }
-
-    /**
-     * Retrieves the Object type of the attribute, which would be
-     * only a primitive Object type if the attribute type matches,
-     * and the column allows nulls.
-     * @param type the type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return such information.
-     * @precondition metadataTypeManager != null
-     */
-    protected String retrieveObjectType(
-        final int type, final MetadataTypeManager metadataTypeManager)
-    {
-        return metadataTypeManager.getObjectType(type);
     }
 }

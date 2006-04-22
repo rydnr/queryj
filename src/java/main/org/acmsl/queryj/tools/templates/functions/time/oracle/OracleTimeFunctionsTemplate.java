@@ -118,11 +118,6 @@ public class OracleTimeFunctionsTemplate
             .toArray();
 
     /**
-     * The mapping.
-     */
-    private static Map m__mMappings;
-
-    /**
      * Builds an OracleTimeFunctionsTemplate using given information.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.

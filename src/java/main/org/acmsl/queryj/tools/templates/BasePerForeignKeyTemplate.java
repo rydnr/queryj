@@ -227,9 +227,6 @@ public abstract class BasePerForeignKeyTemplate
         
         StringTemplate t_Template = retrieveTemplate(t_Group);
 
-        String t_strCapitalizedEngine =
-            stringUtils.capitalize(engineName, '_');
-        
         String t_strRepositoryName =
             stringUtils.capitalize(repositoryName, '_');
 

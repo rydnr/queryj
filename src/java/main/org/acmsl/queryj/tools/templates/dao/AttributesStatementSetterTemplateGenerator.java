@@ -182,7 +182,7 @@ public class AttributesStatementSetterTemplateGenerator
      */
     public DecoratorFactory getDecoratorFactory()
     {
-        return CachingDecoratorFactory.getInstance();
+        return AttributeStatementSetterDecoratorFactory.getInstance();
     }
 
     /**

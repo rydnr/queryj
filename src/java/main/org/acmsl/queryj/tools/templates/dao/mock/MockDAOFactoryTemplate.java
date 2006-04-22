@@ -66,7 +66,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class MockDAOFactoryTemplate
+public class MockDAOFactoryTemplate
 {
     /**
      * The default header.
