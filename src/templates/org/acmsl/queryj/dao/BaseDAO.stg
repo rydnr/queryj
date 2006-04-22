@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: $RCSfile$
+// Filename: $RCSfile: $
 //
 // Author: Jose San Leandro Armendariz
 //
@@ -152,7 +152,8 @@ public interface <input.vo_name>DAO
 
     <input.static_attribute:find_constant_methods(
       attr=it,
-      primaryKeyAttributes=input.pk_attributes)>
+      primaryKeyAttributes=input.pk_attributes,
+      voName=input.vo_name)>
 <endif>
 
     /**
@@ -243,40 +244,29 @@ attribute_specification(attr) ::= <<
 <if(attr.string)>"<attr.value>"<else><attr.value><endif>
 >>
 
-find_constant_methods(
-  voName,
-  staticAttributeName,
-  staticAttributeNameLowercased,
-  staticAttributeNameCapitalized,
-  staticAttributeType,
-  primaryKeyAttributes) ::= <<
+find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<
 <!
   Declares the methods to operate directly on defined constants.
-  @param voName the value object name.
-  @param staticAttributeName the static attribute name.
-  @param staticAttributeNameLowercased the static attribute name, in lower
-  case.
-  @param staticAttributeNameCapitalized the static attribute name,
-  capitalized.
-  @param staticAttributeType the static attribute type.
+  @param attribute the static attribute.
   @param primaryKeyAttributes the primary key attributes.
+  @param voName the value-object name.
 !>
 /**
- * Loads \<i><voName>\</i> information from the constant pool,
- * filtering by <staticAttributeName>.
- * @param <staticAttributeNameLowercased> the <staticAttributeName>
+ * Loads \<i><attribute.tableName>\</i> information from the constant pool,
+ * filtering by <attribute.name>.
+ * @param <attribute.nameLowercased> the <staticAttributeName>
  * to filter.
  * @return the \<code><voName>\</code> instance.
- <precondition_notnull(staticAttributeName)>
+ <precondition_notnull(attribute.name)>
  */
-public <voName> findConstantBy<staticAttributeNameCapitalized>(
-    final <staticAttributeType> <staticAttributeNameLowercased>);
+public <voName> findConstantBy<attribute.nameCapitalized>(
+    final <attribute.javaType> <attribute.nameLowercased>);
 
 /**
- * Loads \<i><voName>\</i> information from the constant pool,
+ * Loads \<i><attribute.tableName>\</i> information from the constant pool,
  * filtering by the primary key.
  <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \<code><voName>\</code> instance.
+ * @return the \<code><attribute.voName>\</code> instance.
  */
 public <voName> findConstantByPk(
   <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">);
