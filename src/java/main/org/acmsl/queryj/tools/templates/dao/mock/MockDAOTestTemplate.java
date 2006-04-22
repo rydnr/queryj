@@ -57,7 +57,6 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some JDK classes.
  */
-import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -162,8 +161,6 @@ public class MockDAOTestTemplate
         try 
          */
         {
-            DatabaseMetaData t_MetaData = t_MetadataManager.getMetaData();
-
             MessageFormat t_Formatter = new MessageFormat(getHeader());
 
             t_sbResult.append(

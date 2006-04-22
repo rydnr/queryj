@@ -182,9 +182,6 @@ public class DAOChooserTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
-        String t_strRepository =
-            stringUtils.normalize(repository, '_');
-
         t_sbResult.append(header);
 
         MessageFormat t_Formatter =

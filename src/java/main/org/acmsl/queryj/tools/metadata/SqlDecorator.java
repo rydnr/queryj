@@ -336,22 +336,25 @@ public class SqlDecorator
                             customSqlProvider.resolveReference(
                                 t_ParameterRef);
 
-                        result.add(
-                            new CachingParameterDecorator(
-                                t_Parameter, metadataTypeManager));
-                    }
-                    else
-                    {
-                        try
+                        if  (t_Parameter != null)
                         {
-                            // todo throw something.
-                            LogFactory.getLog("custom-sql").warn(
-                                  "Referenced parameter not found:"
-                                + t_ParameterRef.getId());
+                            result.add(
+                                new CachingParameterDecorator(
+                                    t_Parameter, metadataTypeManager));
                         }
-                        catch  (final Throwable throwable)
+                        else
                         {
-                            // class-loading problem.
+                            try
+                            {
+                                // todo throw something.
+                                LogFactory.getLog("custom-sql").warn(
+                                    "Referenced parameter not found:"
+                                    + t_ParameterRef.getId());
+                            }
+                            catch  (final Throwable throwable)
+                            {
+                                // class-loading problem.
+                            }
                         }
                     }
                 }

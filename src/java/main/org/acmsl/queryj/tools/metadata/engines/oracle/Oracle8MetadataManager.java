@@ -398,7 +398,7 @@ public class Oracle8MetadataManager
         try
         {
             for  (int t_iTableIndex = 0;
-                      t_iTableIndex < tableNames.length;
+                      t_iTableIndex < t_iLength;
                       t_iTableIndex++) 
             {
                 try
@@ -1174,10 +1174,12 @@ public class Oracle8MetadataManager
 
         if  (t_astrTypes != null)
         {
-            result = new boolean[t_astrTypes.length];
+            int t_iCount = t_astrTypes.length;
+
+            result = new boolean[t_iCount];
 
             for  (int t_iIndex = 0;
-                      t_iIndex < t_astrTypes.length;
+                      t_iIndex < t_iCount;
                       t_iIndex++) 
             {
                 result[t_iIndex] =

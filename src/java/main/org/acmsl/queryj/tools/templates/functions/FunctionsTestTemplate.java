@@ -87,11 +87,6 @@ public abstract class FunctionsTestTemplate
     private String m__strJUnitImports;
 
     /**
-     * The test function method.
-     */
-    private String m__strTestFunctionMethod;
-
-    /**
      * The member accessors.
      */
     private String m__strMemberAccessors;
@@ -705,7 +700,7 @@ public abstract class FunctionsTestTemplate
 
                             if  (t_strMapping == null) 
                             {
-                                if  (generateWarning(t_strMapping)) 
+                                if  (generateWarning(null)) 
                                 {
                                     logDebug(
                                         "No mapping for " + t_strFunction);

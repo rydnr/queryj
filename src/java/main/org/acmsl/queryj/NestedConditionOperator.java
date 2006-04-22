@@ -145,5 +145,24 @@ public abstract class NestedConditionOperator
 
         return result;
     }
+
+    /**
+     * Retrieves the hash code.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return hashCode(getQuery());
+    }
+
+    /**
+     * Retrieves the hash code.
+     * @param query the select query.
+     * @return such information.
+     */
+    protected int hashCode(final SelectQuery query)
+    {
+        return (NestedConditionOperator.class + query.toString()).hashCode();
+    }
 }
 

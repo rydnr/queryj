@@ -128,128 +128,6 @@ public class XMLDAOTemplateGenerator
     }
 
     /**
-     * Adds a new template factory class.
-     * @param daoName the DAO name.
-     * @param templateFactoryClass the template factory.
-     * @precondition daoName != null
-     * @precondition templateFactoryClass != null
-     */
-    public void addTemplateFactoryClass(
-        final String daoName,
-        final String templateFactoryClass)
-    {
-        addTemplateFactoryClass(
-            daoName,
-            templateFactoryClass,
-            TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Adds a new template factory class.
-     * @param daoName the DAO name.
-     * @param templateFactoryClass the template factory.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @precondition daoName != null
-     * @precondition templateFactoryClass != null
-     * @precondition templateMappingManager != null
-     */
-    protected void addTemplateFactoryClass(
-        final String daoName,
-        final String templateFactoryClass,
-        final TemplateMappingManager templateMappingManager)
-    {
-        templateMappingManager.addDefaultTemplateFactoryClass(
-            TemplateMappingManager.XML_DAO_TEMPLATE_PREFIX + daoName,
-            templateFactoryClass);
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param daoName the DAO name.
-     * @return the template factory class name.
-     * @precondition daoName != null
-     * @precondition TemplateMappingManager.getInstance() != null
-     */
-    protected String getTemplateFactoryClass(final String daoName)
-    {
-        return
-            getTemplateFactoryClass(
-                daoName, TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param daoName the DAO name.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @return the template factory class name.
-     * @precondition daoName != null
-     * @precondition templateMappingManager != null
-     */
-    protected String getTemplateFactoryClass(
-        final String daoName,
-        final TemplateMappingManager templateMappingManager)
-    {
-        return
-            templateMappingManager.getDefaultTemplateFactoryClass(
-                TemplateMappingManager.XML_DAO_TEMPLATE_PREFIX + daoName);
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param daoName the DAO name.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition daoName != null
-     * @precondition TemplateMappingManager.getInstance() != null
-     */
-    protected XMLDAOTemplateFactory getTemplateFactory(final String daoName)
-      throws  QueryJException
-    {
-        return
-            getTemplateFactory(daoName, TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param daoName the DAO name.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition daoName != null
-     * @precondition templateMappingManager != null
-     */
-    protected XMLDAOTemplateFactory getTemplateFactory(
-        final String daoName,
-        final TemplateMappingManager templateMappingManager)
-      throws  QueryJException
-    {
-        XMLDAOTemplateFactory result = null;
-
-        Object t_TemplateFactory =
-            templateMappingManager.getDefaultTemplateFactoryClass(
-                TemplateMappingManager.XML_DAO_TEMPLATE_PREFIX + daoName);
-
-        if  (t_TemplateFactory != null)
-        {
-            if  (!(t_TemplateFactory instanceof XMLDAOTemplateFactory))
-            {
-                throw
-                    new QueryJException(
-                        "invalid.xml.dao.template.factory");
-            }
-            else 
-            {
-                result = (XMLDAOTemplateFactory) t_TemplateFactory;
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Generates a XML DAO template.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
@@ -270,35 +148,14 @@ public class XMLDAOTemplateGenerator
         final String repositoryName)
       throws  QueryJException
     {
-        XMLDAOTemplate result = null;
-
-        XMLDAOTemplateFactory t_TemplateFactory =
-            getTemplateFactory(
-                tableTemplate.getTableName());
-
-        if  (t_TemplateFactory != null)
-        {
-            result =
-                t_TemplateFactory.createXMLDAOTemplate(
-                    tableTemplate,
-                    metadataManager,
-                    packageName,
-                    basePackageName,
-                    repositoryName);
-        }
-        else 
-        {
-            result =
-                new XMLDAOTemplate(
-                    tableTemplate,
-                    metadataManager,
-                    getDecoratorFactory(),
-                    packageName,
-                    basePackageName,
-                    repositoryName);
-        }
-
-        return result;
+        return
+            new XMLDAOTemplate(
+                tableTemplate,
+                metadataManager,
+                getDecoratorFactory(),
+                packageName,
+                basePackageName,
+                repositoryName);
     }
 
     /**

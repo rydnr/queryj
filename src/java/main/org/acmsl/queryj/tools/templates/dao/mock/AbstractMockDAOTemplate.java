@@ -228,11 +228,6 @@ public abstract class AbstractMockDAOTemplate
     private String m__strDeletePkDeclaration;
 
     /**
-     * The delete PK filter declaration.
-     */
-    private String m__strDeleteFilterDeclaration;
-
-    /**
      * The delete with FK method.
      */
     private String m__strDeleteWithFkMethod;
@@ -302,7 +297,6 @@ public abstract class AbstractMockDAOTemplate
      * @param deleteMethod the delete method.
      * @param deletePkJavadoc the delete PK javadoc.
      * @param deletePkDeclaration the delete PK declaration.
-     * @param deleteFilterDeclaration the delete filter declaration.
      * @param deleteWithFkMethod the delete method.
      * @param deleteWithFkPkJavadoc the delete with FK PK javadoc.
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.

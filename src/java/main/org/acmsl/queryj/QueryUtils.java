@@ -60,6 +60,11 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
 
+/*
+ * Importing some Commons-Logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Provides some useful methods when working with queries.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -239,6 +244,8 @@ public class QueryUtils
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        SQLException t_ExceptionToThrow = null;
+
         BufferedReader t_Reader =
             new BufferedReader(clob.getCharacterStream());
 
@@ -256,13 +263,29 @@ public class QueryUtils
         }
         catch  (final IOException ioException)
         {
-            SQLException t_ExceptionToThrow =
+            t_ExceptionToThrow =
                 new SQLException(
-                    "Cannot read clob",
+                    "cannot.read.clob",
                     "22021"); // "Translation result not in target repertoire"
 
             t_ExceptionToThrow.initCause(ioException);
+        }
+        finally
+        {
+            try
+            {
+                t_Reader.close();
+            }
+            catch  (final IOException ioException)
+            {
+                LogFactory.getLog(getClass()).warn(
+                    "Cannot close CLOB stream.",
+                    ioException);
+            }
+        }
 
+        if  (t_ExceptionToThrow != null)
+        {
             throw t_ExceptionToThrow;
         }
 

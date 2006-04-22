@@ -129,19 +129,9 @@ public abstract class FunctionsTemplate
     private List m__lFunctions;
 
     /**
-     * The field types used.
-     */
-    private List m__lFieldTypes;
-
-    /**
      * The function - field type mapping.
      */
     private static Map m__mMappings;
-
-    /**
-     * The special function - code mapping.
-     */
-    private static Map m__mSpecialMappings;
 
     /**
      * The ACM-SL import statements.
@@ -885,7 +875,7 @@ public abstract class FunctionsTemplate
      * Specifies the mappings.
      * @param mappings the mappings.
      */
-    protected void setMappings(final Map mappings)
+    protected static void setMappings(final Map mappings)
     {
         m__mMappings = mappings;
     }
@@ -894,9 +884,18 @@ public abstract class FunctionsTemplate
      * Retrieves the mappings.
      * @return such map.
      */
+    protected static final Map immutableGetMappings()
+    {
+        return m__mMappings;
+    }
+    
+    /**
+     * Retrieves the mappings.
+     * @return such map.
+     */
     public Map getMappings()
     {
-        Map result = m__mMappings;
+        Map result = immutableGetMappings();
 
         if  (result == null)
         {
@@ -1243,7 +1242,7 @@ public abstract class FunctionsTemplate
 
                             if  (t_strMapping == null)
                             {
-                                if  (generateWarning(t_strMapping)) 
+                                if  (generateWarning(null))
                                 {
                                     logDebug(
                                         "No mapping for " + t_strFunction);

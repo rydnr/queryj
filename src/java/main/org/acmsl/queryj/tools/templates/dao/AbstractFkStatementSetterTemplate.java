@@ -61,6 +61,11 @@ public abstract class AbstractFkStatementSetterTemplate
     extends  AbstractTemplate
 {
     /**
+     * A cached empty String array.
+     */
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+    
+    /**
      * The table template.
      */
     private TableTemplate m__TableTemplate;
@@ -373,9 +378,18 @@ public abstract class AbstractFkStatementSetterTemplate
      * Retrieves the foreign keys.
      * @return such key.
      */
-    public String[] getForeignKeys()
+    protected final String[] immutableGetForeignKeys()
     {
         return m__astrForeignKeys;
+    }
+
+    /**
+     * Retrieves the foreign keys.
+     * @return such key.
+     */
+    public String[] getForeignKeys()
+    {
+        return clone(immutableGetForeignKeys());
     }
 
     /**
@@ -1082,5 +1096,30 @@ public abstract class AbstractFkStatementSetterTemplate
                         foreignKeys).toLowerCase()),
                 '_')
             + "StatementSetter.";
+    }
+
+    /**
+     * Clones given String array.
+     * @param array the array to clone.
+     * @return the cloned array.
+     * @precondition array != null
+     */
+    protected String[] clone(final String[] array)
+    {
+        String[] result = EMPTY_STRING_ARRAY;
+
+        int t_iCount = (array != null) ? array.length : 0;
+
+        if  (t_iCount > 0)
+        {
+            result = new String[t_iCount];
+
+            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                result[t_iIndex] = array[t_iIndex];
+            }
+        }
+
+        return result;
     }
 }

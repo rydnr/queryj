@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
 /*
  * Importing some JDK classes.
  */
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -61,23 +63,31 @@ public abstract class SystemFunctionsTemplate
     /**
      * The capitalized words.
      */
-    protected static final String[] CAPITALIZED_WORDS =
-        new String[]
-        {
-            "user",
-            "insert",
-            "id"
-        };
+    public static final String[] CAPITALIZED_WORDS =
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "user",
+                        "insert",
+                        "id"
+                    }))
+            .toArray();
 
     /**
      * The field types.
      */
     public static final String[] FIELD_TYPES =
-        new String[]
-        {
-            "String",
-            "Long"
-        };
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "String",
+                        "Long"
+                    }))
+            .toArray();
 
     /**
      * Builds a SystemFunctionsTemplate using given information.

@@ -481,11 +481,11 @@ public class DAOTestTemplate
 
         boolean t_bNotLastPk = false;
 
-        boolean t_bHasNotOnlyPk =
-            (t_astrPrimaryKeys.length < t_astrColumnNames.length);
-
         if  (t_astrPrimaryKeys != null)
         {
+            boolean t_bHasNotOnlyPk =
+                (t_astrPrimaryKeys.length < t_astrColumnNames.length);
+
             for  (int t_iPkIndex = 0;
                   t_iPkIndex < t_astrPrimaryKeys.length;
                   t_iPkIndex++) 

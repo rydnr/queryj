@@ -292,10 +292,15 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 false,
                 parameters);
 
-        storeMetadataManager(t_MetadataManager, parameters);
+        MetadataTypeManager t_MetadataTypeManager = null;
+        
+        if  (t_MetadataManager != null)
+        {
+            storeMetadataManager(t_MetadataManager, parameters);
 
-        MetadataTypeManager t_MetadataTypeManager =
-            t_MetadataManager.getMetadataTypeManager();
+            t_MetadataTypeManager =
+                t_MetadataManager.getMetadataTypeManager();
+        }
 
         if  (t_cTableElements != null)
         {
@@ -303,8 +308,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
 
         if  (   (t_itTableElements != null)
-             && (t_MetadataTypeManager != null)
-             && (t_MetadataManager != null))
+             && (t_MetadataTypeManager != null))
         {
             while  (t_itTableElements.hasNext())
             {

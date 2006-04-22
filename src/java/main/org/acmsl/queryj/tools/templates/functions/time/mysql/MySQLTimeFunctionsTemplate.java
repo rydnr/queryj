@@ -55,6 +55,8 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -72,40 +74,47 @@ public class MySQLTimeFunctionsTemplate
      * The capitalized words.
      */
     protected static final String[] CAPITALIZED_WORDS =
-        new String[]
-        {
-            "week",
-            "day",
-            "month",
-            "year",
-            "name",
-            "hour",
-            "minute",
-            "sec",
-            "second",
-            "format",
-            "date",
-            "time",
-            "cur",
-            "current",
-            "timestamp",
-            "unix",
-            "of",
-            "from"
-        };
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "week",
+                        "day",
+                        "month",
+                        "year",
+                        "name",
+                        "hour",
+                        "minute",
+                        "sec",
+                        "second",
+                        "format",
+                        "date",
+                        "time",
+                        "cur",
+                        "current",
+                        "timestamp",
+                        "unix",
+                        "of",
+                        "from"
+                    }))
+            .toArray();
 
     /**
      * The field types.
      */
     public static final String[] FIELD_TYPES =
-        new String[]
-        {
-            "Int",
-            "String",
-            "Long",
-            "Calendar"
-            
-        };
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "Int",
+                        "String",
+                        "Long",
+                        "Calendar"
+                    }))
+            .toArray();
 
     /**
      * Builds a MySQLTimeFunctionsTemplate using given information.

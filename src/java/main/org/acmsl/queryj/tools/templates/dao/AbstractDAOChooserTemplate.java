@@ -80,16 +80,6 @@ public abstract class AbstractDAOChooserTemplate
     private String m__strRepository;
 
     /**
-     * The project import Javadoc.
-     */
-    private String m__strProjectImportsJavadoc;
-
-    /**
-     * The project import statements.
-     */
-    private String m__strProjectImports;
-
-    /**
      * The JDK import statements.
      */
     private String m__strJDKImports;

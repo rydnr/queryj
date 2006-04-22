@@ -187,7 +187,7 @@ public class STUtils
     {
         StringTemplateGroup result = null;
 
-        InputStream t_Input = getClass().getResourceAsStream(path);
+        InputStream t_Input = STUtils.class.getResourceAsStream(path);
 
         result =
             new StringTemplateGroup(

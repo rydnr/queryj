@@ -2949,7 +2949,7 @@ public class QueryResultSet
         final int length)
       throws  SQLException
     {
-        updateAsciiStream(index, value, length);
+        updateAsciiStream(index, value, length, getResultSet());
     }
 
     /**
@@ -3229,7 +3229,7 @@ public class QueryResultSet
     public void updateByte(final int index, final byte value)
         throws  SQLException
     {
-        updateByte(index, value);
+        updateByte(index, value, getResultSet());
     }
 
     /**

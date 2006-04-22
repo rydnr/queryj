@@ -99,7 +99,7 @@ public class TableRepositoryTemplateBuildHandler
      * Specifies the mappings.
      * @param map the new mappings.
      */
-    protected void setMappings(final Map map)
+    protected static void setMappings(final Map map)
     {
         m__mMappings = map;
     }
@@ -108,7 +108,7 @@ public class TableRepositoryTemplateBuildHandler
      * Retrieves the mappings.
      * @return such collection.
      */
-    protected Map getMappings()
+    protected static Map getMappings()
     {
         return m__mMappings;
     }

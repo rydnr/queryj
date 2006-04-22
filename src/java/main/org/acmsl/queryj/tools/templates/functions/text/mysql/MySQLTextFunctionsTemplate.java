@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
 /*
  * Importing some JDK classes.
  */
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -62,25 +64,33 @@ public class MySQLTextFunctionsTemplate
      * The capitalized words.
      */
     protected static final String[] CAPITALIZED_WORDS =
-        new String[]
-        {
-            "ascii",
-            "char",
-            "length",
-//            "in",
-            "insert",
-            "index"
-        };
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "ascii",
+                        "char",
+                        "length",
+                     // "in",
+                        "insert",
+                        "index"
+                    }))
+            .toArray();
 
     /**
      * The field types.
      */
     public static final String[] FIELD_TYPES =
-        new String[]
-        {
-            "String",
-            "Int"
-        };
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "String",
+                        "Int"
+                    }))
+            .toArray();
 
     /**
      * Builds a <code>MySQLTextFunctionsTemplate</code> using given

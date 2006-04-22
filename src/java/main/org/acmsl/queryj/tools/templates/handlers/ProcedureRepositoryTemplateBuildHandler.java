@@ -100,22 +100,28 @@ public class ProcedureRepositoryTemplateBuildHandler
             MetadataManager t_MetadataManager =
                 retrieveMetadataManager(attributes);
 
-            String t_strPackage = retrievePackage(attributes);
-
-            ProcedureMetadata[] t_aProceduresMetadata =
-                (t_MetadataManager != null)
-                ?  t_MetadataManager.getProceduresMetadata()
-                :  null;
-
-            ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate =
-                buildProcedureRepositoryTemplate(
-                    attributes, t_MetadataManager.getMetadataTypeManager());
-
-            if  (  (t_ProcedureRepositoryTemplate != null)
-                && (t_aProceduresMetadata         != null))
+            ProcedureMetadata[] t_aProceduresMetadata = null;
+            ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate = null;
+            
+            if  (t_MetadataManager != null)
             {
+                t_aProceduresMetadata = 
+                    t_MetadataManager.getProceduresMetadata();
+
+                t_ProcedureRepositoryTemplate =
+                    buildProcedureRepositoryTemplate(
+                        attributes,
+                        t_MetadataManager.getMetadataTypeManager());
+            }
+
+            if  (t_ProcedureRepositoryTemplate != null)
+            {
+                int t_iCount =
+                    (t_aProceduresMetadata != null)
+                    ? t_aProceduresMetadata.length : 0;
+                
                 for  (int t_iIndex = 0;
-                          t_iIndex < t_aProceduresMetadata.length;
+                          t_iIndex < t_iCount;
                           t_iIndex++) 
                 {
                     ProcedureParameterMetadata[] t_aProcedureParametersMetadata =
@@ -130,10 +136,10 @@ public class ProcedureRepositoryTemplateBuildHandler
                             t_aProceduresMetadata[t_iIndex],
                             t_aProcedureParametersMetadata);
                 }
-            }
 
-            storeProcedureRepositoryTemplate(
-                t_ProcedureRepositoryTemplate, attributes);
+                storeProcedureRepositoryTemplate(
+                    t_ProcedureRepositoryTemplate, attributes);
+            }
         }
         
         return result;
@@ -185,9 +191,9 @@ public class ProcedureRepositoryTemplateBuildHandler
                             ParameterValidationHandler.REPOSITORY),
                     metadataTypeManager);
 
+            /*
             if  (result != null) 
             {
-                /*
                 String[] t_astrProcedureNames =
                     (String[])
                         parameters.get(
@@ -202,9 +208,8 @@ public class ProcedureRepositoryTemplateBuildHandler
                         result.addTable(t_astrTableNames[t_iTableIndex]);
                     }                    
                 }
-                */
             }
-            
+            */
         }
 
         return result;

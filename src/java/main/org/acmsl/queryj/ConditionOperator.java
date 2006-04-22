@@ -148,5 +148,24 @@ public abstract class ConditionOperator
 
         return result;
     }
+
+    /**
+     * Retrieves the hash code.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return hashCode(getSymbol());
+    }
+
+    /**
+     * Retrieves the hash code.
+     * @param symbol the symbol.
+     * @return such information.
+     */
+    protected int hashCode(final String symbol)
+    {
+        return (ConditionOperator.class + symbol).hashCode();
+    }
 }
 

@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplate
 /*
  * Importing some JDK classes.
  */
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -61,17 +63,22 @@ public class OracleSystemFunctionsTemplate
     /**
      * The capitalized words.
      */
-    protected static final String[] CAPITALIZED_WORDS = EMPTY_STRING_ARRAY;
+    protected static final String[] CAPITALIZED_WORDS =
+        new String[0];
 
     /**
      * The field types.
      */
     public static final String[] FIELD_TYPES =
-        new String[]
-        {
-            "String",
-            "Long"
-        };
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "String",
+                        "Long"
+                    }))
+            .toArray();
 
     /**
      * Builds a OracleSystemFunctionsTemplate using given information.

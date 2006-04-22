@@ -495,6 +495,8 @@ public class JdbcMetadataTypeManager
         {
             case Types.BIT:
                 result = "Integer";
+                break;
+
             case Types.TINYINT:
             case Types.SMALLINT:
             case Types.INTEGER:

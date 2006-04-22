@@ -252,11 +252,6 @@ public abstract class AbstractXMLDAOTemplate
     private String m__strDeletePkDeclaration;
 
     /**
-     * The delete PK filter declaration.
-     */
-    private String m__strDeleteFilterDeclaration;
-
-    /**
      * The delete with FK method.
      */
     private String m__strDeleteNoFkMethod;
@@ -348,7 +343,6 @@ public abstract class AbstractXMLDAOTemplate
      * @param deleteMethodSubtemplate the delete method subtemplate.
      * @param deletePkJavadoc the delete PK javadoc.
      * @param deletePkDeclaration the delete PK declaration.
-     * @param deleteFilterDeclaration the delete filter declaration.
      * @param deleteNoFkMethod the delete method with no foreign keys.
      * @param deleteWithFkPkJavadoc the delete with FK PK javadoc.
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.

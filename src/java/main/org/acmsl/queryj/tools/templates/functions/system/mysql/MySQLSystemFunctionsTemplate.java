@@ -48,6 +48,8 @@ import org.acmsl.queryj.tools.templates.functions.system
 /*
  * Importing some JDK classes.
  */
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -63,22 +65,30 @@ public class MySQLSystemFunctionsTemplate
      * The capitalized words.
      */
     protected static final String[] CAPITALIZED_WORDS =
-        new String[]
-        {
-            "user",
-            "insert",
-            "id"
-        };
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "user",
+                        "insert",
+                        "id"
+                    }))
+            .toArray();
 
     /**
      * The field types.
      */
     public static final String[] FIELD_TYPES =
-        new String[]
-        {
-            "String",
-            "Long"
-        };
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "String",
+                        "Long"
+                    }))
+            .toArray();
 
     /**
      * Builds a MySQLSystemFunctionsTemplate using given information.

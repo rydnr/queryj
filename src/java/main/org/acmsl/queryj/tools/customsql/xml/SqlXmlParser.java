@@ -93,7 +93,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class SqlXmlParser
+public class SqlXmlParser
     implements  CustomSqlProvider
 {
     /**
@@ -506,6 +506,7 @@ public abstract class SqlXmlParser
         if  (t_mSqlXmlMap == null)
         {
             t_mSqlXmlMap = load();
+            setMap(t_mSqlXmlMap);
         }
     }
 

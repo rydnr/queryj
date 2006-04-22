@@ -351,22 +351,25 @@ public class ResultDecorator
                         t_Property =
                             customSqlProvider.resolveReference(t_PropertyRef);
 
-                        result.add(
-                            decoratorFactory.createDecorator(
-                                t_Property, metadataManager));
-                    }
-                    else
-                    {
-                        try
+                        if  (t_Property != null)
                         {
-                            // todo throw something.
-                            LogFactory.getLog("custom-sql").warn(
-                                  "Referenced property not found:"
-                                + t_PropertyRef.getId());
+                            result.add(
+                                decoratorFactory.createDecorator(
+                                    t_Property, metadataManager));
                         }
-                        catch  (final Throwable throwable)
+                        else
                         {
-                            // class-loading problem.
+                            try
+                            {
+                                // todo throw something.
+                                LogFactory.getLog("custom-sql").warn(
+                                    "Referenced property not found:"
+                                    + t_PropertyRef.getId());
+                            }
+                            catch  (final Throwable throwable)
+                            {
+                                // class-loading problem.
+                            }
                         }
                     }
                 }

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -46,6 +47,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.dao.DAODecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
@@ -182,7 +184,7 @@ public class DAOTemplateGenerator
      */
     public DecoratorFactory getDecoratorFactory()
     {
-        return CachingDecoratorFactory.getInstance();
+        return DAODecoratorFactory.getInstance();
     }
 
     /**
