@@ -162,6 +162,10 @@ public class MySQL4xMetaDataRetrievalHandler
                     catalog,
                     schema);
         }
+        catch  (final RuntimeException exception)
+        {
+            throw exception;
+        }
         catch  (final Exception exception)
         {
             throw new BuildException(exception);

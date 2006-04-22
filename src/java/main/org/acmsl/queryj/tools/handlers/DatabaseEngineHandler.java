@@ -93,8 +93,7 @@ public class DatabaseEngineHandler
 
             try 
             {
-                DatabaseMetaData t_MetaData =
-                    retrieveDatabaseMetaData(t_mAttributes);
+                retrieveDatabaseMetaData(t_mAttributes);
 
                 throw new SQLException();
             }

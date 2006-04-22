@@ -104,7 +104,7 @@ public class ConditionFactory
 
         if  (result == null) 
         {
-            result = new ConditionFactory() {};
+            result = new ConditionFactory();
 
             setReference(result);
         }
@@ -130,7 +130,7 @@ public class ConditionFactory
     {
         return
             new AtomicCondition(
-                leftSideField, operator, rightSideField) {};
+                leftSideField, operator, rightSideField);
     }
 
     /**
@@ -147,7 +147,7 @@ public class ConditionFactory
         final ConditionOperator operator,
         final int value)
     {
-        return new AtomicCondition(leftSideField, operator, value) {};
+        return new AtomicCondition(leftSideField, operator, value);
     }
 
     /**
@@ -164,7 +164,7 @@ public class ConditionFactory
         final ConditionOperator operator,
         final long value)
     {
-        return new AtomicCondition(leftSideField, operator, value) {};
+        return new AtomicCondition(leftSideField, operator, value);
     }
 
     /**
@@ -181,7 +181,7 @@ public class ConditionFactory
         final ConditionOperator operator,
         final double value)
     {
-        return new AtomicCondition(leftSideField, operator, value) {};
+        return new AtomicCondition(leftSideField, operator, value);
     }
 
     /**
@@ -198,7 +198,7 @@ public class ConditionFactory
         final ConditionOperator operator,
         final BigDecimal value)
     {
-        return new AtomicCondition(leftSideField, operator, value) {};
+        return new AtomicCondition(leftSideField, operator, value);
     }
 
     /**
@@ -215,7 +215,7 @@ public class ConditionFactory
         final ConditionOperator operator,
         final String value)
     {
-        return new AtomicCondition(leftSideField, operator, value) {};
+        return new AtomicCondition(leftSideField, operator, value);
     }
 
     /**
@@ -232,7 +232,7 @@ public class ConditionFactory
         final ConditionOperator operator,
         final Calendar value)
     {
-        return new AtomicCondition(leftSideField, operator, value) {};
+        return new AtomicCondition(leftSideField, operator, value);
     }
 
     /**
@@ -249,7 +249,7 @@ public class ConditionFactory
         final ConditionOperator operator,
         final Date value)
     {
-        return new AtomicCondition(leftSideField, operator, value) {};
+        return new AtomicCondition(leftSideField, operator, value);
     }
 
     /**
@@ -264,7 +264,7 @@ public class ConditionFactory
         final Field field,
         final ConditionOperator operator)
     {
-        return new VariableCondition(field, operator) {};
+        return new VariableCondition(field, operator);
     }
 
     /**
@@ -278,7 +278,7 @@ public class ConditionFactory
     public Condition wrap(
         final Condition condition, final String prefix, final String suffix)
     {
-        return new _ConditionWrapper(condition, prefix, suffix) {};
+        return new _ConditionWrapper(condition, prefix, suffix);
     }
 
     /**
@@ -294,7 +294,7 @@ public class ConditionFactory
         final String prefix,
         final String suffix)
     {
-        return new _AtomicConditionWrapper(condition, prefix, suffix) {};
+        return new _AtomicConditionWrapper(condition, prefix, suffix);
     }
 
     /**
@@ -310,7 +310,7 @@ public class ConditionFactory
         final String prefix,
         final String suffix)
     {
-        return new _VariableConditionWrapper(condition, prefix, suffix) {};
+        return new _VariableConditionWrapper(condition, prefix, suffix);
     }
 
     /**

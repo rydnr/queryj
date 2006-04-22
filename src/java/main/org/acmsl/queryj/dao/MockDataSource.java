@@ -384,7 +384,7 @@ public class MockDataSource
         {
             try
             {
-                LogFactory.getLog(getClass()).info(
+                LogFactory.getLog(MockDataSource.class).info(
                     "Driver not yet registered. Performing registration.");
             }
             catch  (final Throwable throwable)
@@ -402,7 +402,11 @@ public class MockDataSource
 
                 t_Driver = (Driver) t_DriverClass.newInstance();
             }
-            catch  (Exception exception)
+            catch  (final RuntimeException exception)
+            {
+                throw exception;
+            }
+            catch  (final Exception exception)
             {
                 SQLException sqlException =
                     new SQLException(exception.getMessage());

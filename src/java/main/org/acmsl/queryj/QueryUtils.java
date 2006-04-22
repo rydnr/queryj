@@ -159,8 +159,7 @@ public class QueryUtils
                 t_sbResult.append(concatenate(t_itItems.next(), simplify));
             }
             
-            while  (   (t_itItems != null) 
-                    && (t_itItems.hasNext()))
+            while  (t_itItems.hasNext())
             {
                 t_sbResult.append(separator);
                 t_sbResult.append(concatenate(t_itItems.next(), simplify));
@@ -278,7 +277,7 @@ public class QueryUtils
             }
             catch  (final IOException ioException)
             {
-                LogFactory.getLog(getClass()).warn(
+                LogFactory.getLog(QueryUtils.class).warn(
                     "Cannot close CLOB stream.",
                     ioException);
             }

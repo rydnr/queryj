@@ -96,6 +96,8 @@ public class QueryResultSet
      * Builds a query result set with given references.
      * @param query the query.
      * @param resultSet the wrapped result set.
+     * @precondition query != null
+     * @precondition resultSet != null
      */
     public QueryResultSet(final Query query, final ResultSet resultSet)
     {

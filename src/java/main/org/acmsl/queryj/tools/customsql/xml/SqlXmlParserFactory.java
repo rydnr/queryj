@@ -43,6 +43,11 @@ package org.acmsl.queryj.tools.customsql.xml;
 import org.acmsl.queryj.tools.customsql.xml.SqlXmlParser;
 
 /*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Factory;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -63,6 +68,7 @@ import org.apache.commons.logging.LogFactory;
            >Jose San Leandro</a>
  */
 public class SqlXmlParserFactory
+    implements  Factory
 {
     /**
      * The default file location.
@@ -115,7 +121,7 @@ public class SqlXmlParserFactory
 
         if  (result == null) 
         {
-            result = new SqlXmlParserFactory() { };
+            result = new SqlXmlParserFactory();
 
             setReference(result);
         }
@@ -203,13 +209,13 @@ public class SqlXmlParserFactory
 
         try
         {
-            result = new SqlXmlParser(new FileInputStream(file)) {};
+            result = new SqlXmlParser(new FileInputStream(file));
         }
         catch  (final FileNotFoundException fileNotFoundException)
         {
             try
             {
-                LogFactory.getLog(getClass()).error(
+                LogFactory.getLog(SqlXmlParserFactory.class).error(
                     "no sql.xml information found at " + file,
                     fileNotFoundException);
             }

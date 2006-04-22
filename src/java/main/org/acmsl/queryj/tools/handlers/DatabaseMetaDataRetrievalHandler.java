@@ -1220,9 +1220,15 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     catalog,
                     schema);
         }
+        catch  (final RuntimeException exception)
+        {
+            throw exception;
+        }
         catch  (final Exception exception)
         {
-            Log t_Log = UniqueLogFactory.getLog(getClass());
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    DatabaseMetaDataRetrievalHandler.class);
                 
             if  (t_Log != null)
             {
@@ -1389,7 +1395,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         BuildException t_ExceptionToThrow = null;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log =
+            UniqueLogFactory.getLog(
+                DatabaseMetaDataRetrievalHandler.class);
 
         String t_strProduct = null;
         String t_strVersion = null;

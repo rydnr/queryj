@@ -61,7 +61,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class SelectQuery
+public class SelectQuery
     extends  Query
 {
     /**
@@ -299,7 +299,7 @@ public abstract class SelectQuery
             result =
                 new QueryResultSet(
                     this,
-                    t_Statement.executeQuery(toString())) {};
+                    t_Statement.executeQuery(toString()));
         }
 
         return result;

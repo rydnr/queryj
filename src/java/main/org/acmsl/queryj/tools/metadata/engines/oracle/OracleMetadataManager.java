@@ -216,7 +216,7 @@ public class OracleMetadataManager
 
         PreparedStatement t_PreparedStatement = null;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
 
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
             
@@ -391,7 +391,7 @@ public class OracleMetadataManager
 
         PreparedStatement t_PreparedStatement = null;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
         
@@ -558,7 +558,7 @@ public class OracleMetadataManager
     {
         String[] result = EMPTY_STRING_ARRAY;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         QueryResultSet t_Results = null;
 
@@ -706,7 +706,7 @@ public class OracleMetadataManager
     {
         String[] result = EMPTY_STRING_ARRAY;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
 
@@ -874,7 +874,7 @@ public class OracleMetadataManager
     {
         int[] result = EMPTY_INT_ARRAY;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
 
@@ -1068,7 +1068,7 @@ public class OracleMetadataManager
     {
         boolean[] result = EMPTY_BOOLEAN_ARRAY;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
 
@@ -1242,7 +1242,7 @@ public class OracleMetadataManager
     {
         String result = "";
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
 

@@ -318,8 +318,8 @@ public class TransactionManager
         else
         {
             throw
-                new TransactionException(
-                    "Invalid transaction token: " + transactionToken) {};
+                new TransactionManagerException(
+                    "Invalid transaction token: " + transactionToken);
         }
     }
 
@@ -378,8 +378,8 @@ public class TransactionManager
         else
         {
             throw
-                new TransactionException(
-                    "Invalid transaction token: " + transactionToken) {};
+                new TransactionManagerException(
+                    "Invalid transaction token: " + transactionToken);
         }
     }
 
@@ -416,5 +416,24 @@ public class TransactionManager
       throws  TransactionException
     {
         transactionManager.rollback(transactionToken);
+    }
+
+    /**
+     * Inner transaction exception shortcut.
+     * @author <a href="mailto:chous@acm-sl.org"
+     *         >Jose San Leandro Armendariz</a>
+     */
+    public static class TransactionManagerException
+        extends  TransactionException
+    {
+        /**
+         * Creates a <code>TransactionManagerException</code>
+         * with given message.
+         * @param message the message.
+         */
+        public TransactionManagerException(final String message)
+        {
+            super(message);
+        }
     }
 }

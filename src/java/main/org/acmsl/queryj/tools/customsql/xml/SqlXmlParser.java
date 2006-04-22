@@ -250,11 +250,15 @@ public class SqlXmlParser
                     setMap(result);
                 }
             }
+            catch  (final RuntimeException exception)
+            {
+                throw exception;
+            }
             catch  (final Exception exception)
             {
                 try
                 {
-                    LogFactory.getLog(getClass()).error(
+                    LogFactory.getLog(SqlXmlParser.class).error(
                         "Cannot read sql.xml information.",
                         exception);
                 }

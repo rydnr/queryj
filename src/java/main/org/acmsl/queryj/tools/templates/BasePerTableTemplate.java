@@ -1193,7 +1193,7 @@ public abstract class BasePerTableTemplate
                                     try
                                     {
                                         // todo throw something.
-                                        LogFactory.getLog("custom-sql").warn(
+                                        LogFactory.getLog(BasePerTableTemplate.class).warn(
                                               "Referenced result not found:"
                                             + t_ResultRefElement.getId());
                                     }
@@ -1208,7 +1208,7 @@ public abstract class BasePerTableTemplate
                                 try
                                 {
                                     // todo throw something.
-                                    LogFactory.getLog("custom-sql").warn(
+                                    LogFactory.getLog(BasePerTableTemplate.class).warn(
                                           "Referenced result not found:"
                                         + t_ResultRefElement.getId());
                                 }

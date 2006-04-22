@@ -2316,7 +2316,8 @@ public abstract class AbstractJdbcMetadataManager
     {
         String[] t_astrTableNames = tableNames;
 
-        if  (t_astrTableNames == null) 
+        if  (   (t_astrTableNames == null)
+             || (t_astrTableNames.length == 0))
         {
             t_astrTableNames =
                 getTableNames(metaData, catalog, schema);
@@ -3527,7 +3528,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected void logVerbose(final String message)
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
 
         if  (t_Log != null)
         {
@@ -3545,7 +3546,7 @@ public abstract class AbstractJdbcMetadataManager
     protected void logWarn(
         final String message, final Exception exception)
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
 
         if  (t_Log != null)
         {

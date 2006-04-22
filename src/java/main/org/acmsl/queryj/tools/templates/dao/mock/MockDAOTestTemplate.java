@@ -475,7 +475,7 @@ public class MockDAOTestTemplate
         /*
         catch  (SQLException sqlException)
         {
-            LogFactory.getLog(getClass()).error(
+            LogFactory.getLog(MockDAOTestTemplate.class).error(
                 "database.meta.data.error",
                 sqlException);
         }

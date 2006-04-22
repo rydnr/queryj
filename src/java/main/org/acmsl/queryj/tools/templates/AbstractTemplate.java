@@ -261,7 +261,7 @@ public abstract class AbstractTemplate
      */
     protected void logHeader(final String header)
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
         
         if  (t_Log != null)
         {

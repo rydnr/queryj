@@ -347,7 +347,7 @@ public class SqlDecorator
                             try
                             {
                                 // todo throw something.
-                                LogFactory.getLog("custom-sql").warn(
+                                LogFactory.getLog(SqlDecorator.class).warn(
                                     "Referenced parameter not found:"
                                     + t_ParameterRef.getId());
                             }

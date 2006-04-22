@@ -99,7 +99,9 @@ public class JdbcConnectionClosingHandler
             }
             catch  (final BuildException buildException)
             {
-                Log t_Log = UniqueLogFactory.getLog(getClass());
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        JdbcConnectionClosingHandler.class);
                 
                 if  (t_Log != null)
                 {

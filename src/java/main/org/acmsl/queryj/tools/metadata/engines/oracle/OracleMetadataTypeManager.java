@@ -136,10 +136,8 @@ public class OracleMetadataTypeManager
 
         switch (dataType)
         {
-            case Types.OTHER:
-                result = true;
-                break;
             case Types.CLOB:
+            case Types.OTHER:
                 result = true;
                 break;
             default:

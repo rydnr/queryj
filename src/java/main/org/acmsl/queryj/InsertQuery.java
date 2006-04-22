@@ -70,7 +70,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class InsertQuery
+public class InsertQuery
     extends  WriteQuery
 {
     /**

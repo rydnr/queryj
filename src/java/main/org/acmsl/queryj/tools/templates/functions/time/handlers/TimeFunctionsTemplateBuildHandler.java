@@ -111,7 +111,9 @@ public class TimeFunctionsTemplateBuildHandler
 
         if  (command != null) 
         {
-            Log t_Log = UniqueLogFactory.getLog(getClass());
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    TimeFunctionsTemplateBuildHandler.class);
 
             try 
             {

@@ -716,7 +716,7 @@ public class DAOTestTemplate
         }
         catch  (SQLException sqlException)
         {
-            LogFactory.getLog(getClass()).error(
+            LogFactory.getLog(DAOTestTemplate.class).error(
                 "database.meta.data.error",
                 sqlException);
         }

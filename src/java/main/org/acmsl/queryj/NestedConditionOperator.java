@@ -50,7 +50,7 @@ import org.acmsl.queryj.Field;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class NestedConditionOperator
+public class NestedConditionOperator
     extends  ConditionOperator
 {
     /**
@@ -62,6 +62,8 @@ public abstract class NestedConditionOperator
      * Creates a nested operator using given information.
      * @param symbol the symbol.
      * @param query the operator query.
+     * @precondition symbol != null
+     * @precondition query != null
      */
     public NestedConditionOperator(final String symbol, final SelectQuery query)
     {

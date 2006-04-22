@@ -111,16 +111,6 @@ public abstract class AbstractAntCommandHandler
     }
 
     /**
-     * Handles given command.
-     * @param command the command.
-     * @return <code>true</code> to avoid further processing of such command
-     * by different handlers.
-     * @throws BuildException if the build process cannot be performed.
-     */
-    public abstract boolean handle(final AntCommand command)
-        throws  BuildException;
-
-    /**
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
      * @return such folder.

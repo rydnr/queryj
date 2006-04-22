@@ -362,7 +362,7 @@ public class ResultDecorator
                             try
                             {
                                 // todo throw something.
-                                LogFactory.getLog("custom-sql").warn(
+                                LogFactory.getLog(ResultDecorator.class).warn(
                                     "Referenced property not found:"
                                     + t_PropertyRef.getId());
                             }

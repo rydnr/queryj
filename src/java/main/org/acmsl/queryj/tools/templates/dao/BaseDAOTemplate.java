@@ -386,7 +386,7 @@ public class BaseDAOTemplate
         final Connection connection)
       throws  InvalidTemplateException
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(BaseDAOTemplate.class);
         
         Collection t_cRows = new ArrayList();
 

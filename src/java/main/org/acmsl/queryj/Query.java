@@ -1037,7 +1037,7 @@ public abstract class Query
     {
         return
             new QueryResultSet(
-                this, retrievePreparedStatement().executeQuery()) {};
+                this, retrievePreparedStatement().executeQuery());
     }
 
     /**
@@ -3119,7 +3119,7 @@ public abstract class Query
     {
         return
             new QueryResultSet(
-                this, retrievePreparedStatement().getGeneratedKeys()) {};
+                this, retrievePreparedStatement().getGeneratedKeys());
     }
 
     /**

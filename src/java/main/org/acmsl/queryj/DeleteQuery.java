@@ -70,7 +70,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class DeleteQuery
+public class DeleteQuery
     extends  WriteQuery
 {
     /**

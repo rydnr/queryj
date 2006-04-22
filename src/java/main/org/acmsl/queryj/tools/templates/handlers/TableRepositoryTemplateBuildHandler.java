@@ -149,7 +149,9 @@ public class TableRepositoryTemplateBuildHandler
         }
         else 
         {
-            Log t_Log = UniqueLogFactory.getLog(getClass());
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    TableRepositoryTemplateBuildHandler.class);
 
             if  (t_Log != null)
             {
@@ -210,7 +212,9 @@ public class TableRepositoryTemplateBuildHandler
             }
             catch  (final SQLException sqlException)
             {
-                Log t_Log = UniqueLogFactory.getLog(getClass());
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        TableRepositoryTemplateBuildHandler.class);
                 
                 if  (t_Log != null)
                 {
@@ -254,7 +258,9 @@ public class TableRepositoryTemplateBuildHandler
             }
             catch  (final SQLException sqlException)
             {
-                Log t_Log = UniqueLogFactory.getLog(getClass());
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        TableRepositoryTemplateBuildHandler.class);
                 
                 if  (t_Log != null)
                 {
@@ -295,7 +301,9 @@ public class TableRepositoryTemplateBuildHandler
 
         if  (t_mMappings != null)
         {
-            Log t_Log = UniqueLogFactory.getLog(getClass());
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    TableRepositoryTemplateBuildHandler.class);
                         
             Object t_Key = buildKey(engine, engineVersion);
             Object t_Value = t_mMappings.get(t_Key);

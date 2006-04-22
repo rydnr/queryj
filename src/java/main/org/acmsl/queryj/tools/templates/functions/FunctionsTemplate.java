@@ -1088,7 +1088,7 @@ public abstract class FunctionsTemplate
      */
     protected void logWarn(final String message)
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(FunctionsTemplate.class);
 
         if  (t_Log != null)
         {
@@ -1102,7 +1102,7 @@ public abstract class FunctionsTemplate
      */
     protected void logDebug(final String message)
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(FunctionsTemplate.class);
 
         if  (t_Log != null)
         {

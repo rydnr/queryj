@@ -231,15 +231,6 @@ public class DataSourceTransactionToken
     */
 
     /**
-     * Retrieves a text version of the instance.
-     * @return such information.
-     */
-    public String toString()
-    {
-        return super.toString();
-    }
-
-    /**
      * Private <code>DataSource</code> wrapper.
      * @author <a href="mailto:chous@acm-sl.org"
      *         >Jose San Leandro Armendariz</a>

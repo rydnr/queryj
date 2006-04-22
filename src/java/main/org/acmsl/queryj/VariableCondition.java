@@ -55,13 +55,15 @@ import java.util.Collection;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class VariableCondition
+public class VariableCondition
     extends  AtomicCondition
 {
     /**
      * Creates a variable condition using given information.
      * @param field the left-side field.
      * @param operator the operator.
+     * @precondition field != null
+     * @precondition operator != null
      */
     public VariableCondition(final Field field, final ConditionOperator operator)
     {

@@ -223,8 +223,8 @@ public class DataAccessManagerTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + stringUtils.capitalize(repository.toLowerCase(), '_')
-            + "DataAccessManager",
+//            + stringUtils.capitalize(repository.toLowerCase(), '_')
+            + "DataAccessManager.java",
             template.generate());
     }
 }
