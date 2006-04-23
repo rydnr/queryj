@@ -74,6 +74,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents generic templates.
@@ -84,6 +86,11 @@ public abstract class AbstractTemplate
     implements  Template,
                 DefaultThemeConstants
 {
+    /**
+     * Caches the StringTemplateGroup for each template class.
+     */
+    private static Map m__mSTCache;
+    
     /**
      * The decorator factory.
      */
@@ -98,6 +105,7 @@ public abstract class AbstractTemplate
     protected AbstractTemplate(final DecoratorFactory decoratorFactory)
     {
         immutableSetDecoratorFactory(decoratorFactory);
+        immutableSetSTCache(new HashMap());
     }
 
     /**
@@ -130,6 +138,24 @@ public abstract class AbstractTemplate
     }
 
     /**
+     * Specifies the ST cache.
+     * @param map the map to use as cache.
+     */
+    protected static final void immutableSetSTCache(final Map map)
+    {
+        m__mSTCache = map;
+    }
+
+    /**
+     * Retrieves the ST cache.
+     * @return the map being used as cache.
+     */
+    protected static final Map immutableGetSTCache()
+    {
+        return m__mSTCache;
+    }
+
+    /**
      * Retrieves the string template group.
      * @param path the path.
      * @return such instance.
@@ -137,21 +163,57 @@ public abstract class AbstractTemplate
      */
     protected StringTemplateGroup retrieveGroup(final String path)
     {
-        return retrieveGroup(path, "/org/acmsl/queryj/queryj.stg");
+        return
+            retrieveGroup(
+                path,
+                "/org/acmsl/queryj/queryj.stg",
+                immutableGetSTCache());
     }
     
     /**
      * Retrieves the string template group.
      * @param path the path.
      * @param theme the theme.
+     * @param cache the ST cache.
      * @return such instance.
      * @precondition path != null
      * @precondition theme != null
+     * @precondition cache != null
      */
     protected StringTemplateGroup retrieveGroup(
-        final String path, final String theme)
+        final String path, final String theme, final Map cache)
     {
-        return retrieveGroup(path, theme, STUtils.getInstance());
+        StringTemplateGroup result = null;
+        
+        Object t_Key = buildSTGroupKey(path, theme);
+
+        result = (StringTemplateGroup) cache.get(t_Key);
+
+        if  (result == null)
+        {
+            result = retrieveGroup(path, theme, STUtils.getInstance());
+
+            if  (result != null)
+            {
+                cache.put(t_Key, result);
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Builds a key to store the ST group associated to
+     * given path and theme.
+     * @param path the ST path.
+     * @param theme the ST theme.
+     * @return such key.
+     * @precondition path != null
+     * @precondition theme != null
+     */
+    protected final Object buildSTGroupKey(final String path, final String theme)
+    {
+        return ".:\\AbstractTemplate//STCACHE//" + path + "//" + theme;
     }
 
     /**

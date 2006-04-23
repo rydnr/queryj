@@ -496,11 +496,6 @@ public class XMLDAOTestTemplate
 
             boolean t_bAllowsNull = false;
 
-            boolean t_bIsPrimaryKey =
-                metadataManager.isPartOfPrimaryKey(
-                    tableTemplate.getTableName(),
-                    t_astrColumnNames[t_iColumnIndex]);
-
             t_bAllowsNull =
                 metadataManager.allowsNull(
                     tableTemplate.getTableName(),

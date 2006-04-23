@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Decorates attributes for AttributeStatementSetter templates.
+ * Description: Decorates attributes for ResultSetExtractor templates.
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
@@ -48,11 +48,11 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /**
- * Decorates attributes for AttributeStatementSetter templates.
+ * Decorates attributes for ResultSetExtractor templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class AttributeStatementSetterAttributeDecorator
+public class ResultSetExtractorAttributeDecorator
     extends  CachingAttributeDecorator
 {
     /**
@@ -66,14 +66,14 @@ public class AttributeStatementSetterAttributeDecorator
     private Boolean m__bCachedNumberSmallerThanInt;
 
     /**
-     * Creates a <code>AttributeStatementSetterAttributeDecorator</code> with the
+     * Creates a <code>ResultSetExtractorAttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
      * @param metadataManager the metadata manager.
      * @precondition attribute != null
      * @precondition metadataManager != null
      */
-    public AttributeStatementSetterAttributeDecorator(
+    public ResultSetExtractorAttributeDecorator(
         final Attribute attribute,
         final MetadataManager metadataManager)
     {

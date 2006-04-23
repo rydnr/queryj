@@ -450,7 +450,7 @@ public class FkStatementSetterTemplateBuildHandler
         final String tableName,
         final MetadataManager metadataManager)
     {
-        Collection t_cResult = new ArrayList();
+        Collection t_cResult = null;
 
         Map t_mAux = new HashMap();
 

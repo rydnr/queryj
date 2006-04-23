@@ -339,11 +339,6 @@ public class XMLDAOTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
-        String t_strRepositoryName =
-            stringUtils.capitalize(
-                repositoryName,
-                '_');
-
         String t_strTableName = tableTemplate.getTableName();
 
         MessageFormat t_HeaderFormatter = new MessageFormat(header);
@@ -447,21 +442,15 @@ public class XMLDAOTemplate
         StringBuffer t_sbBuildKeyValues = new StringBuffer();
         StringBuffer t_sbProcessPkAttributes = new StringBuffer();
         StringBuffer t_sbPkFilterValues = new StringBuffer();
-        StringBuffer t_sbUpdateFilter = new StringBuffer();
         StringBuffer t_sbDeleteMethod = new StringBuffer();
         StringBuffer t_sbDeleteByFkMethod = new StringBuffer();
-        StringBuffer t_sbSelectFields = new StringBuffer();
-        StringBuffer t_sbFilterDeclaration = new StringBuffer();
         StringBuffer t_sbDeleteWithFkPkValues = new StringBuffer();
         StringBuffer t_sbDeleteWithFkPkValuesDeleteRequest = new StringBuffer();
 
         StringBuffer t_sbFkJavadoc = new StringBuffer();
         StringBuffer t_sbFkDeclaration;
         StringBuffer t_sbDeleteNoFkMethod = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkPkJavadoc = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkPkDeclaration = new StringBuffer();
         StringBuffer t_sbDeleteWithFkDAODeleteRequest = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkDAOFkValues = new StringBuffer();
 
         StringBuffer t_sbBuildValueObjectParametersDeclaration =
             new StringBuffer();
@@ -471,7 +460,6 @@ public class XMLDAOTemplate
         StringBuffer t_sbInsertParametersDeclaration    = new StringBuffer();
         StringBuffer t_sbUpdateParametersJavadoc        = new StringBuffer();
         StringBuffer t_sbUpdateParametersDeclaration    = new StringBuffer();
-        StringBuffer t_sbUpdateParametersSpecification  = new StringBuffer();
 
         StringBuffer t_sbPersistMethod = new StringBuffer();
         StringBuffer t_sbUndigesterPropertyRules = new StringBuffer();

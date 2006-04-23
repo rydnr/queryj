@@ -1107,4 +1107,28 @@ public class JdbcMetadataTypeManager
     {
         return (dataType == Types.CLOB);
     }
+
+    /**
+     * Checks if given data type represents numbers smaller than int.
+     * @param dataType the data type.
+     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * or similar.
+     */
+    public boolean isNumberSmallerThanInt(final int dataType)
+    {
+        boolean result = false;
+
+        switch (dataType)
+        {
+            case Types.BIT:
+            case Types.TINYINT:
+            case Types.SMALLINT:
+                result = true;
+
+            default:
+                result = false;
+        }
+        
+        return result;
+    }
 }

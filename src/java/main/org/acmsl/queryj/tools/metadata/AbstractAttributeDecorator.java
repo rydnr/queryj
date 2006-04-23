@@ -610,4 +610,44 @@ public abstract class AbstractAttributeDecorator
         return
             normalizeLowercase(getTableName(), DecorationUtils.getInstance());
     }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    public boolean isNumberSmallerThanInt()
+    {
+        return isNumberSmallerThanInt(getType(), getMetadataManager());
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @param type the type.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such condition.
+     * @precondition metadataManager != null
+     */
+    protected boolean isNumberSmallerThanInt(
+        final int type, final MetadataManager metadataManager)
+    {
+        return
+            isNumberSmallerThanInt(
+                type, metadataManager.getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return such condition.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isNumberSmallerThanInt(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isNumberSmallerThanInt(type);
+    }
 }

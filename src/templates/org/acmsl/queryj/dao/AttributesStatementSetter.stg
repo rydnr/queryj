@@ -391,20 +391,23 @@ public class <input.vo_name>AttributesStatementSetter
 
 
 <endif>
+<if(input.clobHandling)>
         if  (updateOperation)
         {
-<if(input.clobHandling)>
             <input.externally_managed_attributes:
               attribute_preparedstatement_specification(attr=it);
               separator="\n">
-
+        }
 <else>
+<if(input.externally_managed_attributes)>
+        if  (updateOperation)
+        {
             <input.externally_managed_attributes:
               attribute_query_specification(attr=it);
               separator="\n">
-
-<endif>
         }
+<endif>
+<endif>
 
 <if(input.clobHandling)>
         if  (selectForUpdateOperation)
@@ -482,7 +485,12 @@ attribute_query_specification(attr) ::= <<
  Generates the code to specify the attribute into the query.
  @param attr the attribute.
 !>
+<if(attr.numberSmallerThanInt)>
+query.setInt(
+<else>
 query.set<attr.objectType>(
+<endif>
+
     <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
     <attr.nameLowercased>);
 >>
