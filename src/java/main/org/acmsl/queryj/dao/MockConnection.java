@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -197,7 +197,7 @@ public class MockConnection
             {
                 try
                 {
-                    LogFactory.getLog(getClass()).fatal(
+                    LogFactory.getLog(MockConnection.class).fatal(
                         "Wrapped connection null");
                 }
                 catch  (final Throwable throwable)
@@ -216,7 +216,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -247,7 +247,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -259,7 +259,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -271,7 +271,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -305,7 +305,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
 
@@ -315,7 +315,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
         }
@@ -327,7 +327,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -361,7 +361,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -375,7 +375,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -423,7 +423,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -437,7 +437,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -492,7 +492,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -506,7 +506,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -538,7 +538,7 @@ public class MockConnection
         }
         else 
         {
-            LogFactory.getLog(getClass()).fatal(
+            LogFactory.getLog(MockConnection.class).fatal(
                 "Wrapped connection null");
         }
 
@@ -567,7 +567,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -581,7 +581,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -616,7 +616,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -630,7 +630,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
         }
@@ -664,7 +664,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -678,7 +678,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -714,7 +714,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -728,7 +728,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -770,7 +770,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -784,7 +784,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -826,7 +826,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -840,7 +840,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -872,7 +872,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -886,7 +886,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -923,7 +923,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -937,7 +937,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -984,7 +984,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -998,7 +998,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1051,7 +1051,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -1065,7 +1065,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1114,7 +1114,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -1128,7 +1128,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1181,7 +1181,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -1195,7 +1195,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1230,7 +1230,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
 
@@ -1240,7 +1240,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
         }
@@ -1252,7 +1252,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1298,7 +1298,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
 
                 m__bTempAutoCommit = autoCommit;
@@ -1314,7 +1314,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1346,7 +1346,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
 
                 m__strTempCatalog = catalog;
@@ -1362,7 +1362,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1393,7 +1393,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
 
                 m__bTempReadOnly = readOnly;
@@ -1409,7 +1409,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1450,7 +1450,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
 
                 m__iTempTransactionIsolation = level;
@@ -1466,7 +1466,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1499,7 +1499,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
 
                 m__mTempTypeMap = map;
@@ -1515,7 +1515,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1550,7 +1550,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
 
                 m__iTempHoldability = holdability;
@@ -1566,7 +1566,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1601,7 +1601,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -1615,7 +1615,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1650,7 +1650,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -1664,7 +1664,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1701,7 +1701,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -1715,7 +1715,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1750,7 +1750,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -1764,7 +1764,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1796,7 +1796,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -1810,7 +1810,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1870,7 +1870,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -1884,7 +1884,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -1946,7 +1946,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -1960,7 +1960,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -2021,7 +2021,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -2035,7 +2035,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -2095,7 +2095,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -2109,7 +2109,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 
@@ -2172,7 +2172,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped connection null");
             }
         }
@@ -2186,7 +2186,7 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(getClass()).fatal(
+                LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
 

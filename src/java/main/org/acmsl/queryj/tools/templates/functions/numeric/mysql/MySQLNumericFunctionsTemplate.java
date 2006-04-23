@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.functions.numeric.mysql;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTemplate;
 
@@ -52,6 +53,8 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some JDK classes.
  */
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -66,56 +69,67 @@ public class MySQLNumericFunctionsTemplate
     /**
      * The capitalized words.
      */
-    protected static final String[] CAPITALIZED_WORDS =
-        new String[]
-        {
-            "abs",
-            "acos",
-            "asin",
-            "atan",
-            "bit",
-            "count",
-            "ceiling",
-            "degrees",
-            "floor",
-            "log",
-            "max",
-            "min",
-            "mod",
-            "pi",
-            "pow",
-            "radians",
-            "rand",
-            "round",
-            "sqrt",
-            "truncate"
-        };
+    static final String[] CAPITALIZED_WORDS =
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "abs",
+                        "acos",
+                        "asin",
+                        "atan",
+                        "bit",
+                        "count",
+                        "ceiling",
+                        "degrees",
+                        "floor",
+                        "log",
+                        "max",
+                        "min",
+                        "mod",
+                        "pi",
+                        "pow",
+                        "radians",
+                        "rand",
+                        "round",
+                        "sqrt",
+                        "truncate"
+                    }))
+            .toArray();
 
     /**
      * The field types.
      */
-    public static final String[] FIELD_TYPES =
-        new String[]
-        {
-            "Double",
-            "Int",
-            "Long",
-        };
+    static final String[] FIELD_TYPES =
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "Double",
+                        "Int",
+                        "Long"
+                    }))
+            .toArray();
 
     /**
      * Builds a MySQLNumericFunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      */
     public MySQLNumericFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         String  packageName,
         String  engineName,
         String  engineVersion,
         String  quote)
     {
         super(
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

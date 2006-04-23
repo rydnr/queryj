@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,8 @@ package org.acmsl.queryj.tools.templates.valueobject;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -126,173 +128,6 @@ public class ValueObjectFactoryTemplateGenerator
     }
 
     /**
-     * Adds a new template factory class.
-     * @param valueObjectName the value object name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateFactoryClass the template factory.
-     * @precondition valueObjectName != null
-     * @precondition engineName != null
-     * @precondition templateFactoryClass != null
-     */
-    public void addTemplateFactoryClass(
-        final String valueObjectName,
-        final String engineName,
-        final String engineVersion,
-        final String templateFactoryClass)
-    {
-        addTemplateFactoryClass(
-            valueObjectName,
-            engineName,
-            engineVersion,
-            templateFactoryClass,
-            TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Adds a new template factory class.
-     * @param valueObjectName the value object name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateFactoryClass the template factory.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @precondition valueObjectName != null
-     * @precondition engineName != null
-     * @precondition templateFactoryClass != null
-     * @precondition templateMappingManager != null
-     */
-    protected void addTemplateFactoryClass(
-        final String valueObjectName,
-        final String engineName,
-        final String engineVersion,
-        final String templateFactoryClass,
-        final TemplateMappingManager templateMappingManager)
-    {
-        templateMappingManager.addTemplateFactoryClass(
-              TemplateMappingManager.VALUE_OBJECT_FACTORY_TEMPLATE_PREFIX
-            + valueObjectName,
-            engineName,
-            engineVersion,
-            templateFactoryClass);
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param valueObjectName the value object name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @precondition valueObjectName != null
-     * @precondition engineName != null
-     */
-    protected String getTemplateFactoryClass(
-        final String valueObjectName,
-        final String engineName,
-        final String engineVersion)
-    {
-        return
-            getTemplateFactoryClass(
-                valueObjectName,
-                engineName,
-                engineVersion,
-                TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param valueObjectName the value object name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @return the template factory class name.
-     * @precondition valueObjectName != null
-     * @precondition engineName != null
-     * @precondition templateMappingManager != null
-     */
-    protected String getTemplateFactoryClass(
-        final String valueObjectName,
-        final String engineName,
-        final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
-    {
-        return
-            templateMappingManager.getTemplateFactoryClass(
-                  TemplateMappingManager.VALUE_OBJECT_TEMPLATE_PREFIX
-                + valueObjectName,
-                engineName,
-                engineVersion);
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param valueObjectName the value object name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    protected ValueObjectFactoryTemplateFactory getTemplateFactory(
-        final String valueObjectName,
-        final String engineName,
-        final String engineVersion)
-      throws  QueryJException
-    {
-        return
-            getTemplateFactory(
-                valueObjectName,
-                engineName,
-                engineVersion,
-                TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param valueObjectName the value object name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateMappingManager the <code>TemplateMappingManager</code> instance.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition templateMappingManager != null
-     */
-    protected ValueObjectFactoryTemplateFactory getTemplateFactory(
-        final String valueObjectName,
-        final String engineName,
-        final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
-      throws  QueryJException
-    {
-        ValueObjectFactoryTemplateFactory result = null;
-
-        Object t_TemplateFactory =
-            templateMappingManager.getTemplateFactoryClass(
-                  TemplateMappingManager.VALUE_OBJECT_FACTORY_TEMPLATE_PREFIX
-                + valueObjectName,
-                engineName,
-                engineVersion);
-
-        if  (t_TemplateFactory != null)
-        {
-            if  (!(  t_TemplateFactory
-                     instanceof ValueObjectFactoryTemplateFactory))
-            {
-                throw
-                    new QueryJException(
-                        "invalid.value.object.factory.template.factory");
-            }
-            else 
-            {
-                result =
-                    (ValueObjectFactoryTemplateFactory) t_TemplateFactory;
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Generates a value object factory template.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
@@ -313,7 +148,17 @@ public class ValueObjectFactoryTemplateGenerator
             new ValueObjectFactoryTemplate(
                 packageName,
                 tableTemplate,
-                metadataManager);
+                metadataManager,
+                getDecoratorFactory());
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

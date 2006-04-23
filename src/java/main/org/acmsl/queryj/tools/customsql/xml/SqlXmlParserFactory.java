@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,11 @@ package org.acmsl.queryj.tools.customsql.xml;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.customsql.xml.SqlXmlParser;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Factory;
 
 /*
  * Importing some JDK classes.
@@ -63,6 +68,7 @@ import org.apache.commons.logging.LogFactory;
            >Jose San Leandro</a>
  */
 public class SqlXmlParserFactory
+    implements  Factory
 {
     /**
      * The default file location.
@@ -115,7 +121,7 @@ public class SqlXmlParserFactory
 
         if  (result == null) 
         {
-            result = new SqlXmlParserFactory() { };
+            result = new SqlXmlParserFactory();
 
             setReference(result);
         }
@@ -143,11 +149,11 @@ public class SqlXmlParserFactory
     {
         SqlXmlParser result = null;
 
-        InputStream t_isInput = getClass().getResourceAsStream(inputFilePath);
+        InputStream t_isInput = SqlXmlParserFactory.class.getResourceAsStream(inputFilePath);
 
         if  (t_isInput == null)
         {
-            t_isInput = getClass().getResourceAsStream("/" + inputFilePath);
+            t_isInput = SqlXmlParserFactory.class.getResourceAsStream("/" + inputFilePath);
         }
 
         if  (t_isInput == null)
@@ -160,7 +166,7 @@ public class SqlXmlParserFactory
             {
                 try
                 {
-                    LogFactory.getLog(getClass()).error(
+                    LogFactory.getLog(SqlXmlParserFactory.class).error(
                         "Specified sql.xml file does not exist " + inputFilePath,
                         fileNotFoundException);
                 }
@@ -175,7 +181,7 @@ public class SqlXmlParserFactory
         {
             try
             {
-                LogFactory.getLog(getClass()).error(
+                LogFactory.getLog(SqlXmlParserFactory.class).error(
                     "No sql.xml information found at " + inputFilePath);
             }
             catch  (final Throwable throwable)
@@ -185,7 +191,7 @@ public class SqlXmlParserFactory
         }
         else
         {
-            result = new SqlXmlParser(t_isInput) { };
+            result = new SqlXmlParser(t_isInput);
         }
 
         return result;
@@ -203,13 +209,13 @@ public class SqlXmlParserFactory
 
         try
         {
-            result = new SqlXmlParser(new FileInputStream(file)) {};
+            result = new SqlXmlParser(new FileInputStream(file));
         }
         catch  (final FileNotFoundException fileNotFoundException)
         {
             try
             {
-                LogFactory.getLog(getClass()).error(
+                LogFactory.getLog(SqlXmlParserFactory.class).error(
                     "no sql.xml information found at " + file,
                     fileNotFoundException);
             }

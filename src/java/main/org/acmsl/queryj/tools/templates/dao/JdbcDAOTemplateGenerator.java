@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,8 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -121,148 +123,24 @@ public class JdbcDAOTemplateGenerator
     }
 
     /**
-     * Adds a new template factory class.
-     * @param templateFactoryClass the template factory.
-     * @precondition templateFactoryClass != null
-     */
-    public void addTemplateFactoryClass(
-        final String templateFactoryClass)
-    {
-        addTemplateFactoryClass(
-            templateFactoryClass, TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Adds a new template factory class.
-     * @param templateFactoryClass the template factory.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @precondition templateFactoryClass != null
-     * @precondition templateMappingManager != null
-     */
-    public void addTemplateFactoryClass(
-        final String templateFactoryClass,
-        final TemplateMappingManager templateMappingManager)
-    {
-        templateMappingManager.addDefaultTemplateFactoryClass(
-            TemplateMappingManager.JDBC_DAO_TEMPLATE_FACTORY,
-            templateFactoryClass);
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @return the template factory class name.
-     */
-    protected String getTemplateFactoryClass()
-    {
-        return getTemplateFactoryClass(TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param templateMappingManager the
-     * <code>TemplateMappingManager</code> instance.
-     * @return the template factory class name.
-     * @precondition templateMappingManager != null
-     */
-    protected String getTemplateFactoryClass(
-        final TemplateMappingManager templateMappingManager)
-    {
-        return
-            templateMappingManager.getDefaultTemplateFactoryClass(
-                TemplateMappingManager.JDBC_DAO_TEMPLATE_FACTORY);
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    protected JdbcDAOTemplateFactory getTemplateFactory()
-        throws  QueryJException
-    {
-        return getTemplateFactory(TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition templateMappingManager != null
-     */
-    protected JdbcDAOTemplateFactory getTemplateFactory(
-        final TemplateMappingManager templateMappingManager)
-      throws  QueryJException
-    {
-        JdbcDAOTemplateFactory result = null;
-
-        Object t_TemplateFactory =
-            templateMappingManager.getDefaultTemplateFactoryClass(
-                TemplateMappingManager.JDBC_DAO_TEMPLATE_FACTORY);
-    
-        if  (t_TemplateFactory != null)
-        {
-            if  (!(t_TemplateFactory instanceof JdbcDAOTemplateFactory))
-            {
-                throw
-                    new QueryJException(
-                        "invalid.jdbc.dao.template.factory");
-            }
-            else 
-            {
-                result = (JdbcDAOTemplateFactory) t_TemplateFactory;
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Generates a JDBC DAO template.
      * @param packageName the package name.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
      */
-    public JdbcDAOTemplate createJdbcDAOTemplate(
-        final String packageName)
+    public JdbcDAOTemplate createJdbcDAOTemplate(final String packageName)
       throws  QueryJException
     {
-        return
-            createJdbcDAOTemplate(
-                packageName, getTemplateFactory());
+        return new JdbcDAOTemplate(getDecoratorFactory(), packageName);
     }
 
     /**
-     * Generates a JDBC DAO template.
-     * @param packageName the package name.
-     * @param templateFactory the template factory.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition packageName != null
+     * Retrieves the decorator factory.
+     * @return such instance.
      */
-    public JdbcDAOTemplate createJdbcDAOTemplate(
-        final String packageName,
-        final JdbcDAOTemplateFactory templateFactory)
-      throws  QueryJException
+    public DecoratorFactory getDecoratorFactory()
     {
-        JdbcDAOTemplate result = null;
-
-        if  (templateFactory != null)
-        {
-            result =
-                templateFactory.createJdbcDAOTemplate(
-                    packageName);
-        }
-        else 
-        {
-            result =
-                new JdbcDAOTemplate(packageName);
-        }
-
-        return result;
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

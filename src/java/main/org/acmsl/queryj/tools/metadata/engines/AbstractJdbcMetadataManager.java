@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -131,11 +131,6 @@ public abstract class AbstractJdbcMetadataManager
     private String[] m__astrTableNames;
 
     /**
-     * The table comments.
-     */
-    private String[] m__astrTableComments;
-
-    /**
      * The column names (as list) of each table.
      */
     private Map m__mColumnNames;
@@ -184,11 +179,6 @@ public abstract class AbstractJdbcMetadataManager
      * The procedure parameters meta data (as list).
      */
     private Map m__mProcedureParametersMetadata;
-
-    /**
-     * The procedure return types (as list).
-     */
-    private Map m__mProcedureReturnTypes;
 
     /**
      * The table extraction flag. This flag allows to disable
@@ -559,9 +549,18 @@ public abstract class AbstractJdbcMetadataManager
      * Retrieves the table names.
      * @return such names.
      */
-    public String[] getTableNames()
+    protected final String[] immutableGetTableNames()
     {
         return m__astrTableNames;
+    }
+
+    /**
+     * Retrieves the table names.
+     * @return such names.
+     */
+    public String[] getTableNames()
+    {
+        return clone(immutableGetTableNames());
     }
 
     /**
@@ -1332,9 +1331,11 @@ public abstract class AbstractJdbcMetadataManager
         {
             String[][] t_aastrFks = EMPTY_ARRAY_OF_STRING_ARRAYS;
 
-            if  (t_Fks == null)
+            if  (   (t_Fks == null)
+                 && (values != null))
             {
-                t_Fks = values;
+                t_aastrFks = new String[1][values.length];
+                t_aastrFks[0] = values;
             }
             else if  (t_Fks instanceof String)
             {
@@ -1432,7 +1433,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     public String[][] getForeignKeys(final String tableName)
     {
-        String[][] result = EMPTY_ARRAY_OF_STRING_ARRAYS;
+        String[][] result = null;
         
         Collection t_cResult = new ArrayList();
 
@@ -1928,9 +1929,18 @@ public abstract class AbstractJdbcMetadataManager
      * Retrieves the procedures metadata.
      * @return such metadata.
      */
-    public ProcedureMetadata[] getProceduresMetadata()
+    protected final ProcedureMetadata[] immutableGetProceduresMetadata()
     {
         return m__aProceduresMetadata;
+    }
+
+    /**
+     * Retrieves the procedures metadata.
+     * @return such metadata.
+     */
+    public ProcedureMetadata[] getProceduresMetadata()
+    {
+        return clone(immutableGetProceduresMetadata());
     }
 
     /**
@@ -2306,9 +2316,8 @@ public abstract class AbstractJdbcMetadataManager
     {
         String[] t_astrTableNames = tableNames;
 
-        String t_strTableNames = "";
-
-        if  (t_astrTableNames == null) 
+        if  (   (t_astrTableNames == null)
+             || (t_astrTableNames.length == 0))
         {
             t_astrTableNames =
                 getTableNames(metaData, catalog, schema);
@@ -2316,11 +2325,6 @@ public abstract class AbstractJdbcMetadataManager
 
         int t_iLength =
             (t_astrTableNames != null) ? t_astrTableNames.length : 0;
-        
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
-        {
-            t_strTableNames += " " + t_astrTableNames[t_iIndex];
-        }
 
         setTableNames(t_astrTableNames);
 
@@ -2455,7 +2459,7 @@ public abstract class AbstractJdbcMetadataManager
       throws  SQLException,
               QueryJException
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[] result;
 
         ResultSet t_rsTables = null;
 
@@ -2482,6 +2486,10 @@ public abstract class AbstractJdbcMetadataManager
         }
         catch  (final SQLException sqlException)
         {
+            logWarn(
+                "Cannot retrieve the table names.",
+                sqlException);
+
             throw sqlException;
         }
         catch  (final QueryJException queryjException)
@@ -2494,6 +2502,11 @@ public abstract class AbstractJdbcMetadataManager
             {
                 t_rsTables.close();
             }
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_STRING_ARRAY;
         }
 
         return result;
@@ -2532,7 +2545,7 @@ public abstract class AbstractJdbcMetadataManager
       throws  SQLException,
               QueryJException
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[] result;
 
         try 
         {
@@ -2554,6 +2567,11 @@ public abstract class AbstractJdbcMetadataManager
                 sqlException);
 
             throw sqlException;
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_STRING_ARRAY;
         }
 
         return result;
@@ -2736,7 +2754,7 @@ public abstract class AbstractJdbcMetadataManager
       throws  SQLException,
               QueryJException
     {
-        boolean[] result = EMPTY_BOOLEAN_ARRAY;
+        boolean[] result;
 
         try 
         {
@@ -2758,6 +2776,11 @@ public abstract class AbstractJdbcMetadataManager
                 sqlException);
 
             throw sqlException;
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_BOOLEAN_ARRAY;
         }
 
         return result;
@@ -3043,8 +3066,7 @@ public abstract class AbstractJdbcMetadataManager
         final String procedureName)
       throws  SQLException
     {
-        ProcedureParameterMetadata[] result =
-            EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY;
+        ProcedureParameterMetadata[] result;
 
         try 
         {
@@ -3068,6 +3090,11 @@ public abstract class AbstractJdbcMetadataManager
                 sqlException);
 
             throw sqlException;
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY;
         }
 
         return result;
@@ -3524,7 +3551,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected void logVerbose(final String message)
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
 
         if  (t_Log != null)
         {
@@ -3542,7 +3569,7 @@ public abstract class AbstractJdbcMetadataManager
     protected void logWarn(
         final String message, final Exception exception)
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
 
         if  (t_Log != null)
         {
@@ -3605,6 +3632,56 @@ public abstract class AbstractJdbcMetadataManager
             {
                 result = true;
                 break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Clones given String array.
+     * @param array the array to clone.
+     * @return the cloned array.
+     * @precondition array != null
+     */
+    protected ProcedureMetadata[] clone(final ProcedureMetadata[] array)
+    {
+        ProcedureMetadata[] result = EMPTY_PROCEDURE_METADATA_ARRAY;
+
+        int t_iCount = (array != null) ? array.length : 0;
+
+        if  (t_iCount > 0)
+        {
+            result = new ProcedureMetadata[t_iCount];
+
+            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                result[t_iIndex] = array[t_iIndex];
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Clones given String array.
+     * @param array the array to clone.
+     * @return the cloned array.
+     * @precondition array != null
+     */
+    protected String[] clone(final String[] array)
+    {
+        String[] result = EMPTY_STRING_ARRAY;
+
+        int t_iCount = (array != null) ? array.length : 0;
+
+        if  (t_iCount > 0)
+        {
+            result = new String[t_iCount];
+
+            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                result[t_iIndex] = array[t_iIndex];
             }
         }
 

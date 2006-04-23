@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -180,7 +180,8 @@ public class MockDAOTemplateBuildHandler
         }
         catch  (final QueryJException queryjException)
         {
-            Log t_Log = UniqueLogFactory.getLog(getClass());
+            Log t_Log =
+                UniqueLogFactory.getLog(MockDAOTemplateBuildHandler.class);
 
             if  (t_Log != null)
             {

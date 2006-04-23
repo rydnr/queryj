@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -216,7 +216,7 @@ public class Oracle8MetadataManager
 
         PreparedStatement t_PreparedStatement = null;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(Oracle8MetadataManager.class);
 
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
             
@@ -391,14 +391,14 @@ public class Oracle8MetadataManager
 
         PreparedStatement t_PreparedStatement = null;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(Oracle8MetadataManager.class);
         
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
         
         try
         {
             for  (int t_iTableIndex = 0;
-                      t_iTableIndex < tableNames.length;
+                      t_iTableIndex < t_iLength;
                       t_iTableIndex++) 
             {
                 try
@@ -556,9 +556,9 @@ public class Oracle8MetadataManager
       throws  SQLException,
               QueryJException
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[] result;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(Oracle8MetadataManager.class);
         
         QueryResultSet t_Results = null;
 
@@ -592,10 +592,24 @@ public class Oracle8MetadataManager
         }
         catch  (final SQLException sqlException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the table names.",
+                    sqlException);
+            }
+
             throw sqlException;
         }
         catch  (final QueryJException queryjException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the table names.",
+                    queryjException);
+            }
+
             throw queryjException;
         }
         finally 
@@ -633,6 +647,11 @@ public class Oracle8MetadataManager
                         sqlException);
                 }
             }
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_STRING_ARRAY;
         }
 
         return result;
@@ -704,9 +723,9 @@ public class Oracle8MetadataManager
       throws  SQLException,
               QueryJException
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[] result;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(Oracle8MetadataManager.class);
         
         ResultSet t_rsResults = null;
 
@@ -755,10 +774,24 @@ public class Oracle8MetadataManager
         }
         catch  (final SQLException sqlException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the column names.",
+                    sqlException);
+            }
+
             throw sqlException;
         }
         catch  (final QueryJException queryjException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the column names.",
+                    queryjException);
+            }
+
             throw queryjException;
         }
         finally 
@@ -796,6 +829,11 @@ public class Oracle8MetadataManager
                         sqlException);
                 }
             }
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_STRING_ARRAY;
         }
 
         return result;
@@ -872,9 +910,9 @@ public class Oracle8MetadataManager
       throws  SQLException,
               QueryJException
     {
-        int[] result = EMPTY_INT_ARRAY;
+        int[] result;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(Oracle8MetadataManager.class);
         
         ResultSet t_rsResults = null;
 
@@ -912,10 +950,24 @@ public class Oracle8MetadataManager
         }
         catch  (final SQLException sqlException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the column types.",
+                    sqlException);
+            }
+
             throw sqlException;
         }
         catch  (final QueryJException queryjException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the column types.",
+                    queryjException);
+            }
+
             throw queryjException;
         }
         finally 
@@ -953,6 +1005,11 @@ public class Oracle8MetadataManager
                         sqlException);
                 }
             }
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_INT_ARRAY;
         }
 
         return result;
@@ -995,12 +1052,14 @@ public class Oracle8MetadataManager
 
         String[] t_astrTypes = extractStringFields(resultSet, fieldName);
 
-        if  (t_astrTypes != null)
+        int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
+
+        if  (t_iCount > 0)
         {
-            result = new int[t_astrTypes.length];
+            result = new int[t_iCount];
 
             for  (int t_iIndex = 0;
-                      t_iIndex < t_astrTypes.length;
+                      t_iIndex < t_iCount;
                       t_iIndex++) 
             {
                 result[t_iIndex] =
@@ -1066,9 +1125,9 @@ public class Oracle8MetadataManager
       throws  SQLException,
               QueryJException
     {
-        boolean[] result = EMPTY_BOOLEAN_ARRAY;
+        boolean[] result;
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(Oracle8MetadataManager.class);
         
         ResultSet t_rsResults = null;
 
@@ -1099,7 +1158,7 @@ public class Oracle8MetadataManager
             {
                 throw
                     new QueryJException(
-                        "cannot.retrieve.database.column.types",
+                        "cannot.retrieve.database.column.nullable.info",
                         sqlException);
             }
 
@@ -1110,10 +1169,26 @@ public class Oracle8MetadataManager
         }
         catch  (final SQLException sqlException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                      "Cannot retrieve the information regarding "
+                    + "whether each column is nullable or not.",
+                    sqlException);
+            }
+
             throw sqlException;
         }
         catch  (final QueryJException queryjException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                      "Cannot retrieve the information regarding "
+                    + "whether each column is nullable or not.",
+                    queryjException);
+            }
+
             throw queryjException;
         }
         finally 
@@ -1153,6 +1228,11 @@ public class Oracle8MetadataManager
             }
         }
 
+        if  (result == null)
+        {
+            result = EMPTY_BOOLEAN_ARRAY;
+        }
+
         return result;
     }
 
@@ -1172,12 +1252,14 @@ public class Oracle8MetadataManager
 
         String[] t_astrTypes = extractStringFields(resultSet, fieldName);
 
-        if  (t_astrTypes != null)
+        int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
+
+        if  (t_iCount > 0)
         {
-            result = new boolean[t_astrTypes.length];
+            result = new boolean[t_iCount];
 
             for  (int t_iIndex = 0;
-                      t_iIndex < t_astrTypes.length;
+                      t_iIndex < t_iCount;
                       t_iIndex++) 
             {
                 result[t_iIndex] =
@@ -1209,7 +1291,7 @@ public class Oracle8MetadataManager
               QueryJException
     {
         return
-            getTableComment (
+            getTableComment(
                 metaData.getConnection(),
                 catalog,
                 schema,
@@ -1242,7 +1324,7 @@ public class Oracle8MetadataManager
     {
         String result = "";
 
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(Oracle8MetadataManager.class);
         
         ResultSet t_rsResults = null;
 

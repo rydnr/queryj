@@ -228,7 +228,7 @@ public class ConditionTest
          */
         public Field[] getAll()
         {
-            return ALL;
+            return new Field[] {USERID, NAME};
         }
     }
 }

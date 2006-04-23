@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -40,7 +40,9 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.DefaultThemeConstants;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.STUtils;
@@ -72,6 +74,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents generic templates.
@@ -83,10 +87,72 @@ public abstract class AbstractTemplate
                 DefaultThemeConstants
 {
     /**
-     * Builds an empty <code>AbstractTemplate</code>.
+     * Caches the StringTemplateGroup for each template class.
      */
-    protected AbstractTemplate()
+    private static Map m__mSTCache;
+    
+    /**
+     * The decorator factory.
+     */
+    private DecoratorFactory m__DecoratorFactory;
+
+    /**
+     * Builds a <code>AbstractTemplate</code> with given
+     * decorator factory.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition decoratorFactory != null
+     */
+    protected AbstractTemplate(final DecoratorFactory decoratorFactory)
     {
+        immutableSetDecoratorFactory(decoratorFactory);
+        immutableSetSTCache(new HashMap());
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     */
+    protected final void immutableSetDecoratorFactory(
+        final DecoratorFactory factory)
+    {
+        m__DecoratorFactory = factory;
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     */
+    protected void setDecoratorFactory(
+        final DecoratorFactory factory)
+    {
+        immutableSetDecoratorFactory(factory);
+    }
+
+    /**
+     * Retrieves the <code>DecoratorFactory</code> instance.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return m__DecoratorFactory;
+    }
+
+    /**
+     * Specifies the ST cache.
+     * @param map the map to use as cache.
+     */
+    protected static final void immutableSetSTCache(final Map map)
+    {
+        m__mSTCache = map;
+    }
+
+    /**
+     * Retrieves the ST cache.
+     * @return the map being used as cache.
+     */
+    protected static final Map immutableGetSTCache()
+    {
+        return m__mSTCache;
     }
 
     /**
@@ -97,21 +163,57 @@ public abstract class AbstractTemplate
      */
     protected StringTemplateGroup retrieveGroup(final String path)
     {
-        return retrieveGroup(path, "/org/acmsl/queryj/queryj.stg");
+        return
+            retrieveGroup(
+                path,
+                "/org/acmsl/queryj/queryj.stg",
+                immutableGetSTCache());
     }
     
     /**
      * Retrieves the string template group.
      * @param path the path.
      * @param theme the theme.
+     * @param cache the ST cache.
      * @return such instance.
      * @precondition path != null
      * @precondition theme != null
+     * @precondition cache != null
      */
     protected StringTemplateGroup retrieveGroup(
-        final String path, final String theme)
+        final String path, final String theme, final Map cache)
     {
-        return retrieveGroup(path, theme, STUtils.getInstance());
+        StringTemplateGroup result = null;
+        
+        Object t_Key = buildSTGroupKey(path, theme);
+
+        result = (StringTemplateGroup) cache.get(t_Key);
+
+        if  (result == null)
+        {
+            result = retrieveGroup(path, theme, STUtils.getInstance());
+
+            if  (result != null)
+            {
+                cache.put(t_Key, result);
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Builds a key to store the ST group associated to
+     * given path and theme.
+     * @param path the ST path.
+     * @param theme the ST theme.
+     * @return such key.
+     * @precondition path != null
+     * @precondition theme != null
+     */
+    protected final Object buildSTGroupKey(final String path, final String theme)
+    {
+        return ".:\\AbstractTemplate//STCACHE//" + path + "//" + theme;
     }
 
     /**
@@ -221,7 +323,7 @@ public abstract class AbstractTemplate
      */
     protected void logHeader(final String header)
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
         
         if  (t_Log != null)
         {

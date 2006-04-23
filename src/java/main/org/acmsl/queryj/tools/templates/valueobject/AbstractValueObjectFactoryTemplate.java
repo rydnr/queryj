@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.valueobject;
 
 /*
- * Importing project-specific classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -146,6 +147,7 @@ public abstract class AbstractValueObjectFactoryTemplate
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param projectImports the project imports.
      * @param jdkImports the JDK imports.
      * @param javadoc the class Javadoc.
@@ -165,6 +167,7 @@ public abstract class AbstractValueObjectFactoryTemplate
         final String packageName,
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String projectImports,
         final String jdkImports,
         final String javadoc,
@@ -178,6 +181,7 @@ public abstract class AbstractValueObjectFactoryTemplate
         final String factoryAliasMethod,
         final String classEnd)
     {
+        super(decoratorFactory);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

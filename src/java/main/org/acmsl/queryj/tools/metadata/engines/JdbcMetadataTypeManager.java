@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -188,8 +188,11 @@ public class JdbcMetadataTypeManager
                 result = (allowsNull) ? "Long" : "long";
                 break;
 
-            case Types.REAL:
             case Types.FLOAT:
+                result = (allowsNull) ? "Float" : "float";
+                break;
+
+            case Types.REAL:
             case Types.DOUBLE:
                 result = (allowsNull) ? "Double" : "double";
                 break;
@@ -492,6 +495,8 @@ public class JdbcMetadataTypeManager
         {
             case Types.BIT:
                 result = "Integer";
+                break;
+
             case Types.TINYINT:
             case Types.SMALLINT:
             case Types.INTEGER:
@@ -1101,5 +1106,32 @@ public class JdbcMetadataTypeManager
     public boolean isClob(final int dataType)
     {
         return (dataType == Types.CLOB);
+    }
+
+    /**
+     * Checks if given data type represents numbers smaller than int.
+     * @param dataType the data type.
+     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * or similar.
+     */
+    public boolean isNumberSmallerThanInt(final int dataType)
+    {
+        boolean result = false;
+
+        switch (dataType)
+        {
+            case Types.BIT:
+            case Types.TINYINT:
+            case Types.SMALLINT:
+//            case Types.INTEGER:
+                result = true;
+                break;
+
+            default:
+                result = false;
+                break;
+        }
+        
+        return result;
     }
 }

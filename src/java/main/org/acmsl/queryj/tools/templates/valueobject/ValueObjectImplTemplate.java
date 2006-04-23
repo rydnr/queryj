@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.valueobject;
 
 /*
- * Importing project-specific classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
@@ -77,11 +78,13 @@ public class ValueObjectImplTemplate
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      */
     public ValueObjectImplTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         super(
             DEFAULT_HEADER,
@@ -89,6 +92,7 @@ public class ValueObjectImplTemplate
             packageName,
             tableTemplate,
             metadataManager,
+            decoratorFactory,
             ACMSL_IMPORTS,
             JDK_IMPORTS,
             DEFAULT_JAVADOC,

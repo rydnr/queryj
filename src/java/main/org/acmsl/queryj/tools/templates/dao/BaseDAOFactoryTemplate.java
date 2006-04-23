@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 
@@ -71,6 +72,7 @@ public class BaseDAOFactoryTemplate
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -82,6 +84,7 @@ public class BaseDAOFactoryTemplate
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -93,6 +96,7 @@ public class BaseDAOFactoryTemplate
             tableName,
             metadataManager,
             customSqlProvider,
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

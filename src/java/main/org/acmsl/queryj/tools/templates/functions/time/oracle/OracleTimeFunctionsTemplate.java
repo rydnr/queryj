@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.functions.time.oracle;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate;
 
 /*
@@ -53,6 +54,8 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -70,62 +73,67 @@ public class OracleTimeFunctionsTemplate
     /**
      * The capitalized words.
      */
-    protected static final String[] CAPITALIZED_WORDS =
-        new String[]
-        {
-            "between",
-            "week",
-            "day",
-            "month",
-            "year",
-            "name",
-            "hour",
-            "minute",
-            "sec",
-            "second",
-            "format",
-            "date",
-            "time",
-            "cur",
-            "current",
-            "timestamp",
-            "unix",
-            "of",
-            "from"
-        };
+    static final String[] CAPITALIZED_WORDS =
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "between",
+                        "week",
+                        "day",
+                        "month",
+                        "year",
+                        "name",
+                        "hour",
+                        "minute",
+                        "sec",
+                        "second",
+                        "format",
+                        "date",
+                        "time",
+                        "cur",
+                        "current",
+                        "timestamp",
+                        "unix",
+                        "of",
+                        "from"
+                    }))
+            .toArray();
 
     /**
      * The field types.
      */
-    public static final String[] FIELD_TYPES =
-        new String[]
-        {
-            "Int",
-            "String",
-            "Long",
-            "Calendar"
-            
-        };
-
-    /**
-     * The mapping.
-     */
-    private static Map m__mMappings;
+    static final String[] FIELD_TYPES =
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "Int",
+                        "String",
+                        "Long",
+                        "Calendar"
+                    }))
+            .toArray();
 
     /**
      * Builds an OracleTimeFunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      */
     public OracleTimeFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
         final String quote)
     {
         super(
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

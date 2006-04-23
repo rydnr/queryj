@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,11 +41,14 @@ package org.acmsl.queryj.tools.templates.functions.system.oracle;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplate;
 
 /*
  * Importing some JDK classes.
  */
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -60,32 +63,40 @@ public class OracleSystemFunctionsTemplate
     /**
      * The capitalized words.
      */
-    protected static final String[] CAPITALIZED_WORDS = EMPTY_STRING_ARRAY;
+    static final String[] CAPITALIZED_WORDS =
+        new String[0];
 
     /**
      * The field types.
      */
-    public static final String[] FIELD_TYPES =
-        new String[]
-        {
-            "String",
-            "Long"
-        };
+    static final String[] FIELD_TYPES =
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "String",
+                        "Long"
+                    }))
+            .toArray();
 
     /**
      * Builds a OracleSystemFunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      */
     public OracleSystemFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
         final String quote)
     {
         super(
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

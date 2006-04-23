@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -48,7 +48,7 @@ import org.acmsl.queryj.Field;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class ConditionOperator
+public class ConditionOperator
 {
     /**
      * The symbol.
@@ -58,17 +58,18 @@ public abstract class ConditionOperator
     /**
      * Creates a operator using given information.
      * @param symbol the operator symbol.
+     * @precondition symbol != null
      */
     public ConditionOperator(final String symbol)
     {
-        unmodifiableSetSymbol(symbol);
+        immutableSetSymbol(symbol);
     }
 
     /**
      * Specifies the operator symbol.
      * @param symbol the symbol.
      */
-    private void unmodifiableSetSymbol(final String symbol)
+    private void immutableSetSymbol(final String symbol)
     {
         m__strSymbol = symbol;
     }
@@ -79,7 +80,7 @@ public abstract class ConditionOperator
      */
     protected void setSymbol(final String symbol)
     {
-        unmodifiableSetSymbol(symbol);
+        immutableSetSymbol(symbol);
     }
 
     /**
@@ -115,6 +116,7 @@ public abstract class ConditionOperator
      * @param candidate the object to check.
      * @param symbol the symbol.
      * @return <code>true</code> if both objects are logically equal.
+     * @precondition symbol != null
      */
     protected boolean equals(final Object candidate, final String symbol)
     {
@@ -147,6 +149,25 @@ public abstract class ConditionOperator
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the hash code.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return hashCode(getSymbol());
+    }
+
+    /**
+     * Retrieves the hash code.
+     * @param symbol the symbol.
+     * @return such information.
+     */
+    protected int hashCode(final String symbol)
+    {
+        return (ConditionOperator.class + symbol).hashCode();
     }
 }
 

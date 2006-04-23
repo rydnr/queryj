@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -230,26 +230,34 @@ public interface MetadataTypeManager
     public boolean isBoolean(final int dataType);
 
     /**
-     * Checks if given data type represents integers.
+     * Checks if given data type represents primitives.
      * @param dataType the data type.
-     * @return <code>true</code> if such data type can be managed as an
-     * integer.
+     * @return <code>true</code> if such data type can be managed as a
+     * primitive.
      */
     public boolean isPrimitive(final int dataType);
 
     /**
-     * Checks if given data type represents integers.
+     * Checks if given data type represents primitive wrappers.
      * @param dataType the data type.
-     * @return <code>true</code> if such data type can be managed as an
-     * integer.
+     * @return <code>true</code> if such data type can be managed as a
+     * primitive wrapper.
      */
     public boolean isPrimitiveWrapper(final String dataType);
 
     /**
-     * Checks if given data type represents integers.
+     * Checks if given data type represents clobs.
      * @param dataType the data type.
-     * @return <code>true</code> if such data type can be managed as an
-     * integer.
+     * @return <code>true</code> if such data type can be managed as a
+     * clob.
      */
     public boolean isClob(final int dataType);
+
+    /**
+     * Checks if given data type represents numbers smaller than int.
+     * @param dataType the data type.
+     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * or similar.
+     */
+    public boolean isNumberSmallerThanInt(final int dataType);
 }

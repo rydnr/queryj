@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -38,8 +38,9 @@
 package org.acmsl.queryj.tools.templates.functions.system;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTestTemplate;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTemplate;
@@ -54,6 +55,7 @@ public abstract class SystemFunctionsTestTemplate
 {
     /**
      * Builds a SystemFunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
      * @param engineName the engine name.
@@ -61,6 +63,7 @@ public abstract class SystemFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public SystemFunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  packageName,
         final String  testedPackageName,
         final String  engineName,
@@ -68,6 +71,7 @@ public abstract class SystemFunctionsTestTemplate
         final String  quote)
     {
         super(
+            decoratorFactory,
             "system",
             "System",
             packageName,

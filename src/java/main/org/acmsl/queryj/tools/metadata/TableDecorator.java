@@ -29,7 +29,7 @@
 
  *****************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -243,7 +243,6 @@ public class TableDecorator
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(value);
-        
     }
 
     /**
@@ -252,7 +251,7 @@ public class TableDecorator
      */
     public String getVoName()
     {
-        return capitalize(getName(), DecorationUtils.getInstance());
+        return getSingularNameCapitalized();
     }
 
     /**

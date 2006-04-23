@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -109,9 +109,11 @@ public class ExternallyManagedFieldsRetrievalHandler
             {
                 result = handle(t_AntCommand);
             }
-            catch  (BuildException buildException)
+            catch  (final BuildException buildException)
             {
-                Log t_Log = UniqueLogFactory.getLog(getClass());
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        ExternallyManagedFieldsRetrievalHandler.class);
                 
                 if  (t_Log != null)
                 {

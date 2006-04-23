@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.valueobject;
 * Importing project classes.
 */
 // JUnitDoclet begin import
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate;
 // JUnitDoclet end import
 
@@ -112,7 +113,8 @@ extends TestCase
         new org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate(
             "com.foo.bar", // package name
             null, // table template
-            null); // database metadata manager
+            null, // database metadata manager
+            CachingDecoratorFactory.getInstance());
     // JUnitDoclet end method testcase.createInstance
   }
   

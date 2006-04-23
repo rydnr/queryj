@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -114,7 +114,7 @@ public class ConditionOperatorRepository
      */
     public ConditionOperator getEquals()
     {
-        return new ConditionOperator("=")  {};
+        return new ConditionOperator("=");
     }
 
     /**
@@ -123,7 +123,7 @@ public class ConditionOperatorRepository
      */
     public ConditionOperator getNotEquals()
     {
-        return new ConditionOperator("!=")  {};
+        return new ConditionOperator("!=");
     }
 
     /**
@@ -132,7 +132,7 @@ public class ConditionOperatorRepository
      */
     public ConditionOperator getGreaterThan()
     {
-        return new ConditionOperator(">")  {};
+        return new ConditionOperator(">");
     }
 
     /**
@@ -141,7 +141,7 @@ public class ConditionOperatorRepository
      */
     public ConditionOperator getLessThan()
     {
-        return new ConditionOperator("<")  {};
+        return new ConditionOperator("<");
     }
 
     /**
@@ -150,7 +150,7 @@ public class ConditionOperatorRepository
      */
     public ConditionOperator getIsNull()
     {
-        return new ConditionOperator("is null")  {};
+        return new ConditionOperator("is null");
     }
 
     /**
@@ -160,7 +160,7 @@ public class ConditionOperatorRepository
      */
     public ConditionOperator getBelongsTo(final SelectQuery query)
     {
-        return new NestedConditionOperator("in", query)  {};
+        return new NestedConditionOperator("in", query);
     }
 
     /**
@@ -170,7 +170,7 @@ public class ConditionOperatorRepository
      */
     public ConditionOperator getNotBelongsTo(final SelectQuery query)
     {
-        return new NestedConditionOperator("not in", query)  {};
+        return new NestedConditionOperator("not in", query);
     }
 
     /**
@@ -179,7 +179,7 @@ public class ConditionOperatorRepository
      */
     public ConditionOperator getLike()
     {
-        return new ConditionOperator("like")  {};
+        return new ConditionOperator("like");
     }
 
     /**
@@ -188,6 +188,6 @@ public class ConditionOperatorRepository
      */
     public ConditionOperator getNotLike()
     {
-        return new ConditionOperator("not like")  {};
+        return new ConditionOperator("not like");
     }
 }

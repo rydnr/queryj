@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -38,8 +38,9 @@
 package org.acmsl.queryj.tools.templates.functions;
 
 /*
- * Importing project classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
 /*
@@ -128,19 +129,9 @@ public abstract class FunctionsTemplate
     private List m__lFunctions;
 
     /**
-     * The field types used.
-     */
-    private List m__lFieldTypes;
-
-    /**
      * The function - field type mapping.
      */
     private static Map m__mMappings;
-
-    /**
-     * The special function - code mapping.
-     */
-    private static Map m__mSpecialMappings;
 
     /**
      * The ACM-SL import statements.
@@ -189,6 +180,7 @@ public abstract class FunctionsTemplate
 
     /**
      * Builds a <code>FunctionsTemplate</code> using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
      * @param header the header.
@@ -208,6 +200,7 @@ public abstract class FunctionsTemplate
      * @param classEnd the class end.
      */
     protected FunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  classDescription,
         final String  classPrefix,
         final String  header,
@@ -226,6 +219,7 @@ public abstract class FunctionsTemplate
         final String  innerClass,
         final String  classEnd)
     {
+        super(decoratorFactory);
         immutableSetClassDescription(classDescription);
         immutableSetClassPrefix(classPrefix);
         immutableSetHeader(header);
@@ -248,6 +242,7 @@ public abstract class FunctionsTemplate
 
     /**
      * Builds a FunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
      * @param packageName the package name.
@@ -256,6 +251,7 @@ public abstract class FunctionsTemplate
      * @param quote the identifier quote string.
      */
     protected FunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String classDescription,
         final String classPrefix,
         final String packageName,
@@ -264,6 +260,7 @@ public abstract class FunctionsTemplate
         final String quote)
     {
         this(
+            decoratorFactory,
             classDescription,
             classPrefix,
             DEFAULT_HEADER,
@@ -878,7 +875,7 @@ public abstract class FunctionsTemplate
      * Specifies the mappings.
      * @param mappings the mappings.
      */
-    protected void setMappings(final Map mappings)
+    protected static void setMappings(final Map mappings)
     {
         m__mMappings = mappings;
     }
@@ -887,9 +884,18 @@ public abstract class FunctionsTemplate
      * Retrieves the mappings.
      * @return such map.
      */
+    protected static final Map immutableGetMappings()
+    {
+        return m__mMappings;
+    }
+    
+    /**
+     * Retrieves the mappings.
+     * @return such map.
+     */
     public Map getMappings()
     {
-        Map result = m__mMappings;
+        Map result = immutableGetMappings();
 
         if  (result == null)
         {
@@ -1082,7 +1088,7 @@ public abstract class FunctionsTemplate
      */
     protected void logWarn(final String message)
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(FunctionsTemplate.class);
 
         if  (t_Log != null)
         {
@@ -1096,7 +1102,7 @@ public abstract class FunctionsTemplate
      */
     protected void logDebug(final String message)
     {
-        Log t_Log = UniqueLogFactory.getLog(getClass());
+        Log t_Log = UniqueLogFactory.getLog(FunctionsTemplate.class);
 
         if  (t_Log != null)
         {
@@ -1236,7 +1242,7 @@ public abstract class FunctionsTemplate
 
                             if  (t_strMapping == null)
                             {
-                                if  (generateWarning(t_strMapping)) 
+                                if  (generateWarning(null))
                                 {
                                     logDebug(
                                         "No mapping for " + t_strFunction);

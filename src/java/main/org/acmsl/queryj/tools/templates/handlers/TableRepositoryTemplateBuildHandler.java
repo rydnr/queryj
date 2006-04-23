@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -99,7 +99,7 @@ public class TableRepositoryTemplateBuildHandler
      * Specifies the mappings.
      * @param map the new mappings.
      */
-    protected void setMappings(final Map map)
+    protected static void setMappings(final Map map)
     {
         m__mMappings = map;
     }
@@ -108,7 +108,7 @@ public class TableRepositoryTemplateBuildHandler
      * Retrieves the mappings.
      * @return such collection.
      */
-    protected Map getMappings()
+    protected static Map getMappings()
     {
         return m__mMappings;
     }
@@ -149,7 +149,9 @@ public class TableRepositoryTemplateBuildHandler
         }
         else 
         {
-            Log t_Log = UniqueLogFactory.getLog(getClass());
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    TableRepositoryTemplateBuildHandler.class);
 
             if  (t_Log != null)
             {
@@ -210,7 +212,9 @@ public class TableRepositoryTemplateBuildHandler
             }
             catch  (final SQLException sqlException)
             {
-                Log t_Log = UniqueLogFactory.getLog(getClass());
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        TableRepositoryTemplateBuildHandler.class);
                 
                 if  (t_Log != null)
                 {
@@ -254,7 +258,9 @@ public class TableRepositoryTemplateBuildHandler
             }
             catch  (final SQLException sqlException)
             {
-                Log t_Log = UniqueLogFactory.getLog(getClass());
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        TableRepositoryTemplateBuildHandler.class);
                 
                 if  (t_Log != null)
                 {
@@ -295,7 +301,9 @@ public class TableRepositoryTemplateBuildHandler
 
         if  (t_mMappings != null)
         {
-            Log t_Log = UniqueLogFactory.getLog(getClass());
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    TableRepositoryTemplateBuildHandler.class);
                         
             Object t_Key = buildKey(engine, engineVersion);
             Object t_Value = t_mMappings.get(t_Key);

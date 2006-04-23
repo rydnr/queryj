@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -161,6 +161,10 @@ public class OracleMetaDataRetrievalHandler
                     metaData,
                     catalog,
                     schema);
+        }
+        catch  (final RuntimeException exception)
+        {
+            throw exception;
         }
         catch  (final Exception exception)
         {

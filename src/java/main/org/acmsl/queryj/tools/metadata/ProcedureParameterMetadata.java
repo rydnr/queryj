@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -118,7 +118,7 @@ public class ProcedureParameterMetadata
 
         try
         {
-            org.apache.commons.logging.LogFactory.getLog(getClass()).info(
+            LogFactory.getLog(ProcedureParameterMetadata.class).info(
                   "Parameter (name, type, comment, dataType, length, nullable) =\n"
                 + name + ", " + type + ", " + comment + ", " + dataType
                 + ", " + length + ", " + nullable);

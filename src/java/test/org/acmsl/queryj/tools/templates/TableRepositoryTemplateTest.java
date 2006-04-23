@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates;
 * Importing project classes.
 */
 // JUnitDoclet begin import
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
 // JUnitDoclet end import
 
@@ -110,6 +111,7 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.TableRepositoryTemplate(
+            CachingDecoratorFactory.getInstance(),
             "com.foo.bar", // package name
             "query"); // repository
     // JUnitDoclet end method testcase.createInstance

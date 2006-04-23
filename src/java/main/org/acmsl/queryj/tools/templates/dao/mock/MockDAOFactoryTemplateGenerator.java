@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -123,92 +123,6 @@ public class MockDAOFactoryTemplateGenerator
     }
 
     /**
-     * Adds a new template factory class.
-     * @param mockDAOFactoryName the Mock DAO factory name.
-     * @param templateFactoryClass the template factory.
-     */
-    public void addTemplateFactoryClass(
-        final String mockDAOFactoryName,
-        final String templateFactoryClass)
-    {
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (   (t_MappingManager     != null)
-             && (templateFactoryClass != null))
-        {
-            t_MappingManager.addDefaultTemplateFactoryClass(
-                  TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATE_PREFIX
-                + mockDAOFactoryName,
-                templateFactoryClass);
-        }
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param mockDAOFactoryName the Mock DAO factory name.
-     * @return the template factory class name.
-     */
-    protected String getTemplateFactoryClass(
-        final String mockDAOFactoryName)
-    {
-        String result = null;
-
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (t_MappingManager != null)
-        {
-            result =
-                t_MappingManager.getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATE_PREFIX
-                    + mockDAOFactoryName);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param mockDAOFactoryName the Mock DAO factory name.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    protected MockDAOFactoryTemplateFactory getTemplateFactory(
-        final String mockDAOFactoryName)
-      throws  QueryJException
-    {
-        MockDAOFactoryTemplateFactory result = null;
-
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (t_MappingManager != null)
-        {
-            Object t_TemplateFactory =
-                t_MappingManager.getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATE_PREFIX
-                    + mockDAOFactoryName);
-
-            if  (t_TemplateFactory != null)
-            {
-                if  (!(t_TemplateFactory instanceof MockDAOFactoryTemplateFactory))
-                {
-                    throw
-                        new QueryJException(
-                            "invalid.mock.dao.factory.template.factory");
-                }
-                else 
-                {
-                    result = (MockDAOFactoryTemplateFactory) t_TemplateFactory;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Generates a Mock DAO factory template.
      * @param tableTemplate the table template.
      * @param packageName the package name.
@@ -218,8 +132,8 @@ public class MockDAOFactoryTemplateGenerator
      */
     public MockDAOFactoryTemplate createMockDAOFactoryTemplate(
         final TableTemplate tableTemplate,
-        final String        packageName,
-        final String        basePackageName)
+        final String packageName,
+        final String basePackageName)
       throws  QueryJException
     {
         MockDAOFactoryTemplate result = null;
@@ -232,7 +146,7 @@ public class MockDAOFactoryTemplateGenerator
                 new MockDAOFactoryTemplate(
                     tableTemplate,
                     packageName,
-                    basePackageName) {};
+                    basePackageName);
         }
 
         return result;
@@ -246,7 +160,7 @@ public class MockDAOFactoryTemplateGenerator
      */
     public void write(
         final MockDAOFactoryTemplate template,
-        final File                   outputDir)
+        final File outputDir)
       throws  IOException
     {
         if  (   (template  != null)

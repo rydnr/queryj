@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.functions;
 
 /*
- * Importing project-specific classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
 
@@ -86,11 +87,6 @@ public abstract class FunctionsTestTemplate
     private String m__strJUnitImports;
 
     /**
-     * The test function method.
-     */
-    private String m__strTestFunctionMethod;
-
-    /**
      * The member accessors.
      */
     private String m__strMemberAccessors;
@@ -117,6 +113,7 @@ public abstract class FunctionsTestTemplate
 
     /**
      * Builds a FunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
      * @param header the header.
@@ -143,6 +140,7 @@ public abstract class FunctionsTestTemplate
      * @param classEnd the class end.
      */
     public FunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         final String classDescription,
         final String classPrefix,
         final String header,
@@ -169,6 +167,7 @@ public abstract class FunctionsTestTemplate
         final String classEnd)
     {
         super(
+            decoratorFactory,
             classDescription,
             classPrefix,
             header,
@@ -199,6 +198,7 @@ public abstract class FunctionsTestTemplate
 
     /**
      * Builds a FunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
      * @param packageName the package name.
@@ -208,6 +208,7 @@ public abstract class FunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public FunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         final String classDescription,
         final String classPrefix,
         final String packageName,
@@ -217,6 +218,7 @@ public abstract class FunctionsTestTemplate
         final String quote)
     {
         this(
+            decoratorFactory,
             classDescription,
             classPrefix,
             FunctionsTestTemplateDefaults.DEFAULT_HEADER,
@@ -698,7 +700,7 @@ public abstract class FunctionsTestTemplate
 
                             if  (t_strMapping == null) 
                             {
-                                if  (generateWarning(t_strMapping)) 
+                                if  (generateWarning(null)) 
                                 {
                                     logDebug(
                                         "No mapping for " + t_strFunction);

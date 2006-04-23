@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateFactory;
@@ -139,7 +140,10 @@ public class ProcedureRepositoryTemplateGenerator
     {
         return
             new ProcedureRepositoryTemplate(
-                packageName, repository, metadataTypeManager);
+                CachingDecoratorFactory.getInstance(),
+                packageName,
+                repository,
+                metadataTypeManager);
     }
 
     /**

@@ -29,7 +29,7 @@
 
  *****************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -52,12 +52,14 @@ import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.CachingResultDecorator;
 import org.acmsl.queryj.tools.metadata.CachingSqlDecorator;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
+import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.AbstractDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
@@ -106,6 +108,7 @@ public abstract class BasePerTableTemplate
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -117,6 +120,7 @@ public abstract class BasePerTableTemplate
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -128,6 +132,7 @@ public abstract class BasePerTableTemplate
             tableName,
             metadataManager,
             customSqlProvider,
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,
@@ -171,6 +176,7 @@ public abstract class BasePerTableTemplate
                 getQuote(),
                 getBasePackageName(),
                 getRepositoryName(),
+                getDecoratorFactory(),
                 StringUtils.getInstance(),
                 DefaultThemeUtils.getInstance(),
                 PackageUtils.getInstance(),
@@ -193,6 +199,7 @@ public abstract class BasePerTableTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param stringUtils the StringUtils instance.
      * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
      * @param packageUtils the PackageUtils instance.
@@ -205,6 +212,7 @@ public abstract class BasePerTableTemplate
      * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      * @precondition stringUtils != null
      * @precondition defaultThemeUtils != null
      * @precondition packageUtils != null
@@ -225,6 +233,7 @@ public abstract class BasePerTableTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
+        final DecoratorFactory decoratorFactory,
         final StringUtils stringUtils,
         final DefaultThemeUtils defaultThemeUtils,
         final PackageUtils packageUtils,
@@ -265,9 +274,6 @@ public abstract class BasePerTableTemplate
         int t_iPrimaryKeysLength =
             (t_astrPrimaryKeys != null) ? t_astrPrimaryKeys.length : 0;
 
-        String[] t_astrColumnNames =
-            metadataManager.getColumnNames(tableName);
-
         String t_strTableComment =
             metadataManager.getTableComment(tableName);
 
@@ -291,44 +297,74 @@ public abstract class BasePerTableTemplate
         // getAllowsNull()
         Collection t_cPrimaryKeyAttributes =
             metadataUtils.retrievePrimaryKeyAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cNonPrimaryKeyAttributes =
             metadataUtils.retrieveNonPrimaryKeyAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cForeignKeyAttributes =
             metadataUtils.retrieveForeignKeyAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
 
         // A map of "fk_"referringTableName -> foreign_keys (list of lists)
         Map t_mReferringKeys =
             metadataUtils.retrieveReferingKeys(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
 
         Collection t_cAttributes =
             metadataUtils.retrieveAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
 
         Collection t_cExternallyManagedAttributes =
             metadataUtils.retrieveExternallyManagedAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cAllButExternallyManagedAttributes =
             metadataUtils.retrieveAllButExternallyManagedAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cLobAttributes =
             metadataUtils.retrieveLobAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cAllButLobAttributes =
             metadataUtils.retrieveAllButLobAttributes(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
         
         Collection t_cForeignKeys =
             metadataUtils.retrieveForeignKeys(
-                tableName, metadataManager, metadataTypeManager);
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory);
 
         // items have to include the following methods:
         // getId()
@@ -376,6 +412,7 @@ public abstract class BasePerTableTemplate
                 tableName,
                 customSqlProvider,
                 metadataManager,
+                decoratorFactory,
                 daoTemplateUtils);
 
         fillParameters(
@@ -416,6 +453,7 @@ public abstract class BasePerTableTemplate
             t_strRepositoryName,
             metadataManager,
             metadataTypeManager,
+            decoratorFactory,
             metadataUtils,
             stringUtils);
         
@@ -466,6 +504,7 @@ public abstract class BasePerTableTemplate
      * @param tableRepositoryName the table repository.
      * @param metadataManager the database metadata manager.
      * @param metadataTypeManager the metadata type manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @precondition input != null
@@ -496,6 +535,7 @@ public abstract class BasePerTableTemplate
      * @precondition tableRepositoryName != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      * @precondition metadataUtils != null
      * @precondition stringUtils != null
      */
@@ -532,6 +572,7 @@ public abstract class BasePerTableTemplate
         final String tableRepositoryName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory,
         final MetadataUtils metadataUtils,
         final StringUtils stringUtils)
     {
@@ -591,11 +632,18 @@ public abstract class BasePerTableTemplate
         {
             fillStaticTableParameters(
                 input,
-                voName,
                 staticAttributeName,
                 staticAttributeType,
+                tableName,
+                metadataUtils.contain(
+                    externallyManagedAttributes,
+                    staticAttributeName,
+                    tableName),
+                metadataManager.getAllowNull(
+                    tableName, staticAttributeName),
                 metadataManager,
-                stringUtils);
+                metadataTypeManager,
+                decoratorFactory);
         }
 
         input.put("class_name", className);
@@ -846,35 +894,46 @@ public abstract class BasePerTableTemplate
      * Provides the parameters required by
      * <code>static_table</code> rule.
      * @param input the input.
-     * @param voName the value object name.
      * @param staticAttributeName the static attribute name.
      * @param staticAttributeType the static attribute type.
-     * @param metadataManager the database metadata manager.
-     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param tableName the table name.
+     * @param managedExternally whether the attribute is managed
+     * externally.
+     * @param allowsNull if the attribute allows nulls.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition input != null
-     * @precondition voName != null
      * @precondition staticAttributeName != null
      * @precondition staticAttributeType != null
      * @precondition metadataManager != null
-     * @precondition stringUtils != null
+     * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
      */
     protected void fillStaticTableParameters(
         final Map input,
-        final String voName,
         final String staticAttributeName,
         final String staticAttributeType,
+        final String tableName,
+        final boolean managedExternally,
+        final boolean allowsNull,
         final MetadataManager metadataManager,
-        final StringUtils stringUtils)
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory)
     {
-        input.put("vo_name", voName);
-        input.put("static_attribute_name", staticAttributeName);
         input.put(
-            "static_attribute_name_lowercased",
-            staticAttributeName.toLowerCase());
-        input.put(
-            "static_attribute_name_capitalized",
-            stringUtils.capitalize(staticAttributeName, '_'));
-        input.put("static_attribute_type", staticAttributeType);
+            "static_attribute",
+            decoratorFactory.createDecorator(
+                new AttributeValueObject(
+                    staticAttributeName,
+                    metadataTypeManager.getJavaType(staticAttributeType),
+                    staticAttributeType,
+                    staticAttributeType,
+                    tableName,
+                    managedExternally,
+                    allowsNull,
+                    null),
+                metadataManager));
     }
 
     /**
@@ -1068,17 +1127,20 @@ public abstract class BasePerTableTemplate
      * @param tableName the table name.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom results.
      * @precondition tableName != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
     protected Collection retrieveCustomResults(
         final String tableName,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final DAOTemplateUtils daoTemplateUtils)
     {
         Collection result = new ArrayList();
@@ -1087,8 +1149,6 @@ public abstract class BasePerTableTemplate
 
         if  (t_cContents != null)
         {
-            Collection t_cSql = new ArrayList();
-
             Object t_Content = null;
             SqlElement t_SqlElement = null;
             ResultRefElement t_ResultRefElement = null;
@@ -1124,7 +1184,9 @@ public abstract class BasePerTableTemplate
                                         result.add(
                                             new CachingResultDecorator(
                                                 t_ResultElement,
-                                                customSqlProvider));
+                                                customSqlProvider,
+                                                metadataManager,
+                                                decoratorFactory));
                                     }
                                 }
                                 else
@@ -1132,7 +1194,7 @@ public abstract class BasePerTableTemplate
                                     try
                                     {
                                         // todo throw something.
-                                        LogFactory.getLog("custom-sql").warn(
+                                        LogFactory.getLog(BasePerTableTemplate.class).warn(
                                               "Referenced result not found:"
                                             + t_ResultRefElement.getId());
                                     }
@@ -1147,7 +1209,7 @@ public abstract class BasePerTableTemplate
                                 try
                                 {
                                     // todo throw something.
-                                    LogFactory.getLog("custom-sql").warn(
+                                    LogFactory.getLog(BasePerTableTemplate.class).warn(
                                           "Referenced result not found:"
                                         + t_ResultRefElement.getId());
                                 }

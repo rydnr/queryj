@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
@@ -56,7 +57,6 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some JDK classes.
  */
-import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -85,6 +85,7 @@ public class MockDAOTestTemplate
      * Builds a DAOTestTemplate using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectsPackageName the value objects' package name.
@@ -92,6 +93,7 @@ public class MockDAOTestTemplate
     public MockDAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String daoPackageName,
         final String valueObjectsPackageName)
@@ -99,6 +101,7 @@ public class MockDAOTestTemplate
         super(
             tableTemplate,
             metadataManager,
+            decoratorFactory,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
@@ -158,8 +161,6 @@ public class MockDAOTestTemplate
         try 
          */
         {
-            DatabaseMetaData t_MetaData = t_MetadataManager.getMetaData();
-
             MessageFormat t_Formatter = new MessageFormat(getHeader());
 
             t_sbResult.append(
@@ -474,7 +475,7 @@ public class MockDAOTestTemplate
         /*
         catch  (SQLException sqlException)
         {
-            LogFactory.getLog(getClass()).error(
+            LogFactory.getLog(MockDAOTestTemplate.class).error(
                 "database.meta.data.error",
                 sqlException);
         }

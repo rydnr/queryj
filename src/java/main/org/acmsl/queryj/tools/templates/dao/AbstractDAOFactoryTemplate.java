@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
@@ -90,6 +91,7 @@ public abstract class AbstractDAOFactoryTemplate
 
     /**
      * Builds an <code>AbstractDAOFactoryTemplate</code> using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param tableTemplate the table template.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -99,6 +101,7 @@ public abstract class AbstractDAOFactoryTemplate
      * @param jndiDataSource the JNDI location of the data source.
      */
     protected AbstractDAOFactoryTemplate(
+        final DecoratorFactory decoratorFactory,
         final TableTemplate tableTemplate,
         final String packageName,
         final String engineName,
@@ -107,6 +110,7 @@ public abstract class AbstractDAOFactoryTemplate
         final String basePackageName,
         final String jndiDataSource)
     {
+        super(decoratorFactory);
         immutableSetTableTemplate(tableTemplate);
         immutableSetPackageName(packageName);
         immutableSetEngineName(engineName);

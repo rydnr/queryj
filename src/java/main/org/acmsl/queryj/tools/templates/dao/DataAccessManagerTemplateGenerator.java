@@ -28,25 +28,32 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate data acccess manager classes according to
- *              database metadata.
+ * Description: Is able to generate DataAccessManager implementations
+ *              according to database metadata.
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some project-specific  classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplate;
-import org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -56,15 +63,17 @@ import org.acmsl.commons.utils.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 
 /**
- * Is able to generate data access manager instances according
+ * Is able to generate DataAccessManager implementations according
  * to database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+           >Jose San Leandro</a>
  */
 public class DataAccessManagerTemplateGenerator
-    implements  DataAccessManagerTemplateFactory
+    implements  BasePerRepositoryTemplateFactory,
+                BasePerRepositoryTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -80,7 +89,7 @@ public class DataAccessManagerTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(
+    private static void setReference(
         final DataAccessManagerTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
@@ -90,13 +99,14 @@ public class DataAccessManagerTemplateGenerator
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
 
     /**
-     * Retrieves a DataAccessManagerTemplateGenerator instance.
+     * Retrieves a <code>DataAccessManagerTemplateGenerator</code>
+     * instance.
      * @return such instance.
      */
     public static DataAccessManagerTemplateGenerator getInstance()
@@ -121,55 +131,88 @@ public class DataAccessManagerTemplateGenerator
     }
 
     /**
-     * Creates a data access manager template instance.
+     * Generates a DataAccessManager template.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
-     * @param repository the repository.
-     * @return such template.
+     * @param basePackageName the base package name.
+     * @param repositoryName the name of the repository.
+     * @param engineName the engine name.
+     * @param tables the table names.
+     * @return a template.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition metadataManager != null
      * @precondition packageName != null
-     * @precondition repository != null
+     * @precondition basePackageName != null
+     * @precondition repositoryName != null
+     * @precondition engineName != null
+     * @precondition tables != null
      */
-    public DataAccessManagerTemplate createDataAccessManagerTemplate(
-        final String packageName, final String repository)
+    public BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
+        final String packageName,
+        final String basePackageName,
+        final String repositoryName,
+        final String engineName,
+        final Collection tables)
+      throws  QueryJException
     {
         return
             new DataAccessManagerTemplate(
-                packageName, repository);
+                metadataManager,
+                getDecoratorFactory(),
+                packageName,
+                basePackageName,
+                repositoryName,
+                engineName,
+                tables);
     }
 
     /**
-     * Writes a data acccess manager to disk.
-     * @param dataAccessManagerTemplate the template to write.
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
+    }
+
+    /**
+     * Writes a DataAccessManager template to disk.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition dataAccessManagerTemplate != null
+     * @precondition template instanceof DataAccessManagerTemplate
      * @precondition outputDir != null
      */
     public void write(
-        final DataAccessManagerTemplate dataAccessManagerTemplate,
-        final File outputDir)
+        final BasePerRepositoryTemplate template, final File outputDir)
       throws  IOException
     {
         write(
-            dataAccessManagerTemplate,
-            outputDir,
+            template,
+            template.getRepositoryName(),
+            outputDir, 
             StringUtils.getInstance(),
             FileUtils.getInstance());
     }
 
     /**
-     * Writes a data acccess manager to disk.
-     * @param dataAccessManagerTemplate the template to write.
+     * Writes a DataAccessManager template to disk.
+     * @param template template to write.
+     * @param repository the repository.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition dataAccessManagerTemplate != null
+     * @precondition template instanceof DataAccessManagerTemplate
+     * @precondition repository != null
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final DataAccessManagerTemplate dataAccessManagerTemplate,
+        final BasePerRepositoryTemplate template,
+        final String repository,
         final File outputDir,
         final StringUtils stringUtils,
         final FileUtils fileUtils)
@@ -180,7 +223,8 @@ public class DataAccessManagerTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
+//            + stringUtils.capitalize(repository.toLowerCase(), '_')
             + "DataAccessManager.java",
-            dataAccessManagerTemplate.generate());
+            template.generate());
     }
 }

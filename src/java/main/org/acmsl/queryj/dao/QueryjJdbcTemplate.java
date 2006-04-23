@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -235,7 +235,8 @@ public class QueryjJdbcTemplate
         }
         finally
         {
-            if  (t_bCloseConnection)
+            if  (   (t_bCloseConnection)
+                 && (t_Connection != null))
             {
                 try
                 {
@@ -243,7 +244,7 @@ public class QueryjJdbcTemplate
                 }
                 catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).info(
+                    LogFactory.getLog(QueryjJdbcTemplate.class).info(
                         "Could not close connection",
                         sqlException);
                 }
@@ -373,7 +374,8 @@ public class QueryjJdbcTemplate
         {
             JdbcUtils.closeStatement(t_Statement);
 
-            if  (t_bCloseConnection)
+            if  (   (t_bCloseConnection)
+                 && (t_Connection != null))
             {
                 try
                 {
@@ -381,7 +383,7 @@ public class QueryjJdbcTemplate
                 }
                 catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).info(
+                    LogFactory.getLog(QueryjJdbcTemplate.class).info(
                         "Could not close connection",
                         sqlException);
                 }
@@ -532,7 +534,8 @@ public class QueryjJdbcTemplate
 
             JdbcUtils.closeStatement(t_PreparedStatement);
 
-            if  (t_bCloseConnection)
+            if  (   (t_bCloseConnection)
+                 && (t_Connection != null))
             {
                 try
                 {
@@ -540,7 +543,7 @@ public class QueryjJdbcTemplate
                 }
                 catch  (final SQLException sqlException)
                 {
-                    LogFactory.getLog(getClass()).info(
+                    LogFactory.getLog(QueryjJdbcTemplate.class).info(
                         "Could not close connection",
                         sqlException);
                 }

@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,8 +41,11 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateFactory;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -141,7 +144,7 @@ public class FkStatementSetterTemplateGenerator
      * @precondition packageName != null
      * @precondition repositoryName != null
      */
-    public FkStatementSetterTemplate createFkStatementSetterTemplate(
+    public BasePerForeignKeyTemplate createTemplate(
         final ForeignKey foreignKey,
         final MetadataManager metadataManager,
         final String packageName,
@@ -156,12 +159,22 @@ public class FkStatementSetterTemplateGenerator
             new FkStatementSetterTemplate(
                 foreignKey,
                 metadataManager,
+                getDecoratorFactory(),
                 packageName,
                 engineName,
                 engineVersion,
                 quote,
                 basePackageName,
                 repositoryName);
+    }
+
+    /**
+     * Retrieves the decorator factory for each template.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return FkStatementSetterDecoratorFactory.getInstance();
     }
 
     /**

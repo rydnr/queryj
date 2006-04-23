@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,11 +41,14 @@ package org.acmsl.queryj.tools.templates.functions.text.oracle;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
 
 /*
  * Importing some JDK classes.
  */
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -60,41 +63,52 @@ public class OracleTextFunctionsTemplate
     /**
      * The capitalized words.
      */
-    protected static final String[] CAPITALIZED_WORDS =
-        new String[]
-        {
-            "ascii",
-            "char",
-            "length",
+    static final String[] CAPITALIZED_WORDS =
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "ascii",
+                        "char",
+                        "length",
 //            "in",
-            "insert",
-            "index"
-        };
+                        "insert",
+                        "index"
+                    }))
+            .toArray();
 
     /**
      * The field types.
      */
-    public static final String[] FIELD_TYPES =
-        new String[]
-        {
-            "String",
-            "Int"
-        };
+    static final String[] FIELD_TYPES =
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "String",
+                        "Int"
+                    }))
+            .toArray();
 
     /**
      * Builds a OracleTextFunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      */
     public OracleTextFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
         final String quote)
     {
         super(
+            decoratorFactory,
             packageName,
             engineName,
             engineVersion,

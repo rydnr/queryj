@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
 
@@ -54,8 +55,11 @@ public abstract class AbstractTestTemplate
 {
     /**
      * Builds an empty <code>AbstractTestTemplate</code>.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      */
-    protected AbstractTestTemplate()
+    protected AbstractTestTemplate(
+        final DecoratorFactory decoratorFactory)
     {
+        super(decoratorFactory);
     }
 }

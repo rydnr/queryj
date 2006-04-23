@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -96,6 +96,8 @@ public class QueryResultSet
      * Builds a query result set with given references.
      * @param query the query.
      * @param resultSet the wrapped result set.
+     * @precondition query != null
+     * @precondition resultSet != null
      */
     public QueryResultSet(final Query query, final ResultSet resultSet)
     {
@@ -2949,7 +2951,7 @@ public class QueryResultSet
         final int length)
       throws  SQLException
     {
-        updateAsciiStream(index, value, length);
+        updateAsciiStream(index, value, length, getResultSet());
     }
 
     /**
@@ -3229,7 +3231,7 @@ public class QueryResultSet
     public void updateByte(final int index, final byte value)
         throws  SQLException
     {
-        updateByte(index, value);
+        updateByte(index, value, getResultSet());
     }
 
     /**

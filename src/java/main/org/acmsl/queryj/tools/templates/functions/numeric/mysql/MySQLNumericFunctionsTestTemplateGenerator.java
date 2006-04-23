@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.templates.functions.numeric.mysql;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.numeric.mysql
     .MySQLNumericFunctionsTestTemplate;
 
@@ -157,6 +159,7 @@ public class MySQLNumericFunctionsTestTemplateGenerator
         {
             result =
                 new MySQLNumericFunctionsTestTemplate(
+                    getDecoratorFactory(),
                     packageName,
                     testedPackageName,
                     engineName,
@@ -165,5 +168,14 @@ public class MySQLNumericFunctionsTestTemplateGenerator
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 }

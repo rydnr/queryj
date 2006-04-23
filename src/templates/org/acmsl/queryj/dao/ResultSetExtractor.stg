@@ -476,11 +476,12 @@ default_nullable_attribute_extraction(attr, input) ::= <<
 <endif>
 <else>
 <if(input.clobhandling)>
-<indirect_template(name=attr.objectType+"_nullable_clobhandling_attribute_extractor", input=attr)>
+    <indirect_template(name=attr.objectType+"_nullable_clobhandling_attribute_extractor", input=attr)>
 <else>
-<indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
+    <indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
 <endif>
 <endif>
+
 if  (resultSet.wasNull())
 {
     t_<attr.nameCapitalized>As<attr.objectType> = null;
@@ -538,7 +539,12 @@ primitive_nullable_attribute_extractor(attr) ::= <<
   Generates the code to extract a primitive nullable attribute.
 !>
 new <attr.objectType>(
+<if(attr.numberSmallerThanInt)>
+    resultSet.getInt(
+<else>
     resultSet.get<attr.objectType>(
+<endif>
+
         <attr.tableNameUppercased>.<attr.nameUppercased>));
 >>
 
@@ -547,14 +553,23 @@ primitive_nullable_clobhandling_attribute_extractor(attr) ::= <<
   Generates the code to extract a primitive nullable attribute.
 !>
 new <attr.objectType>(
+<if(attr.numberSmallerThanInt)>
+    resultSet.getInt("<attr.nameUppercased>"));
+<else>
     resultSet.get<attr.objectType>("<attr.nameUppercased>"));
+<endif>
 >>
 
 object_nullable_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a non-primitive nullable attribute.
 !>
-resultSet.get<attr.statementSetterFieldType>(
+<if(attr.numberSmallerThanInt)>
+    resultSet.getInt(
+<else>
+resultSet.get<attr.objectType>(
+<endif>
+
     <attr.tableNameUppercased>.<attr.nameUppercased>);
 >>
 
@@ -562,7 +577,11 @@ object_nullable_clobhandling_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a non-primitive nullable attribute.
 !>
-resultSet.get<attr.statementSetterFieldType>("<attr.nameUppercased>");
+<if(attr.numberSmallerThanInt)>
+resultSet.getInt("<attr.nameUppercased>");
+<else>
+resultSet.get<attr.objectType>("<attr.nameUppercased>");
+<endif>
 >>
 
 attribute_extraction(attr, input) ::= <<
@@ -587,7 +606,11 @@ default_attribute_extraction(attr) ::= <<
 <if(attr.allowsNull)>
 t_<attr.nameCapitalized>As<attr.objectType>
 <else>
-resultSet.get<attr.statementSetterFieldType>(<attr.tableNameUppercased>.<attr.nameUppercased>)
+<if(attr.numberSmallerThanInt)>
+resultSet.getInt(<attr.tableNameUppercased>.<attr.nameUppercased>)
+<else>
+resultSet.get<attr.objectType>(<attr.tableNameUppercased>.<attr.nameUppercased>)
+<endif>
 <endif>
 >>
 
@@ -599,7 +622,11 @@ default_clobhandling_attribute_extraction(attr) ::= <<
 <if(attr.allowsNull)>
 t_<attr.nameCapitalized>As<attr.objectType>
 <else>
-resultSet.get<attr.statementSetterFieldType>("<attr.nameUppercased>")
+<if(attr.numberSmallerThanInt)>
+resultSet.getInt("<attr.nameUppercased>")
+<else>
+resultSet.get<attr.objectType>("<attr.nameUppercased>")
+<endif>
 <endif>
 >>
 

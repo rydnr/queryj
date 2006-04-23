@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -72,6 +73,7 @@ public class XMLDAOTemplate
      * Builds a <code>XMLDAOTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
@@ -79,6 +81,7 @@ public class XMLDAOTemplate
     public XMLDAOTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String basePackageName,
         final String repositoryName)
@@ -86,6 +89,7 @@ public class XMLDAOTemplate
         super(
             tableTemplate,
             metadataManager,
+            decoratorFactory,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
@@ -335,11 +339,6 @@ public class XMLDAOTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
-        String t_strRepositoryName =
-            stringUtils.capitalize(
-                repositoryName,
-                '_');
-
         String t_strTableName = tableTemplate.getTableName();
 
         MessageFormat t_HeaderFormatter = new MessageFormat(header);
@@ -443,21 +442,15 @@ public class XMLDAOTemplate
         StringBuffer t_sbBuildKeyValues = new StringBuffer();
         StringBuffer t_sbProcessPkAttributes = new StringBuffer();
         StringBuffer t_sbPkFilterValues = new StringBuffer();
-        StringBuffer t_sbUpdateFilter = new StringBuffer();
         StringBuffer t_sbDeleteMethod = new StringBuffer();
         StringBuffer t_sbDeleteByFkMethod = new StringBuffer();
-        StringBuffer t_sbSelectFields = new StringBuffer();
-        StringBuffer t_sbFilterDeclaration = new StringBuffer();
         StringBuffer t_sbDeleteWithFkPkValues = new StringBuffer();
         StringBuffer t_sbDeleteWithFkPkValuesDeleteRequest = new StringBuffer();
 
         StringBuffer t_sbFkJavadoc = new StringBuffer();
         StringBuffer t_sbFkDeclaration;
         StringBuffer t_sbDeleteNoFkMethod = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkPkJavadoc = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkPkDeclaration = new StringBuffer();
         StringBuffer t_sbDeleteWithFkDAODeleteRequest = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkDAOFkValues = new StringBuffer();
 
         StringBuffer t_sbBuildValueObjectParametersDeclaration =
             new StringBuffer();
@@ -467,7 +460,6 @@ public class XMLDAOTemplate
         StringBuffer t_sbInsertParametersDeclaration    = new StringBuffer();
         StringBuffer t_sbUpdateParametersJavadoc        = new StringBuffer();
         StringBuffer t_sbUpdateParametersDeclaration    = new StringBuffer();
-        StringBuffer t_sbUpdateParametersSpecification  = new StringBuffer();
 
         StringBuffer t_sbPersistMethod = new StringBuffer();
         StringBuffer t_sbUndigesterPropertyRules = new StringBuffer();

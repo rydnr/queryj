@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -229,15 +229,6 @@ public class DataSourceTransactionToken
         return dataSource.hashCode();
     }
     */
-
-    /**
-     * Retrieves a text version of the instance.
-     * @return such information.
-     */
-    public String toString()
-    {
-        return super.toString();
-    }
 
     /**
      * Private <code>DataSource</code> wrapper.

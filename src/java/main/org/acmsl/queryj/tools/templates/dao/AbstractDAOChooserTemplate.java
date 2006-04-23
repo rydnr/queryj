@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
 /*
@@ -77,16 +78,6 @@ public abstract class AbstractDAOChooserTemplate
      * The repository.
      */
     private String m__strRepository;
-
-    /**
-     * The project import Javadoc.
-     */
-    private String m__strProjectImportsJavadoc;
-
-    /**
-     * The project import statements.
-     */
-    private String m__strProjectImports;
 
     /**
      * The JDK import statements.
@@ -156,6 +147,7 @@ public abstract class AbstractDAOChooserTemplate
     /**
      * Builds an <code>AbstractDAOChooserTemplate</code> using given
      * information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -174,6 +166,7 @@ public abstract class AbstractDAOChooserTemplate
      * @param classEnd the class end.
      */
     public AbstractDAOChooserTemplate(
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -191,6 +184,7 @@ public abstract class AbstractDAOChooserTemplate
         final String getDAOFactoryMethods,
         final String classEnd)
     {
+        super(decoratorFactory);
         immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);

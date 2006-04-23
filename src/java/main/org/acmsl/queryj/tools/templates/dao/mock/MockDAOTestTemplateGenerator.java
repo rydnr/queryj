@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateFactory;
@@ -126,129 +128,6 @@ public class MockDAOTestTemplateGenerator
     }
 
     /**
-     * Adds a new template factory class.
-     * @param daoName the DAO name.
-     * @param templateFactoryClass the template factory.
-     * @precondition daoName != null
-     * @precondition templateFactoryClass != null
-     * @precondition TemplateMappingManager.getInstance() != null
-     */
-    public void addTemplateFactoryClass(
-        final String daoName,
-        final String templateFactoryClass)
-    {
-        addTemplateFactoryClass(
-            daoName,
-            templateFactoryClass,
-            TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Adds a new template factory class.
-     * @param daoName the DAO name.
-     * @param templateFactoryClass the template factory.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @precondition daoName != null
-     * @precondition templateFactoryClass != null
-     * @precondition templateMappingManager != null
-     */
-    public void addTemplateFactoryClass(
-        final String daoName,
-        final String templateFactoryClass,
-        final TemplateMappingManager templateMappingManager)
-    {
-        templateMappingManager.addDefaultTemplateFactoryClass(
-            TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX + daoName,
-            templateFactoryClass);
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param daoName the DAO name.
-     * @return the template factory class name.
-     * @precondition daoName != null
-     */
-    protected String getTemplateFactoryClass(final String daoName)
-    {
-        return
-            getTemplateFactoryClass(
-                daoName, TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param daoName the DAO name.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @return the template factory class name.
-     * @precondition daoName != null
-     * @precondition templateMappingManager != null
-     */
-    protected String getTemplateFactoryClass(
-        final String daoName,
-        final TemplateMappingManager templateMappingManager)
-    {
-        return
-            templateMappingManager.getDefaultTemplateFactoryClass(
-                  TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX
-                + daoName);
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param daoName the DAO name.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition daoName != null
-     * @precondition TemplateMappingManager.getInstance() != null
-     */
-    protected MockDAOTestTemplateFactory getTemplateFactory(final String daoName)
-        throws  QueryJException
-    {
-        return getTemplateFactory(daoName, TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param daoName the DAO name.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition daoName != null
-     * @precondition templateMappingManager != null
-     */
-    protected MockDAOTestTemplateFactory getTemplateFactory(
-        final String daoName,
-        final TemplateMappingManager templateMappingManager)
-      throws  QueryJException
-    {
-        MockDAOTestTemplateFactory result = null;
-
-        Object t_TemplateFactory =
-            templateMappingManager.getDefaultTemplateFactoryClass(
-                  TemplateMappingManager.MOCK_DAO_TEST_TEMPLATE_PREFIX
-                + daoName);
-
-        if  (t_TemplateFactory != null)
-        {
-            if  (!(t_TemplateFactory instanceof MockDAOTestTemplateFactory))
-            {
-                throw
-                    new QueryJException(
-                        "invalid.mock.dao.test.template.factory");
-            }
-            else 
-            {
-                result = (MockDAOTestTemplateFactory) t_TemplateFactory;
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Generates a DAO test template.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
@@ -274,33 +153,23 @@ public class MockDAOTestTemplateGenerator
         final String valueObjectPackageName)
       throws  QueryJException
     {
-        MockDAOTestTemplate result = null;
+        return
+            new MockDAOTestTemplate(
+                tableTemplate,
+                metadataManager,
+                getDecoratorFactory(),
+                packageName,
+                daoPackageName,
+                valueObjectPackageName);
+    }
 
-        MockDAOTestTemplateFactory t_TemplateFactory =
-            getTemplateFactory(tableTemplate.getTableName());
-
-        if  (t_TemplateFactory != null)
-        {
-            result =
-                t_TemplateFactory.createMockDAOTestTemplate(
-                    tableTemplate,
-                    metadataManager,
-                    packageName,
-                    daoPackageName,
-                    valueObjectPackageName);
-        }
-        else 
-        {
-            result =
-                new MockDAOTestTemplate(
-                    tableTemplate,
-                    metadataManager,
-                    packageName,
-                    daoPackageName,
-                    valueObjectPackageName);
-        }
-
-        return result;
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -59,6 +60,11 @@ import org.acmsl.commons.utils.StringUtils;
 public abstract class AbstractFkStatementSetterTemplate
     extends  AbstractTemplate
 {
+    /**
+     * A cached empty String array.
+     */
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+    
     /**
      * The table template.
      */
@@ -195,6 +201,7 @@ public abstract class AbstractFkStatementSetterTemplate
      * @param tableTemplate the table template.
      * @param foreignKeys the foreign keys.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -223,6 +230,7 @@ public abstract class AbstractFkStatementSetterTemplate
         final TableTemplate tableTemplate,
         final String[] foreignKeys,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -247,6 +255,8 @@ public abstract class AbstractFkStatementSetterTemplate
         final String parameterSpecification,
         final String classEnd)
     {
+        super(decoratorFactory);
+
         immutableSetTableTemplate(
             tableTemplate);
 
@@ -368,9 +378,18 @@ public abstract class AbstractFkStatementSetterTemplate
      * Retrieves the foreign keys.
      * @return such key.
      */
-    public String[] getForeignKeys()
+    protected final String[] immutableGetForeignKeys()
     {
         return m__astrForeignKeys;
+    }
+
+    /**
+     * Retrieves the foreign keys.
+     * @return such key.
+     */
+    public String[] getForeignKeys()
+    {
+        return clone(immutableGetForeignKeys());
     }
 
     /**
@@ -1077,5 +1096,30 @@ public abstract class AbstractFkStatementSetterTemplate
                         foreignKeys).toLowerCase()),
                 '_')
             + "StatementSetter.";
+    }
+
+    /**
+     * Clones given String array.
+     * @param array the array to clone.
+     * @return the cloned array.
+     * @precondition array != null
+     */
+    protected String[] clone(final String[] array)
+    {
+        String[] result = EMPTY_STRING_ARRAY;
+
+        int t_iCount = (array != null) ? array.length : 0;
+
+        if  (t_iCount > 0)
+        {
+            result = new String[t_iCount];
+
+            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                result[t_iIndex] = array[t_iIndex];
+            }
+        }
+
+        return result;
     }
 }

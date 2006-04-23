@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -227,11 +228,6 @@ public abstract class AbstractMockDAOTemplate
     private String m__strDeletePkDeclaration;
 
     /**
-     * The delete PK filter declaration.
-     */
-    private String m__strDeleteFilterDeclaration;
-
-    /**
      * The delete with FK method.
      */
     private String m__strDeleteWithFkMethod;
@@ -266,6 +262,7 @@ public abstract class AbstractMockDAOTemplate
      * given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -300,7 +297,6 @@ public abstract class AbstractMockDAOTemplate
      * @param deleteMethod the delete method.
      * @param deletePkJavadoc the delete PK javadoc.
      * @param deletePkDeclaration the delete PK declaration.
-     * @param deleteFilterDeclaration the delete filter declaration.
      * @param deleteWithFkMethod the delete method.
      * @param deleteWithFkPkJavadoc the delete with FK PK javadoc.
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
@@ -311,6 +307,7 @@ public abstract class AbstractMockDAOTemplate
     public AbstractMockDAOTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -350,6 +347,8 @@ public abstract class AbstractMockDAOTemplate
         final String deleteWithFkPkValues,
         final String classEnd)
     {
+        super(decoratorFactory);
+
         inmutableSetTableTemplate(
             tableTemplate);
 

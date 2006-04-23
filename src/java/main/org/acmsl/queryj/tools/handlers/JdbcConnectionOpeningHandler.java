@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -105,7 +105,8 @@ public class JdbcConnectionOpeningHandler
             }
             catch  (final BuildException buildException)
             {
-                Log t_Log = UniqueLogFactory.getLog(getClass());
+                Log t_Log =
+                    UniqueLogFactory.getLog(JdbcConnectionOpeningHandler.class);
                 
                 if  (t_Log != null)
                 {
@@ -202,6 +203,10 @@ public class JdbcConnectionOpeningHandler
                 result =
                     DriverManager.getConnection(
                         url, username, password);
+            }
+            catch  (final RuntimeException exception)
+            {
+                throw exception;
             }
             catch  (final Exception exception)
             {

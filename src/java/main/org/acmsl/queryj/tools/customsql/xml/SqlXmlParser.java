@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -93,7 +93,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class SqlXmlParser
+public class SqlXmlParser
     implements  CustomSqlProvider
 {
     /**
@@ -250,11 +250,15 @@ public abstract class SqlXmlParser
                     setMap(result);
                 }
             }
+            catch  (final RuntimeException exception)
+            {
+                throw exception;
+            }
             catch  (final Exception exception)
             {
                 try
                 {
-                    LogFactory.getLog(getClass()).error(
+                    LogFactory.getLog(SqlXmlParser.class).error(
                         "Cannot read sql.xml information.",
                         exception);
                 }
@@ -506,6 +510,7 @@ public abstract class SqlXmlParser
         if  (t_mSqlXmlMap == null)
         {
             t_mSqlXmlMap = load();
+            setMap(t_mSqlXmlMap);
         }
     }
 

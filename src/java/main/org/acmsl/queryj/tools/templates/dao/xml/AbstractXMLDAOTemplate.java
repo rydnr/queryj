@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -251,11 +252,6 @@ public abstract class AbstractXMLDAOTemplate
     private String m__strDeletePkDeclaration;
 
     /**
-     * The delete PK filter declaration.
-     */
-    private String m__strDeleteFilterDeclaration;
-
-    /**
      * The delete with FK method.
      */
     private String m__strDeleteNoFkMethod;
@@ -304,6 +300,7 @@ public abstract class AbstractXMLDAOTemplate
      * Builds an <code>AbstractXMLDAOTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -346,7 +343,6 @@ public abstract class AbstractXMLDAOTemplate
      * @param deleteMethodSubtemplate the delete method subtemplate.
      * @param deletePkJavadoc the delete PK javadoc.
      * @param deletePkDeclaration the delete PK declaration.
-     * @param deleteFilterDeclaration the delete filter declaration.
      * @param deleteNoFkMethod the delete method with no foreign keys.
      * @param deleteWithFkPkJavadoc the delete with FK PK javadoc.
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
@@ -360,6 +356,7 @@ public abstract class AbstractXMLDAOTemplate
     protected AbstractXMLDAOTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -407,6 +404,8 @@ public abstract class AbstractXMLDAOTemplate
         final String undigesterPropertyRules,
         final String classEnd)
     {
+        super(decoratorFactory);
+
         immutableSetTableTemplate(
             tableTemplate);
 

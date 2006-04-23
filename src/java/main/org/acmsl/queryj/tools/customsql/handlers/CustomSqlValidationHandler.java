@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -102,7 +102,7 @@ public class CustomSqlValidationHandler
     /**
      * A cached class array.
      */
-    protected static final Class[] CLASS_ARRAY_OF_ONE_STRING =
+    private static final Class[] CLASS_ARRAY_OF_ONE_STRING =
         new Class[] { String.class };
 
     /**

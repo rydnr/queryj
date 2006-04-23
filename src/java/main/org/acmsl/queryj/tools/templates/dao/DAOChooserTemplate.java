@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -37,6 +37,11 @@
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
+
+/*
+ * Importing some project-specific classes.
+ */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -64,13 +69,17 @@ public class DAOChooserTemplate
 {
     /**
      * Builds a <code>DAOChooserTemplate</code> using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param repository the repository.
      */
     public DAOChooserTemplate(
-        final String packageName, final String repository)
+        final DecoratorFactory decoratorFactory,
+        final String packageName,
+        final String repository)
     {
         super(
+            decoratorFactory,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
@@ -172,9 +181,6 @@ public class DAOChooserTemplate
         final StringUtils stringUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
-
-        String t_strRepository =
-            stringUtils.normalize(repository, '_');
 
         t_sbResult.append(header);
 

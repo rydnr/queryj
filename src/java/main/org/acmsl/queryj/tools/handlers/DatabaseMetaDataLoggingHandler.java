@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -101,7 +101,9 @@ public class DatabaseMetaDataLoggingHandler
             }
             catch  (final BuildException buildException)
             {
-                Log t_Log = UniqueLogFactory.getLog(getClass());
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        DatabaseMetaDataLoggingHandler.class);
                 
                 if  (t_Log != null)
                 {

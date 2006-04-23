@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,8 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplateFactory;
 
@@ -131,7 +133,20 @@ public class TableRepositoryTemplateGenerator
         final String packageName,
         final String repository)
     {
-        return new TableRepositoryTemplate(packageName, repository);
+        return
+            new TableRepositoryTemplate(
+                getDecoratorFactory(),
+                packageName,
+                repository);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

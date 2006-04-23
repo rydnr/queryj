@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -305,7 +305,8 @@ public class ParameterValidationHandler
             }
             catch  (final BuildException buildException)
             {
-                Log t_Log = UniqueLogFactory.getLog(getClass());
+                Log t_Log =
+                    UniqueLogFactory.getLog(ParameterValidationHandler.class);
                 
                 if  (t_Log != null)
                 {

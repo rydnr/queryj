@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -613,15 +613,12 @@ public abstract class TemplateMappingManager
 
             if  (t_Key != null)
             {
-                if  (   (t_mMapping.containsKey(t_Key))
-                     && (!templateFactoryClass.equals(t_mMapping.get(t_Key))))
+                if  (!templateFactoryClass.equals(t_mMapping.get(t_Key)))
                 {
-                    /*
-                    LogFactory.getLog(getClass()).warn(
+                    LogFactory.getLog(TemplateMappingManager.class).debug(
                           "Overwritting previous template factory ("
                         + t_mMapping.get(t_Key)
                         + "->" + templateFactoryClass + ")");
-                    */
                 }
 
                 t_mMapping.put(t_Key, templateFactoryClass);

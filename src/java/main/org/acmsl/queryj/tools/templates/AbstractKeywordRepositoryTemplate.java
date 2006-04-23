@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -150,6 +151,7 @@ public abstract class AbstractKeywordRepositoryTemplate
     /**
      * Builds an <code>AbstractKeywordRepositoryTemplate</code> using
      * given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -166,6 +168,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * @param classEnd the class end.
      */
     public AbstractKeywordRepositoryTemplate(
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -181,29 +184,30 @@ public abstract class AbstractKeywordRepositoryTemplate
         final String keywordRetrievalMethodBody,
         final String classEnd)
     {
-        inmutableSetHeader(header);
-        inmutableSetPackageDeclaration(packageDeclaration);
-        inmutableSetPackageName(packageName);
-        inmutableSetRepository(repository);
-        inmutableSetAcmslImports(acmslImports);
-        inmutableSetAcmslImportTemplate(acmslImportTemplate);
-        inmutableSetJdkImports(jdkImports);
-        inmutableSetJavadoc(javadoc);
-        inmutableSetClassDefinition(classDefinition);
-        inmutableSetClassStart(classStart);
-        inmutableSetSingletonBody(singletonBody);
-        inmutableSetKeywordRetrievalMethodJavadoc(keywordRetrievalMethodJavadoc);
-        inmutableSetKeywordRetrievalMethodBody(keywordRetrievalMethodBody);
-        inmutableSetClassEnd(classEnd);
-        inmutableSetKeywordsMetaDataList(new ArrayList());
-        inmutableSetKeywordsMetaData(new HashMap());
+        super(decoratorFactory);
+        immutableSetHeader(header);
+        immutableSetPackageDeclaration(packageDeclaration);
+        immutableSetPackageName(packageName);
+        immutableSetRepository(repository);
+        immutableSetAcmslImports(acmslImports);
+        immutableSetAcmslImportTemplate(acmslImportTemplate);
+        immutableSetJdkImports(jdkImports);
+        immutableSetJavadoc(javadoc);
+        immutableSetClassDefinition(classDefinition);
+        immutableSetClassStart(classStart);
+        immutableSetSingletonBody(singletonBody);
+        immutableSetKeywordRetrievalMethodJavadoc(keywordRetrievalMethodJavadoc);
+        immutableSetKeywordRetrievalMethodBody(keywordRetrievalMethodBody);
+        immutableSetClassEnd(classEnd);
+        immutableSetKeywordsMetaDataList(new ArrayList());
+        immutableSetKeywordsMetaData(new HashMap());
     }
 
     /**
      * Specifies the header.
      * @param header the new header.
      */
-    private void inmutableSetHeader(final String header)
+    private void immutableSetHeader(final String header)
     {
         m__strHeader = header;
     }
@@ -214,7 +218,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setHeader(final String header)
     {
-        inmutableSetHeader(header);
+        immutableSetHeader(header);
     }
 
     /**
@@ -230,7 +234,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the package declaration.
      * @param packageDeclaration the new package declaration.
      */
-    private void inmutableSetPackageDeclaration(final String packageDeclaration)
+    private void immutableSetPackageDeclaration(final String packageDeclaration)
     {
         m__strPackageDeclaration = packageDeclaration;
     }
@@ -241,7 +245,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setPackageDeclaration(final String packageDeclaration)
     {
-        inmutableSetPackageDeclaration(packageDeclaration);
+        immutableSetPackageDeclaration(packageDeclaration);
     }
 
     /**
@@ -257,7 +261,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    private void inmutableSetPackageName(final String packageName)
+    private void immutableSetPackageName(final String packageName)
     {
         m__strPackageName = packageName;
     }
@@ -268,7 +272,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setPackageName(final String packageName)
     {
-        inmutableSetPackageName(packageName);
+        immutableSetPackageName(packageName);
     }
 
     /**
@@ -284,7 +288,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the repository.
      * @param repository the new repository.
      */
-    private void inmutableSetRepository(final String repository)
+    private void immutableSetRepository(final String repository)
     {
         m__strRepository = repository;
     }
@@ -295,7 +299,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setRepository(final String repository)
     {
-        inmutableSetRepository(repository);
+        immutableSetRepository(repository);
     }
 
     /**
@@ -311,7 +315,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the ACM-SL imports.
      * @param acmslImports the new ACM-SL imports.
      */
-    private void inmutableSetAcmslImports(final String acmslImports)
+    private void immutableSetAcmslImports(final String acmslImports)
     {
         m__strAcmslImports = acmslImports;
     }
@@ -322,7 +326,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setAcmslImports(final String acmslImports)
     {
-        inmutableSetAcmslImports(acmslImports);
+        immutableSetAcmslImports(acmslImports);
     }
 
     /**
@@ -338,7 +342,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the ACM-SL import template.
      * @param acmslImportTemplate the new ACM-SL import template.
      */
-    private void inmutableSetAcmslImportTemplate(final String acmslImportTemplate)
+    private void immutableSetAcmslImportTemplate(final String acmslImportTemplate)
     {
         m__strAcmslImportTemplate = acmslImportTemplate;
     }
@@ -349,7 +353,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setAcmslImportTemplate(final String acmslImportTemplate)
     {
-        inmutableSetAcmslImportTemplate(acmslImportTemplate);
+        immutableSetAcmslImportTemplate(acmslImportTemplate);
     }
 
     /**
@@ -365,7 +369,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the JDK imports.
      * @param jdkImports the new JDK imports.
      */
-    private void inmutableSetJdkImports(final String jdkImports)
+    private void immutableSetJdkImports(final String jdkImports)
     {
         m__strJdkImports = jdkImports;
     }
@@ -376,7 +380,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setJdkImports(final String jdkImports)
     {
-        inmutableSetJdkImports(jdkImports);
+        immutableSetJdkImports(jdkImports);
     }
 
     /**
@@ -392,7 +396,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the javadoc.
      * @param javadoc the new javadoc.
      */
-    private void inmutableSetJavadoc(final String javadoc)
+    private void immutableSetJavadoc(final String javadoc)
     {
         m__strJavadoc = javadoc;
     }
@@ -403,7 +407,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setJavadoc(final String javadoc)
     {
-        inmutableSetJavadoc(javadoc);
+        immutableSetJavadoc(javadoc);
     }
 
     /**
@@ -419,7 +423,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the class definition.
      * @param classDefinition the new class definition.
      */
-    private void inmutableSetClassDefinition(final String classDefinition)
+    private void immutableSetClassDefinition(final String classDefinition)
     {
         m__strClassDefinition = classDefinition;
     }
@@ -430,7 +434,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setClassDefinition(final String classDefinition)
     {
-        inmutableSetClassDefinition(classDefinition);
+        immutableSetClassDefinition(classDefinition);
     }
 
     /**
@@ -446,7 +450,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the class start.
      * @param classStart the new class start.
      */
-    private void inmutableSetClassStart(final String classStart)
+    private void immutableSetClassStart(final String classStart)
     {
         m__strClassStart = classStart;
     }
@@ -457,7 +461,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setClassStart(final String classStart)
     {
-        inmutableSetClassStart(classStart);
+        immutableSetClassStart(classStart);
     }
 
     /**
@@ -473,7 +477,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the singleton body.
      * @param singletonBody the new singleton body.
      */
-    private void inmutableSetSingletonBody(final String singletonBody)
+    private void immutableSetSingletonBody(final String singletonBody)
     {
         m__strSingletonBody = singletonBody;
     }
@@ -484,7 +488,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setSingletonBody(final String singletonBody)
     {
-        inmutableSetSingletonBody(singletonBody);
+        immutableSetSingletonBody(singletonBody);
     }
 
     /**
@@ -501,7 +505,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * @param keywordRetrievalMethodJavadoc the new keyword retrieval method
      * Javadoc.
      */
-    private void inmutableSetKeywordRetrievalMethodJavadoc(
+    private void immutableSetKeywordRetrievalMethodJavadoc(
         String keywordRetrievalMethodJavadoc)
     {
         m__strKeywordRetrievalMethodJavadoc = keywordRetrievalMethodJavadoc;
@@ -515,7 +519,7 @@ public abstract class AbstractKeywordRepositoryTemplate
     protected void setKeywordRetrievalMethodJavadoc(
         String keywordRetrievalMethodJavadoc)
     {
-        inmutableSetKeywordRetrievalMethodJavadoc(keywordRetrievalMethodJavadoc);
+        immutableSetKeywordRetrievalMethodJavadoc(keywordRetrievalMethodJavadoc);
     }
 
     /**
@@ -531,7 +535,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the keyword retrieval method body.
      * @param keywordRetrievalMethodBody the new keyword retrieval method body.
      */
-    private void inmutableSetKeywordRetrievalMethodBody(
+    private void immutableSetKeywordRetrievalMethodBody(
         String keywordRetrievalMethodBody)
     {
         m__strKeywordRetrievalMethodBody = keywordRetrievalMethodBody;
@@ -543,7 +547,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setKeywordRetrievalMethodBody(final String keywordRetrievalMethodBody)
     {
-        inmutableSetKeywordRetrievalMethodBody(keywordRetrievalMethodBody);
+        immutableSetKeywordRetrievalMethodBody(keywordRetrievalMethodBody);
     }
 
     /**
@@ -559,7 +563,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the class end.
      * @param classEnd the new class end.
      */
-    private void inmutableSetClassEnd(final String classEnd)
+    private void immutableSetClassEnd(final String classEnd)
     {
         m__strClassEnd = classEnd;
     }
@@ -570,7 +574,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setClassEnd(final String classEnd)
     {
-        inmutableSetClassEnd(classEnd);
+        immutableSetClassEnd(classEnd);
     }
 
     /**
@@ -586,7 +590,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the keywords metadata.
      * @param keywordsMetaData the keywords metadata.
      */
-    private void inmutableSetKeywordsMetaDataList(List keywordsMetaData)
+    private void immutableSetKeywordsMetaDataList(List keywordsMetaData)
     {
         m__lKeywordsMetaData = keywordsMetaData;
     }
@@ -597,7 +601,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setKeywordsMetaDataList(List keywordsMetaData)
     {
-        inmutableSetKeywordsMetaDataList(keywordsMetaData);
+        immutableSetKeywordsMetaDataList(keywordsMetaData);
     }
 
     /**
@@ -663,7 +667,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      * Specifies the keyword parameters metadata.
      * @param keywordsMetaData the keywords map.
      */
-    private void inmutableSetKeywordsMetaData(Map keywordsMetaData)
+    private void immutableSetKeywordsMetaData(Map keywordsMetaData)
     {
         m__mKeywordsMetaData = keywordsMetaData;
     }
@@ -674,7 +678,7 @@ public abstract class AbstractKeywordRepositoryTemplate
      */
     protected void setKeywordsMetaData(Map keywordsMetaData)
     {
-        inmutableSetKeywordsMetaData(keywordsMetaData);
+        immutableSetKeywordsMetaData(keywordsMetaData);
     }
 
     /**

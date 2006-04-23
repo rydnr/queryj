@@ -29,7 +29,7 @@
 
  *****************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -52,7 +52,7 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
  *         >Jose San Leandro</a>
  */
 public class CachingAttributeDecorator
-    extends  AttributeDecorator
+    extends  AbstractAttributeDecorator
 {
     /**
      * The cached name uppercased.
@@ -152,52 +152,6 @@ public class CachingAttributeDecorator
         final MetadataManager metadataManager)
     {
         super(attribute, metadataManager);
-    }
-
-    /**
-     * Creates a <code>CachingAttributeDecorator</code> with the following
-     * information.
-     * @param name the name.
-     * @param type the type.
-     * @param nativeType the native type.
-     * @param fieldType the field type.
-     * @param tableName the table name.
-     * @param managedExternally whether the attribute is managed externally.
-     * @param allowsNull whether the attribute allows null values or not.
-     * @param value the optional attribute value.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @precondition name != null
-     * @precondition type != null
-     * @precondition nativeType != null
-     * @precondition fieldType != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     */
-    public CachingAttributeDecorator(
-        final String name,
-        final int type,
-        final String nativeType,
-        final String fieldType,
-        final String tableName,
-        final boolean managedExternally,
-        final boolean allowsNull,
-        final String value,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        super(
-            name,
-            type,
-            nativeType,
-            fieldType,
-            tableName,
-            managedExternally,
-            allowsNull,
-            value,
-            metadataManager,
-            metadataTypeManager);
     }
 
     /**
@@ -963,4 +917,5 @@ public class CachingAttributeDecorator
         
         return result;
     }
+
 }

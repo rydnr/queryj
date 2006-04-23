@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -38,8 +38,9 @@
 package org.acmsl.queryj.tools.templates.functions.text;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTestTemplate;
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
 
@@ -58,6 +59,7 @@ public abstract class TextFunctionsTestTemplate
 {
     /**
      * Builds a TextFunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -83,6 +85,7 @@ public abstract class TextFunctionsTestTemplate
      * @param classEnd the class end.
      */
     public TextFunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  header,
         final String  packageDeclaration,
         final String  packageName,
@@ -107,6 +110,7 @@ public abstract class TextFunctionsTestTemplate
         final String  classEnd)
     {
         super(
+            decoratorFactory,
             "text",
             "Text",
             header,
@@ -135,6 +139,7 @@ public abstract class TextFunctionsTestTemplate
 
     /**
      * Builds a TextFunctionsTestTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
      * @param engineName the engine name.
@@ -142,6 +147,7 @@ public abstract class TextFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public TextFunctionsTestTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  packageName,
         final String  testedPackageName,
         final String  engineName,
@@ -149,6 +155,7 @@ public abstract class TextFunctionsTestTemplate
         final String  quote)
     {
         super(
+            decoratorFactory,
             "text",
             "Text",
             packageName,

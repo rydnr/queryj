@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -101,9 +101,16 @@ public class PropertyElementFactory
 
         String t_strType = attributes.getValue("type");
 
+        String t_strNullable = attributes.getValue("nullable");
+
         result =
             new PropertyElement(
-                t_strId, t_strColumnName, t_iIndex, t_strName, t_strType);
+                t_strId,
+                t_strColumnName,
+                t_iIndex,
+                t_strName,
+                t_strType,
+                Boolean.TRUE.toString().equalsIgnoreCase(t_strNullable));
 
         return result;
     }

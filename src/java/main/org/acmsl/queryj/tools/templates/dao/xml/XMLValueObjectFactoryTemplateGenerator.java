@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.templates.dao.xml;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -119,118 +121,9 @@ public class XMLValueObjectFactoryTemplateGenerator
 
         if  (result == null) 
         {
-            result = new XMLValueObjectFactoryTemplateGenerator() {};
+            result = new XMLValueObjectFactoryTemplateGenerator();
 
             setReference(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Adds a new template factory class.
-     * @param valueObjectName the value object name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateFactoryClass the template factory.
-     */
-    public void addTemplateFactoryClass(
-        final String valueObjectName,
-        final String engineName,
-        final String engineVersion,
-        final String templateFactoryClass)
-    {
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (   (t_MappingManager     != null)
-             && (engineName           != null)
-             && (templateFactoryClass != null))
-        {
-            t_MappingManager.addTemplateFactoryClass(
-                  TemplateMappingManager.XML_VALUE_OBJECT_FACTORY_TEMPLATE_PREFIX
-                + valueObjectName,
-                engineName,
-                engineVersion,
-                templateFactoryClass);
-        }
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param valueObjectName the value object name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     */
-    protected String getTemplateFactoryClass(
-        final String valueObjectName,
-        final String engineName,
-        final String engineVersion)
-    {
-        String result = null;
-
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (   (t_MappingManager != null)
-             && (engineName       != null))
-        {
-            result =
-                t_MappingManager.getTemplateFactoryClass(
-                      TemplateMappingManager.XML_VALUE_OBJECT_TEMPLATE_PREFIX
-                    + valueObjectName,
-                    engineName,
-                    engineVersion);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param valueObjectName the value object name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    protected XMLValueObjectFactoryTemplateFactory getTemplateFactory(
-            final String valueObjectName,
-            final String engineName,
-            final String engineVersion)
-        throws  QueryJException
-    {
-        XMLValueObjectFactoryTemplateFactory result = null;
-
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (t_MappingManager != null)
-        {
-            Object t_TemplateFactory =
-                t_MappingManager.getTemplateFactoryClass(
-                      TemplateMappingManager
-                          .XML_VALUE_OBJECT_FACTORY_TEMPLATE_PREFIX
-                    + valueObjectName,
-                    engineName,
-                    engineVersion);
-
-            if  (t_TemplateFactory != null)
-            {
-                if  (!(  t_TemplateFactory
-                       instanceof XMLValueObjectFactoryTemplateFactory))
-                {
-                    throw
-                        new QueryJException(
-                            "invalid.xml.value.object.factory.template.factory");
-                }
-                else 
-                {
-                    result =
-                        (XMLValueObjectFactoryTemplateFactory) t_TemplateFactory;
-                }
-            }
         }
 
         return result;
@@ -261,7 +154,17 @@ public class XMLValueObjectFactoryTemplateGenerator
                 packageName,
                 valueObjectPackageName,
                 tableTemplate,
-                metadataManager);
+                metadataManager,
+                getDecoratorFactory());
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

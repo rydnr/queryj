@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,8 @@ package org.acmsl.queryj.tools.templates.dao.xml;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -124,92 +126,6 @@ public class XMLDAOFactoryTemplateGenerator
     }
 
     /**
-     * Adds a new template factory class.
-     * @param xmlDAOFactoryName the XML DAO factory name.
-     * @param templateFactoryClass the template factory.
-     */
-    public void addTemplateFactoryClass(
-        final String xmlDAOFactoryName,
-        final String templateFactoryClass)
-    {
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (   (t_MappingManager     != null)
-             && (templateFactoryClass != null))
-        {
-            t_MappingManager.addDefaultTemplateFactoryClass(
-                  TemplateMappingManager.XML_DAO_FACTORY_TEMPLATE_PREFIX
-                + xmlDAOFactoryName,
-                templateFactoryClass);
-        }
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param xmlDAOFactoryName the XML DAO factory name.
-     * @return the template factory class name.
-     */
-    protected String getTemplateFactoryClass(
-        final String xmlDAOFactoryName)
-    {
-        String result = null;
-
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (t_MappingManager != null)
-        {
-            result =
-                t_MappingManager.getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.XML_DAO_FACTORY_TEMPLATE_PREFIX
-                    + xmlDAOFactoryName);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param xmlDAOFactoryName the XML DAO factory name.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    protected XMLDAOFactoryTemplateFactory getTemplateFactory(
-        final String xmlDAOFactoryName)
-      throws  QueryJException
-    {
-        XMLDAOFactoryTemplateFactory result = null;
-
-        TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (t_MappingManager != null)
-        {
-            Object t_TemplateFactory =
-                t_MappingManager.getDefaultTemplateFactoryClass(
-                      TemplateMappingManager.XML_DAO_FACTORY_TEMPLATE_PREFIX
-                    + xmlDAOFactoryName);
-
-            if  (t_TemplateFactory != null)
-            {
-                if  (!(t_TemplateFactory instanceof XMLDAOFactoryTemplateFactory))
-                {
-                    throw
-                        new QueryJException(
-                            "invalid.xml.dao.factory.template.factory");
-                }
-                else 
-                {
-                    result = (XMLDAOFactoryTemplateFactory) t_TemplateFactory;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Generates a XML DAO factory template.
      * @param tableTemplate the table template.
      * @param packageName the package name.
@@ -228,9 +144,19 @@ public class XMLDAOFactoryTemplateGenerator
     {
         return
             new XMLDAOFactoryTemplate(
+                getDecoratorFactory(),
                 tableTemplate,
                 packageName,
                 basePackageName);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

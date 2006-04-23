@@ -1,0 +1,42 @@
+[Jar files]
+/home/chous/dev/acmsl-svn/queryj/trunk/dist/build/queryj-0.7-SNAPSHOT.jar
+[Source dirs]
+/home/chous/dev/acmsl-svn/queryj/trunk/src/java/main
+[Aux classpath entries]
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/acmsl-commons-0.5.7b11.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/ant-1.6.1.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/commons-digester-1.6.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/commons-logging-1.0.3.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/stringtemplate-2.2.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/undigester-0.6b3.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/development/acmsl-commons-0.5.7b11.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/development/antmake-0.1.9b1.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/development/commons-logging-1.0.3.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/development/junitdoclet-acmsl-1.0.2.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/development/mysql-connector-java-2.0.14-bin.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/development/oracle-driver-1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/development/oro-2.0.8.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/development/spring-1.1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/development/spring-core-1.1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/development/spring-dao-1.1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/runtime/commons-beanutils-1.7.0.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/runtime/mysql-connector-java-2.0.14-bin.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/runtime/oracle-driver-1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/runtime/oro-2.0.8.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/runtime/rmijdbc-3.0.1.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/runtime/spring-1.1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/runtime/spring-core-1.1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/runtime/spring-dao-1.1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/acmsl-commons-0.5.7b11.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/ant-1.6.1.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/commons-digester-1.6.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/commons-logging-1.0.3.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/junit-3.8.1.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/mysql-connector-java-2.0.14-bin.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/oro-2.0.8.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/rmijdbc-3.0.1.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/spring-1.1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/spring-core-1.1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/spring-dao-1.1.4.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/stringtemplate-2.2.jar
+/home/chous/dev/acmsl-svn/queryj/trunk/dependencies/lib/java/unittest/undigester-0.6b3.jar

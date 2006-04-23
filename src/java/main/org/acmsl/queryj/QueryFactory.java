@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -38,13 +38,18 @@
 package org.acmsl.queryj;
 
 /*
- * Importing ACM-SL classes.
+ * Importing project-specific classes.
  */
 import org.acmsl.queryj.DeleteQuery;
 import org.acmsl.queryj.InsertQuery;
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.SelectQuery;
 import org.acmsl.queryj.UpdateQuery;
+
+/*
+ * Importing ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Factory;
 
 /*
  * Importing some JDK classes.
@@ -55,7 +60,8 @@ import java.lang.ref.WeakReference;
  * Has the responsiblity of knowing how to create queries.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public abstract class QueryFactory
+public class QueryFactory
+    implements  Factory
 {
     /**
      * Singleton implemented as a weak reference.
@@ -102,7 +108,7 @@ public abstract class QueryFactory
 
         if  (result == null) 
         {
-            result = new QueryFactory() {};
+            result = new QueryFactory();
 
             setReference(result);
         }
@@ -116,7 +122,7 @@ public abstract class QueryFactory
      */
     public SelectQuery createSelectQuery()
     {
-        return new SelectQuery() {};
+        return new SelectQuery();
     }
 
     /**
@@ -125,7 +131,7 @@ public abstract class QueryFactory
      */
     public InsertQuery createInsertQuery()
     {
-        return new InsertQuery() {};
+        return new InsertQuery();
     }
 
     /**
@@ -134,7 +140,7 @@ public abstract class QueryFactory
      */
     public UpdateQuery createUpdateQuery()
     {
-        return new UpdateQuery() {};
+        return new UpdateQuery();
     }
 
     /**
@@ -143,6 +149,6 @@ public abstract class QueryFactory
      */
     public DeleteQuery createDeleteQuery()
     {
-        return new DeleteQuery() {};
+        return new DeleteQuery();
     }
 }

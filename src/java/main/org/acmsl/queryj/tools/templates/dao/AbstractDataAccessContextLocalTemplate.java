@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
 /**
@@ -103,6 +104,7 @@ public abstract class AbstractDataAccessContextLocalTemplate
     /**
      * Builds a <code>AbstractDataAccessContextLocalTemplate</code>
      * using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param jndiLocation the JNDI location.
      * @param engineName the engine name.
@@ -112,6 +114,7 @@ public abstract class AbstractDataAccessContextLocalTemplate
      * @param daoDefinition the DAO definitions subtemplate.
      */
     protected AbstractDataAccessContextLocalTemplate(
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String jndiLocation,
         final String engineName,
@@ -120,6 +123,7 @@ public abstract class AbstractDataAccessContextLocalTemplate
         final String resourceDefinition,
         final String daoDefinition)
     {
+        super(decoratorFactory);
         immutableSetHeader(header);
         immutableSetJNDILocation(jndiLocation);
         immutableSetEngineName(engineName);

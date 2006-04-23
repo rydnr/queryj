@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -50,7 +50,7 @@ import org.acmsl.queryj.Field;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class NestedConditionOperator
+public class NestedConditionOperator
     extends  ConditionOperator
 {
     /**
@@ -62,6 +62,8 @@ public abstract class NestedConditionOperator
      * Creates a nested operator using given information.
      * @param symbol the symbol.
      * @param query the operator query.
+     * @precondition symbol != null
+     * @precondition query != null
      */
     public NestedConditionOperator(final String symbol, final SelectQuery query)
     {
@@ -144,6 +146,25 @@ public abstract class NestedConditionOperator
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the hash code.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return hashCode(getQuery());
+    }
+
+    /**
+     * Retrieves the hash code.
+     * @param query the select query.
+     * @return such information.
+     */
+    protected int hashCode(final SelectQuery query)
+    {
+        return (NestedConditionOperator.class + query.toString()).hashCode();
     }
 }
 

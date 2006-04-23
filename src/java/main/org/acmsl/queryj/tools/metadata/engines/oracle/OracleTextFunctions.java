@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: QueryJ
  *
@@ -128,7 +128,7 @@ public class OracleTextFunctions
      * Wraps a field to call a function.
      * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
      */
-    private final class _StringFieldWrapper
+    private static final class _StringFieldWrapper
         extends  StringField
     {
         /**
@@ -426,6 +426,46 @@ public class OracleTextFunctions
                 else
                 {
                     result = t_strThisToString.equals(t_strOtherToString);
+                }
+            }
+
+            return result;
+        }
+
+        /**
+         * Retrieves the hash code.
+         * @return such information.
+         */
+        public int hashCode()
+        {
+            return hashCode(getWrappedField(), getFunction(), getParameters());
+        }
+
+        /**
+         * Retrieves the hash code.
+         * @param field the wrapped field.
+         * @param function the function name.
+         * @param parameters the parameters.
+         * @return such information.
+         */
+        protected int hashCode(
+            final Field field,
+            final String function,
+            final Object[] parameters)
+        {
+            int result = (field + function).hashCode();
+            
+            int t_iCount = (parameters != null) ? parameters.length : 0;
+
+            Object t_CurrentParameter = null;
+
+            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                t_CurrentParameter = parameters[t_iIndex];
+
+                if  (t_CurrentParameter != null)
+                {
+                    result += t_CurrentParameter.hashCode();
                 }
             }
 

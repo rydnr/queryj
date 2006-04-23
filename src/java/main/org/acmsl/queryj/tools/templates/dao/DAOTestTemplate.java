@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
@@ -78,6 +79,7 @@ public class DAOTestTemplate
      * Builds a <code>DAOTestTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -92,6 +94,7 @@ public class DAOTestTemplate
     public DAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -106,6 +109,7 @@ public class DAOTestTemplate
         super(
             tableTemplate,
             metadataManager,
+            decoratorFactory,
             DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
@@ -477,11 +481,11 @@ public class DAOTestTemplate
 
         boolean t_bNotLastPk = false;
 
-        boolean t_bHasNotOnlyPk =
-            (t_astrPrimaryKeys.length < t_astrColumnNames.length);
-
         if  (t_astrPrimaryKeys != null)
         {
+            boolean t_bHasNotOnlyPk =
+                (t_astrPrimaryKeys.length < t_astrColumnNames.length);
+
             for  (int t_iPkIndex = 0;
                   t_iPkIndex < t_astrPrimaryKeys.length;
                   t_iPkIndex++) 
@@ -712,7 +716,7 @@ public class DAOTestTemplate
         }
         catch  (SQLException sqlException)
         {
-            LogFactory.getLog(getClass()).error(
+            LogFactory.getLog(DAOTestTemplate.class).error(
                 "database.meta.data.error",
                 sqlException);
         }

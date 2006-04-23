@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -125,174 +127,6 @@ public class DAOFactoryTemplateGenerator
     }
 
     /**
-     * Adds a new template factory class.
-     * @param daoFactoryName the DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateFactoryClass the template factory.
-     * @precondition engineName != null
-     * @precondition templateFactoryClass != null
-     */
-    public void addTemplateFactoryClass(
-        final String daoFactoryName,
-        final String engineName,
-        final String engineVersion,
-        final String templateFactoryClass)
-    {
-        addTemplateFactoryClass(
-            daoFactoryName,
-            engineName,
-            engineVersion,
-            templateFactoryClass,
-            TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Adds a new template factory class.
-     * @param daoFactoryName the DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateFactoryClass the template factory.
-     * @param templateMappingManager the
-     * <code>TemplateMappingManager</code> instance.
-     * @precondition engineName != null
-     * @precondition templateFactoryClass != null
-     * @precondition templateMappingManager != null
-     */
-    protected void addTemplateFactoryClass(
-        final String daoFactoryName,
-        final String engineName,
-        final String engineVersion,
-        final String templateFactoryClass,
-        final TemplateMappingManager templateMappingManager)
-    {
-        templateMappingManager.addTemplateFactoryClass(
-              TemplateMappingManager.DAO_FACTORY_TEMPLATE_PREFIX
-            + daoFactoryName,
-            engineName,
-            engineVersion,
-            templateFactoryClass);
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param daoFactoryName the DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     */
-    protected String getTemplateFactoryClass(
-        final String daoFactoryName,
-        final String engineName,
-        final String engineVersion)
-    {
-        return
-            getTemplateFactoryClass(
-                daoFactoryName,
-                engineName,
-                engineVersion,
-                TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param daoFactoryName the DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateMappingManager the
-     * <code>TemplateMappingManager</code> instance.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     * @precondition templateMappingManager != null
-     */
-    protected String getTemplateFactoryClass(
-        final String daoFactoryName,
-        final String engineName,
-        final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
-    {
-        return
-            templateMappingManager.getTemplateFactoryClass(
-                  TemplateMappingManager.DAO_FACTORY_TEMPLATE_PREFIX
-                + daoFactoryName,
-                engineName,
-                engineVersion);
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param daoFactoryName the DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     */
-    protected DAOFactoryTemplateFactory getTemplateFactory(
-        final String daoFactoryName,
-        final String engineName,
-        final String engineVersion)
-      throws  QueryJException
-    {
-        return
-            getTemplateFactory(
-                daoFactoryName,
-                engineName,
-                engineVersion,
-                TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory instance.
-     * @param daoFactoryName the DAO factory name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateMappingManager the
-     * <code>TemplateMappingManager</code> instance.
-     * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition templateMappingManager != null
-     */
-    protected DAOFactoryTemplateFactory getTemplateFactory(
-        final String daoFactoryName,
-        final String engineName,
-        final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
-      throws  QueryJException
-    {
-        DAOFactoryTemplateFactory result = null;
-
-        Object t_TemplateFactory =
-            templateMappingManager.getTemplateFactoryClass(
-                  TemplateMappingManager.DAO_FACTORY_TEMPLATE_PREFIX
-                + daoFactoryName,
-                engineName,
-                engineVersion);
-
-        if  (t_TemplateFactory != null)
-        {
-            if  (!(t_TemplateFactory instanceof DAOFactoryTemplateFactory))
-            {
-                throw
-                    new QueryJException(
-                        "invalid.dao.factory.template.factory");
-            }
-            else 
-            {
-                result = (DAOFactoryTemplateFactory) t_TemplateFactory;
-            }
-        }
-        else
-        {
-            throw
-                new QueryJException(
-                    "dao.factory.template.factory.not.found");
-        }
-
-        return result;
-    }
-
-    /**
      * Generates a DAO factory template.
      * @param tableTemplate the table template.
      * @param packageName the package name.
@@ -315,11 +149,21 @@ public class DAOFactoryTemplateGenerator
     {
         return
             new DAOFactoryTemplate(
+                getDecoratorFactory(),
                 tableTemplate,
                 packageName,
                 engineName,
                 basePackageName,
                 jndiDataSource);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**

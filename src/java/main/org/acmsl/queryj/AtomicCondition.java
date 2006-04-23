@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -56,7 +56,7 @@ import java.util.Date;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class AtomicCondition
+public class AtomicCondition
     extends  Condition
 {
     /**
@@ -84,6 +84,9 @@ public abstract class AtomicCondition
      * @param leftSideField the left-side field.
      * @param operator the operator.
      * @param rightSideField the right-side field.
+     * @precondition leftSideField != null
+     * @precondition operator != null
+     * @precondition rightSideField != null
      */
     public AtomicCondition(
         final Field leftSideField,
@@ -100,8 +103,11 @@ public abstract class AtomicCondition
      * @param leftSideField the left-side field.
      * @param operator the operator.
      * @param rightSideValue the right-side value.
+     * @precondition leftSideField != null
+     * @precondition operator != null
+     * @precondition rightSideValue != null
      */
-    protected AtomicCondition(
+    public AtomicCondition(
         final Field leftSideField,
         final ConditionOperator operator,
         final String rightSideValue)
@@ -116,6 +122,8 @@ public abstract class AtomicCondition
      * @param leftSideField the left-side field.
      * @param operator the operator.
      * @param rightSideValue the right-side value.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public AtomicCondition(
         final Field leftSideField,
@@ -131,6 +139,8 @@ public abstract class AtomicCondition
      * @param leftSideField the left-side field.
      * @param operator the operator.
      * @param rightSideValue the right-side value.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public AtomicCondition(
         final Field leftSideField,
@@ -146,6 +156,8 @@ public abstract class AtomicCondition
      * @param leftSideField the left-side field.
      * @param operator the operator.
      * @param rightSideValue the right-side value.
+     * @precondition leftSideField != null
+     * @precondition operator != null
      */
     public AtomicCondition(
         final Field leftSideField,
@@ -161,6 +173,9 @@ public abstract class AtomicCondition
      * @param leftSideField the left-side field.
      * @param operator the operator.
      * @param rightSideValue the right-side value.
+     * @precondition leftSideField != null
+     * @precondition operator != null
+     * @precondition rightSideValue != null
      */
     public AtomicCondition(
         final Field leftSideField,
@@ -176,6 +191,9 @@ public abstract class AtomicCondition
      * @param leftSideField the left-side field.
      * @param operator the operator.
      * @param rightSideValue the right-side value.
+     * @precondition leftSideField != null
+     * @precondition operator != null
+     * @precondition rightSideValue != null
      */
     public AtomicCondition(
         final Field leftSideField,
@@ -192,6 +210,9 @@ public abstract class AtomicCondition
      * @param leftSideField the left-side field.
      * @param operator the operator.
      * @param rightSideValue the right-side value.
+     * @precondition leftSideField != null
+     * @precondition operator != null
+     * @precondition rightSideValue != null
      */
     public AtomicCondition(
         final Field leftSideField,
@@ -386,49 +407,45 @@ public abstract class AtomicCondition
     {
         boolean result = false;
 
-        if  (   (object != null)
-             && (object instanceof VariableCondition))
+        if  (object instanceof VariableCondition)
         {
             VariableCondition t_Object = (VariableCondition) object;
 
-            if  (t_Object != null)
-            {
-                Field t_LeftSideField = t_Object.getLeftSideField();
+            Field t_LeftSideField = t_Object.getLeftSideField();
 
-                if  (t_LeftSideField == null)
+            if  (t_LeftSideField == null)
+            {
+                result = (getLeftSideField() == null);
+            }
+            else
+            {
+                result = t_LeftSideField.equals((Object) getLeftSideField());
+            }
+
+            if  (result) 
+            {
+                ConditionOperator t_Operator = t_Object.getOperator();
+
+                if  (t_Operator == null)
                 {
-                    result = (getLeftSideField() == null);
+                    result = (getOperator() == null);
                 }
                 else
                 {
-                    result = t_LeftSideField.equals((Object) getLeftSideField());
+                    result = t_Operator.equals(getOperator());
                 }
 
                 if  (result) 
                 {
-                    ConditionOperator t_Operator = t_Object.getOperator();
+                    Field t_RightSideField = t_Object.getRightSideField();
 
-                    if  (t_Operator == null)
+                    if  (t_RightSideField == null)
                     {
-                        result = (getOperator() == null);
+                        result = (getRightSideField() == null);
                     }
                     else
                     {
-                        result = t_Operator.equals(getOperator());
-                    }
-
-                    if  (result) 
-                    {
-                        Field t_RightSideField = t_Object.getRightSideField();
-
-                        if  (t_RightSideField == null)
-                        {
-                            result = (getRightSideField() == null);
-                        }
-                        else
-                        {
-                            result = t_RightSideField.equals((Object) getRightSideField());
-                        }
+                        result = t_RightSideField.equals((Object) getRightSideField());
                     }
                 }
             }

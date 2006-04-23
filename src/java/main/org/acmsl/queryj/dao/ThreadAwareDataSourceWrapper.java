@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -67,7 +67,6 @@ import org.apache.commons.logging.LogFactory;
 public class ThreadAwareDataSourceWrapper
     extends  TransactionAwareDataSourceProxy
 //    implements  SmartDataSource
-    implements  DataSource
 {
     /**
      * The connection used in the transaction.
@@ -374,7 +373,7 @@ public class ThreadAwareDataSourceWrapper
         {
             try
             {
-                LogFactory.getLog(getClass()).warn(
+                LogFactory.getLog(ThreadAwareDataSourceWrapper.class).warn(
                     "Error checking if connection is closed.",
                     sqlException);
             }

@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -234,6 +235,7 @@ public abstract class AbstractXMLDAOTestTemplate
      * Builds a <code>AbstractDAOTestTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
@@ -273,6 +275,7 @@ public abstract class AbstractXMLDAOTestTemplate
     protected AbstractXMLDAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -303,6 +306,7 @@ public abstract class AbstractXMLDAOTestTemplate
         final String removeFilterValues,
         final String classEnd)
     {
+        super(decoratorFactory);
         immutableSetTableTemplate(tableTemplate);
         immutableSetMetadataManager(metadataManager);
         immutableSetHeader(header);

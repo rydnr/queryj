@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -58,7 +58,13 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  */
 public class PropertyElement
     extends  AbstractParameterElement
+    implements  Property
 {
+    /**
+     * Whether the property allows nulls or not.
+     */
+    private boolean m__bNullable;
+    
     /**
      * Creates a PropertyElement with given information.
      * @param id the <i>id</i> attribute.
@@ -66,6 +72,7 @@ public class PropertyElement
      * @param index the <i>index</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
+     * @param nullable the <i>nullable</i> attribute.
      * @precondition id != null
      * @precondition type != null
      */
@@ -74,8 +81,39 @@ public class PropertyElement
         final String columnName,
         final int index,
         final String name,
-        final String type)
+        final String type,
+        final boolean nullable)
     {
         super(id, columnName, index, name, type);
+
+        immutableSetNullable(nullable);
+    }
+
+    /**
+     * Specifies whether the property is nullable or not.
+     * @param flag such condition.
+     */
+    protected final void immutableSetNullable(final boolean flag)
+    {
+        m__bNullable = flag;
+    }
+    
+    /**
+     * Specifies whether the property is nullable or not.
+     * @param flag such condition.
+     */
+    protected void setNullable(final boolean flag)
+    {
+        immutableSetNullable(flag);
+    }
+    
+
+    /**
+     * Retrieves ehether the property is nullable or not.
+     * @return such condition.
+     */
+    public boolean isNullable()
+    {
+        return m__bNullable;
     }
 }

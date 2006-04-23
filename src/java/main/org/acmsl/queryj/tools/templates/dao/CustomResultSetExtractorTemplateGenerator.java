@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -43,11 +43,13 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
-import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplateFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -69,7 +71,8 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class CustomResultSetExtractorTemplateGenerator
-    implements  CustomResultSetExtractorTemplateFactory
+    implements  BasePerCustomResultTemplateFactory,
+                BasePerCustomResultTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -128,55 +131,64 @@ public class CustomResultSetExtractorTemplateGenerator
 
     /**
      * Generates a CustomResultSetExtractor template.
-     * @param resultElement the result element.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
+     * @param customResult the custom result.
+     * @param customSqlProvider the custom sql provider.
+     * @param metadataManager the database metadata manager.
      * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
      * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @return a template.
+     * @param repositoryName the repository name.
+     * @return the new template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition resultElement != null
      * @precondition customSqlProvider != null
-     * @precondition tableTemplate != null
      * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
-    public CustomResultSetExtractorTemplate createCustomResultSetExtractorTemplate(
-        final ResultElement resultElement,
+    public BasePerCustomResultTemplate createTemplate(
+        final ResultElement customResult,
         final CustomSqlProvider customSqlProvider,
-        final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
         final String packageName,
+        final String engineName,
+        final String engineVersion,
         final String basePackageName,
         final String repositoryName)
       throws  QueryJException
     {
         return
             new CustomResultSetExtractorTemplate(
-                resultElement,
+                customResult,
                 customSqlProvider,
-                tableTemplate,
                 metadataManager,
+                getDecoratorFactory(),
                 packageName,
+                engineName,
+                engineVersion,
                 basePackageName,
                 repositoryName);
     }
 
     /**
-     * Writes a CustomResultSetExtractor template to disk.
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CustomResultSetExtractorDecoratorFactory.getInstance();
+    }
+
+    /**
+     * Writes a custom resultset extractor template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
      */
     public void write(
-        final CustomResultSetExtractorTemplate template,
-        final File outputDir)
+        final BasePerCustomResultTemplate template, final File outputDir)
       throws  IOException
     {
         write(
@@ -203,7 +215,7 @@ public class CustomResultSetExtractorTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final CustomResultSetExtractorTemplate template,
+        final BasePerCustomResultTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
@@ -218,7 +230,7 @@ public class CustomResultSetExtractorTemplateGenerator
             + stringUtils.capitalize(
                 stringUtils.capitalize(
                     stringUtils.capitalize(
-                        template.getResultElement().getId(),
+                        template.getResult().getId(),
                         '.'),
                     '_'),
                 '-')

@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -41,11 +41,14 @@ package org.acmsl.queryj.tools.templates.functions.system;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
 
 /*
  * Importing some JDK classes.
  */
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -60,38 +63,49 @@ public abstract class SystemFunctionsTemplate
     /**
      * The capitalized words.
      */
-    protected static final String[] CAPITALIZED_WORDS =
-        new String[]
-        {
-            "user",
-            "insert",
-            "id"
-        };
+    static final String[] CAPITALIZED_WORDS =
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "user",
+                        "insert",
+                        "id"
+                    }))
+            .toArray();
 
     /**
      * The field types.
      */
-    public static final String[] FIELD_TYPES =
-        new String[]
-        {
-            "String",
-            "Long"
-        };
+    static final String[] FIELD_TYPES =
+        (String[])
+            Collections.unmodifiableList(
+                Arrays.asList(
+                    new String[]
+                    {
+                        "String",
+                        "Long"
+                    }))
+            .toArray();
 
     /**
      * Builds a SystemFunctionsTemplate using given information.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      */
     public SystemFunctionsTemplate(
+        final DecoratorFactory decoratorFactory,
         final String  packageName,
         final String  engineName,
         final String  engineVersion,
         final String  quote)
     {
         super(
+            decoratorFactory,
             "system",
             "System",
             packageName,

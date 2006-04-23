@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -38,8 +38,10 @@
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some project-specific  classes.
+ * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplate;
 import org.acmsl.queryj.tools.templates.dao
     .DataAccessContextLocalTemplateFactory;
@@ -138,10 +140,20 @@ public class DataAccessContextLocalTemplateGenerator
     {
         return
             new DataAccessContextLocalTemplate(
+                getDecoratorFactory(),
                 jndiLocation,
                 engineName,
                 engineVersion,
                 basePackageName);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**
