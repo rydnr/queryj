@@ -63,7 +63,7 @@ public class OracleTextFunctionsTemplate
     /**
      * The capitalized words.
      */
-    protected static final String[] CAPITALIZED_WORDS =
+    static final String[] CAPITALIZED_WORDS =
         (String[])
             Collections.unmodifiableList(
                 Arrays.asList(
@@ -81,7 +81,7 @@ public class OracleTextFunctionsTemplate
     /**
      * The field types.
      */
-    public static final String[] FIELD_TYPES =
+    static final String[] FIELD_TYPES =
         (String[])
             Collections.unmodifiableList(
                 Arrays.asList(

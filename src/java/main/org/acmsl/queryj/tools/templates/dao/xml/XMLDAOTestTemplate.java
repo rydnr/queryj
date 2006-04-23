@@ -508,10 +508,6 @@ public class XMLDAOTestTemplate
                 String t_strTestValue =
                     metadataTypeManager.getNativeType(t_iColumnType);
 
-                String t_strFieldType =
-                    metadataTypeManager.getNativeType(
-                        t_iColumnType, t_bAllowsNull);
-
                 Object[] t_aParams =
                     new Object[] { t_strTestValue.toUpperCase() };
 
@@ -520,16 +516,13 @@ public class XMLDAOTestTemplate
                 if  (   (t_bAllowsNull)
                      && (metadataTypeManager.isPrimitive(t_iColumnType)))
                 {
-                    t_strFieldType =
-                        metadataTypeManager.getSmartObjectType(t_iColumnType);
-
                     t_Formatter =
                         t_NullableInsertedValuesConversionFormatter;
 
                     t_aParams =
                         new Object[]
                         {
-                            t_strFieldType,
+                            metadataTypeManager.getSmartObjectType(t_iColumnType),
                             t_strTestValue.toUpperCase()
                         };
                 }

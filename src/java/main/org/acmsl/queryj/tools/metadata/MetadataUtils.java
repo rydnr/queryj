@@ -465,8 +465,9 @@ public class MetadataUtils
                     buildAttributes(
                         t_aastrForeignKeys[t_iIndex],
                         t_strReferredTable,
-                        (metadataManager.allowsNull(
-                            t_strReferredTable, t_astrReferredColumns)
+                        (    (metadataManager != null)
+                          && (metadataManager.allowsNull(
+                                  t_strReferredTable, t_astrReferredColumns))
                          ?  Boolean.TRUE : Boolean.FALSE),
                         metadataManager,
                         metadataTypeManager,
@@ -509,7 +510,7 @@ public class MetadataUtils
         String[] t_astrReferingTables =
             metadataManager.getReferingTables(tableName);
 
-        String[][] t_aastrReferingColumns = null;
+        String[][] t_aastrReferingColumns;
 
         int t_iLength =
             (t_astrReferingTables != null) ? t_astrReferingTables.length : 0;

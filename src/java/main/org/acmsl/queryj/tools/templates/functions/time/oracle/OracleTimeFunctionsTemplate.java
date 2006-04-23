@@ -73,7 +73,7 @@ public class OracleTimeFunctionsTemplate
     /**
      * The capitalized words.
      */
-    protected static final String[] CAPITALIZED_WORDS =
+    static final String[] CAPITALIZED_WORDS =
         (String[])
             Collections.unmodifiableList(
                 Arrays.asList(
@@ -104,7 +104,7 @@ public class OracleTimeFunctionsTemplate
     /**
      * The field types.
      */
-    public static final String[] FIELD_TYPES =
+    static final String[] FIELD_TYPES =
         (String[])
             Collections.unmodifiableList(
                 Arrays.asList(

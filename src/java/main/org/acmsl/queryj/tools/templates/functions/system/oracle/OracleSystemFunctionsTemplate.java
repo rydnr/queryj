@@ -63,13 +63,13 @@ public class OracleSystemFunctionsTemplate
     /**
      * The capitalized words.
      */
-    protected static final String[] CAPITALIZED_WORDS =
+    static final String[] CAPITALIZED_WORDS =
         new String[0];
 
     /**
      * The field types.
      */
-    public static final String[] FIELD_TYPES =
+    static final String[] FIELD_TYPES =
         (String[])
             Collections.unmodifiableList(
                 Arrays.asList(

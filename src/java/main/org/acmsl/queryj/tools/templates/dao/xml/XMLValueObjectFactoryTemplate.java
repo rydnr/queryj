@@ -260,12 +260,6 @@ public class XMLValueObjectFactoryTemplate
             {
                 String t_strField = (String) t_itFields.next();
 
-                String t_strFieldType =
-                    metadataTypeManager.getNativeType(
-                        metadataManager.getColumnType(
-                            tableTemplate.getTableName(),
-                            t_strField));
-
                 int t_iColumnType =
                     metadataManager.getColumnType(
                         tableTemplate.getTableName(),
@@ -286,7 +280,7 @@ public class XMLValueObjectFactoryTemplate
                             t_strField);
                 }
 
-                t_strFieldType =
+                String t_strFieldType =
                     metadataTypeManager.getNativeType(t_iColumnType, t_bAllowsNull);
 
                 if  (t_bAllowsNull)

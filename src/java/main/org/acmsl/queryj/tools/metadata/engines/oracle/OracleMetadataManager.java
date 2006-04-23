@@ -556,7 +556,7 @@ public class OracleMetadataManager
       throws  SQLException,
               QueryJException
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[] result;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
@@ -592,10 +592,24 @@ public class OracleMetadataManager
         }
         catch  (final SQLException sqlException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the table names.",
+                    sqlException);
+            }
+
             throw sqlException;
         }
         catch  (final QueryJException queryjException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the table names.",
+                    queryjException);
+            }
+
             throw queryjException;
         }
         finally 
@@ -633,6 +647,11 @@ public class OracleMetadataManager
                         sqlException);
                 }
             }
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_STRING_ARRAY;
         }
 
         return result;
@@ -704,7 +723,7 @@ public class OracleMetadataManager
       throws  SQLException,
               QueryJException
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[] result;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
@@ -755,10 +774,24 @@ public class OracleMetadataManager
         }
         catch  (final SQLException sqlException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the column names.",
+                    sqlException);
+            }
+
             throw sqlException;
         }
         catch  (final QueryJException queryjException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the column names.",
+                    queryjException);
+            }
+
             throw queryjException;
         }
         finally 
@@ -796,6 +829,11 @@ public class OracleMetadataManager
                         sqlException);
                 }
             }
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_STRING_ARRAY;
         }
 
         return result;
@@ -872,7 +910,7 @@ public class OracleMetadataManager
       throws  SQLException,
               QueryJException
     {
-        int[] result = EMPTY_INT_ARRAY;
+        int[] result;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
@@ -912,10 +950,24 @@ public class OracleMetadataManager
         }
         catch  (final SQLException sqlException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the column types.",
+                    sqlException);
+            }
+
             throw sqlException;
         }
         catch  (final QueryJException queryjException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the column types.",
+                    queryjException);
+            }
+
             throw queryjException;
         }
         finally 
@@ -953,6 +1005,11 @@ public class OracleMetadataManager
                         sqlException);
                 }
             }
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_INT_ARRAY;
         }
 
         return result;
@@ -995,12 +1052,14 @@ public class OracleMetadataManager
 
         String[] t_astrTypes = extractStringFields(resultSet, fieldName);
 
-        if  (t_astrTypes != null)
+        int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
+
+        if  (t_iCount > 0)
         {
-            result = new int[t_astrTypes.length];
+            result = new int[t_iCount];
 
             for  (int t_iIndex = 0;
-                      t_iIndex < t_astrTypes.length;
+                      t_iIndex < t_iCount;
                       t_iIndex++) 
             {
                 result[t_iIndex] =
@@ -1066,7 +1125,7 @@ public class OracleMetadataManager
       throws  SQLException,
               QueryJException
     {
-        boolean[] result = EMPTY_BOOLEAN_ARRAY;
+        boolean[] result;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
@@ -1110,10 +1169,24 @@ public class OracleMetadataManager
         }
         catch  (final SQLException sqlException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the column types.",
+                    sqlException);
+            }
+
             throw sqlException;
         }
         catch  (final QueryJException queryjException)
         {
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve the column types.",
+                    queryjException);
+            }
+
             throw queryjException;
         }
         finally 
@@ -1153,6 +1226,11 @@ public class OracleMetadataManager
             }
         }
 
+        if  (result == null)
+        {
+            result = EMPTY_BOOLEAN_ARRAY;
+        }
+
         return result;
     }
 
@@ -1172,12 +1250,14 @@ public class OracleMetadataManager
 
         String[] t_astrTypes = extractStringFields(resultSet, fieldName);
 
-        if  (t_astrTypes != null)
+        int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
+
+        if  (t_iCount > 0)
         {
-            result = new boolean[t_astrTypes.length];
+            result = new boolean[t_iCount];
 
             for  (int t_iIndex = 0;
-                      t_iIndex < t_astrTypes.length;
+                      t_iIndex < t_iCount;
                       t_iIndex++) 
             {
                 result[t_iIndex] =

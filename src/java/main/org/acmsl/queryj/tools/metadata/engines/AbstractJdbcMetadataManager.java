@@ -1433,7 +1433,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     public String[][] getForeignKeys(final String tableName)
     {
-        String[][] result = EMPTY_ARRAY_OF_STRING_ARRAYS;
+        String[][] result = null;
         
         Collection t_cResult = new ArrayList();
 
@@ -2459,7 +2459,7 @@ public abstract class AbstractJdbcMetadataManager
       throws  SQLException,
               QueryJException
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[] result;
 
         ResultSet t_rsTables = null;
 
@@ -2486,6 +2486,10 @@ public abstract class AbstractJdbcMetadataManager
         }
         catch  (final SQLException sqlException)
         {
+            logWarn(
+                "Cannot retrieve the table names.",
+                sqlException);
+
             throw sqlException;
         }
         catch  (final QueryJException queryjException)
@@ -2498,6 +2502,11 @@ public abstract class AbstractJdbcMetadataManager
             {
                 t_rsTables.close();
             }
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_STRING_ARRAY;
         }
 
         return result;
@@ -2536,7 +2545,7 @@ public abstract class AbstractJdbcMetadataManager
       throws  SQLException,
               QueryJException
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[] result;
 
         try 
         {
@@ -2558,6 +2567,11 @@ public abstract class AbstractJdbcMetadataManager
                 sqlException);
 
             throw sqlException;
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_STRING_ARRAY;
         }
 
         return result;
@@ -2740,7 +2754,7 @@ public abstract class AbstractJdbcMetadataManager
       throws  SQLException,
               QueryJException
     {
-        boolean[] result = EMPTY_BOOLEAN_ARRAY;
+        boolean[] result;
 
         try 
         {
@@ -2762,6 +2776,11 @@ public abstract class AbstractJdbcMetadataManager
                 sqlException);
 
             throw sqlException;
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_BOOLEAN_ARRAY;
         }
 
         return result;
@@ -3047,8 +3066,7 @@ public abstract class AbstractJdbcMetadataManager
         final String procedureName)
       throws  SQLException
     {
-        ProcedureParameterMetadata[] result =
-            EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY;
+        ProcedureParameterMetadata[] result;
 
         try 
         {
@@ -3072,6 +3090,11 @@ public abstract class AbstractJdbcMetadataManager
                 sqlException);
 
             throw sqlException;
+        }
+
+        if  (result == null)
+        {
+            result = EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY;
         }
 
         return result;

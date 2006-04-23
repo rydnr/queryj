@@ -460,7 +460,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         String t_strSourceTable = null;
         String[] t_astrReferredTables = null;
         int t_iReferredTableLength = 0;
-        String[][] t_aastrForeignKeys = null;
+        String[][] t_aastrForeignKeys;
         int t_iForeignKeyLength = 0;
         String t_strReferredTable = null;
         

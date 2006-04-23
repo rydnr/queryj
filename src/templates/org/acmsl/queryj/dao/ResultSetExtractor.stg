@@ -476,11 +476,12 @@ default_nullable_attribute_extraction(attr, input) ::= <<
 <endif>
 <else>
 <if(input.clobhandling)>
-<indirect_template(name=attr.objectType+"_nullable_clobhandling_attribute_extractor", input=attr)>
+    <indirect_template(name=attr.objectType+"_nullable_clobhandling_attribute_extractor", input=attr)>
 <else>
-<indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
+    <indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
 <endif>
 <endif>
+
 if  (resultSet.wasNull())
 {
     t_<attr.nameCapitalized>As<attr.objectType> = null;
