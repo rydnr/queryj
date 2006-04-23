@@ -1123,11 +1123,13 @@ public class JdbcMetadataTypeManager
             case Types.BIT:
             case Types.TINYINT:
             case Types.SMALLINT:
-            case Types.INTEGER:
+//            case Types.INTEGER:
                 result = true;
+                break;
 
             default:
                 result = false;
+                break;
         }
         
         return result;

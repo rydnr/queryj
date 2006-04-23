@@ -618,7 +618,11 @@ default_attribute_extraction(attr) ::= <<
 <if(attr.allowsNull)>
 t_<attr.nameCapitalized>As<attr.objectType>
 <else>
+<if(attr.numberSmallerThanInt)>
+resultSet.getInt(<attr.tableNameUppercased>.<attr.nameUppercased>)
+<else>
 resultSet.get<attr.objectType>(<attr.tableNameUppercased>.<attr.nameUppercased>)
+<endif>
 <endif>
 >>
 
