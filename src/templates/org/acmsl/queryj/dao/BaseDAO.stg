@@ -54,6 +54,9 @@ source(input) ::= <<
   @params project_imports
   @params class
 !>
+<if(input.header)>
+<input.header>
+<else>
 <java_header(
   years=input.copyright_years,
   description=
@@ -62,6 +65,8 @@ source(input) ::= <<
     second_line_description(tableName=input.table_name)
   ],
   timestamp=input.timestamp)>
+<endif>
+
 <package_declaration(
   packageNames=
   [

@@ -49,6 +49,9 @@ source(input) ::= <<
   @param input.vo_name the value-object name.
   @params class
 !>
+<if(input.header)>
+<input.header>
+<else>
 <java_header(
   years=input.copyright_years,
   description=
@@ -57,6 +60,8 @@ source(input) ::= <<
     second_line_description(voName=input.vo_name)
   ],
   timestamp=input.timestamp)>
+<endif>
+
 <package_declaration(
   packageNames=
   [

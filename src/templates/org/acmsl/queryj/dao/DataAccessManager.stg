@@ -48,6 +48,9 @@ source(input) ::= <<
  @param input.tables the tables.
  @param input.repository the repository.
 !>
+<if(input.header)>
+<input.header>
+<else>
 <java_header(
   years=input.copyright_years,
   description=
@@ -56,6 +59,8 @@ source(input) ::= <<
       second_line_description(model=input.repository)
     ],
     timestamp=input.timestamp)>
+<endif>
+
 <package_declaration(
   packageNames=
   [
