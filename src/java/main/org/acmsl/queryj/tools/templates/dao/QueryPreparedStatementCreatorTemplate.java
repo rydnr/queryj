@@ -73,7 +73,7 @@ public class QueryPreparedStatementCreatorTemplate
         final String packageName)
     {
         super(
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,

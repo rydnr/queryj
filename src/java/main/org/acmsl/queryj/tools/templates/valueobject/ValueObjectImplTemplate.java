@@ -92,7 +92,7 @@ public class ValueObjectImplTemplate
             packageName,
             tableTemplate,
             metadataManager,
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             ACMSL_IMPORTS,
             JDK_IMPORTS,

@@ -220,7 +220,9 @@ public abstract class FunctionsTestTemplate
         final String quote)
     {
         this(
-            header,
+            (header != null)
+            ?  header
+            :  FunctionsTestTemplateDefaults.DEFAULT_HEADER,
             decoratorFactory,
             classDescription,
             classPrefix,

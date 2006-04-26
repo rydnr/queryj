@@ -79,7 +79,7 @@ public class TableRepositoryTemplate
         final String repository)
     {
         super(
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,

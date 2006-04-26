@@ -103,7 +103,7 @@ public class MockDAOTestTemplate
         super(
             tableTemplate,
             metadataManager,
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,

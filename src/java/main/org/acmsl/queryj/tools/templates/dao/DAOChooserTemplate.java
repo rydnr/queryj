@@ -81,7 +81,7 @@ public class DAOChooserTemplate
         final String repository)
     {
         super(
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,

@@ -95,7 +95,7 @@ public class XMLValueObjectFactoryTemplate
             valueObjectPackageName,
             tableTemplate,
             metadataManager,
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             DEFAULT_PROJECT_IMPORTS,
             DEFAULT_ACMSL_IMPORTS,

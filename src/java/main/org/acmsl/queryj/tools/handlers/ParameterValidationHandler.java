@@ -381,7 +381,7 @@ public class ParameterValidationHandler
                 (String) parameters.get(PACKAGE),
                 (Path) parameters.get(CLASSPATH),
                 (File) parameters.get(OUTPUT_DIR),
-                (File) parameters.get(HEADER),
+                (File) parameters.get(HEADER_FILE),
                 (Boolean) parameters.get(OUTPUT_DIR_SUBFOLDERS),
                 (Boolean) parameters.get(EXTRACT_PROCEDURES),
                 (Boolean) parameters.get(EXTRACT_FUNCTIONS),

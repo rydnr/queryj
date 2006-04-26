@@ -88,7 +88,7 @@ public class XMLDAOFactoryTemplate
         final String basePackageName)
     {
         super(
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             PACKAGE_DECLARATION,
             tableTemplate,

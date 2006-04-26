@@ -111,7 +111,7 @@ public class DAOTestTemplate
         super(
             tableTemplate,
             metadataManager,
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,

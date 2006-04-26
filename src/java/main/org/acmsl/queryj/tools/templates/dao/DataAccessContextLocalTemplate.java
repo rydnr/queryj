@@ -89,7 +89,7 @@ public class DataAccessContextLocalTemplate
         final String basePackageName)
     {
         super(
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             jndiLocation,
             engineName,

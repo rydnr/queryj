@@ -84,7 +84,7 @@ public class KeywordRepositoryTemplate
         final String repository)
     {
         super(
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             PACKAGE_DECLARATION,
             packageName,

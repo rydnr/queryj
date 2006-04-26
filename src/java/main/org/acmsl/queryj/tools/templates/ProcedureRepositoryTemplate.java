@@ -90,7 +90,7 @@ public class ProcedureRepositoryTemplate
         final MetadataTypeManager metadataTypeManager)
     {
         super(
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             PACKAGE_DECLARATION,
             packageName,

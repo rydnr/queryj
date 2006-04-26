@@ -97,7 +97,7 @@ public class MockDAOTemplate
         super(
             tableTemplate,
             metadataManager,
-            header,
+            (header != null) ? header : DEFAULT_HEADER,
             decoratorFactory,
             PACKAGE_DECLARATION,
             packageName,
