@@ -65,7 +65,7 @@ public abstract class AbstractAttributeDecorator
      * The decorated attribute.
      */
     private Attribute m__Attribute;
-    
+
     /**
      * The metadata type manager.
      */
@@ -160,7 +160,7 @@ public abstract class AbstractAttributeDecorator
     {
         m__Attribute = attribute;
     }
-       
+
     /**
      * Specifies the attribute to decorate.
      * @param attribute such attribute.
@@ -245,7 +245,7 @@ public abstract class AbstractAttributeDecorator
     {
         return upperCase(getName(), DecorationUtils.getInstance());
     }
-    
+
     /**
      * Retrieves the capitalized name.
      * @return such name.
@@ -268,7 +268,7 @@ public abstract class AbstractAttributeDecorator
     {
         return decorationUtils.capitalize(value.toLowerCase());
     }
-    
+
     /**
      * Converts given value to upper-case.
      * @param value the value.
@@ -282,7 +282,7 @@ public abstract class AbstractAttributeDecorator
     {
         return decorationUtils.upperCase(value);
     }
-    
+
     /**
      * Normalizes given value to lower-case.
      * @param value the value.
@@ -296,7 +296,7 @@ public abstract class AbstractAttributeDecorator
     {
         return decorationUtils.normalizeLowercase(value);
     }
-    
+
     /**
      * Retrieves the name, in lower case.
      * @return such value.
@@ -305,7 +305,7 @@ public abstract class AbstractAttributeDecorator
     {
         return lowerCase(getName(), DecorationUtils.getInstance());
     }
-    
+
     /**
      * Converts given value to lower-case.
      * @param value the value.
@@ -341,7 +341,7 @@ public abstract class AbstractAttributeDecorator
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(value);
-        
+
     }
 
     /**
@@ -649,5 +649,25 @@ public abstract class AbstractAttributeDecorator
         final int type, final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.isNumberSmallerThanInt(type);
+    }
+
+    /**
+     * Retrieves the attribute name.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return toString(getAttribute());
+    }
+
+    /**
+     * Retrieves the attribute name.
+     * @param attribute attribute.
+     * @return such information.
+     * @precondition attribute != null
+     */
+    protected String toString(final Attribute attribute)
+    {
+        return attribute.toString();
     }
 }

@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -68,13 +68,13 @@ public abstract class AbstractBasePerCustomResultTemplate
     /**
      * The result.
      */
-    private ResultElement m__Result;
+    private Result m__Result;
 
     /**
      * The custom result provider.
      */
     private CustomSqlProvider m__CustomSqlProvider;
-    
+
     /**
      * The database metadata manager.
      */
@@ -119,7 +119,7 @@ public abstract class AbstractBasePerCustomResultTemplate
      * @param repositoryName the repository name.
      */
     public AbstractBasePerCustomResultTemplate(
-        final ResultElement result,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
@@ -144,25 +144,25 @@ public abstract class AbstractBasePerCustomResultTemplate
      * Specifies the result.
      * @param result the custom result.
      */
-    protected final void immutableSetResult(final ResultElement result)
+    protected final void immutableSetResult(final Result result)
     {
         m__Result = result;
     }
-    
+
     /**
      * Specifies the result.
      * @param result the custom result.
      */
-    protected void setResult(final ResultElement result)
+    protected void setResult(final Result result)
     {
         immutableSetResult(result);
     }
-    
+
     /**
      * Retrieves the result.
      * @return such information.
      */
-    public ResultElement getResult()
+    public Result getResult()
     {
         return m__Result;
     }
@@ -176,7 +176,7 @@ public abstract class AbstractBasePerCustomResultTemplate
     {
         m__CustomSqlProvider = customSqlProvider;
     }
-    
+
     /**
      * Specifies the custom result provider.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
@@ -195,7 +195,7 @@ public abstract class AbstractBasePerCustomResultTemplate
     {
         return m__CustomSqlProvider;
     }
-    
+
     /**
      * Specifies the metadata manager.
      * @param metadataManager the metadata manager.
@@ -247,7 +247,7 @@ public abstract class AbstractBasePerCustomResultTemplate
      * Retrieves the package name.
      * @return such information.
      */
-    public String getPackageName() 
+    public String getPackageName()
     {
         return m__strPackageName;
     }
@@ -274,7 +274,7 @@ public abstract class AbstractBasePerCustomResultTemplate
      * Retrieves the engine name.
      * @return such information.
      */
-    public String getEngineName() 
+    public String getEngineName()
     {
         return m__strEngineName;
     }
@@ -328,7 +328,7 @@ public abstract class AbstractBasePerCustomResultTemplate
      * Retrieves the base package name.
      * @return such information.
      */
-    public String getBasePackageName() 
+    public String getBasePackageName()
     {
         return m__strBasePackageName;
     }
@@ -378,7 +378,7 @@ public abstract class AbstractBasePerCustomResultTemplate
      * @precondition result != null
      */
     protected String buildHeader(
-        final String templateName, final ResultElement result)
+        final String templateName, final Result result)
     {
         return
               "Generating " + templateName + " for " + result.getId();

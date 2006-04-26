@@ -55,22 +55,22 @@ public abstract class AbstractAttribute
      * The name.
      */
     private String m__strName;
-    
+
     /**
      * The type.
      */
     private int m__iType;
-    
+
     /**
      * The native type.
      */
     private String m__strNativeType;
-    
+
     /**
      * The field type.
      */
     private String m__strFieldType;
-    
+
     /**
      * The table name.
      */
@@ -80,7 +80,7 @@ public abstract class AbstractAttribute
      * Whether the attribute is managed externally or not.
      */
     private boolean m__bManagedExternally;
-    
+
     /**
      * Whether the attribute allows null values or not.
      */
@@ -122,7 +122,7 @@ public abstract class AbstractAttribute
         immutableSetAllowsNull(allowsNull);
         immutableSetValue(value);
     }
-    
+
     /**
      * Specifies the name.
      * @param name such name.
@@ -131,7 +131,7 @@ public abstract class AbstractAttribute
     {
         m__strName = name;
     }
-    
+
     /**
      * Specifies the name.
      * @param name such name.
@@ -140,7 +140,7 @@ public abstract class AbstractAttribute
     {
         immutableSetName(name);
     }
-    
+
     /**
      * Retrieves the attribute name.
      * @return such name.
@@ -158,7 +158,7 @@ public abstract class AbstractAttribute
     {
         m__iType = type;
     }
-    
+
     /**
      * Specifies the type.
      * @param type such information.
@@ -167,7 +167,7 @@ public abstract class AbstractAttribute
     {
         immutableSetType(type);
     }
-    
+
     /**
      * Retrieves the attribute type.
      * @return its type.
@@ -185,7 +185,7 @@ public abstract class AbstractAttribute
     {
         m__strNativeType = nativeType;
     }
-    
+
     /**
      * Specifies the native type.
      * @param nativeType such information.
@@ -194,7 +194,7 @@ public abstract class AbstractAttribute
     {
         immutableSetNativeType(nativeType);
     }
-    
+
     /**
      * Retrieves the native type.
      * @return such information.
@@ -212,7 +212,7 @@ public abstract class AbstractAttribute
     {
         m__strFieldType = fieldType;
     }
-    
+
     /**
      * Specifies the field type.
      * @param fieldType such information.
@@ -221,7 +221,7 @@ public abstract class AbstractAttribute
     {
         immutableSetFieldType(fieldType);
     }
-    
+
     /**
      * Retrieves the field type.
      * @return such information.
@@ -239,7 +239,7 @@ public abstract class AbstractAttribute
     {
         m__strTableName = tableName;
     }
-    
+
     /**
      * Specifies the table name.
      * @param tableName such information.
@@ -248,7 +248,7 @@ public abstract class AbstractAttribute
     {
         immutableSetTableName(tableName);
     }
-    
+
     /**
      * Retrieves the table name.
      * @return such information.
@@ -294,7 +294,7 @@ public abstract class AbstractAttribute
     {
         m__bAllowsNull = allowsNull;
     }
-    
+
     /**
      * Specifies whether the attribute allows null values or not.
      * @param allowsNull such information.
@@ -303,7 +303,7 @@ public abstract class AbstractAttribute
     {
         immutableSetAllowsNull(allowsNull);
     }
-    
+
     /**
      * Retrieves whether it allows null values or not.
      * @return such information.
@@ -344,5 +344,14 @@ public abstract class AbstractAttribute
     public String getValue()
     {
         return m__strValue;
+    }
+
+    /**
+     * Retrieves the attribute name.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return getName();
     }
 }

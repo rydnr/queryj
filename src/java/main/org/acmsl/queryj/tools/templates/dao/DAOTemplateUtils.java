@@ -46,7 +46,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
 import org.acmsl.queryj.tools.customsql.SqlElement;
@@ -247,12 +247,12 @@ public class DAOTemplateUtils
 
         WeakReference reference = getReference();
 
-        if  (reference != null) 
+        if  (reference != null)
         {
             result = (DAOTemplateUtils) reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new DAOTemplateUtils();
 
@@ -631,7 +631,7 @@ public class DAOTemplateUtils
             customResultUtils.findSqlElementsByResultId(
                 resultId, customSqlProvider);
     }
-    
+
     /**
      * Checks whether given table name matches the DAO id.
      * @param tableName the table name.
@@ -743,24 +743,23 @@ public class DAOTemplateUtils
     }
 
     /**
-     * Retrieves all <code>ResultElement</code> instances of given type.
+     * Retrieves all <code>Result</code> instances of given type.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param type the type.
      * @return such elements.
      * @precondition sqlProvider != null
      * @precondition type != null
      */
-    public ResultElement[] retrieveResultElementsByType(
-        final CustomSqlProvider customSqlProvider,
-        final String type)
+    public Result[] retrieveResultsByType(
+        final CustomSqlProvider customSqlProvider, final String type)
     {
         return
-            retrieveResultElementsByType(
+            retrieveResultsByType(
                 customSqlProvider, type, CustomResultUtils.getInstance());
     }
 
     /**
-     * Retrieves all <code>ResultElement</code> instances of given type.
+     * Retrieves all <code>Result</code> instances of given type.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param type the type.
      * @param customResultUtils the <code>CustomResultUtils</code> instance.
@@ -769,13 +768,13 @@ public class DAOTemplateUtils
      * @precondition type != null
      * @precondition customResultUtils != null
      */
-    protected ResultElement[] retrieveResultElementsByType(
+    protected Result[] retrieveResultsByType(
         final CustomSqlProvider customSqlProvider,
         final String type,
         final CustomResultUtils customResultUtils)
     {
         return
-            customResultUtils.retrieveResultElementsByType(
+            customResultUtils.retrieveResultsByType(
                 customSqlProvider, type);
     }
 
@@ -790,7 +789,7 @@ public class DAOTemplateUtils
      */
     public PropertyElement[] retrievePropertyElementsByResultId(
         final CustomSqlProvider customSqlProvider,
-        final ResultElement resultElement)
+        final Result resultElement)
     {
         Collection t_cResult = new ArrayList();
 

@@ -63,22 +63,8 @@ import java.util.Collection;
  */
 public class ResultElement
     extends  AbstractIdElement
+    implements  Result
 {
-    /**
-     * The <b>none</b> value for <i>matches</i> attribute.
-     */
-    public static final String NONE = "none";
-
-    /**
-     * The <b>single</b> value for <i>matches</i> attribute.
-     */
-    public static final String SINGLE = "single";
-
-    /**
-     * The <b>multiple</b> value for <i>multiple</i> attribute.
-     */
-    public static final String MULTIPLE = "multiple";
-
     /**
      * The <i>class</i> attribute.
      */
@@ -295,7 +281,7 @@ public class ResultElement
                  && ("" + propertyRefs).equals(
                          "" + candidate.getPropertyRefs())));
         }
-        
+
         return result;
     }
 

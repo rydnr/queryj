@@ -44,7 +44,7 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
@@ -61,7 +61,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public class CachingResultDecorator
-    extends  ResultDecorator
+    extends  AbstractResultDecorator
 {
     /**
      * The cached normalized id.
@@ -77,7 +77,7 @@ public class CachingResultDecorator
      * The cached normalized uppercased id.
      */
     private String m__strCachedIdNormalizedUppercased;
-    
+
     /**
      * The cached properties.
      */
@@ -88,11 +88,13 @@ public class CachingResultDecorator
      * @param result the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
      * to decorate referred parameters.
+     * @param metadataManager the <code>MetadataManager</code> instance.
      * @precondition result != null
      * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
      */
     public CachingResultDecorator(
-        final ResultElement result,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
@@ -109,7 +111,7 @@ public class CachingResultDecorator
     {
         m__strCachedIdNormalized = value;
     }
-    
+
     /**
      * Specifies the cached normalized id.
      * @param value the value to cache.
@@ -134,13 +136,13 @@ public class CachingResultDecorator
     public String getIdNormalized()
     {
         String result = getCachedIdNormalized();
-        
+
         if  (result == null)
         {
             result = super.getIdNormalized();
             setCachedIdNormalized(result);
         }
-        
+
         return result;
     }
 
@@ -153,7 +155,7 @@ public class CachingResultDecorator
     {
         m__strCachedIdCapitalized = value;
     }
-    
+
     /**
      * Specifies the cached capitalized id.
      * @param value the value to cache.
@@ -171,7 +173,7 @@ public class CachingResultDecorator
     {
         return m__strCachedIdCapitalized;
     }
-    
+
     /**
      * Retrieves the id capitalized.
      * @return such information.
@@ -179,13 +181,13 @@ public class CachingResultDecorator
     public String getIdCapitalized()
     {
         String result = getCachedIdCapitalized();
-        
+
         if  (result == null)
         {
             result = super.getIdCapitalized();
             setCachedIdCapitalized(result);
         }
-        
+
         return result;
     }
 
@@ -198,7 +200,7 @@ public class CachingResultDecorator
     {
         m__strCachedIdNormalizedUppercased = value;
     }
-    
+
     /**
      * Specifies the cached normalized uppercased id.
      * @param value the value to cache.
@@ -216,7 +218,7 @@ public class CachingResultDecorator
     {
         return m__strCachedIdNormalizedUppercased;
     }
-    
+
     /**
      * Retrieves the id, normalized and upper-cased.
      * @return such information.
@@ -224,13 +226,13 @@ public class CachingResultDecorator
     public String getIdNormalizedUppercased()
     {
         String result = getCachedIdNormalizedUppercased();
-        
+
         if  (result == null)
         {
             result = super.getIdNormalizedUppercased();
             setCachedIdNormalizedUppercased(result);
         }
-        
+
         return result;
     }
 
@@ -243,7 +245,7 @@ public class CachingResultDecorator
     {
         m__cCachedProperties = value;
     }
-    
+
     /**
      * Specifies the cached properties.
      * @param value the value to cache.
@@ -269,13 +271,13 @@ public class CachingResultDecorator
     public Collection getProperties()
     {
         Collection result = getCachedProperties();
-        
+
         if  (result == null)
         {
             result = super.getProperties();
             setCachedProperties(result);
         }
-        
+
         return result;
     }
 }

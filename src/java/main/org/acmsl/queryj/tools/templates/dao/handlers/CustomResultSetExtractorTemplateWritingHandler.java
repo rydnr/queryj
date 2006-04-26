@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -101,7 +101,8 @@ public class CustomResultSetExtractorTemplateWritingHandler
         return
             (BasePerCustomResultTemplate[])
                 parameters.get(
-                    TemplateMappingManager.CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES);
+                    TemplateMappingManager
+                        .CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES);
     }
 
     /**
@@ -120,7 +121,7 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @throws BuildException if the output-dir retrieval process if faulty.
      */
     protected File retrieveOutputDir(
-        final ResultElement resultElement,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final File projectFolder,
@@ -134,7 +135,7 @@ public class CustomResultSetExtractorTemplateWritingHandler
         return
             retrieveOutputDir(
                 retrieveTableName(
-                    resultElement,
+                    result,
                     customSqlProvider,
                     metadataManager,
                     CustomResultUtils.getInstance()),
@@ -159,14 +160,14 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @precondition customResultUtils != null
      */
     protected String retrieveTableName(
-        final ResultElement resultElement,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final CustomResultUtils customResultUtils)
     {
         return
             customResultUtils.retrieveTable(
-                resultElement, customSqlProvider, metadataManager);
+                result, customSqlProvider, metadataManager);
     }
 
     /**

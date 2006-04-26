@@ -151,7 +151,7 @@ public interface <input.vo_name>DAO
         };
 
     <input.static_attribute:find_constant_methods(
-      attr=it,
+      attribute=it,
       primaryKeyAttributes=input.pk_attributes,
       voName=input.vo_name)>
 <endif>
@@ -254,7 +254,7 @@ find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<
 /**
  * Loads \<i><attribute.tableName>\</i> information from the constant pool,
  * filtering by <attribute.name>.
- * @param <attribute.nameLowercased> the <staticAttributeName>
+ * @param <attribute.nameLowercased> the <attribute.name>
  * to filter.
  * @return the \<code><voName>\</code> instance.
  <precondition_notnull(attribute.name)>

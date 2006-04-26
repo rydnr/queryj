@@ -64,7 +64,7 @@ public abstract class AbstractPropertyDecorator
      * The metadata manager.
      */
     private MetadataManager m__MetadataManager;
-    
+
     /**
      * The metadata type manager.
      */
@@ -100,7 +100,7 @@ public abstract class AbstractPropertyDecorator
     {
         m__Property = property;
     }
-    
+
     /**
      * Specifies the <code>Property</code> to decorate.
      * @param property such property.
@@ -190,7 +190,7 @@ public abstract class AbstractPropertyDecorator
     {
         return getJavaType(getType(), getMetadataTypeManager());
     }
-    
+
     /**
      * Retrieves the Java type of the property.
      * @param type the type.
@@ -249,7 +249,7 @@ public abstract class AbstractPropertyDecorator
     {
         return capitalize(value, DecorationUtils.getInstance());
     }
-    
+
     /**
      * Capitalizes given value.
      * @param value the value.
@@ -262,5 +262,25 @@ public abstract class AbstractPropertyDecorator
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
+    }
+
+    /**
+     * Retrieves the property name.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return toString(getProperty());
+    }
+
+    /**
+     * Retrieves the property name.
+     * @param property property.
+     * @return such information.
+     * @precondition property != null
+     */
+    protected String toString(final Property property)
+    {
+        return property.toString();
     }
 }

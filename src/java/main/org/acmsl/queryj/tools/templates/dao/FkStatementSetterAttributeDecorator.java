@@ -59,7 +59,7 @@ public class FkStatementSetterAttributeDecorator
      * The cached Java type.
      */
     private String m__strCachedJavaType;
-    
+
     /**
      * Creates a <code>FkStatementSetterAttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
@@ -83,7 +83,7 @@ public class FkStatementSetterAttributeDecorator
     {
         m__strCachedJavaType = type;
     }
-    
+
     /**
      * Specifies the cached Java type.
      * @param type such type.
@@ -111,13 +111,13 @@ public class FkStatementSetterAttributeDecorator
     public String getJavaType()
     {
         String result = getCachedJavaType();
-        
+
         if  (result == null)
         {
             result = retrieveJavaType();
             setCachedJavaType(result);
         }
-        
+
         return result;
     }
 
@@ -176,7 +176,7 @@ public class FkStatementSetterAttributeDecorator
         final MetadataTypeUtils metadataTypeUtils)
     {
         String result = metadataTypeManager.getNativeType(type);
-        
+
         if  (allowsNull)
         {
             result = metadataTypeUtils.getWrapperClass(result);
@@ -194,13 +194,13 @@ public class FkStatementSetterAttributeDecorator
     public String getObjectType()
     {
         String result = getCachedObjectType();
-        
+
         if  (result == null)
         {
             result = retrieveObjectType();
             setCachedObjectType(result);
         }
-        
+
         return result;
     }
 

@@ -35,13 +35,14 @@
  *
  * Description: Base logic for all per-FK templates.
  *
+ * $Id$
  */
 package org.acmsl.queryj.tools.templates;
 
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -107,7 +108,7 @@ public abstract class BasePerCustomResultTemplate
      * @precondition customSqlProvider != null
      */
     public BasePerCustomResultTemplate(
-        final ResultElement result,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
@@ -157,6 +158,7 @@ public abstract class BasePerCustomResultTemplate
                 getResult(),
                 getCustomSqlProvider(),
                 metadataManager,
+                getDecoratorFactory(),
                 getPackageName(),
                 getEngineName(),
                 getEngineVersion(),
@@ -176,6 +178,7 @@ public abstract class BasePerCustomResultTemplate
      * @param customResult the custom result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -192,6 +195,7 @@ public abstract class BasePerCustomResultTemplate
      * @precondition customResult != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      * @precondition metadataTypeManager != null
      * @precondition stringUtils != null
      * @precondition defaultThemeUtils != null
@@ -201,9 +205,10 @@ public abstract class BasePerCustomResultTemplate
      * @precondition metaLanguageUtils != null
      */
     protected String generateOutput(
-        final ResultElement customResult,
+        final Result customResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -220,7 +225,7 @@ public abstract class BasePerCustomResultTemplate
         String result = "";
 
         StringTemplateGroup t_Group = retrieveGroup();
-        
+
         StringTemplate t_Template = retrieveTemplate(t_Group);
 
         String t_strRepositoryName =
@@ -237,6 +242,7 @@ public abstract class BasePerCustomResultTemplate
             customResult,
             customSqlProvider,
             metadataManager,
+            decoratorFactory,
             engineName,
             engineVersion,
             basePackageName,
@@ -258,6 +264,7 @@ public abstract class BasePerCustomResultTemplate
      * @param result the result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
@@ -272,6 +279,7 @@ public abstract class BasePerCustomResultTemplate
      * @precondition result != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      * @precondition engineName != null
      * @precondition engineVersion != null
      * @precondition basePackageName != null
@@ -284,9 +292,10 @@ public abstract class BasePerCustomResultTemplate
         final Map input,
         final StringTemplate template,
         final Integer[] copyrightYears,
-        final ResultElement customResult,
+        final Result customResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String engineName,
         final String engineVersion,
         final String basePackageName,
@@ -302,6 +311,7 @@ public abstract class BasePerCustomResultTemplate
             customResult,
             customSqlProvider,
             metadataManager,
+            decoratorFactory,
             engineName,
             engineVersion);
 
@@ -329,25 +339,30 @@ public abstract class BasePerCustomResultTemplate
      * @param result the result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @precondition input != null
      * @precondition result != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      * @precondition engineName != null
      * @precondition engineVersion != null
      */
     protected void fillCommonParameters(
         final Map input,
-        final ResultElement result,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String engineName,
         final String engineVersion)
     {
-        //input.put("result", new ResultDecorator(result));
-        input.put("result", result);
+        input.put(
+            "result",
+            decoratorFactory.createDecorator(
+                result, customSqlProvider, metadataManager));
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);
     }
@@ -425,7 +440,7 @@ public abstract class BasePerCustomResultTemplate
      */
     protected void fillClassParameters(
         final Map input,
-        final ResultElement customResult,
+        final Result customResult,
         final CustomSqlProvider customSqlProvider,
         final String engineName,
         final String engineVersion,

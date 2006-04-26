@@ -39,7 +39,7 @@
 //
 // $Id$
 //
-group AttributesStatementSetter;
+group CustomResultSetExtractor;
 
 source(input) ::= <<
 <!
@@ -53,11 +53,11 @@ source(input) ::= <<
 <java_header(
   years=input.copyright_years,
   description=
-    [
-      first_line_description(result=input.result),
-      second_line_description(result=input.result)
-    ],
-    timestamp=input.timestamp)>
+  [
+    first_line_description(result=input.result),
+    second_line_description(result=input.result)
+  ],
+  timestamp=input.timestamp)>
 <package_declaration(
   packageNames=
   [
@@ -113,7 +113,7 @@ first_line_description(result) ::= <<
   Generates the first line of the generated file description.
   @param result the result.
 !>
-Extracts <result.name> instances
+Extracts <result.id> instances
 >>
 
 second_line_description(result) ::= <<
@@ -193,7 +193,7 @@ public Object extractData(final ResultSet resultSet)
 }
 
 /**
- * Extracts \<i><result.name>\</i> information from given result set.
+ * Extracts \<i><result.id>\</i> information from given result set.
  * @param resultSet the result set.
  * @param factory the value object factory.
  * @return the \<i><input.name>\</i> or \<code>null\</code>
@@ -235,7 +235,7 @@ extract_data_with_multiple_result(result) ::= <<
 !>
 // <extract data>
 /**
- * Extracts \<i><result.name>\</i> information from given result set.
+ * Extracts \<i><result.id>\</i> information from given result set.
  * @param resultSet the result set.
  * @return the list of retrieved \<code><result.classValue>\</code> instances.
  * @throws SQLException intercepted by \<i>Spring\</i>.
@@ -254,10 +254,10 @@ public Object extractData(final ResultSet resultSet)
 }
 
 /**
- * Extracts \<i><result.name>\</i> information from given result set.
+ * Extracts \<i><result.id>\</i> information from given result set.
  * @param resultSet the result set.
  * @param factory the value object factory.
- * @return the list of retrieved \<i><result.name>\</i> instances.
+ * @return the list of retrieved \<i><result.id>\</i> instances.
  * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
  * custom exception.

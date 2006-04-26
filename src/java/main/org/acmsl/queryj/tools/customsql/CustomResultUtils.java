@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.customsql;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 
@@ -72,10 +72,10 @@ public class CustomResultUtils
         new SqlElement[0];
 
     /**
-     * An empty ResultElement array.
+     * An empty Result array.
      */
-    public static final ResultElement[] EMPTY_RESULTELEMENT_ARRAY =
-        new ResultElement[0];
+    public static final Result[] EMPTY_RESULT_ARRAY =
+        new Result[0];
 
     /**
      * Singleton implemented as a weak reference.
@@ -115,12 +115,12 @@ public class CustomResultUtils
 
         WeakReference reference = getReference();
 
-        if  (reference != null) 
+        if  (reference != null)
         {
             result = (CustomResultUtils) reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new CustomResultUtils();
 
@@ -141,17 +141,17 @@ public class CustomResultUtils
      * @precondition metadataManager != null
      */
     public String retrieveTable(
-        final ResultElement resultElement,
+        final Result resultElement,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
     {
         String result = null;
-        
+
         String[] t_astrTableNames = metadataManager.getTableNames();
-        
+
         int t_iTableCount =
             (t_astrTableNames != null) ? t_astrTableNames.length : 0;
-        
+
         SqlElement[] t_aSqlElements = null;
 
         int t_iSqlCount = 0;
@@ -167,7 +167,7 @@ public class CustomResultUtils
                     customSqlProvider, resultElement.getId());
 
             t_iSqlCount = (t_aSqlElements != null) ? t_aSqlElements.length : 0;
-            
+
             for  (int t_iSqlIndex = 0;
                       t_iSqlIndex < t_iSqlCount;
                       t_iSqlIndex++)
@@ -189,7 +189,7 @@ public class CustomResultUtils
     /**
      * Checks whether given result element is suitable of being
      * included in the DAO layer associated to a concrete table.
-     * @param resultElement the result element.
+     * @param resultElement the result.
      * @param tableName the table name.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @return <code>true</code> if it should be included.
@@ -198,7 +198,7 @@ public class CustomResultUtils
      * @precondition customSqlProvider != null
      */
     public boolean matches(
-        final ResultElement resultElement,
+        final Result resultElement,
         final String tableName,
         final CustomSqlProvider customSqlProvider)
     {
@@ -333,14 +333,14 @@ public class CustomResultUtils
     }
 
     /**
-     * Retrieves all <code>ResultElement</code> instances of given type.
+     * Retrieves all <code>Result</code> instances of given type.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param type the type.
      * @return such elements.
      * @precondition sqlProvider != null
      * @precondition type != null
      */
-    public ResultElement[] retrieveResultElementsByType(
+    public Result[] retrieveResultsByType(
         final CustomSqlProvider customSqlProvider,
         final String type)
     {
@@ -349,7 +349,7 @@ public class CustomResultUtils
         SqlElement[] t_aSqlElements =
             retrieveSqlElementsByType(customSqlProvider, type);
 
-        ResultElement t_CurrentElement = null;
+        Result t_CurrentElement = null;
 
         for  (int t_iIndex = 0; t_iIndex < t_aSqlElements.length; t_iIndex++)
         {
@@ -364,7 +364,7 @@ public class CustomResultUtils
         }
 
         return
-            (ResultElement[]) t_cResult.toArray(EMPTY_RESULTELEMENT_ARRAY);
+            (Result[]) t_cResult.toArray(EMPTY_RESULT_ARRAY);
     }
 
     /**

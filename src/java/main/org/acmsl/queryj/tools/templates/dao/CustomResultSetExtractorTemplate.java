@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
@@ -85,7 +85,7 @@ public class CustomResultSetExtractorTemplate
      * @precondition decoratorFactory != null
      */
     public CustomResultSetExtractorTemplate(
-        final ResultElement result,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
@@ -112,21 +112,24 @@ public class CustomResultSetExtractorTemplate
      * @param input the input.
      * @param result the result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataMananager the database metadata manager.
+     * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @precondition input != null
      * @precondition result != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      * @precondition engineName != null
      * @precondition engineVersion != null
      */
     protected void fillCommonParameters(
         final Map input,
-        final ResultElement result,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String engineName,
         final String engineVersion)
     {
@@ -135,6 +138,7 @@ public class CustomResultSetExtractorTemplate
             result,
             customSqlProvider,
             metadataManager,
+            decoratorFactory,
             engineName,
             engineVersion);
 
@@ -163,18 +167,18 @@ public class CustomResultSetExtractorTemplate
 
     /**
      * Retrieves the table associated to the result.
-     * @param resultElement the result element.
+     * @param result the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
      * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @return the table name.
-     * @precondition resultElement != null
+     * @precondition result != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition customResultUtils != null
      */
     protected String retrieveTable(
-        final ResultElement resultElement,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final CustomResultUtils customResultUtils)
@@ -182,7 +186,7 @@ public class CustomResultSetExtractorTemplate
     {
         return
             customResultUtils.retrieveTable(
-                resultElement, customSqlProvider, metadataManager);
+                result, customSqlProvider, metadataManager);
     }
 
     /**
@@ -191,7 +195,9 @@ public class CustomResultSetExtractorTemplate
      */
     protected StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/ResultSetExtractor.stg");
+        return
+            retrieveGroup(
+                "/org/acmsl/queryj/dao/CustomResultSetExtractor.stg");
     }
 
     /**
@@ -200,6 +206,6 @@ public class CustomResultSetExtractorTemplate
      */
     public String getTemplateName()
     {
-        return "ResultSetExtractor";
+        return "CustomResultSetExtractor";
     }
 }
