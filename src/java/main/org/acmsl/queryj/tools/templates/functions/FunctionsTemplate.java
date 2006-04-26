@@ -256,7 +256,8 @@ public abstract class FunctionsTemplate
         final String quote)
     {
         this(
-            (header != null) ? header : DEFAULT_HEADER,
+//            (header != null) ? header : DEFAULT_HEADER,
+            DEFAULT_HEADER,
             decoratorFactory,
             classDescription,
             classPrefix,

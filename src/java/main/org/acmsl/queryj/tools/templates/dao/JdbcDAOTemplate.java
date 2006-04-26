@@ -79,7 +79,8 @@ public class JdbcDAOTemplate
         final String packageName)
     {
         super(
-            (header != null) ? header : DEFAULT_HEADER,
+//            (header != null) ? header : DEFAULT_HEADER,
+            DEFAULT_HEADER,
             decoratorFactory,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
