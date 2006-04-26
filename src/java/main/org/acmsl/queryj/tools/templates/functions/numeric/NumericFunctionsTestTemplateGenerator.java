@@ -118,7 +118,7 @@ public class NumericFunctionsTestTemplateGenerator
 
         if  (result == null) 
         {
-            result = new NumericFunctionsTestTemplateGenerator() {};
+            result = new NumericFunctionsTestTemplateGenerator();
 
             setReference(result);
         }
@@ -250,28 +250,28 @@ public class NumericFunctionsTestTemplateGenerator
      * @throws QueryJException if the template factory is invalid.
      */
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
-        String  header,
-        String  packageDeclaration,
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote,
-        String  projectImports,
-        String  acmslImports,
-        String  jdkImports,
-        String  junitImports,
-        String  javadoc,
-        String  classDefinition,
-        String  classStart,
-        String  classConstructor,
-        String  memberAccessors,
-        String  setUpTearDownMethods,
-        String  mainMethod,
-        String  getInstanceTest,
-        String  innerClass,
-        String  innerTable,
-        String  classEnd)
+        final String header,
+        final String packageDeclaration,
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String projectImports,
+        final String acmslImports,
+        final String jdkImports,
+        final String junitImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String classConstructor,
+        final String memberAccessors,
+        final String setUpTearDownMethods,
+        final String mainMethod,
+        final String getInstanceTest,
+        final String innerClass,
+        final String innerTable,
+        final String classEnd)
       throws  QueryJException
     {
         NumericFunctionsTestTemplate result = null;
@@ -324,15 +324,17 @@ public class NumericFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the template factory is invalid.
      */
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
-        final String  packageName,
-        final String  testedPackageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String header)
       throws  QueryJException
     {
         NumericFunctionsTestTemplate result = null;
@@ -354,7 +356,8 @@ public class NumericFunctionsTestTemplateGenerator
                         testedPackageName,
                         engineName,
                         engineVersion,
-                        quote);
+                        quote,
+                        header);
             }
         }
 

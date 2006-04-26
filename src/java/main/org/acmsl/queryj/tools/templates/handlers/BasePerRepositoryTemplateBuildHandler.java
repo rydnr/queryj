@@ -175,6 +175,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 retrieveProjectPackage(parameters),
                 retrievePackage(engineName, parameters),
                 retrieveTableRepositoryName(parameters),
+                retrieveHeader(parameters),
                 retrieveTableTemplates(parameters));
     }
 
@@ -196,6 +197,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -220,6 +222,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final String projectPackage,
         final String packageName,
         final String repository,
+        final String header,
         final TableTemplate[] tableTemplates)
       throws  BuildException
     {
@@ -243,7 +246,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                     projectPackage,
                     repository,
                     engineName,
-                    t_cTableNames);
+                    t_cTableNames,
+                    header);
 
             storeTemplate(t_Template, parameters);
         }

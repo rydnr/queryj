@@ -127,6 +127,7 @@ public class DataAccessContextLocalTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
+     * @param header the header.
      * @return such template.
      * @precondition repository != null
      * @precondition engineName != null
@@ -136,10 +137,12 @@ public class DataAccessContextLocalTemplateGenerator
         final String jndiLocation,
         final String engineName,
         final String engineVersion,
-        final String basePackageName)
+        final String basePackageName,
+        final String header)
     {
         return
             new DataAccessContextLocalTemplate(
+                header,
                 getDecoratorFactory(),
                 jndiLocation,
                 engineName,

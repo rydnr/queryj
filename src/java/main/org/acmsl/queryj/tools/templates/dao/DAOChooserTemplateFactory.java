@@ -53,9 +53,11 @@ public interface DAOChooserTemplateFactory
      * Creates a DAOChooser template instance.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @return such template.
      */
     public DAOChooserTemplate createDAOChooserTemplate(
         final String packageName,
-        final String repository);
+        final String repository,
+        final String header);
 }

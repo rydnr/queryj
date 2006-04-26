@@ -118,6 +118,7 @@ public class ValueObjectFactoryTemplateBuildHandler
                 retrieveDatabaseMetaData(attributes),
                 retrieveMetadataManager(attributes),
                 retrievePackage(attributes),
+                retrieveHeader(attributes),
                 retrieveTableTemplates(attributes),
                 ValueObjectFactoryTemplateGenerator.getInstance());
     }
@@ -128,6 +129,7 @@ public class ValueObjectFactoryTemplateBuildHandler
      * @param databaseMetaData the database metadata.
      * @param metadataManager the database metadata manager.
      * @param packageName the package name.
+     * @param header the header.
      * @param tableTemplates the table templates.
      * @param factory the template factory.
      * @return <code>true</code> if the chain should be stopped.
@@ -144,6 +146,7 @@ public class ValueObjectFactoryTemplateBuildHandler
         final DatabaseMetaData metaData,
         final MetadataManager metadataManager,
         final String packageName,
+        final String header,
         final TableTemplate[] tableTemplates,
         final ValueObjectFactoryTemplateFactory factory)
       throws  BuildException
@@ -175,7 +178,8 @@ public class ValueObjectFactoryTemplateBuildHandler
                     factory.createValueObjectFactoryTemplate(
                         packageName,
                         tableTemplates[t_iValueObjectFactoryIndex],
-                        metadataManager);
+                        metadataManager,
+                        header);
             }
 
             storeValueObjectFactoryTemplates(t_aValueObjectFactoryTemplates, attributes);

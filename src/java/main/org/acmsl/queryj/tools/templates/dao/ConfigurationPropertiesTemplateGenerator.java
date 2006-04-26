@@ -138,6 +138,7 @@ public class ConfigurationPropertiesTemplateGenerator
      * @param repositoryName the name of the repository.
      * @param engineName the engine name.
      * @param tables the table names.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition metadataManager != null
@@ -153,12 +154,14 @@ public class ConfigurationPropertiesTemplateGenerator
         final String basePackageName,
         final String repositoryName,
         final String engineName,
-        final Collection tables)
+        final Collection tables,
+        final String header)
       throws  QueryJException
     {
         return
             new ConfigurationPropertiesTemplate(
                 metadataManager,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,

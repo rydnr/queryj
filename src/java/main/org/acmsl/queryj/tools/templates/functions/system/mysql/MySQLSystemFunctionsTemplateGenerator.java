@@ -133,14 +133,16 @@ public class MySQLSystemFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
     public SystemFunctionsTemplate createSystemFunctionsTemplate(
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String header)
       throws  QueryJException
     {
         SystemFunctionsTemplate result = null;
@@ -152,6 +154,7 @@ public class MySQLSystemFunctionsTemplateGenerator
         {
             result =
                 new MySQLSystemFunctionsTemplate(
+                    header,
                     getDecoratorFactory(),
                     packageName,
                     engineName,

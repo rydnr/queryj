@@ -171,6 +171,7 @@ public class MockDAOTestTemplateBuildHandler
                 retrieveValueObjectPackage(parameters),
                 retrieveMockDAOPackage(engineName, parameters),
                 retrieveMockDAOTestPackage(parameters),
+                retrieveHeader(parameters),
                 MockDAOTestTemplateGenerator.getInstance());
     }
 
@@ -182,6 +183,7 @@ public class MockDAOTestTemplateBuildHandler
      * @param valueObjectPackage such package.
      * @param mockDAOPackage such package.
      * @param mockDAOTestPackage such package.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -200,6 +202,7 @@ public class MockDAOTestTemplateBuildHandler
         final String valueObjectPackage,
         final String mockDAOPackage,
         final String mockDAOTestPackage,
+        final String header,
         final MockDAOTestTemplateFactory templateFactory)
       throws  BuildException
     {
@@ -222,7 +225,8 @@ public class MockDAOTestTemplateBuildHandler
                         metadataManager,
                         mockDAOTestPackage,
                         mockDAOPackage,
-                        valueObjectPackage);
+                        valueObjectPackage,
+                        header);
 
                 storeTestTemplate(
                     t_aMockDAOTestTemplates[t_iMockDAOTestIndex],

@@ -63,6 +63,7 @@ public interface BasePerForeignKeyTemplateFactory
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param header the header.
      */
     public BasePerForeignKeyTemplate createTemplate(
         final ForeignKey foreignKey,
@@ -72,7 +73,8 @@ public interface BasePerForeignKeyTemplateFactory
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
       throws  QueryJException;
 
     /**

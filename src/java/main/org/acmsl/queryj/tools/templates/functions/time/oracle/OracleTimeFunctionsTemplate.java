@@ -119,6 +119,7 @@ public class OracleTimeFunctionsTemplate
 
     /**
      * Builds an OracleTimeFunctionsTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -126,6 +127,7 @@ public class OracleTimeFunctionsTemplate
      * @param quote the identifier quote string.
      */
     public OracleTimeFunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -133,6 +135,7 @@ public class OracleTimeFunctionsTemplate
         final String quote)
     {
         super(
+            header,
             decoratorFactory,
             packageName,
             engineName,

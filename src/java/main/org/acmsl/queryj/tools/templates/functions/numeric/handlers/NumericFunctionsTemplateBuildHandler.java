@@ -121,7 +121,8 @@ public class NumericFunctionsTemplateBuildHandler
                             NumericFunctionsTemplateGenerator.getInstance();
 
                     String t_strPackage = retrievePackage(attributes);
-
+                    String t_strHeader = retrieveHeader(attributes);
+                    
                     StringUtils t_StringUtils = StringUtils.getInstance();
 
                     if  (   (t_MetaData                          != null)
@@ -148,7 +149,8 @@ public class NumericFunctionsTemplateBuildHandler
                                         t_strPackage,
                                         t_MetaData.getDatabaseProductName(),
                                         t_MetaData.getDatabaseProductVersion(),
-                                        t_strQuote);
+                                        t_strQuote,
+                                        t_strHeader);
 
                         Collection t_cFunctions =
                             t_StringUtils.tokenize(

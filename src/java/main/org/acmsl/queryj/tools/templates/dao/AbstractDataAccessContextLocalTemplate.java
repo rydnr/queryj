@@ -62,11 +62,6 @@ public abstract class AbstractDataAccessContextLocalTemplate
     extends  AbstractTemplate
 {
     /**
-     * The header.
-     */
-    private String m__strHeader;
-
-    /**
      * The JNDI location.
      */
     private String m__strJNDILocation;
@@ -104,8 +99,8 @@ public abstract class AbstractDataAccessContextLocalTemplate
     /**
      * Builds a <code>AbstractDataAccessContextLocalTemplate</code>
      * using given information.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param jndiLocation the JNDI location.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -114,8 +109,8 @@ public abstract class AbstractDataAccessContextLocalTemplate
      * @param daoDefinition the DAO definitions subtemplate.
      */
     protected AbstractDataAccessContextLocalTemplate(
-        final DecoratorFactory decoratorFactory,
         final String header,
+        final DecoratorFactory decoratorFactory,
         final String jndiLocation,
         final String engineName,
         final String engineVersion,
@@ -123,8 +118,7 @@ public abstract class AbstractDataAccessContextLocalTemplate
         final String resourceDefinition,
         final String daoDefinition)
     {
-        super(decoratorFactory);
-        immutableSetHeader(header);
+        super(header, decoratorFactory);
         immutableSetJNDILocation(jndiLocation);
         immutableSetEngineName(engineName);
         immutableSetEngineVersion(engineVersion);
@@ -132,33 +126,6 @@ public abstract class AbstractDataAccessContextLocalTemplate
         immutableSetResourceDefinition(resourceDefinition);
         immutableSetDAODefinition(daoDefinition);
         immutableSetTables(new ArrayList());
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    private void immutableSetHeader(final String header)
-    {
-        m__strHeader = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected void setHeader(final String header)
-    {
-        immutableSetHeader(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    public String getHeader() 
-    {
-        return m__strHeader;
     }
 
     /**

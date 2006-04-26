@@ -74,6 +74,7 @@ public class CustomResultSetExtractorTemplate
      * @param result the custom result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -89,6 +90,7 @@ public class CustomResultSetExtractorTemplate
         final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -100,6 +102,7 @@ public class CustomResultSetExtractorTemplate
             result,
             customSqlProvider,
             metadataManager,
+            header,
             decoratorFactory,
             packageName,
             engineName,

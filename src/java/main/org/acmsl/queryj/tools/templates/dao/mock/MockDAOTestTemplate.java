@@ -85,6 +85,7 @@ public class MockDAOTestTemplate
      * Builds a DAOTestTemplate using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param daoPackageName the DAO's package name.
@@ -93,6 +94,7 @@ public class MockDAOTestTemplate
     public MockDAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String daoPackageName,
@@ -101,8 +103,8 @@ public class MockDAOTestTemplate
         super(
             tableTemplate,
             metadataManager,
+            header,
             decoratorFactory,
-            DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
             daoPackageName,
@@ -134,9 +136,10 @@ public class MockDAOTestTemplate
     /**
      * Produces a text version of the template, weaving the
      * dynamic parts with the static skeleton.
+     * @param header the header.
      * @return such source code.
      */
-    protected String generateOutput()
+    protected String generateOutput(final String header)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
@@ -161,7 +164,7 @@ public class MockDAOTestTemplate
         try 
          */
         {
-            MessageFormat t_Formatter = new MessageFormat(getHeader());
+            MessageFormat t_Formatter = new MessageFormat(header);
 
             t_sbResult.append(
                 t_Formatter.format(

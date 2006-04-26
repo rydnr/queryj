@@ -113,10 +113,10 @@ public abstract class FunctionsTestTemplate
 
     /**
      * Builds a FunctionsTestTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
-     * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
@@ -140,10 +140,10 @@ public abstract class FunctionsTestTemplate
      * @param classEnd the class end.
      */
     public FunctionsTestTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String classDescription,
         final String classPrefix,
-        final String header,
         final String packageDeclaration,
         final String packageName,
         final String testedPackageName,
@@ -167,10 +167,10 @@ public abstract class FunctionsTestTemplate
         final String classEnd)
     {
         super(
+            header,
             decoratorFactory,
             classDescription,
             classPrefix,
-            header,
             packageDeclaration,
             packageName,
             engineName,
@@ -198,6 +198,7 @@ public abstract class FunctionsTestTemplate
 
     /**
      * Builds a FunctionsTestTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
@@ -208,6 +209,7 @@ public abstract class FunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public FunctionsTestTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String classDescription,
         final String classPrefix,
@@ -218,10 +220,10 @@ public abstract class FunctionsTestTemplate
         final String quote)
     {
         this(
+            header,
             decoratorFactory,
             classDescription,
             classPrefix,
-            FunctionsTestTemplateDefaults.DEFAULT_HEADER,
             FunctionsTestTemplateDefaults.PACKAGE_DECLARATION,
             packageName,
             testedPackageName,
@@ -528,9 +530,10 @@ public abstract class FunctionsTestTemplate
 
     /**
      * Retrieves the source code of the generated numeric functions test.
+     * @param header the header.
      * @return such source code.
      */
-    protected String generateOutput()
+    protected String generateOutput(final String header)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
@@ -552,7 +555,7 @@ public abstract class FunctionsTestTemplate
 
             MessageFormat t_Formatter = null;
 
-            String t_strHeader = getHeader();
+            String t_strHeader = header;
 
             if  (t_strHeader != null) 
             {

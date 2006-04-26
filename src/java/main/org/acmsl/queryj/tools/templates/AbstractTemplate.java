@@ -90,6 +90,16 @@ public abstract class AbstractTemplate
      * Caches the StringTemplateGroup for each template class.
      */
     private static Map m__mSTCache;
+
+    /**
+     * The optional header.
+     */
+    private String m__strHeader;
+
+    /**
+     * The cached processed header.
+     */
+    private String m__strCachedProcessedHeader;
     
     /**
      * The decorator factory.
@@ -99,13 +109,103 @@ public abstract class AbstractTemplate
     /**
      * Builds a <code>AbstractTemplate</code> with given
      * decorator factory.
+     * @param header the optional header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition decoratorFactory != null
      */
-    protected AbstractTemplate(final DecoratorFactory decoratorFactory)
+    protected AbstractTemplate(
+        final String header, final DecoratorFactory decoratorFactory)
     {
+        immutableSetHeader(header);
         immutableSetDecoratorFactory(decoratorFactory);
         immutableSetSTCache(new HashMap());
+    }
+
+    /**
+     * Specifies the header.
+     * @param header the header.
+     */
+    protected final void immutableSetHeader(final String header)
+    {
+        m__strHeader = header;
+    }
+    
+    /**
+     * Specifies the header.
+     * @param header the header.
+     */
+    protected void setHeader(final String header)
+    {
+        immutableSetHeader(header);
+    }
+    
+    /**
+     * Retrieves the header.
+     * @return the header.
+     */
+    protected String getHeader()
+    {
+        return m__strHeader;
+    }
+
+    /**
+     * Specifies the cached processed header.
+     * @param header such value.
+     */
+    protected final void immutableSetCachedProcessedHeader(final String header)
+    {
+        m__strCachedProcessedHeader = header;
+    }
+    
+    /**
+     * Specifies the cached processed header.
+     * @param header such value.
+     */
+    protected void setCachedProcessedHeader(final String header)
+    {
+        immutableSetCachedProcessedHeader(header);
+    }
+    
+    /**
+     * Retrieves the cached processed header.
+     * @returnsuch value.
+     */
+    protected String getCachedProcessedHeader()
+    {
+        return m__strCachedProcessedHeader;
+    }
+
+    /**
+     * Retrieves the processed header.
+     * @param input the input.
+     * @return such information.
+     * @precondition input != null
+     */
+    public String getProcessedHeader(final Map input)
+    {
+        String result = getCachedProcessedHeader();
+        
+        if  (result == null)
+        {
+            result = processHeader(input, getHeader());
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves the processed header.
+     * @param input the input.
+     * @return such information.
+     * @precondition input != null
+     */
+    public String processHeader(final Map input, final String header)
+    {
+        String result = processInnerTemplate(header, input);
+
+        setCachedProcessedHeader(result);
+        
+        return result;
     }
 
     /**
@@ -314,7 +414,7 @@ public abstract class AbstractTemplate
     {
         logHeader(buildHeader());
 
-        return generateOutput();
+        return generateOutput(getHeader());
     }
 
     /**
@@ -341,11 +441,38 @@ public abstract class AbstractTemplate
     }
 
     /**
+     * Processes given text as a template.
+     * @param template the template.
+     * @param input the input.
+     * @return the processed text.
+     * @precondition template != null
+     * @precondition input != null
+     */
+    protected String processInnerTemplate(final String template, final Map input)
+    {
+        String result = null;
+        
+        if  (template != null)
+        {
+            
+            StringTemplate t_strInnerTemplate =
+                new StringTemplate(template, AngleBracketTemplateLexer.class);
+
+            t_strInnerTemplate.setAttribute("input", input);
+        
+            result = t_strInnerTemplate.toString();
+        }
+        
+        return result;
+    }
+    
+    /**
      * Generates the actual source code.
+     * @param header the header.
      * @return such output. 
      * @throws InvalidTemplateException if the template cannot be generated.
      */
-    protected abstract String generateOutput()
+    protected abstract String generateOutput(final String header)
       throws  InvalidTemplateException;
 
     /**

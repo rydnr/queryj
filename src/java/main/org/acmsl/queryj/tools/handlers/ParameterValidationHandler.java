@@ -50,6 +50,7 @@ import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
+import org.acmsl.commons.utils.io.FileUtils;
 
 /*
  * Importing some Ant classes.
@@ -67,6 +68,8 @@ import org.apache.commons.logging.Log;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -173,6 +176,22 @@ public class ParameterValidationHandler
      * The output-dir attribute name.
      */
     public static final String OUTPUT_DIR = "outputdir";
+
+    /**
+     * The header-file attribute name.
+     */
+    public static final String HEADER_FILE = "header-file";
+
+    /**
+     * The header attribute name.
+     */
+    public static final String HEADER = "header";
+
+    /**
+     * The header unreadable error message.
+     */
+    public static final String HEADER_NOT_READABLE =
+        "Specified header is not readable";
 
     /**
      * The missing output dir error message.
@@ -362,6 +381,7 @@ public class ParameterValidationHandler
                 (String) parameters.get(PACKAGE),
                 (Path) parameters.get(CLASSPATH),
                 (File) parameters.get(OUTPUT_DIR),
+                (File) parameters.get(HEADER),
                 (Boolean) parameters.get(OUTPUT_DIR_SUBFOLDERS),
                 (Boolean) parameters.get(EXTRACT_PROCEDURES),
                 (Boolean) parameters.get(EXTRACT_FUNCTIONS),
@@ -372,7 +392,8 @@ public class ParameterValidationHandler
                     parameters.get(EXTERNALLY_MANAGED_FIELDS),
                 (String) parameters.get(CUSTOM_SQL_MODEL),
                 (File) parameters.get(SQL_XML_FILE),
-                (String) parameters.get(GRAMMAR_BUNDLE_NAME));
+                (String) parameters.get(GRAMMAR_BUNDLE_NAME),
+                parameters);
         }
     }
 
@@ -388,6 +409,7 @@ public class ParameterValidationHandler
      * @param packageName the package name.
      * @param classpath the classpath.
      * @param outputdir the output folder.
+     * @param header the header.
      * @param outputdirsubfolders whether to use subfolders.
      * @param extractProcedures the extract-procedures setting.
      * @param extractFunctions the extract-functions setting.
@@ -399,6 +421,8 @@ public class ParameterValidationHandler
      * @param customSqlModel the model for custom-sql information.
      * @param sqlXmlFile the sql.xml file.
      * @param grammarBundleName the grammar bundle name.
+     * @param parameters the parameter map, to store processed information
+     * such as the header contents.
      * @throws BuildException whenever the required
      * parameters are not present or valid.
      */
@@ -413,6 +437,7 @@ public class ParameterValidationHandler
         final String packageName,
         final Path classpath,
         final File outputdir,
+        final File header,
         final Boolean outputdirsubfolders,
         final Boolean extractProcedures,
         final Boolean extractFunctions,
@@ -422,9 +447,13 @@ public class ParameterValidationHandler
         final AntExternallyManagedFieldsElement externallyManagedFields,
         final String customSqlModel,
         final File sqlXmlFile,
-        final String grammarBundleName)
+        final String grammarBundleName,
+        final Map parameters)
       throws  BuildException
     {
+        Log t_Log =
+            UniqueLogFactory.getLog(ParameterValidationHandler.class);
+                
         if  (driver == null) 
         {
             throw new BuildException(DRIVER_MISSING);
@@ -479,6 +508,65 @@ public class ParameterValidationHandler
             throw new BuildException(OUTPUTDIR_MISSING);
         }
 
+        if  (header == null) 
+        {
+            if  (t_Log != null)
+            {
+                t_Log.info(
+                      "No header specified. Using "
+                    + "GPLed QueryJ's instead.");
+            }
+        }
+        else
+        {
+            boolean t_bExceptionReadingHeader = false;
+            
+            try
+            {
+                parameters.put(HEADER, readFile(header));
+            }
+            catch  (final FileNotFoundException fileNotFoundException)
+            {
+                t_bExceptionReadingHeader = true;
+                
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Header file not found.",
+                        fileNotFoundException);
+                }
+            }
+            catch  (final SecurityException securityException)
+            {
+                t_bExceptionReadingHeader = true;
+                
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "No permission to read header file.",
+                        securityException);
+                }
+            }
+            catch  (final IOException ioException)
+            {
+                t_bExceptionReadingHeader = true;
+                
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Could not read header file.",
+                        ioException);
+                }
+            }
+            finally
+            {
+                if  (t_bExceptionReadingHeader)
+                {
+                    throw new BuildException(HEADER_NOT_READABLE);
+                }
+            }
+        }
+        
         if  (!outputdir.isDirectory())
         {
             throw new BuildException(OUTPUTDIR_NOT_FOLDER);
@@ -535,5 +623,45 @@ public class ParameterValidationHandler
                 throw new BuildException(GRAMMAR_BUNDLE_NOT_FOUND);
             }
         }
+    }
+
+    /**
+     * Reads the contents of given file.
+     * @param file the file.
+     * @return the file contents.
+     * @throws FileNotFoundException if the file is not found.
+     * @throws SecurityException if the environment prevents
+     * reading the file.
+     * @throws IOException if the file cannot be read for any
+     * other reason.
+     * @precondition file != null
+     */
+    protected String readFile(final File file)
+        throws  FileNotFoundException,
+                SecurityException,
+                IOException
+    {
+        return readFile(file, FileUtils.getInstance());
+    }
+
+    /**
+     * Reads the contents of given file.
+     * @param file the file.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @return the file contents.
+     * @throws FileNotFoundException if the file is not found.
+     * @throws SecurityException if the environment prevents
+     * reading the file.
+     * @throws IOException if the file cannot be read for any
+     * other reason.
+     * @precondition file != null
+     * @precondition fileUtils != null
+     */
+    protected String readFile(final File file, final FileUtils fileUtils)
+        throws  FileNotFoundException,
+                SecurityException,
+                IOException
+    {
+        return fileUtils.readFile(file);
     }
 }

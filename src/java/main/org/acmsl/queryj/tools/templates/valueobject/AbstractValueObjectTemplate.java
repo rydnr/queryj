@@ -56,11 +56,6 @@ public abstract class AbstractValueObjectTemplate
     extends  AbstractTemplate
 {
     /**
-     * The header.
-     */
-    private String m__strHeader;
-
-    /**
      * The package declaration.
      */
     private String m__strPackageDeclaration;
@@ -133,11 +128,11 @@ public abstract class AbstractValueObjectTemplate
     /**
      * Builds an <code>AbstractValueObjectTemplate</code>
      * using given information.
-     * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param acmslImports the ACM-SL imports.
      * @param jdkImports the JDK imports.
@@ -151,11 +146,11 @@ public abstract class AbstractValueObjectTemplate
      * @param classEnd the class end.
      */
     public AbstractValueObjectTemplate(
-        final String header,
         final String packageDeclaration,
         final String packageName,
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String acmslImports,
         final String jdkImports,
@@ -168,8 +163,7 @@ public abstract class AbstractValueObjectTemplate
         final String constructorFieldValueSetter,
         final String classEnd)
     {
-        super(decoratorFactory);
-        immutableSetHeader(header);
+        super(header, decoratorFactory);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetTableTemplate(tableTemplate);
@@ -184,32 +178,6 @@ public abstract class AbstractValueObjectTemplate
         immutableSetConstructorFieldDefinition(constructorFieldDefinition);
         immutableSetConstructorFieldValueSetter(constructorFieldValueSetter);
         immutableSetClassEnd(classEnd);
-    }
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    private void immutableSetHeader(final String header)
-    {
-        m__strHeader = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected void setHeader(final String header)
-    {
-        immutableSetHeader(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    public String getHeader() 
-    {
-        return m__strHeader;
     }
 
     /**

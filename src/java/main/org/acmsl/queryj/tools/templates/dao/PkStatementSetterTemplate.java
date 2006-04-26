@@ -67,6 +67,7 @@ public class PkStatementSetterTemplate
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -79,6 +80,7 @@ public class PkStatementSetterTemplate
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -91,6 +93,7 @@ public class PkStatementSetterTemplate
             tableName,
             metadataManager,
             customSqlProvider,
+            header,
             decoratorFactory,
             packageName,
             engineName,

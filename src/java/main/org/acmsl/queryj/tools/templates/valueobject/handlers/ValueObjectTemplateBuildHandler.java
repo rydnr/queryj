@@ -118,6 +118,7 @@ public class ValueObjectTemplateBuildHandler
                 retrieveDatabaseMetaData(attributes),
                 retrieveMetadataManager(attributes),
                 retrievePackage(attributes),
+                retrieveHeader(attributes),
                 ValueObjectTemplateGenerator.getInstance(),
                 retrieveTableTemplates(attributes));
     }
@@ -128,6 +129,7 @@ public class ValueObjectTemplateBuildHandler
      * @param databaseMetaData the <code>DatabaseMetaData</code> instance.
      * @param metadataManager the metadata manager.
      * @param packageName the package name.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
@@ -144,19 +146,22 @@ public class ValueObjectTemplateBuildHandler
         final DatabaseMetaData databaseMetaData,
         final MetadataManager metadataManager,
         final String packageName,
+        final String header,
         final ValueObjectTemplateFactory templateFactory,
         final TableTemplate[] tableTemplates)
       throws  BuildException
     {
         boolean result = false;
 
+        int t_iCount = (tableTemplates != null) ? tableTemplates.length : 0;
+            
         try
         {
             ValueObjectTemplate[] t_aValueObjectTemplates =
-                new ValueObjectTemplate[tableTemplates.length];
+                new ValueObjectTemplate[t_iCount];
 
             for  (int t_iValueObjectIndex = 0;
-                      t_iValueObjectIndex < t_aValueObjectTemplates.length;
+                      t_iValueObjectIndex < t_iCount;
                       t_iValueObjectIndex++) 
             {
                 String t_strQuote =
@@ -176,7 +181,8 @@ public class ValueObjectTemplateBuildHandler
                     templateFactory.createValueObjectTemplate(
                         packageName,
                         tableTemplates[t_iValueObjectIndex],
-                        metadataManager);
+                        metadataManager,
+                        header);
             }
 
             storeValueObjectTemplates(t_aValueObjectTemplates, attributes);

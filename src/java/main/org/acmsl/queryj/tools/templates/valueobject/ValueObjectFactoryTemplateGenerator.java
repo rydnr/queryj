@@ -129,9 +129,10 @@ public class ValueObjectFactoryTemplateGenerator
 
     /**
      * Generates a value object factory template.
+     * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
-     * @param packageName the package name.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
@@ -141,7 +142,8 @@ public class ValueObjectFactoryTemplateGenerator
     public ValueObjectFactoryTemplate createValueObjectFactoryTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final String header)
       throws  QueryJException
     {
         return
@@ -149,6 +151,7 @@ public class ValueObjectFactoryTemplateGenerator
                 packageName,
                 tableTemplate,
                 metadataManager,
+                header,
                 getDecoratorFactory());
     }
 

@@ -154,6 +154,7 @@ public class DAOFactoryTemplateBuildHandler
                     metaData.getDatabaseProductName().toLowerCase()),
                 basePackage,
                 metaData.getDatabaseProductName(),
+                retrieveHeader(parameters),
                 retrieveTableTemplates(parameters),
                 DAOFactoryTemplateGenerator.getInstance());
         }
@@ -172,6 +173,7 @@ public class DAOFactoryTemplateBuildHandler
      * @param packageName the package name.
      * @param basePackage the base package.
      * @param engineName the engine name.
+     * @param header the header.
      * @param tableTemplates the table templates.
      * @param templateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
@@ -189,6 +191,7 @@ public class DAOFactoryTemplateBuildHandler
         final String packageName,
         final String basePackage,
         final String engineName,
+        final String header,
         final TableTemplate[] tableTemplates,
         final DAOFactoryTemplateFactory templateFactory)
       throws  BuildException
@@ -211,7 +214,8 @@ public class DAOFactoryTemplateBuildHandler
                         packageName,
                         engineName,
                         basePackage,
-                        jndiDataSource);
+                        jndiDataSource,
+                        header);
             }
 
             storeDAOFactoryTemplates(t_aDAOFactoryTemplates, parameters);

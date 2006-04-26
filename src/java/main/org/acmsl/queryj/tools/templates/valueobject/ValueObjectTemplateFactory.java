@@ -57,12 +57,14 @@ public interface ValueObjectTemplateFactory
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
     public ValueObjectTemplate createValueObjectTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final String header)
       throws  QueryJException;
 }

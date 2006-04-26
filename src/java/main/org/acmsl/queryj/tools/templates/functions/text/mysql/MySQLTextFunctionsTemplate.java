@@ -95,6 +95,7 @@ public class MySQLTextFunctionsTemplate
     /**
      * Builds a <code>MySQLTextFunctionsTemplate</code> using given
      * information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -102,13 +103,15 @@ public class MySQLTextFunctionsTemplate
      * @param quote the identifier quote string.
      */
     public MySQLTextFunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         super(
+            header,
             decoratorFactory,
             packageName,
             engineName,

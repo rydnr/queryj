@@ -64,6 +64,7 @@ public interface BasePerRepositoryTemplateFactory
      * @param engineName the engine name.
      * @param repositoryName the name of the repository.
      * @param tables the tables.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -73,6 +74,7 @@ public interface BasePerRepositoryTemplateFactory
         final String basePackageName,
         final String repositoryName,
         final String engineName,
-        final Collection tables)
+        final Collection tables,
+        final String header)
       throws  QueryJException;
 }

@@ -172,6 +172,7 @@ public abstract class BasePerTableTemplateBuildHandler
                 retrieveTemplateFactory(),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
+                retrieveHeader(parameters),
                 retrieveTableTemplates(parameters));
     }
 
@@ -192,6 +193,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param templateFactory the template factory.
      * @param projectPackage the project package.
      * @param repository the repository.
+     * @param header the header.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -214,6 +216,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final BasePerTableTemplateFactory templateFactory,
         final String projectPackage,
         final String repository,
+        final String header,
         final TableTemplate[] tableTemplates)
       throws  BuildException
     {
@@ -243,7 +246,8 @@ public abstract class BasePerTableTemplateBuildHandler
                         engineVersion,
                         quote,
                         projectPackage,
-                        repository);
+                        repository,
+                        header);
             }
 
             storeTemplates(t_aTemplates, parameters);

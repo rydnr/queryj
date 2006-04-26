@@ -55,10 +55,12 @@ public interface ProcedureRepositoryTemplateFactory
      * @param packageName the package name.
      * @param repository the repository.
      * @param metadataTypeManager the metadata type manager instance.
+     * @param header the header.
      * @return such template.
      */
     public ProcedureRepositoryTemplate createProcedureRepositoryTemplate(
         final String packageName,
         final String repository,
-        final MetadataTypeManager metadataTypeManager);
+        final MetadataTypeManager metadataTypeManager,
+        final String header);
 }

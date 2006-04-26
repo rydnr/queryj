@@ -187,7 +187,8 @@ public class TableTemplateBuildHandler
                 TableTemplateGenerator.getInstance(),
                 retrieveProjectPackage(parameters),
                 retrievePackage(engineName, parameters),
-                retrieveTableRepositoryName(parameters));
+                retrieveTableRepositoryName(parameters),
+                retrieveHeader(parameters));
     }
 
     /**
@@ -202,6 +203,7 @@ public class TableTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @throws QueryJException in case of error.
@@ -224,7 +226,8 @@ public class TableTemplateBuildHandler
         final TableTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
-        final String repository)
+        final String repository,
+        final String header)
       throws  BuildException,
               QueryJException
     {
@@ -256,7 +259,8 @@ public class TableTemplateBuildHandler
                         engineVersion,
                         quote,
                         projectPackage,
-                        repository);
+                        repository,
+                        header);
 
                 t_astrColumnNames =
                     metadataManager.getColumnNames(

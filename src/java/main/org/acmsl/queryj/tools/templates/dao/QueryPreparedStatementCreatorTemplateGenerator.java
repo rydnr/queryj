@@ -128,17 +128,18 @@ public class QueryPreparedStatementCreatorTemplateGenerator
     /**
      * Generates a QueryPreparedStatementCreator template.
      * @param packageName the package name.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
      */
     public QueryPreparedStatementCreatorTemplate createQueryPreparedStatementCreatorTemplate(
-        final String packageName)
+        final String packageName, final String header)
       throws  QueryJException
     {
         return
             new QueryPreparedStatementCreatorTemplate(
-                getDecoratorFactory(), packageName);
+                header, getDecoratorFactory(), packageName);
     }
 
     /**

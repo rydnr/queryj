@@ -68,6 +68,7 @@ public class DataAccessManagerTemplate
      * Builds a <code>DataAccessManagerTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
@@ -77,6 +78,7 @@ public class DataAccessManagerTemplate
      */
     public DataAccessManagerTemplate(
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String basePackageName,
@@ -86,6 +88,7 @@ public class DataAccessManagerTemplate
     {
         super(
             metadataManager,
+            header,
             decoratorFactory,
             packageName,
             basePackageName,

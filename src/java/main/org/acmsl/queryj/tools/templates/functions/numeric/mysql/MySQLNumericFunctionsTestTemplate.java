@@ -59,10 +59,11 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class MySQLNumericFunctionsTestTemplate
-    extends     NumericFunctionsTestTemplate
+    extends  NumericFunctionsTestTemplate
 {
     /**
      * Builds a MySQLNumericFunctionsTestTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
@@ -71,14 +72,16 @@ public class MySQLNumericFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public MySQLNumericFunctionsTestTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  packageName,
-        final String  testedPackageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         super(
+            header,
             decoratorFactory,
             packageName,
             testedPackageName,

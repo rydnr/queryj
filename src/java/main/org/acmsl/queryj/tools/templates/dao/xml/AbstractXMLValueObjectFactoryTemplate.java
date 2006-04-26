@@ -158,12 +158,12 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
     /**
      * Builds an <code>AbstractXMLValueObjectFactoryTemplate</code>
      * using given information.
-     * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param projectImports the project imports.
      * @param acmSlImports the ACM-SL imports.
@@ -182,12 +182,12 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
      * @param classEnd the class end.
      */
     public AbstractXMLValueObjectFactoryTemplate(
-        final String header,
         final String packageDeclaration,
         final String packageName,
         final String valueObjectPackageName,
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String projectImports,
         final String acmSlImports,
@@ -204,8 +204,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
         final String extraMethods,
         final String classEnd)
     {
-        super(decoratorFactory);
-        immutableSetHeader(header);
+        super(header, decoratorFactory);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetValueObjectPackageName(valueObjectPackageName);
@@ -226,33 +225,6 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
             conversionMethodSuffixForNullableValues);
         immutableSetExtraMethods(extraMethods);
         immutableSetClassEnd(classEnd);
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    private void immutableSetHeader(final String header)
-    {
-        m__strHeader = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected void setHeader(final String header)
-    {
-        immutableSetHeader(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    public String getHeader() 
-    {
-        return m__strHeader;
     }
 
     /**

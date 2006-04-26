@@ -78,6 +78,7 @@ public class XMLValueObjectFactoryTemplate
      * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      */
     public XMLValueObjectFactoryTemplate(
@@ -85,15 +86,16 @@ public class XMLValueObjectFactoryTemplate
         final String valueObjectPackageName,
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory)
     {
         super(
-            DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             packageName,
             valueObjectPackageName,
             tableTemplate,
             metadataManager,
+            header,
             decoratorFactory,
             DEFAULT_PROJECT_IMPORTS,
             DEFAULT_ACMSL_IMPORTS,
@@ -113,23 +115,27 @@ public class XMLValueObjectFactoryTemplate
 
     /**
      * Retrieves the source code of the generated field tableName.
+     * @param header the header.
      * @return such source code.
      */
-    public String generateOutput()
+    public String generateOutput(final String header)
     {
-        return generateOutput(getMetadataManager());
+        return generateOutput(header, getMetadataManager());
     }
     
     /**
      * Retrieves the source code of the generated field tableName.
+     * @param header the header.
      * @param metadataManager the metadata manager.
      * @return such source code.
      * @precondition metadataManager != null
      */
-    protected String generateOutput(final MetadataManager metadataManager)
+    protected String generateOutput(
+        final String header, final MetadataManager metadataManager)
     {
         return
             generateOutput(
+                header,
                 getTableTemplate(),
                 metadataManager,
                 metadataManager.getMetadataTypeManager(),
@@ -139,6 +145,7 @@ public class XMLValueObjectFactoryTemplate
  
    /**
      * Retrieves the source code of the generated field tableName.
+     * @param header the header.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
      * @param metadataTypeManager the metadata type manager.
@@ -153,6 +160,7 @@ public class XMLValueObjectFactoryTemplate
      * @precondition englishGrammarUtils != null
      */
     protected String generateOutput(
+        final String header,
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -161,7 +169,7 @@ public class XMLValueObjectFactoryTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
-        MessageFormat t_Formatter = new MessageFormat(getHeader());
+        MessageFormat t_Formatter = new MessageFormat(header);
 
         t_sbResult.append(
             t_Formatter.format(

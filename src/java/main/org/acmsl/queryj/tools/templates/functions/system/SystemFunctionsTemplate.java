@@ -47,8 +47,6 @@ import org.acmsl.queryj.tools.templates.functions.FunctionsTemplate;
 /*
  * Importing some JDK classes.
  */
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -64,33 +62,26 @@ public abstract class SystemFunctionsTemplate
      * The capitalized words.
      */
     static final String[] CAPITALIZED_WORDS =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "user",
-                        "insert",
-                        "id"
-                    }))
-            .toArray();
+        new String[]
+        {
+            "user",
+            "insert",
+            "id"
+        };
 
     /**
      * The field types.
      */
     static final String[] FIELD_TYPES =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "String",
-                        "Long"
-                    }))
-            .toArray();
+        new String[]
+        {
+            "String",
+            "Long"
+        };
 
     /**
      * Builds a SystemFunctionsTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -98,13 +89,15 @@ public abstract class SystemFunctionsTemplate
      * @param quote the identifier quote string.
      */
     public SystemFunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         super(
+            header,
             decoratorFactory,
             "system",
             "System",

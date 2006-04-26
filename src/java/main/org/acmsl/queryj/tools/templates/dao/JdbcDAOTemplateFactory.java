@@ -53,10 +53,11 @@ public interface JdbcDAOTemplateFactory
     /**
      * Generates a JdbcDAO template.
      * @param packageName the package name.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
     public JdbcDAOTemplate createJdbcDAOTemplate(
-        final String packageName)
+        final String packageName, final String header)
       throws  QueryJException;
 }

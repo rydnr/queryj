@@ -135,6 +135,7 @@ public class XMLValueObjectFactoryTemplateGenerator
      * @param valueObjectPackageName the value object package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
@@ -146,7 +147,8 @@ public class XMLValueObjectFactoryTemplateGenerator
         final String packageName,
         final String valueObjectPackageName,
         final TableTemplate tableTemplate,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final String header)
       throws  QueryJException
     {
         return
@@ -155,6 +157,7 @@ public class XMLValueObjectFactoryTemplateGenerator
                 valueObjectPackageName,
                 tableTemplate,
                 metadataManager,
+                header,
                 getDecoratorFactory());
     }
 

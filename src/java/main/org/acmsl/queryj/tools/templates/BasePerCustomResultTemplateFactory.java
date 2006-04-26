@@ -63,6 +63,7 @@ public interface BasePerCustomResultTemplateFactory
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param header the header.
      */
     public BasePerCustomResultTemplate createTemplate(
         final ResultElement customResult,
@@ -72,6 +73,7 @@ public interface BasePerCustomResultTemplateFactory
         final String engineName,
         final String engineVersion,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
       throws  QueryJException;
 }

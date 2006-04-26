@@ -131,14 +131,16 @@ public class MySQLTextFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the input information is invalid.
      */
     public TextFunctionsTemplate createTextFunctionsTemplate(
-        String  packageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote)
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String header)
       throws  QueryJException
     {
         TextFunctionsTemplate result = null;
@@ -150,6 +152,7 @@ public class MySQLTextFunctionsTemplateGenerator
         {
             result =
                 new MySQLTextFunctionsTemplate(
+                    header,
                     getDecoratorFactory(),
                     packageName,
                     engineName,

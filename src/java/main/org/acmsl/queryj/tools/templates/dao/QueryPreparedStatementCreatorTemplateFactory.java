@@ -53,10 +53,11 @@ public interface QueryPreparedStatementCreatorTemplateFactory
     /**
      * Generates a QueryPreparedStatementCreator template.
      * @param packageName the package name.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
     public QueryPreparedStatementCreatorTemplate createQueryPreparedStatementCreatorTemplate(
-        final String packageName)
+        final String packageName, final String header)
       throws  QueryJException;
 }

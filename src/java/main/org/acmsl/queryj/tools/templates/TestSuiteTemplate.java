@@ -64,18 +64,21 @@ public class TestSuiteTemplate
 {
     /**
      * Builds a TestSuiteTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the tested package name.
      * @param testPackageName the test package name.
      * @param suiteName the suite name.
      */
     public TestSuiteTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String testPackageName,
         final String suiteName)
     {
         super(
+            header,
             decoratorFactory,
             packageName,
             testPackageName,
@@ -88,12 +91,14 @@ public class TestSuiteTemplate
 
     /**
      * Retrieves the source code of the test suite.
+     * @param header the header.
      * @return such Java source code.
      */
-    protected String generateOutput()
+    protected String generateOutput(final String header)
     {
         return
             generateOutput(
+                header,
                 getPackageName(),
                 getTestPackageName(),
                 getSuiteName(),
@@ -106,6 +111,7 @@ public class TestSuiteTemplate
 
     /**
      * Retrieves the source code of the test suite.
+     * @param header the header.
      * @param packageName the tested package name.
      * @param testPackageName the test package name.
      * @param suiteName the suite name.
@@ -120,6 +126,7 @@ public class TestSuiteTemplate
      * @precondition testCases != null
      */
     protected String generateOutput(
+        final String header,
         final String packageName,
         final String testPackageName,
         final String suiteName,
@@ -188,6 +195,7 @@ public class TestSuiteTemplate
             t_Formatter.format(
                 new Object[]
                 {
+                    header,
                     packageName,
                     testPackageName,
                     t_sbTestCaseImportStatements,

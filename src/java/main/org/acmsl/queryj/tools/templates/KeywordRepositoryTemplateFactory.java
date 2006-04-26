@@ -53,10 +53,13 @@ public interface KeywordRepositoryTemplateFactory
      * Generates a keyword repository template.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @param project the project, for logging purposes.
      * @param task the task, for logging purposes.
      * @return such template.
      */
     public KeywordRepositoryTemplate createKeywordRepositoryTemplate(
-        final String packageName, final String repository);
+        final String packageName,
+        final String repository,
+        final String header);
 }

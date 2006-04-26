@@ -126,16 +126,22 @@ public class DAOChooserTemplateGenerator
      * Creates a DAOChooser template instance.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @return such template.
      * @precondition packageName != null
      * @precondition repository != null
      */
     public DAOChooserTemplate createDAOChooserTemplate(
-        final String packageName, final String repository)
+        final String packageName,
+        final String repository,
+        final String header)
     {
         return
             new DAOChooserTemplate(
-                getDecoratorFactory(), packageName, repository);
+                header,
+                getDecoratorFactory(),
+                packageName,
+                repository);
     }
 
     /**

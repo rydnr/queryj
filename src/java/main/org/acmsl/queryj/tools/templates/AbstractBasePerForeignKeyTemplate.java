@@ -109,6 +109,7 @@ public abstract class AbstractBasePerForeignKeyTemplate
      * given information.
      * @param foreignKey the foreign key.
      * @param metadataManager the database metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -120,6 +121,7 @@ public abstract class AbstractBasePerForeignKeyTemplate
     public AbstractBasePerForeignKeyTemplate(
         final ForeignKey foreignKey,
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -128,7 +130,7 @@ public abstract class AbstractBasePerForeignKeyTemplate
         final String basePackageName,
         final String repositoryName)
     {
-        super(decoratorFactory);
+        super(header, decoratorFactory);
         immutableSetForeignKey(foreignKey);
         immutableSetMetadataManager(metadataManager);
         immutableSetPackageName(packageName);

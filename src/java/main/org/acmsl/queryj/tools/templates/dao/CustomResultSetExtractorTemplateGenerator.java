@@ -139,6 +139,7 @@ public class CustomResultSetExtractorTemplateGenerator
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param header the header.
      * @return the new template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition resultElement != null
@@ -156,7 +157,8 @@ public class CustomResultSetExtractorTemplateGenerator
         final String engineName,
         final String engineVersion,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
       throws  QueryJException
     {
         return
@@ -164,6 +166,7 @@ public class CustomResultSetExtractorTemplateGenerator
                 customResult,
                 customSqlProvider,
                 metadataManager,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 engineName,

@@ -131,6 +131,7 @@ public class OracleTextFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
@@ -138,7 +139,8 @@ public class OracleTextFunctionsTemplateGenerator
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote)
+        final String quote,
+        final String header)
       throws  QueryJException
     {
         TextFunctionsTemplate result = null;
@@ -150,6 +152,7 @@ public class OracleTextFunctionsTemplateGenerator
         {
             result =
                 new OracleTextFunctionsTemplate(
+                    header,
                     getDecoratorFactory(),
                     packageName,
                     engineName,

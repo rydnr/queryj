@@ -75,6 +75,7 @@ public class DAOFactoryTemplate
 {
     /**
      * Builds a <code>DAOFactoryTemplate</code> using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param tableTemplate the table template.
      * @param packageName the package name.
@@ -83,6 +84,7 @@ public class DAOFactoryTemplate
      * @param jndiDataSource the JNDI location of the data source.
      */
     public DAOFactoryTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final TableTemplate tableTemplate,
         final String packageName,
@@ -91,6 +93,7 @@ public class DAOFactoryTemplate
         final String jndiDataSource)
     {
         super(
+            header,
             decoratorFactory,
             tableTemplate,
             packageName,
@@ -103,12 +106,14 @@ public class DAOFactoryTemplate
 
     /**
      * Retrieves the source code of the generated field tableName.
+     * @param header the header.
      * @return such source code.
      */
-    protected String generateOutput()
+    protected String generateOutput(final String header)
     {
         return
             generateOutput(
+                header,
                 getTableTemplate(),
                 getPackageName(),
                 getEngineName(),
@@ -122,6 +127,7 @@ public class DAOFactoryTemplate
 
     /**
      * Retrieves the source code of the generated field tableName.
+     * @param header the header.
      * @param tableTemplate the table template.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -141,6 +147,7 @@ public class DAOFactoryTemplate
      * @precondition packageUtils != null
      */
     protected String generateOutput(
+        final String header,
         final TableTemplate tableTemplate,
         final String packageName,
         final String engineName,
@@ -175,6 +182,7 @@ public class DAOFactoryTemplate
                 STARTING_YEAR,
                 new Integer(retrieveCurrentYear())
             },
+            header,
             t_strTableName,
             engineName,
             basePackageName,
@@ -204,6 +212,7 @@ public class DAOFactoryTemplate
      * Fills the template parameters.
      * @param template the template.
      * @param copyrightYears the copyright years.
+     * @param header the header.
      * @param tableName the table name.
      * @param engineName the engine name.
      * @param basePackageName the base package name.
@@ -244,6 +253,7 @@ public class DAOFactoryTemplate
     protected void fillParameters(
         final StringTemplate template,
         final Integer[] copyrightYears,
+        final String header,
         final String tableName,
         final String engineName,
         final String basePackageName,
@@ -265,7 +275,13 @@ public class DAOFactoryTemplate
 
         fillPackageDeclarationParameters(
             input, basePackageName, subpackageName);
-        
+
+        if  (   (header != null)
+             && (!input.containsKey("header")))
+        {
+            input.put("header", processHeader(input, header));
+        }
+
         input.put("copyright_years", copyrightYears);
 
         input.put("table_name",  tableName);

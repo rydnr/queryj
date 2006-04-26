@@ -221,6 +221,7 @@ public class FkStatementSetterTemplateBuildHandler
                 retrieveMetadataManager(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
+                retrieveHeader(parameters),
                 templateFactory,
                 templateFactory.getDecoratorFactory(),
                 retrieveTableTemplates(parameters),
@@ -236,6 +237,7 @@ public class FkStatementSetterTemplateBuildHandler
      * @param metadataManager the database metadata manager.
      * @param basePackageName the base package name.
      * @param repository the repository.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
@@ -259,6 +261,7 @@ public class FkStatementSetterTemplateBuildHandler
         final MetadataManager metadataManager,
         final String basePackageName,
         final String repositoryName,
+        final String header,
         final FkStatementSetterTemplateFactory templateFactory,
         final DecoratorFactory decoratorFactory,
         final TableTemplate[] tableTemplates,
@@ -305,7 +308,8 @@ public class FkStatementSetterTemplateBuildHandler
                             engineVersion,
                             quote,
                             basePackageName,
-                            repositoryName));
+                            repositoryName,
+                            header));
                 }
             }
 

@@ -129,14 +129,16 @@ public class OracleTimeFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
     public TimeFunctionsTemplate createTimeFunctionsTemplate(
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String header)
       throws  QueryJException
     {
         TimeFunctionsTemplate result = null;
@@ -148,6 +150,7 @@ public class OracleTimeFunctionsTemplateGenerator
         {
             result =
                 new OracleTimeFunctionsTemplate(
+                    header,
                     getDecoratorFactory(),
                     packageName,
                     engineName,

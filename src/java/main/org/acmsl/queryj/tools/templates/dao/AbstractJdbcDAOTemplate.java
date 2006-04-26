@@ -54,11 +54,6 @@ public abstract class AbstractJdbcDAOTemplate
     extends  AbstractTemplate
 {
     /**
-     * The header.
-     */
-    private String m__strHeader;
-
-    /**
      * The package declaration.
      */
     private String m__strPackageDeclaration;
@@ -145,8 +140,8 @@ public abstract class AbstractJdbcDAOTemplate
 
     /**
      * Builds an <code>AbstractJdbcDAOTemplate</code> using given information.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param acmslImports the ACM-SL imports.
@@ -167,8 +162,8 @@ public abstract class AbstractJdbcDAOTemplate
      * @param classEnd the class end.
      */
     protected AbstractJdbcDAOTemplate(
-        final DecoratorFactory decoratorFactory,
         final String header,
+        final DecoratorFactory decoratorFactory,
         final String packageDeclaration,
         final String packageName,
         final String acmslImports,
@@ -187,8 +182,7 @@ public abstract class AbstractJdbcDAOTemplate
         final String transactionTokenFactoryMethods,
         final String classEnd)
     {
-        super(decoratorFactory);
-        immutableSetHeader(header);
+        super(header, decoratorFactory);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetAcmslImports(acmslImports);
@@ -208,33 +202,6 @@ public abstract class AbstractJdbcDAOTemplate
         immutableSetTransactionTokenFactoryMethods(
             transactionTokenFactoryMethods);
         immutableSetClassEnd(classEnd);
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    private void immutableSetHeader(final String header)
-    {
-        m__strHeader = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected void setHeader(final String header)
-    {
-        immutableSetHeader(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    public String getHeader() 
-    {
-        return m__strHeader;
     }
 
     /**

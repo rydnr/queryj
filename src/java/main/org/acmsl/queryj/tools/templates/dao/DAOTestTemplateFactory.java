@@ -66,6 +66,7 @@ public interface DAOTestTemplateFactory
      * @param jdbcUrl the JDBC URL.
      * @param jdbcUsername the JDBC username.
      * @param jdbcPassword the JDBC password.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
@@ -81,6 +82,7 @@ public interface DAOTestTemplateFactory
         final String jdbcDriver,
         final String jdbcUrl,
         final String jdbcUsername,
-        final String jdbcPassword)
+        final String jdbcPassword,
+        final String header)
       throws QueryJException;
 } 

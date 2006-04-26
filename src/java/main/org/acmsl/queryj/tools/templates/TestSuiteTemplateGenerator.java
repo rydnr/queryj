@@ -125,6 +125,7 @@ public class TestSuiteTemplateGenerator
      * Generates a test suite template.
      * @param packageName the package name.
      * @param suiteName the suite name.
+     * @param header the header.
      * @param useSubfolders whether to use subfolders.
      * @return a template.
      * @precondition packageName != null
@@ -133,12 +134,14 @@ public class TestSuiteTemplateGenerator
     public TestSuiteTemplate createTestSuiteTemplate(
         final String packageName,
         final String suiteName,
+        final String header,
         final boolean useSubfolders)
     {
         return
             createTestSuiteTemplate(
                 packageName,
                 suiteName,
+                header,
                 useSubfolders,
                 PackageUtils.getInstance());
     }
@@ -147,6 +150,7 @@ public class TestSuiteTemplateGenerator
      * Generates a test suite template.
      * @param packageName the package name.
      * @param suiteName the suite name.
+     * @param header the header.
      * @param useSubfolders whether to use subfolders.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return a template.
@@ -157,11 +161,13 @@ public class TestSuiteTemplateGenerator
     protected TestSuiteTemplate createTestSuiteTemplate(
         final String packageName,
         final String suiteName,
+        final String header,
         final boolean useSubfolders,
         final PackageUtils packageUtils)
     {
         return
             new TestSuiteTemplate(
+                header,
                 getDecoratorFactory(),
                 packageName,
                 packageUtils.retrieveBaseTestSuitePackage(

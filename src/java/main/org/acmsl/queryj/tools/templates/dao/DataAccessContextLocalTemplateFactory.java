@@ -57,6 +57,7 @@ public interface DataAccessContextLocalTemplateFactory
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -64,6 +65,7 @@ public interface DataAccessContextLocalTemplateFactory
         final String jndiLocation,
         final String engineName,
         final String engineVersion,
-        final String basePackageName)
+        final String basePackageName,
+        final String header)
       throws  QueryJException;
 }

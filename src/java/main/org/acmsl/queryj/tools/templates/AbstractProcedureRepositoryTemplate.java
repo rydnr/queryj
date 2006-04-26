@@ -72,11 +72,6 @@ public abstract class AbstractProcedureRepositoryTemplate
             new ProcedureParameterMetadata[0];
     
     /**
-     * The header.
-     */
-    private String m__strHeader;
-
-    /**
      * The package declaration.
      */
     private String m__strPackageDeclaration;
@@ -194,8 +189,8 @@ public abstract class AbstractProcedureRepositoryTemplate
     /**
      * Builds an <code>AbstractProcedureRepositoryTemplate</code> using
      * given information.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param repository the repository.
@@ -219,8 +214,8 @@ public abstract class AbstractProcedureRepositoryTemplate
      * @param classEnd the class end.
      */
     public AbstractProcedureRepositoryTemplate(
-        final DecoratorFactory decoratorFactory,
         final String header,
+        final DecoratorFactory decoratorFactory,
         final String packageDeclaration,
         final String packageName,
         final String repository,
@@ -243,8 +238,7 @@ public abstract class AbstractProcedureRepositoryTemplate
         final String valueObjectConstruction,
         final String classEnd)
     {
-        super(decoratorFactory);
-        immutableSetHeader(header);
+        super(header, decoratorFactory);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetRepository(repository);
@@ -299,33 +293,6 @@ public abstract class AbstractProcedureRepositoryTemplate
     protected MetadataTypeManager getMetadataTypeManager()
     {
         return m__MetadataTypeManager;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    private void immutableSetHeader(final String header)
-    {
-        m__strHeader = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected void setHeader(final String header)
-    {
-        immutableSetHeader(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    public String getHeader() 
-    {
-        return m__strHeader;
     }
 
     /**

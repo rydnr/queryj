@@ -87,11 +87,6 @@ public abstract class AbstractXMLDAOTestTemplate
     private MetadataManager m__MetadataManager;
 
     /**
-     * The header.
-     */
-    private String m__strHeader;
-
-    /**
      * The package declaration.
      */
     private String m__strPackageDeclaration;
@@ -235,8 +230,8 @@ public abstract class AbstractXMLDAOTestTemplate
      * Builds a <code>AbstractDAOTestTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param daoPackageName the DAO's package name.
@@ -275,8 +270,8 @@ public abstract class AbstractXMLDAOTestTemplate
     protected AbstractXMLDAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory,
         final String header,
+        final DecoratorFactory decoratorFactory,
         final String packageDeclaration,
         final String packageName,
         final String daoPackageName,
@@ -306,10 +301,9 @@ public abstract class AbstractXMLDAOTestTemplate
         final String removeFilterValues,
         final String classEnd)
     {
-        super(decoratorFactory);
+        super(header, decoratorFactory);
         immutableSetTableTemplate(tableTemplate);
         immutableSetMetadataManager(metadataManager);
-        immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetDAOPackageName(daoPackageName);
@@ -396,33 +390,6 @@ public abstract class AbstractXMLDAOTestTemplate
     public MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    private void immutableSetHeader(final String header)
-    {
-        m__strHeader = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected void setHeader(final String header)
-    {
-        immutableSetHeader(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    public String getHeader() 
-    {
-        return m__strHeader;
     }
 
     /**

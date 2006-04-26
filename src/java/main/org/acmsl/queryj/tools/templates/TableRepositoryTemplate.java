@@ -67,18 +67,20 @@ public class TableRepositoryTemplate
 {
     /**
      * Builds a <code>TableRepositoryTemplate</code> using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param repository the repository.
      */
     public TableRepositoryTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String repository)
     {
         super(
+            header,
             decoratorFactory,
-            DEFAULT_HEADER,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
             repository,
@@ -127,13 +129,14 @@ public class TableRepositoryTemplate
 
     /**
      * Retrieves the source code of the generated table repository.
+     * @param header the header.
      * @return such source code.
      */
-    protected String generateOutput()
+    protected String generateOutput(final String header)
     {
         return
             generateOutput(
-                getHeader(),
+                header,
                 getPackageDeclaration(),
                 getPackageName(),
                 getRepository(),

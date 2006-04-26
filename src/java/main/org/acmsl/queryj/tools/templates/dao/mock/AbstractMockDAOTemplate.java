@@ -68,11 +68,6 @@ public abstract class AbstractMockDAOTemplate
     private MetadataManager m__MetadataManager;
 
     /**
-     * The header.
-     */
-    private String m__strHeader;
-
-    /**
      * The package declaration.
      */
     private String m__strPackageDeclaration;
@@ -262,8 +257,8 @@ public abstract class AbstractMockDAOTemplate
      * given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param basePackageName the base package name.
@@ -307,8 +302,8 @@ public abstract class AbstractMockDAOTemplate
     public AbstractMockDAOTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory,
         final String header,
+        final DecoratorFactory decoratorFactory,
         final String packageDeclaration,
         final String packageName,
         final String basePackageName,
@@ -347,16 +342,13 @@ public abstract class AbstractMockDAOTemplate
         final String deleteWithFkPkValues,
         final String classEnd)
     {
-        super(decoratorFactory);
+        super(header, decoratorFactory);
 
         inmutableSetTableTemplate(
             tableTemplate);
 
         inmutableSetMetadataManager(
             metadataManager);
-
-        inmutableSetHeader(
-            header);
 
         inmutableSetPackageDeclaration(
             packageDeclaration);
@@ -525,33 +517,6 @@ public abstract class AbstractMockDAOTemplate
     public MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    private void inmutableSetHeader(final String header)
-    {
-        m__strHeader = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected void setHeader(final String header)
-    {
-        inmutableSetHeader(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    public String getHeader() 
-    {
-        return m__strHeader;
     }
 
     /**

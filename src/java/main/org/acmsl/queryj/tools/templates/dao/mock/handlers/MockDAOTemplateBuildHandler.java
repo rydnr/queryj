@@ -122,6 +122,7 @@ public class MockDAOTemplateBuildHandler
                 retrievePackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveTableTemplates(parameters),
+                retrieveHeader(parameters),
                 MockDAOTemplateGenerator.getInstance());
     }
 
@@ -133,6 +134,7 @@ public class MockDAOTemplateBuildHandler
      * @param packageName the package name.
      * @param tableRepositoryName the name of the table repository.
      * @param tableTemplates the table templates.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -151,6 +153,7 @@ public class MockDAOTemplateBuildHandler
         final String packageName,
         final String tableRepositoryName,
         final TableTemplate[] tableTemplates,
+        final String header,
         final MockDAOTemplateFactory templateFactory)
       throws  BuildException
     {
@@ -173,7 +176,8 @@ public class MockDAOTemplateBuildHandler
                         metadataManager,
                         packageName,
                         basePackageName,
-                        tableRepositoryName);
+                        tableRepositoryName,
+                        header);
             }
 
             storeMockDAOTemplates(t_aMockDAOTemplates, parameters);

@@ -130,6 +130,7 @@ public class XMLDAOFactoryTemplateGenerator
      * @param tableTemplate the table template.
      * @param packageName the package name.
      * @param basePackageName the base package name.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      * @precondition tableTemplate != null
@@ -139,11 +140,13 @@ public class XMLDAOFactoryTemplateGenerator
     public XMLDAOFactoryTemplate createXMLDAOFactoryTemplate(
         final TableTemplate tableTemplate,
         final String packageName,
-        final String basePackageName)
+        final String basePackageName,
+        final String header)
       throws  QueryJException
     {
         return
             new XMLDAOFactoryTemplate(
+                header,
                 getDecoratorFactory(),
                 tableTemplate,
                 packageName,

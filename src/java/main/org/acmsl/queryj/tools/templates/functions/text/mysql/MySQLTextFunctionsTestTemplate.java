@@ -61,6 +61,7 @@ public class MySQLTextFunctionsTestTemplate
 {
     /**
      * Builds a MySQLTextFunctionsTestTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
@@ -69,14 +70,16 @@ public class MySQLTextFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public MySQLTextFunctionsTestTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote)
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         super(
+            header,
             decoratorFactory,
             packageName,
             testedPackageName,

@@ -289,6 +289,7 @@ public class KeywordRepositoryTemplateBuildHandler
             buildKeywordRepositoryTemplate(
                 retrievePackage(parameters),
                 retrieveRepository(parameters),
+                retrieveHeader(parameters),
                 KeywordRepositoryTemplateGenerator.getInstance());
     }
 
@@ -296,6 +297,7 @@ public class KeywordRepositoryTemplateBuildHandler
      * Builds a procedure repository template using given information.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
@@ -307,12 +309,13 @@ public class KeywordRepositoryTemplateBuildHandler
     protected KeywordRepositoryTemplate buildKeywordRepositoryTemplate(
         final String packageName,
         final String repository,
+        final String header,
         final KeywordRepositoryTemplateFactory templateFactory)
       throws  BuildException
     {
         return
             templateFactory.createKeywordRepositoryTemplate(
-                packageName, repository);
+                packageName, repository, header);
     }
 
     /**

@@ -53,8 +53,11 @@ public interface TableRepositoryTemplateFactory
      * Generates a table repository template.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @return the template.
      */
     public TableRepositoryTemplate createTableRepositoryTemplate(
-        final String packageName, final String repository);
+        final String packageName,
+        final String repository,
+        final String header);
 }

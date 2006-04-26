@@ -76,20 +76,22 @@ public class ValueObjectFactoryTemplate
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      */
     public ValueObjectFactoryTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory)
     {
         super(
-            DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             packageName,
             tableTemplate,
             metadataManager,
+            header,
             decoratorFactory,
             DEFAULT_PROJECT_IMPORTS,
             DEFAULT_JDK_IMPORTS,
@@ -107,27 +109,30 @@ public class ValueObjectFactoryTemplate
 
     /**
      * Retrieves the source code of the generated value object factory.
+     * @param header the header.
      * @return such source code.
      */
-    protected String generateOutput()
+    protected String generateOutput(final String header)
     {
-        return generateOutput(getMetadataManager());
+        return generateOutput(header, getMetadataManager());
     }
     
     /**
      * Retrieves the source code of the generated value object factory.
+     * @param header the header.
      * @param metadataManager the metadata manager.
      * @return such source code.
      * @precondition metadataManager != null
      */
-    protected String generateOutput(final MetadataManager metadataManager)
+    protected String generateOutput(
+        final String header, final MetadataManager metadataManager)
     {
         return
             generateOutput(
                 getTableTemplate(),
                 metadataManager,
                 getPackageName(),
-                getHeader(),
+                header,
                 getPackageDeclaration(),
                 getProjectImports(),
                 getJdkImports(),

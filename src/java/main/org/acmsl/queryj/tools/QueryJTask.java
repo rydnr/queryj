@@ -147,6 +147,11 @@ public class QueryJTask
     private File m__Outputdir;
 
     /**
+     * The optional header.
+     */
+    private File m__Header;
+
+    /**
      * The "outputdirsubfolders" value.
      */
     private String m__strOutputdirsubfolders;
@@ -541,6 +546,34 @@ public class QueryJTask
     public File getOutputdir() 
     {
         return m__Outputdir;
+    }
+
+
+    /**
+     * Specifies the header.
+     * @param header the new header.
+     */
+    protected final void immutableSetHeader(final File header)
+    {
+        m__Header = header;
+    }
+
+    /**
+     * Specifies the header.
+     * @param header the new header.
+     */
+    public void setHeader(final File header)
+    {
+        immutableSetHeader(header);
+    }
+
+    /**
+     * Retrieves the header.
+     * @return such information.
+     */
+    public File getHeader() 
+    {
+        return m__Header;
     }
 
     /**
@@ -1102,7 +1135,8 @@ public class QueryJTask
             String t_strPackage    = getPackage();
             Path   t_Classpath     = getClasspath();
             File   t_Outputdir     = getOutputdir();
-
+            File   t_Header = getHeader();
+            
             boolean t_bOutputdirsubfolders = getOutputdirsubfoldersFlag();
             boolean t_bExtractTables = getExtractTablesFlag();
             boolean t_bExtractProcedures = getExtractProceduresFlag();
@@ -1192,6 +1226,13 @@ public class QueryJTask
                     t_mAttributes.put(
                         ParameterValidationHandler.OUTPUT_DIR,
                         t_Outputdir);
+                }
+
+                if  (t_Header != null)
+                {
+                    t_mAttributes.put(
+                        ParameterValidationHandler.HEADER_FILE,
+                        t_Header);
                 }
 
                 t_mAttributes.put(

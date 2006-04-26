@@ -96,6 +96,7 @@ public abstract class AbstractBasePerRepositoryTemplate
      * Builds an <code>AbstractBasePerRepositoryTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
@@ -105,6 +106,7 @@ public abstract class AbstractBasePerRepositoryTemplate
      */
     public AbstractBasePerRepositoryTemplate(
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
@@ -112,7 +114,7 @@ public abstract class AbstractBasePerRepositoryTemplate
         final String engineName,
         final Collection tables)
     {
-        super(decoratorFactory);
+        super(header, decoratorFactory);
         immutableSetMetadataManager(metadataManager);
         immutableSetSubpackageName(subpackageName);
         immutableSetBasePackageName(basePackageName);

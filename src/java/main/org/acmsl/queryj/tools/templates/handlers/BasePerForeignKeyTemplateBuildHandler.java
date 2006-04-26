@@ -261,6 +261,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                 templateFactory,
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
+                retrieveHeader(parameters),
                 retrieveForeignKeys(
                     parameters, metadataManager, decoratorFactory));
     }
@@ -282,6 +283,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param templateFactory the template factory.
      * @param projectPackage the project package.
      * @param repository the repository.
+     * @param header the header.
      * @param foreignKeys the foreign keys.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -304,6 +306,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         final BasePerForeignKeyTemplateFactory templateFactory,
         final String projectPackage,
         final String repository,
+        final String header,
         final ForeignKey[] foreignKeys)
       throws  BuildException
     {
@@ -334,7 +337,8 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                         engineVersion,
                         quote,
                         projectPackage,
-                        repository);
+                        repository,
+                        header);
             }
 
             storeTemplates(t_aTemplates, parameters);

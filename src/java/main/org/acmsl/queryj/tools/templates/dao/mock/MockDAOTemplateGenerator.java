@@ -134,6 +134,7 @@ public class MockDAOTemplateGenerator
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
@@ -145,13 +146,15 @@ public class MockDAOTemplateGenerator
         final MetadataManager metadataManager,
         final String packageName,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
       throws  QueryJException
     {
         return
             new MockDAOTemplate(
                 tableTemplate,
                 metadataManager,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,
@@ -224,6 +227,6 @@ public class MockDAOTemplateGenerator
                             .getTableName().toLowerCase()),
                 '_')
             + "DAO.java",
-            mockDAOTemplate.generateOutput());
+            mockDAOTemplate.generate());
     }
 }

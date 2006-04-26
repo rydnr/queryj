@@ -220,6 +220,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 retrieveTemplateFactory(),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
+                retrieveHeader(parameters),
                 retrieveCustomResult(
                     parameters, customSqlProvider, metadataManager));
     }
@@ -241,6 +242,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param templateFactory the template factory.
      * @param projectPackage the project package.
      * @param repository the repository.
+     * @param header the header.
      * @param resultElements the custom RESULT elements.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -263,6 +265,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         final BasePerCustomResultTemplateFactory templateFactory,
         final String projectPackage,
         final String repository,
+        final String header,
         final ResultElement[] resultElements)
       throws  BuildException
     {
@@ -295,7 +298,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                         engineName,
                         engineVersion,
                         projectPackage,
-                        repository);
+                        repository,
+                        header);
             }
 
             storeTemplates(t_aTemplates, parameters);

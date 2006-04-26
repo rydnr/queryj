@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.CachingTableDecorator;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.TableDecorator;
@@ -84,6 +85,7 @@ public class ConfigurationPropertiesTemplate
      * Builds a <code>ConfigurationPropertiesTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
@@ -93,6 +95,7 @@ public class ConfigurationPropertiesTemplate
      */
     public ConfigurationPropertiesTemplate(
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String basePackageName,
@@ -102,6 +105,7 @@ public class ConfigurationPropertiesTemplate
     {
         super(
             metadataManager,
+            header,
             decoratorFactory,
             packageName,
             basePackageName,
@@ -172,8 +176,31 @@ public class ConfigurationPropertiesTemplate
                 basePackageName, engineName, PackageUtils.getInstance()));
 
         input.put("tables", decorateTables(tables, metadataManager));
+        input.put("splitted_header", split(getProcessedHeader(input)));
     }
 
+    /**
+     * Splits given value into multiple lines.
+     * @param value the text.
+     * @return the splitted text.
+     */
+    protected String[] split(final String value)
+    {
+        return split(value, DecorationUtils.getInstance());
+    }
+    
+    /**
+     * Splits given value into multiple lines.
+     * @param value the text.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the splitted text.
+     */
+    protected String[] split(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.split(value);
+    }
+    
     /**
      * Retrieves the DAO subpackage name.
      * @param basePackageName the base package name.
