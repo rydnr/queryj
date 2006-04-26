@@ -553,7 +553,7 @@ public class QueryJTask
      * Specifies the header.
      * @param header the new header.
      */
-    protected final void immutableSetHeader(final File header)
+    protected final void immutableSetHeaderfile(final File header)
     {
         m__Header = header;
     }
@@ -562,16 +562,16 @@ public class QueryJTask
      * Specifies the header.
      * @param header the new header.
      */
-    public void setHeader(final File header)
+    public void setHeaderfile(final File header)
     {
-        immutableSetHeader(header);
+        immutableSetHeaderfile(header);
     }
 
     /**
      * Retrieves the header.
      * @return such information.
      */
-    public File getHeader() 
+    public File getHeaderfile() 
     {
         return m__Header;
     }
@@ -1135,7 +1135,7 @@ public class QueryJTask
             String t_strPackage    = getPackage();
             Path   t_Classpath     = getClasspath();
             File   t_Outputdir     = getOutputdir();
-            File   t_Header = getHeader();
+            File   t_Header = getHeaderfile();
             
             boolean t_bOutputdirsubfolders = getOutputdirsubfoldersFlag();
             boolean t_bExtractTables = getExtractTablesFlag();

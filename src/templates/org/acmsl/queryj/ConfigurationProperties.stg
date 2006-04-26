@@ -50,6 +50,7 @@ source(input) ::= <<
  @param input.repository the repository.
  @param input.daoFactoryPackage the DAOFactory package.
 !>
+//;-*- mode: java-conf-*-
 <if(input.header)>
 <input.splitted_header>
 <else>
