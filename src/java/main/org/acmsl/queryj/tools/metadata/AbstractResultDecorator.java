@@ -203,6 +203,27 @@ public abstract class AbstractResultDecorator
     }
 
     /**
+     * Retrieves the metadata type manager.
+     * @return such manager.
+     */
+    protected MetadataTypeManager getMetadataTypeManager()
+    {
+        return getMetadataTypeManager(getMetadataManager());
+    }
+
+    /**
+     * Retrieves the metadata type manager.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such manager.
+     * @precondition metadataManager != null
+     */
+    protected MetadataTypeManager getMetadataTypeManager(
+        final MetadataManager metadataManager)
+    {
+        return metadataManager.getMetadataTypeManager();
+    }
+
+    /**
      * Specifies the decorator factory.
      * @param factory such instance.
      */
@@ -401,6 +422,39 @@ public abstract class AbstractResultDecorator
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the large-object-block properties.
+     * @return such collection.
+     */
+    public Collection getLobProperties()
+    {
+        return
+            filterLobProperties(
+                getProperties(),
+                getMetadataTypeManager(),
+                MetadataUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the large-object-block properties.
+     * @param properties the properties.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param metadataUtils the <code>MetadataUtils</code> instance.
+     * @return such collection.
+     * @precondition properties != null
+     * @precondition metadataTypeManager != null
+     * @precondition metadataUtils != null
+     */
+    protected Collection filterLobProperties(
+        final Collection properties,
+        final MetadataTypeManager metadataTypeManager,
+        final MetadataUtils metadataUtils)
+    {
+        return
+            metadataUtils.filterLobProperties(
+                properties, metadataTypeManager);
     }
 
     /**

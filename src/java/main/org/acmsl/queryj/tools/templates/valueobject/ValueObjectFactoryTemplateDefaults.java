@@ -214,6 +214,17 @@ public interface ValueObjectFactoryTemplateDefaults
         + "        return\n"
         + "            create{0}("
         + "{3});\n\n"  // factory method value object build.
+        + "    '}'\n\n"
+        + "    /**\n"
+        + "     * Creates a <i>{0}</i> value object.\n"
+        + "{1}" // constructor field javadoc
+        + "     */\n"
+        + "    public {0}ValueObject createValueObject(" // table
+        + "{2})\n" // factory method field declaration
+        + "    '{'\n"
+        + "        return\n"
+        + "            create{0}("
+        + "{3});\n\n"  // factory method value object build.
         + "    '}'\n\n";
 
     /**

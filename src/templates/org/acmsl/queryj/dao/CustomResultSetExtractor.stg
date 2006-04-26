@@ -96,6 +96,7 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -159,184 +160,338 @@ public class <result.idCapitalized>Extractor
     implements  ResultSetExtractor,
                 <input.tr_name>TableRepository
 {
+    // \<extract data\>
+    /**
+     * Extracts \<i><result.id>\</i> information from given result set.
+     * @param resultSet the result set.
 <if(result.multiple)>
-    <extract_data_with_multiple_result(result=result)>
+     * @return the \<i><input.className>\</i> instances or \<code>null\</code>
+     * if the operation returned no data.
 <else>
-    <extract_data_with_single_result(result=result)>
+     * @return the \<i><input.className>\</i> instance or \<code>null\</code>
+     * if the operation returned no data.
 <endif>
-}
->>
 
-extract_data_with_single_result(result) ::= <<
-<!
- Generates the method to extract a single instance.
- @param result the result entity in the model.
-!>
-// \<extract data\>
-/**
- * Extracts \<i><result.id>\</i> information from given result set.
- * @param resultSet the result set.
- * @return the \<i><input.className>\</i> or \<code>null\</code>
- * if the operation returned no data.
- * @throws SQLException intercepted by \<i>Spring\</i>.
- * @throws DataAccessException with information about any
- * custom exception.
- <precondition_notnull("resultSet")>
- */
-public Object extractData(final ResultSet resultSet)
-    throws  SQLException,
-            DataAccessException
-{
-    return
-        extractData(
-            resultSet, <result.classValue>Factory.getInstance());
-}
-
-/**
- * Extracts \<i><result.id>\</i> information from given result set.
- * @param resultSet the result set.
- * @param factory the value object factory.
- * @return the \<i><input.className>\</i> or \<code>null\</code>
- * if the operation returned no data.
- * @throws SQLException intercepted by \<i>Spring\</i>.
- * @throws DataAccessException with information about any
- * custom exception.
- <precondition_notnull("resultSet")>
- */
-protected Object extractData(
-    final ResultSet resultSet, final <result.classValue>Factory factory)
-  throws  SQLException,
-          DataAccessException
-{
-    <input.classValue> result = null;
-
-    Long t_LongAux = null;
-    Integer t_IntAux = null;
-    Double t_DoubleAux = null;
-
-    if  (resultSet.next())
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     * @throws DataAccessException with information about any
+     * custom exception.
+     <precondition_notnull("resultSet")>
+     */
+    public Object extractData(final ResultSet resultSet)
+        throws  SQLException,
+                DataAccessException
     {
-        <result.properties:property_retrieval(property=it); separator="\n\n">
-
-        result =
-            factory.create(
-                <result.properties:property_specification(property=it);
-                separator=",\n">);
+        return
+            extractData(
+                resultSet, <result.classValue>Factory.getInstance());
     }
 
-    return result;
-}
->>
-
-extract_data_with_multiple_result(result) ::= <<
-<!
- Generates the method to extract multiple instances.
- @param result the result entity in the model.
-!>
-// \<extract data\>
-/**
- * Extracts \<i><result.id>\</i> information from given result set.
- * @param resultSet the result set.
- * @return the list of retrieved \<code><result.classValue>\</code> instances.
- * @throws SQLException intercepted by \<i>Spring\</i>.
- * @throws DataAccessException with information about any
- * custom exception.
- <precondition_notnull("resultSet")>
- */
-public Object extractData(final ResultSet resultSet)
-    throws  SQLException,
-            DataAccessException
-{
-    return
-        extractData(
-            resultSet,
-            <result.classValue>Factory.getInstance());
-}
-
-/**
- * Extracts \<i><result.id>\</i> information from given result set.
- * @param resultSet the result set.
- * @param factory the value object factory.
- * @return the list of retrieved \<i><result.id>\</i> instances.
- * @throws SQLException intercepted by \<i>Spring\</i>.
- * @throws DataAccessException with information about any
- * custom exception.
- <precondition_notnull("resultSet")>
- <precondition_notnull("factory")>
- */
-protected Object extractData(
-    final ResultSet resultSet,
-    final <result.classValue>Factory factory)
-  throws  SQLException,
-          DataAccessException
-{
-    Collection result = new ArrayList();
-
-    while  (resultSet.next())
+    /**
+     * Extracts \<i><result.id>\</i> information from given result set.
+     * @param resultSet the result set.
+     * @param factory the value object factory.
+<if(result.multiple)>
+     * @return the \<i><input.className>\</i> instances or \<code>null\</code>
+     * if the operation returned no data.
+<else>
+     * @return the \<i><input.className>\</i> instance or \<code>null\</code>
+     * if the operation returned no data.
+<endif>
+     * if the operation returned no data.
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     * @throws DataAccessException with information about any
+     * custom exception.
+     <precondition_notnull("resultSet")>
+     */
+    protected Object extractData(
+        final ResultSet resultSet,
+        final <result.classValue>Factory factory)
+      throws  SQLException,
+              DataAccessException
     {
-        <result.properties:property_retrieval(property=it); separator="\n\n">
+<if(result.multiple)>
+        Collection result = new ArrayList();
+<else>
+        <result.classValue> result = null;
+<endif>
 
-        result.add(
-            factory.create(
-                <result.properties:property_specification(property=it);
-                separator=",\n">));
+
+<if(result.multiple)>
+        while  (resultSet.next())
+<else>
+        if  (resultSet.next())
+<endif>
+
+        {
+            <result.properties:nullable_attribute_extraction(
+              attr=it, input=input)>
+            <result.lobProperties:special_attribute_extraction(
+              attr=it, input=input)>
+<if(result.multiple)>
+            result.add(
+<else>
+            result =
+<endif>
+
+                factory.createValueObject(
+                    <result.properties:attribute_extraction(
+                      attr=it, input=input); separator=",\n">)<if(result.multiple)>)<endif>;
+        }
+
+        return result;
     }
-
-    return result;
 }
 >>
 
-non_nullable_property_specification(property) ::= <<
+nullable_attribute_extraction(attr, input) ::= <<
 <!
- Generates the code to retrieve and specify a value object's property.
- @param property the property.
+ Generates the code to extract nullable attributes.
+ @param attr the attribute.
+ @param input the input.
 !>
-resultSet.get<property.javaType>("<property.columnName>")
+<if(input.clobHandling)>
+<indirect_template(
+  name=input.clobHandling+"_nullable_attribute_extraction", input=attr)>
+<else>
+<default_nullable_attribute_extraction(attr=attr, input=input)>
+<endif>
 >>
 
-nullable_property_retrieval(property) ::= <<
+default_nullable_attribute_extraction(attr, input) ::= <<
 <!
- Generates the code to retrieve a nullable property.
- @param property the property.
+ Generates the code to extract nullable attributes.
+ @param attr the attribute.
+ @param input the input.
 !>
-<property.javaType> t_<property.javaTypeCapitalized><property.nameLowercased> =
-    new <property.objectType>(
-        resultSet.get<property.objectType>(
-            "<property.columnName>"));
+<if(attr.allowsNull)>
+<attr.objectType> t_<attr.columnNameNormalizedCapitalized>As<attr.objectType> =
+<if(attr.primitive)>
+<if(input.clobhandling)>
+    <object_nullable_clobhandling_attribute_extractor(attr=attr)>
+<else>
+    <primitive_nullable_attribute_extractor(attr=attr)>
+<endif>
+<else>
+<if(input.clobhandling)>
+    <indirect_template(name=attr.objectType+"_nullable_clobhandling_attribute_extractor", input=attr)>
+<else>
+    <indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
+<endif>
+<endif>
 
 if  (resultSet.wasNull())
 {
-    t_<property.javaTypeCapitalized><property.nameLowercased> = null;
+    t_<attr.columnNameNormalizedCapitalized>As<attr.objectType> = null;
 }
->>
 
-nullable_property_specification(property) ::= <<
-<!
- Generaters the code to specify the value of a nullable value object's
- property.
- @param property the property.
-!>
-t_<property.javaTypeCapitalized><property.nameLowercased>
->>
-
-property_retrieval(property) ::= <<
-<!
- Generates the code to specify a property.
- @param property the property.
-!>
-<if(property.nullable)>
-<nullable_property_retrieval(property=property)>
 <endif>
 >>
 
-property_specification(property) ::= <<
+String_nullable_attribute_extractor(input) ::= <<
 <!
- Generates the code to specify a property.
- @param property the property.
+  Generates the code to extract a String nullable attribute.
 !>
-<if(property.nullable)>
-<nullable_property_specification(property=property)>
+<object_nullable_attribute_extractor(attr=input)>
+>>
+
+String_nullable_clobhandling_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a String nullable attribute.
+!>
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
+>>
+
+Date_nullable_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a Date nullable attribute.
+!>
+<object_nullable_attribute_extractor(attr=input)>
+>>
+
+Date_nullable_clobhandling_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a Date nullable attribute.
+!>
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
+>>
+
+Timestamp_nullable_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a Timestamp nullable attribute.
+!>
+<object_nullable_attribute_extractor(attr=input)>
+>>
+
+Timestamp_nullable_clobhandling_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a Timestamp nullable attribute.
+!>
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
+>>
+
+BigDecimal_nullable_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a BigDecimal nullable attribute.
+!>
+<object_nullable_attribute_extractor(attr=input)>
+>>
+
+BigDecimal_nullable_clobhandling_attribute_extractor(input) ::= <<
+<!
+  Generates the code to extract a BigDecimal nullable attribute.
+!>
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
+>>
+
+primitive_nullable_attribute_extractor(attr) ::= <<
+<!
+  Generates the code to extract a primitive nullable attribute.
+!>
+new <attr.objectType>(
+<if(attr.numberSmallerThanInt)>
+    resultSet.getInt(
 <else>
-<non_nullable_property_specification(property=property)>
+    resultSet.get<attr.objectType>(
+<endif>
+
+        "<attr.columnName>"));
+>>
+
+primitive_nullable_clobhandling_attribute_extractor(attr) ::= <<
+<!
+  Generates the code to extract a primitive nullable attribute.
+!>
+new <attr.objectType>(
+<if(attr.numberSmallerThanInt)>
+    resultSet.getInt("<attr.columnName>"));
+<else>
+    resultSet.get<attr.objectType>("<attr.columnName>"));
+<endif>
+>>
+
+object_nullable_attribute_extractor(attr) ::= <<
+<!
+  Generates the code to extract a non-primitive nullable attribute.
+!>
+<if(attr.numberSmallerThanInt)>
+    resultSet.getInt(
+<else>
+resultSet.get<attr.objectType>(
+<endif>
+
+    "<attr.columnName>");
+>>
+
+object_nullable_clobhandling_attribute_extractor(attr) ::= <<
+<!
+  Generates the code to extract a non-primitive nullable attribute.
+!>
+<if(attr.numberSmallerThanInt)>
+resultSet.getInt("<attr.columnName>");
+<else>
+resultSet.get<attr.objectType>("<attr.columnName>");
+<endif>
+>>
+
+attribute_extraction(attr, input) ::= <<
+<!
+ Generates the code to extract attributes.
+ @param attr the attribute.
+ @param input the input.
+!>
+<if(input.clobHandling)>
+<indirect_template(
+  name=input.clobHandling+"_attribute_extraction", input=attr)>
+<else>
+<default_attribute_extraction(attr)>
+<endif>
+>>
+
+default_attribute_extraction(attr) ::= <<
+<!
+ Generates the member declaration for a concrete attribute.
+ @param attr the attribute.
+!>
+<if(attr.allowsNull)>
+t_<attr.columnNameNormalizedCapitalized>As<attr.objectType>
+<else>
+<if(attr.numberSmallerThanInt)>
+resultSet.getInt("<attr.columnName>")
+<else>
+resultSet.get<attr.objectType>("<attr.columnName>")
+<endif>
+<endif>
+>>
+
+default_clobhandling_attribute_extraction(attr) ::= <<
+<!
+ Generates the member declaration for a concrete attribute.
+ @param attr the attribute.
+!>
+<if(attr.allowsNull)>
+t_<attr.columnNameNormalizedCapitalized>As<attr.objectType>
+<else>
+<if(attr.numberSmallerThanInt)>
+resultSet.getInt("<attr.columnName>")
+<else>
+resultSet.get<attr.objectType>("<attr.columnName>")
+<endif>
+<endif>
+>>
+
+special_attribute_extraction(attr, input) ::= <<
+<!
+ Generates the code to extract special attributes.
+ @param attr the attribute.
+ @param input the input.
+!>
+<if(input.clobHandling)>
+<indirect_template(
+  name=input.clobHandling+"_special_attribute_extraction", input=attr)>
+<endif>
+>>
+
+oracle8_nullable_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract nullable attributes for Oracle8.
+ @param input the attribute.
+!>
+<if(!input.clob)>
+<default_nullable_attribute_extraction(attr=input)>
+<endif>
+>>
+
+oracle8_special_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract special attributes for Oracle8.
+ @param input the attribute.
+!>
+<if(input.clob)>
+oracle.sql.CLOB t_<input.columnNameNormalizedCapitalized> =
+    (oracle.sql.CLOB) resultSet.getClob("<attr.columnName>");
+
+if  (selectForUpdateMode)
+{
+    t_<input.columnNameNormalizedCapitalized>.putString(1, <input.nameLowercased>);
+}
+<else>
+if  (resultSet.wasNull())
+{
+    t_<input.columnNameNormalizedCapitalized>As<input.objectType> = null;
+}
+<endif>
+>>
+
+oracle8_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract the attributes for Oracle8.
+ @param input the attribute.
+!>
+<if(input.clob)>
+(selectForUpdateMode)
+?  <input.nameLowercased>
+:  t_<input.columnNameNormalizedCapitalized>.getSubString(1, (int) t_<input.columnNameNormalizedCapitalized>.length())
+<else>
+<default_clobhandling_attribute_extraction(attr=input)>
 <endif>
 >>

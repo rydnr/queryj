@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.metadata.CachingAttributeDecorator;
 import org.acmsl.queryj.tools.metadata.CachingForeignKeyDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -124,12 +125,12 @@ public class MetadataUtils
 
         WeakReference reference = getReference();
 
-        if  (reference != null) 
+        if  (reference != null)
         {
             result = (MetadataUtils) reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new MetadataUtils();
 
@@ -165,7 +166,7 @@ public class MetadataUtils
                 metadataTypeManager,
                 decoratorFactory);
     }
-    
+
     /**
      * Retrieves the non-primary key attributes.
      * @param tableName the table name.
@@ -187,7 +188,7 @@ public class MetadataUtils
         final DecoratorFactory decoratorFactory)
     {
         Collection t_cNonPkNames = new ArrayList();
-        
+
         String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
@@ -335,7 +336,7 @@ public class MetadataUtils
         final DecoratorFactory decoratorFactory)
     {
         Collection t_cExternallyManagedAttributeNames = new ArrayList();
-        
+
         String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
@@ -383,7 +384,7 @@ public class MetadataUtils
         final DecoratorFactory decoratorFactory)
     {
         Collection t_cNonExternallyManagedAttributeNames = new ArrayList();
-        
+
         String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
@@ -491,7 +492,7 @@ public class MetadataUtils
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the foreign keys of other tables pointing
-     * to this one: 
+     * to this one:
      * a map of "fk_"referringTableName -> foreign_keys (list of attribute
      * lists).
      * @precondition tableName != null
@@ -733,7 +734,7 @@ public class MetadataUtils
         final DecoratorFactory decoratorFactory)
     {
         Collection result = new ArrayList();
-        
+
         int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
@@ -778,7 +779,7 @@ public class MetadataUtils
                         columnValues[t_iIndex]),
                     metadataManager));
         }
-        
+
         return result;
     }
 
@@ -834,7 +835,7 @@ public class MetadataUtils
         final MetadataManager metadataManager)
     {
         boolean result = false;
-        
+
         int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
@@ -894,7 +895,7 @@ public class MetadataUtils
         final DecoratorFactory decoratorFactory)
     {
         Collection result = new ArrayList();
-        
+
         String[] t_astrReferredTables =
             metadataManager.getReferredTables(tableName);
 
@@ -912,7 +913,7 @@ public class MetadataUtils
 
             for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
             {
-                boolean t_bAllowsNullAsAWhole = 
+                boolean t_bAllowsNullAsAWhole =
                     allowsNullAsAWhole(
                         t_aastrForeignKeys[t_iFkIndex],
                         tableName,
@@ -1011,7 +1012,7 @@ public class MetadataUtils
         final DecoratorFactory decoratorFactory)
     {
         Collection t_cLobAttributeNames = new ArrayList();
-        
+
         String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
@@ -1042,6 +1043,50 @@ public class MetadataUtils
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
+    }
+
+    /**
+     * Retrieves the large-object-block properties.
+     * @param properties the properties.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     instance.
+     * @return such collection.
+     * @precondition properties != null
+     * @precondition metadataTypeManager != null
+     */
+    public Collection filterLobProperties(
+        final Collection properties,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        Collection result = new ArrayList();
+
+        Iterator t_itPropertyIterator =
+            (properties != null) ? properties.iterator() : null;
+
+        if  (t_itPropertyIterator != null)
+        {
+            Property t_Property;
+
+            boolean t_bLob;
+
+            while  (t_itPropertyIterator.hasNext())
+            {
+                t_Property = (Property) t_itPropertyIterator.next();
+
+                if  (t_Property != null)
+                {
+                    t_bLob =
+                        metadataTypeManager.isClob(t_Property.getType());
+
+                    if  (t_bLob)
+                    {
+                        result.add(t_Property);
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     /**

@@ -55,7 +55,7 @@ public interface PropertyDecorator
      * @return such instance.
      */
     public Property getProperty();
-    
+
     /**
      * Retrieves the Java type of the property.
      * @return such information.
@@ -67,4 +67,11 @@ public interface PropertyDecorator
      * @return such information.
      */
     public String getNameLowercased();
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    public boolean isNumberSmallerThanInt();
 }

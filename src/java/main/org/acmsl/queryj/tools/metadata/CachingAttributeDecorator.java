@@ -58,12 +58,12 @@ public class CachingAttributeDecorator
      * The cached name uppercased.
      */
     private String m__strCachedNameUppercased;
-    
+
     /**
      * The cached capitalized name.
      */
     private String m__strCachedNameCapitalized;
-    
+
     /**
      * The cached lowercased name.
      */
@@ -140,6 +140,11 @@ public class CachingAttributeDecorator
     private String m__strCachedTableNameNormalizedLowercased;
 
     /**
+     * Whether the type refers to a number smaller than int.
+     */
+    private Boolean m__bCachedNumberSmallerThanInt;
+
+    /**
      * Creates a <code>CachingAttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
@@ -163,7 +168,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedNameUppercased = name;
     }
-    
+
     /**
      * Specifies the name uppercased.
      * @param name such name.
@@ -190,7 +195,7 @@ public class CachingAttributeDecorator
     public String getNameUppercased()
     {
         String result = getCachedNameUppercased();
-        
+
         if  (result == null)
         {
             result = super.getNameUppercased();
@@ -209,7 +214,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedNameCapitalized = name;
     }
-    
+
     /**
      * Specifies the cached capitalized name.
      * @param name such name.
@@ -236,13 +241,13 @@ public class CachingAttributeDecorator
     public String getNameCapitalized()
     {
         String result = getCachedNameCapitalized();
-        
+
         if  (result == null)
         {
             result = super.getNameCapitalized();
             setCachedNameCapitalized(result);
         }
-        
+
         return result;
     }
 
@@ -255,7 +260,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedNameLowercased = value;
     }
-    
+
     /**
      * Specifies the cached lowercased name.
      * @param value the value to cache.
@@ -273,7 +278,7 @@ public class CachingAttributeDecorator
     {
         return m__strCachedNameLowercased;
     }
-    
+
     /**
      * Retrieves the name, in lower case.
      * @return such value.
@@ -281,16 +286,16 @@ public class CachingAttributeDecorator
     public String getNameLowercased()
     {
         String result = getCachedNameLowercased();
-        
+
         if  (result == null)
         {
             result = super.getNameLowercased();
             setCachedNameLowercased(result);
         }
-        
+
         return result;
     }
-    
+
     /**
      * Specifies the cached uncapitalized table name.
      * @param value the value to cache.
@@ -300,7 +305,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedUncapitalizedTableName = value;
     }
-    
+
     /**
      * Specifies the cached uncapitalized table name.
      * @param value the value to cache.
@@ -318,7 +323,7 @@ public class CachingAttributeDecorator
     {
         return m__strCachedUncapitalizedTableName;
     }
-    
+
     /**
      * Retrieves the table name, uncapitalized.
      * @return such value.
@@ -326,13 +331,13 @@ public class CachingAttributeDecorator
     public String getUncapitalizedTableName()
     {
         String result = getCachedUncapitalizedTableName();
-        
+
         if  (result == null)
         {
             result = super.getUncapitalizedTableName();
             setCachedUncapitalizedTableName(result);
         }
-        
+
         return result;
     }
 
@@ -345,7 +350,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedVoName = value;
     }
-    
+
     /**
      * Specifies the cached VO name.
      * @param value the value to cache.
@@ -363,7 +368,7 @@ public class CachingAttributeDecorator
     {
         return m__strCachedVoName;
     }
-    
+
     /**
      * Retrieves the value-object name associated to the table name.
      * @return such name.
@@ -371,18 +376,18 @@ public class CachingAttributeDecorator
     public String getVoName()
     {
         String result = getCachedVoName();
-        
+
         if  (result == null)
         {
             result = super.getVoName();
             setCachedVoName(result);
         }
-        
+
         return result;
     }
 
     /**
-     * Specifies the cached Java name. 
+     * Specifies the cached Java name.
      * @param value the value to cache.
      */
     protected final void immutableSetCachedJavaName(
@@ -390,7 +395,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedJavaName = value;
     }
-    
+
     /**
      * Specifies the cached Java name.
      * @param value the value to cache.
@@ -408,7 +413,7 @@ public class CachingAttributeDecorator
     {
         return m__strCachedJavaName;
     }
-    
+
     /**
      * Retrieves the attribute's Java name.
      * @return such information.
@@ -416,13 +421,13 @@ public class CachingAttributeDecorator
     public String getJavaName()
     {
         String result = getCachedJavaName();
-        
+
         if  (result == null)
         {
             result = super.getJavaName();
             setCachedJavaName(result);
         }
-        
+
         return result;
     }
 
@@ -435,7 +440,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedGetterMethod = value;
     }
-    
+
     /**
      * Specifies the cached getter method.
      * @param value the value to cache.
@@ -453,7 +458,7 @@ public class CachingAttributeDecorator
     {
         return m__strCachedGetterMethod;
     }
-    
+
     /**
      * Retrieves the attribute's associated getter method.
      * @return such information.
@@ -461,13 +466,13 @@ public class CachingAttributeDecorator
     public String getGetterMethod()
     {
         String result = getCachedGetterMethod();
-        
+
         if  (result == null)
         {
             result = super.getGetterMethod();
             setCachedGetterMethod(result);
         }
-        
+
         return result;
     }
 
@@ -480,7 +485,7 @@ public class CachingAttributeDecorator
     {
         m__bCachedIsPrimitive = value;
     }
-    
+
     /**
      * Specifies the cached <code>isPrimitive</code> value.
      * @param value the value to cache.
@@ -498,7 +503,7 @@ public class CachingAttributeDecorator
     {
         return m__bCachedIsPrimitive;
     }
-    
+
     /**
      * Retrieves whether this attribute can be modelled as a primitive or not.
      * @return <code>false</code> if no primitive matches.
@@ -506,13 +511,13 @@ public class CachingAttributeDecorator
     public Boolean isPrimitive()
     {
         Boolean result = getCachedIsPrimitive();
-        
+
         if  (result == null)
         {
             result = super.isPrimitive();
             setCachedIsPrimitive(result);
         }
-        
+
         return result;
     }
 
@@ -525,7 +530,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedObjectType = value;
     }
-    
+
     /**
      * Specifies the cached object type.
      * @param value the value to cache.
@@ -543,7 +548,7 @@ public class CachingAttributeDecorator
     {
         return m__strCachedObjectType;
     }
-    
+
     /**
      * Retrieves the object type.
      * @return such information.
@@ -551,13 +556,13 @@ public class CachingAttributeDecorator
     public String getObjectType()
     {
         String result = getCachedObjectType();
-        
+
         if  (result == null)
         {
             result = super.getObjectType();
             setCachedObjectType(result);
         }
-        
+
         return result;
     }
 
@@ -570,7 +575,7 @@ public class CachingAttributeDecorator
     {
         m__bCachedIsClob = value;
     }
-    
+
     /**
      * Specifies the cached <code>isClob</code> value.
      * @param value the value to cache.
@@ -595,13 +600,13 @@ public class CachingAttributeDecorator
     public boolean isClob()
     {
         Boolean result = getCachedIsClob();
-        
+
         if  (result == null)
         {
             result = super.isClob() ? Boolean.TRUE : Boolean.FALSE;
             setCachedIsClob(result);
         }
-        
+
         return result.booleanValue();
     }
 
@@ -614,7 +619,7 @@ public class CachingAttributeDecorator
     {
         m__bCachedIsString = value;
     }
-    
+
     /**
      * Specifies the cached <code>isString</code> value.
      * @param value the value to cache.
@@ -640,13 +645,13 @@ public class CachingAttributeDecorator
     public boolean isString()
     {
         Boolean result = getCachedIsString();
-        
+
         if  (result == null)
         {
             result = super.isString() ? Boolean.TRUE : Boolean.FALSE;
             setCachedIsString(result);
         }
-        
+
         return result.booleanValue();
     }
 
@@ -659,7 +664,7 @@ public class CachingAttributeDecorator
     {
         m__bCachedIsDate = value;
     }
-    
+
     /**
      * Specifies the cached <code>isDate</code> value.
      * @param value the value to cache.
@@ -685,13 +690,13 @@ public class CachingAttributeDecorator
     public boolean isDate()
     {
         Boolean result = getCachedIsDate();
-        
+
         if  (result == null)
         {
             result = super.isDate() ? Boolean.TRUE : Boolean.FALSE;
             setCachedIsDate(result);
         }
-        
+
         return result.booleanValue();
     }
 
@@ -704,7 +709,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedQuery = value;
     }
-    
+
     /**
      * Specifies the cached query.
      * @param value the value to cache.
@@ -729,13 +734,13 @@ public class CachingAttributeDecorator
     public String getQuery()
     {
         String result = getCachedQuery();
-        
+
         if  (result == null)
         {
             result = super.getQuery();
             setCachedQuery(result);
         }
-        
+
         return result;
     }
 
@@ -748,7 +753,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedQueryJFieldType = value;
     }
-    
+
     /**
      * Specifies the cached QueryJ field type.
      * @param value the value to cache.
@@ -774,13 +779,13 @@ public class CachingAttributeDecorator
     public String getQueryJFieldType()
     {
         String result = getCachedQueryJFieldType();
-        
+
         if  (result == null)
         {
             result = super.getQueryJFieldType();
             setCachedQueryJFieldType(result);
         }
-        
+
         return result;
     }
 
@@ -793,7 +798,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedStatementSetterFieldType = value;
     }
-    
+
     /**
      * Specifies the cached <code>StatementSetter</code> field type.
      * @param value the value to cache.
@@ -818,13 +823,13 @@ public class CachingAttributeDecorator
     public String getStatementSetterFieldType()
     {
         String result = getCachedStatementSetterFieldType();
-        
+
         if  (result == null)
         {
             result = super.getStatementSetterFieldType();
             setCachedStatementSetterFieldType(result);
         }
-        
+
         return result;
     }
 
@@ -837,7 +842,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedTableNameUppercased = value;
     }
-    
+
     /**
      * Specifies the cached uppercased table name.
      * @param value the value to cache.
@@ -863,13 +868,13 @@ public class CachingAttributeDecorator
     public String getTableNameUppercased()
     {
         String result = getCachedTableNameUppercased();
-        
+
         if  (result == null)
         {
             result = super.getTableNameUppercased();
             setCachedTableNameUppercased(result);
         }
-        
+
         return result;
     }
 
@@ -882,7 +887,7 @@ public class CachingAttributeDecorator
     {
         m__strCachedTableNameNormalizedLowercased = value;
     }
-    
+
     /**
      * Specifies the cached normalized and lower-cased table name.
      * @param value the value to cache.
@@ -908,14 +913,67 @@ public class CachingAttributeDecorator
     public String getTableNameNormalizedLowercased()
     {
         String result = getCachedTableNameNormalizedLowercased();
-        
+
         if  (result == null)
         {
             result = super.getTableNameNormalizedLowercased();
             setCachedTableNameNormalizedLowercased(result);
         }
-        
+
         return result;
     }
 
+    /**
+     * Specifies whether the type means the attribute is a
+     * number smaller than an int.
+     * @param flag such condition.
+     */
+    protected final void immutableSetCachedNumberSmallerThanInt(
+        final Boolean flag)
+    {
+        m__bCachedNumberSmallerThanInt = flag;
+    }
+
+    /**
+     * Specifies whether the type means the attribute is a
+     * number smaller than an int.
+     * @param flag such condition.
+     */
+    protected void setCachedNumberSmallerThanInt(
+        final Boolean flag)
+    {
+        immutableSetCachedNumberSmallerThanInt(flag);
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    protected Boolean getCachedNumberSmallerThanInt()
+    {
+        return m__bCachedNumberSmallerThanInt;
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    public boolean getNumberSmallerThanInt()
+    {
+        Boolean result = getCachedNumberSmallerThanInt();
+
+        if  (result == null)
+        {
+            result =
+                (super.isNumberSmallerThanInt())
+                ?  Boolean.TRUE
+                :  Boolean.FALSE;
+
+            setCachedNumberSmallerThanInt(result);
+        }
+
+        return result.booleanValue();
+    }
 }

@@ -57,11 +57,21 @@ public class CachingPropertyDecorator
      * The cached Java type.
      */
     private String m__strCachedJavaType;
-    
+
     /**
      * The cached name lowercased.
      */
     private String m__strCachedNameLowercased;
+
+    /**
+     * Whether the type refers to a number smaller than int.
+     */
+    private Boolean m__bCachedNumberSmallerThanInt;
+
+    /**
+     * The cached capitalized name.
+     */
+    private String m__strCachedColumnNameNormalizedCapitalized;
 
     /**
      * Creates a <code>CachingPropertyDecorator</code> to decorate given property.
@@ -83,7 +93,7 @@ public class CachingPropertyDecorator
     {
         m__strCachedJavaType = type;
     }
-    
+
     /**
      * Specifies the cached Java type.
      * @param type such type.
@@ -111,7 +121,7 @@ public class CachingPropertyDecorator
     {
         m__strCachedNameLowercased = nameLowercased;
     }
-    
+
     /**
      * Specifies the cached name lowercased.
      * @param nameLowercased such value.
@@ -144,7 +154,7 @@ public class CachingPropertyDecorator
             result = super.getJavaType();
             setCachedJavaType(result);
         }
-        
+
         return result;
     }
 
@@ -155,11 +165,111 @@ public class CachingPropertyDecorator
     public String getNameLowercased()
     {
         String result = getCachedNameLowercased();
-        
+
         if  (result == null)
         {
             result = super.getNameLowercased();
             setCachedNameLowercased(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies whether the type means the attribute is a
+     * number smaller than an int.
+     * @param flag such condition.
+     */
+    protected final void immutableSetCachedNumberSmallerThanInt(
+        final Boolean flag)
+    {
+        m__bCachedNumberSmallerThanInt = flag;
+    }
+
+    /**
+     * Specifies whether the type means the attribute is a
+     * number smaller than an int.
+     * @param flag such condition.
+     */
+    protected void setCachedNumberSmallerThanInt(
+        final Boolean flag)
+    {
+        immutableSetCachedNumberSmallerThanInt(flag);
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    protected Boolean getCachedNumberSmallerThanInt()
+    {
+        return m__bCachedNumberSmallerThanInt;
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    public boolean getNumberSmallerThanInt()
+    {
+        Boolean result = getCachedNumberSmallerThanInt();
+
+        if  (result == null)
+        {
+            result =
+                (super.isNumberSmallerThanInt())
+                ?  Boolean.TRUE
+                :  Boolean.FALSE;
+
+            setCachedNumberSmallerThanInt(result);
+        }
+
+        return result.booleanValue();
+    }
+
+    /**
+     * Specifies the cached capitalized name.
+     * @param name such name.
+     */
+    protected final void immutableSetCachedColumnNameNormalizedCapitalized(
+        final String name)
+    {
+        m__strCachedColumnNameNormalizedCapitalized = name;
+    }
+
+    /**
+     * Specifies the cached capitalized name.
+     * @param name such name.
+     */
+    protected void setCachedColumnNameNormalizedCapitalized(
+        final String name)
+    {
+        immutableSetCachedColumnNameNormalizedCapitalized(name);
+    }
+
+    /**
+     * Retrieves the cached capitalized name.
+     * @return such name.
+     */
+    public String getCachedColumnNameNormalizedCapitalized()
+    {
+        return m__strCachedColumnNameNormalizedCapitalized;
+    }
+
+    /**
+     * Retrieves the capitalized name.
+     * @return such name.
+     */
+    public String getColumnNameNormalizedCapitalized()
+    {
+        String result = getCachedColumnNameNormalizedCapitalized();
+
+        if  (result == null)
+        {
+            result = super.getColumnNameNormalizedCapitalized();
+            setCachedColumnNameNormalizedCapitalized(result);
         }
 
         return result;

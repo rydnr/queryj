@@ -164,7 +164,8 @@ public class CachingSqlDecorator
     {
         String[] result = getCachedSplittedQuotedValue();
 
-        if  (result == null)
+        if  (   (result == null)
+             || (result.length == 0))
         {
             result = super.getSplittedQuotedValue();
             setCachedSplittedQuotedValue(result);

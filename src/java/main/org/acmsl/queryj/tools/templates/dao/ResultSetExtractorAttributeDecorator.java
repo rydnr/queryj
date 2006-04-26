@@ -61,11 +61,6 @@ public class ResultSetExtractorAttributeDecorator
     private String m__strCachedJavaType;
 
     /**
-     * Whether the type refers to a number smaller than int.
-     */
-    private Boolean m__bCachedNumberSmallerThanInt;
-
-    /**
      * Creates a <code>ResultSetExtractorAttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
@@ -88,7 +83,7 @@ public class ResultSetExtractorAttributeDecorator
     {
         m__strCachedJavaType = type;
     }
-    
+
     /**
      * Specifies the cached Java type.
      * @param type such type.
@@ -116,13 +111,13 @@ public class ResultSetExtractorAttributeDecorator
     public String getJavaType()
     {
         String result = getCachedJavaType();
-        
+
         if  (result == null)
         {
             result = retrieveJavaType();
             setCachedJavaType(result);
         }
-        
+
         return result;
     }
 
@@ -180,66 +175,12 @@ public class ResultSetExtractorAttributeDecorator
         final MetadataTypeUtils metadataTypeUtils)
     {
         String result = metadataTypeManager.getNativeType(type);
-        
+
         if  (allowsNull)
         {
             result = metadataTypeUtils.getWrapperClass(result);
         }
 
         return result;
-    }
-
-    /**
-     * Specifies whether the type means the attribute is a
-     * number smaller than an int.
-     * @param flag such condition.
-     */
-    protected final void immutableSetCachedNumberSmallerThanInt(
-        final Boolean flag)
-    {
-        m__bCachedNumberSmallerThanInt = flag;
-    }
-
-    /**
-     * Specifies whether the type means the attribute is a
-     * number smaller than an int.
-     * @param flag such condition.
-     */
-    protected void setCachedNumberSmallerThanInt(
-        final Boolean flag)
-    {
-        immutableSetCachedNumberSmallerThanInt(flag);
-    }
-
-    /**
-     * Retrieves whether the type means the attribute is a
-     * number smaller than an int.
-     * @return such condition.
-     */
-    protected Boolean getCachedNumberSmallerThanInt()
-    {
-        return m__bCachedNumberSmallerThanInt;
-    }
-    
-    /**
-     * Retrieves whether the type means the attribute is a
-     * number smaller than an int.
-     * @return such condition.
-     */
-    public boolean getNumberSmallerThanInt()
-    {
-        Boolean result = getCachedNumberSmallerThanInt();
-
-        if  (result == null)
-        {
-            result =
-                (super.isNumberSmallerThanInt())
-                ?  Boolean.TRUE
-                :  Boolean.FALSE;
-
-            setCachedNumberSmallerThanInt(result);
-        }
-
-        return result.booleanValue();
     }
 }

@@ -238,6 +238,14 @@ public interface MetadataTypeManager
     public boolean isPrimitive(final int dataType);
 
     /**
+     * Checks if given data type represents primitives.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * primitive.
+     */
+    public boolean isPrimitive(final String dataType);
+
+    /**
      * Checks if given data type represents primitive wrappers.
      * @param dataType the data type.
      * @return <code>true</code> if such data type can be managed as a
@@ -254,10 +262,26 @@ public interface MetadataTypeManager
     public boolean isClob(final int dataType);
 
     /**
+     * Checks if given data type represents clobs.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * clob.
+     */
+    public boolean isClob(final String dataType);
+
+    /**
      * Checks if given data type represents numbers smaller than int.
      * @param dataType the data type.
      * @return <code>true</code> is fuch data type is smallint, tinyint
      * or similar.
      */
     public boolean isNumberSmallerThanInt(final int dataType);
+
+    /**
+     * Checks if given data type represents numbers smaller than int.
+     * @param dataType the data type.
+     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * or similar.
+     */
+    public boolean isNumberSmallerThanInt(final String dataType);
 }

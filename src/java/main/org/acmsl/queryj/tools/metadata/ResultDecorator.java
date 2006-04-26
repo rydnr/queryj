@@ -47,6 +47,11 @@ import org.acmsl.queryj.tools.customsql.Result;
  */
 import org.acmsl.commons.patterns.Decorator;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Collection;
+
 /**
  * Decorates &lt;result&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -61,4 +66,23 @@ public interface ResultDecorator
      * @return such element.
      */
     public Result getResult();
+
+    /**
+     * Retrieves whether the result matches a single entity or expects
+     * a set of them.
+     * @return such information.
+     */
+    public boolean isMultiple();
+
+    /**
+     * Retrieves the properties.
+     * @return such information.
+     */
+    public Collection getProperties();
+
+    /**
+     * Retrieves the large-object-block properties.
+     * @return such collection.
+     */
+    public Collection getLobProperties();
 }

@@ -152,9 +152,9 @@ public class <input.vo_name>ResultSetExtractor
                 <input.tr_name>TableRepository
 {
 <if(input.clobHandling)>
-<indirect_template(name=input.clobHandling+"Extractor", input=input)>
+    <indirect_template(name=input.clobHandling+"Extractor", input=input)>
 <else>
-<defaultExtractor(input=input)>
+    <defaultExtractor(input=input)>
 <endif>
 }
 >>
@@ -164,61 +164,61 @@ defaultExtractor(input) ::= <<
  Generates the default logic for the extractor.
  @param input the input.
 !>
-    /**
-     * Extracts \<i><input.vo_name>\</i> information from given result set.
-     * @param resultSet the result set.
-     * @return the \<code><input.vo_name>ValueObject\</code> or
-     * \<code>null\</code> if the operation returned no data.
-     * @throws SQLException intercepted by \<i>Spring\</i\>.
-     * @throws DataAccessException with information about any
-     * custom exception.
-     <precondition_notnull("resultSet")>
-     <precondition_instanceof(name="resultSet", className="QueryResultSet")>
-     */
-    public Object extractData(final ResultSet resultSet)
-        throws  SQLException,
-                DataAccessException
+/**
+ * Extracts \<i><input.vo_name>\</i> information from given result set.
+ * @param resultSet the result set.
+ * @return the \<code><input.vo_name>ValueObject\</code> or
+ * \<code>null\</code> if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i\>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ <precondition_notnull("resultSet")>
+ <precondition_instanceof(name="resultSet", className="QueryResultSet")>
+ */
+public Object extractData(final ResultSet resultSet)
+    throws  SQLException,
+            DataAccessException
+{
+    return
+        extractData(
+            (QueryResultSet) resultSet,
+            <input.vo_name>ValueObjectFactory.getInstance());
+}
+
+/**
+ * Extracts \<i><input.vo_name>\</i> information from given result set.
+ * @param resultSet the result set.
+ * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+ * instance.
+ * @return the \<code><input.vo_name>ValueObject\</code> or
+ * \<code>null\</code> if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ <precondition_notnull("resultSet")>
+ <precondition_notnull("factory")>
+ */
+protected <input.vo_name> extractData(
+    final QueryResultSet resultSet,
+    final <input.vo_name>ValueObjectFactory factory)
+  throws  SQLException,
+          DataAccessException
+{
+    <input.vo_name>ValueObject result = null;
+
+    if  (resultSet.next())
     {
-        return
-            extractData(
-                (QueryResultSet) resultSet,
-                <input.vo_name>ValueObjectFactory.getInstance());
+        <input.attributes:nullable_attribute_extraction(
+          attr=it, input=input)>
+
+        result =
+            factory.create<input.vo_name>ValueObject(
+                <input.attributes:attribute_extraction(attr=it);
+                  separator=",\n">);
     }
 
-    /**
-     * Extracts \<i><input.vo_name>\</i> information from given result set.
-     * @param resultSet the result set.
-     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
-     * instance.
-     * @return the \<code><input.vo_name>ValueObject\</code> or
-     * \<code>null\</code> if the operation returned no data.
-     * @throws SQLException intercepted by \<i>Spring\</i>.
-     * @throws DataAccessException with information about any
-     * custom exception.
-     <precondition_notnull("resultSet")>
-     <precondition_notnull("factory")>
-     */
-    protected <input.vo_name> extractData(
-        final QueryResultSet resultSet,
-        final <input.vo_name>ValueObjectFactory factory)
-      throws  SQLException,
-              DataAccessException
-    {
-        <input.vo_name>ValueObject result = null;
-
-        if  (resultSet.next())
-        {
-            <input.attributes:nullable_attribute_extraction(
-              attr=it, input=input)>
-
-            result =
-                factory.create<input.vo_name>ValueObject(
-                    <input.attributes:attribute_extraction(attr=it);
-                      separator=",\n">);
-        }
-
-        return result;
-    }
+    return result;
+}
 >>
 
 oracle8Extractor(input) ::= <<
@@ -226,153 +226,153 @@ oracle8Extractor(input) ::= <<
  Generates the constructor needed by Oracle8 LOB management.
  @param input the input.
 !>
-    <input.lob_attributes:attribute_class_declaration(attr=it);
-      separator="\n\n">
+<input.lob_attributes:attribute_class_declaration(attr=it);
+  separator="\n\n">
 
-    /**
-     * The \<i>select for update\</i> mode.
-     */
-    private boolean m__bSelectForUpdateMode;
+/**
+ * The \<i>select for update\</i> mode.
+ */
+private boolean m__bSelectForUpdateMode;
 
-    /**
-     * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
-     * to extract <input.vo_name> information, managing LOB stuff.
-     * @param selectForUpdateMode whether the result set is the result of
-     * the \<i>select for update\</code> (required to perform some operations
-     * such as \<b>insert\</b>s), or not.
-     */
-    protected <input.vo_name>ResultSetExtractor(
-        final boolean selectForUpdateMode)
+/**
+ * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
+ * to extract <input.vo_name> information, managing LOB stuff.
+ * @param selectForUpdateMode whether the result set is the result of
+ * the \<i>select for update\</code> (required to perform some operations
+ * such as \<b>insert\</b>s), or not.
+ */
+protected <input.vo_name>ResultSetExtractor(
+    final boolean selectForUpdateMode)
+{
+    immutableSetSelectForUpdateMode(selectForUpdateMode);
+}
+
+/**
+ * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
+ * to extract <input.vo_name> information, managing LOB stuff.
+ <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
+   separator=",\n">
+ * @param selectForUpdateMode whether the result set is the result of
+ * the \<i>select for update\</code> (required to perform some operations
+ * such as \<b>insert\</b>s), or not.
+ */
+public <input.vo_name>ResultSetExtractor(
+    <input.lob_attributes:attribute_method_declaration(attr=it);
+      separator=",\n">,
+    final boolean selectForUpdateMode)
+{
+    this(selectForUpdateMode);
+    <input.lob_attributes:attribute_setter_call(attr=it); separator="\n">
+}
+
+/**
+ * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
+ * to extract <input.vo_name> information, managing LOB stuff.
+ */
+public <input.vo_name>ResultSetExtractor()
+{
+    this(false);
+}
+
+<input.lob_attributes:attribute_accessors(attr=it); separator="\n\n">
+
+/**
+ * Specifies whether the extractor is retrieving results of a
+ * \<i>select for update\</i> or not.
+ * @param selectForUpdate such behaviour.
+ */
+protected final void immutableSetSelectForUpdateMode(
+    final boolean selectForUpdateMode)
+{
+    m__bSelectForUpdateMode = selectForUpdateMode;
+}
+
+/**
+ * Specifies whether the extractor is retrieving results of a
+ * \<i>select for update\</i> or not.
+ * @param selectForUpdate such behaviour.
+ */
+protected void setSelectForUpdateMode(final boolean selectForUpdateMode)
+{
+    immutableSetSelectForUpdateMode(selectForUpdateMode);
+}
+
+/**
+ * Retrieves whether the extractor is retrieving results of a
+ * \<i>select for update\</i> or not.
+ * @return such behaviour.
+ */
+public boolean getSelectForUpdateMode()
+{
+    return m__bSelectForUpdateMode;
+}
+
+/**
+ * Extracts \<i><input.vo_name>\</i> information from given result set.
+ * @param resultSet the result set.
+ * @return the \<code><input.vo_name>ValueObject\</code> or
+ * \<code>null\</code> if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i\>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ <precondition_instanceof(name="resultSet", className="QueryResultSet")>
+ */
+public Object extractData(final ResultSet resultSet)
+    throws  SQLException,
+            DataAccessException
+{
+    return
+        extractData(
+            resultSet,
+            <input.lob_attributes:{get<it.nameCapitalized>()};
+              separator=",\n">,
+            getSelectForUpdateMode(),
+            <input.vo_name>ValueObjectFactory.getInstance());
+}
+
+/**
+ * Extracts \<i><input.vo_name>\</i> information from given result set.
+ * @param resultSet the result set.
+ <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
+   separator="\n">
+ * @param selectForUpdate whether the operation is a
+ * \<i>select for update\</i>.
+ * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+ * instance.
+ * @return the \<code><input.vo_name>ValueObject\</code> or
+ * \<code>null\</code> if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i\>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ <precondition_notnull("resultSet")>
+ <precondition_notnull("factory")>
+ */
+protected Object extractData(
+    final ResultSet resultSet,
+    <input.lob_attributes:attribute_method_declaration(attr=it);
+      separator=",\n">,
+    final boolean selectForUpdateMode,
+    final <input.vo_name>ValueObjectFactory factory)
+  throws  SQLException,
+          DataAccessException
+{
+    <input.vo_name>ValueObject result = null;
+
+    if  (resultSet.next())
     {
-        immutableSetSelectForUpdateMode(selectForUpdateMode);
+        <input.attributes:nullable_attribute_extraction(
+          attr=it, input=input)>
+        <input.lob_attributes:special_attribute_extraction(
+          attr=it, input=input)>
+
+        result =
+            factory.create<input.vo_name>ValueObject(
+                <input.attributes:attribute_extraction(
+                  attr=it, input=input); separator=",\n">);
     }
 
-    /**
-     * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
-     * to extract <input.vo_name> information, managing LOB stuff.
-     <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
-       separator=",\n">
-     * @param selectForUpdateMode whether the result set is the result of
-     * the \<i>select for update\</code> (required to perform some operations
-     * such as \<b>insert\</b>s), or not.
-     */
-    public <input.vo_name>ResultSetExtractor(
-        <input.lob_attributes:attribute_method_declaration(attr=it);
-          separator=",\n">,
-        final boolean selectForUpdateMode)
-    {
-        this(selectForUpdateMode);
-        <input.lob_attributes:attribute_setter_call(attr=it); separator="\n">
-    }
-
-    /**
-     * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
-     * to extract <input.vo_name> information, managing LOB stuff.
-     */
-    public <input.vo_name>ResultSetExtractor()
-    {
-        this(false);
-    }
-
-    <input.lob_attributes:attribute_accessors(attr=it); separator="\n\n">
-
-    /**
-     * Specifies whether the extractor is retrieving results of a
-     * \<i>select for update\</i> or not.
-     * @param selectForUpdate such behaviour.
-     */
-    protected final void immutableSetSelectForUpdateMode(
-        final boolean selectForUpdateMode)
-    {
-        m__bSelectForUpdateMode = selectForUpdateMode;
-    }
-
-    /**
-     * Specifies whether the extractor is retrieving results of a
-     * \<i>select for update\</i> or not.
-     * @param selectForUpdate such behaviour.
-     */
-    protected void setSelectForUpdateMode(final boolean selectForUpdateMode)
-    {
-        immutableSetSelectForUpdateMode(selectForUpdateMode);
-    }
-
-    /**
-     * Retrieves whether the extractor is retrieving results of a
-     * \<i>select for update\</i> or not.
-     * @return such behaviour.
-     */
-    public boolean getSelectForUpdateMode()
-    {
-        return m__bSelectForUpdateMode;
-    }
-
-    /**
-     * Extracts \<i><input.vo_name>\</i> information from given result set.
-     * @param resultSet the result set.
-     * @return the \<code><input.vo_name>ValueObject\</code> or
-     * \<code>null\</code> if the operation returned no data.
-     * @throws SQLException intercepted by \<i>Spring\</i\>.
-     * @throws DataAccessException with information about any
-     * custom exception.
-     <precondition_instanceof(name="resultSet", className="QueryResultSet")>
-     */
-    public Object extractData(final ResultSet resultSet)
-        throws  SQLException,
-                DataAccessException
-    {
-        return
-            extractData(
-                resultSet,
-                <input.lob_attributes:{get<it.nameCapitalized>()};
-                  separator=",\n">,
-                getSelectForUpdateMode(),
-                <input.vo_name>ValueObjectFactory.getInstance());
-    }
-
-    /**
-     * Extracts \<i><input.vo_name>\</i> information from given result set.
-     * @param resultSet the result set.
-     <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
-       separator="\n">
-     * @param selectForUpdate whether the operation is a
-     * \<i>select for update\</i>.
-     * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
-     * instance.
-     * @return the \<code><input.vo_name>ValueObject\</code> or
-     * \<code>null\</code> if the operation returned no data.
-     * @throws SQLException intercepted by \<i>Spring\</i\>.
-     * @throws DataAccessException with information about any
-     * custom exception.
-     <precondition_notnull("resultSet")>
-     <precondition_notnull("factory")>
-     */
-    protected Object extractData(
-        final ResultSet resultSet,
-        <input.lob_attributes:attribute_method_declaration(attr=it);
-          separator=",\n">,
-        final boolean selectForUpdateMode,
-        final <input.vo_name>ValueObjectFactory factory)
-      throws  SQLException,
-              DataAccessException
-    {
-        <input.vo_name>ValueObject result = null;
-
-        if  (resultSet.next())
-        {
-            <input.attributes:nullable_attribute_extraction(
-              attr=it, input=input)>
-            <input.lob_attributes:special_attribute_extraction(
-              attr=it, input=input)>
-
-            result =
-                factory.create<input.vo_name>ValueObject(
-                    <input.attributes:attribute_extraction(
-                      attr=it, input=input); separator=",\n">);
-        }
-
-        return result;
-    }
+    return result;
+}
 
 >>
 

@@ -87,7 +87,7 @@ public class JdbcMetadataTypeManager
      * Creates an empty <code>JdbcMetadataTypeManager</code>.
      */
     public JdbcMetadataTypeManager() {};
-    
+
     /**
      * Specifies a new weak reference.
      * @param manager the manager instance to use.
@@ -116,12 +116,12 @@ public class JdbcMetadataTypeManager
 
         WeakReference t_Reference = getReference();
 
-        if  (t_Reference != null) 
+        if  (t_Reference != null)
         {
             result = (JdbcMetadataTypeManager) t_Reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new JdbcMetadataTypeManager();
 
@@ -232,10 +232,10 @@ public class JdbcMetadataTypeManager
     {
         int result = Types.NULL;
 
-        if  (dataType != null) 
+        if  (dataType != null)
         {
             result = Types.OTHER;
-        
+
             Map t_mNative2JavaTypesMap = getNative2JavaTypeMapping();
 
             if  (t_mNative2JavaTypesMap == null)
@@ -243,14 +243,14 @@ public class JdbcMetadataTypeManager
                 t_mNative2JavaTypesMap = buildNative2JavaTypeMap();
                 setNative2JavaTypeMapping(t_mNative2JavaTypesMap);
             }
-        
-            Object t_Result = 
+
+            Object t_Result =
                 t_mNative2JavaTypesMap.get(dataType);
 
             if  (   (t_Result == null)
                  || !(t_Result instanceof Integer))
             {
-                t_Result = 
+                t_Result =
                     t_mNative2JavaTypesMap.get(dataType.toUpperCase());
             }
 
@@ -995,7 +995,7 @@ public class JdbcMetadataTypeManager
                     break;
             }
         }
-        
+
         return result;
     }
 
@@ -1083,6 +1083,26 @@ public class JdbcMetadataTypeManager
      * @return <code>true</code> if such data type can be managed as an
      * integer.
      */
+    public boolean isPrimitive(final String dataType)
+    {
+        boolean result = false;
+
+        if  (   ("int".equals(dataType))
+             || ("long".equals(dataType))
+             || ("double".equals(dataType)))
+        {
+            result = true;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if given data type represents integers.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as an
+     * integer.
+     */
     public boolean isPrimitiveWrapper(final String dataType)
     {
         boolean result = false;
@@ -1109,6 +1129,17 @@ public class JdbcMetadataTypeManager
     }
 
     /**
+     * Checks if given data type represents integers.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as an
+     * integer.
+     */
+    public boolean isClob(final String dataType)
+    {
+        return "Clob".equals(dataType);
+    }
+
+    /**
      * Checks if given data type represents numbers smaller than int.
      * @param dataType the data type.
      * @return <code>true</code> is fuch data type is smallint, tinyint
@@ -1131,7 +1162,28 @@ public class JdbcMetadataTypeManager
                 result = false;
                 break;
         }
-        
+
+        return result;
+    }
+
+    /**
+     * Checks if given data type represents numbers smaller than int.
+     * @param dataType the data type.
+     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * or similar.
+     */
+    public boolean isNumberSmallerThanInt(final String dataType)
+    {
+        boolean result = false;
+
+        if  (   ("byte".equalsIgnoreCase(dataType))
+             || ("bit".equalsIgnoreCase(dataType))
+             || ("tinyint".equalsIgnoreCase(dataType))
+             || ("smallint".equalsIgnoreCase(dataType)))
+        {
+            result = true;
+        }
+
         return result;
     }
 }

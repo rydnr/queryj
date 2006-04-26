@@ -62,4 +62,28 @@ public interface AttributeDecorator
      * @return such instance.
      */
     public Attribute getAttribute();
+    /**
+     * Retrieves whether the attribute is a clob or not.
+     * return such information.
+     */
+    public boolean isClob();
+
+    /**
+     * Retrieves whether the attribute is a string or not.
+     * return such information.
+     */
+    public boolean isString();
+
+    /**
+     * Retrieves whether the attribute is a date or not.
+     * return such information.
+     */
+    public boolean isDate();
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    public boolean isNumberSmallerThanInt();
 }

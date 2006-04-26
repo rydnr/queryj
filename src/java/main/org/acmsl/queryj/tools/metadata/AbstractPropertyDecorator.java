@@ -265,6 +265,102 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the alternate version of the value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalizeCapitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(decorationUtils.normalize(value));
+    }
+
+    /**
+     * Checks whether the property allows null or not.
+     * @return such information.
+     */
+    public boolean getAllowsNull()
+    {
+        return isNullable();
+    }
+
+    /**
+     * Retrieves whether this attribute can be modelled as a primitive or not.
+     * @return <code>false</code> if no primitive matches.
+     */
+    public Boolean isPrimitive()
+    {
+        return isPrimitive(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether this attribute can be modelled as a primitive or not.
+     * @param type the attribute type.
+     * @param metadataTypeManager the metadata type manager.
+     * @return <code>false</code> if no primitive matches.
+     * @precondition metadataTypeManager != null
+     */
+    protected Boolean isPrimitive(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            (metadataTypeManager.isPrimitive(type)
+             ?  Boolean.TRUE : Boolean.FALSE);
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    public boolean isNumberSmallerThanInt()
+    {
+        return isNumberSmallerThanInt(getType(), getMetadataManager());
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @param type the type.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such condition.
+     * @precondition metadataManager != null
+     */
+    protected boolean isNumberSmallerThanInt(
+        final String type, final MetadataManager metadataManager)
+    {
+        return
+            isNumberSmallerThanInt(
+                type, metadataManager.getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return such condition.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isNumberSmallerThanInt(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isNumberSmallerThanInt(type);
+    }
+
+    /**
+     * Retrieves the capitalized name.
+     * @return such name.
+     */
+    public String getColumnNameNormalizedCapitalized()
+    {
+        return normalizeCapitalize(getColumnName(), DecorationUtils.getInstance());
+    }
+
+    /**
      * Retrieves the property name.
      * @return such information.
      */

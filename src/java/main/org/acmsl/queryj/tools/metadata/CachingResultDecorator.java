@@ -89,6 +89,11 @@ public class CachingResultDecorator
     private Collection m__cCachedProperties;
 
     /**
+     * The cached LOB properties.
+     */
+    private Collection m__cCachedLobProperties;
+
+    /**
      * Creates a <code>CachingResultElementDecorator</code> with given instance.
      * @param result the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
@@ -325,6 +330,51 @@ public class CachingResultDecorator
         {
             result = super.getProperties();
             setCachedProperties(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached properties.
+     * @param value the value to cache.
+     */
+    protected final void immutableSetCachedLobProperties(
+        final Collection value)
+    {
+        m__cCachedLobProperties = value;
+    }
+
+    /**
+     * Specifies the cached properties.
+     * @param value the value to cache.
+     */
+    protected void setCachedLobProperties(final Collection value)
+    {
+        immutableSetCachedLobProperties(value);
+    }
+
+    /**
+     * Retrieves the cached properties.
+     * @return such value.
+     */
+    public Collection getCachedLobProperties()
+    {
+        return m__cCachedLobProperties;
+    }
+
+    /**
+     * Retrieves the properties.
+     * @return such information.
+     */
+    public Collection getLobProperties()
+    {
+        Collection result = getCachedLobProperties();
+
+        if  (result == null)
+        {
+            result = super.getLobProperties();
+            setCachedLobProperties(result);
         }
 
         return result;
