@@ -52,7 +52,7 @@ source(input) ::= <<
 !>
 //;-*- mode: java-conf-*-
 <if(input.header)>
-<input.splitted_header:{it}; separator="\n">
+<input.splitted_header:{<it>}; separator="\n">
 <else>
 <header(
   years=input.copyright_years,
