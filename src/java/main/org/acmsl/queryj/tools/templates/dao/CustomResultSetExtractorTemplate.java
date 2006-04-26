@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
@@ -142,13 +143,16 @@ public class CustomResultSetExtractorTemplate
             engineName,
             engineVersion);
 
-        input.put(
-            "table",
+        String t_strTable =
             retrieveTable(
                 result,
                 customSqlProvider,
                 metadataManager,
-                CustomResultUtils.getInstance()));
+                CustomResultUtils.getInstance());
+
+        input.put("table", t_strTable);
+        input.put(
+            "tableNormalizedLowercased", normalizeLowercase(t_strTable));
     }
 
     /**
@@ -207,5 +211,30 @@ public class CustomResultSetExtractorTemplate
     public String getTemplateName()
     {
         return "CustomResultSetExtractor";
+    }
+
+    /**
+     * Normalizes and lowers the case of given value.
+     * @param value the value.
+     * @return the processed value.
+     * @precondition value != null
+     */
+    protected String normalizeLowercase(final String value)
+    {
+        return normalizeLowercase(value, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Normalizes and lowers the case of given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the processed value.
+     * @precondition value != null
+     * @precondition decoratorUtils != null
+     */
+    protected String normalizeLowercase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.normalizeLowercase(value);
     }
 }

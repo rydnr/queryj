@@ -301,6 +301,28 @@ public abstract class AbstractResultDecorator
     }
 
     /**
+     * Retrieves whether the result matches a single entity or expects
+     * a set of them.
+     * @return such information.
+     */
+    public boolean isMultiple()
+    {
+        return isMultiple(getResult());
+    }
+
+    /**
+     * Retrieves whether the result matches a single entity or expects
+     * a set of them.
+     * @param result the result element.
+     * @return such information.
+     * @precondition result != null
+     */
+    protected boolean isMultiple(final Result result)
+    {
+        return Result.MULTIPLE.equalsIgnoreCase(result.getMatches());
+    }
+
+    /**
      * Retrieves the properties.
      * @return such information.
      */

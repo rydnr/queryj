@@ -153,7 +153,7 @@ public abstract class <input.vo_name>DAOFactory
      * Retrieves a <input.vo_name>DAOFactory instance.
      * @param daoChooser the DAOChooser instance.
      * @return such instance.
-     * @precondition daoChooser != null
+     <precondition_notnull("daoChooser")>
      */
     protected static <input.vo_name>DAOFactory getInstance(final DAOChooser daoChooser)
     {

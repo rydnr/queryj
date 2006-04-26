@@ -74,6 +74,11 @@ public class CachingResultDecorator
     private String m__strCachedIdCapitalized;
 
     /**
+     * The cached <i>multiple</i> information.
+     */
+    private Boolean m__bCachedMultiple;
+
+    /**
      * The cached normalized uppercased id.
      */
     private String m__strCachedIdNormalizedUppercased;
@@ -236,6 +241,50 @@ public class CachingResultDecorator
         return result;
     }
 
+    /**
+     * Specifies the cached <i>multiple</i> info.
+     * @param multiple such information.
+     */
+    protected final void immutableSetCachedMultiple(final Boolean multiple)
+    {
+        m__bCachedMultiple = multiple;
+    }
+
+    /**
+     * Specifies the cached <i>multiple</i> info.
+     * @param multiple such information.
+     */
+    protected void setCachedMultiple(final Boolean multiple)
+    {
+        immutableSetCachedMultiple(multiple);
+    }
+
+    /**
+     * Retrieves the cached <i>multiple</i> info.
+     * @return such information.
+     */
+    protected Boolean getCachedMultiple()
+    {
+        return m__bCachedMultiple;
+    }
+
+    /**
+     * Retrieves whether the result matches a single entity or expects
+     * a set of them.
+     * @return such information.
+     */
+    public boolean isMultiple()
+    {
+        Boolean result = getCachedMultiple();
+
+        if  (result == null)
+        {
+            result = super.isMultiple() ? Boolean.TRUE : Boolean.FALSE;
+            setCachedMultiple(result);
+        }
+
+        return result.booleanValue();
+    }
     /**
      * Specifies the cached properties.
      * @param value the value to cache.

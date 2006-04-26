@@ -65,7 +65,7 @@ source(input) ::= <<
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
     input.subpackage_name,
-    input.table:{it.normalizedLowercased}
+    input.tableNormalizedLowercased
   ])>
 
 <project_imports(
@@ -160,9 +160,9 @@ public class <result.idCapitalized>Extractor
                 <input.tr_name>TableRepository
 {
 <if(result.multiple)>
-<extract_data_with_multiple_result(result)>
+    <extract_data_with_multiple_result(result=result)>
 <else>
-<extract_data_with_single_result(result)>
+    <extract_data_with_single_result(result=result)>
 <endif>
 }
 >>
@@ -172,16 +172,16 @@ extract_data_with_single_result(result) ::= <<
  Generates the method to extract a single instance.
  @param result the result entity in the model.
 !>
-// <extract data>
+// \<extract data\>
 /**
- * Extracts \<i><result.name>\</i> information from given result set.
+ * Extracts \<i><result.id>\</i> information from given result set.
  * @param resultSet the result set.
- * @return the \<i><input.name>\</i> or \<code>null\</code>
+ * @return the \<i><input.className>\</i> or \<code>null\</code>
  * if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
  * custom exception.
- <precondition_not_null(resultSet)>
+ <precondition_notnull("resultSet")>
  */
 public Object extractData(final ResultSet resultSet)
     throws  SQLException,
@@ -196,12 +196,12 @@ public Object extractData(final ResultSet resultSet)
  * Extracts \<i><result.id>\</i> information from given result set.
  * @param resultSet the result set.
  * @param factory the value object factory.
- * @return the \<i><input.name>\</i> or \<code>null\</code>
+ * @return the \<i><input.className>\</i> or \<code>null\</code>
  * if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
  * custom exception.
- <precondition_not_null(resultSet)>
+ <precondition_notnull("resultSet")>
  */
 protected Object extractData(
     final ResultSet resultSet, final <result.classValue>Factory factory)
@@ -219,9 +219,9 @@ protected Object extractData(
         <result.properties:property_retrieval(property=it); separator="\n\n">
 
         result =
-            factory.create<result.nameCapitalized>(
+            factory.create(
                 <result.properties:property_specification(property=it);
-                separator=",\n">));
+                separator=",\n">);
     }
 
     return result;
@@ -233,7 +233,7 @@ extract_data_with_multiple_result(result) ::= <<
  Generates the method to extract multiple instances.
  @param result the result entity in the model.
 !>
-// <extract data>
+// \<extract data\>
 /**
  * Extracts \<i><result.id>\</i> information from given result set.
  * @param resultSet the result set.
@@ -241,7 +241,7 @@ extract_data_with_multiple_result(result) ::= <<
  * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
  * custom exception.
- <precondition_not_null(resultSet)>
+ <precondition_notnull("resultSet")>
  */
 public Object extractData(final ResultSet resultSet)
     throws  SQLException,
@@ -261,8 +261,8 @@ public Object extractData(final ResultSet resultSet)
  * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
  * custom exception.
- <precondition_not_null(resultSet)>
- <precondition_not_null(factory)>
+ <precondition_notnull("resultSet")>
+ <precondition_notnull("factory")>
  */
 protected Object extractData(
     final ResultSet resultSet,
@@ -277,7 +277,7 @@ protected Object extractData(
         <result.properties:property_retrieval(property=it); separator="\n\n">
 
         result.add(
-            factory.create<result.nameCapitalized>(
+            factory.create(
                 <result.properties:property_specification(property=it);
                 separator=",\n">));
     }
@@ -291,7 +291,7 @@ non_nullable_property_specification(property) ::= <<
  Generates the code to retrieve and specify a value object's property.
  @param property the property.
 !>
-resultSet.get<property.javaType>("<property.name>");
+resultSet.get<property.javaType>("<property.columnName>")
 >>
 
 nullable_property_retrieval(property) ::= <<
@@ -302,7 +302,7 @@ nullable_property_retrieval(property) ::= <<
 <property.javaType> t_<property.javaTypeCapitalized><property.nameLowercased> =
     new <property.objectType>(
         resultSet.get<property.objectType>(
-            "<property.name>"));
+            "<property.columnName>"));
 
 if  (resultSet.wasNull())
 {

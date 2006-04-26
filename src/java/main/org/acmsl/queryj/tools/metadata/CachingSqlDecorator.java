@@ -42,7 +42,8 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.Sql;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
 
@@ -58,7 +59,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public class CachingSqlDecorator
-    extends  SqlDecorator
+    extends  AbstractSqlDecorator
 {
     /**
      * A cached empty String array.
@@ -102,20 +103,20 @@ public class CachingSqlDecorator
 
     /**
      * Creates a <code>CachingSqlDecorator</code> with given information.
-     * @param sqlElement the <code>SqlElement</code> to decorate.
+     * @param sql the <code>Sql</code> to decorate.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
      * to decorate referred parameters.
-     * @param metadataTypeManager the metadata type manager.
-     * @precondition sqlElement != null
+     * @param metadataManager the metadata manager.
+     * @precondition sql != null
      * @precondition customSqlProvider != null
-     * @precondition metadataTypeManager != null
+     * @precondition metadataManager != null
      */
     public CachingSqlDecorator(
-        final SqlElement sqlElement,
+        final Sql sql,
         final CustomSqlProvider customSqlProvider,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataManager metadataManager)
     {
-        super(sqlElement, customSqlProvider, metadataTypeManager);
+        super(sql, customSqlProvider, metadataManager);
     }
 
     /**
@@ -127,7 +128,7 @@ public class CachingSqlDecorator
     {
         m__astrCachedSplittedQuotedValue = value;
     }
-    
+
     /**
      * Specifies the cached splitted quoted value.
      * @param value the value to cache.
@@ -162,13 +163,13 @@ public class CachingSqlDecorator
     public String[] getSplittedQuotedValue()
     {
         String[] result = getCachedSplittedQuotedValue();
-        
+
         if  (result == null)
         {
             result = super.getSplittedQuotedValue();
             setCachedSplittedQuotedValue(result);
         }
-        
+
         return result;
     }
 
@@ -181,7 +182,7 @@ public class CachingSqlDecorator
     {
         m__strCachedIdAsConstant = value;
     }
-    
+
     /**
      * Specifies the cached id formatted as constant.
      * @param value the value to cache.
@@ -199,7 +200,7 @@ public class CachingSqlDecorator
     {
         return m__strCachedIdAsConstant;
     }
-    
+
     /**
      * Retrieves the id formatted as constant.
      * @return such information.
@@ -207,13 +208,13 @@ public class CachingSqlDecorator
     public String getIdAsConstant()
     {
         String result = getCachedIdAsConstant();
-        
+
         if  (result == null)
         {
             result = super.getIdAsConstant();
             setCachedIdAsConstant(result);
         }
-        
+
         return result;
     }
 
@@ -226,7 +227,7 @@ public class CachingSqlDecorator
     {
         m__strCachedIdCapitalized = value;
     }
-    
+
     /**
      * Specifies the cached capitalized id.
      * @param value the value to cache.
@@ -244,7 +245,7 @@ public class CachingSqlDecorator
     {
         return m__strCachedIdCapitalized;
     }
-    
+
     /**
      * Retrieves the id capitalized.
      * @return such information.
@@ -252,13 +253,13 @@ public class CachingSqlDecorator
     public String getIdCapitalized()
     {
         String result = getCachedIdCapitalized();
-        
+
         if  (result == null)
         {
             result = super.getIdCapitalized();
             setCachedIdCapitalized(result);
         }
-        
+
         return result;
     }
 
@@ -271,7 +272,7 @@ public class CachingSqlDecorator
     {
         m__strCachedNameUncapitalized = value;
     }
-    
+
     /**
      * Specifies the cached uncapitalized name.
      * @param value the value to cache.
@@ -289,7 +290,7 @@ public class CachingSqlDecorator
     {
         return m__strCachedNameUncapitalized;
     }
-    
+
     /**
      * Retrieves the name, (un)capitalized.
      * @return such information.
@@ -297,13 +298,13 @@ public class CachingSqlDecorator
     public String getNameUncapitalized()
     {
         String result = getCachedNameUncapitalized();
-        
+
         if  (result == null)
         {
             result = super.getNameUncapitalized();
             setCachedNameUncapitalized(result);
         }
-        
+
         return result;
     }
 
@@ -316,7 +317,7 @@ public class CachingSqlDecorator
     {
         m__cCachedParameters = value;
     }
-    
+
     /**
      * Specifies the cached parameters.
      * @param value the value to cache.
@@ -334,7 +335,7 @@ public class CachingSqlDecorator
     {
         return m__cCachedParameters;
     }
-    
+
     /**
      * Retrieves the parameters.
      * @return such information.
@@ -342,13 +343,13 @@ public class CachingSqlDecorator
     public Collection getParameters()
     {
         Collection result = getCachedParameters();
-        
+
         if  (result == null)
         {
             result = super.getParameters();
             setCachedParameters(result);
         }
-        
+
         return result;
     }
 
@@ -361,7 +362,7 @@ public class CachingSqlDecorator
     {
         m__strCachedResultClass = value;
     }
-    
+
     /**
      * Specifies the cached result class.
      * @param value the value to cache.
@@ -387,13 +388,13 @@ public class CachingSqlDecorator
     public String getResultClass()
     {
         String result = getCachedResultClass();
-        
+
         if  (result == null)
         {
             result = super.getResultClass();
             setCachedResultClass(result);
         }
-        
+
         return result;
     }
 
@@ -406,7 +407,7 @@ public class CachingSqlDecorator
     {
         m__strCachedResultIdAsConstant = value;
     }
-    
+
     /**
      * Specifies the cached result id as constant.
      * @param value the value to cache.
@@ -424,7 +425,7 @@ public class CachingSqlDecorator
     {
         return m__strCachedResultIdAsConstant;
     }
-    
+
     /**
      * Retrieves the result id as constant.
      * @return such information.
@@ -432,13 +433,13 @@ public class CachingSqlDecorator
     public String getResultIdAsConstant()
     {
         String result = getCachedResultIdAsConstant();
-        
+
         if  (result == null)
         {
             result = super.getResultIdAsConstant();
             setCachedResultIdAsConstant(result);
         }
-        
+
         return result;
     }
 

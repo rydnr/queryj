@@ -227,12 +227,12 @@ public class <input.class_name>
 
         WeakReference reference = getReference();
 
-        if  (reference != null) 
+        if  (reference != null)
         {
             result = (<input.class_name>) reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new <input.class_name>();
 
@@ -256,7 +256,7 @@ public class <input.class_name>
      * using given data source.
      * @param dataSource the data source.
      * @return such DAO.
-     * @precondition dataSource != null
+     <precondition_notnull("dataSource")>
      */
     protected <input.dao_class_name> create<input.dao_class_name>(final DataSource dataSource)
     {
@@ -283,7 +283,7 @@ public class <input.class_name>
      * Retrieves the data source.
      * @param jndiUtils the \<code\>JndiUtils\</code\> instance.
      * @return such data source.
-     * @precondition jndiUtils != null
+     <precondition_notnull("jndiUtils")>
      */
     protected DataSource getDataSource(final JndiUtils jndiUtils)
     {

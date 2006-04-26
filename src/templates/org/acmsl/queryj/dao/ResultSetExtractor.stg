@@ -172,8 +172,8 @@ defaultExtractor(input) ::= <<
      * @throws SQLException intercepted by \<i>Spring\</i\>.
      * @throws DataAccessException with information about any
      * custom exception.
-     * @precondition resultSet != null
-     * @precondition resultSet instanceof QueryResultSet
+     <precondition_notnull("resultSet")>
+     <precondition_instanceof(name="resultSet", className="QueryResultSet")>
      */
     public Object extractData(final ResultSet resultSet)
         throws  SQLException,
@@ -195,8 +195,8 @@ defaultExtractor(input) ::= <<
      * @throws SQLException intercepted by \<i>Spring\</i>.
      * @throws DataAccessException with information about any
      * custom exception.
-     * @precondition resultSet != null
-     * @precondition factory != null
+     <precondition_notnull("resultSet")>
+     <precondition_notnull("factory")>
      */
     protected <input.vo_name> extractData(
         final QueryResultSet resultSet,
@@ -315,7 +315,7 @@ oracle8Extractor(input) ::= <<
      * @throws SQLException intercepted by \<i>Spring\</i\>.
      * @throws DataAccessException with information about any
      * custom exception.
-     * @precondition resultSet instanceof QueryResultSet
+     <precondition_instanceof(name="resultSet", className="QueryResultSet")>
      */
     public Object extractData(final ResultSet resultSet)
         throws  SQLException,
@@ -344,8 +344,8 @@ oracle8Extractor(input) ::= <<
      * @throws SQLException intercepted by \<i>Spring\</i\>.
      * @throws DataAccessException with information about any
      * custom exception.
-     * @precondition resultSet != null
-     * @precondition factory != null
+     <precondition_notnull("resultSet")>
+     <precondition_notnull("factory")>
      */
     protected Object extractData(
         final ResultSet resultSet,

@@ -792,44 +792,6 @@ public class <input.engine_name><input.vo_name>DAO
       throws DataAccessException
     {
 <if(input.fk_attributes)>
-        delete(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-            DataAccessManager.getInstance());
-    }
-
-    /**
-     * Deletes \<code><input.vo_name>\</code> information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
-     * @param dataAccessManager the \<code>DataAccessManager\</code> instance.
-     <precondition_notnull("dataAccessManager")>
-     */
-    protected void delete(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
-        final DataAccessManager dataAccessManager)
-    {
-        delete(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-            <input.fk_attributes:{dataAccessManager.get<it.sourceVoName>DAO()}
-              ; separator=",\n">);
-    }
-
-    /**
-     * Deletes \<code><input.vo_name>\</code> information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
-     <input.fk_attributes:dao_javadoc(
-       name=it.sourceTableName,
-       uncapitalizedName=it.sourceTableNameUncapitalized)
-       ; separator="\n">
-     <input.fk_attributes:precondition_notnull(name=it.sourceVoName);
-       separator="\n">
-     */
-    protected void delete(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
-        <input.fk_attributes:dao_declaration(
-          name=it.sourceVoName,
-          uncapitalizedName=it.sourceTableNameUncapitalized)
-          ; separator=",\n">)
-    {
         <input.fk_attributes:fk_dao_delete_call(
           foreignKey=it, pkAttributes=input.pk_attributes);
           separator="\n\n">
@@ -1489,7 +1451,7 @@ static_table(
  * @param <attribute.nameLowercased> the <attribute.name>
  * to filter.
  * @return the \<code><voName>\</code> instance.
- <precondition_notnull(attribute.name)>
+ <precondition_notnull(name=attribute.name)>
  */
 public <voName> findConstantBy<attribute.nameCapitalized>(
     final <attribute.javaType> <attribute.name>)
