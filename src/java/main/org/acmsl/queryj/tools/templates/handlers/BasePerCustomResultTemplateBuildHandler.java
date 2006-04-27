@@ -44,7 +44,7 @@ package org.acmsl.queryj.tools.templates.handlers;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -87,13 +87,20 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * A cached empty Result array.
      */
-    public static final ResultElement[] EMPTY_RESULT_ARRAY = new ResultElement[0];
+    public static final Result[] EMPTY_RESULT_ARRAY = new Result[0];
+
+    /**
+     * A cached empty BasePerCustomResultTemplate array.
+     */
+    public static final BasePerCustomResultTemplate[]
+        EMPTY_BASEPERCUSTOMRESULTTEMPLATE_ARRAY =
+            new BasePerCustomResultTemplate[0];
 
     /**
      * The key for storing the custom RESULT in the parameter map.
      */
     public static final String CUSTOM_RESULT = "..CustOMresult:::";
-    
+
     /**
      * Creates a <code>BasePerCustomResultTemplateBuildHandler</code> instance.
      */
@@ -224,7 +231,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 retrieveCustomResult(
                     parameters, customSqlProvider, metadataManager));
     }
-    
+
     /**
      * Retrieves the template factory.
      * @return such instance.
@@ -266,25 +273,26 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         final String projectPackage,
         final String repository,
         final String header,
-        final ResultElement[] resultElements)
+        final Result[] resultElements)
       throws  BuildException
     {
         boolean result = false;
 
         int t_iLength = (resultElements != null) ? resultElements.length : 0;
-        
-        BasePerCustomResultTemplate[] t_aTemplates =
-            new BasePerCustomResultTemplate[t_iLength];
+
+        Collection t_cTemplates = new ArrayList();
 
         try
         {
-            ResultElement t_ResultElement = null;
-            
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
+            Result t_ResultElement = null;
+
+            BasePerCustomResultTemplate t_Template = null;
+
+            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
             {
                 t_ResultElement = resultElements[t_iIndex];
-                
-                t_aTemplates[t_iIndex] =
+
+                t_Template =
                     templateFactory.createTemplate(
                         t_ResultElement,
                         customSqlProvider,
@@ -300,15 +308,24 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                         projectPackage,
                         repository,
                         header);
+
+                if  (t_Template != null)
+                {
+                    t_cTemplates.add(t_Template);
+                }
             }
 
-            storeTemplates(t_aTemplates, parameters);
+            storeTemplates(
+                (BasePerCustomResultTemplate[])
+                    t_cTemplates.toArray(
+                        EMPTY_BASEPERCUSTOMRESULTTEMPLATE_ARRAY),
+                parameters);
         }
         catch  (final QueryJException queryjException)
         {
             throw new BuildException(queryjException);
         }
-        
+
         return result;
     }
 
@@ -325,7 +342,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrievePackage(
-        final ResultElement customResult,
+        final Result customResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String engineName,
@@ -354,7 +371,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @throws BuildException if the package retrieval process if faulty.
      */
     protected abstract String retrievePackage(
-        final ResultElement customResult,
+        final Result customResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String engineName,
@@ -383,30 +400,32 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
-    protected ResultElement[] retrieveCustomResult(
+    protected Result[] retrieveCustomResult(
         final Map parameters,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
       throws  BuildException
     {
-        ResultElement[] result = (ResultElement[]) parameters.get(CUSTOM_RESULT);
+        Result[] result = (Result[]) parameters.get(CUSTOM_RESULT);
 
         if  (result == null)
         {
             Collection t_cCustomResult = new ArrayList();
-            
-            ResultElement[] t_aResultElements =
-                retrieveCustomResultElements(customSqlProvider, metadataManager);
 
-            int t_iLength = (t_aResultElements != null) ? t_aResultElements.length : 0;
-            
+            Result[] t_aResultElements =
+                retrieveCustomResultElements(
+                    customSqlProvider, metadataManager);
+
+            int t_iLength =
+                (t_aResultElements != null) ? t_aResultElements.length : 0;
+
             for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
             {
                 t_cCustomResult.add(t_aResultElements[t_iIndex]);
             }
 
             result =
-                (ResultElement[]) t_cCustomResult.toArray(EMPTY_RESULT_ARRAY);
+                (Result[]) t_cCustomResult.toArray(EMPTY_RESULT_ARRAY);
         }
 
         return result;
@@ -420,18 +439,18 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
-    protected ResultElement[] retrieveCustomResultElements(
+    protected Result[] retrieveCustomResultElements(
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
     {
         Collection t_cResult = new ArrayList();
-        
+
         Collection t_cCollection = customSqlProvider.getCollection();
 
         if  (t_cCollection != null)
         {
             Iterator t_itElements = t_cCollection.iterator();
-            
+
             if  (t_itElements != null)
             {
                 Object t_Item = null;
@@ -439,15 +458,15 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 while  (t_itElements.hasNext())
                 {
                     t_Item = t_itElements.next();
-                    
-                    if  (t_Item instanceof ResultElement)
+
+                    if  (t_Item instanceof Result)
                     {
                         t_cResult.add(t_Item);
                     }
                 }
             }
         }
-        
-        return (ResultElement[]) t_cResult.toArray(EMPTY_RESULT_ARRAY);
+
+        return (Result[]) t_cResult.toArray(EMPTY_RESULT_ARRAY);
     }
 }

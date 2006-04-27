@@ -32,29 +32,23 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a ResultSetExtractor template.
+ * Description: Builds a ValueObject template.
  *
  */
-package org.acmsl.queryj.tools.templates.dao.handlers;
+package org.acmsl.queryj.tools.templates.valueobject.handlers;
 
 /*
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
-import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplate;
-import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplateGenerator;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -73,31 +67,29 @@ import org.apache.tools.ant.BuildException;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
 /**
- * Builds custom ResultSetExtractor templates.
+ * Builds custom ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class CustomResultSetExtractorTemplateBuildHandler
+public class CustomValueObjectTemplateBuildHandler
     extends  BasePerCustomResultTemplateBuildHandler
 {
     /**
      * An empty template array.
      */
-    protected static final CustomResultSetExtractorTemplate[]
+    protected static final CustomValueObjectTemplate[]
         EMPTY_CUSTOMRESULTSETEXTRACTOR_TEMPLATE_ARRAY =
-            new CustomResultSetExtractorTemplate[0];
+            new CustomValueObjectTemplate[0];
 
     /**
-     * Creates a CustomResultSetExtractorTemplateBuildHandler.
+     * Creates a CustomValueObjectTemplateBuildHandler.
      */
-    public CustomResultSetExtractorTemplateBuildHandler() {};
+    public CustomValueObjectTemplateBuildHandler() {};
 
     /**
      * Retrieves the template factory.
@@ -105,7 +97,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
      */
     protected BasePerCustomResultTemplateFactory retrieveTemplateFactory()
     {
-        return CustomResultSetExtractorTemplateGenerator.getInstance();
+        return CustomValueObjectTemplateGenerator.getInstance();
     }
 
     /**
@@ -129,50 +121,8 @@ public class CustomResultSetExtractorTemplateBuildHandler
       throws BuildException
     {
         return
-            packageUtils.retrieveResultSetExtractorPackage(
-                projectPackage,
-                engineName,
-                retrieveTableName(
-                    customResult,
-                    customSqlProvider,
-                    metadataManager,
-                    CustomResultUtils.getInstance()));
-    }
-
-    /**
-     * Retrieves the table name.
-     * @param resultElement the result element.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the database metadata manager.
-     * @param customResultUtils the <code>CustomResultUtils</code> instance.
-     * @return the table name.
-     * @throws BuildException if there's no table associated to the result.
-     * @precondition resultElement != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition customResultUtils != null
-     */
-    protected String retrieveTableName(
-        final Result resultElement,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final CustomResultUtils customResultUtils)
-      throws  BuildException
-    {
-        String result =
-            customResultUtils.retrieveTable(
-                resultElement, customSqlProvider, metadataManager);
-
-        if  (result == null)
-        {
-            throw
-                new BuildException(
-                      "Specified result element "
-                    + resultElement.getId()
-                    + " is not associated to any table in the model.");
-        }
-
-        return result;
+            packageUtils.retrieveValueObjectPackage(
+                projectPackage);
     }
 
     /**
@@ -186,34 +136,26 @@ public class CustomResultSetExtractorTemplateBuildHandler
         final BasePerCustomResultTemplate[] templates, final Map parameters)
     {
         parameters.put(
-            TemplateMappingManager.CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES,
+            TemplateMappingManager.CUSTOM_VALUEOBJECT_TEMPLATES,
             templates);
     }
 
     /**
      * Retrieves the package name from the attribute map.
      * @param projectPackage the project package.
-     * @param engineName the engine name.
-     * @param tableName the table name.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
-     * @precondition engineName != null
      * @precondition projectPackage != null
-     * @precondition tableName != null
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
         final String projectPackage,
-        final String engineName,
-        final String tableName,
         final PackageUtils packageUtils)
       throws  BuildException
     {
         return
-            packageUtils.retrieveResultSetExtractorPackage(
-                projectPackage,
-                engineName,
-                tableName);
+            packageUtils.retrieveValueObjectPackage(
+                projectPackage);
     }
 }

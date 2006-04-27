@@ -134,7 +134,7 @@ public class ValueObjectTemplateWritingHandler
     {
         boolean result = false;
 
-        try 
+        try
         {
             for  (int t_iValueObjectIndex = 0;
                       t_iValueObjectIndex < templates.length;
@@ -148,7 +148,7 @@ public class ValueObjectTemplateWritingHandler
         {
             throw new BuildException(ioException);
         }
-        
+
         return result;
     }
 
@@ -159,8 +159,9 @@ public class ValueObjectTemplateWritingHandler
      * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected ValueObjectTemplate[] retrieveValueObjectTemplates(final Map parameters)
-        throws  BuildException
+    protected ValueObjectTemplate[] retrieveValueObjectTemplates(
+        final Map parameters)
+      throws  BuildException
     {
         return
             (ValueObjectTemplate[])
@@ -180,7 +181,7 @@ public class ValueObjectTemplateWritingHandler
     {
         return
             retrieveOutputDir(
-                retrieveBaseDir(parameters),
+                retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveUseSubfoldersFlag(parameters),
                 PackageUtils.getInstance());
@@ -208,31 +209,5 @@ public class ValueObjectTemplateWritingHandler
         return
             packageUtils.retrieveValueObjectFolder(
                 baseDir, projectPackage, subFolders);
-    }
-
-    /**
-     * Retrieves the base dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return the base dir.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveBaseDir(final Map parameters)
-        throws  BuildException
-    {
-        return (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
 }

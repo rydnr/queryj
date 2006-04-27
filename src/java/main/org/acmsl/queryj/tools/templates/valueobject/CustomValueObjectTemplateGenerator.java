@@ -32,10 +32,10 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate custom ResultSetExtractor templates.
+ * Description: Is able to generate custom ValueObject templates.
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.valueobject;
 
 /*
  * Importing some project-specific classes.
@@ -46,7 +46,7 @@ import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
@@ -66,11 +66,11 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Is able to generate custom ResultSetExtractor templates.
+ * Is able to generate custom ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class CustomResultSetExtractorTemplateGenerator
+public class CustomValueObjectTemplateGenerator
     implements  BasePerCustomResultTemplateFactory,
                 BasePerCustomResultTemplateGenerator
 {
@@ -82,14 +82,14 @@ public class CustomResultSetExtractorTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected CustomResultSetExtractorTemplateGenerator() {};
+    protected CustomValueObjectTemplateGenerator() {};
 
     /**
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        final CustomResultSetExtractorTemplateGenerator generator)
+        final CustomValueObjectTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -104,24 +104,24 @@ public class CustomResultSetExtractorTemplateGenerator
     }
 
     /**
-     * Retrieves a CustomResultSetExtractorTemplateGenerator instance.
+     * Retrieves a CustomValueObjectTemplateGenerator instance.
      * @return such instance.
      */
-    public static CustomResultSetExtractorTemplateGenerator getInstance()
+    public static CustomValueObjectTemplateGenerator getInstance()
     {
-        CustomResultSetExtractorTemplateGenerator result = null;
+        CustomValueObjectTemplateGenerator result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null)
         {
             result =
-                (CustomResultSetExtractorTemplateGenerator) reference.get();
+                (CustomValueObjectTemplateGenerator) reference.get();
         }
 
         if  (result == null)
         {
-            result = new CustomResultSetExtractorTemplateGenerator();
+            result = new CustomValueObjectTemplateGenerator();
 
             setReference(result);
         }
@@ -130,7 +130,7 @@ public class CustomResultSetExtractorTemplateGenerator
     }
 
     /**
-     * Generates a CustomResultSetExtractor template.
+     * Generates a CustomValueObject template.
      * @param customResult the custom result.
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the database metadata manager.
@@ -161,18 +161,25 @@ public class CustomResultSetExtractorTemplateGenerator
         final String header)
       throws  QueryJException
     {
-        return
-            new CustomResultSetExtractorTemplate(
-                customResult,
-                customSqlProvider,
-                metadataManager,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                engineName,
-                engineVersion,
-                basePackageName,
-                repositoryName);
+        BasePerCustomResultTemplate result = null;
+
+        if  (!isStandard(customResult.getClassValue(), metadataManager))
+        {
+            result =
+                new CustomValueObjectTemplate(
+                    customResult,
+                    customSqlProvider,
+                    metadataManager,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    engineName,
+                    engineVersion,
+                    basePackageName,
+                    repositoryName);
+        }
+
+        return result;
     }
 
     /**
@@ -181,7 +188,7 @@ public class CustomResultSetExtractorTemplateGenerator
      */
     public DecoratorFactory getDecoratorFactory()
     {
-        return CustomResultSetExtractorDecoratorFactory.getInstance();
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**
@@ -203,7 +210,7 @@ public class CustomResultSetExtractorTemplateGenerator
     }
 
     /**
-     * Writes a ResultSetExtractorCreator template to disk.
+     * Writes a ValueObjectCreator template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
@@ -230,14 +237,76 @@ public class CustomResultSetExtractorTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + stringUtils.capitalize(
-                stringUtils.capitalize(
-                    stringUtils.capitalize(
-                        template.getResult().getId(),
-                        '.'),
-                    '_'),
-                '-')
-            + "Extractor.java",
+            + template.getResult().getClassValue()
+            + ".java",
             template.generate());
+    }
+
+    /**
+     * Checks whether the given class name corresponds to
+     * a standard value object or not.
+     * @param className the class name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition className != null
+     * @precondition metadataManager != null
+     */
+    protected boolean isStandard(
+        final String className, final MetadataManager metadataManager)
+    {
+        return
+            isStandard(
+                className,
+                metadataManager,
+                ValueObjectTemplateGenerator.getInstance());
+    }
+
+    /**
+     * Checks whether the given class name corresponds to
+     * a standard value object or not.
+     * @param className the class name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param valueObjectTemplateGenerator the
+     * <code>ValueObjectTemplateGenerator</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition className != null
+     * @precondition metadataManager != null
+     * @precondition valueObjectTemplateGenerator != null
+     */
+    protected boolean isStandard(
+        final String className,
+        final MetadataManager metadataManager,
+        final ValueObjectTemplateGenerator valueObjectTemplateGenerator)
+    {
+        boolean result = false;
+
+        String[] t_astrTableNames = metadataManager.getTableNames();
+
+        int t_iCount =
+            (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+
+        String t_strTableName;
+        String t_strVoClassName;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_strTableName = t_astrTableNames[t_iIndex];
+
+            if  (t_strTableName != null)
+            {
+                t_strVoClassName =
+                    valueObjectTemplateGenerator.getVoClassName(
+                        t_strTableName);
+
+                if  (   (t_strVoClassName != null)
+                     && (t_strVoClassName.equals(className)))
+                {
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 }

@@ -112,12 +112,12 @@ public class ValueObjectTemplateGenerator
 
         WeakReference reference = getReference();
 
-        if  (reference != null) 
+        if  (reference != null)
         {
             result = (ValueObjectTemplateGenerator) reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new ValueObjectTemplateGenerator();
 
@@ -179,10 +179,48 @@ public class ValueObjectTemplateGenerator
     {
         write(
             valueObjectTemplate,
-            outputDir, 
+            outputDir,
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
             FileUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the class name of the value object associated to
+     * given table name.
+     * @param tableName the table name.
+     * @return the class name.
+     */
+    public String getVoClassName(final String tableName)
+    {
+        return
+            getVoClassName(
+                tableName,
+                EnglishGrammarUtils.getInstance(),
+                StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the class name of the value object associated to
+     * given table name.
+     * @param tableName the table name.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the class name.
+     * @precondition englishGrammarUtils != null
+     * @precondition stringUtils != null
+     */
+    protected String getVoClassName(
+        final String tableName,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final StringUtils stringUtils)
+    {
+        return
+              stringUtils.capitalize(
+                  englishGrammarUtils.getSingular(tableName.toLowerCase()),
+                  '_')
+            + "ValueObject";
     }
 
     /**
@@ -213,14 +251,11 @@ public class ValueObjectTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    valueObjectTemplate
-                        .getTableTemplate()
-                            .getTableName()
-                                .toLowerCase()),
-                '_')
-            + "ValueObject.java",
+            + getVoClassName(
+                  valueObjectTemplate.getTableTemplate().getTableName(),
+                  englishGrammarUtils,
+                  stringUtils)
+            + ".java",
             valueObjectTemplate.generate());
     }
 }

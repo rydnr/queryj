@@ -134,7 +134,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class TemplateMappingManager
+public class TemplateMappingManager
 {
     /**
      * The default template type.
@@ -295,6 +295,12 @@ public abstract class TemplateMappingManager
      */
     public static final String FK_STATEMENT_SETTER_TEMPLATES =
         "fk.statement.setter.templates";
+
+    /**
+     * The CustomValueObject template type.
+     */
+    public static final String CUSTOM_VALUEOBJECT_TEMPLATES =
+        "custom.valueobject.templates";
 
     /**
      * The Mock DAO template prefix.
@@ -515,14 +521,14 @@ public abstract class TemplateMappingManager
 
         WeakReference reference = getReference();
 
-        if  (reference != null) 
+        if  (reference != null)
         {
             result = (TemplateMappingManager) reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
-            result = new TemplateMappingManager() {};
+            result = new TemplateMappingManager();
 
             setReference(result);
         }
@@ -657,29 +663,29 @@ public abstract class TemplateMappingManager
         {
             Map t_Mapping = getMapping();
 
-            if  (t_Mapping != null) 
+            if  (t_Mapping != null)
             {
                 t_Key = buildKey(type, engineName, engineVersion);
 
                 Object t_Result = t_Mapping.get(t_Key);
 
-                if  (t_Result == null) 
+                if  (t_Result == null)
                 {
                     t_Key = buildKey(type, engineName);
 
                     t_Result =
                         t_Mapping.get(t_Key);
                 }
-                
-                if  (t_Result == null) 
+
+                if  (t_Result == null)
                 {
                     t_Key = buildKey(type);
 
                     t_Result =
                         t_Mapping.get(t_Key);
                 }
-                
-                if  (t_Result != null) 
+
+                if  (t_Result != null)
                 {
                     result = t_Result.toString();
                 }
@@ -709,7 +715,7 @@ public abstract class TemplateMappingManager
 
         if  (t_strClassName != null)
         {
-            try 
+            try
             {
                 Class t_Class = Class.forName(t_strClassName);
 
@@ -797,11 +803,11 @@ public abstract class TemplateMappingManager
     {
         String result = buildKey(type, engineName);
 
-        if  (engineVersion != null) 
+        if  (engineVersion != null)
         {
             result += "-" + engineVersion.toLowerCase();
         }
-        
+
         return result;
     }
 
