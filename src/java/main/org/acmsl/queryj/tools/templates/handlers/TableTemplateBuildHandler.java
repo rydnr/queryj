@@ -240,37 +240,45 @@ public class TableTemplateBuildHandler
 
         int t_iColumnType = -1;
 
-        if  (t_astrTableNames != null) 
+        int t_iCount =
+            (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+
+        if  (t_iCount > 0)
         {
             TableTemplate[] t_aTableTemplates =
-                new TableTemplate[t_astrTableNames.length];
+                new TableTemplate[t_iCount];
 
             for  (int t_iTableIndex = 0;
-                      t_iTableIndex < t_astrTableNames.length;
-                      t_iTableIndex++) 
+                      t_iTableIndex < t_iCount;
+                      t_iTableIndex++)
             {
                 t_aTableTemplates[t_iTableIndex] =
                     templateFactory.createTableTemplate(
                         t_astrTableNames[t_iTableIndex],
                         metadataManager,
                         customSqlProvider,
+                        header,
                         packageName,
                         engineName,
                         engineVersion,
                         quote,
                         projectPackage,
-                        repository,
-                        header);
+                        repository);
 
                 t_astrColumnNames =
                     metadataManager.getColumnNames(
                         t_astrTableNames[t_iTableIndex]);
 
-                if  (t_astrColumnNames != null) 
+                int t_iColumnCount =
+                    (t_astrColumnNames != null)
+                    ?  t_astrColumnNames.length
+                    :  0;
+
+                if  (t_iColumnCount > 0)
                 {
                     for  (int t_iColumnIndex = 0;
-                              t_iColumnIndex < t_astrColumnNames.length;
-                              t_iColumnIndex++) 
+                              t_iColumnIndex < t_iColumnCount;
+                              t_iColumnIndex++)
                     {
                         t_aTableTemplates[t_iTableIndex].addField(
                             t_astrColumnNames[t_iColumnIndex]);
