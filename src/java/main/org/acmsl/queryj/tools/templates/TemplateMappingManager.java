@@ -300,7 +300,13 @@ public class TemplateMappingManager
      * The CustomValueObject template type.
      */
     public static final String CUSTOM_VALUEOBJECT_TEMPLATES =
-        "custom.valueobject.templates";
+        "custom.value.object.templates";
+
+    /**
+     * The CustomBaseValueObject template type.
+     */
+    public static final String CUSTOM_BASEVALUEOBJECT_TEMPLATES =
+        "custom.base.value.object.templates";
 
     /**
      * The Mock DAO template prefix.

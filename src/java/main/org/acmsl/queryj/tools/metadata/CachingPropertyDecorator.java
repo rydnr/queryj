@@ -79,6 +79,11 @@ public class CachingPropertyDecorator
     private String m__strCachedColumnNameNormalizedCapitalized;
 
     /**
+     * The cached capitalized name.
+     */
+    private String m__strCachedColumnNameNormalized;
+
+    /**
      * Creates a <code>CachingPropertyDecorator</code> to decorate given property.
      * @param property the property to decorate.
      * @precondition property != null
@@ -320,6 +325,52 @@ public class CachingPropertyDecorator
         {
             result = super.getColumnNameNormalizedCapitalized();
             setCachedColumnNameNormalizedCapitalized(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached name.
+     * @param name such name.
+     */
+    protected final void immutableSetCachedColumnNameNormalized(
+        final String name)
+    {
+        m__strCachedColumnNameNormalized = name;
+    }
+
+    /**
+     * Specifies the cached name.
+     * @param name such name.
+     */
+    protected void setCachedColumnNameNormalized(
+        final String name)
+    {
+        immutableSetCachedColumnNameNormalized(name);
+    }
+
+    /**
+     * Retrieves the cached name.
+     * @return such name.
+     */
+    public String getCachedColumnNameNormalized()
+    {
+        return m__strCachedColumnNameNormalized;
+    }
+
+    /**
+     * Retrieves the name.
+     * @return such name.
+     */
+    public String getColumnNameNormalized()
+    {
+        String result = getCachedColumnNameNormalized();
+
+        if  (result == null)
+        {
+            result = super.getColumnNameNormalized();
+            setCachedColumnNameNormalized(result);
         }
 
         return result;

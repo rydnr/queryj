@@ -63,6 +63,7 @@ import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.functions.FunctionsBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomBaseValueObjectTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundle;
@@ -1094,6 +1095,8 @@ public class QueryJTask
             result.add(new ValueObjectImplTemplateHandlerBundle());
 
             result.add(new CustomValueObjectTemplateHandlerBundle());
+
+            result.add(new CustomBaseValueObjectTemplateHandlerBundle());
 
             result.add(new TestSuiteTemplateHandlerBundle());
 

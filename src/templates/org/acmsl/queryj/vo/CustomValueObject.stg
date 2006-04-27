@@ -119,11 +119,11 @@ property_getter(attribute) ::= <<
  Writes the getter for given attribute.
  @param attribute the attribute.
 !>
-<if(attribute.allowsNull)>
 /**
  * Retrieves the \<i\><attribute.columnName>\</i\> value.
  * @return such information.
  */
+<if(attribute.allowsNull)>
 public <attribute.objectType> get<attribute.columnNameNormalizedCapitalized>();
 <else>
 public <attribute.javaType> get<attribute.columnNameNormalizedCapitalized>();
