@@ -718,13 +718,14 @@ public abstract class BasePerTableTemplate
         final String timestamp,
         final MetadataManager metadataManager)
     {
+        input.put("copyright_years", copyrightYears);
+        input.put("timestamp", timestamp);
+
         if  (   (header != null)
              && (!input.containsKey("header")))
         {
             input.put("header", processHeader(input, header));
         }
-        input.put("copyright_years", copyrightYears);
-        input.put("timestamp", timestamp);
     }
 
     /**

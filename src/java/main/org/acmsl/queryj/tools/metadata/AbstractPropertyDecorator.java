@@ -209,6 +209,66 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
+     * Retrieves the Object type of the property.
+     * @return such information.
+     */
+    public String getObjectType()
+    {
+        return retrieveObjectType();
+    }
+
+    /**
+     * Retrieves the Object type of the property.
+     * @return such information.
+     */
+    protected String retrieveObjectType()
+    {
+        return
+            retrieveObjectType(
+                getType(), getMetadataManager(), isNullable());
+    }
+
+    /**
+     * Retrieves the Object type of the property.
+     * @param type the declared type.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param allowsNull whether it allows nulls.
+     * @return such information.
+     * @precondition metadataManager != null
+     */
+    protected String retrieveObjectType(
+        final String type,
+        final MetadataManager metadataManager,
+        final boolean allowsNull)
+    {
+        return
+            retrieveObjectType(
+                type,
+                metadataManager.getMetadataTypeManager(),
+                allowsNull,
+                MetadataTypeUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the Object type of the property.
+     * @param type the declared type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param allowsNull whether it allows nulls.
+     * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
+     * @return such information.
+     * @precondition metadataTypeManager != null
+     * @precondition metadataTypeUtils != null
+     */
+    protected String retrieveObjectType(
+        final String type,
+        final MetadataTypeManager metadataTypeManager,
+        final boolean allowsNull,
+        final MetadataTypeUtils metadataTypeUtils)
+    {
+        return metadataTypeUtils.getWrapperClass(type);
+    }
+
+    /**
      * Retrieves the name, in lower case.
      * @return such information.
      */

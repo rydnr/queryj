@@ -395,13 +395,14 @@ public abstract class BasePerCustomResultTemplate
         final Integer[] copyrightYears,
         final String timestamp)
     {
+        input.put("copyright_years", copyrightYears);
+        input.put("timestamp", timestamp);
+
         if  (   (header != null)
              && (!input.containsKey("header")))
         {
             input.put("header", processHeader(input, header));
         }
-        input.put("copyright_years", copyrightYears);
-        input.put("timestamp", timestamp);
     }
 
     /**

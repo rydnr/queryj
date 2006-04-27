@@ -59,6 +59,11 @@ public class CachingPropertyDecorator
     private String m__strCachedJavaType;
 
     /**
+     * The cached object type.
+     */
+    private String m__strCachedObjectType;
+
+    /**
      * The cached name lowercased.
      */
     private String m__strCachedNameLowercased;
@@ -153,6 +158,51 @@ public class CachingPropertyDecorator
         {
             result = super.getJavaType();
             setCachedJavaType(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached object type.
+     * @param value the value to cache.
+     */
+    protected final void immutableSetCachedObjectType(
+        final String value)
+    {
+        m__strCachedObjectType = value;
+    }
+
+    /**
+     * Specifies the cached object type.
+     * @param value the value to cache.
+     */
+    protected void setCachedObjectType(final String value)
+    {
+        immutableSetCachedObjectType(value);
+    }
+
+    /**
+     * Retrieves the cached object type.
+     * @return such value.
+     */
+    public String getCachedObjectType()
+    {
+        return m__strCachedObjectType;
+    }
+
+    /**
+     * Retrieves the object type.
+     * @return such information.
+     */
+    public String getObjectType()
+    {
+        String result = getCachedObjectType();
+
+        if  (result == null)
+        {
+            result = super.getObjectType();
+            setCachedObjectType(result);
         }
 
         return result;

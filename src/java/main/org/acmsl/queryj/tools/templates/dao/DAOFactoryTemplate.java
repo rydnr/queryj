@@ -174,7 +174,7 @@ public class DAOFactoryTemplate
 
         String t_strCapitalizedEngine =
             stringUtils.capitalize(engineName, '_');
-        
+
         fillParameters(
             t_Template,
             new Integer[]
@@ -202,12 +202,12 @@ public class DAOFactoryTemplate
             packageUtils.retrieveDAOPackage(
                 basePackageName, engineName),
             jndiDataSource);
-        
+
         result = t_Template.toString();
 
         return result;
     }
-    
+
     /**
      * Fills the template parameters.
      * @param template the template.
@@ -276,30 +276,24 @@ public class DAOFactoryTemplate
         fillPackageDeclarationParameters(
             input, basePackageName, subpackageName);
 
-        if  (   (header != null)
-             && (!input.containsKey("header")))
-        {
-            input.put("header", processHeader(input, header));
-        }
-
         input.put("copyright_years", copyrightYears);
 
         input.put("table_name",  tableName);
         input.put("engine_name", engineName);
         input.put("timestamp", timestamp);
-        
+
         input.put("class_name", daoFactoryImplementationClassName);
 
         input.put("dao_class_name", daoClassName);
-        
+
         input.put("dao_package_name",  daoPackageName);
-        
+
         input.put(
             "dao_factory_class_name", daoFactoryClassName);
-        
+
         input.put(
             "dao_factory_package_name", daoFactoryPackageName);
-        
+
         input.put(
             "dao_implementation_class_name", daoImplementationClassName);
 
@@ -307,6 +301,12 @@ public class DAOFactoryTemplate
             "dao_implementation_package_name", daoImplementationPackageName);
 
         input.put("jndi_location", jndiLocation);
+
+        if  (   (header != null)
+             && (!input.containsKey("header")))
+        {
+            input.put("header", processHeader(input, header));
+        }
     }
 
     /**

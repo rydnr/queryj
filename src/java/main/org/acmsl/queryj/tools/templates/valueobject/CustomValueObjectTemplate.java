@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 
@@ -110,6 +111,74 @@ public class CustomValueObjectTemplate
             engineVersion,
             basePackageName,
             repositoryName);
+    }
+
+    /**
+     * Fills the common parameters.
+     * @param input the input.
+     * @param result the result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @precondition input != null
+     * @precondition result != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     */
+    protected void fillCommonParameters(
+        final Map input,
+        final Result result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
+        final String engineName,
+        final String engineVersion)
+    {
+        super.fillCommonParameters(
+            input,
+            result,
+            customSqlProvider,
+            metadataManager,
+            decoratorFactory,
+            engineName,
+            engineVersion);
+
+        String t_strVoName = extractClassName(result.getClassValue());
+
+        if  (t_strVoName != null)
+        {
+            input.put("vo_name", t_strVoName);
+        }
+    }
+
+    /**
+     * Extracts the class name of given fully-qualified class.
+     * @param fqcn such information.
+     * @return the class name.
+     * @precondition fqcn != null
+     */
+    public String extractClassName(final String fqdn)
+    {
+        return extractClassName(fqdn, PackageUtils.getInstance());
+    }
+
+    /**
+     * Extracts the class name of given fully-qualified class.
+     * @param fqcn such information.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the class name.
+     * @precondition fqcn != null
+     * @precondition packageUtils != null
+     */
+    protected String extractClassName(
+        final String fqdn, final PackageUtils packageUtils)
+    {
+        return packageUtils.extractClassName(fqdn);
     }
 
     /**

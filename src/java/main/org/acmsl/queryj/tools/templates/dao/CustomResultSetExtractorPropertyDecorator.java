@@ -59,7 +59,7 @@ public class CustomResultSetExtractorPropertyDecorator
      * The cached Java type, capitalized.
      */
     private String m__strCachedJavaTypeCapitalized;
-    
+
     /**
      * The cached object type.
      */
@@ -86,7 +86,7 @@ public class CustomResultSetExtractorPropertyDecorator
     {
         m__strCachedJavaTypeCapitalized = type;
     }
-    
+
     /**
      * Specifies the cached Java type, capitalized.
      * @param type such type.
@@ -118,7 +118,7 @@ public class CustomResultSetExtractorPropertyDecorator
             result = uppercase(getJavaType());
             setCachedJavaType(result);
         }
-        
+
         return result;
     }
 
@@ -135,7 +135,7 @@ public class CustomResultSetExtractorPropertyDecorator
             result = retrieveJavaType();
             setCachedJavaType(result);
         }
-        
+
         return result;
     }
 
@@ -186,99 +186,5 @@ public class CustomResultSetExtractorPropertyDecorator
         final MetadataTypeUtils metadataTypeUtils)
     {
         return type;
-    }
-
-    /**
-     * Specifies the cached object type.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedObjectType(
-        final String value)
-    {
-        m__strCachedObjectType = value;
-    }
-    
-    /**
-     * Specifies the cached object type.
-     * @param value the value to cache.
-     */
-    protected void setCachedObjectType(final String value)
-    {
-        immutableSetCachedObjectType(value);
-    }
-
-    /**
-     * Retrieves the cached object type.
-     * @return such value.
-     */
-    public String getCachedObjectType()
-    {
-        return m__strCachedObjectType;
-    }
-    
-    /**
-     * Retrieves the object type.
-     * @return such information.
-     */
-    public String getObjectType()
-    {
-        String result = getCachedObjectType();
-        
-        if  (result == null)
-        {
-            result = retrieveObjectType();
-            setCachedObjectType(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the Object type of the property.
-     * @return such information.
-     */
-    protected String retrieveObjectType()
-    {
-        return retrieveObjectType(getType(), getMetadataManager(), isNullable());
-    }
-
-    /**
-     * Retrieves the Object type of the property.
-     * @param type the declared type.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param allowsNull whether it allows nulls.
-     * @return such information.
-     * @precondition metadataManager != null
-     */
-    protected String retrieveObjectType(
-        final String type,
-        final MetadataManager metadataManager,
-        final boolean allowsNull)
-    {
-        return
-            retrieveObjectType(
-                type,
-                metadataManager.getMetadataTypeManager(),
-                allowsNull,
-                MetadataTypeUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the Object type of the property.
-     * @param type the declared type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @param allowsNull whether it allows nulls.
-     * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
-     * @return such information.
-     * @precondition metadataTypeManager != null
-     * @precondition metadataTypeUtils != null
-     */
-    protected String retrieveObjectType(
-        final String type,
-        final MetadataTypeManager metadataTypeManager,
-        final boolean allowsNull,
-        final MetadataTypeUtils metadataTypeUtils)
-    {
-        return metadataTypeUtils.getWrapperClass(type);
     }
 }

@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
@@ -163,7 +164,9 @@ public class CustomValueObjectTemplateGenerator
     {
         BasePerCustomResultTemplate result = null;
 
-        if  (!isStandard(customResult.getClassValue(), metadataManager))
+        if  (!isStandard(
+                 extractClassName(customResult.getClassValue()),
+                 metadataManager))
         {
             result =
                 new CustomValueObjectTemplate(
@@ -237,7 +240,7 @@ public class CustomValueObjectTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + template.getResult().getClassValue()
+              + extractClassName(template.getResult().getClassValue())
             + ".java",
             template.generate());
     }
@@ -308,5 +311,30 @@ public class CustomValueObjectTemplateGenerator
         }
 
         return result;
+    }
+
+    /**
+     * Extracts the class name of given fully-qualified class.
+     * @param fqcn such information.
+     * @return the class name.
+     * @precondition fqcn != null
+     */
+    public String extractClassName(final String fqdn)
+    {
+        return extractClassName(fqdn, PackageUtils.getInstance());
+    }
+
+    /**
+     * Extracts the class name of given fully-qualified class.
+     * @param fqcn such information.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the class name.
+     * @precondition fqcn != null
+     * @precondition packageUtils != null
+     */
+    protected String extractClassName(
+        final String fqdn, final PackageUtils packageUtils)
+    {
+        return packageUtils.extractClassName(fqdn);
     }
 }

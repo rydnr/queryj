@@ -158,6 +158,13 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated object type.
      */
+    public String getObjectType(final String dataType);
+
+    /**
+     * Retrieves the object type of given data type.
+     * @param dataType the data type.
+     * @return the associated object type.
+     */
     public String getSmartObjectType(final int dataType);
 
     /**

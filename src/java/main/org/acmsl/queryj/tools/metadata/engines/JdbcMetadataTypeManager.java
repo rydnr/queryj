@@ -654,6 +654,37 @@ public class JdbcMetadataTypeManager
      * Retrieves the object type of given data type.
      * @param dataType the data type.
      * @return the associated object type.
+     * @precondition dataType != null
+     */
+    public String getObjectType(final String dataType)
+    {
+        String result = dataType;
+
+        if  (dataType.equals("int"))
+        {
+            result = "Integer";
+        }
+        else if  (dataType.equals("long"))
+        {
+            result = "Long";
+        }
+        else if  (   (dataType.equals("float"))
+                  || (dataType.equals("double")))
+        {
+            result = "Double";
+        }
+        else if  (dataType.equals("clob"))
+        {
+            result = "String";
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the object type of given data type.
+     * @param dataType the data type.
+     * @return the associated object type.
      */
     public String getSmartObjectType(final int dataType)
     {
