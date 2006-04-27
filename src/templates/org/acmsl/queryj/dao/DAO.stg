@@ -54,6 +54,9 @@ source(input) ::= <<
   @params project_imports
   @params class
 !>
+<if(input.header)>
+<input.header>
+<else>
 <java_header(
   years=input.copyright_years,
   description=
@@ -72,6 +75,8 @@ source(input) ::= <<
       engineVersion=input.engine_version)
   ],
   timestamp=input.timestamp)>
+<endif>
+
 <package_declaration(
   packageNames=
   [
@@ -140,6 +145,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -237,7 +243,6 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackage
   baseDAOSubpackageName=baseDAOSubpackageName,
   rdbSubpackageName=rdbSubpackageName,
   subpackageName=subpackageName,
-  tableNameLowercased=tableNameLowercased,
   crseIdCapitalized=it.idCapitalized); separator="\n">
 import <basePackageName>.<voSubpackageName>.<voName>;
 import <basePackageName>.<voFactorySubpackageName>.<voName>ValueObjectFactory;
@@ -260,7 +265,6 @@ resultset_extractor_import(
   baseDAOSubpackageName,
   rdbSubpackageName,
   subpackageName,
-  tableNameLowercased,
   crseIdCapitalized) ::= <<
 <!
   Generates the import statement of a custom resultset extractor.
@@ -268,10 +272,9 @@ resultset_extractor_import(
   @param baseDAOSubpackageName the base DAO subpackage.
   @param rdbSubpackageName the rdb subpackage.
   @param subpackageName the subpackage.
-  @param tableNameLowercased the table name, in lower case.
   @param crseIdCapitalized the custom resultset extractor identifier, capitalized.
 !>
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<crseIdCapitalized>Extractor;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<crseIdCapitalized>Extractor;
 >>
 
 foreignkey_statementsetter_import(
@@ -795,44 +798,6 @@ public class <input.engine_name><input.vo_name>DAO
       throws DataAccessException
     {
 <if(input.fk_attributes)>
-        delete(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-            DataAccessManager.getInstance());
-    }
-
-    /**
-     * Deletes \<code><input.vo_name>\</code> information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
-     * @param dataAccessManager the \<code>DataAccessManager\</code> instance.
-     <precondition_notnull("dataAccessManager")>
-     */
-    protected void delete(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
-        final DataAccessManager dataAccessManager)
-    {
-        delete(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-            <input.fk_attributes:{dataAccessManager.get<it.sourceVoName>DAO()}
-              ; separator=",\n">);
-    }
-
-    /**
-     * Deletes \<code><input.vo_name>\</code> information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
-     <input.fk_attributes:dao_javadoc(
-       name=it.sourceTableName,
-       uncapitalizedName=it.sourceTableNameUncapitalized)
-       ; separator="\n">
-     <input.fk_attributes:precondition_notnull(name=it.sourceVoName);
-       separator="\n">
-     */
-    protected void delete(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
-        <input.fk_attributes:dao_declaration(
-          name=it.sourceVoName,
-          uncapitalizedName=it.sourceTableNameUncapitalized)
-          ; separator=",\n">)
-    {
         <input.fk_attributes:fk_dao_delete_call(
           foreignKey=it, pkAttributes=input.pk_attributes);
           separator="\n\n">
@@ -1492,7 +1457,7 @@ static_table(
  * @param <attribute.nameLowercased> the <attribute.name>
  * to filter.
  * @return the \<code><voName>\</code> instance.
- <precondition_notnull(attribute.name)>
+ <precondition_notnull(name=attribute.name)>
  */
 public <voName> findConstantBy<attribute.nameCapitalized>(
     final <attribute.javaType> <attribute.name>)

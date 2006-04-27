@@ -115,7 +115,8 @@ public class NumericFunctionsTestTemplateBuildHandler
                     String t_strPackage = retrievePackage(attributes);
 
                     String t_strTestedPackage = retrieveTestedPackage(attributes);
-
+                    String t_strHeader = retrieveHeader(attributes);
+                    
                     NumericFunctionsTestTemplateGenerator
                         t_NumericFunctionsTestTemplateGenerator =
                             NumericFunctionsTestTemplateGenerator.getInstance();
@@ -147,7 +148,8 @@ public class NumericFunctionsTestTemplateBuildHandler
                                         t_strTestedPackage,
                                         t_MetaData.getDatabaseProductName(),
                                         t_MetaData.getDatabaseProductVersion(),
-                                        t_strQuote);
+                                        t_strQuote,
+                                        t_strHeader);
 
                         Collection t_cFunctions =
                             t_StringUtils.tokenize(

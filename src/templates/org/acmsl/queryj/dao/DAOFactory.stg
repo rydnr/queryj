@@ -52,6 +52,9 @@ source(input) ::= <<
   @param input.dao_implementation_class_name the DAO implementation class name.
   @params class
 !>
+<if(input.header)>
+<input.header>
+<else>
 <java_header(
   years=input.copyright_years,
   description=
@@ -64,6 +67,8 @@ source(input) ::= <<
       engineName=input.engine_name)
   ],
   timestamp=input.timestamp)>
+<endif>
+
 <package_declaration(
   packageNames=
   [
@@ -227,12 +232,12 @@ public class <input.class_name>
 
         WeakReference reference = getReference();
 
-        if  (reference != null) 
+        if  (reference != null)
         {
             result = (<input.class_name>) reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new <input.class_name>();
 
@@ -256,7 +261,7 @@ public class <input.class_name>
      * using given data source.
      * @param dataSource the data source.
      * @return such DAO.
-     * @precondition dataSource != null
+     <precondition_notnull("dataSource")>
      */
     protected <input.dao_class_name> create<input.dao_class_name>(final DataSource dataSource)
     {
@@ -283,7 +288,7 @@ public class <input.class_name>
      * Retrieves the data source.
      * @param jndiUtils the \<code\>JndiUtils\</code\> instance.
      * @return such data source.
-     * @precondition jndiUtils != null
+     <precondition_notnull("jndiUtils")>
      */
     protected DataSource getDataSource(final JndiUtils jndiUtils)
     {

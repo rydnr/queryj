@@ -58,6 +58,7 @@ public interface TableTemplateFactory
      * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param header the header.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -71,6 +72,7 @@ public interface TableTemplateFactory
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
+        final String header,
         final String packageName,
         final String engineName,
         final String engineVersion,

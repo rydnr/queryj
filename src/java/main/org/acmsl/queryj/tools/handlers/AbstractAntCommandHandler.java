@@ -302,4 +302,18 @@ public abstract class AbstractAntCommandHandler
                 parameters.get(
                     ParameterValidationHandler.REPOSITORY);
     }
+
+    /**
+     * Retrieves the header from the attribute map.
+     * @param parameters the parameter map.
+     * @return the header.
+     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters !0 null
+     */
+    protected String retrieveHeader(final Map parameters)
+        throws  BuildException
+    {
+        return (String) parameters.get(ParameterValidationHandler.HEADER);
+    }
+
 }

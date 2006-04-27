@@ -139,6 +139,7 @@ public class PkStatementSetterTemplateGenerator
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableName != null
@@ -159,7 +160,8 @@ public class PkStatementSetterTemplateGenerator
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
       throws  QueryJException
     {
         return
@@ -167,6 +169,7 @@ public class PkStatementSetterTemplateGenerator
                 tableName,
                 metadataManager,
                 customSqlProvider,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 engineName,

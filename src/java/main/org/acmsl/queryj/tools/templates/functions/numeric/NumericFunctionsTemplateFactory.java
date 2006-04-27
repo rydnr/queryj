@@ -59,6 +59,7 @@ public interface NumericFunctionsTemplateFactory
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
@@ -66,6 +67,7 @@ public interface NumericFunctionsTemplateFactory
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote)
+        final String quote,
+        final String header)
       throws  QueryJException;
 }

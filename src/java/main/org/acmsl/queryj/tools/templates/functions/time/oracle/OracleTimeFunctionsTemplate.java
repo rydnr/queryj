@@ -74,51 +74,44 @@ public class OracleTimeFunctionsTemplate
      * The capitalized words.
      */
     static final String[] CAPITALIZED_WORDS =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "between",
-                        "week",
-                        "day",
-                        "month",
-                        "year",
-                        "name",
-                        "hour",
-                        "minute",
-                        "sec",
-                        "second",
-                        "format",
-                        "date",
-                        "time",
-                        "cur",
-                        "current",
-                        "timestamp",
-                        "unix",
-                        "of",
-                        "from"
-                    }))
-            .toArray();
+        new String[]
+        {
+            "between",
+            "week",
+            "day",
+            "month",
+            "year",
+            "name",
+            "hour",
+            "minute",
+            "sec",
+            "second",
+            "format",
+            "date",
+            "time",
+            "cur",
+            "current",
+            "timestamp",
+            "unix",
+            "of",
+            "from"
+        };
 
     /**
      * The field types.
      */
     static final String[] FIELD_TYPES =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "Int",
-                        "String",
-                        "Long",
-                        "Calendar"
-                    }))
-            .toArray();
+        new String[]
+        {
+            "Int",
+            "String",
+            "Long",
+            "Calendar"
+        };
 
     /**
      * Builds an OracleTimeFunctionsTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -126,6 +119,7 @@ public class OracleTimeFunctionsTemplate
      * @param quote the identifier quote string.
      */
     public OracleTimeFunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -133,6 +127,7 @@ public class OracleTimeFunctionsTemplate
         final String quote)
     {
         super(
+            header,
             decoratorFactory,
             packageName,
             engineName,

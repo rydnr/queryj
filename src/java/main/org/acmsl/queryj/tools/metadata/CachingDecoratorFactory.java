@@ -40,7 +40,10 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Property;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
@@ -62,7 +65,7 @@ public class CachingDecoratorFactory
      * A singleton implemented as a weak reference.
      */
     private static WeakReference m__Singleton;
-    
+
     /**
      * Protected constructor to avoid accidental instantiation.
      */
@@ -96,12 +99,12 @@ public class CachingDecoratorFactory
 
         WeakReference reference = getReference();
 
-        if  (reference != null) 
+        if  (reference != null)
         {
             result = (CachingDecoratorFactory) reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new CachingDecoratorFactory();
 
@@ -127,7 +130,7 @@ public class CachingDecoratorFactory
     /**
      * Creates a <code>PropertyDecorator</code> for given
      * property instance.
-     * @param property the attribute.
+     * @param property the property.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
      */
@@ -135,5 +138,41 @@ public class CachingDecoratorFactory
         final Property property, final MetadataManager metadataManager)
     {
         return new CachingPropertyDecorator(property, metadataManager);
+    }
+
+    /**
+     * Creates a <code>ResultDecorator</code> for given
+     * property instance.
+     * @param result the result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated result for the concrete template.
+     */
+    public ResultDecorator createDecorator(
+        final Result result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager)
+    {
+        return
+            new CachingResultDecorator(
+                result, customSqlProvider, metadataManager, this);
+    }
+
+    /**
+     * Creates a <code>SqlDecorator</code> for given
+     * property instance.
+     * @param sql the custom sql.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated sql for the concrete template.
+     */
+    public SqlDecorator createDecorator(
+        final Sql sql,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager)
+    {
+        return
+            new CachingSqlDecorator(
+                sql, customSqlProvider, metadataManager);
     }
 }

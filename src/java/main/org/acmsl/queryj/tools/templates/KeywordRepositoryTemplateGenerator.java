@@ -126,6 +126,7 @@ public class KeywordRepositoryTemplateGenerator
      * Generates a keyword repository template.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @return such template.
      * @throws IOException if the file cannot be created.
      * @precondition packageName != null
@@ -133,10 +134,12 @@ public class KeywordRepositoryTemplateGenerator
      */
     public KeywordRepositoryTemplate createKeywordRepositoryTemplate(
         final String packageName,
-        final String repository)
+        final String repository,
+        final String header)
     {
         return
             new KeywordRepositoryTemplate(
+                header,
                 getDecoratorFactory(),
                 packageName,
                 repository);

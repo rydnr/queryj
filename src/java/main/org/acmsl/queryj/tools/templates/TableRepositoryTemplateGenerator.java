@@ -125,16 +125,19 @@ public class TableRepositoryTemplateGenerator
      * Generates a table repository template.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @return such template.
      * @precondition packageName != null
      * @precondition repository != null
      */
     public TableRepositoryTemplate createTableRepositoryTemplate(
         final String packageName,
-        final String repository)
+        final String repository,
+        final String header)
     {
         return
             new TableRepositoryTemplate(
+                header,
                 getDecoratorFactory(),
                 packageName,
                 repository);

@@ -50,6 +50,10 @@ source(input) ::= <<
  @param input.repository the repository.
  @param input.daoFactoryPackage the DAOFactory package.
 !>
+//;-*- mode: java-conf-*-
+<if(input.header)>
+<input.splitted_header:{<it>}; separator="\n">
+<else>
 <header(
   years=input.copyright_years,
   description=
@@ -57,6 +61,8 @@ source(input) ::= <<
     "Defines the DAO settings."
   ],
   timestamp=input.timestamp)>
+<endif>
+
 <input.tables:dao_factory_property(
   table=it,
   engineName=input.engine_name,

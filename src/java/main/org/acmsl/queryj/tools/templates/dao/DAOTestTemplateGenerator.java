@@ -119,7 +119,7 @@ public class DAOTestTemplateGenerator
 
         if  (result == null) 
         {
-            result = new DAOTestTemplateGenerator() {};
+            result = new DAOTestTemplateGenerator();
 
             setReference(result);
         }
@@ -141,6 +141,7 @@ public class DAOTestTemplateGenerator
      * @param jdbcUrl the JDBC URL.
      * @param jdbcUsername the JDBC username.
      * @param jdbcPassword the JDBC password.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
@@ -168,13 +169,15 @@ public class DAOTestTemplateGenerator
         final String jdbcDriver,
         final String jdbcUrl,
         final String jdbcUsername,
-        final String jdbcPassword)
+        final String jdbcPassword,
+        final String header)
       throws  QueryJException
     {
         return
             new DAOTestTemplate(
                 tableTemplate,
                 metadataManager,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 engineName,

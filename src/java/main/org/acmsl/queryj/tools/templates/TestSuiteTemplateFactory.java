@@ -53,11 +53,13 @@ public interface TestSuiteTemplateFactory
      * Generates a test suite template.
      * @param packageName the package name.
      * @param suiteName the suite name.
+     * @param header the header.
      * @param useSubfolders whether to use subfolders.
      * @return a template.
      */
     public TestSuiteTemplate createTestSuiteTemplate(
         final String packageName,
         final String suiteName,
+        final String header,
         final boolean useSubfolders);
 }

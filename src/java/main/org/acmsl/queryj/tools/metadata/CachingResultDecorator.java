@@ -44,7 +44,7 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
@@ -61,7 +61,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public class CachingResultDecorator
-    extends  ResultDecorator
+    extends  AbstractResultDecorator
 {
     /**
      * The cached normalized id.
@@ -74,25 +74,37 @@ public class CachingResultDecorator
     private String m__strCachedIdCapitalized;
 
     /**
+     * The cached <i>multiple</i> information.
+     */
+    private Boolean m__bCachedMultiple;
+
+    /**
      * The cached normalized uppercased id.
      */
     private String m__strCachedIdNormalizedUppercased;
-    
+
     /**
      * The cached properties.
      */
     private Collection m__cCachedProperties;
 
     /**
+     * The cached LOB properties.
+     */
+    private Collection m__cCachedLobProperties;
+
+    /**
      * Creates a <code>CachingResultElementDecorator</code> with given instance.
      * @param result the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
      * to decorate referred parameters.
+     * @param metadataManager the <code>MetadataManager</code> instance.
      * @precondition result != null
      * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
      */
     public CachingResultDecorator(
-        final ResultElement result,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
@@ -109,7 +121,7 @@ public class CachingResultDecorator
     {
         m__strCachedIdNormalized = value;
     }
-    
+
     /**
      * Specifies the cached normalized id.
      * @param value the value to cache.
@@ -134,13 +146,13 @@ public class CachingResultDecorator
     public String getIdNormalized()
     {
         String result = getCachedIdNormalized();
-        
+
         if  (result == null)
         {
             result = super.getIdNormalized();
             setCachedIdNormalized(result);
         }
-        
+
         return result;
     }
 
@@ -153,7 +165,7 @@ public class CachingResultDecorator
     {
         m__strCachedIdCapitalized = value;
     }
-    
+
     /**
      * Specifies the cached capitalized id.
      * @param value the value to cache.
@@ -171,7 +183,7 @@ public class CachingResultDecorator
     {
         return m__strCachedIdCapitalized;
     }
-    
+
     /**
      * Retrieves the id capitalized.
      * @return such information.
@@ -179,13 +191,13 @@ public class CachingResultDecorator
     public String getIdCapitalized()
     {
         String result = getCachedIdCapitalized();
-        
+
         if  (result == null)
         {
             result = super.getIdCapitalized();
             setCachedIdCapitalized(result);
         }
-        
+
         return result;
     }
 
@@ -198,7 +210,7 @@ public class CachingResultDecorator
     {
         m__strCachedIdNormalizedUppercased = value;
     }
-    
+
     /**
      * Specifies the cached normalized uppercased id.
      * @param value the value to cache.
@@ -216,7 +228,7 @@ public class CachingResultDecorator
     {
         return m__strCachedIdNormalizedUppercased;
     }
-    
+
     /**
      * Retrieves the id, normalized and upper-cased.
      * @return such information.
@@ -224,16 +236,60 @@ public class CachingResultDecorator
     public String getIdNormalizedUppercased()
     {
         String result = getCachedIdNormalizedUppercased();
-        
+
         if  (result == null)
         {
             result = super.getIdNormalizedUppercased();
             setCachedIdNormalizedUppercased(result);
         }
-        
+
         return result;
     }
 
+    /**
+     * Specifies the cached <i>multiple</i> info.
+     * @param multiple such information.
+     */
+    protected final void immutableSetCachedMultiple(final Boolean multiple)
+    {
+        m__bCachedMultiple = multiple;
+    }
+
+    /**
+     * Specifies the cached <i>multiple</i> info.
+     * @param multiple such information.
+     */
+    protected void setCachedMultiple(final Boolean multiple)
+    {
+        immutableSetCachedMultiple(multiple);
+    }
+
+    /**
+     * Retrieves the cached <i>multiple</i> info.
+     * @return such information.
+     */
+    protected Boolean getCachedMultiple()
+    {
+        return m__bCachedMultiple;
+    }
+
+    /**
+     * Retrieves whether the result matches a single entity or expects
+     * a set of them.
+     * @return such information.
+     */
+    public boolean isMultiple()
+    {
+        Boolean result = getCachedMultiple();
+
+        if  (result == null)
+        {
+            result = super.isMultiple() ? Boolean.TRUE : Boolean.FALSE;
+            setCachedMultiple(result);
+        }
+
+        return result.booleanValue();
+    }
     /**
      * Specifies the cached properties.
      * @param value the value to cache.
@@ -243,7 +299,7 @@ public class CachingResultDecorator
     {
         m__cCachedProperties = value;
     }
-    
+
     /**
      * Specifies the cached properties.
      * @param value the value to cache.
@@ -269,13 +325,58 @@ public class CachingResultDecorator
     public Collection getProperties()
     {
         Collection result = getCachedProperties();
-        
+
         if  (result == null)
         {
             result = super.getProperties();
             setCachedProperties(result);
         }
-        
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached properties.
+     * @param value the value to cache.
+     */
+    protected final void immutableSetCachedLobProperties(
+        final Collection value)
+    {
+        m__cCachedLobProperties = value;
+    }
+
+    /**
+     * Specifies the cached properties.
+     * @param value the value to cache.
+     */
+    protected void setCachedLobProperties(final Collection value)
+    {
+        immutableSetCachedLobProperties(value);
+    }
+
+    /**
+     * Retrieves the cached properties.
+     * @return such value.
+     */
+    public Collection getCachedLobProperties()
+    {
+        return m__cCachedLobProperties;
+    }
+
+    /**
+     * Retrieves the properties.
+     * @return such information.
+     */
+    public Collection getLobProperties()
+    {
+        Collection result = getCachedLobProperties();
+
+        if  (result == null)
+        {
+            result = super.getLobProperties();
+            setCachedLobProperties(result);
+        }
+
         return result;
     }
 }

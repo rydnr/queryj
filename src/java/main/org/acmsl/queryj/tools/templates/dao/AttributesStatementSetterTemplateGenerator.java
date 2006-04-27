@@ -159,14 +159,16 @@ public class AttributesStatementSetterTemplateGenerator
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
-      throws  QueryJException
+        final String repositoryName,
+        final String header)
+     throws  QueryJException
     {
         return
             new AttributesStatementSetterTemplate(
                 tableName,
                 metadataManager,
                 customSqlProvider,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 engineName,

@@ -139,6 +139,7 @@ public class BaseDAOFactoryTemplateGenerator
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param header the header.
      * @return the fresh new template.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -157,13 +158,15 @@ public class BaseDAOFactoryTemplateGenerator
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
     {
         return
             new BaseDAOFactoryTemplate(
                 tableName,
                 metadataManager,
                 customSqlProvider,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 engineName,

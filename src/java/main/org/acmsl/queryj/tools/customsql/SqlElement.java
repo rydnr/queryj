@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.customsql;
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.Sql;
 
 /*
  * Importing JDK classes.
@@ -64,72 +65,8 @@ import java.util.Collection;
  */
 public class SqlElement
     extends  AbstractIdElement
+    implements Sql
 {
-    /**
-     * The <b>select</b> value for <i>type</i> attribute.
-     */
-    public static final String SELECT = "select";
-
-    /**
-     * The <b>insert</b> value for <i>type</i> attribute.
-     */
-    public static final String INSERT = "insert";
-
-    /**
-     * The <b>update</b> value for <i>type</i> attribute.
-     */
-    public static final String UPDATE = "update";
-
-    /**
-     * The <b>delete</b> value for <i>type</i> attribute.
-     */
-    public static final String DELETE = "delete";
-
-    /**
-     * The <b>select-for-update</b> value for <i>type</i> attribute.
-     */
-    public static final String SELECT_FOR_UPDATE = "select-for-update";
-
-    /**
-     * The <b>mysql</b> value for <i>type</i> attribute.
-     */
-    public static final String MYSQL = "mysql";
-
-    /**
-     * The <b>oracle</b> value for <i>type</i> attribute.
-     */
-    public static final String ORACLE = "oracle";
-
-    /**
-     * The <b>postgres</b> value for <i>type</i> attribute.
-     */
-    public static final String POSTGRES = "postgres";
-
-    /**
-     * The <b>odbc</b> value for <i>type</i> attribute.
-     */
-    public static final String ODBC = "odbc";
-
-    /**
-     * The <b>all-jdbc</b> value for <i>type</i> attribute.
-     */
-    public static final String ALL_JDBC = "all-jdbc";
-
-    /**
-     * The <b>mock</b> value for <i>type</i> attribute.
-     */
-    public static final String MOCK = "mock";
-
-    /**
-     * The <b>xml</b> value for <i>type</i> attribute.
-     */
-    public static final String XML = "xml";
-
-    /**
-     * The <b>all</b> value for <i>type</i> attribute.
-     */
-    public static final String ALL = "all";
-
     /**
      * The <i>dao</i> attribute.
      */

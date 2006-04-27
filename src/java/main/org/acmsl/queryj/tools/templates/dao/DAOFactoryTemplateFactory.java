@@ -60,6 +60,7 @@ public interface DAOFactoryTemplateFactory
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -68,6 +69,7 @@ public interface DAOFactoryTemplateFactory
         final String packageName,
         final String engineName,
         final String basePackageName,
-        final String jndiDataSource)
+        final String jndiDataSource,
+        final String header)
       throws  QueryJException;
 }

@@ -137,6 +137,7 @@ public class MockDAOTestTemplateGenerator
      * @param quote the identifier quote string.
      * @param daoPackageName the DAO's package name.
      * @param valueObjectPackageName the value object's package name.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
@@ -150,13 +151,15 @@ public class MockDAOTestTemplateGenerator
         final MetadataManager metadataManager,
         final String packageName,
         final String daoPackageName,
-        final String valueObjectPackageName)
+        final String valueObjectPackageName,
+        final String header)
       throws  QueryJException
     {
         return
             new MockDAOTestTemplate(
                 tableTemplate,
                 metadataManager,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 daoPackageName,

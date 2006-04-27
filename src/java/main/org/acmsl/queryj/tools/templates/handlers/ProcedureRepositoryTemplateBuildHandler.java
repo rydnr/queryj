@@ -189,7 +189,8 @@ public class ProcedureRepositoryTemplateBuildHandler
                     (String)
                         parameters.get(
                             ParameterValidationHandler.REPOSITORY),
-                    metadataTypeManager);
+                    metadataTypeManager,
+                    retrieveHeader(parameters));
 
             /*
             if  (result != null) 
@@ -220,6 +221,7 @@ public class ProcedureRepositoryTemplateBuildHandler
      * @param packageName the package name.
      * @param repository the repository.
      * @param metadataTypeManager the metadata type manager.
+     * @param header the header.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
      * information is not valid.
@@ -227,7 +229,8 @@ public class ProcedureRepositoryTemplateBuildHandler
     protected ProcedureRepositoryTemplate buildProcedureRepositoryTemplate(
         final String packageName,
         final String repository,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final String header)
       throws  BuildException
     {
         ProcedureRepositoryTemplate result = null;
@@ -243,7 +246,7 @@ public class ProcedureRepositoryTemplateBuildHandler
             {
                 result =
                     t_ProcedureRepositoryTemplateGenerator.createProcedureRepositoryTemplate(
-                        packageName, repository, metadataTypeManager);
+                        packageName, repository, metadataTypeManager, header);
             }
         }
 

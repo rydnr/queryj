@@ -357,7 +357,7 @@ public class MockDAOFactoryTemplate
         final String factoryMethod,
         final String classEnd)
     {
-        immutableSetHeader(header);
+        immutableSetHeader((header != null) ? header : DEFAULT_HEADER);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetTableTemplate(tableTemplate);
         immutableSetPackageName(packageName);

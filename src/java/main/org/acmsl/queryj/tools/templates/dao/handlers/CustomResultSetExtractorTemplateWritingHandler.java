@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -101,7 +101,8 @@ public class CustomResultSetExtractorTemplateWritingHandler
         return
             (BasePerCustomResultTemplate[])
                 parameters.get(
-                    TemplateMappingManager.CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES);
+                    TemplateMappingManager
+                        .CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES);
     }
 
     /**
@@ -120,7 +121,7 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @throws BuildException if the output-dir retrieval process if faulty.
      */
     protected File retrieveOutputDir(
-        final ResultElement resultElement,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final File projectFolder,
@@ -133,11 +134,6 @@ public class CustomResultSetExtractorTemplateWritingHandler
     {
         return
             retrieveOutputDir(
-                retrieveTableName(
-                    resultElement,
-                    customSqlProvider,
-                    metadataManager,
-                    CustomResultUtils.getInstance()),
                 projectFolder,
                 projectPackage,
                 useSubfolders,
@@ -146,32 +142,7 @@ public class CustomResultSetExtractorTemplateWritingHandler
     }
 
     /**
-     * Retrieves the table name.
-     * @param resultElement the result element.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the metadata manager.
-     * @param customResultUtils the <code>CustomResultUtils</code>
-     * instance.
-     * @return the table name.
-     * @precondition resultElement != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition customResultUtils != null
-     */
-    protected String retrieveTableName(
-        final ResultElement resultElement,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final CustomResultUtils customResultUtils)
-    {
-        return
-            customResultUtils.retrieveTable(
-                resultElement, customSqlProvider, metadataManager);
-    }
-
-    /**
      * Retrieves the output dir from the attribute map.
-     * @param tableName the table name.
      * @param engineName the engine name.
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
@@ -182,11 +153,9 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @precondition engineName != null
      * @precondition projectOutputDir != null
      * @precondition projectPackage != null
-     * @precondition tableName != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final String tableName,
         final File projectOutputDir,
         final String projectPackage,
         final boolean useSubfolders,
@@ -195,11 +164,10 @@ public class CustomResultSetExtractorTemplateWritingHandler
       throws  BuildException
     {
         return
-            packageUtils.retrieveResultSetExtractorFolder(
+            packageUtils.retrieveCustomResultSetExtractorFolder(
                 projectOutputDir,
                 projectPackage,
                 engineName,
-                tableName,
                 useSubfolders);
     }
 }

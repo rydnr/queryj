@@ -132,13 +132,35 @@ public class DAOTestTemplateBuildHandler
         final MetadataManager metadataManager)
       throws  BuildException
     {
-        return
-            handle(
-                parameters,
-                metaData,
-                metadataManager,
-                retrieveTableTemplates(parameters),
-                DAOTestTemplateGenerator.getInstance());
+        boolean result = false;
+        
+        try
+        {
+            result =
+                handle(
+                    parameters,
+                    metaData,
+                    metadataManager,
+                    retrieveTableTemplates(parameters),
+                    metaData.getDatabaseProductName(),
+                    metaData.getDatabaseProductVersion(),
+                    retrieveDAOPackage(
+                        metaData.getDatabaseProductName(),
+                        parameters),
+                    retrieveValueObjectPackage(parameters),
+                    retrieveJdbcDriver(parameters),
+                    retrieveJdbcUrl(parameters),
+                    retrieveJdbcUsername(parameters),
+                    retrieveJdbcPassword(parameters),
+                    retrieveHeader(parameters),
+                    DAOTestTemplateGenerator.getInstance());
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw new BuildException(sqlException);
+        }
+
+        return result;
     }
     
     /**
@@ -147,6 +169,15 @@ public class DAOTestTemplateBuildHandler
      * @param metaData the database metadata.
      * @param metadataManager the database metadata manager.
      * @param tableTemplates the table templates.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param daoPackage the DAO package.
+     * @param voPackage the value-object package.
+     * @param jdbcDriver the JDBC driver.
+     * @param jdbcUrl the JDBC url.
+     * @param jdbcUsername the JDBC username.
+     * @param jdbcPassword the JDBC password.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -161,6 +192,15 @@ public class DAOTestTemplateBuildHandler
         final DatabaseMetaData metaData,
         final MetadataManager metadataManager,
         final TableTemplate[] tableTemplates,
+        final String engineName,
+        final String engineVersion,
+        final String daoPackage,
+        final String voPackage,
+        final String jdbcDriver,
+        final String jdbcUrl,
+        final String jdbcUsername,
+        final String jdbcPassword,
+        final String header,
         final DAOTestTemplateFactory factory)
       throws  BuildException
     {
@@ -173,8 +213,7 @@ public class DAOTestTemplateBuildHandler
 
             String t_strPackage =
                 retrieveDAOTestPackage(
-                    metaData.getDatabaseProductName(),
-                    parameters);
+                    engineName, parameters);
 
             DAOTestTemplate[] t_aDAOTestTemplates =
                 new DAOTestTemplate[t_iLength];
@@ -200,17 +239,16 @@ public class DAOTestTemplateBuildHandler
                         tableTemplates[t_iDAOTestIndex],
                         metadataManager,
                         t_strPackage,
-                        metaData.getDatabaseProductName(),
-                        metaData.getDatabaseProductVersion(),
+                        engineName,
+                        engineVersion,
                         t_strQuote,
-                        retrieveDAOPackage(
-                            metaData.getDatabaseProductName(),
-                            parameters),
-                        retrieveValueObjectPackage(parameters),
-                        retrieveJdbcDriver(parameters),
-                        retrieveJdbcUrl(parameters),
-                        retrieveJdbcUsername(parameters),
-                        retrieveJdbcPassword(parameters));
+                        daoPackage,
+                        voPackage,
+                        jdbcDriver,
+                        jdbcUrl,
+                        jdbcUsername,
+                        jdbcPassword,
+                        header);
 
                 storeTestTemplate(
                     t_aDAOTestTemplates[t_iDAOTestIndex],

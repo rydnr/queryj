@@ -65,6 +65,7 @@ public interface ResultSetExtractorTemplateFactory
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param header the header.
      * @return such template.
      */
     public ResultSetExtractorTemplate createResultSetExtractorTemplate(
@@ -76,6 +77,7 @@ public interface ResultSetExtractorTemplateFactory
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
       throws  QueryJException;
 }

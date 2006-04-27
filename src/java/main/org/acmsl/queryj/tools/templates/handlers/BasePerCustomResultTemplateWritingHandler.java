@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.handlers;
  */
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -152,7 +152,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
             engineName,
             parameters);
     }
-            
+
     /**
      * Handles given information.
      * @param template the template.
@@ -179,8 +179,8 @@ public abstract class BasePerCustomResultTemplateWritingHandler
         int t_iCount = (templates != null) ? templates.length : 0;
 
         BasePerCustomResultTemplate t_Template = null;
-        
-        try 
+
+        try
         {
             for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
@@ -234,7 +234,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @precondition resultElement != null
      */
     protected File retrieveOutputDir(
-        final ResultElement resultElement,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String engineName,
@@ -243,7 +243,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     {
         return
             retrieveOutputDir(
-                resultElement,
+                result,
                 customSqlProvider,
                 metadataManager,
                 retrieveProjectOutputDir(parameters),
@@ -270,7 +270,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @throws BuildException if the output-dir retrieval process if faulty.
      */
     protected abstract File retrieveOutputDir(
-        final ResultElement resultElement,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final File projectFolder,

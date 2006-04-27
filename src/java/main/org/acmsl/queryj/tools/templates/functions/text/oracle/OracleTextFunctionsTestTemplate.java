@@ -62,7 +62,8 @@ public class OracleTextFunctionsTestTemplate
 {
     /**
      * Builds a <code>OracleTextFunctionsTestTemplate</code>
-     *  using given information.
+     * using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
@@ -71,6 +72,7 @@ public class OracleTextFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public OracleTextFunctionsTestTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String testedPackageName,
@@ -79,6 +81,7 @@ public class OracleTextFunctionsTestTemplate
         final String quote)
     {
         super(
+            header,
             decoratorFactory,
             packageName,
             testedPackageName,

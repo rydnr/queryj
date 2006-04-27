@@ -113,6 +113,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
             handle(
                 parameters,
                 retrievePackage(parameters),
+                retrieveHeader(parameters),
                 QueryPreparedStatementCreatorTemplateGenerator.getInstance());
     }
 
@@ -120,6 +121,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @param packageName the package name.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -130,6 +132,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
     protected boolean handle(
         final Map parameters,
         final String packageName,
+        final String header,
         final QueryPreparedStatementCreatorTemplateFactory templateFactory)
       throws  BuildException
     {
@@ -139,7 +142,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
         {
             QueryPreparedStatementCreatorTemplate t_Template =
                 templateFactory.createQueryPreparedStatementCreatorTemplate(
-                    packageName);
+                    packageName, header);
 
             storeTemplate(t_Template, parameters);
         }

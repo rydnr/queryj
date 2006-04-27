@@ -40,7 +40,10 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Property;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
@@ -70,10 +73,36 @@ public interface DecoratorFactory
     /**
      * Creates a <code>PropertyDecorator</code> for given
      * property instance.
-     * @param property the attribute.
+     * @param property the property.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
      */
     public PropertyDecorator createDecorator(
         final Property property, final MetadataManager metadataManager);
+
+    /**
+     * Creates a <code>ResultDecorator</code> for given
+     * property instance.
+     * @param result the custom result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated result for the concrete template.
+     */
+    public ResultDecorator createDecorator(
+        final Result result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager);
+
+    /**
+     * Creates a <code>SqlDecorator</code> for given
+     * property instance.
+     * @param sql the custom sql.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated sql for the concrete template.
+     */
+    public SqlDecorator createDecorator(
+        final Sql sql,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager);
 }

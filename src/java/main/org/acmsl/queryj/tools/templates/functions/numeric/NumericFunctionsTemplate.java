@@ -70,8 +70,8 @@ public abstract class NumericFunctionsTemplate
 {
     /**
      * Builds a <code>NumericFunctionsTemplate</code> using given information.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -88,28 +88,28 @@ public abstract class NumericFunctionsTemplate
      * @param classEnd the class end.
      */
     public NumericFunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  header,
-        final String  packageDeclaration,
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote,
-        final String  acmslImports,
-        final String  jdkImports,
-        final String  javadoc,
-        final String  classDefinition,
-        final String  classStart,
-        final String  singletonBody,
-        final String  classConstructor,
-        final String  innerClass,
-        final String  classEnd)
+        final String packageDeclaration,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String acmslImports,
+        final String jdkImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String singletonBody,
+        final String classConstructor,
+        final String innerClass,
+        final String classEnd)
     {
         super(
+            header,
             decoratorFactory,
             "numeric",
             "Numeric",
-            header,
             packageDeclaration,
             packageName,
             engineName,
@@ -128,6 +128,7 @@ public abstract class NumericFunctionsTemplate
 
     /**
      * Builds a <code>NumericFunctionsTemplate</code> using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -135,13 +136,15 @@ public abstract class NumericFunctionsTemplate
      * @param quote the identifier quote string.
      */
     public NumericFunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         super(
+            header,
             decoratorFactory,
             "numeric",
             "Numeric",

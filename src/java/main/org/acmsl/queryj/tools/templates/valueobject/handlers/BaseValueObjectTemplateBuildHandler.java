@@ -118,6 +118,7 @@ public class BaseValueObjectTemplateBuildHandler
                 retrieveDatabaseMetaData(attributes),
                 retrieveMetadataManager(attributes),
                 retrievePackage(attributes),
+                retrieveHeader(attributes),
                 BaseValueObjectTemplateGenerator.getInstance(),
                 retrieveTableTemplates(attributes));
     }
@@ -129,6 +130,7 @@ public class BaseValueObjectTemplateBuildHandler
      * @param metadataManager the metadata manager.
      * instance.
      * @param packageName the package name.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
@@ -145,6 +147,7 @@ public class BaseValueObjectTemplateBuildHandler
         final DatabaseMetaData databaseMetaData,
         final MetadataManager metadataManager,
         final String packageName,
+        final String header,
         final BaseValueObjectTemplateFactory templateFactory,
         final TableTemplate[] tableTemplates)
       throws  BuildException
@@ -182,7 +185,8 @@ public class BaseValueObjectTemplateBuildHandler
                     templateFactory.createBaseValueObjectTemplate(
                         packageName,
                         tableTemplates[t_iBaseValueObjectIndex],
-                        metadataManager);
+                        metadataManager,
+                        header);
             }
 
             storeBaseValueObjectTemplates(t_aBaseValueObjectTemplates, attributes);

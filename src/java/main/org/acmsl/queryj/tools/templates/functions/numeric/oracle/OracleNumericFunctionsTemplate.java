@@ -116,6 +116,7 @@ public class OracleNumericFunctionsTemplate
     /**
      * Builds a <code>OracleNumericFunctionsTemplate</code>
      * using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -123,6 +124,7 @@ public class OracleNumericFunctionsTemplate
      * @param quote the identifier quote string.
      */
     public OracleNumericFunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -130,6 +132,7 @@ public class OracleNumericFunctionsTemplate
         final String quote)
     {
         super(
+            header,
             decoratorFactory,
             packageName,
             engineName,

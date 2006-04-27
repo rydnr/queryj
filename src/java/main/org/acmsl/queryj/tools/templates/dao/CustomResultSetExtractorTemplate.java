@@ -34,6 +34,8 @@
  *
  * Description: Is able to create CustomResultSetExtractor implementation
  *              for each custom query requiring so.
+ *
+ * $Id$
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -42,7 +44,8 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
@@ -73,6 +76,7 @@ public class CustomResultSetExtractorTemplate
      * @param result the custom result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -85,9 +89,10 @@ public class CustomResultSetExtractorTemplate
      * @precondition decoratorFactory != null
      */
     public CustomResultSetExtractorTemplate(
-        final ResultElement result,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -99,6 +104,7 @@ public class CustomResultSetExtractorTemplate
             result,
             customSqlProvider,
             metadataManager,
+            header,
             decoratorFactory,
             packageName,
             engineName,
@@ -112,21 +118,24 @@ public class CustomResultSetExtractorTemplate
      * @param input the input.
      * @param result the result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataMananager the database metadata manager.
+     * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @precondition input != null
      * @precondition result != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      * @precondition engineName != null
      * @precondition engineVersion != null
      */
     protected void fillCommonParameters(
         final Map input,
-        final ResultElement result,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
         final String engineName,
         final String engineVersion)
     {
@@ -135,16 +144,20 @@ public class CustomResultSetExtractorTemplate
             result,
             customSqlProvider,
             metadataManager,
+            decoratorFactory,
             engineName,
             engineVersion);
 
-        input.put(
-            "table",
+        String t_strTable =
             retrieveTable(
                 result,
                 customSqlProvider,
                 metadataManager,
-                CustomResultUtils.getInstance()));
+                CustomResultUtils.getInstance());
+
+        input.put("table", t_strTable);
+        input.put(
+            "tableNormalizedLowercased", normalizeLowercase(t_strTable));
     }
 
     /**
@@ -163,18 +176,18 @@ public class CustomResultSetExtractorTemplate
 
     /**
      * Retrieves the table associated to the result.
-     * @param resultElement the result element.
+     * @param result the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
      * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @return the table name.
-     * @precondition resultElement != null
+     * @precondition result != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition customResultUtils != null
      */
     protected String retrieveTable(
-        final ResultElement resultElement,
+        final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final CustomResultUtils customResultUtils)
@@ -182,7 +195,7 @@ public class CustomResultSetExtractorTemplate
     {
         return
             customResultUtils.retrieveTable(
-                resultElement, customSqlProvider, metadataManager);
+                result, customSqlProvider, metadataManager);
     }
 
     /**
@@ -191,7 +204,9 @@ public class CustomResultSetExtractorTemplate
      */
     protected StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/ResultSetExtractor.stg");
+        return
+            retrieveGroup(
+                "/org/acmsl/queryj/dao/CustomResultSetExtractor.stg");
     }
 
     /**
@@ -200,6 +215,31 @@ public class CustomResultSetExtractorTemplate
      */
     public String getTemplateName()
     {
-        return "ResultSetExtractor";
+        return "CustomResultSetExtractor";
+    }
+
+    /**
+     * Normalizes and lowers the case of given value.
+     * @param value the value.
+     * @return the processed value.
+     * @precondition value != null
+     */
+    protected String normalizeLowercase(final String value)
+    {
+        return normalizeLowercase(value, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Normalizes and lowers the case of given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the processed value.
+     * @precondition value != null
+     * @precondition decoratorUtils != null
+     */
+    protected String normalizeLowercase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.normalizeLowercase(value);
     }
 }

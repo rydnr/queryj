@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -113,13 +113,13 @@ public class CustomResultSetExtractorTemplateGenerator
 
         WeakReference reference = getReference();
 
-        if  (reference != null) 
+        if  (reference != null)
         {
             result =
                 (CustomResultSetExtractorTemplateGenerator) reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new CustomResultSetExtractorTemplateGenerator();
 
@@ -139,6 +139,7 @@ public class CustomResultSetExtractorTemplateGenerator
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param header the header.
      * @return the new template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition resultElement != null
@@ -149,14 +150,15 @@ public class CustomResultSetExtractorTemplateGenerator
      * @precondition repositoryName != null
      */
     public BasePerCustomResultTemplate createTemplate(
-        final ResultElement customResult,
+        final Result customResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String packageName,
         final String engineName,
         final String engineVersion,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
       throws  QueryJException
     {
         return
@@ -164,6 +166,7 @@ public class CustomResultSetExtractorTemplateGenerator
                 customResult,
                 customSqlProvider,
                 metadataManager,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 engineName,
@@ -193,7 +196,7 @@ public class CustomResultSetExtractorTemplateGenerator
     {
         write(
             template,
-            outputDir, 
+            outputDir,
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
             FileUtils.getInstance());

@@ -94,6 +94,7 @@ public class OracleTextFunctionsTemplate
 
     /**
      * Builds a OracleTextFunctionsTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -101,6 +102,7 @@ public class OracleTextFunctionsTemplate
      * @param quote the identifier quote string.
      */
     public OracleTextFunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -108,6 +110,7 @@ public class OracleTextFunctionsTemplate
         final String quote)
     {
         super(
+            header,
             decoratorFactory,
             packageName,
             engineName,

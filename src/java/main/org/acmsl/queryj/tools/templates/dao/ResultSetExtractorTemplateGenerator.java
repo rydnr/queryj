@@ -139,6 +139,7 @@ public class ResultSetExtractorTemplateGenerator
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param header the header.
      * @return such template.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -157,7 +158,8 @@ public class ResultSetExtractorTemplateGenerator
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
       throws  QueryJException
     {
         return
@@ -165,6 +167,7 @@ public class ResultSetExtractorTemplateGenerator
                 tableName,
                 metadataManager,
                 customSqlProvider,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 engineName,

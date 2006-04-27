@@ -59,8 +59,8 @@ public abstract class TextFunctionsTestTemplate
 {
     /**
      * Builds a TextFunctionsTestTemplate using given information.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
@@ -85,35 +85,35 @@ public abstract class TextFunctionsTestTemplate
      * @param classEnd the class end.
      */
     public TextFunctionsTestTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  header,
-        final String  packageDeclaration,
-        final String  packageName,
-        final String  testedPackageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote,
-        final String  projectImports,
-        final String  acmslImports,
-        final String  jdkImports,
-        final String  junitImports,
-        final String  javadoc,
-        final String  classDefinition,
-        final String  classStart,
-        final String  classConstructor,
-        final String  memberAccessors,
-        final String  setUpTearDownMethods,
-        final String  mainMethod,
-        final String  getInstanceTest,
-        final String  innerClass,
-        final String  innerTable,
-        final String  classEnd)
+        final String packageDeclaration,
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String projectImports,
+        final String acmslImports,
+        final String jdkImports,
+        final String junitImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String classConstructor,
+        final String memberAccessors,
+        final String setUpTearDownMethods,
+        final String mainMethod,
+        final String getInstanceTest,
+        final String innerClass,
+        final String innerTable,
+        final String classEnd)
     {
         super(
+            header,
             decoratorFactory,
             "text",
             "Text",
-            header,
             packageDeclaration,
             packageName,
             testedPackageName,
@@ -139,6 +139,7 @@ public abstract class TextFunctionsTestTemplate
 
     /**
      * Builds a TextFunctionsTestTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
@@ -147,14 +148,16 @@ public abstract class TextFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public TextFunctionsTestTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  packageName,
-        final String  testedPackageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         super(
+            header,
             decoratorFactory,
             "text",
             "Text",

@@ -59,6 +59,7 @@ public interface MockDAOTemplateFactory
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -67,6 +68,7 @@ public interface MockDAOTemplateFactory
         final MetadataManager metadataManager,
         final String packageName,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
       throws  QueryJException;
 }

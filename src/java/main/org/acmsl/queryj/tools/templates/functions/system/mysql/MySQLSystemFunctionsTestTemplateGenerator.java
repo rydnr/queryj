@@ -138,15 +138,17 @@ public class MySQLSystemFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the input information is invalid.
      */
     public SystemFunctionsTestTemplate createSystemFunctionsTestTemplate(
-        final String  packageName,
-        final String  testedPackageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String header)
       throws  QueryJException
     {
         SystemFunctionsTestTemplate result = null;
@@ -158,6 +160,7 @@ public class MySQLSystemFunctionsTestTemplateGenerator
         {
             result =
                 new MySQLSystemFunctionsTestTemplate(
+                    header,
                     getDecoratorFactory(),
                     packageName,
                     testedPackageName,

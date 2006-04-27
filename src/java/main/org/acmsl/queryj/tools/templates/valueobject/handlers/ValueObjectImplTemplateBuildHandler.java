@@ -118,6 +118,7 @@ public class ValueObjectImplTemplateBuildHandler
                 retrieveDatabaseMetaData(attributes),
                 retrieveMetadataManager(attributes),
                 retrievePackage(attributes),
+                retrieveHeader(attributes),
                 ValueObjectImplTemplateGenerator.getInstance(),
                 retrieveTableTemplates(attributes));
     }
@@ -128,6 +129,7 @@ public class ValueObjectImplTemplateBuildHandler
      * @param databaseMetaData the <code>DatabaseMetaData</code> instance.
      * @param metaDataManager the metadata manager.
      * @param packageName the package name.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
@@ -144,6 +146,7 @@ public class ValueObjectImplTemplateBuildHandler
         final DatabaseMetaData databaseMetaData,
         final MetadataManager metadataManager,
         final String packageName,
+        final String header,
         final ValueObjectImplTemplateFactory templateFactory,
         final TableTemplate[] tableTemplates)
       throws  BuildException
@@ -181,7 +184,8 @@ public class ValueObjectImplTemplateBuildHandler
                     templateFactory.createValueObjectImplTemplate(
                         packageName,
                         tableTemplates[t_iValueObjectImplIndex],
-                        metadataManager);
+                        metadataManager,
+                        header);
             }
 
             storeValueObjectImplTemplates(

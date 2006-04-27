@@ -127,6 +127,7 @@ public class ProcedureRepositoryTemplateGenerator
      * @param packageName the package name.
      * @param repository the repository.
      * @param metadataTypeManager the metadata type manager instance.
+     * @param header the header.
      * @return such template.
      * @throws IOException if the file cannot be created.
      * @precondition packageName != null
@@ -136,10 +137,12 @@ public class ProcedureRepositoryTemplateGenerator
     public ProcedureRepositoryTemplate createProcedureRepositoryTemplate(
         final String packageName,
         final String repository,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final String header)
     {
         return
             new ProcedureRepositoryTemplate(
+                header,
                 CachingDecoratorFactory.getInstance(),
                 packageName,
                 repository,
@@ -201,7 +204,7 @@ public class ProcedureRepositoryTemplateGenerator
                 + procedureRepositoryTemplateUtils
                       .retrieveProcedureRepositoryClassName(
                           procedureRepositoryTemplate.getRepository()),
-                procedureRepositoryTemplate.generateOutput());
+                procedureRepositoryTemplate.generate());
         }
     }
 }

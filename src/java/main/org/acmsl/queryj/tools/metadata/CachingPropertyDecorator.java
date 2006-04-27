@@ -57,11 +57,31 @@ public class CachingPropertyDecorator
      * The cached Java type.
      */
     private String m__strCachedJavaType;
-    
+
+    /**
+     * The cached object type.
+     */
+    private String m__strCachedObjectType;
+
     /**
      * The cached name lowercased.
      */
     private String m__strCachedNameLowercased;
+
+    /**
+     * Whether the type refers to a number smaller than int.
+     */
+    private Boolean m__bCachedNumberSmallerThanInt;
+
+    /**
+     * The cached normalized/capitalized name.
+     */
+    private String m__strCachedColumnNameNormalizedCapitalized;
+
+    /**
+     * The cached normalized/uncapitalized name.
+     */
+    private String m__strCachedColumnNameNormalizedUncapitalized;
 
     /**
      * Creates a <code>CachingPropertyDecorator</code> to decorate given property.
@@ -83,7 +103,7 @@ public class CachingPropertyDecorator
     {
         m__strCachedJavaType = type;
     }
-    
+
     /**
      * Specifies the cached Java type.
      * @param type such type.
@@ -111,7 +131,7 @@ public class CachingPropertyDecorator
     {
         m__strCachedNameLowercased = nameLowercased;
     }
-    
+
     /**
      * Specifies the cached name lowercased.
      * @param nameLowercased such value.
@@ -144,7 +164,52 @@ public class CachingPropertyDecorator
             result = super.getJavaType();
             setCachedJavaType(result);
         }
-        
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached object type.
+     * @param value the value to cache.
+     */
+    protected final void immutableSetCachedObjectType(
+        final String value)
+    {
+        m__strCachedObjectType = value;
+    }
+
+    /**
+     * Specifies the cached object type.
+     * @param value the value to cache.
+     */
+    protected void setCachedObjectType(final String value)
+    {
+        immutableSetCachedObjectType(value);
+    }
+
+    /**
+     * Retrieves the cached object type.
+     * @return such value.
+     */
+    public String getCachedObjectType()
+    {
+        return m__strCachedObjectType;
+    }
+
+    /**
+     * Retrieves the object type.
+     * @return such information.
+     */
+    public String getObjectType()
+    {
+        String result = getCachedObjectType();
+
+        if  (result == null)
+        {
+            result = super.getObjectType();
+            setCachedObjectType(result);
+        }
+
         return result;
     }
 
@@ -155,11 +220,157 @@ public class CachingPropertyDecorator
     public String getNameLowercased()
     {
         String result = getCachedNameLowercased();
-        
+
         if  (result == null)
         {
             result = super.getNameLowercased();
             setCachedNameLowercased(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies whether the type means the attribute is a
+     * number smaller than an int.
+     * @param flag such condition.
+     */
+    protected final void immutableSetCachedNumberSmallerThanInt(
+        final Boolean flag)
+    {
+        m__bCachedNumberSmallerThanInt = flag;
+    }
+
+    /**
+     * Specifies whether the type means the attribute is a
+     * number smaller than an int.
+     * @param flag such condition.
+     */
+    protected void setCachedNumberSmallerThanInt(
+        final Boolean flag)
+    {
+        immutableSetCachedNumberSmallerThanInt(flag);
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    protected Boolean getCachedNumberSmallerThanInt()
+    {
+        return m__bCachedNumberSmallerThanInt;
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    public boolean getNumberSmallerThanInt()
+    {
+        Boolean result = getCachedNumberSmallerThanInt();
+
+        if  (result == null)
+        {
+            result =
+                (super.isNumberSmallerThanInt())
+                ?  Boolean.TRUE
+                :  Boolean.FALSE;
+
+            setCachedNumberSmallerThanInt(result);
+        }
+
+        return result.booleanValue();
+    }
+
+    /**
+     * Specifies the cached capitalized name.
+     * @param name such name.
+     */
+    protected final void immutableSetCachedColumnNameNormalizedCapitalized(
+        final String name)
+    {
+        m__strCachedColumnNameNormalizedCapitalized = name;
+    }
+
+    /**
+     * Specifies the cached capitalized name.
+     * @param name such name.
+     */
+    protected void setCachedColumnNameNormalizedCapitalized(
+        final String name)
+    {
+        immutableSetCachedColumnNameNormalizedCapitalized(name);
+    }
+
+    /**
+     * Retrieves the cached capitalized name.
+     * @return such name.
+     */
+    public String getCachedColumnNameNormalizedCapitalized()
+    {
+        return m__strCachedColumnNameNormalizedCapitalized;
+    }
+
+    /**
+     * Retrieves the capitalized name.
+     * @return such name.
+     */
+    public String getColumnNameNormalizedCapitalized()
+    {
+        String result = getCachedColumnNameNormalizedCapitalized();
+
+        if  (result == null)
+        {
+            result = super.getColumnNameNormalizedCapitalized();
+            setCachedColumnNameNormalizedCapitalized(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached column name normalized uncapitalized.
+     * @param name such information.
+     */
+    protected final void immutableSetCachedColumnNameNormalizedUncapitalized(
+        final String name)
+    {
+        m__strCachedColumnNameNormalizedUncapitalized = name;
+    }
+
+    /**
+     * Specifies the cached column name normalized uncapitalized.
+     * @param name such information.
+     */
+    protected void setCachedColumnNameNormalizedUncapitalized(
+        final String name)
+    {
+        immutableSetCachedColumnNameNormalizedUncapitalized(name);
+    }
+
+    /**
+     * Retrieves the cached column name normalized uncapitalized.
+     * @return such information.
+     */
+    public String getCachedColumnNameNormalizedUncapitalized()
+    {
+        return m__strCachedColumnNameNormalizedUncapitalized;
+    }
+
+    /**
+     * Retrieves the column name normalized uncapitalized.
+     * @return such information.
+     */
+    public String getColumnNameNormalizedUncapitalized()
+    {
+        String result = getCachedColumnNameNormalizedUncapitalized();
+
+        if  (result == null)
+        {
+            result = super.getColumnNameNormalizedUncapitalized();
+            setCachedColumnNameNormalizedUncapitalized(result);
         }
 
         return result;

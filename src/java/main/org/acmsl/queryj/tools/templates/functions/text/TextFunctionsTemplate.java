@@ -60,8 +60,8 @@ public abstract class TextFunctionsTemplate
 {
     /**
      * Builds a TextFunctionsTemplate using given information.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -78,28 +78,28 @@ public abstract class TextFunctionsTemplate
      * @param classEnd the class end.
      */
     public TextFunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  header,
-        final String  packageDeclaration,
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote,
-        final String  acmslImports,
-        final String  jdkImports,
-        final String  javadoc,
-        final String  classDefinition,
-        final String  classStart,
-        final String  singletonBody,
-        final String  classConstructor,
-        final String  innerClass,
-        final String  classEnd)
+        final String packageDeclaration,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String acmslImports,
+        final String jdkImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String singletonBody,
+        final String classConstructor,
+        final String innerClass,
+        final String classEnd)
     {
         super(
+            header,
             decoratorFactory,
             "text",
             "Text",
-            header,
             packageDeclaration,
             packageName,
             engineName,
@@ -118,6 +118,7 @@ public abstract class TextFunctionsTemplate
 
     /**
      * Builds a TextFunctionsTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -125,13 +126,15 @@ public abstract class TextFunctionsTemplate
      * @param quote the identifier quote string.
      */
     public TextFunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         super(
+            header,
             decoratorFactory,
             "text",
             "Text",

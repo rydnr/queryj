@@ -91,6 +91,7 @@ public abstract class AbstractDAOFactoryTemplate
 
     /**
      * Builds an <code>AbstractDAOFactoryTemplate</code> using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param tableTemplate the table template.
      * @param packageName the package name.
@@ -101,6 +102,7 @@ public abstract class AbstractDAOFactoryTemplate
      * @param jndiDataSource the JNDI location of the data source.
      */
     protected AbstractDAOFactoryTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final TableTemplate tableTemplate,
         final String packageName,
@@ -110,7 +112,7 @@ public abstract class AbstractDAOFactoryTemplate
         final String basePackageName,
         final String jndiDataSource)
     {
-        super(decoratorFactory);
+        super(header, decoratorFactory);
         immutableSetTableTemplate(tableTemplate);
         immutableSetPackageName(packageName);
         immutableSetEngineName(engineName);

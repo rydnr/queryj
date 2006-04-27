@@ -158,12 +158,12 @@ public class PackageUtils
 
         WeakReference reference = getReference();
 
-        if  (reference != null) 
+        if  (reference != null)
         {
             result = (PackageUtils) reference.get();
         }
 
-        if  (result == null) 
+        if  (result == null)
         {
             result = new PackageUtils();
 
@@ -794,7 +794,7 @@ public class PackageUtils
     {
         return engineName.toLowerCase();
     }
-    
+
     /**
      * Retrieves the package name for DAO templates.
      * @param packageName the original package.
@@ -1311,7 +1311,7 @@ public class PackageUtils
     public String retrieveXMLDAOTestPackage(
         final String packageName, final boolean subFolders)
     {
-        return 
+        return
             retrieveTestPackage(
                 retrieveXMLDAOPackage(packageName), subFolders);
     }
@@ -1553,6 +1553,42 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the package name for the ResultSetExtractor classes.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @return the package for the associated classes.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     */
+    public String retrieveCustomResultSetExtractorPackage(
+        final String packageName, final String engineName)
+    {
+        return retrieveDAOPackage(packageName, engineName);
+    }
+
+    /**
+     * Retrieves the folder for the ResultSetExtractor classes.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder for the associated pointers.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     */
+    public File retrieveCustomResultSetExtractorFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final boolean useSubfolders)
+    {
+        return
+            retrieveDAOFolder(
+                parentFolder, packageName, engineName, useSubfolders);
+    }
+
+    /**
      * Retrieves the package name for the AttributesStatementSetter classes.
      * @param packageName the original package.
      * @param engineName the engine.
@@ -1697,5 +1733,58 @@ public class PackageUtils
                 engineName,
                 tableName,
                 useSubfolders);
+    }
+
+    /**
+     * Extracts the class name of given fully-qualified class.
+     * @param fqcn such information.
+     * @return the class name.
+     * @precondition fqcn != null
+     */
+    public String extractClassName(final String fqdn)
+    {
+        String result = null;
+
+        String[] t_astrPieces = split(fqdn, ".");
+
+        int t_iCount = (t_astrPieces != null) ? t_astrPieces.length : 0;
+
+        if  (t_iCount > 0)
+        {
+            result = t_astrPieces[t_iCount - 1];
+        }
+
+        return result;
+    }
+
+    /**
+     * Splits given value into chunks separated by a separator.
+     * @param value the value.
+     * @param separator the separator.
+     * @return the chunks.
+     * @precondition value != null
+     * @precondition separator != null
+     */
+    public String[] split(final String value, final String separator)
+    {
+        return split(value, separator, StringUtils.getInstance());
+    }
+
+    /**
+     * Splits given value into chunks separated by a separator.
+     * @param value the value.
+     * @param separator the separator.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the chunks.
+     * @precondition value != null
+     * @precondition separator != null
+     * @precondition stringUtils != null
+     */
+    protected String[] split(
+        final String value,
+        final String separator,
+        final StringUtils stringUtils)
+    {
+        return stringUtils.split(value, new String[] { separator });
     }
 }

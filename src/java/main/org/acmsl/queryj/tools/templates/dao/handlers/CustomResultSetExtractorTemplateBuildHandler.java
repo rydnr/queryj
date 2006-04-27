@@ -44,8 +44,7 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -121,7 +120,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @throws BuildException if the package retrieval process if faulty.
      */
     protected String retrievePackage(
-        final ResultElement customResult,
+        final Result customResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String engineName,
@@ -130,50 +129,8 @@ public class CustomResultSetExtractorTemplateBuildHandler
       throws BuildException
     {
         return
-            packageUtils.retrieveResultSetExtractorPackage(
-                projectPackage,
-                engineName,
-                retrieveTableName(
-                    customResult,
-                    customSqlProvider,
-                    metadataManager,
-                    CustomResultUtils.getInstance()));
-    }
-
-    /**
-     * Retrieves the table name.
-     * @param resultElement the result element.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the database metadata manager.
-     * @param customResultUtils the <code>CustomResultUtils</code> instance.
-     * @return the table name.
-     * @throws BuildException if there's no table associated to the result.
-     * @precondition resultElement != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition customResultUtils != null
-     */
-    protected String retrieveTableName(
-        final ResultElement resultElement,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final CustomResultUtils customResultUtils)
-      throws  BuildException
-    {
-        String result =
-            customResultUtils.retrieveTable(
-                resultElement, customSqlProvider, metadataManager);
-
-        if  (result == null)
-        {
-            throw
-                new BuildException(
-                      "Specified result element "
-                    + resultElement.getId()
-                    + " is not associated to any table in the model.");
-        }
-
-        return result;
+            packageUtils.retrieveCustomResultSetExtractorPackage(
+                projectPackage, engineName);
     }
 
     /**
@@ -195,26 +152,21 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * Retrieves the package name from the attribute map.
      * @param projectPackage the project package.
      * @param engineName the engine name.
-     * @param tableName the table name.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      * @precondition engineName != null
      * @precondition projectPackage != null
-     * @precondition tableName != null
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
         final String projectPackage,
         final String engineName,
-        final String tableName,
         final PackageUtils packageUtils)
       throws  BuildException
     {
         return
-            packageUtils.retrieveResultSetExtractorPackage(
-                projectPackage,
-                engineName,
-                tableName);
+            packageUtils.retrieveCustomResultSetExtractorPackage(
+                projectPackage, engineName);
     }
 }

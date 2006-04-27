@@ -51,7 +51,7 @@ public interface TestSuiteTemplateDefaults
      * The test suite.
      */
     public static final String TEST_SUITE_TEMPLATE =
-          HEADER
+          "{0}"
         + " *****************************************************************"
         + "*************\n"
         + " *\n"
@@ -60,14 +60,14 @@ public interface TestSuiteTemplateDefaults
         + " * Author: QueryJ\n"
         + " *\n"
         + " * Description: Executes all defined test cases for\n"
-        + "                {0} package.\n"
+        + "                {1} package.\n"
           // package.
         + " */\n"
-        + "package {1};\n\n" // test package.
+        + "package {2};\n\n" // test package.
         + "/*\n"
         + " * Importing some project classes.\n"
         + " */\n"
-        + "{2}" // test cases / suites import.
+        + "{3}" // test cases / suites import.
         + "\n"
         + "/*\n"
         + " * Importing some JUnit classes.\n"
@@ -78,16 +78,16 @@ public interface TestSuiteTemplateDefaults
         + "import junit.textui.TestRunner;\n\n"
         + "/**\n"
         + " * Executes all defined test cases for\n"
-        + " * {0} package.\n" // package
+        + " * {1} package.\n" // package
         + " * @author <a href=\"http://maven.acm-sl.org/queryj\">QueryJ</a>\n"
         + " */\n"
-        + "public class {3}Suite\n"
+        + "public class {4}Suite\n"
         + "    extends  TestSuite\n"
         + "'{'\n"
         + "    /**\n"
         + "     * Default constructor.\n"
         + "     */\n"
-        + "    public {3}Suite()\n" // suite name
+        + "    public {4}Suite()\n" // suite name
         + "    '{'\n"
         + "        addTest(suite());\n"
         + "    '}'\n\n"
@@ -97,7 +97,7 @@ public interface TestSuiteTemplateDefaults
         + "     */\n"
         + "    public static void main(String[] args)\n"
         + "    '{'\n"
-        + "        TestRunner.run({3}Suite.class);\n" // suite name
+        + "        TestRunner.run({4}Suite.class);\n" // suite name
         + "    '}'\n\n"
         + "    /**\n"
         + "     * Retrieves the set of tests included in this suite.\n"
@@ -105,8 +105,8 @@ public interface TestSuiteTemplateDefaults
         + "     */\n"
         + "    public static Test suite()\n"
         + "    '{'\n"
-        + "        TestSuite result = new TestSuite(\"{3} suite\");\n\n" // suite name
-        + "{4}\n" // adding test case to suite
+        + "        TestSuite result = new TestSuite(\"{4} suite\");\n\n" // suite name
+        + "{5}\n" // adding test case to suite
         + "        return result;\n"
         + "    '}'\n"
         + "'}'";

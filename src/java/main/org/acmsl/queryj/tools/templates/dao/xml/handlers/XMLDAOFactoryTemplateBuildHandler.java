@@ -140,6 +140,7 @@ public class XMLDAOFactoryTemplateBuildHandler
                 retrievePackage(projectPackageName),
                 projectPackageName,
                 tableTemplates,
+                retrieveHeader(parameters),
                 XMLDAOFactoryTemplateGenerator.getInstance());
     }
 
@@ -149,6 +150,7 @@ public class XMLDAOFactoryTemplateBuildHandler
      * @param packageName the package name.
      * @param projectPackageName the project package name.
      * @param tableTemplates the table templates.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -163,6 +165,7 @@ public class XMLDAOFactoryTemplateBuildHandler
         final String packageName,
         final String projectPackageName,
         final TableTemplate[] tableTemplates,
+        final String header,
         final XMLDAOFactoryTemplateFactory templateFactory)
       throws  BuildException
     {
@@ -183,7 +186,8 @@ public class XMLDAOFactoryTemplateBuildHandler
                     templateFactory.createXMLDAOFactoryTemplate(
                         tableTemplates[t_iXMLDAOFactoryIndex],
                         packageName,
-                        projectPackageName);
+                        projectPackageName,
+                        header);
             }
 
             storeXMLDAOFactoryTemplates(t_aXMLDAOFactoryTemplates, parameters);

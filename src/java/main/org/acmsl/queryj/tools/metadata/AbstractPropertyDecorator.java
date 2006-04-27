@@ -64,7 +64,7 @@ public abstract class AbstractPropertyDecorator
      * The metadata manager.
      */
     private MetadataManager m__MetadataManager;
-    
+
     /**
      * The metadata type manager.
      */
@@ -100,7 +100,7 @@ public abstract class AbstractPropertyDecorator
     {
         m__Property = property;
     }
-    
+
     /**
      * Specifies the <code>Property</code> to decorate.
      * @param property such property.
@@ -190,7 +190,7 @@ public abstract class AbstractPropertyDecorator
     {
         return getJavaType(getType(), getMetadataTypeManager());
     }
-    
+
     /**
      * Retrieves the Java type of the property.
      * @param type the type.
@@ -206,6 +206,66 @@ public abstract class AbstractPropertyDecorator
         return
             metadataTypeManager.getObjectType(
                 metadataTypeManager.getJavaType(type));
+    }
+
+    /**
+     * Retrieves the Object type of the property.
+     * @return such information.
+     */
+    public String getObjectType()
+    {
+        return retrieveObjectType();
+    }
+
+    /**
+     * Retrieves the Object type of the property.
+     * @return such information.
+     */
+    protected String retrieveObjectType()
+    {
+        return
+            retrieveObjectType(
+                getType(), getMetadataManager(), isNullable());
+    }
+
+    /**
+     * Retrieves the Object type of the property.
+     * @param type the declared type.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param allowsNull whether it allows nulls.
+     * @return such information.
+     * @precondition metadataManager != null
+     */
+    protected String retrieveObjectType(
+        final String type,
+        final MetadataManager metadataManager,
+        final boolean allowsNull)
+    {
+        return
+            retrieveObjectType(
+                type,
+                metadataManager.getMetadataTypeManager(),
+                allowsNull,
+                MetadataTypeUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the Object type of the property.
+     * @param type the declared type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param allowsNull whether it allows nulls.
+     * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
+     * @return such information.
+     * @precondition metadataTypeManager != null
+     * @precondition metadataTypeUtils != null
+     */
+    protected String retrieveObjectType(
+        final String type,
+        final MetadataTypeManager metadataTypeManager,
+        final boolean allowsNull,
+        final MetadataTypeUtils metadataTypeUtils)
+    {
+        return metadataTypeUtils.getWrapperClass(type);
     }
 
     /**
@@ -249,7 +309,7 @@ public abstract class AbstractPropertyDecorator
     {
         return capitalize(value, DecorationUtils.getInstance());
     }
-    
+
     /**
      * Capitalizes given value.
      * @param value the value.
@@ -262,5 +322,148 @@ public abstract class AbstractPropertyDecorator
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
+    }
+
+    /**
+     * Normalizes and capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the alternate version of the value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalizeCapitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(decorationUtils.normalize(value));
+    }
+
+    /**
+     * Normalizes and uncapitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the alternate version of the value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalizeUncapitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.uncapitalize(decorationUtils.normalize(value));
+    }
+
+    /**
+     * Checks whether the property allows null or not.
+     * @return such information.
+     */
+    public boolean getAllowsNull()
+    {
+        return isNullable();
+    }
+
+    /**
+     * Retrieves whether this attribute can be modelled as a primitive or not.
+     * @return <code>false</code> if no primitive matches.
+     */
+    public Boolean isPrimitive()
+    {
+        return isPrimitive(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether this attribute can be modelled as a primitive or not.
+     * @param type the attribute type.
+     * @param metadataTypeManager the metadata type manager.
+     * @return <code>false</code> if no primitive matches.
+     * @precondition metadataTypeManager != null
+     */
+    protected Boolean isPrimitive(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            (metadataTypeManager.isPrimitive(type)
+             ?  Boolean.TRUE : Boolean.FALSE);
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @return such condition.
+     */
+    public boolean isNumberSmallerThanInt()
+    {
+        return isNumberSmallerThanInt(getType(), getMetadataManager());
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @param type the type.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such condition.
+     * @precondition metadataManager != null
+     */
+    protected boolean isNumberSmallerThanInt(
+        final String type, final MetadataManager metadataManager)
+    {
+        return
+            isNumberSmallerThanInt(
+                type, metadataManager.getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the type means the attribute is a
+     * number smaller than an int.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return such condition.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isNumberSmallerThanInt(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isNumberSmallerThanInt(type);
+    }
+
+    /**
+     * Retrieves the capitalized name.
+     * @return such name.
+     */
+    public String getColumnNameNormalizedCapitalized()
+    {
+        return
+            normalizeCapitalize(
+                getColumnName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the capitalized name.
+     * @return such name.
+     */
+    public String getColumnNameNormalizedUncapitalized()
+    {
+        return
+            normalizeUncapitalize(
+                getColumnName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the property name.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return toString(getProperty());
+    }
+
+    /**
+     * Retrieves the property name.
+     * @param property property.
+     * @return such information.
+     * @precondition property != null
+     */
+    protected String toString(final Property property)
+    {
+        return property.toString();
     }
 }

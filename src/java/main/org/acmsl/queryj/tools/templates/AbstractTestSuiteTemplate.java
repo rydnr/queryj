@@ -103,6 +103,7 @@ public abstract class AbstractTestSuiteTemplate
     /**
      * Builds an <code>AbstractTestSuiteTemplate</code> using
      * given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the tested package name.
      * @param testPackageName the test package name.
@@ -115,6 +116,7 @@ public abstract class AbstractTestSuiteTemplate
      * test suites to the suite.
      */
     protected AbstractTestSuiteTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String testPackageName,
@@ -124,7 +126,7 @@ public abstract class AbstractTestSuiteTemplate
         final String addingTestCaseToSuiteStatement,
         final String addingTestSuiteToSuiteStatement)
     {
-        super(decoratorFactory);
+        super(header, decoratorFactory);
         immutableSetPackageName(packageName);
         immutableSetTestPackageName(testPackageName);
         immutableSetSuiteName(suiteName);

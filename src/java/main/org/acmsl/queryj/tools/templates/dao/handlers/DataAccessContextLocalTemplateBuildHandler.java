@@ -179,7 +179,8 @@ public class DataAccessContextLocalTemplateBuildHandler
                     metaData.getDatabaseProductName(),
                     metaData.getDatabaseProductVersion(),
                     retrieveProjectPackage(parameters),
-                    retrieveTableNames(parameters));
+                    retrieveTableNames(parameters),
+                    retrieveHeader(parameters));
         }
         catch  (final SQLException sqlException)
         {
@@ -198,6 +199,7 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param projectPackage the project package.
      * @param tableNames the table names.
+     * @param header the header.
      * @return the template instance.
      * @throws BuildException if the template cannot be created.
      * @precondition parameters != null
@@ -212,7 +214,8 @@ public class DataAccessContextLocalTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String projectPackage,
-        final String[] tableNames)
+        final String[] tableNames,
+        final String header)
       throws  BuildException
     {
         DataAccessContextLocalTemplate result =
@@ -220,7 +223,8 @@ public class DataAccessContextLocalTemplateBuildHandler
                 jndiLocation,
                 engineName,
                 engineVersion,
-                projectPackage);
+                projectPackage,
+                header);
 
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
         
@@ -250,7 +254,8 @@ public class DataAccessContextLocalTemplateBuildHandler
         final String jndiLocation,
         final String engineName,
         final String engineVersion,
-        final String basePackageName)
+        final String basePackageName,
+        final String header)
       throws  BuildException
     {
         return
@@ -259,6 +264,7 @@ public class DataAccessContextLocalTemplateBuildHandler
                 engineName,
                 engineVersion,
                 basePackageName,
+                header,
                 DataAccessContextLocalTemplateGenerator.getInstance());
     }
 
@@ -268,6 +274,7 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @throws BuildException whenever the template
      * information is not valid.
@@ -281,6 +288,7 @@ public class DataAccessContextLocalTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String basePackageName,
+        final String header,
         final DataAccessContextLocalTemplateFactory templateFactory)
       throws  BuildException
     {
@@ -293,7 +301,8 @@ public class DataAccessContextLocalTemplateBuildHandler
                     jndiLocation,
                     engineName,
                     engineVersion,
-                    basePackageName);
+                    basePackageName,
+                    header);
         }
         catch  (final QueryJException queryjException)
         {

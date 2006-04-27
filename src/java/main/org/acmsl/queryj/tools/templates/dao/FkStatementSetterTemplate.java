@@ -65,6 +65,7 @@ public class FkStatementSetterTemplate
      * information.
      * @param foreignKey the foreign key.
      * @param metadataManager the database metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -76,6 +77,7 @@ public class FkStatementSetterTemplate
     public FkStatementSetterTemplate(
         final ForeignKey foreignKey,
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -87,6 +89,7 @@ public class FkStatementSetterTemplate
         super(
             foreignKey,
             metadataManager,
+            header,
             decoratorFactory,
             packageName,
             engineName,

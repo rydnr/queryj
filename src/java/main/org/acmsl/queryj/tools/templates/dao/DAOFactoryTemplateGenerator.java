@@ -133,6 +133,7 @@ public class DAOFactoryTemplateGenerator
      * @param engineName the engine name.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      * @precondition tableTemplate != null
@@ -144,11 +145,13 @@ public class DAOFactoryTemplateGenerator
         final String packageName,
         final String engineName,
         final String basePackageName,
-        final String jndiDataSource)
+        final String jndiDataSource,
+        final String header)
       throws  QueryJException
     {
         return
             new DAOFactoryTemplate(
+                header,
                 getDecoratorFactory(),
                 tableTemplate,
                 packageName,

@@ -94,11 +94,6 @@ public abstract class FunctionsTemplate
     private String m__strClassPrefix;
 
     /**
-     * The header.
-     */
-    private String m__strHeader;
-
-    /**
      * The package declaration.
      */
     private String m__strPackageDeclaration;
@@ -180,10 +175,10 @@ public abstract class FunctionsTemplate
 
     /**
      * Builds a <code>FunctionsTemplate</code> using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
-     * @param header the header.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -200,29 +195,28 @@ public abstract class FunctionsTemplate
      * @param classEnd the class end.
      */
     protected FunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  classDescription,
-        final String  classPrefix,
-        final String  header,
-        final String  packageDeclaration,
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote,
-        final String  acmslImports,
-        final String  jdkImports,
-        final String  javadoc,
-        final String  classDefinition,
-        final String  classStart,
-        final String  singletonBody,
-        final String  classConstructor,
-        final String  innerClass,
-        final String  classEnd)
+        final String classDescription,
+        final String classPrefix,
+        final String packageDeclaration,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String acmslImports,
+        final String jdkImports,
+        final String javadoc,
+        final String classDefinition,
+        final String classStart,
+        final String singletonBody,
+        final String classConstructor,
+        final String innerClass,
+        final String classEnd)
     {
-        super(decoratorFactory);
+        super(header, decoratorFactory);
         immutableSetClassDescription(classDescription);
         immutableSetClassPrefix(classPrefix);
-        immutableSetHeader(header);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetEngineName(engineName);
@@ -242,6 +236,7 @@ public abstract class FunctionsTemplate
 
     /**
      * Builds a FunctionsTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param classDescription the class description.
      * @param classPrefix the class prefix.
@@ -251,6 +246,7 @@ public abstract class FunctionsTemplate
      * @param quote the identifier quote string.
      */
     protected FunctionsTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String classDescription,
         final String classPrefix,
@@ -260,10 +256,11 @@ public abstract class FunctionsTemplate
         final String quote)
     {
         this(
+//            (header != null) ? header : DEFAULT_HEADER,
+            DEFAULT_HEADER,
             decoratorFactory,
             classDescription,
             classPrefix,
-            DEFAULT_HEADER,
             PACKAGE_DECLARATION,
             packageName,
             engineName,
@@ -332,33 +329,6 @@ public abstract class FunctionsTemplate
     protected String getClassPrefix()
     {
         return m__strClassPrefix;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    private void immutableSetHeader(final String header)
-    {
-        m__strHeader = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected void setHeader(final String header)
-    {
-        immutableSetHeader(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    protected String getHeader() 
-    {
-        return m__strHeader;
     }
 
     /**
@@ -1132,9 +1102,10 @@ public abstract class FunctionsTemplate
 
     /**
      * Retrieves the source code of the generated field tableName.
+     * @param header the header.
      * @return such source code.
      */
-    protected String generateOutput()
+    protected String generateOutput(final String header)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
@@ -1156,7 +1127,7 @@ public abstract class FunctionsTemplate
 
             MessageFormat t_Formatter = null;
 
-            String t_strHeader = getHeader();
+            String t_strHeader = header;
 
             if  (t_strHeader != null) 
             {

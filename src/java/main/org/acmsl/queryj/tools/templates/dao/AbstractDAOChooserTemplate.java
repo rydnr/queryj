@@ -147,8 +147,8 @@ public abstract class AbstractDAOChooserTemplate
     /**
      * Builds an <code>AbstractDAOChooserTemplate</code> using given
      * information.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param header the header.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageDeclaration the package declaration.
      * @param packageName the package name.
      * @param repository the repository.
@@ -166,8 +166,8 @@ public abstract class AbstractDAOChooserTemplate
      * @param classEnd the class end.
      */
     public AbstractDAOChooserTemplate(
-        final DecoratorFactory decoratorFactory,
         final String header,
+        final DecoratorFactory decoratorFactory,
         final String packageDeclaration,
         final String packageName,
         final String repository,
@@ -184,8 +184,7 @@ public abstract class AbstractDAOChooserTemplate
         final String getDAOFactoryMethods,
         final String classEnd)
     {
-        super(decoratorFactory);
-        immutableSetHeader(header);
+        super(header, decoratorFactory);
         immutableSetPackageDeclaration(packageDeclaration);
         immutableSetPackageName(packageName);
         immutableSetRepository(repository);
@@ -202,33 +201,6 @@ public abstract class AbstractDAOChooserTemplate
         immutableSetGetDAOFactoryMethods(getDAOFactoryMethods);
         immutableSetClassEnd(classEnd);
         immutableSetTables(new ArrayList());
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    private void immutableSetHeader(final String header)
-    {
-        m__strHeader = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected void setHeader(final String header)
-    {
-        immutableSetHeader(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    public String getHeader() 
-    {
-        return m__strHeader;
     }
 
     /**

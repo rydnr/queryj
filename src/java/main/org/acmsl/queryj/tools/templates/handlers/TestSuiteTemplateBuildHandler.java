@@ -117,6 +117,7 @@ public class TestSuiteTemplateBuildHandler
                 parameters,
                 retrieveTestTemplates(parameters),
                 retrieveProjectPackage(parameters),
+                retrieveHeader(parameters),
                 retrieveUseSubfoldersFlag(parameters),
                 TestSuiteTemplateGenerator.getInstance(),
                 StringUtils.getInstance());
@@ -127,6 +128,7 @@ public class TestSuiteTemplateBuildHandler
      * @param parameters the parameters.
      * @param testTemplates the test templates.
      * @param projectPackage the project package.
+     * @param header the header.
      * @param subFolders whether to use subfolders or not.
      * @param templateFactory the template factory.
      * @param stringUtils the <code>StringUtils</code> instance.
@@ -142,6 +144,7 @@ public class TestSuiteTemplateBuildHandler
         final Map parameters,
         final Collection testTemplates,
         final String projectPackage,
+        final String header,
         final boolean subFolders,
         final TestSuiteTemplateFactory templateFactory,
         final StringUtils stringUtils)
@@ -153,6 +156,7 @@ public class TestSuiteTemplateBuildHandler
             templateFactory.createTestSuiteTemplate(
                 projectPackage,
                 stringUtils.extractPackageName(projectPackage),
+                header,
                 subFolders);
 
         if  (testTemplates != null)

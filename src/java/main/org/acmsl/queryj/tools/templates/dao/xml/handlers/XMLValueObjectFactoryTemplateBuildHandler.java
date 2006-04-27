@@ -114,7 +114,8 @@ public class XMLValueObjectFactoryTemplateBuildHandler
 
                 String t_strPackage = retrievePackage(attributes);
                 String t_strValueObjectPackage = retrieveValueObjectPackage(attributes);
-
+                String t_strHeader = retrieveHeader(attributes);
+                
                 XMLValueObjectFactoryTemplateGenerator t_XMLValueObjectFactoryTemplateGenerator =
                     XMLValueObjectFactoryTemplateGenerator.getInstance();
 
@@ -146,7 +147,8 @@ public class XMLValueObjectFactoryTemplateBuildHandler
                                 t_strPackage,
                                 t_strValueObjectPackage,
                                 t_aTableTemplates[t_iValueObjectFactoryIndex],
-                                t_MetadataManager);
+                                t_MetadataManager,
+                                t_strHeader);
                         }
 
                     storeXMLValueObjectFactoryTemplates(t_aValueObjectFactoryTemplates, attributes);

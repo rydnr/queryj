@@ -486,7 +486,10 @@ public class TableRepositoryTemplateBuildHandler
                             ParameterValidationHandler.PACKAGE)),
                 (String)
                     parameters.get(
-                        ParameterValidationHandler.REPOSITORY));
+                        ParameterValidationHandler.REPOSITORY),
+                (String)
+                    parameters.get(
+                        ParameterValidationHandler.HEADER));
 
         if  (result != null) 
         {
@@ -514,6 +517,7 @@ public class TableRepositoryTemplateBuildHandler
      * Builds a table repository template using given information.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
      * information is not valid.
@@ -522,14 +526,17 @@ public class TableRepositoryTemplateBuildHandler
      * @precondition TableRepositoryTemplateGenerator.getInstance() != null
      */
     protected TableRepositoryTemplate buildTableRepositoryTemplate(
-        final String packageName, final String repository)
+        final String packageName,
+        final String repository,
+        final String header)
       throws  BuildException
     {
         return
             buildTableRepositoryTemplate(
                 packageName,
                 repository,
-                TableRepositoryTemplateGenerator.getInstance());
+                TableRepositoryTemplateGenerator.getInstance(),
+                header);
     }
     
     /**
@@ -537,6 +544,7 @@ public class TableRepositoryTemplateBuildHandler
      * @param packageName the package name.
      * @param repository the repository.
      * @param factory the template factory.
+     * @param header the header.
      * @return such template.
      * @throws org.apache.tools.ant.BuildException whenever the repository
      * information is not valid.
@@ -547,12 +555,13 @@ public class TableRepositoryTemplateBuildHandler
     protected TableRepositoryTemplate buildTableRepositoryTemplate(
         final String packageName,
         final String repository,
-        final TableRepositoryTemplateFactory factory)
+        final TableRepositoryTemplateFactory factory,
+        final String header)
       throws  BuildException
     {
         return
             factory.createTableRepositoryTemplate(
-                packageName, repository);
+                packageName, repository, header);
     }
 
     /**

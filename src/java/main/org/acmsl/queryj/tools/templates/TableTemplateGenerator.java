@@ -128,6 +128,7 @@ public class TableTemplateGenerator
      * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param header the header.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -141,6 +142,7 @@ public class TableTemplateGenerator
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
+        final String header,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -154,6 +156,7 @@ public class TableTemplateGenerator
                 tableName,
                 metadataManager,
                 customSqlProvider,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 engineName,
@@ -218,6 +221,6 @@ public class TableTemplateGenerator
             + tableTemplateUtils.retrieveTableClassName(
                   tableTemplate.getTableName())
             + ".java",
-            tableTemplate.generateOutput());
+            tableTemplate.generate());
     }
 }

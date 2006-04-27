@@ -153,12 +153,14 @@ public class DataAccessManagerTemplateGenerator
         final String basePackageName,
         final String repositoryName,
         final String engineName,
-        final Collection tables)
+        final Collection tables,
+        final String header)
       throws  QueryJException
     {
         return
             new DataAccessManagerTemplate(
                 metadataManager,
+                header,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,

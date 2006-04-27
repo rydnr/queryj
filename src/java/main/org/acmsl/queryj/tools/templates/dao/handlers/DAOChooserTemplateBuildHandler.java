@@ -128,6 +128,7 @@ public class DAOChooserTemplateBuildHandler
                 parameters,
                 retrievePackage(parameters),
                 retrieveRepository(parameters),
+                retrieveHeader(parameters),
                 retrieveTableNames(parameters));
     }
 
@@ -137,6 +138,7 @@ public class DAOChooserTemplateBuildHandler
      * @param parameters the parameter map.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @param tableNames the table names.
      * @return the <code>DAOChooserTemplate</code> instance.
      * @precondition parameters != null
@@ -148,11 +150,12 @@ public class DAOChooserTemplateBuildHandler
         final Map parameters,
         final String packageName,
         final String repository,
+        final String header,
         final String[] tableNames)
     {
         DAOChooserTemplate result =
             buildDAOChooserTemplate(
-                packageName, repository);
+                packageName, repository, header);
 
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
         
@@ -170,18 +173,22 @@ public class DAOChooserTemplateBuildHandler
      * Builds a DAOChooser template using given information.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param header the header.
      * @return the template.
      * @precondition packageName != null
      * @precondition repository != null
      */
     protected DAOChooserTemplate buildDAOChooserTemplate(
-        final String packageName, final String repository)
+        final String packageName,
+        final String repository,
+        final String header)
     {
         return
             buildDAOChooserTemplate(
                 packageName,
                 repository,
-                DAOChooserTemplateGenerator.getInstance());
+                DAOChooserTemplateGenerator.getInstance(),
+                header);
     }
 
     /**
@@ -196,11 +203,12 @@ public class DAOChooserTemplateBuildHandler
     protected DAOChooserTemplate buildDAOChooserTemplate(
         final String packageName,
         final String repository,
-        final DAOChooserTemplateFactory templateFactory)
+        final DAOChooserTemplateFactory templateFactory,
+        final String header)
     {
         return
             templateFactory.createDAOChooserTemplate(
-                packageName, repository);
+                packageName, repository, header);
     }
 
     /**

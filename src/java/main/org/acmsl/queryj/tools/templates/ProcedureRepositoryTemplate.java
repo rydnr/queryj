@@ -74,6 +74,7 @@ public class ProcedureRepositoryTemplate
     /**
      * Builds a <code>ProcedureRepositoryTemplate</code> using given
      * information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param repository the repository.
@@ -82,14 +83,16 @@ public class ProcedureRepositoryTemplate
      * @precondition metadataTypeManager != null
      */
     public ProcedureRepositoryTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String repository,
         final MetadataTypeManager metadataTypeManager)
     {
         super(
-            decoratorFactory,
+//            (header != null) ? header : DEFAULT_HEADER,
             DEFAULT_HEADER,
+            decoratorFactory,
             PACKAGE_DECLARATION,
             packageName,
             repository,
@@ -115,13 +118,14 @@ public class ProcedureRepositoryTemplate
 
     /**
      * Retrieves the source code of the generated procedure repository.
+     * @param header the header.
      * @return such source code.
      */
-    protected String generateOutput()
+    protected String generateOutput(final String header)
     {
         return
             generateOutput(
-                getHeader(),
+                header,
                 getPackageDeclaration(),
                 getPackageName(),
                 getRepository(),

@@ -59,6 +59,7 @@ public interface XMLDAOTemplateFactory
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
@@ -70,6 +71,7 @@ public interface XMLDAOTemplateFactory
         final MetadataManager metadataManager,
         final String packageName,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final String header)
       throws  QueryJException;
 }

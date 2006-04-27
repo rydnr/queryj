@@ -125,13 +125,15 @@ public class JdbcDAOTemplateGenerator
     /**
      * Generates a JDBC DAO template.
      * @param packageName the package name.
+     * @param header the header.
      * @return a template.
      * @precondition packageName != null
      */
-    public JdbcDAOTemplate createJdbcDAOTemplate(final String packageName)
+    public JdbcDAOTemplate createJdbcDAOTemplate(
+        final String packageName, final String header)
       throws  QueryJException
     {
-        return new JdbcDAOTemplate(getDecoratorFactory(), packageName);
+        return new JdbcDAOTemplate(header, getDecoratorFactory(), packageName);
     }
 
     /**

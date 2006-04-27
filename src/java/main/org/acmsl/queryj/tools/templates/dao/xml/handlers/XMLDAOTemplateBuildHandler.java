@@ -117,6 +117,7 @@ public class XMLDAOTemplateBuildHandler
                 retrievePackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveTableTemplates(parameters),
+                retrieveHeader(parameters),
                 XMLDAOTemplateGenerator.getInstance());
     }
 
@@ -128,6 +129,7 @@ public class XMLDAOTemplateBuildHandler
      * @param packageName the package name.
      * @param repositoryName the repository name.
      * @param tableTemplates the table templates.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -146,6 +148,7 @@ public class XMLDAOTemplateBuildHandler
         final String packageName,
         final String repositoryName,
         final TableTemplate[] tableTemplates,
+        final String header,
         final XMLDAOTemplateFactory templateFactory)
       throws  BuildException
     {
@@ -167,7 +170,8 @@ public class XMLDAOTemplateBuildHandler
                         metadataManager,
                         packageName,
                         basePackage,
-                        repositoryName);
+                        repositoryName,
+                        header);
             }
 
             storeXMLDAOTemplates(t_aXMLDAOTemplates, parameters);

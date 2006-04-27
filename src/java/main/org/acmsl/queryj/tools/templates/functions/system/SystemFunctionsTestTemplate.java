@@ -55,6 +55,7 @@ public abstract class SystemFunctionsTestTemplate
 {
     /**
      * Builds a SystemFunctionsTestTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param testedPackageName the tested package name.
@@ -63,14 +64,16 @@ public abstract class SystemFunctionsTestTemplate
      * @param quote the identifier quote string.
      */
     public SystemFunctionsTestTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
-        final String  packageName,
-        final String  testedPackageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         super(
+            header,
             decoratorFactory,
             "system",
             "System",

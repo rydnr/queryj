@@ -63,6 +63,10 @@ import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.functions.FunctionsBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomBaseValueObjectTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectImplTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectImplTemplateHandlerBundle;
@@ -147,6 +151,11 @@ public class QueryJTask
     private File m__Outputdir;
 
     /**
+     * The optional header.
+     */
+    private File m__Header;
+
+    /**
      * The "outputdirsubfolders" value.
      */
     private String m__strOutputdirsubfolders;
@@ -225,7 +234,7 @@ public class QueryJTask
      * The "grammar-bundle" property.
      */
     private String m__strGrammarBundleName;
-    
+
     /**
      * The nested tables.
      */
@@ -263,7 +272,7 @@ public class QueryJTask
      * Retrieves the driver.
      * @return such information.
      */
-    public String getDriver() 
+    public String getDriver()
     {
         return m__strDriver;
     }
@@ -290,7 +299,7 @@ public class QueryJTask
      * Retrieves the url.
      * @return such information.
      */
-    public String getUrl() 
+    public String getUrl()
     {
         return m__strUrl;
     }
@@ -317,7 +326,7 @@ public class QueryJTask
      * Retrieves the username.
      * @return such information.
      */
-    public String getUsername() 
+    public String getUsername()
     {
         return m__strUsername;
     }
@@ -344,7 +353,7 @@ public class QueryJTask
      * Retrieves the password.
      * @return such information.
      */
-    public String getPassword() 
+    public String getPassword()
     {
         return m__strPassword;
     }
@@ -371,7 +380,7 @@ public class QueryJTask
      * Retrieves the catalog.
      * @return such information.
      */
-    public String getCatalog() 
+    public String getCatalog()
     {
         return m__strCatalog;
     }
@@ -398,7 +407,7 @@ public class QueryJTask
      * Retrieves the schema.
      * @return such information.
      */
-    public String getSchema() 
+    public String getSchema()
     {
         return m__strSchema;
     }
@@ -425,7 +434,7 @@ public class QueryJTask
      * Retrieves the repository.
      * @return such information.
      */
-    public String getRepository() 
+    public String getRepository()
     {
         return m__strRepository;
     }
@@ -452,7 +461,7 @@ public class QueryJTask
      * Retrieves the package.
      * @return such information.
      */
-    public String getPackage() 
+    public String getPackage()
     {
         return m__strPackage;
     }
@@ -478,7 +487,7 @@ public class QueryJTask
     /**
      * Creates the classpath structure.
      * @return such path.
-     */ 
+     */
     public Path createClasspath()
     {
         Path t_Classpath = getClasspath();
@@ -501,7 +510,7 @@ public class QueryJTask
     {
         Path t_Path = createClasspath();
 
-        if  (t_Path != null) 
+        if  (t_Path != null)
         {
             t_Path.setRefid(classpathReference);
         }
@@ -511,7 +520,7 @@ public class QueryJTask
      * Retrieves the classpath.
      * @return such information.
      */
-    public Path getClasspath() 
+    public Path getClasspath()
     {
         return m__Classpath;
     }
@@ -538,9 +547,37 @@ public class QueryJTask
      * Retrieves the outputdir.
      * @return such information.
      */
-    public File getOutputdir() 
+    public File getOutputdir()
     {
         return m__Outputdir;
+    }
+
+
+    /**
+     * Specifies the header.
+     * @param header the new header.
+     */
+    protected final void immutableSetHeaderfile(final File header)
+    {
+        m__Header = header;
+    }
+
+    /**
+     * Specifies the header.
+     * @param header the new header.
+     */
+    public void setHeaderfile(final File header)
+    {
+        immutableSetHeaderfile(header);
+    }
+
+    /**
+     * Retrieves the header.
+     * @return such information.
+     */
+    public File getHeaderfile()
+    {
+        return m__Header;
     }
 
     /**
@@ -552,7 +589,7 @@ public class QueryJTask
     {
         m__strOutputdirsubfolders = outputDirSubFolders;
     }
-    
+
     /**
      * Specifies whether to use subfolders.
      * @param outputDirSubFolders such setting.
@@ -961,7 +998,7 @@ public class QueryJTask
      * Retrieves the sql.xml file.
      * @return such information.
      */
-    public File getSqlXmlFile() 
+    public File getSqlXmlFile()
     {
         return m__SqlXmlFile;
     }
@@ -989,7 +1026,7 @@ public class QueryJTask
      * Retrieves the grammarbundle.
      * @return such information.
      */
-    public String getGrammarbundle() 
+    public String getGrammarbundle()
     {
         return m__strGrammarBundleName;
     }
@@ -1022,7 +1059,7 @@ public class QueryJTask
     {
         Chain result = chain;
 
-        if  (result != null) 
+        if  (result != null)
         {
             result.add(new ParameterValidationHandler());
 
@@ -1059,11 +1096,19 @@ public class QueryJTask
 
             result.add(new ValueObjectImplTemplateHandlerBundle());
 
+            result.add(new CustomValueObjectTemplateHandlerBundle());
+
+            result.add(new CustomBaseValueObjectTemplateHandlerBundle());
+
+            result.add(new CustomValueObjectImplTemplateHandlerBundle());
+
+            result.add(new CustomValueObjectFactoryTemplateHandlerBundle());
+
             result.add(new TestSuiteTemplateHandlerBundle());
 
             result.add(new JdbcConnectionClosingHandler());
         }
-        
+
         return result;
     }
 
@@ -1088,7 +1133,7 @@ public class QueryJTask
     {
         AntCommand result = command;
 
-        if  (result != null) 
+        if  (result != null)
         {
             Map t_mAttributes = result.getAttributeMap();
 
@@ -1102,6 +1147,7 @@ public class QueryJTask
             String t_strPackage    = getPackage();
             Path   t_Classpath     = getClasspath();
             File   t_Outputdir     = getOutputdir();
+            File   t_Header = getHeaderfile();
 
             boolean t_bOutputdirsubfolders = getOutputdirsubfoldersFlag();
             boolean t_bExtractTables = getExtractTablesFlag();
@@ -1116,7 +1162,7 @@ public class QueryJTask
             File t_SqlXmlFile = getSqlXmlFile();
 
             String t_strGrammarBundle = getGrammarbundle();
-            
+
             AntTablesElement t_Tables = getTables();
 
             AntExternallyManagedFieldsElement t_ExternallyManagedFields =
@@ -1124,7 +1170,7 @@ public class QueryJTask
 
             if  (t_mAttributes != null)
             {
-                if  (t_strDriver != null) 
+                if  (t_strDriver != null)
                 {
                     t_mAttributes.put(
                         ParameterValidationHandler.JDBC_DRIVER,
@@ -1192,6 +1238,13 @@ public class QueryJTask
                     t_mAttributes.put(
                         ParameterValidationHandler.OUTPUT_DIR,
                         t_Outputdir);
+                }
+
+                if  (t_Header != null)
+                {
+                    t_mAttributes.put(
+                        ParameterValidationHandler.HEADER_FILE,
+                        t_Header);
                 }
 
                 t_mAttributes.put(
@@ -1267,7 +1320,7 @@ public class QueryJTask
                 }
             }
         }
-        
+
         return result;
     }
 

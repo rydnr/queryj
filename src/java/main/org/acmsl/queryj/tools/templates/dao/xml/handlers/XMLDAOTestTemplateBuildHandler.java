@@ -146,6 +146,7 @@ public class XMLDAOTestTemplateBuildHandler
                 retrieveValueObjectPackage(projectPackage),
                 retrieveXMLDAOPackage(projectPackage),
                 retrieveTableTemplates(parameters),
+                retrieveHeader(parameters),
                 XMLDAOTestTemplateGenerator.getInstance());
     }
 
@@ -158,6 +159,7 @@ public class XMLDAOTestTemplateBuildHandler
      * @param voPackageName the value-object package name.
      * @param xmlDAOPackageName the package name of the XML DAOs.
      * @param tableTemplates the table templates.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -178,6 +180,7 @@ public class XMLDAOTestTemplateBuildHandler
         final String voPackageName,
         final String xmlDAOPackageName,
         final TableTemplate[] tableTemplates,
+        final String header,
         final XMLDAOTestTemplateFactory templateFactory)
       throws  BuildException
     {
@@ -201,7 +204,8 @@ public class XMLDAOTestTemplateBuildHandler
                         metadataManager,
                         packageName,
                         xmlDAOPackageName,
-                        voPackageName);
+                        voPackageName,
+                        header);
 
                 storeTestTemplate(
                     t_aXMLDAOTestTemplates[t_iXMLDAOTestIndex],

@@ -55,11 +55,13 @@ public abstract class AbstractTestTemplate
 {
     /**
      * Builds an empty <code>AbstractTestTemplate</code>.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      */
     protected AbstractTestTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory)
     {
-        super(decoratorFactory);
+        super(header, decoratorFactory);
     }
 }

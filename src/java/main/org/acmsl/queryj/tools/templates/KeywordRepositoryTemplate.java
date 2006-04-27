@@ -72,18 +72,21 @@ public class KeywordRepositoryTemplate
 {
     /**
      * Builds a KeywordRepositoryTemplate using given information.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param repository the repository.
      */
     public KeywordRepositoryTemplate(
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String repository)
     {
         super(
-            decoratorFactory,
+//            (header != null) ? header : DEFAULT_HEADER,
             DEFAULT_HEADER,
+            decoratorFactory,
             PACKAGE_DECLARATION,
             packageName,
             repository,
@@ -101,13 +104,14 @@ public class KeywordRepositoryTemplate
 
     /**
      * Retrieves the source code of the generated procedure repository.
+     * @param header the header.
      * @return such source code.
      */
-    protected String generateOutput()
+    protected String generateOutput(final String header)
     {
         return
             generateOutput(
-                getHeader(),
+                header,
                 getPackageDeclaration(),
                 getPackageName(),
                 getRepository(),

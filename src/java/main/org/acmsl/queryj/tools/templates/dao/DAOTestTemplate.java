@@ -79,6 +79,7 @@ public class DAOTestTemplate
      * Builds a <code>DAOTestTemplate</code> using given information.
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -94,6 +95,7 @@ public class DAOTestTemplate
     public DAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -109,8 +111,9 @@ public class DAOTestTemplate
         super(
             tableTemplate,
             metadataManager,
-            decoratorFactory,
+//            (header != null) ? header : DEFAULT_HEADER,
             DEFAULT_HEADER,
+            decoratorFactory,
             DEFAULT_PACKAGE_DECLARATION,
             packageName,
             engineName,
@@ -152,27 +155,30 @@ public class DAOTestTemplate
     /**
      * Produces a text version of the template, weaving the
      * dynamic parts with the static skeleton.
+     * @param header the header.
      * @return such source code.
      */
-    protected String generateOutput()
+    protected String generateOutput(final String header)
     {
-        return generateOutput(getMetadataManager());
+        return generateOutput(header, getMetadataManager());
     }
         
     /**
      * Produces a text version of the template, weaving the
      * dynamic parts with the static skeleton.
+     * @param header the header.
      * @param metadataManager the metadata manager.
      * @return such source code.
      * @precondition metadataManager != null
      */
-    protected String generateOutput(final MetadataManager metadataManager)
+    protected String generateOutput(
+        final String header, final MetadataManager metadataManager)
     {
         return
             generateOutput(
                 getTableTemplate(),
                 metadataManager,
-                getHeader(),
+                header,
                 getPackageDeclaration(),
                 getPackageName(),
                 getEngineName(),

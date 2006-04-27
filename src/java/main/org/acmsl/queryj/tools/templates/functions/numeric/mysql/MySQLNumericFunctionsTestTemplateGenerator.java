@@ -124,7 +124,7 @@ public class MySQLNumericFunctionsTestTemplateGenerator
         if  (result == null) 
         {
             result =
-                new MySQLNumericFunctionsTestTemplateGenerator() {};
+                new MySQLNumericFunctionsTestTemplateGenerator();
 
             setReference(result);
         }
@@ -139,15 +139,17 @@ public class MySQLNumericFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the template factory is invalid.
      */
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
-        final String  packageName,
-        final String  testedPackageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String header)
       throws  QueryJException
     {
         NumericFunctionsTestTemplate result = null;
@@ -159,6 +161,7 @@ public class MySQLNumericFunctionsTestTemplateGenerator
         {
             result =
                 new MySQLNumericFunctionsTestTemplate(
+                    header,
                     getDecoratorFactory(),
                     packageName,
                     testedPackageName,

@@ -108,6 +108,7 @@ public abstract class AbstractBasePerTableTemplate
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -120,6 +121,7 @@ public abstract class AbstractBasePerTableTemplate
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -128,7 +130,7 @@ public abstract class AbstractBasePerTableTemplate
         final String basePackageName,
         final String repositoryName)
     {
-        super(decoratorFactory);
+        super(header, decoratorFactory);
 
         immutableSetTableName(
             tableName);

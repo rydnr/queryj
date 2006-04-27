@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.valueobject;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
@@ -57,12 +58,14 @@ public interface BaseValueObjectTemplateFactory
      * @param packageName the package name.
      * @param tableTemplate the table template.
      * @param metadataManager the metadata manager.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      */
     public BaseValueObjectTemplate createBaseValueObjectTemplate(
         final String packageName,
         final TableTemplate tableTemplate,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final String header)
       throws  QueryJException;
 }

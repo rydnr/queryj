@@ -134,89 +134,6 @@ public class NumericFunctionsTemplateGenerator
     }
 
     /**
-     * Adds a new template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateFactoryClass the template factory.
-     * @precondition engineName != null
-     * @precondition templateFactoryClass != null
-     */
-    public void addTemplateFactoryClass(
-        final String engineName,
-        final String engineVersion,
-        final String templateFactoryClass)
-    {
-        addTemplateFactoryClass(
-            engineName,
-            engineVersion,
-            templateFactoryClass,
-            TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Adds a new template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateFactoryClass the template factory.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @precondition engineName != null
-     * @precondition templateFactoryClass != null
-     * @precondition templateMappingManager != null
-     */
-    protected void addTemplateFactoryClass(
-        final String engineName,
-        final String engineVersion,
-        final String templateFactoryClass,
-        final TemplateMappingManager templateMappingManager)
-    {
-        templateMappingManager.addTemplateFactoryClass(
-            TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
-            engineName,
-            engineVersion,
-            templateFactoryClass);
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     */
-    protected String getTemplateFactoryClass(
-        final String engineName, final String engineVersion)
-    {
-        return
-            getTemplateFactoryClass(
-                engineName,
-                engineVersion,
-                TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
-     * instance.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     * @precondition templateMappingManager != null
-     */
-    protected String getTemplateFactoryClass(
-        final String engineName,
-        final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
-    {
-        return
-            templateMappingManager.getTemplateFactoryClass(
-                TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
-                engineName,
-                engineVersion);
-    }
-
-    /**
      * Retrieves the template factory instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -281,6 +198,7 @@ public class NumericFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
@@ -291,7 +209,8 @@ public class NumericFunctionsTemplateGenerator
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote)
+        final String quote,
+        final String header)
       throws  QueryJException
     {
         NumericFunctionsTemplate result = null;
@@ -307,7 +226,8 @@ public class NumericFunctionsTemplateGenerator
                     packageName,
                     engineName,
                     engineVersion,
-                    quote);
+                    quote,
+                    header);
         }
         else 
         {

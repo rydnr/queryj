@@ -105,11 +105,13 @@ public class BaseDAOTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param header the header.
      */
     public BaseDAOTemplate(
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
+        final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String engineName,
@@ -122,6 +124,7 @@ public class BaseDAOTemplate
             tableName,
             metadataManager,
             customSqlProvider,
+            header,
             decoratorFactory,
             packageName,
             engineName,

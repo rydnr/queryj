@@ -173,6 +173,7 @@ public class ResultSetExtractorTemplateBuildHandler
                 retrieveCustomSqlProvider(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
+                retrieveHeader(parameters),
                 ResultSetExtractorTemplateGenerator.getInstance(),
                 filterTableTemplates(
                     retrieveTableTemplates(parameters),
@@ -189,6 +190,7 @@ public class ResultSetExtractorTemplateBuildHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param basePackageName the base package name.
      * @param repository the repository.
+     * @param header the header.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
@@ -212,6 +214,7 @@ public class ResultSetExtractorTemplateBuildHandler
         final CustomSqlProvider customSqlProvider,
         final String basePackageName,
         final String repositoryName,
+        final String header,
         final ResultSetExtractorTemplateFactory templateFactory,
         final TableTemplate[] tableTemplates)
       throws  BuildException
@@ -242,7 +245,8 @@ public class ResultSetExtractorTemplateBuildHandler
                         engineVersion,
                         quote,
                         basePackageName,
-                        repositoryName);
+                        repositoryName,
+                        header);
             }
 
             storeTemplates(t_aTemplates, parameters);

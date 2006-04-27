@@ -118,7 +118,8 @@ public class JdbcDAOTemplateBuildHandler
         {
             storeJdbcDAOTemplate(
                 jdbcDAOTemplateFactory.createJdbcDAOTemplate(
-                    retrievePackage(parameters)),
+                    retrievePackage(parameters),
+                    retrieveHeader(parameters)),
                 parameters);
         }
         catch  (final QueryJException queryjException)
