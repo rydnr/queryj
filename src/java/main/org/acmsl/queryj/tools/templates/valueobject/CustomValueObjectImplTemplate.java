@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create CustomBaseValueObject implementation
+ * Description: Is able to create CustomValueObjectImpl implementation
  *              for each custom query requiring so.
  *
  * $Id: $
@@ -62,12 +62,12 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import java.util.Map;
 
 /**
- * Is able to create CustomBaseValueObject implementations for each
+ * Is able to create CustomValueObjectImpl implementations for each
  * custom query requiring so.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class CustomBaseValueObjectTemplate
+public class CustomValueObjectImplTemplate
     extends  CustomValueObjectTemplate
 {
     /**
@@ -88,7 +88,7 @@ public class CustomBaseValueObjectTemplate
      * @precondition metadataNanager != null
      * @precondition decoratorFactory != null
      */
-    public CustomBaseValueObjectTemplate(
+    public CustomValueObjectImplTemplate(
         final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
@@ -121,7 +121,7 @@ public class CustomBaseValueObjectTemplate
     {
         return
             retrieveGroup(
-                "/org/acmsl/queryj/vo/CustomBaseValueObject.stg");
+                "/org/acmsl/queryj/vo/CustomValueObjectImpl.stg");
     }
 
     /**
@@ -130,6 +130,6 @@ public class CustomBaseValueObjectTemplate
      */
     public String getTemplateName()
     {
-        return "CustomBaseValueObject";
+        return "CustomValueObjectImpl";
     }
 }

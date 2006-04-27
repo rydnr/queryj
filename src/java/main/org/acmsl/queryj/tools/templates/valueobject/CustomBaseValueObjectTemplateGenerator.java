@@ -72,7 +72,7 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class CustomBaseValueObjectTemplateGenerator
-    extends     CustomValueObjectTemplateGenerator
+    extends  CustomValueObjectTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -223,7 +223,7 @@ public class CustomBaseValueObjectTemplateGenerator
             + File.separator
             + "Abstract"
             + extractClassName(template.getResult().getClassValue())
-            + ".java",
+            + "ValueObject.java",
             template.generate());
     }
 }

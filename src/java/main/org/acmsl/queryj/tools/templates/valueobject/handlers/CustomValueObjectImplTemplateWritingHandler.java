@@ -47,8 +47,8 @@ import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
-import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplateGenerator;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -71,13 +71,13 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class CustomBaseValueObjectTemplateWritingHandler
+public class CustomValueObjectImplTemplateWritingHandler
     extends  CustomValueObjectTemplateWritingHandler
 {
     /**
-     * Creates a CustomBaseValueObjectTemplateWritingHandler.
+     * Creates a CustomValueObjectImplTemplateWritingHandler.
      */
-    public CustomBaseValueObjectTemplateWritingHandler() {};
+    public CustomValueObjectImplTemplateWritingHandler() {};
 
     /**
      * Retrieves the template generator.
@@ -85,7 +85,7 @@ public class CustomBaseValueObjectTemplateWritingHandler
      */
     protected BasePerCustomResultTemplateGenerator retrieveTemplateGenerator()
     {
-        return CustomBaseValueObjectTemplateGenerator.getInstance();
+        return CustomValueObjectImplTemplateGenerator.getInstance();
     }
 
     /**
@@ -101,6 +101,6 @@ public class CustomBaseValueObjectTemplateWritingHandler
         return
             (BasePerCustomResultTemplate[])
                 parameters.get(
-                    TemplateMappingManager.CUSTOM_BASE_VALUE_OBJECT_TEMPLATES);
+                    TemplateMappingManager.CUSTOM_VALUE_OBJECT_IMPL_TEMPLATES);
     }
 }

@@ -142,7 +142,7 @@ project_imports(result, basePackageName, trSubpackageName, trName) ::= <<
  * Importing project classes.
  */
 import <result.classValue>;
-import <result.classValue>Factory;
+import <result.classValue>ValueObjectFactory;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
 
@@ -188,7 +188,8 @@ public class <result.idCapitalized>Extractor
     {
         return
             extractData(
-                resultSet, <result.classValue>Factory.getInstance());
+                resultSet,
+                <result.classValue>ValueObjectFactory.getInstance());
     }
 
     /**
@@ -210,7 +211,7 @@ public class <result.idCapitalized>Extractor
      */
     protected Object extractData(
         final ResultSet resultSet,
-        final <result.classValue>Factory factory)
+        final <result.classValue>ValueObjectFactory factory)
       throws  SQLException,
               DataAccessException
     {

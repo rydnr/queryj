@@ -32,11 +32,11 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Property decorator specific for CustomResultSetExtractor
- *              template.
+ * Description: Property decorator specific for CustomValueObject
+ *              template families.
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.valueobject;
 
 /*
  * Importing project-specific classes.
@@ -52,14 +52,9 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class CustomResultSetExtractorPropertyDecorator
+public class CustomValueObjectPropertyDecorator
     extends  CachingPropertyDecorator
 {
-    /**
-     * The cached Java type, capitalized.
-     */
-    private String m__strCachedJavaTypeCapitalized;
-
     /**
      * Creates a <code>CustomResultSetExtractorPropertyDecorator</code> to
      * decorate given property.
@@ -67,54 +62,10 @@ public class CustomResultSetExtractorPropertyDecorator
      * @precondition property != null
      * @precondition metadataManager != null
      */
-    public CustomResultSetExtractorPropertyDecorator(
+    public CustomValueObjectPropertyDecorator(
         final Property property, final MetadataManager metadataManager)
     {
         super(property, metadataManager);
-    }
-
-    /**
-     * Specifies the cached Java type, capitalized.
-     * @param type such type.
-     */
-    protected final void immutableSetCachedJavaTypeCapitalized(final String type)
-    {
-        m__strCachedJavaTypeCapitalized = type;
-    }
-
-    /**
-     * Specifies the cached Java type, capitalized.
-     * @param type such type.
-     */
-    protected void setCachedJavaTypeCapitalized(final String type)
-    {
-        immutableSetCachedJavaTypeCapitalized(type);
-    }
-
-    /**
-     * Retrieves the cached Java type, capitalized.
-     * @return such type.
-     */
-    public String getCachedJavaTypeCapitalized()
-    {
-        return m__strCachedJavaTypeCapitalized;
-    }
-
-    /**
-     * Retrieves the Java type of the property.
-     * @return such information.
-     */
-    public String getJavaTypeCapitalized()
-    {
-        String result = getCachedJavaType();
-
-        if  (result == null)
-        {
-            result = uppercase(getJavaType());
-            setCachedJavaType(result);
-        }
-
-        return result;
     }
 
     /**

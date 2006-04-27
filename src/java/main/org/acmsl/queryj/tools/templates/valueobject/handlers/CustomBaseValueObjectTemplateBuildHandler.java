@@ -104,7 +104,7 @@ public class CustomBaseValueObjectTemplateBuildHandler
         final BasePerCustomResultTemplate[] templates, final Map parameters)
     {
         parameters.put(
-            TemplateMappingManager.CUSTOM_BASEVALUEOBJECT_TEMPLATES,
+            TemplateMappingManager.CUSTOM_BASE_VALUE_OBJECT_TEMPLATES,
             templates);
     }
 }

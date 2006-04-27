@@ -339,17 +339,17 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
-     * Normalized given value.
+     * Normalizes and uncapitalizes given value.
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
      * @precondition value != null
      * @precondition decorationUtils != null
      */
-    protected String normalize(
+    protected String normalizeUncapitalize(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.normalize(value);
+        return decorationUtils.uncapitalize(decorationUtils.normalize(value));
     }
 
     /**
@@ -440,9 +440,11 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the capitalized name.
      * @return such name.
      */
-    public String getColumnNameNormalized()
+    public String getColumnNameNormalizedUncapitalized()
     {
-        return normalize(getColumnName(), DecorationUtils.getInstance());
+        return
+            normalizeUncapitalize(
+                getColumnName(), DecorationUtils.getInstance());
     }
 
     /**

@@ -101,7 +101,7 @@ public class CustomValueObjectTemplateWritingHandler
         return
             (BasePerCustomResultTemplate[])
                 parameters.get(
-                    TemplateMappingManager.CUSTOM_VALUEOBJECT_TEMPLATES);
+                    TemplateMappingManager.CUSTOM_VALUE_OBJECT_TEMPLATES);
     }
 
     /**

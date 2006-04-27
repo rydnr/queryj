@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a ValueObject template.
+ * Description: Builds a custom ValueObjectImpl template.
  *
  */
 package org.acmsl.queryj.tools.templates.valueobject.handlers;
@@ -47,8 +47,8 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -72,17 +72,17 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Builds custom ValueObject templates.
+ * Builds custom ValueObjectImpl templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class CustomValueObjectTemplateBuildHandler
-    extends  BasePerCustomResultTemplateBuildHandler
+public class CustomValueObjectImplTemplateBuildHandler
+    extends  CustomValueObjectTemplateBuildHandler
 {
     /**
-     * Creates a CustomValueObjectTemplateBuildHandler.
+     * Creates a CustomValueObjectImplTemplateBuildHandler.
      */
-    public CustomValueObjectTemplateBuildHandler() {};
+    public CustomValueObjectImplTemplateBuildHandler() {};
 
     /**
      * Retrieves the template factory.
@@ -90,32 +90,7 @@ public class CustomValueObjectTemplateBuildHandler
      */
     protected BasePerCustomResultTemplateFactory retrieveTemplateFactory()
     {
-        return CustomValueObjectTemplateGenerator.getInstance();
-    }
-
-    /**
-     * Retrieves the package name.
-     * @param customResult the custom result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the database metadata manager.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     */
-    protected String retrievePackage(
-        final Result customResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String engineName,
-        final String projectPackage,
-        final PackageUtils packageUtils)
-      throws BuildException
-    {
-        return
-            packageUtils.retrieveValueObjectPackage(
-                projectPackage);
+        return CustomValueObjectImplTemplateGenerator.getInstance();
     }
 
     /**
@@ -129,26 +104,7 @@ public class CustomValueObjectTemplateBuildHandler
         final BasePerCustomResultTemplate[] templates, final Map parameters)
     {
         parameters.put(
-            TemplateMappingManager.CUSTOM_VALUE_OBJECT_TEMPLATES,
+            TemplateMappingManager.CUSTOM_VALUE_OBJECT_IMPL_TEMPLATES,
             templates);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
-     */
-    protected String retrievePackage(
-        final String projectPackage,
-        final PackageUtils packageUtils)
-      throws  BuildException
-    {
-        return
-            packageUtils.retrieveValueObjectPackage(
-                projectPackage);
     }
 }

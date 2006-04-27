@@ -74,14 +74,14 @@ public class CachingPropertyDecorator
     private Boolean m__bCachedNumberSmallerThanInt;
 
     /**
-     * The cached capitalized name.
+     * The cached normalized/capitalized name.
      */
     private String m__strCachedColumnNameNormalizedCapitalized;
 
     /**
-     * The cached capitalized name.
+     * The cached normalized/uncapitalized name.
      */
-    private String m__strCachedColumnNameNormalized;
+    private String m__strCachedColumnNameNormalizedUncapitalized;
 
     /**
      * Creates a <code>CachingPropertyDecorator</code> to decorate given property.
@@ -331,46 +331,46 @@ public class CachingPropertyDecorator
     }
 
     /**
-     * Specifies the cached name.
-     * @param name such name.
+     * Specifies the cached column name normalized uncapitalized.
+     * @param name such information.
      */
-    protected final void immutableSetCachedColumnNameNormalized(
+    protected final void immutableSetCachedColumnNameNormalizedUncapitalized(
         final String name)
     {
-        m__strCachedColumnNameNormalized = name;
+        m__strCachedColumnNameNormalizedUncapitalized = name;
     }
 
     /**
-     * Specifies the cached name.
-     * @param name such name.
+     * Specifies the cached column name normalized uncapitalized.
+     * @param name such information.
      */
-    protected void setCachedColumnNameNormalized(
+    protected void setCachedColumnNameNormalizedUncapitalized(
         final String name)
     {
-        immutableSetCachedColumnNameNormalized(name);
+        immutableSetCachedColumnNameNormalizedUncapitalized(name);
     }
 
     /**
-     * Retrieves the cached name.
-     * @return such name.
+     * Retrieves the cached column name normalized uncapitalized.
+     * @return such information.
      */
-    public String getCachedColumnNameNormalized()
+    public String getCachedColumnNameNormalizedUncapitalized()
     {
-        return m__strCachedColumnNameNormalized;
+        return m__strCachedColumnNameNormalizedUncapitalized;
     }
 
     /**
-     * Retrieves the name.
-     * @return such name.
+     * Retrieves the column name normalized uncapitalized.
+     * @return such information.
      */
-    public String getColumnNameNormalized()
+    public String getColumnNameNormalizedUncapitalized()
     {
-        String result = getCachedColumnNameNormalized();
+        String result = getCachedColumnNameNormalizedUncapitalized();
 
         if  (result == null)
         {
-            result = super.getColumnNameNormalized();
-            setCachedColumnNameNormalized(result);
+            result = super.getColumnNameNormalizedUncapitalized();
+            setCachedColumnNameNormalizedUncapitalized(result);
         }
 
         return result;

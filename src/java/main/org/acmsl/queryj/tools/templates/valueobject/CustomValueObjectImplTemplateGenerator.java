@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate custom ValueObject templates.
+ * Description: Is able to generate custom ValueObjectImpl templates.
  *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
@@ -67,13 +67,12 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Is able to generate custom ValueObject templates.
+ * Is able to generate custom ValueObjectImpl templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class CustomValueObjectTemplateGenerator
-    implements  BasePerCustomResultTemplateFactory,
-                BasePerCustomResultTemplateGenerator
+public class CustomValueObjectImplTemplateGenerator
+    extends     CustomValueObjectTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -83,7 +82,7 @@ public class CustomValueObjectTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected CustomValueObjectTemplateGenerator() {};
+    protected CustomValueObjectImplTemplateGenerator() {};
 
     /**
      * Specifies a new weak reference.
@@ -110,19 +109,19 @@ public class CustomValueObjectTemplateGenerator
      */
     public static CustomValueObjectTemplateGenerator getInstance()
     {
-        CustomValueObjectTemplateGenerator result = null;
+        CustomValueObjectImplTemplateGenerator result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null)
         {
             result =
-                (CustomValueObjectTemplateGenerator) reference.get();
+                (CustomValueObjectImplTemplateGenerator) reference.get();
         }
 
         if  (result == null)
         {
-            result = new CustomValueObjectTemplateGenerator();
+            result = new CustomValueObjectImplTemplateGenerator();
 
             setReference(result);
         }
@@ -169,7 +168,7 @@ public class CustomValueObjectTemplateGenerator
                  metadataManager))
         {
             result =
-                new CustomValueObjectTemplate(
+                new CustomValueObjectImplTemplate(
                     customResult,
                     customSqlProvider,
                     metadataManager,
@@ -191,25 +190,7 @@ public class CustomValueObjectTemplateGenerator
      */
     public DecoratorFactory getDecoratorFactory()
     {
-        return CustomValueObjectDecoratorFactory.getInstance();
-    }
-
-    /**
-     * Writes a custom resultset extractor template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @throws IOException if the file cannot be created.
-     */
-    public void write(
-        final BasePerCustomResultTemplate template, final File outputDir)
-      throws  IOException
-    {
-        write(
-            template,
-            outputDir,
-            StringUtils.getInstance(),
-            EnglishGrammarUtils.getInstance(),
-            FileUtils.getInstance());
+        return CachingDecoratorFactory.getInstance();
     }
 
     /**
@@ -240,105 +221,8 @@ public class CustomValueObjectTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-              + extractClassName(template.getResult().getClassValue())
-            + ".java",
+            + extractClassName(template.getResult().getClassValue())
+            + "ValueObject.java",
             template.generate());
-    }
-
-    /**
-     * Checks whether the given class name corresponds to
-     * a standard value object or not.
-     * @param className the class name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return <code>true</code> in such case.
-     * @precondition className != null
-     * @precondition metadataManager != null
-     */
-    protected boolean isStandard(
-        final String className, final MetadataManager metadataManager)
-    {
-        return
-            isStandard(
-                className,
-                metadataManager,
-                ValueObjectTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Checks whether the given class name corresponds to
-     * a standard value object or not.
-     * @param className the class name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param valueObjectTemplateGenerator the
-     * <code>ValueObjectTemplateGenerator</code> instance.
-     * @return <code>true</code> in such case.
-     * @precondition className != null
-     * @precondition metadataManager != null
-     * @precondition valueObjectTemplateGenerator != null
-     */
-    protected boolean isStandard(
-        final String className,
-        final MetadataManager metadataManager,
-        final ValueObjectTemplateGenerator valueObjectTemplateGenerator)
-    {
-        boolean result = false;
-
-        String[] t_astrTableNames = metadataManager.getTableNames();
-
-        int t_iCount =
-            (t_astrTableNames != null) ? t_astrTableNames.length : 0;
-
-        String t_strTableName;
-        String t_strVoClassName;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
-        {
-            t_strTableName = t_astrTableNames[t_iIndex];
-
-            if  (t_strTableName != null)
-            {
-                t_strVoClassName =
-                    valueObjectTemplateGenerator.getVoClassName(
-                        t_strTableName);
-
-                if  (   (t_strVoClassName != null)
-                     && (   (t_strVoClassName.equals(className)))
-                         || ((t_strVoClassName + "ValueObject").equals(
-                                 className))
-                         || ((className + "ValueObject").equals(
-                                 t_strVoClassName)))
-                {
-                    result = true;
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Extracts the class name of given fully-qualified class.
-     * @param fqcn such information.
-     * @return the class name.
-     * @precondition fqcn != null
-     */
-    public String extractClassName(final String fqdn)
-    {
-        return extractClassName(fqdn, PackageUtils.getInstance());
-    }
-
-    /**
-     * Extracts the class name of given fully-qualified class.
-     * @param fqcn such information.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the class name.
-     * @precondition fqcn != null
-     * @precondition packageUtils != null
-     */
-    protected String extractClassName(
-        final String fqdn, final PackageUtils packageUtils)
-    {
-        return packageUtils.extractClassName(fqdn);
     }
 }
