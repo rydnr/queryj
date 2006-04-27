@@ -243,7 +243,6 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackage
   baseDAOSubpackageName=baseDAOSubpackageName,
   rdbSubpackageName=rdbSubpackageName,
   subpackageName=subpackageName,
-  tableNameLowercased=tableNameLowercased,
   crseIdCapitalized=it.idCapitalized); separator="\n">
 import <basePackageName>.<voSubpackageName>.<voName>;
 import <basePackageName>.<voFactorySubpackageName>.<voName>ValueObjectFactory;
@@ -266,7 +265,6 @@ resultset_extractor_import(
   baseDAOSubpackageName,
   rdbSubpackageName,
   subpackageName,
-  tableNameLowercased,
   crseIdCapitalized) ::= <<
 <!
   Generates the import statement of a custom resultset extractor.
@@ -274,10 +272,9 @@ resultset_extractor_import(
   @param baseDAOSubpackageName the base DAO subpackage.
   @param rdbSubpackageName the rdb subpackage.
   @param subpackageName the subpackage.
-  @param tableNameLowercased the table name, in lower case.
   @param crseIdCapitalized the custom resultset extractor identifier, capitalized.
 !>
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<crseIdCapitalized>Extractor;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<crseIdCapitalized>Extractor;
 >>
 
 foreignkey_statementsetter_import(

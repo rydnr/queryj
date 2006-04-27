@@ -69,8 +69,7 @@ source(input) ::= <<
     input.base_package_name,
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
-    input.subpackage_name,
-    input.tableNormalizedLowercased
+    input.subpackage_name
   ])>
 
 <project_imports(

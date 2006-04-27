@@ -1553,6 +1553,42 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the package name for the ResultSetExtractor classes.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @return the package for the associated classes.
+     * @precondition packageName != null
+     * @precondition engineName != null
+     */
+    public String retrieveCustomResultSetExtractorPackage(
+        final String packageName, final String engineName)
+    {
+        return retrieveDAOPackage(packageName, engineName);
+    }
+
+    /**
+     * Retrieves the folder for the ResultSetExtractor classes.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder for the associated pointers.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     */
+    public File retrieveCustomResultSetExtractorFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final boolean useSubfolders)
+    {
+        return
+            retrieveDAOFolder(
+                parentFolder, packageName, engineName, useSubfolders);
+    }
+
+    /**
      * Retrieves the package name for the AttributesStatementSetter classes.
      * @param packageName the original package.
      * @param engineName the engine.

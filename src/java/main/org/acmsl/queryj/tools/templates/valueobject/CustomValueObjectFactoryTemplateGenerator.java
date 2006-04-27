@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate custom ValueObjectImpl templates.
+ * Description: Is able to generate custom ValueObjectFactory templates.
  *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
@@ -67,12 +67,12 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Is able to generate custom ValueObjectImpl templates.
+ * Is able to generate custom ValueObjectFactory templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class CustomValueObjectImplTemplateGenerator
-    extends  CustomValueObjectTemplateGenerator
+public class CustomValueObjectFactoryTemplateGenerator
+    extends     CustomValueObjectTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -82,7 +82,7 @@ public class CustomValueObjectImplTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected CustomValueObjectImplTemplateGenerator() {};
+    protected CustomValueObjectFactoryTemplateGenerator() {};
 
     /**
      * Specifies a new weak reference.
@@ -109,19 +109,19 @@ public class CustomValueObjectImplTemplateGenerator
      */
     public static CustomValueObjectTemplateGenerator getInstance()
     {
-        CustomValueObjectImplTemplateGenerator result = null;
+        CustomValueObjectFactoryTemplateGenerator result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null)
         {
             result =
-                (CustomValueObjectImplTemplateGenerator) reference.get();
+                (CustomValueObjectFactoryTemplateGenerator) reference.get();
         }
 
         if  (result == null)
         {
-            result = new CustomValueObjectImplTemplateGenerator();
+            result = new CustomValueObjectFactoryTemplateGenerator();
 
             setReference(result);
         }
@@ -168,7 +168,7 @@ public class CustomValueObjectImplTemplateGenerator
                  metadataManager))
         {
             result =
-                new CustomValueObjectImplTemplate(
+                new CustomValueObjectFactoryTemplate(
                     customResult,
                     customSqlProvider,
                     metadataManager,
@@ -213,7 +213,7 @@ public class CustomValueObjectImplTemplateGenerator
               outputDir.getAbsolutePath()
             + File.separator
             + extractClassName(template.getResult().getClassValue())
-            + "ValueObject.java",
+            + "ValueObjectFactory.java",
             template.generate());
     }
 }

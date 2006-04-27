@@ -185,15 +185,6 @@ public class CustomBaseValueObjectTemplateGenerator
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
-    }
-
-    /**
      * Writes a ValueObjectCreator template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.

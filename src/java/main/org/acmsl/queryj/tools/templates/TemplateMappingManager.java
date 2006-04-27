@@ -258,7 +258,8 @@ public class TemplateMappingManager
     /**
      * The JDBC DAO template factory type.
      */
-    public static final String JDBC_DAO_TEMPLATE_FACTORY = "jdbc.dao.template.factory";
+    public static final String JDBC_DAO_TEMPLATE_FACTORY =
+        "jdbc.dao.template.factory";
 
     /**
      * The QueryPreparedStatementCreator template type.
@@ -313,6 +314,12 @@ public class TemplateMappingManager
      */
     public static final String CUSTOM_VALUE_OBJECT_IMPL_TEMPLATES =
         "custom.value.object.impl.templates";
+
+    /**
+     * The CustomValueObjectFactory template type.
+     */
+    public static final String CUSTOM_VALUE_OBJECT_FACTORY_TEMPLATES =
+        "custom.value.object.factory.templates";
 
     /**
      * The Mock DAO template prefix.
