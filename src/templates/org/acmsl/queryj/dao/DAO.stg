@@ -484,7 +484,6 @@ public class <input.engine_name><input.vo_name>DAO
     {
         <input.vo_name> result = null;
 
-        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
@@ -631,7 +630,6 @@ public class <input.engine_name><input.vo_name>DAO
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
@@ -756,7 +754,6 @@ public class <input.engine_name><input.vo_name>DAO
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
-        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
@@ -1766,7 +1763,6 @@ fk_delete_method(foreignKey,input) ::= <<
         final Query query,
         final PlatformTransactionManager transactionManager)
     {
-        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
@@ -1888,7 +1884,6 @@ custom_select(cs, input) ::= <<
     {
         <cs.resultClass> result = null;
 
-        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
@@ -2021,7 +2016,6 @@ public void <cs.nameUncapitalized>(
              object=it.object); separator=",\n">
         };
 
-        /*
     // Enabling transactions temporarily.
     synchronized (DataSourceTransactionManager.class)
     {
