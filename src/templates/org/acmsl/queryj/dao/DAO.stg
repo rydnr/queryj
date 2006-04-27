@@ -2155,7 +2155,6 @@ jdbcInsert(input) ::= <<
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
-        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
@@ -2409,7 +2408,6 @@ oracle8Insert(input) ::= <<
     {
         <input.vo_name> result = null;
 
-        /*
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
         {
