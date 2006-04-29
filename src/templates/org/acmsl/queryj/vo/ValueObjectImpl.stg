@@ -112,7 +112,7 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public class <input.vo_name>ValueObject
-    extends  Abstract<input.vo_name>
+    extends  Abstract<input.vo_name>ValueObject
 {
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
