@@ -33,7 +33,7 @@
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate custom value object
+// Description: Defines the rules to generate value object
 //              implementations.
 //
 // Version: $Revision: 563 $ ($Author: chous $ at $Date: 2006-04-26 23:06:32 +0200 (Wed, 26 Apr 2006) $)
@@ -44,7 +44,7 @@ group CustomValueObject;
 
 source(input) ::= <<
 <!
-  Generates a custom value object.
+  Generates a value object.
   @param input.copyright_years the copyright's years.
   @param input.table_name the table name.
   @param input.package the package.
@@ -61,7 +61,7 @@ source(input) ::= <<
   years=input.copyright_years,
   description=
   [
-    first_line_description(result=input.result)
+    first_line_description(tableName=input.table_name)
   ],
   timestamp=input.timestamp)>
 <endif>
@@ -82,26 +82,25 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-<class(input=input, result=input.result)>
+<class(input=input)>
 >>
 
-first_line_description(result) ::= <<
+first_line_description(tableName) ::= <<
 <!
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-Custom value object for \<i\><result.id>\</i\>.
+Custom value object for \<i\><tableName>\</i\>.
 >>
 
-class(input, result) ::= <<
+class(input) ::= <<
 <!
  Generates the class body.
  @param input the input.
- @param result the custom result.
 !>
 /**
  * <[
-      first_line_description(result=input.result)
+      first_line_description(tableName=input.table_name)
     ]:{line |<line>}; separator="\n * ">
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
@@ -109,24 +108,24 @@ class(input, result) ::= <<
  */
 public interface <input.vo_name>
 {
-    <result.properties:property_getter(attribute=it);
+    <input.attributes:attribute_getter(attribute=it);
      separator="\n\n">
 }
 >>
 
-property_getter(attribute) ::= <<
+attribute_getter(attribute) ::= <<
 <!
  Writes the getter for given attribute.
  @param attribute the attribute.
 !>
 /**
- * Retrieves the \<i\><attribute.columnName>\</i\> value.
+ * Retrieves the \<i\><attribute.name>\</i\> value.
  * @return such information.
  */
 <if(attribute.allowsNull)>
-public <attribute.objectType> get<attribute.columnNameNormalizedCapitalized>();
+public <attribute.objectType> get<attribute.nameCapitalized>();
 <else>
-public <attribute.javaType> get<attribute.columnNameNormalizedCapitalized>();
+public <attribute.javaType> get<attribute.nameCapitalized>();
 <endif>
 
 >>
