@@ -87,7 +87,7 @@ first_line_description(tableName) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-Value object implementation for \<i\><tableName>\</i\>.
+Abstract value-object implementation for \<i\><tableName>\</i\>.
 >>
 
 class(input) ::= <<
@@ -103,22 +103,43 @@ class(input) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.vo_name>ValueObject
-    extends  Abstract<input.vo_name>ValueObject
+public abstract class Abstract<input.vo_name>ValueObject
+    implements  <input.vo_name>
 {
+    <input.attributes:attribute_declaration(attribute=it);
+     separator="\n\n">
+
     /**
-     * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
+     * Creates a \<code\>Abstract<input.vo_name>ValueObject\</code> instance.
      <input.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
-    public <input.vo_name>ValueObject(
+    public Abstract<input.vo_name>ValueObject(
         <input.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {
-        super(
-            <input.attributes:{<it.nameUncapitalized>};
-              separator=",\n">);
+        <input.attributes:immutable_setter_call(attribute=it);
+          separator="\n">
     }
+
+    <input.attributes:attribute_accessors(attribute=it);
+     separator="\n\n">
 }
+>>
+
+attribute_declaration(attribute) ::= <<
+<!
+ Writes the declaration for given attribute.
+ @param attribute the attribute.
+!>
+/**
+ * The \<i\><attribute.name>\</i\> value.
+ */
+<if(attribute.allowsNull)>
+private <attribute.objectType> m__<attribute.nameCapitalized>;
+<else>
+private <attribute.javaType> m__<attribute.nameCapitalized>;
+<endif>
+
 >>
 
 attribute_javadoc(attribute) ::= <<
@@ -140,4 +161,77 @@ final <attribute.objectType> <attribute.nameUncapitalized>
 final <attribute.javaType> <attribute.nameUncapitalized>
 <endif>
 
+>>
+
+immutable_setter_call(attribute) ::= <<
+<!
+ Writes the method call for the immutable setter of given attribute.
+ @param attribute the attribute.
+!>
+immutableSet<attribute.nameCapitalized>(<attribute.nameUncapitalized>);
+<endif>
+
+>>
+
+attribute_accessors(attribute) ::= <<
+<!
+ Writes the accessors for given attribute.
+ @param attribute the attribute.
+!>
+<attribute_setter(attribute=attribute)>
+<attribute_getter(attribute=attribute)>
+>>
+
+attribute_setter(attribute) ::= <<
+<!
+ Writes the setter for given attribute.
+ @param attribute the attribute.
+!>
+/**
+ * Specifies the \<i\><attribute.name>\</i\> value.
+ * @param value such information.
+ */
+<if(attribute.allowsNull)>
+protected final void immutableSet<attribute.nameCapitalized>(final <attribute.objectType> value)
+<else>
+protected final void immutableSet<attribute.nameCapitalized>(final <attribute.javaType> value)
+<endif>
+
+{
+    m__<attribute.nameCapitalized> = value;
+}
+
+/**
+ * Specifies the \<i\><attribute.name>\</i\> value.
+ * @param value such information.
+ */
+<if(attribute.allowsNull)>
+protected void set<attribute.nameCapitalized>(final <attribute.objectType> value)
+<else>
+protected void set<attribute.nameCapitalized>(final <attribute.javaType> value)
+<endif>
+
+{
+    immutableSet<attribute.nameCapitalized>(value);
+}
+>>
+
+attribute_getter(attribute) ::= <<
+<!
+ Writes the getter for given attribute.
+ @param attribute the attribute.
+!>
+/**
+ * Retrieves the \<i\><attribute.name>\</i\> value.
+ * @return such information.
+ */
+<if(attribute.allowsNull)>
+public <attribute.objectType> get<attribute.nameCapitalized>()
+<else>
+public <attribute.javaType> get<attribute.nameCapitalized>()
+<endif>
+
+{
+    return m__<attribute.nameCapitalized>;
+}
 >>

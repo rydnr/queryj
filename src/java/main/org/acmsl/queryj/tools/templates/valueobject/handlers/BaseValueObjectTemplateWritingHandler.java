@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes base value object templates.
+ * Description: Writes ValueObject templates.
  *
  */
 package org.acmsl.queryj.tools.templates.valueobject.handlers;
@@ -40,15 +40,12 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some Ant classes.
@@ -63,139 +60,72 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Writes Base Value Object templates.
+ * Writes <code>BaseValueObjectTemplate</code> instances.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class BaseValueObjectTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler
 {
     /**
-     * Creates a <code>BaseValueObjectTemplateWritingHandler</code>.
+     * Creates a <code>BaseValueObjectTemplateWritingHandler</code> instance.
      */
     public BaseValueObjectTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
     {
-        return handle(command.getAttributeMap());
+        return BaseValueObjectTemplateGenerator.getInstance();
     }
 
     /**
-     * Handles given command.
-     * @param attributes the attributes.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition attributes != null
-     */
-    protected boolean handle(final Map attributes)
-        throws  BuildException
-    {
-        return
-            handle(
-                retrieveBaseValueObjectTemplates(attributes),
-                retrieveOutputDir(attributes),
-                BaseValueObjectTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Handles given command.
-     * @param templates the templates.
-     * @param outputDir the output dir.
-     * @param generator the <code>ValueObjectTemplateGenerator</code>
-     * instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition templates != null
-     * @precondition outputDir != null
-     * @precondition generator != null
-
-     */
-    protected boolean handle(
-        final BaseValueObjectTemplate[] templates,
-        final File outputDir,
-        final BaseValueObjectTemplateGenerator generator)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try 
-        {
-            int t_iLength = (templates != null) ? templates.length : 0;
-
-            for  (int t_iValueObjectIndex = 0;
-                      t_iValueObjectIndex < t_iLength;
-                      t_iValueObjectIndex++)
-            {
-                generator.write(
-                    templates[t_iValueObjectIndex], outputDir);
-            }
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the base value object template from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
-     * @precondition parameters != null
      */
-    protected BaseValueObjectTemplate[] retrieveBaseValueObjectTemplates(final Map parameters)
-        throws  BuildException
+    protected BasePerTableTemplate[] retrieveTemplates(
+        final Map parameters)
+      throws  BuildException
     {
         return
-            (BaseValueObjectTemplate[])
+            (BasePerTableTemplate[])
                 parameters.get(
                     TemplateMappingManager.BASE_VALUE_OBJECT_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param tableName the table name.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return
-            retrieveOutputDir(
-                parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parmaters the parameters.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
+     * @precondition projectFolder != null
+     * @precondition projectPackage != null
+     * @precondition engineName != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
+        final String tableName,
+        final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveBaseValueObjectFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters));
+                projectFolder, projectPackage, useSubfolders);
     }
 }
