@@ -65,6 +65,11 @@ public class CachingAttributeDecorator
     private String m__strCachedNameCapitalized;
 
     /**
+     * The cached uncapitalized name.
+     */
+    private String m__strCachedNameUncapitalized;
+
+    /**
      * The cached lowercased name.
      */
     private String m__strCachedNameLowercased;
@@ -246,6 +251,52 @@ public class CachingAttributeDecorator
         {
             result = super.getNameCapitalized();
             setCachedNameCapitalized(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached uncapitalized name.
+     * @param name such name.
+     */
+    protected final void immutableSetCachedNameUncapitalized(
+        final String name)
+    {
+        m__strCachedNameUncapitalized = name;
+    }
+
+    /**
+     * Specifies the cached uncapitalized name.
+     * @param name such name.
+     */
+    protected void setCachedNameUncapitalized(
+        final String name)
+    {
+        immutableSetCachedNameUncapitalized(name);
+    }
+
+    /**
+     * Retrieves the cached uncapitalized name.
+     * @return such name.
+     */
+    public String getCachedNameUncapitalized()
+    {
+        return m__strCachedNameUncapitalized;
+    }
+
+    /**
+     * Retrieves the uncapitalized name.
+     * @return such name.
+     */
+    public String getNameUncapitalized()
+    {
+        String result = getCachedNameUncapitalized();
+
+        if  (result == null)
+        {
+            result = super.getNameUncapitalized();
+            setCachedNameUncapitalized(result);
         }
 
         return result;

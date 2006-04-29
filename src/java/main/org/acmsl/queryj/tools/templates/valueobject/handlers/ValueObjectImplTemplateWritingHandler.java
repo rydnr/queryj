@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes value object templates.
+ * Description: Writes ValueObject templates.
  *
  */
 package org.acmsl.queryj.tools.templates.valueobject.handlers;
@@ -40,15 +40,12 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectImplTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some Ant classes.
@@ -63,152 +60,72 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Writes DAO templates.
+ * Writes <code>ValueObjectImplTemplate</code> instances.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class ValueObjectImplTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler
 {
     /**
-     * A cached empty value object template array.
-     */
-    public static final ValueObjectImplTemplate[]
-        EMPTY_VALUE_OBJECT_IMPL_TEMPLATE_ARRAY =
-            new ValueObjectImplTemplate[0];
-
-    /**
-     * Creates a ValueObjectImplTemplateWritingHandler.
+     * Creates a <code>ValueObjectImplTemplateWritingHandler</code> instance.
      */
     public ValueObjectImplTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
     {
-        return handle(command.getAttributeMap());
+        return ValueObjectImplTemplateGenerator.getInstance();
     }
 
     /**
-     * Handles given command.
-     * @param attributes the attributes.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition attributes != null
-     */
-    protected boolean handle(final Map attributes)
-        throws  BuildException
-    {
-        return
-            handle(
-                retrieveValueObjectImplTemplates(attributes),
-                retrieveOutputDir(attributes),
-                ValueObjectImplTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Handles given command.
-     * @param templates the templates.
-     * @param outputDir the output dir.
-     * @param generator the <code>ValueObjectImplTemplateGenerator</code>
-     * instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition templates != null
-     * @precondition outputDir != null
-     * @precondition generator != null
-
-     */
-    protected boolean handle(
-        final ValueObjectImplTemplate[] templates,
-        final File outputDir,
-        final ValueObjectImplTemplateGenerator generator)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try 
-        {
-            int t_iLength = (templates != null) ? templates.length : 0;
-
-            for  (int t_iValueObjectImplIndex = 0;
-                      t_iValueObjectImplIndex < t_iLength;
-                      t_iValueObjectImplIndex++)
-            {
-                generator.write(
-                    templates[t_iValueObjectImplIndex], outputDir);
-            }
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the value object template from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
-     * @precondition parameters != null
      */
-    protected ValueObjectImplTemplate[] retrieveValueObjectImplTemplates(final Map parameters)
-        throws  BuildException
+    protected BasePerTableTemplate[] retrieveTemplates(
+        final Map parameters)
+      throws  BuildException
     {
         return
-            (ValueObjectImplTemplate[])
+            (BasePerTableTemplate[])
                 parameters.get(
                     TemplateMappingManager.VALUE_OBJECT_IMPL_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param tableName the table name.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return
-            retrieveOutputDir(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters),
-                PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param baseDir the base dir.
-     * @param projectPackage the project package.
-     * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition baseDir != null
+     * @precondition projectFolder != null
      * @precondition projectPackage != null
+     * @precondition engineName != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final File baseDir,
+        final File projectFolder,
         final String projectPackage,
-        final boolean subFolders,
+        final boolean useSubfolders,
+        final String tableName,
+        final String engineName,
+        final Map parameters,
         final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveValueObjectImplFolder(
-                baseDir, projectPackage, subFolders);
+                projectFolder, projectPackage, useSubfolders);
     }
 }

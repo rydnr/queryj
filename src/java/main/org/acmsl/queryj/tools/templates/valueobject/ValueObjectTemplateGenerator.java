@@ -217,10 +217,9 @@ public class ValueObjectTemplateGenerator
         final StringUtils stringUtils)
     {
         return
-              stringUtils.capitalize(
-                  englishGrammarUtils.getSingular(tableName.toLowerCase()),
-                  '_')
-            + "ValueObject";
+            stringUtils.capitalize(
+                englishGrammarUtils.getSingular(tableName.toLowerCase()),
+                '_');
     }
 
     /**

@@ -95,7 +95,7 @@ first_line_description(tableName) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-Value object for \<i\><tableName>\</i\>.
+Value object implementation for \<i\><tableName>\</i\>.
 >>
 
 class(input) ::= <<
@@ -111,27 +111,41 @@ class(input) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public interface <input.vo_name>
-    extends  ValueObject
+public class <input.vo_name>ValueObject
+    extends  Abstract<input.vo_name>
 {
-    <input.attributes:attribute_getter(attribute=it);
-      separator="\n\n">
+    /**
+     * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
+     <input.attributes:attribute_javadoc(attribute=it); separator="\n">
+     */
+    public <input.vo_name>ValueObject(
+        <input.attributes:attribute_method_declaration(attribute=it);
+          separator=",\n">)
+    {
+        super(
+          <input.attributes:{<it.nameUncapitalized>};
+          separator=",\n">);
+    }
 }
 >>
 
-attribute_getter(attribute) ::= <<
+attribute_javadoc(attribute) ::= <<
 <!
- Writes the getter for given attribute.
+ Writes the Javadoc for given attribute.
  @param attribute the attribute.
 !>
-/**
- * Retrieves the \<i\><attribute.name>\</i\> value.
- * @return such information.
- */
+* @param <attribute.nameUncapitalized> the \<i\><attribute.nameCapitalized>\</i> value.
+>>
+
+attribute_method_declaration(attribute) ::= <<
+<!
+ Writes the method declaration for given attribute.
+ @param attribute the attribute.
+!>
 <if(attribute.allowsNull)>
-public <attribute.objectType> get<attribute.nameCapitalized>();
+final <attribute.objectType> <attribute.nameUncapitalized>
 <else>
-public <attribute.javaType> get<attribute.nameCapitalized>();
+final <attribute.javaType> <attribute.nameUncapitalized>
 <endif>
 
 >>

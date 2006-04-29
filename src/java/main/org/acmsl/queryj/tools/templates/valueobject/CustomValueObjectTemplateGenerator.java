@@ -240,7 +240,7 @@ public class CustomValueObjectTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-              + extractClassName(template.getResult().getClassValue())
+            + extractClassName(template.getResult().getClassValue())
             + ".java",
             template.generate());
     }
