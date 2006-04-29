@@ -134,7 +134,6 @@ project_imports(
  * Importing project classes.
  */
 import <basePackageName>.<voSubpackageName>.<voName>;
-import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
 import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
@@ -172,7 +171,7 @@ defaultExtractor(input) ::= <<
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
- * @return the \<code><input.vo_name>ValueObject\</code> or
+ * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
@@ -195,7 +194,7 @@ public Object extractData(final ResultSet resultSet)
  * @param resultSet the result set.
  * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
  * instance.
- * @return the \<code><input.vo_name>ValueObject\</code> or
+ * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
@@ -209,7 +208,7 @@ protected <input.vo_name> extractData(
   throws  SQLException,
           DataAccessException
 {
-    <input.vo_name>ValueObject result = null;
+    <input.vo_name> result = null;
 
     if  (resultSet.next())
     {
@@ -315,7 +314,7 @@ public boolean getSelectForUpdateMode()
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
- * @return the \<code><input.vo_name>ValueObject\</code> or
+ * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
@@ -344,7 +343,7 @@ public Object extractData(final ResultSet resultSet)
  * \<i>select for update\</i>.
  * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
  * instance.
- * @return the \<code><input.vo_name>ValueObject\</code> or
+ * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
@@ -361,7 +360,7 @@ protected Object extractData(
   throws  SQLException,
           DataAccessException
 {
-    <input.vo_name>ValueObject result = null;
+    <input.vo_name> result = null;
 
     if  (resultSet.next())
     {

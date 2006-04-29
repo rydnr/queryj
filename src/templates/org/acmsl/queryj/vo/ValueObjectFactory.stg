@@ -58,7 +58,7 @@ source(input) ::= <<
   years=input.copyright_years,
   description=
   [
-    first_line_description(result=input.result)
+    first_line_description(tableName=input.table_name)
   ],
   timestamp=input.timestamp)>
 <endif>
@@ -81,18 +81,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-<class(input=input, result=input.result)>
+<class(input=input)>
 >>
 
-first_line_description(result) ::= <<
+first_line_description(tableName) ::= <<
 <!
   Generates the first line of the generated file description.
-  @param result the custom result.
+  @param tableName the table name.
 !>
-Value object factory for custom result \<i\><result.id>\</i\>.
+Value object factory for \<i\><tableName>\</i\>.
 >>
 
-class(input, result) ::= <<
+class(input) ::= <<
 <!
  Generates the class body.
  @param input the input.
@@ -100,7 +100,7 @@ class(input, result) ::= <<
 !>
 /**
  * <[
-      first_line_description(result=input.result)
+      first_line_description(tableName=input.table_name)
     ]:{line |<line>}; separator="\n * ">
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
@@ -166,79 +166,79 @@ public class <input.vo_name>ValueObjectFactory
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
-     <result.properties:property_javadoc(attribute=it); separator="\n">
+     <input.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create<input.vo_name>(
-        <result.properties:property_method_declaration(attribute=it);
+        <input.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {
         return
             new <input.vo_name>ValueObject(
-                <result.properties:{<it.columnNameNormalizedUncapitalized>};
+                <input.attributes:{<it.nameUncapitalized>};
                 separator=",\n">);
     }
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
-     <result.properties:property_javadoc(attribute=it); separator="\n">
+     <input.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create<input.vo_name>ValueObject(
-        <result.properties:property_method_declaration(attribute=it);
+        <input.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {
         return
             create<input.vo_name>(
-                <result.properties:{<it.columnNameNormalizedUncapitalized>};
+                <input.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);
     }
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
-     <result.properties:property_javadoc(attribute=it); separator="\n">
+     <input.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create(
-        <result.properties:property_method_declaration(attribute=it);
+        <input.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {
         return
             create<input.vo_name>(
-                <result.properties:{<it.columnNameNormalizedUncapitalized>};
+                <input.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);
     }
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
-     <result.properties:property_javadoc(attribute=it); separator="\n">
+     <input.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> createValueObject(
-        <result.properties:property_method_declaration(attribute=it);
+        <input.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {
         return
             create<input.vo_name>(
-                <result.properties:{<it.columnNameNormalizedUncapitalized>};
+                <input.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);
     }
 }
 >>
 
-property_javadoc(attribute) ::= <<
+attribute_javadoc(attribute) ::= <<
 <!
  Writes the Javadoc for given attribute.
  @param attribute the attribute.
 !>
-* @param <attribute.columnNameNormalizedUncapitalized> the \<i\><attribute.columnNameNormalizedCapitalized>\</i> value.
+* @param <attribute.nameUncapitalized> the \<i\><attribute.name>\</i> value.
 >>
 
-property_method_declaration(attribute) ::= <<
+attribute_method_declaration(attribute) ::= <<
 <!
  Writes the method declaration for given attribute.
  @param attribute the attribute.
 !>
 <if(attribute.allowsNull)>
-final <attribute.objectType> <attribute.columnNameNormalizedUncapitalized>
+final <attribute.objectType> <attribute.nameUncapitalized>
 <else>
-final <attribute.javaType> <attribute.columnNameNormalizedUncapitalized>
+final <attribute.javaType> <attribute.nameUncapitalized>
 <endif>
 
 >>

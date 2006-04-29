@@ -98,7 +98,7 @@ public class ValueObjectImplTemplateBuildHandler
       throws  BuildException
     {
         return
-            packageUtils.retrieveValueObjectPackage(projectPackage);
+            packageUtils.retrieveValueObjectImplPackage(projectPackage);
     }
 
     /**

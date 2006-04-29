@@ -10,7 +10,7 @@
     version 2 of the License, or any later version.
 
     This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    but WITHOUT ANY WARRANTY; without even the factoryied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     General Public License for more details.
 
@@ -32,8 +32,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate value object factories according to
- *              database metadata.
+ * Description: Is able to generate base DAO factories.
+ *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
@@ -41,14 +41,14 @@ package org.acmsl.queryj.tools.templates.valueobject;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate;
-import org.acmsl.queryj.tools.templates.valueobject
-    .ValueObjectFactoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -65,16 +65,16 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Is able to generate value object factories according to database
- * metadata.
+ * Is able to generate base DAO factories.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  */
 public class ValueObjectFactoryTemplateGenerator
-    implements  ValueObjectFactoryTemplateFactory
+    implements  BasePerTableTemplateFactory,
+                BasePerTableTemplateGenerator
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton factoryemented as a weak reference.
      */
     private static WeakReference singleton;
 
@@ -87,7 +87,7 @@ public class ValueObjectFactoryTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(
+    private static void setReference(
         final ValueObjectFactoryTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
@@ -97,13 +97,13 @@ public class ValueObjectFactoryTemplateGenerator
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
 
     /**
-     * Retrieves a ValueObjectFactoryTemplateGenerator instance.
+     * Retrieves a <code>ValueObjectFactoryTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static ValueObjectFactoryTemplateGenerator getInstance()
@@ -128,31 +128,52 @@ public class ValueObjectFactoryTemplateGenerator
     }
 
     /**
-     * Generates a value object factory template.
+     * Creates a <code>ValueObjectFactoryTemplate</code> using given
+     * information.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
      * @param header the header.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition packageName != null
-     * @precondition tableTemplate != null
+     * @return the fresh new template.
+     * @precondition tableName != null
      * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition basePackageName != null
+     * @precondition repositoryName != null
      */
-    public ValueObjectFactoryTemplate createValueObjectFactoryTemplate(
-        final String packageName,
-        final TableTemplate tableTemplate,
+    public BasePerTableTemplate createTemplate(
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName,
         final String header)
-      throws  QueryJException
     {
         return
             new ValueObjectFactoryTemplate(
-                packageName,
-                tableTemplate,
+                tableName,
                 metadataManager,
+                customSqlProvider,
                 header,
-                getDecoratorFactory());
+                getDecoratorFactory(),
+                packageName,
+                engineName,
+                engineVersion,
+                quote,
+                basePackageName,
+                repositoryName);
     }
 
     /**
@@ -165,59 +186,63 @@ public class ValueObjectFactoryTemplateGenerator
     }
 
     /**
-     * Writes a value object factory template to disk.
-     * @param template the value object factory template to write.
+     * Writes a <code>ValueObject</code> template to disk.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
+     * @precondition template instanceof BaseDAOFactoryTemplate
      * @precondition outputDir != null
      */
     public void write(
-        final ValueObjectFactoryTemplate template,
-        final File outputDir)
+        final BasePerTableTemplate template, final File outputDir)
       throws  IOException
     {
         write(
             template,
-            outputDir,
-            EnglishGrammarUtils.getInstance(),
+            outputDir, 
+            ValueObjectTemplateGenerator.getInstance(),
             StringUtils.getInstance(),
+            EnglishGrammarUtils.getInstance(),
             FileUtils.getInstance());
     }
 
     /**
-     * Writes a value object factory template to disk.
-     * @param template the value object factory template to write.
+     * Writes a value object template to disk.
+     * @param valueObjectFactoryTemplate the value object factoryementation template
+     * to write.
      * @param outputDir the output folder.
+     * @param valueObjectTemplateGenerator the
+     * <code>ValueObjectTemplateGenerator</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
+     * @precondition valueObjectFactoryTemplate != null
      * @precondition outputDir != null
-     * @precondition englishGrammarUtils != null
      * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final ValueObjectFactoryTemplate template,
+        final BasePerTableTemplate valueObjectFactoryTemplate,
         final File outputDir,
-        final EnglishGrammarUtils englishGrammarUtils,
+        final ValueObjectTemplateGenerator valueObjectTemplateGenerator,
         final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils,
         final FileUtils fileUtils)
       throws  IOException
     {
         outputDir.mkdirs();
 
         fileUtils.writeFile(
-            outputDir.getAbsolutePath()
+              outputDir.getAbsolutePath()
             + File.separator
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    template.getTableTemplate().getTableName().toLowerCase()),
-                '_')
+            + valueObjectTemplateGenerator.getVoClassName(
+                  valueObjectFactoryTemplate.getTableName(),
+                  englishGrammarUtils,
+                  stringUtils)
             + "ValueObjectFactory.java",
-            template.generate());
+            valueObjectFactoryTemplate.generate());
     }
 }
