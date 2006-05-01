@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -42,19 +43,17 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some StringTemplate classes.
  */
-import org.acmsl.commons.utils.StringUtils;
+import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JDK classes.
  */
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Is able to generate Table repositories according to database metadata.
@@ -62,232 +61,56 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public class TableRepositoryTemplate
-    extends  AbstractTableRepositoryTemplate
-    implements  TableRepositoryTemplateDefaults
+    extends  BasePerRepositoryTemplate
 {
     /**
-     * Builds a <code>TableRepositoryTemplate</code> using given information.
+     * Builds a <code>TableRepositoryTemplate</code> using given
+     * information.
+     * @param metadataManager the database metadata manager.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
-     * @param repository the repository.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
+     * @param engineName the engine name.
+     * @param tables the tables.
      */
     public TableRepositoryTemplate(
+        final MetadataManager metadataManager,
         final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
-        final String repository)
+        final String basePackageName,
+        final String repositoryName,
+        final String engineName,
+        final Collection tables)
     {
         super(
-//            (header != null) ? header : DEFAULT_HEADER,
-            DEFAULT_HEADER,
+            metadataManager,
+            header,
             decoratorFactory,
-            DEFAULT_PACKAGE_DECLARATION,
             packageName,
-            repository,
-            DEFAULT_PROJECT_IMPORTS_JAVADOC,
-            DEFAULT_PROJECT_IMPORTS,
-            DEFAULT_ACMSL_IMPORTS,
-            DEFAULT_JAVADOC,
-            DEFAULT_CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            DEFAULT_TABLE_JAVADOC,
-            DEFAULT_TABLE_DEFINITION,
-            DEFAULT_CLASS_END);
+            basePackageName,
+            repositoryName,
+            engineName,
+            tables);
     }
 
     /**
-     * Builds the header for logging purposes.
-     * @return such header.
+     * Retrieves the string template group.
+     * @return such instance.
      */
-    protected String buildHeader()
+    protected StringTemplateGroup retrieveGroup()
     {
-        return
-            buildHeader(
-                getRepository(),
-                TableRepositoryTemplateUtils.getInstance());
+        return retrieveGroup("/org/acmsl/queryj/sql/TableRepository.stg");
     }
 
     /**
-     * Builds the header for logging purposes.
-     * @param repository the table repository.
-     * @param tableRepositoryTemplateUtils the
-     * <code>TableRepositoryTemplateUtils</code> instance.
-     * @return such header.
-     * @precondition repository != null
-     * @precondition tableRepositoryTemplateUtils != null
+     * Retrieves the template name.
+     * @return such information.
      */
-    protected String buildHeader(
-        final String repository,
-        final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
+    public String getTemplateName()
     {
-        return
-              "Generating "
-            + tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
-                  repository)
-            + ".";
-    }
-
-    /**
-     * Retrieves the source code of the generated table repository.
-     * @param header the header.
-     * @return such source code.
-     */
-    protected String generateOutput(final String header)
-    {
-        return
-            generateOutput(
-                header,
-                getPackageDeclaration(),
-                getPackageName(),
-                getRepository(),
-                getProjectImportsJavadoc(),
-                getProjectImports(),
-                getAcmslImports(),
-                getJavadoc(),
-                getClassDefinition(),
-                getClassStart(),
-                getTableJavadoc(),
-                getTableDefinition(),
-                getClassEnd(),
-                getTables(),
-                TableRepositoryTemplateUtils.getInstance(),
-                StringUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the source code of the generated table repository.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param repository the repository.
-     * @param importsJavadoc the project imports javadoc.
-     * @param projectImports the project imports.
-     * @param acmslImports the ACM-SL imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param tableJavadoc the table Javadoc.
-     * @param tableDefinition the table definition.
-     * @param classEnd the class end.
-     * @param tables the tables.
-     * @param tableRepositoryTemplateUtils the
-     * <code>TableRepositoryTemplateUtils</code> instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @return such source code.
-     * @precondition tables != null
-     * @precondition tableRepositoryUtils != null
-     * @precondition stringUtils != null
-     */
-    protected String generateOutput(
-        final String header,
-        final String packageDeclaration,
-        final String packageName,
-        final String repository,
-        final String importsJavadoc,
-        final String projectImports,
-        final String acmslImports,
-        final String javadoc,
-        final String classDefinition,
-        final String classStart,
-        final String tableJavadoc,
-        final String tableDefinition,
-        final String classEnd,
-        final List tables,
-        final TableRepositoryTemplateUtils tableRepositoryTemplateUtils,
-        final StringUtils stringUtils)
-    {
-        StringBuffer t_sbResult = new StringBuffer();
-
-        Object[] t_aRepository =
-            new Object[]
-            {
-                stringUtils.capitalize(repository)
-            };
-
-        Object[] t_aPackageName = new Object[]{packageName};
-
-        MessageFormat t_Formatter = new MessageFormat(header);
-        t_sbResult.append(t_Formatter.format(t_aRepository));
-
-        t_Formatter = new MessageFormat(packageDeclaration);
-        t_sbResult.append(t_Formatter.format(t_aPackageName));
-
-        Iterator t_itTables = tables.iterator();
-
-        if  (t_itTables.hasNext()) 
-        {
-            t_sbResult.append(importsJavadoc);
-        }
-
-        MessageFormat t_ImportFormatter =
-            new MessageFormat(projectImports);
-
-        while  (t_itTables.hasNext()) 
-        {
-            String t_strTable = (String) t_itTables.next();
-
-            if  (t_strTable != null)
-            {
-                t_sbResult.append(
-                    t_ImportFormatter.format(
-                        new Object[]{
-                            packageName,
-                            stringUtils.capitalize(
-                                t_strTable.toLowerCase(),
-                                '_')}));
-            }
-        }
-
-        t_sbResult.append(acmslImports);
-
-        t_Formatter = new MessageFormat(javadoc);
-        t_sbResult.append(t_Formatter.format(t_aRepository));
-
-        t_Formatter = new MessageFormat(classDefinition);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    tableRepositoryTemplateUtils
-                        .retrieveTableRepositoryClassName(
-                            repository)
-                }));
-
-        t_sbResult.append(classStart);
-
-        t_itTables = tables.iterator();
-
-        MessageFormat t_JavadocFormatter =
-            new MessageFormat(tableJavadoc);
-
-        MessageFormat t_DefinitionFormatter =
-            new MessageFormat(tableDefinition);
-
-        while  (t_itTables.hasNext()) 
-        {
-            String t_strTable = (String) t_itTables.next();
-
-            if  (t_strTable != null)
-            {
-                t_sbResult.append(
-                    t_JavadocFormatter.format(
-                        new Object[]{t_strTable}));
-
-                t_sbResult.append(
-                    t_DefinitionFormatter.format(
-                        new Object[]
-                        {
-                            t_strTable.toUpperCase(),
-                            stringUtils.capitalize(
-                                t_strTable.toLowerCase(),
-                                '_')
-                        }));
-            }
-        }
-
-        t_sbResult.append(classEnd);
-
-        return t_sbResult.toString();
+        return "Table repository";
     }
 }
