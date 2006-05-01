@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -487,6 +488,17 @@ public abstract class AbstractTemplate
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @return such output.
+     * @precondition value != null
+     */
+    protected String capitalize(final String value)
+    {
+        return capitalize(value, DecorationUtils.getInstance());
     }
 
     /**

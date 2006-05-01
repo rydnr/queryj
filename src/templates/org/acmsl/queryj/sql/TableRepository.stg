@@ -65,8 +65,7 @@ source(input) ::= <<
 <package_declaration(
   packageNames=
   [
-    input.base_package_name,
-    typeInitMap.tableRepositorySubpackageName
+    input.base_package_name
   ])>
 
 /*
@@ -115,13 +114,13 @@ class(input) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public interface <input.tr_name>
+public interface <input.tr_name_capitalized>TableRepository
 {
     <input.tables:table_constant(table=it); separator="\n\n">
 }
 >>
 
-table_constants(table) ::= <<
+table_constant(table) ::= <<
 <!
  Writes the constant declaration for each table.
  @param table the table.

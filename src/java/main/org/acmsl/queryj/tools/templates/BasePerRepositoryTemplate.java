@@ -316,6 +316,8 @@ public abstract class BasePerRepositoryTemplate
     {
         input.put("tr_name", tableRepositoryName);
 
+        input.put("tr_name_capitalized", capitalize(tableRepositoryName));
+
         input.put("base_package_name", basePackageName);
 
         input.put(
