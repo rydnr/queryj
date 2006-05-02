@@ -44,6 +44,7 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
@@ -221,7 +222,33 @@ public class DAOChooserTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
+            + capitalize(template.getRepositoryName())
             + "DAOChooser.java",
             template.generate());
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @return the capitalized value.
+     * @precondition value != null
+     */
+    protected String capitalize(final String value)
+    {
+        return capitalize(value, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the capitalized value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String capitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
     }
 }

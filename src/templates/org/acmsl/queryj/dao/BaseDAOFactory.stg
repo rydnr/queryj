@@ -80,7 +80,8 @@ source(input) ::= <<
   [
     input.base_package_name,
     typeInitMap.baseDAOSubpackageName
-  ])>
+  ],
+  repository=input.tr_name_capitalized)>
 
 <class(input=input)>
 >>
@@ -101,18 +102,19 @@ second_line_description(voName) ::= <<
 following the Abstract Factory pattern.
 >>
 
-project_imports(daoPackage, voName, daoChooserPackage) ::= <<
+project_imports(daoPackage, voName, daoChooserPackage, repository) ::= <<
 <!
   Generates the import statements for the project classes.
   @param daoPackage the package parts of the DAO class.
   @param voName the value-object name.
   @param daoChooserPackage the DAOChooser package.
+  @param repository the repository, capitalized.
 !>
 /*
  * Importing some project classes.
  */
 import <daoPackage:{<it>}; separator=".">.<voName>DAO;
-import <daoChooserPackage:{<it>}; separator=".">.DAOChooser;
+import <daoChooserPackage:{<it>}; separator=".">.<repository>DAOChooser;
 
 /*
  * Importing some JDK classes.
@@ -151,7 +153,7 @@ public abstract class <input.vo_name>DAOFactory
      */
     public static <input.vo_name>DAOFactory getInstance()
     {
-        return getInstance(DAOChooser.getInstance());
+        return getInstance(<input.tr_name_capitalized>DAOChooser.getInstance());
     }
 
     /**
@@ -160,7 +162,8 @@ public abstract class <input.vo_name>DAOFactory
      * @return such instance.
      <precondition_notnull("daoChooser")>
      */
-    protected static <input.vo_name>DAOFactory getInstance(final DAOChooser daoChooser)
+    protected static <input.vo_name>DAOFactory getInstance(
+        final <input.tr_name_capitalized>DAOChooser daoChooser)
     {
         <input.vo_name>DAOFactory result = null;
 

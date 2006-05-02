@@ -884,6 +884,7 @@ public abstract class BasePerTableTemplate
         }
 
         input.put("tr_name", tableRepositoryName);
+        input.put("tr_name_capitalized", capitalize(tableRepositoryName));
         input.put("table_name", tableName);
         input.put("table_name_uppercased", tableName.toUpperCase());
         input.put(
@@ -1276,6 +1277,17 @@ public abstract class BasePerTableTemplate
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @return such output.
+     * @precondition value != null
+     */
+    protected String capitalize(final String value)
+    {
+        return capitalize(value, DecorationUtils.getInstance());
     }
 
     /**

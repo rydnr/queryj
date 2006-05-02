@@ -180,7 +180,33 @@ public class DAOChooserTemplate
             stringUtils);
 
         input.put("tr_name_uppercased", tableRepositoryName.toUpperCase());
-        input.put("tr_name_uppercased", tableRepositoryName.toUpperCase());
+        input.put("tr_name_lowercased", tableRepositoryName.toLowerCase());
         input.put("tr_name_capitalized", capitalize(tableRepositoryName));
+        input.put("properties_file_name", retrievePropertiesFileName(tableRepositoryName));
+    }
+
+    /**
+     * Retrieves the properties file for given repository.
+     * @param repository the repository.
+     * @return the properties file.
+     * @precondition repository != null
+     */
+    protected String retrievePropertiesFileName(final String repository)
+    {
+        return retrievePropertiesFileName(repository, DAOChooserTemplateUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the properties file for given repository.
+     * @param repository the repository.
+     * @param daoChooserTemplateUtils the <code>DAOChooserTemplateUtils</code> instance.
+     * @return the properties file.
+     * @precondition repository != null
+     * @precondition daoChooserTemplateUtils != null
+     */
+    protected String retrievePropertiesFileName(
+        final String repository, final DAOChooserTemplateUtils daoChooserTemplateUtils)
+    {
+        return daoChooserTemplateUtils.retrievePropertiesFileName(repository);
     }
 }
