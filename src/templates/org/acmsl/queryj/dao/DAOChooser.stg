@@ -165,7 +165,7 @@ public class <input.tr_name_capitalized>DAOChooser
 
     /**
      * Specifies a new weak reference.
-     * @param manager the new manager instance.
+     * @param chooser the new \<code\><input.tr_name_capitalized>DAOChooser\</code\> instance.
      */
     protected static void setReference(final <input.tr_name_capitalized>DAOChooser chooser)
     {

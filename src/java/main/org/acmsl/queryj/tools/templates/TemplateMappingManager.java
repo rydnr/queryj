@@ -495,6 +495,12 @@ public class TemplateMappingManager
         "dataAccessContext-local.xml.template";
 
     /**
+     * The keyword repository template attribute name.
+     */
+    public static final String KEYWORD_REPOSITORY_TEMPLATE =
+        "keyword.repository.template";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;

@@ -48,6 +48,7 @@ typeInitMap ::= [
   "voFactorySubpackageName":"vo",
   "rdbSubpackageName":"rdb",
   "tableRepositorySubpackageName":"tables",
+  "functionsRepositorySubpackageName":"functions",
   "dataAccessManagerSubpackageName":"dao",
   "foreignKeyStatementSetterSubpackageName":"dao.rdb",
   "xmlSubpackageName":"xml",

@@ -82,7 +82,7 @@ source(input) ::= <<
     engineName=input.engine_name,
     engineNameLowercased=input.engine_name_lowercased,
     basePackageName=input.base_package_name,
-    baseDAOSubPackageName=typeInitMap.baseDAOSubpackageName,
+    baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
     subpackageName=typeInitMap.rdbSubpackageName);
    separator="\n\n">
 \</beans\>

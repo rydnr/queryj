@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -40,14 +41,13 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some Ant classes.
@@ -67,125 +67,61 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class KeywordRepositoryTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
-     * Creates a KeywordRepositoryTemplateWritingHandler.
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public KeywordRepositoryTemplateWritingHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        return
-            handle(
-                command.getAttributeMap());
-    }
-                
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     */
-    protected boolean handle(final Map parameters)
-      throws  BuildException
-    {
-        return
-            handle(
-                retrieveKeywordRepositoryTemplate(parameters),
-                retrieveOutputDir(parameters),
-                KeywordRepositoryTemplateGenerator.getInstance());
+        return KeywordRepositoryTemplateGenerator.getInstance();
     }
 
     /**
-     * Handles given information.
-     * @param template the template.
-     * @param outputDir the output dir.
-     * @param templateGenerator the template generator.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition templateGenerator != null
-     */
-    protected boolean handle(
-        final KeywordRepositoryTemplate template,
-        final File outputDir,
-        final KeywordRepositoryTemplateGenerator templateGenerator)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try 
-        {
-            templateGenerator.write(template, outputDir);
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the keyword repository template from the attribute map.
+     * Retrieves the template from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the repository retrieval process if faulty.
-     * @precondition parameters != null
+     * @throws BuildException if the template retrieval process if faulty.
      */
-    protected KeywordRepositoryTemplate retrieveKeywordRepositoryTemplate(
+    protected BasePerRepositoryTemplate retrieveTemplate(
         final Map parameters)
       throws  BuildException
     {
         return
-            (KeywordRepositoryTemplate)
+            (BasePerRepositoryTemplate)
                 parameters.get(
-                    KeywordRepositoryTemplateBuildHandler
-                        .KEYWORD_REPOSITORY_TEMPLATE);
+                    TemplateMappingManager.KEYWORD_REPOSITORY_TEMPLATE);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return retrieveOutputDir(parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition engineName != null
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveKeywordRepositoryFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters));
+                projectFolder,
+                projectPackage,
+                useSubfolders);
     }
 }

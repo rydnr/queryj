@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -32,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate procedure repositories according to
- *              database metadata.
+ * Description: Is able to generate keyword repositories according to database
+ *              types.
  *
  */
 package org.acmsl.queryj.tools.templates;
@@ -42,237 +43,347 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.AbstractKeywordRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateDefaults;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JDK classes.
  */
-import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Is able to generate procedure repositories according to
- * database metadata.
+ * Is able to generate Keyword repositories according to database types.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  */
 public class KeywordRepositoryTemplate
-    extends  AbstractKeywordRepositoryTemplate
-    implements  KeywordRepositoryTemplateDefaults
+    extends  BasePerRepositoryTemplate
 {
     /**
-     * Builds a KeywordRepositoryTemplate using given information.
+     * The keywords list.
+     */
+    private List m__lKeywords;
+
+    /**
+     * The keyword types.
+     */
+    private Map m__mKeywordTypes;
+
+    /**
+     * Builds a <code>KeywordRepositoryTemplate</code> using given
+     * information.
+     * @param metadataManager the database metadata manager.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
-     * @param repository the repository.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
+     * @param engineName the engine name.
+     * @param keywords the keywords.
      */
     public KeywordRepositoryTemplate(
+        final MetadataManager metadataManager,
         final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
-        final String repository)
+        final String basePackageName,
+        final String repositoryName,
+        final String engineName)
     {
         super(
-//            (header != null) ? header : DEFAULT_HEADER,
-            DEFAULT_HEADER,
+            metadataManager,
+            header,
             decoratorFactory,
-            PACKAGE_DECLARATION,
             packageName,
-            repository,
-            ACMSL_IMPORTS,
-            DEFAULT_ACMSL_IMPORT_TEMPLATE,
-            DEFAULT_JDK_IMPORTS,
-            DEFAULT_JAVADOC,
-            CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            DEFAULT_SINGLETON_BODY,
-            DEFAULT_KEYWORD_RETRIEVAL_METHOD_JAVADOC,
-            DEFAULT_KEYWORD_RETRIEVAL_METHOD_BODY,
-            DEFAULT_CLASS_END);
+            basePackageName,
+            repositoryName,
+            engineName,
+            new ArrayList());
+
+        immutableSetKeywords(new ArrayList());
+        immutableSetKeywordTypes(new HashMap());
     }
 
     /**
-     * Retrieves the source code of the generated procedure repository.
-     * @param header the header.
-     * @return such source code.
-     */
-    protected String generateOutput(final String header)
-    {
-        return
-            generateOutput(
-                header,
-                getPackageDeclaration(),
-                getPackageName(),
-                getRepository(),
-                getAcmslImports(),
-                getAcmslImportTemplate(),
-                getJdkImports(),
-                getJavadoc(),
-                getClassDefinition(),
-                getClassStart(),
-                getSingletonBody(),
-                getKeywordRetrievalMethodJavadoc(),
-                getKeywordRetrievalMethodBody(),
-                getClassEnd(),
-                getKeywordsMetaDataList(),
-                StringUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the source code of the generated procedure repository.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param repository the repository.
-     * @param acmslImports the ACM-SL imports.
-     * @param acmslImportTemplate the ACM-SL import template.
-     * @param jdkImports the JDK imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param singletonBody the singleton body.
-     * @param keywordRetrievalMethodJavadoc the keyword retrieval method Javadoc.
-     * @param keywordRetrievalMethodBody the the keyword retrieval method body.
-     * @param classEnd the class end.
-     * @param keywordsMetaData the keywords meta data.
+     * Fills the core parameters.
+     * @param input the input.
+     * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param subpackageName the subpackage name.
+     * @param basePackageName the base package name.
+     * @param tableRepositoryName the table repository name.
+     * @param engineName the engine name.
+     * @param tables the tables.
+     * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @return such source code.
+     * @precondition input != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     * @precondition subpackageName != null
+     * @precondition basePackageName != null
+     * @precondition tableRepositoryName != null
+     * @precondition tables != null
+     * @precondition timestamp != null
      * @precondition stringUtils != null
      */
-    protected String generateOutput(
-        final String header,
-        final String packageDeclaration,
-        final String packageName,
-        final String repository,
-        final String acmslImports,
-        final String acmslImportTemplate,
-        final String jdkImports,
-        final String javadoc,
-        final String classDefinition,
-        final String classStart,
-        final String singletonBody,
-        final String keywordRetrievalMethodJavadoc,
-        final String keywordRetrievalMethodBody,
-        final String classEnd,
-        final List keywordsMetaData,
+    protected void fillCoreParameters(
+        final Map input,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
+        final String subpackageName,
+        final String basePackageName,
+        final String tableRepositoryName,
+        final String engineName,
+        final Collection tables,
+        final String timestamp,
         final StringUtils stringUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        super.fillCoreParameters(
+            input,
+            metadataManager,
+            decoratorFactory,
+            subpackageName,
+            basePackageName,
+            tableRepositoryName,
+            engineName,
+            tables,
+            timestamp,
+            stringUtils);
 
-        String t_strRepository = stringUtils.capitalize(repository);
+        input.put("keywords", getKeywords());
+        input.put("keyword_types", retrieveKeywordTypes());
+        input.put("keywords_uncapitalized", retrieveKeywordsUncapitalized());
+    }
 
-        Object[] t_aRepository =
-            new Object[]
-            {
-                t_strRepository
-            };
+    /**
+     * Specifies the keywords.
+     * @param keywords the keywords.
+     */
+    private void immutableSetKeywords(final List keywords)
+    {
+        m__lKeywords = keywords;
+    }
 
-        Object[] t_aPackageName = new Object[]{packageName};
+    /**
+     * Specifies the keywords.
+     * @param keywords the keywords.
+     */
+    protected void setKeywords(final List keywords)
+    {
+        immutableSetKeywords(keywords);
+    }
 
-        MessageFormat t_Formatter = new MessageFormat(header);
-        t_sbResult.append(t_Formatter.format(t_aRepository));
+    /**
+     * Retrieves the keywords.
+     * @return such collection.
+     */
+    public List getKeywords()
+    {
+        return m__lKeywords;
+    }
 
-        t_Formatter = new MessageFormat(packageDeclaration);
-        t_sbResult.append(t_Formatter.format(t_aPackageName));
+    /**
+     * Adds a new keyword types.
+     * @param keyword the keyword.
+     * @param fieldType the field type.
+     * @precondition keyword != null
+     * @precondition fieldType != null
+     */
+    public void addKeyword(
+        final String keyword, final String fieldType)
+    {
+        List t_lKeywords = getKeywords();
 
-        StringBuffer t_sbAcmslImports = new StringBuffer();
-
-        StringBuffer t_sbKeywordRetrievalMethods = new StringBuffer();
-
-        List t_lKeywordsMetaData = getKeywordsMetaDataList();
-
-        if  (t_lKeywordsMetaData != null)
+        if  (t_lKeywords != null)
         {
-            Iterator t_itKeywordsMetaData = t_lKeywordsMetaData.iterator();
+            t_lKeywords.add(keyword);
+        }
 
-            MessageFormat t_AcmslImportTemplateFormatter =
-                new MessageFormat(acmslImportTemplate);
+        Map t_mKeywordTypes = getKeywordTypes();
 
-            MessageFormat t_KeywordRetrievalMethodJavadocFormatter =
-                new MessageFormat(keywordRetrievalMethodJavadoc);
+        if  (t_mKeywordTypes != null)
+        {
+            t_mKeywordTypes.put(buildKey(keyword), fieldType);
+        }
+    }
 
-            MessageFormat t_KeywordRetrievalMethodBodyFormatter =
-                new MessageFormat(keywordRetrievalMethodBody);
+    /**
+     * Retrieves the field type of given keyword.
+     * @param keyword the keyword.
+     * @return the field type.
+     */
+    protected String getKeywordFieldType(final String keyword)
+    {
+        String result = "";
 
-            while  (t_itKeywordsMetaData.hasNext())
+        if  (keyword != null)
+        {
+            Map t_mKeywordtypes = getKeywordTypes();
+
+            if  (t_mKeywordtypes != null)
             {
-                String t_strKeyword =
-                    "" + t_itKeywordsMetaData.next();
-
-                String t_strFieldType =
-                    "" + getKeywordFieldType(t_strKeyword);
-
-                t_sbAcmslImports.append(
-                    t_AcmslImportTemplateFormatter.format(
-                        new Object[]
-                        {
-                            t_strFieldType
-                        }));
-
-                t_sbKeywordRetrievalMethods.append(
-                    t_KeywordRetrievalMethodJavadocFormatter.format(
-                        new Object[]
-                        {
-                            t_strKeyword
-                        }));
-
-                t_sbKeywordRetrievalMethods.append(
-                    t_KeywordRetrievalMethodBodyFormatter.format(
-                        new Object[]
-                        {
-                            t_strFieldType,
-                            stringUtils.capitalize(t_strKeyword),
-                            t_strKeyword
-                        }));
+                result =
+                      ""
+                    + t_mKeywordtypes.get(buildKey(keyword));
             }
         }
 
-        t_Formatter = new MessageFormat(acmslImports);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    t_sbAcmslImports
-                }));
+        return result;
+    }
 
-        t_sbResult.append(jdkImports);
+    /**
+     * Specifies the keyword types.
+     * @param keywordTypes the keyword types.
+     */
+    private void immutableSetKeywordTypes(final Map keywordTypes)
+    {
+        m__mKeywordTypes = keywordTypes;
+    }
 
-        t_Formatter = new MessageFormat(javadoc);
-        t_sbResult.append(t_Formatter.format(t_aRepository));
+    /**
+     * Specifies the keyword types.
+     * @param keywordTypes the keyword types.
+     */
+    protected void setKeywordTypes(final Map keywordTypes)
+    {
+        immutableSetKeywordTypes(keywordTypes);
+    }
 
-        t_Formatter = new MessageFormat(classDefinition);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    t_strRepository + "KeywordRepository"
-                }));
+    /**
+     * Retrieves the keyword types.
+     * @return such types.
+     */
+    protected Map getKeywordTypes()
+    {
+        return m__mKeywordTypes;
+    }
 
-        t_sbResult.append(classStart);
+    /**
+     * Builds the key based on the keyword.
+     * @param keyword the keyword.
+     * @return the associated key.
+     */
+    protected Object buildKey(final String keyword)
+    {
+        Object result = keyword;
 
-        t_Formatter = new MessageFormat(singletonBody);
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    t_strRepository + "KeywordRepository"
-                }));
+        if  (keyword != null)
+        {
+            result = "keyword." + keyword;
+        }
 
-        t_sbResult.append(t_sbKeywordRetrievalMethods);
+        return result;
+    }
 
-        t_sbResult.append(classEnd);
+    /**
+     * Retrieves the keyword types.
+     * @return such information.
+     */
+    protected Collection retrieveKeywordTypes()
+    {
+        return retrieveKeywordTypes(getKeywords());
+    }
 
-        return t_sbResult.toString();
+    /**
+     * Retrieves the keyword types.
+     * @param keywords the keywords.
+     * @return such information.
+     */
+    protected Collection retrieveKeywordTypes(final Collection keywords)
+    {
+        Collection result = new ArrayList();
+
+        Iterator t_Iterator = (keywords != null) ? keywords.iterator() : null;
+
+        if  (t_Iterator != null)
+        {
+            while  (t_Iterator.hasNext())
+            {
+                result.add(getKeywordFieldType((String) t_Iterator.next()));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the uncapitalized keywords.
+     * @return such information.
+     */
+    protected Collection retrieveKeywordsUncapitalized()
+    {
+        return
+            retrieveKeywordsUncapitalized(getKeywords(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the uncapitalized keywords.
+     * @param keywords the keywords.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such information.
+     * @precondition decorationUtils != null
+     */
+    protected Collection retrieveKeywordsUncapitalized(
+        final Collection keywords, final DecorationUtils decorationUtils)
+    {
+        Collection result = new ArrayList();
+
+        Iterator t_Iterator = (keywords != null) ? keywords.iterator() : null;
+
+        if  (t_Iterator != null)
+        {
+            while  (t_Iterator.hasNext())
+            {
+                result.add(uncapitalize((String) t_Iterator.next(), decorationUtils));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Uncapitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the uncapitalzed value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String uncapitalize(final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.uncapitalize(decorationUtils.capitalize(value));
+    }
+
+    /**
+     * Retrieves the string template group.
+     * @return such instance.
+     */
+    protected StringTemplateGroup retrieveGroup()
+    {
+        return retrieveGroup("/org/acmsl/queryj/sql/KeywordRepository.stg");
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    public String getTemplateName()
+    {
+        return "Keyword repository";
     }
 }

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -32,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create keyword repository templates.
+ * Description: Represents entities able to create keyword repositories..
  *
  */
 package org.acmsl.queryj.tools.templates;
@@ -40,26 +41,41 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate;
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Collection;
 
 /**
- * Is able to create keyword repository templates.
+ * Represents entities able to create keyword repositories.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  */
 public interface KeywordRepositoryTemplateFactory
+    extends  BasePerRepositoryTemplateFactory
 {
     /**
-     * Generates a keyword repository template.
+     * Generates a <i>per-repository</i> template.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
-     * @param repository the repository.
+     * @param basePackageName the base package name.
+     * @param engineName the engine name.
+     * @param repositoryName the name of the repository.
+     * @param tables the tables.
      * @param header the header.
-     * @param project the project, for logging purposes.
-     * @param task the task, for logging purposes.
-     * @return such template.
+     * @return a template.
+     * @throws QueryJException if the input values are invalid.
      */
-    public KeywordRepositoryTemplate createKeywordRepositoryTemplate(
+    public BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
         final String packageName,
-        final String repository,
-        final String header);
+        final String basePackageName,
+        final String repositoryName,
+        final String engineName,
+        final String header)
+      throws  QueryJException;
 }
