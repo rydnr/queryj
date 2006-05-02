@@ -48,8 +48,8 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 
 /*
@@ -73,7 +73,7 @@ import java.util.Collection;
            >Jose San Leandro</a>
  */
 public class DAOChooserTemplateGenerator
-    implements  BasePerRepositoryTemplateFactory,
+    implements  DefaultBasePerRepositoryTemplateFactory,
                 BasePerRepositoryTemplateGenerator
 {
     /**

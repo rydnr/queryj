@@ -249,7 +249,7 @@ import <basePackageName>.<voFactorySubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.QueryPreparedStatementCreator;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
-import <basePackageName>.<damSubpackageName>.DataAccessManager;
+import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
 <fkAttributes:foreignkey_statementsetter_import(
   basePackageName=basePackageName,
   fkssSubpackageName=fkssSubpackageName,

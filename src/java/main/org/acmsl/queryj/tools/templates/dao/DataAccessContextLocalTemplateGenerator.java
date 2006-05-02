@@ -71,7 +71,8 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public class DataAccessContextLocalTemplateGenerator
-    implements  DataAccessContextLocalTemplateFactory
+    implements  DataAccessContextLocalTemplateFactory,
+                BasePerRepositoryTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -119,7 +120,7 @@ public class DataAccessContextLocalTemplateGenerator
 
         if  (result == null) 
         {
-            result = new DataAccessContextLocalTemplateGenerator() {};
+            result = new DataAccessContextLocalTemplateGenerator();
 
             setReference(result);
         }

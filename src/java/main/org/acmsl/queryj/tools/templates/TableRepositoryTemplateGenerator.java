@@ -47,7 +47,6 @@ import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.TableRepositoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -69,7 +68,7 @@ import java.util.Collection;
            >Jose San Leandro</a>
  */
 public class TableRepositoryTemplateGenerator
-    implements  BasePerRepositoryTemplateFactory,
+    implements  DefaultBasePerRepositoryTemplateFactory,
                 BasePerRepositoryTemplateGenerator
 {
     /**

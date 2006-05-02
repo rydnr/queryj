@@ -65,7 +65,8 @@ source(input) ::= <<
 <package_declaration(
   packageNames=
   [
-    input.base_package_name
+    input.base_package_name,
+    typeInitMap.tableRepositorySubpackageName
   ])>
 
 /*

@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: $RCSfile$
+// Filename: $RCSfile: $
 //
 // Author: Jose San Leandro Armendariz
 //
@@ -46,7 +46,7 @@ source(input) ::= <<
  Generates the DataAccessManager.
  @param input.copyright_years the copyright's years.
  @param input.tables the tables.
- @param input.repository the repository.
+ @param input.tr_name the repository name.
 !>
 <if(input.header)>
 <input.header>
@@ -55,8 +55,8 @@ source(input) ::= <<
   years=input.copyright_years,
   description=
     [
-      first_line_description(model=input.repository),
-      second_line_description(model=input.repository)
+      first_line_description(model=input.tr_name),
+      second_line_description(model=input.tr_name)
     ],
     timestamp=input.timestamp)>
 <endif>
@@ -64,7 +64,8 @@ source(input) ::= <<
 <package_declaration(
   packageNames=
   [
-    input.base_package_name
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName
   ])>
 
 /*
@@ -112,14 +113,14 @@ class(input) ::= <<
 !>
 /**
  * <[
-      first_line_description(model=input.repository),
-      second_line_description(model=input.repository)
+      first_line_description(model=input.tr_name),
+      second_line_description(model=input.tr_name)
     ]:{line |<line>}; separator="\n * ")>
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.repository>DataAccessManager
+public class <input.tr_name_capitalized>DataAccessManager
 {
     /**
      * Singleton implemented as a weak reference.
@@ -129,15 +130,16 @@ public class <input.repository>DataAccessManager
     <input.tables:dao_attribute_declaration(table=it); separator="\n\n">
 
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * Public constructor to allow reflective access.
      */
-    protected DataAccessManager() {};
+    public <input.tr_name_capitalized>DataAccessManager() {};
 
     /**
      * Specifies a new weak reference.
      * @param manager the new manager instance.
      */
-    private static void setReference(final DataAccessManager manager)
+    private static void setReference(
+        final <input.tr_name_capitalized>DataAccessManager manager)
     {
         singleton = new WeakReference(manager);
     }
@@ -152,23 +154,23 @@ public class <input.repository>DataAccessManager
     }
 
     /**
-     * Retrieves a \<code>DataAccessManager\</code> instance.
+     * Retrieves a \<code\><input.tr_name_capitalized>DataAccessManager\</code\> instance.
      * @return such instance.
      */
-    public static DataAccessManager getInstance()
+    public static <input.tr_name_capitalized>DataAccessManager getInstance()
     {
-        DataAccessManager result = null;
+        <input.tr_name_capitalized>DataAccessManager result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (DataAccessManager) reference.get();
+            result = (<input.tr_name_capitalized>DataAccessManager) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new DataAccessManager();
+            result = new <input.tr_name_capitalized>DataAccessManager();
 
             setReference(result);
         }

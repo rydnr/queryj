@@ -81,8 +81,8 @@ source(input) ::= <<
     table=it,
     engineName=input.engine_name,
     engineNameLowercased=input.engine_name_lowercased,
-    basePackageName=input.basePackageName,
-    baseDAOSubPackageName=typeInitMap.daoSubpackage,
+    basePackageName=input.base_package_name,
+    baseDAOSubPackageName=typeInitMap.baseDAOSubpackageName,
     subpackageName=typeInitMap.rdbSubpackageName);
    separator="\n\n">
 \</beans\>
@@ -108,7 +108,7 @@ dao_definition(
 \<!-- DAO declaration for <table.name> --\>
 \<bean
   id="<table.voName>DAO"
-  class="<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineNameLowercased>.<engineName><table.singularNameCapitalizedLowercased>DAO"\>
+  class="<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineNameLowercased>.<engineName><table.singularNameCapitalized>DAO"\>
   \<property name="dataSource"\>\<ref local="dataSource"/\>\</property\>
 \</bean>
 \<!-- Transactional declaration for <table.name> --\>
