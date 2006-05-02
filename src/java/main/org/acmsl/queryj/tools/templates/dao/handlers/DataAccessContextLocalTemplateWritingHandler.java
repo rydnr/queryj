@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -32,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the DataAccessContextLocal template.
+ * Description: Writes the Spring DAO definition file.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -40,13 +41,11 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplate;
-import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessContextLocalTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -58,17 +57,15 @@ import org.apache.tools.ant.BuildException;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
- * Writes the DAO chooser template.
+ * Writes the Spring DAO definition file.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class DataAccessContextLocalTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
      * Creates a DataAccessContextLocalTemplateWritingHandler.
@@ -76,89 +73,54 @@ public class DataAccessContextLocalTemplateWritingHandler
     public DataAccessContextLocalTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            try 
-            {
-                Map attributes = command.getAttributeMap();
-
-                DataAccessContextLocalTemplateGenerator
-                    t_DataAccessContextLocalTemplateGenerator =
-                        DataAccessContextLocalTemplateGenerator.getInstance();
-
-                DataAccessContextLocalTemplate
-                    t_DataAccessContextLocalTemplate =
-                        retrieveDataAccessContextLocalTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                               != null) 
-                     && (t_DataAccessContextLocalTemplate          != null)
-                     && (t_DataAccessContextLocalTemplateGenerator != null))
-                {
-                    t_DataAccessContextLocalTemplateGenerator.write(
-                        t_DataAccessContextLocalTemplate, t_OutputDir);
-                }
-            }
-            catch  (IOException ioException)
-            {
-                throw new BuildException(ioException);
-            }
-        }
-        
-        return result;
+        return ConfigurationPropertiesTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the DataAccessContextLocal template from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
-     * @return the repository instance.
-     * @throws BuildException if the DataAccessContextLocal template process if faulty.
+     * @return the template.
+     * @throws BuildException if the template retrieval process if faulty.
      */
-    protected DataAccessContextLocalTemplate
-        retrieveDataAccessContextLocalTemplate(Map parameters)
-        throws  BuildException
+    protected BasePerRepositoryTemplate retrieveTemplate(final Map parameters)
+      throws  BuildException
     {
-        DataAccessContextLocalTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DataAccessContextLocalTemplate)
-                    parameters.get(
+        return
+            (BasePerRepositoryTemplate)
+                parameters.get(
                         TemplateMappingManager.DATAACCESSCONTEXTLOCAL_TEMPLATE);
-        }
-        
-        return result;
     }
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition projectFolder != null
+     * @precondition projectPackage != null
+     * @precondition engineName != null
+     * @precondition packageUtils != null
      */
-    protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
+    protected File retrieveOutputDir(
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
+      throws  BuildException
     {
-        File result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-        }
-
-        return result;
+        return projectFolder;
     }
 }

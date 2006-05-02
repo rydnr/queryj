@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -40,8 +41,12 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplate;
 import org.acmsl.queryj.tools.templates.dao
     .DataAccessContextLocalTemplateFactory;
@@ -58,6 +63,7 @@ import org.acmsl.commons.utils.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 
 /**
  * Is able to generate dataAccessContext-local.xml templates.
@@ -122,32 +128,47 @@ public class DataAccessContextLocalTemplateGenerator
     }
 
     /**
-     * Creates a DataAccessContextLocal template instance.
-     * @param jndiLocation the JNDI location.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
+     * Generates a <code>DataAccessContextLocal</code> template.
+     * @param metadataManager the metadata manager.
+     * @param packageName the package name.
      * @param basePackageName the base package name.
+     * @param repositoryName the name of the repository.
+     * @param engineName the engine name.
+     * @param jndiLocation the JNDI location.
+     * @param tables the table names.
      * @param header the header.
-     * @return such template.
-     * @precondition repository != null
-     * @precondition engineName != null
+     * @return a template.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition metadataManager != null
+     * @precondition packageName != null
      * @precondition basePackageName != null
+     * @precondition repositoryName != null
+     * @precondition engineName != null
+     * @precondition jndiLocation != null
+     * @precondition tables != null
      */
-    public DataAccessContextLocalTemplate createDataAccessContextLocalTemplate(
-        final String jndiLocation,
-        final String engineName,
-        final String engineVersion,
+    public BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
+        final String packageName,
         final String basePackageName,
+        final String repositoryName,
+        final String engineName,
+        final String jndiLocation,
+        final Collection tables,
         final String header)
+      throws  QueryJException
     {
         return
             new DataAccessContextLocalTemplate(
+                metadataManager,
                 header,
                 getDecoratorFactory(),
-                jndiLocation,
+                packageName,
+                basePackageName,
+                repositoryName,
                 engineName,
-                engineVersion,
-                basePackageName);
+                jndiLocation,
+                tables);
     }
 
     /**
@@ -160,16 +181,13 @@ public class DataAccessContextLocalTemplateGenerator
     }
 
     /**
-     * Writes a dataAccessContext-local.xml to disk.
+     * Writes a per-repository template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
      */
     public void write(
-        final DataAccessContextLocalTemplate template,
-        final File outputDir)
+        final BasePerRepositoryTemplate template, final File outputDir)
       throws  IOException
     {
         write(
@@ -189,7 +207,7 @@ public class DataAccessContextLocalTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final DataAccessContextLocalTemplate template,
+        final BasePerRepositoryTemplate template,
         final File outputDir,
         final FileUtils fileUtils)
       throws  IOException

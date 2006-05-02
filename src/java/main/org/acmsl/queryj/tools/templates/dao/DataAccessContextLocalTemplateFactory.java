@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -32,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create
- *              dataAccessContext-local.xml templates.
+ * Description: Represents entities able to create Spring DAO defintion
+ *              templates.
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
@@ -42,30 +43,44 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Collection;
 
 /**
- * Represents entities able to create dataAccessContext-local.xml templates.
+ * Represents entities able to create Spring DAO defintion templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public interface DataAccessContextLocalTemplateFactory
+    extends  BasePerRepositoryTemplateFactory
 {
     /**
-     * Generates a dataAccessContext-local.xml template.
-     * @param jndiLocation the JNDI location name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
+     * Generates a <code>DataAccessContextLocal</code> template.
+     * @param metadataManager the metadata manager.
+     * @param packageName the package name.
      * @param basePackageName the base package name.
+     * @param repositoryName the name of the repository.
+     * @param engineName the engine name.
+     * @param jndiLocation the JNDI location.
+     * @param tables the table names.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the input values are invalid.
+     * @throws QueryJException if the input is invalid.
      */
-    public DataAccessContextLocalTemplate createDataAccessContextLocalTemplate(
-        final String jndiLocation,
-        final String engineName,
-        final String engineVersion,
+    public BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
+        final String packageName,
         final String basePackageName,
+        final String repositoryName,
+        final String engineName,
+        final String jndiLocation,
+        final Collection tables,
         final String header)
       throws  QueryJException;
 }

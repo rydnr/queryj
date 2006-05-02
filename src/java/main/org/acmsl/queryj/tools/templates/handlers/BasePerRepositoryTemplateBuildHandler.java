@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -72,6 +73,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+
+/*
+ * Importing some Commons-Logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Builds a per-repository template using database metadata.
@@ -241,14 +247,16 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         try
         {
             BasePerRepositoryTemplate t_Template =
-                templateFactory.createTemplate(
+                createTemplate(
                     metadataManager,
+                    templateFactory,
                     packageName,
                     projectPackage,
                     repository,
                     engineName,
+                    header,
                     t_cTableNames,
-                    header);
+                    parameters);
 
             storeTemplate(t_Template, parameters);
         }
@@ -257,6 +265,63 @@ public abstract class BasePerRepositoryTemplateBuildHandler
             throw new BuildException(queryjException);
         }
         
+        return result;
+    }
+
+    /**
+     * Uses the factory to create the template.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param factory the template factory.
+     * @param packageName the package name.
+     * @param projectPackage the base package.
+     * @param repository the repository.
+     * @param engineName the engine name.
+     * @param tableNames the table names.
+     * @param header the header.
+     * @return the template.
+     * @throws QueryJException on invalid input.
+     * @precondition metadataManager != null
+     * @precondition packageName != null
+     * @precondition projectPackage != null
+     * @precondition repository != null
+     * @precondition engineName != null
+     * @precondition tableNames != null
+     * @precondition factory != null
+     */
+    protected BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
+        final BasePerRepositoryTemplateFactory templateFactory,
+        final String projectPackage,
+        final String packageName,
+        final String repository,
+        final String engineName,
+        final String header,
+        final Collection tableNames,
+        final Map parameters)
+      throws  QueryJException
+    {
+        BasePerRepositoryTemplate result = null;
+
+        if  (templateFactory instanceof DefaultBasePerRepositoryTemplateFactory)
+        {
+            result =
+                ((DefaultBasePerRepositoryTemplateFactory) templateFactory)
+                    .createTemplate(
+                        metadataManager,
+                        packageName,
+                        projectPackage,
+                        repository,
+                        engineName,
+                        tableNames,
+                        header);
+        }
+        else
+        {
+            LogFactory.getLog(BasePerRepositoryTemplateBuildHandler.class).warn(
+                  "Unexpected BasePerRepository factory. Forgot overriding build handler's "
+                + "createTemplate(..) ?");
+        }
+
         return result;
     }
 
