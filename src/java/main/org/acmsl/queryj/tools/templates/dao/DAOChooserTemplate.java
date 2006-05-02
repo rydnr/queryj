@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -19,7 +20,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
+    Contact info: jose.sanleandro@acm-sl.com
     Postal Address: c/Playa de Lagoa, 1
                     Urb. Valdecabanas
                     Boadilla del monte
@@ -32,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate DAOChooser class according
- *              to database metadata.
+ * Description: Is able to generate the configuration file for configuring
+ *              DAOChooser.
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
@@ -41,241 +42,145 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.CachingTableDecorator;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.TableDecorator;
+import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing StringTemplate classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JDK classes.
  */
-import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
- * Is able to generate DAOChooser class according to database
- * metadata.
+ * Is able to generate the configuration file for configuring
+ * DAOChooser.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public class DAOChooserTemplate
-    extends  AbstractDAOChooserTemplate
-    implements DAOChooserTemplateDefaults
+    extends  BasePerRepositoryTemplate
 {
     /**
-     * Builds a <code>DAOChooserTemplate</code> using given information.
+     * Builds a <code>DAOChooserTemplate</code> using given
+     * information.
+     * @param metadataManager the database metadata manager.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
-     * @param repository the repository.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
+     * @param engineName the engine name.
+     * @param tables the tables.
      */
     public DAOChooserTemplate(
+        final MetadataManager metadataManager,
         final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
-        final String repository)
+        final String basePackageName,
+        final String repositoryName,
+        final String engineName,
+        final Collection tables)
     {
         super(
-//            (header != null) ? header : DEFAULT_HEADER,
-            DEFAULT_HEADER,
+            metadataManager,
+            header,
             decoratorFactory,
-            DEFAULT_PACKAGE_DECLARATION,
             packageName,
-            repository,
-            DEFAULT_JDK_IMPORTS,
-            DEFAULT_LOGGING_IMPORTS,
-            DEFAULT_JAVADOC,
-            DEFAULT_CLASS_DEFINITION,
-            DEFAULT_CLASS_START,
-            DEFAULT_PROPERTIES_KEYS,
-            DEFAULT_PROPERTIES_REFERENCE,
-            DEFAULT_SINGLETON_BODY,
-            DEFAULT_PROPERTIES_ACCESSORS,
-            DEFAULT_HELPER_METHODS,
-            DEFAULT_GETDAOFACTORY_METHOD,
-            DEFAULT_CLASS_END);
+            basePackageName,
+            repositoryName,
+            engineName,
+            tables);
     }
 
     /**
-     * Retrieves the source code of the generated table repository.
-     * @param header the header.
-     * @return such source code.
+     * Retrieves the string template group.
+     * @return such instance.
      */
-    protected String generateOutput(final String header)
+    protected StringTemplateGroup retrieveGroup()
     {
-        return
-            generateOutput(
-                header,
-                getPackageDeclaration(),
-                getPackageName(),
-                getRepository(),
-                getJdkImports(),
-                getLoggingImports(),
-                getJavadoc(),
-                getClassDefinition(),
-                getClassStart(),
-                getPropertiesKeys(),
-                getPropertiesReference(),
-                getSingletonBody(),
-                getPropertiesAccessors(),
-                getHelperMethods(),
-                getGetDAOFactoryMethods(),
-                getClassEnd(),
-                getTables(),
-                DAOChooserTemplateUtils.getInstance(),
-                EnglishGrammarUtils.getInstance(),
-                StringUtils.getInstance());
+        return retrieveGroup("/org/acmsl/queryj/dao/DAOChooser.stg");
     }
 
     /**
-     * Retrieves the source code of the generated table repository.
-     * @param header the header.
-     * @param packageDeclaration the package declaration.
-     * @param packageName the package name.
-     * @param repository the repository.
-     * @param jdkImports the JDK imports.
-     * @param loggingImports the logging imports.
-     * @param javadoc the class Javadoc.
-     * @param classDefinition the class definition.
-     * @param classStart the class start.
-     * @param propertiesKeys the properties' keys template.
-     * @param propertiesReference the properties reference template.
-     * @param singletonBody the singleton body.
-     * @param propertiesAccessors the properties accessors template.
-     * @param helperMethods the helper methods.
-     * @param getDAOFactoryMethods the getDAOFactory methods.
-     * @param classEnd the class end.
+     * Retrieves the template name.
+     * @return such information.
+     */
+    public String getTemplateName()
+    {
+        return "DAOChooser";
+    }
+
+    /**
+     * Fills the core parameters.
+     * @param input the input.
+     * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param basePackageName the base package name.
+     * @param subpackageName the subpackage name.
+     * @param tableRepositoryName the table repository name.
+     * @param engineName the engine name.
      * @param tables the tables.
-     * @param daoChooserTemplateUtils the <code>DAOChooserTemplateUtils</code>
-     * instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
-     * instance.
+     * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @return such source code.
+     * @precondition input != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     * @precondition subpackageName != null
+     * @precondition basePackageName != null
+     * @precondition tableRepositoryName != null
      * @precondition tables != null
-     * @precondition daoChooserTemplateUtils != null
-     * @precondition englishGrammarUtils != null
+     * @precondition timestamp != null
      * @precondition stringUtils != null
      */
-    protected String generateOutput(
-        final String header,
-        final String packageDeclaration,
-        final String packageName,
-        final String repository,
-        final String jdkImports,
-        final String loggingImports,
-        final String javadoc,
-        final String classDefinition,
-        final String classStart,
-        final String propertiesKeys,
-        final String propertiesReference,
-        final String singletonBody,
-        final String propertiesAccessors,
-        final String helperMethods,
-        final String getDAOFactoryMethods,
-        final String classEnd,
+    protected void fillCoreParameters(
+        final Map input,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
+        final String basePackageName,
+        final String subpackageName,
+        final String tableRepositoryName,
+        final String engineName,
         final Collection tables,
-        final DAOChooserTemplateUtils daoChooserTemplateUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
+        final String timestamp,
         final StringUtils stringUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        super.fillCoreParameters(
+            input,
+            metadataManager,
+            decoratorFactory,
+            basePackageName,
+            subpackageName,
+            tableRepositoryName,
+            engineName,
+            tables,
+            timestamp,
+            stringUtils);
 
-        t_sbResult.append(header);
-
-        MessageFormat t_Formatter =
-            new MessageFormat(packageDeclaration);
-
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    packageName
-                }));
-
-        t_sbResult.append(jdkImports);
-        t_sbResult.append(loggingImports);
-        t_sbResult.append(javadoc);
-        t_sbResult.append(classDefinition);
-
-        t_sbResult.append(classStart);
-
-        StringBuffer t_sbPropertiesKeys = new StringBuffer();
-        MessageFormat t_PropertiesKeysFormatter =
-            new MessageFormat(propertiesKeys);
-
-        StringBuffer t_sbGetDAOFactoryMethods = new StringBuffer();
-        MessageFormat t_GetDAOFactoryMethodFormatter =
-            new MessageFormat(getDAOFactoryMethods);
-
-        Iterator t_itTables = tables.iterator();
-
-        while  (t_itTables.hasNext()) 
-        {
-            String t_strTable = (String) t_itTables.next();
-
-            if  (t_strTable != null)
-            {
-                String t_strCapitalizedTable =
-                    stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
-                            t_strTable.toLowerCase()),
-                        '_');
-
-                String t_strUpperCaseTable =
-                    (  ("" + repository).toUpperCase()
-                       + "_" + t_strCapitalizedTable).toUpperCase();
-
-                String t_strDottedTable =
-                    (  ("" + repository).toLowerCase()
-                       + "." + t_strCapitalizedTable).toLowerCase();
-
-                t_sbPropertiesKeys.append(
-                    t_PropertiesKeysFormatter.format(
-                        new Object[]
-                        {
-                            t_strUpperCaseTable,
-                            t_strDottedTable
-                        }));
-
-                t_sbGetDAOFactoryMethods.append(
-                    t_GetDAOFactoryMethodFormatter.format(
-                        new Object[]
-                        {
-                            t_strCapitalizedTable,
-                            t_strUpperCaseTable,
-                            t_strCapitalizedTable
-                        }));
-            }
-        }
-
-        t_sbResult.append(t_sbPropertiesKeys);
-
-        t_Formatter = new MessageFormat(propertiesReference);
-
-        t_sbResult.append(
-            t_Formatter.format(
-                new Object[]
-                {
-                    daoChooserTemplateUtils.retrievePropertiesFileName(
-                        ("" + repository).toLowerCase())
-                }));
-
-        t_sbResult.append(singletonBody);
-
-        t_sbResult.append(propertiesAccessors);
-
-        t_sbResult.append(helperMethods);
-
-        t_sbResult.append(t_sbGetDAOFactoryMethods);
-
-        t_sbResult.append(classEnd);
-
-        return t_sbResult.toString();
+        input.put("tr_name_uppercased", tableRepositoryName.toUpperCase());
+        input.put("tr_name_uppercased", tableRepositoryName.toUpperCase());
+        input.put("tr_name_capitalized", capitalize(tableRepositoryName));
     }
 }

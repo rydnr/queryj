@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -82,7 +83,7 @@ public interface DecoratorFactory
 
     /**
      * Creates a <code>ResultDecorator</code> for given
-     * property instance.
+     * result instance.
      * @param result the custom result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
@@ -94,8 +95,7 @@ public interface DecoratorFactory
         final MetadataManager metadataManager);
 
     /**
-     * Creates a <code>SqlDecorator</code> for given
-     * property instance.
+     * Creates a <code>SqlDecorator</code>.
      * @param sql the custom sql.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
@@ -105,4 +105,13 @@ public interface DecoratorFactory
         final Sql sql,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager);
+
+    /**
+     * Creates a <code>TableDecorator</code>.
+     * @param table the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated table for the concrete template.
+     */
+    public TableDecorator createTableDecorator(
+        final String table, final MetadataManager metadataManager);
 }

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -41,10 +42,14 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -58,6 +63,7 @@ import org.acmsl.commons.utils.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 
 /**
  * Is able to generate DAOChooser instances according
@@ -66,7 +72,8 @@ import java.lang.ref.WeakReference;
            >Jose San Leandro</a>
  */
 public class DAOChooserTemplateGenerator
-    implements  DAOChooserTemplateFactory
+    implements  BasePerRepositoryTemplateFactory,
+                BasePerRepositoryTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -123,25 +130,43 @@ public class DAOChooserTemplateGenerator
     }
 
     /**
-     * Creates a DAOChooser template instance.
+     * Generates a <code>DAOChooserTemplate</code>.
+     * @param metadataManager the metadata manager.
      * @param packageName the package name.
-     * @param repository the repository.
+     * @param basePackageName the base package name.
+     * @param repositoryName the name of the repository.
+     * @param engineName the engine name.
+     * @param tables the table names.
      * @param header the header.
-     * @return such template.
+     * @return a template.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition metadataManager != null
      * @precondition packageName != null
-     * @precondition repository != null
+     * @precondition basePackageName != null
+     * @precondition repositoryName != null
+     * @precondition engineName != null
+     * @precondition tables != null
      */
-    public DAOChooserTemplate createDAOChooserTemplate(
+    public BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
         final String packageName,
-        final String repository,
+        final String basePackageName,
+        final String repositoryName,
+        final String engineName,
+        final Collection tables,
         final String header)
+      throws  QueryJException
     {
         return
             new DAOChooserTemplate(
+                metadataManager,
                 header,
                 getDecoratorFactory(),
                 packageName,
-                repository);
+                basePackageName,
+                repositoryName,
+                engineName,
+                tables);
     }
 
     /**
@@ -155,19 +180,18 @@ public class DAOChooserTemplateGenerator
 
     /**
      * Writes a DAOChooser to disk.
-     * @param daoChooserTemplate the template to write.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition daoChooserTemplate != null
+     * @precondition template != null
      * @precondition outputDir != null
      */
     public void write(
-        final DAOChooserTemplate daoChooserTemplate,
-        final File outputDir)
+        final BasePerRepositoryTemplate template, final File outputDir)
       throws  IOException
     {
         write(
-            daoChooserTemplate,
+            template,
             outputDir,
             StringUtils.getInstance(),
             FileUtils.getInstance());
@@ -175,18 +199,18 @@ public class DAOChooserTemplateGenerator
 
     /**
      * Writes a DAOChooser to disk.
-     * @param daoChooserTemplate the template to write.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition daoChooserTemplate != null
+     * @precondition template != null
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final DAOChooserTemplate daoChooserTemplate,
+        final BasePerRepositoryTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
         final FileUtils fileUtils)
@@ -198,6 +222,6 @@ public class DAOChooserTemplateGenerator
               outputDir.getAbsolutePath()
             + File.separator
             + "DAOChooser.java",
-            daoChooserTemplate.generate());
+            template.generate());
     }
 }
