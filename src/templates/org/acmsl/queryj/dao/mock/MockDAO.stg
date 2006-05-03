@@ -76,7 +76,7 @@ source(input) ::= <<
 
 <project_imports(
   basePackageName=input.base_package_name,
-  daoSubpackageName=typeInitMap.daoSubpackageName,
+  daoSubpackageName=typeInitMap.baseDAOSubpackageName,
   voSubpackageName=typeInitMap.voSubpackageName,
   voName=input.vo_name)>
 
@@ -137,7 +137,7 @@ project_imports(basePackageName, daoSubpackageName, voSubpackageName, voName) ::
  */
 import <basePackageName>.<daoSubpackageName>.<voName>DAO;
 import <basePackageName>.<voSubpackageName>.<voName>;
-import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
+import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
 >>
 
 class(input, table) ::= <<
@@ -155,13 +155,20 @@ class(input, table) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class Mock<table.voName>DAO
+public abstract class Mock<table.voName>DAO
     implements  <table.voName>DAO
 {
     /**
      * A lock to synchronize writes and reads.
      */
     protected static final Object LOCK = new Object();
+
+<if(input.static_table)>
+    <input.static_attribute:static_table(
+      attribute=it,
+      primaryKeyAttributes=input.pk_attributes,
+      voName=input.vo_name)>
+<endif>
 
     /**
      * The storage of <table.name> information.
@@ -266,9 +273,11 @@ public class Mock<table.voName>DAO
 
         if  (t_<table.voName>Factory != null)
         {
+            /*
             result =
                 t_<table.voName>Factory.create<table.voName>(
                     <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
+            */
         }
 
         return result;
@@ -285,24 +294,8 @@ public class Mock<table.voName>DAO
           attr=it); separator=",\n">)
       throws DataAccessException
     {
-        Map t_m<table.voName>Map = null;
-
-        synchronized (LOCK)
-        {
-            t_m<table.voName>Map = get<table.voName>Map();
-
-            if  (t_m<table.voName>Map == null)
-            {
-                t_m<table.voName>Map = new Hashtable();
-                set<table.voName>Map(t_m<table.voName>Map);
-            }
-        }
-
-        t_m<table.voName>Map.put(
-            buildKey(
-                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
-            build<table.voName>(
-                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">));
+        create(
+            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">);
     }
 
     /**
@@ -319,12 +312,29 @@ public class Mock<table.voName>DAO
     {
         <table.voName> result = null;
 
-        insert(
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">);
+        Map t_m<table.voName>Map = null;
 
+        synchronized (LOCK)
+        {
+            t_m<table.voName>Map = get<table.voName>Map();
+
+            if  (t_m<table.voName>Map == null)
+            {
+                t_m<table.voName>Map = new Hashtable();
+                set<table.voName>Map(t_m<table.voName>Map);
+            }
+        }
+
+        /*
         result =
-            findByPrimaryKey(
-                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
+            build<table.voName>(
+                <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">);
+
+        t_m<table.voName>Map.put(
+            buildKey(
+                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
+            result);
+        */
 
         return result;
     }
@@ -487,3 +497,132 @@ public <cs.resultClass> <cs.nameUncapitalized>(
     return null;
 }
 >>
+
+static_table(
+  attribute, primaryKeyAttributes, voName) ::= <<
+<!
+  Generates the method to operate directly on defined constants.
+  @param attribute the static attribute.
+  @param primaryKeyAttributes the primary key.
+  @param voName the value object name.
+!>
+/**
+ * Loads \<i><voName>\</i> information from the constant pool,
+ * filtering by <attribute.name>.
+ * @param <attribute.nameLowercased> the <attribute.name>
+ * to filter.
+ * @return the \<code><voName>\</code> instance.
+ <precondition_notnull(name=attribute.name)>
+ */
+public <voName> findConstantBy<attribute.nameCapitalized>(
+    final <attribute.javaType> <attribute.name>)
+{
+    <voName> result = null;
+
+    int t_iLength =
+        (_ALL_QUERYJ_CONSTANTS_ != null)
+        ?  _ALL_QUERYJ_CONSTANTS_.length
+        :  0;
+
+    for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
+    {
+        <voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
+
+        if  (   (t_CurrentItem != null)
+             && (<attribute.nameLowercased>.equals(
+                    t_CurrentItem.get<attribute.nameCapitalized>())))
+        {
+            result = t_CurrentItem;
+            break;
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Loads \<i><voName>\</i> information from the constant pool,
+ * filtering by the primary key.
+ <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the \<code><voName>\</code> instance.
+ */
+public <voName> findConstantByPk(
+  <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">)
+{
+    <voName> result = null;
+
+    int t_iLength =
+        (_ALL_QUERYJ_CONSTANTS_ != null)
+        ?  _ALL_QUERYJ_CONSTANTS_.length
+        :  0;
+
+    boolean t_bFound = false;
+
+    for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
+    {
+        <voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
+
+        if  (t_CurrentItem != null)
+        {
+            t_bFound = true;
+
+            <primaryKeyAttributes:static_attribute_check(attr=it);
+              separator="\n">
+
+            if  (t_bFound)
+            {
+                result = t_CurrentItem;
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+>>
+
+static_attribute_check(attr) ::= <<
+<!
+ Generates the code to perform the static check on given attribute.
+ @param attr the attribute
+!>
+<if(attr.primitive)>
+<static_primitive_attribute_check(attr=attr)>
+<else>
+<static_object_attribute_check(attr=attr)>
+<endif>
+
+>>
+
+static_primitive_attribute_check(attr) ::= <<
+<!
+ Generates the code to perform the static check on given primitive attribute.
+ @param attr the attribute
+!>
+t_bFound =
+    (   (t_bFound)
+     && (t_CurrentItem.get<attr.nameCapitalized>() == <attr.nameLowercased>));
+>>
+
+static_object_attribute_check(attr) ::= <<
+<!
+ Generates the code to perform the static check on given primitive attribute.
+ @param attr the attribute
+!>
+if  (t_bFound)
+{
+    Object t_<attr.nameCapitalized> =
+        (t_CurrentItem.get<attr.nameCapitalized>();
+
+    if  (t_<attr.nameCapitalized> == null)
+    {
+        t_bFound = (<attr.name> == null);
+    }
+    else
+    {
+        t_bFound = t_<attr.nameCapitalized>.equals(<attr.name>);
+    }
+}
+>>
+

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -246,7 +247,7 @@ public class MockDAOFactoryTemplate
         + "     */\n"
         + "    public {0}DAO create{0}DAO()\n" // table
         + "    '{'\n"
-        + "        return new Mock{0}DAO() '{'}';\n"
+        + "        return null; //new Mock{0}DAO() '{'}';\n"
         + "    '}'\n\n";
 
     /**
