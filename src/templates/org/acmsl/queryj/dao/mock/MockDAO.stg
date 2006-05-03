@@ -40,7 +40,7 @@
 //
 // $Id: BaseDAO.stg 563 2006-04-26 21:06:32Z chous $
 //
-group BaseDAO;
+group MockDAO;
 
 source(input) ::= <<
 <!

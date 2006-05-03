@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -40,17 +41,11 @@ package org.acmsl.queryj.tools.templates.dao.mock.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplate;
-import org.acmsl.queryj.tools.templates.dao.mock
-    .MockDAOFactoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.mock.handlers
-    .MockDAOFactoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -63,139 +58,77 @@ import org.apache.tools.ant.BuildException;
  */
 import java.io.File;
 import java.io.IOException;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Writes Mock DAO factory templates.
+ * Writes mock DAO factory templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class MockDAOFactoryTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler
 {
     /**
-     * Creates a MockDAOFactoryTemplateWritingHandler.
+     * Creates a <code>MockDAOFactoryTemplateWritingHandler</code> instance.
      */
     public MockDAOFactoryTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
     {
-        return handle(command.getAttributeMap());
+        return MockDAOFactoryTemplateGenerator.getInstance();
     }
 
     /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     */
-    protected boolean handle(final Map parameters)
-        throws  BuildException
-    {
-        return
-            handle(
-                retrieveMockDAOFactoryTemplates(parameters),
-                retrieveOutputDir(parameters),
-                MockDAOFactoryTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Handles given information.
-     * @param templates the templates.
-     * @param outputDir the output dir.
-     * @param generator the generator.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition templates != null
-     * @precondition outputDir != null
-     * @precondition generator != null
-     */
-    protected boolean handle(
-        final MockDAOFactoryTemplate[] templates,
-        final File outputDir,
-        final MockDAOFactoryTemplateGenerator generator)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try 
-        {
-            int t_iLength = (templates != null) ? templates.length : 0;
-
-            for  (int t_iMockDAOFactoryIndex = 0;
-                      t_iMockDAOFactoryIndex < t_iLength;
-                      t_iMockDAOFactoryIndex++)
-            {
-                generator.write(templates[t_iMockDAOFactoryIndex], outputDir);
-            }
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the Mock DAO factory templates from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
-     * @precondition parameters != null
      */
-    protected MockDAOFactoryTemplate[] retrieveMockDAOFactoryTemplates(
+    protected BasePerTableTemplate[] retrieveTemplates(
         final Map parameters)
       throws  BuildException
     {
         return
-            (MockDAOFactoryTemplate[])
+            (BasePerTableTemplate[])
                 parameters.get(
                     TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return retrieveOutputDir(parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param tableName the table name.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
+     * @precondition projectFolder != null
+     * @precondition projectPackage != null
+     * @precondition engineName != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
+        final String tableName,
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveMockDAOFactoryFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters));
+                projectFolder,
+                projectPackage,
+                useSubfolders);
     }
 }
