@@ -59,6 +59,7 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
+import org.acmsl.queryj.tools.metadata.TableDecorator;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
@@ -597,7 +598,8 @@ public abstract class BasePerTableTemplate
             tableName,
             engineName,
             engineVersion,
-            metadataManager);
+            metadataManager,
+            decoratorFactory);
 
         fillJavaHeaderParameters(
             input,header,  copyrightYears, timestamp, metadataManager);
@@ -681,20 +683,26 @@ public abstract class BasePerTableTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition input != null
      * @precondition tableName != null
      * @precondition engineName != null
      * @precondition engineVersion != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     protected void fillCommonParameters(
         final Map input,
         final String tableName,
         final String engineName,
         final String engineVersion,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         input.put("table_name",  tableName);
+        input.put(
+            "table",
+            decorate(tableName, metadataManager, decoratorFactory));
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);
     }
@@ -1339,5 +1347,23 @@ public abstract class BasePerTableTemplate
         }
 
         return result;
+    }
+
+    /**
+     * Decorates given table.
+     * @param table the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return the decorated table.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected TableDecorator decorate(
+        final String table,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        return decoratorFactory.createTableDecorator(table, metadataManager);
     }
 }

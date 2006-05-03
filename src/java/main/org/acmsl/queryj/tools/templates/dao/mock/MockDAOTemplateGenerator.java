@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -32,8 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate Mock DAO implementations according to
- *              database metadata.
+ * Description: Is able to generate mock DAO implementations.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.mock;
@@ -42,13 +42,15 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplate;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplateFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -65,13 +67,13 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Is able to generate Mock DAO implementations according to database
- * metadata.
+ * Is able to generate mock DAO implementations.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class MockDAOTemplateGenerator
-    implements  MockDAOTemplateFactory
+    implements  BasePerTableTemplateFactory,
+                BasePerTableTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -87,7 +89,7 @@ public class MockDAOTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(
+    private static void setReference(
         final MockDAOTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
@@ -97,13 +99,13 @@ public class MockDAOTemplateGenerator
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
 
     /**
-     * Retrieves a MockDAOTemplateGenerator instance.
+     * Retrieves a <code>MockDAOTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static MockDAOTemplateGenerator getInstance()
@@ -119,7 +121,7 @@ public class MockDAOTemplateGenerator
 
         if  (result == null) 
         {
-            result = new MockDAOTemplateGenerator() {};
+            result = new MockDAOTemplateGenerator();
 
             setReference(result);
         }
@@ -128,36 +130,53 @@ public class MockDAOTemplateGenerator
     }
 
     /**
-     * Generates a Mock DAO template.
-     * @param tableTemplate the table template.
+     * Generates a MockDAO template.
+     * @param tableName the table name.
      * @param metadataManager the metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param basePackageName the base package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param mockPackageName the mock package name.
      * @param repositoryName the name of the repository.
      * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
-     * @precondition tableTemplate != null
+     * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition quote != null
+     * @precondition mockPackageName != null
+     * @precondition repositoryName != null
      */
-    public MockDAOTemplate createMockDAOTemplate(
-        final TableTemplate tableTemplate,
+    public BasePerTableTemplate createTemplate(
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String basePackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String mockPackageName,
         final String repositoryName,
         final String header)
       throws  QueryJException
     {
         return
             new MockDAOTemplate(
-                tableTemplate,
+                tableName,
                 metadataManager,
+                customSqlProvider,
                 header,
                 getDecoratorFactory(),
                 packageName,
-                basePackageName,
+                engineName,
+                engineVersion,
+                quote,
+                mockPackageName,
                 repositoryName);
     }
 
@@ -171,43 +190,42 @@ public class MockDAOTemplateGenerator
     }
 
     /**
-     * Writes a Mock DAO template to disk.
-     * @param mockDAOTemplate the Mock DAO template to write.
+     * Writes a MockDAO template to disk.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition mockDAOTemplate != null
+     * @precondition template instanceof MockDAOTemplate
      * @precondition outputDir != null
      */
     public void write(
-        final MockDAOTemplate mockDAOTemplate,
-        final File outputDir)
+        final BasePerTableTemplate template, final File outputDir)
       throws  IOException
     {
         write(
-            mockDAOTemplate,
-            outputDir,
+            template,
+            outputDir, 
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
             FileUtils.getInstance());
     }
 
     /**
-     * Writes a Mock DAO template to disk.
-     * @param mockDAOTemplate the Mock DAO template to write.
+     * Writes a MockDAO template to disk.
+     * @param template template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition mockDAOTemplate != null
+     * @precondition template instanceof MockDAOTemplate
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final MockDAOTemplate mockDAOTemplate,
+        final BasePerTableTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
@@ -217,16 +235,14 @@ public class MockDAOTemplateGenerator
         outputDir.mkdirs();
 
         fileUtils.writeFile(
-            outputDir.getAbsolutePath()
+              outputDir.getAbsolutePath()
             + File.separator
             + "Mock"
             + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    mockDAOTemplate
-                        .getTableTemplate()
-                            .getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase()),
                 '_')
             + "DAO.java",
-            mockDAOTemplate.generate());
+            template.generate());
     }
 }
