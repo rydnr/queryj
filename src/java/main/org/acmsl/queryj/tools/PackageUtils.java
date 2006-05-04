@@ -1281,7 +1281,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO factory class.
      */
-    public String retrieveXMLDAOFactoryPackage(final String packageName)
+    public String retrieveXmlDAOFactoryPackage(final String packageName)
     {
         return retrieveXMLDAOPackage(packageName);
     }
@@ -1294,7 +1294,7 @@ public class PackageUtils
      * @return the folder in which  the associated DAO factory should be
      * generated.
      */
-    public File retrieveXMLDAOFactoryFolder(
+    public File retrieveXmlDAOFactoryFolder(
         final File parentFolder,
         final String packageName,
         final boolean useSubfolders)
