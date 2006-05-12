@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -32,46 +33,17 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Models <property> elements in custom-sql models.
+ * Description: Models references in custom-sql models.
  *
  */
 package org.acmsl.queryj.tools.customsql;
 
 /**
- * Models &lt;property&gt; elements in <i>custom-sql</i> models.
+ * Models references in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface Property
+public interface Ref
     extends  IdentifiableElement
 {
-    /**
-     * Retrieves the <i>column_name</i> attribute.
-     * @return such information.
-     */
-    public String getColumnName();
-
-    /**
-     * Retrieves the <i>index</i> attribute.
-     * @return such information.
-     */
-    public int getIndex();
-
-    /**
-     * Retrieves the <i>name</i> attribute.
-     * @return such information.
-     */
-    public String getName();
-
-    /**
-     * Retrieves the <i>type</i> attribute.
-     * @return such information.
-     */
-    public String getType();
-
-    /**
-     * Retrieves ehether the property is nullable or not.
-     * @return such condition.
-     */
-    public boolean isNullable();
 }

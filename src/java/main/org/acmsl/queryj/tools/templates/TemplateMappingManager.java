@@ -501,6 +501,11 @@ public class TemplateMappingManager
         "keyword.repository.template";
 
     /**
+     * The repository DAO template attribute name.
+     */
+    public static final String REPOSITORY_DAO_TEMPLATE = "repository.dao";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;

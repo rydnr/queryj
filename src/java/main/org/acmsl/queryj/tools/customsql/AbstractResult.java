@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Models <result> elements in custom-sql models.
+ * Description: Common logic for all <result> elements in custom-sql models.
  *
  */
 package org.acmsl.queryj.tools.customsql;
@@ -51,67 +51,117 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Models &lt;result&gt; elements in <i>custom-sql</i> models, which
- * satisfy the following DTD extract (to describe the model even in
- * non-xml implementations):
- *  <!ELEMENT result (property-ref)+>
- *  <!ATTLIST result
- *    id ID #REQUIRED
- *    class CDATA #IMPLIED
- *    matches (single | multiple) #REQUIRED>
+ * Commons logic for all &lt;result&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class ResultElement
-    extends  AbstractResult
+public abstract class AbstractResult
+    extends  AbstractIdElement
+    implements  Result
 {
     /**
-     * The <i>class</i> attribute.
+     * The <i>matches</i> attribute.
      */
-    public String m__strClass;
+    private String m__strMatches;
 
     /**
-     * Creates a <code>ResultElement</code> with given information.
+     * The <i>property-ref> elements.
+     */
+    private Collection m__cPropertyRefs;
+
+    /**
+     * Creates a <code>AbstractResult</code> with given information.
      * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
      * @precondition id != null
      * @precondition matches != null
      */
-    public ResultElement(
-        final String id,
-        final String classValue,
-        final String matches)
+    public AbstractResult(final String id, final String matches)
     {
-        super(id, matches);
-        immutableSetClassValue(classValue);
+        super(id);
+        immutableSetMatches(matches);
     }
 
     /**
-     * Specifies the <i>class</i> attribute.
-     * @param classValue such value.
+     * Specifies the <i>matches</i> attribute.
+     * @param matches such value.
      */
-    protected final void immutableSetClassValue(final String classValue)
+    protected final void immutableSetMatches(final String matches)
     {
-        m__strClass = classValue;
+        m__strMatches = matches;
     }
 
     /**
-     * Specifies the <i>class</i> attribute.
-     * @param classValue such value.
+     * Specifies the <i>matches</i> attribute.
+     * @param matches such value.
      */
-    protected void setClassValue(final String classValue)
+    protected void setMatches(final String matches)
     {
-        immutableSetClassValue(classValue);
+        immutableSetMatches(matches);
     }
 
     /**
-     * Retrieves the <i>class</i> attribute.
+     * Retrieves the <i>matches</i> attribute.
      * @return such value.
      */
-    public String getClassValue()
+    public String getMatches()
     {
-        return m__strClass;
+        return m__strMatches;
+    }
+
+    /**
+     * Specifies the &lt;property-ref&gt; elements.
+     * @param propertyRefs such elements.
+     */
+    protected final void immutableSetPropertyRefs(final Collection collection)
+    {
+        m__cPropertyRefs = collection;
+    }
+
+    /**
+     * Specifies the &lt;property-ref&gt; elements.
+     * @param propertyRefs such elements.
+     */
+    protected void setPropertyRefs(final Collection collection)
+    {
+        immutableSetPropertyRefs(collection);
+    }
+
+    /**
+     * Retrieves the &lt;property-ref&gt; elements.
+     * @return such elements.
+     */
+    public Collection getPropertyRefs()
+    {
+        return m__cPropertyRefs;
+    }
+
+    /**
+     * Adds a new &lt;property-ref&gt; element.
+     * @param propertyRef such element.
+     */
+    public void add(final PropertyRefElement propertyRef)
+    {
+        add(propertyRef, getPropertyRefs());
+    }
+
+    /**
+     * Adds a new &lt;property-ref&gt; element.
+     * @param propertyRef such element.
+     * @param propertyRefs thhe &ltproperty-ref&gt; elements.
+     */
+    protected synchronized void add(
+        final PropertyRefElement propertyRef, final Collection propertyRefs)
+    {
+        Collection t_cPropertyRefs = propertyRefs;
+
+        if  (t_cPropertyRefs == null)
+        {
+            t_cPropertyRefs = new ArrayList();
+            setPropertyRefs(t_cPropertyRefs);
+        }
+
+        t_cPropertyRefs.add(propertyRef);
     }
 
     /**
@@ -122,26 +172,24 @@ public class ResultElement
     {
         return
             hashCode(
-                getId(), getClassValue(), getMatches(), getPropertyRefs());
+                getId(), getMatches(), getPropertyRefs());
     }
 
     /**
      * Retrieves the hashcode.
      * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such value.
      */
     protected int hashCode(
         final String id,
-        final String classValue,
         final String matches,
         final Collection propertyRefs)
     {
         return
-            (id + "@#" + classValue + "#@" + matches + "@#" + propertyRefs)
-            .toLowerCase().hashCode();
+            (id + "@#" + matches + "@#" + propertyRefs)
+                .toLowerCase().hashCode();
     }
 
     /**
@@ -155,7 +203,6 @@ public class ResultElement
             equals(
                 instance,
                 getId(),
-                getClassValue(),
                 getMatches(),
                 getPropertyRefs());
     }
@@ -163,7 +210,6 @@ public class ResultElement
     /**
      * Checks whether given instance is semantically equal to this one.
      * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return <code>true</code> in such case.
@@ -171,19 +217,17 @@ public class ResultElement
     public boolean equals(
         final Object instance,
         final String id,
-        final String classValue,
         final String matches,
         final Collection propertyRefs)
     {
         boolean result = false;
 
-        if  (instance instanceof ResultElement)
+        if  (instance instanceof Result)
         {
-            ResultElement candidate = (ResultElement) instance;
+            Result candidate = (Result) instance;
 
             result =
                 (   (id.equalsIgnoreCase(candidate.getId())
-                 && (classValue.equals(candidate.getClassValue()))
                  && (matches.equalsIgnoreCase(candidate.getMatches()))
                  && ("" + propertyRefs).equals(
                          "" + candidate.getPropertyRefs())));
@@ -201,7 +245,6 @@ public class ResultElement
         return
             toString(
                 getId(),
-                getClassValue(),
                 getMatches(),
                 getPropertyRefs());
     }
@@ -209,21 +252,18 @@ public class ResultElement
     /**
      * Provides a text information about this instance.
      * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such information.
      */
     protected String toString(
         final String id,
-        final String classValue,
         final String matches,
         final Collection propertyRefs)
     {
         return
               getClass().getName()
             + "[" + "id=" + id + "]"
-            + "[" + "class=" + classValue + "]"
             + "[" + "matches=" + matches + "]"
             + "[" + "property-refs=" + propertyRefs + "]";
     }

@@ -33,7 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Models <result> elements in custom-sql models.
+ * Description: Models pre-defined per-DAO <result> elements in custom-sql
+ *              models.
  *
  */
 package org.acmsl.queryj.tools.customsql;
@@ -51,58 +52,59 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Models &lt;result&gt; elements in <i>custom-sql</i> models, which
- * satisfy the following DTD extract (to describe the model even in
- * non-xml implementations):
- *  <!ELEMENT result (property-ref)+>
- *  <!ATTLIST result
- *    id ID #REQUIRED
- *    class CDATA #IMPLIED
- *    matches (single | multiple) #REQUIRED>
+ * Models pre-defined per-DAO &lt;result&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class ResultElement
+public class ImplicitDAOResult
     extends  AbstractResult
 {
     /**
-     * The <i>class</i> attribute.
+     * The <i>DAO</i> attribute.
      */
-    public String m__strClass;
+    public String m__strDAORef;
 
     /**
-     * Creates a <code>ResultElement</code> with given information.
+     * Creates a <code>ImplicitDAOResult</code> with given information.
      * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
+     * @param daoRef the <i>daoRef</i> attribute.
      * @precondition id != null
      * @precondition matches != null
+     * @precondition daoRef != null
      */
-    public ResultElement(
-        final String id,
-        final String classValue,
-        final String matches)
+    public ImplicitDAOResult(
+        final String id, final String matches, final String daoRef)
     {
         super(id, matches);
-        immutableSetClassValue(classValue);
+        immutableSetDaoRef(daoRef);
     }
 
     /**
-     * Specifies the <i>class</i> attribute.
-     * @param classValue such value.
+     * Specifies the <i>daoRef</i> attribute.
+     * @param daoRef such value.
      */
-    protected final void immutableSetClassValue(final String classValue)
+    protected final void immutableSetDaoRef(final String daoRef)
     {
-        m__strClass = classValue;
+        m__strDAORef = daoRef;
     }
 
     /**
-     * Specifies the <i>class</i> attribute.
-     * @param classValue such value.
+     * Specifies the <i>daoRef</i> attribute.
+     * @param daoRef such value.
      */
-    protected void setClassValue(final String classValue)
+    protected void setDaoRef(final String daoRef)
     {
-        immutableSetClassValue(classValue);
+        immutableSetDaoRef(daoRef);
+    }
+
+    /**
+     * Retrieves the <i>daoRef</i> attribute.
+     * @return such value.
+     */
+    public String getDaoRef()
+    {
+        return m__strDAORef;
     }
 
     /**
@@ -111,7 +113,9 @@ public class ResultElement
      */
     public String getClassValue()
     {
-        return m__strClass;
+        throw
+            new IllegalArgumentException(
+                "Implicit results don't allow classValue");
     }
 
     /**
@@ -122,25 +126,25 @@ public class ResultElement
     {
         return
             hashCode(
-                getId(), getClassValue(), getMatches(), getPropertyRefs());
+                getId(), getMatches(), getDaoRef(), getPropertyRefs());
     }
 
     /**
      * Retrieves the hashcode.
      * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
+     * @param daoRef the <i>daoRef</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such value.
      */
     protected int hashCode(
         final String id,
-        final String classValue,
         final String matches,
+        final String daoRef,
         final Collection propertyRefs)
     {
         return
-            (id + "@#" + classValue + "#@" + matches + "@#" + propertyRefs)
+            (id + "@#" + matches + "#@" + daoRef + "@#" + propertyRefs)
             .toLowerCase().hashCode();
     }
 
@@ -155,36 +159,36 @@ public class ResultElement
             equals(
                 instance,
                 getId(),
-                getClassValue(),
                 getMatches(),
+                getDaoRef(),
                 getPropertyRefs());
     }
 
     /**
      * Checks whether given instance is semantically equal to this one.
      * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
+     * @param daoRef the <i>daoRef</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return <code>true</code> in such case.
      */
     public boolean equals(
         final Object instance,
         final String id,
-        final String classValue,
         final String matches,
+        final String daoRef,
         final Collection propertyRefs)
     {
         boolean result = false;
 
-        if  (instance instanceof ResultElement)
+        if  (instance instanceof ImplicitDAOResult)
         {
-            ResultElement candidate = (ResultElement) instance;
+            ImplicitDAOResult candidate = (ImplicitDAOResult) instance;
 
             result =
                 (   (id.equalsIgnoreCase(candidate.getId())
-                 && (classValue.equals(candidate.getClassValue()))
                  && (matches.equalsIgnoreCase(candidate.getMatches()))
+                 && (daoRef.equalsIgnoreCase(candidate.getDaoRef()))
                  && ("" + propertyRefs).equals(
                          "" + candidate.getPropertyRefs())));
         }
@@ -201,30 +205,30 @@ public class ResultElement
         return
             toString(
                 getId(),
-                getClassValue(),
                 getMatches(),
+                getDaoRef(),
                 getPropertyRefs());
     }
 
     /**
      * Provides a text information about this instance.
      * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
+     * @param daoRef the <i>daoRef</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such information.
      */
     protected String toString(
         final String id,
-        final String classValue,
         final String matches,
+        final String daoRef,
         final Collection propertyRefs)
     {
         return
               getClass().getName()
             + "[" + "id=" + id + "]"
-            + "[" + "class=" + classValue + "]"
             + "[" + "matches=" + matches + "]"
+            + "[" + "daoRef=" + daoRef + "]"
             + "[" + "property-refs=" + propertyRefs + "]";
     }
 }

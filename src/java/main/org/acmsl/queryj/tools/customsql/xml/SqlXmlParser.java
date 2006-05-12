@@ -46,8 +46,10 @@ import org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
+import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
@@ -855,6 +857,33 @@ public class SqlXmlParser
         }
 
         return result;
+    }
+
+    /**
+     * Adds a new result.
+     * @param id the result id.
+     * @param result the <code>Result</code> instance.
+     * @precondition id != null
+     * @precondition result != null
+     */
+    public void addResult(final String id, final Result result)
+    {
+        // TODO
+    }
+
+    /**
+     * Adds a new property.
+     * @param id the property id.
+     * @param name the property name.
+     * @param type the property type.
+     * @precondition id != null
+     * @precondition name != null
+     * @precondition type != null
+     */
+    public void addProperty(
+        final String id, final String name, final String type)
+    {
+        // TODO
     }
 }
 

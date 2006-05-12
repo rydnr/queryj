@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -54,6 +55,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public interface Result
+    extends  IdentifiableElement
 {
     /**
      * The <b>none</b> value for <i>matches</i> attribute.
@@ -69,12 +71,6 @@ public interface Result
      * The <b>multiple</b> value for <i>multiple</i> attribute.
      */
     public static final String MULTIPLE = "multiple";
-
-    /**
-     * Retrieves the <i>id</i> value.
-     * @return such information.
-     */
-    public String getId();
 
     /**
      * Retrieves the <i>class</i> attribute.

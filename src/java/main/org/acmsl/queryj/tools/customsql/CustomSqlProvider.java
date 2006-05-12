@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -96,6 +97,22 @@ public interface CustomSqlProvider
      */
     public PropertyElement resolveReference(
         final PropertyRefElement reference);
+
+    /**
+     * Adds a new property.
+     * @param id the id of the property.
+     * @param name the property name.
+     * @param type the property type.
+     */
+    public void addProperty(
+        final String id, final String name, final String type);
+
+    /**
+     * Adds a new result.
+     * @param id the id of the result.
+     * @param result the result information.
+     */
+    public void addResult(final String id, final Result result);
 
     /**
      * Resolves the connection-flags reference.

@@ -73,6 +73,11 @@ public class SqlElement
     private String m__strDAO;
 
     /**
+     * The <i>repositoryScope</i> attribute.
+     */
+    private String m__strRepositoryScope;
+
+    /**
      * The <i>name</i> attribute.
      */
     private String m__strName;
@@ -128,7 +133,7 @@ public class SqlElement
     private ResultSetFlagsRefElement m__ResultSetFlagsRef;
 
     /**
-     * Creates a SqlElement with given information.
+     * Creates a <code>SqlElement</code> with given information.
      * @param id the <i>id</i> attribute.
      * @param dao the <i>dao</i> attribute.
      * @param name the <i>name</i> attribute.
@@ -149,8 +154,62 @@ public class SqlElement
         final String implementation,
         final boolean validate)
     {
+        this(id, dao, null, name, type, implementation, validate);
+    }
+
+    /**
+     * Creates a <code>SqlElement</code> with given information.
+     * @param id the <i>id</i> attribute.
+     * @param name the <i>name</i> attribute.
+     * @param type the <i>type</i> attribute.
+     * @param implementation the <i>implementation</i> attribute.
+     * @param validate the <i>validate</i> attribute.
+     * @param repositoryScope the <i>repositoryScope</i> attribute.
+     * @precondition id != null
+     * @precondition name != null
+     * @precondition type != null
+     * @precondition implementation != null
+     * @precondition repositoryScope != null
+     */
+    public SqlElement(
+        final String id,
+        final String name,
+        final String type,
+        final String implementation,
+        final boolean validate,
+        final String repositoryScope)
+    {
+        this(
+            id, null, repositoryScope, name, type, implementation, validate);
+    }
+
+    /**
+     * Creates a <code>SqlElement</code> with given information.
+     * @param id the <i>id</i> attribute.
+     * @param dao the <i>dao</i> attribute.
+     * @param repositoryScope the <i>repositoryScope</i> attribute.
+     * @param name the <i>name</i> attribute.
+     * @param type the <i>type</i> attribute.
+     * @param implementation the <i>implementation</i> attribute.
+     * @param validate the <i>validate</i> attribute.
+     * @precondition id != null
+     * @precondition (dao != null) || (repositoryScope != null)
+     * @precondition name != null
+     * @precondition type != null
+     * @precondition implementation != null
+     */
+    protected SqlElement(
+        final String id,
+        final String dao,
+        final String repositoryScope,
+        final String name,
+        final String type,
+        final String implementation,
+        final boolean validate)
+    {
         super(id);
         immutableSetDAO(dao);
+        immutableSetRepositoryScope(repositoryScope);
         immutableSetName(name);
         immutableSetType(type);
         immutableSetImplementation(implementation);
@@ -193,6 +252,34 @@ public class SqlElement
         return m__strDAO;
     }
 
+    /**
+     * Specifies the <i>repositoryScope</i> attribute.
+     * @param repositoryScope such attribute.
+     */
+    protected final void immutableSetRepositoryScope(
+        final String repositoryScope)
+    {
+        m__strRepositoryScope = repositoryScope;
+    }
+    
+    /**
+     * Specifies the <i>repositoryScope</i> attribute.
+     * @param repositoryScope such attribute.
+     */
+    protected void setRepositoryScope(final String repositoryScope)
+    {
+        immutableSetRepositoryScope(repositoryScope);
+    }
+    
+    /**
+     * Retrieves the <i>repositoryScope</i> attribute.
+     * @return such information.
+     */
+    public String getRepositoryScope()
+    {
+        return m__strRepositoryScope;
+    }
+    
     /**
      * Specifies the <i>name</i> attribute.
      * @param name such value.
@@ -543,6 +630,7 @@ public class SqlElement
                 getId(),
                 getDescription(),
                 getDao(),
+                getRepositoryScope(),
                 getName(),
                 getType(),
                 getImplementation(),
@@ -559,6 +647,7 @@ public class SqlElement
      * @param id the <i>id</i> attribute.
      * @param description the <i>description</i> attribute.
      * @param dao the <i>dao</i> attribute.
+     * @param repositoryScope the <i>repositoryScope</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
      * @param implementation the <i>implementation</i> attribute.
@@ -574,6 +663,7 @@ public class SqlElement
         final String id,
         final String description,
         final String dao,
+        final String repositoryScope,
         final String name,
         final String type,
         final String implementation,
@@ -589,6 +679,7 @@ public class SqlElement
             + "[" + "id=" + id + "]"
             + "[" + "description=" + description + "]"
             + "[" + "dao=" + dao + "]"
+            + "[" + "repositoryScope=" + repositoryScope + "]"
             + "[" + "name=" + name + "]"
             + "[" + "type=" + type + "]"
             + "[" + "value=" + value + "]"

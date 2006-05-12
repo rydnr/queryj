@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -32,46 +33,34 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Models <property> elements in custom-sql models.
+ * Description: Bundles a pair of XmlDAOFactory template build and writing
+ *              handlers.
  *
  */
-package org.acmsl.queryj.tools.customsql;
+package org.acmsl.queryj.tools.templates.dao.xml.handlers;
+
+/*
+ * Importing some project classes.
+ */
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XmlDAOFactoryTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XmlDAOFactoryTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Models &lt;property&gt; elements in <i>custom-sql</i> models.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * Bundles a pair of template XmlDAOFactory template build and writing
+ * handlers.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public interface Property
-    extends  IdentifiableElement
+public class XmlDAOFactoryTemplateHandlerBundle
+    extends  TemplateHandlerBundle
 {
     /**
-     * Retrieves the <i>column_name</i> attribute.
-     * @return such information.
+     * Builds a bundle with given handlers.
      */
-    public String getColumnName();
-
-    /**
-     * Retrieves the <i>index</i> attribute.
-     * @return such information.
-     */
-    public int getIndex();
-
-    /**
-     * Retrieves the <i>name</i> attribute.
-     * @return such information.
-     */
-    public String getName();
-
-    /**
-     * Retrieves the <i>type</i> attribute.
-     * @return such information.
-     */
-    public String getType();
-
-    /**
-     * Retrieves ehether the property is nullable or not.
-     * @return such condition.
-     */
-    public boolean isNullable();
+    public XmlDAOFactoryTemplateHandlerBundle()
+    {
+        super(
+            new XmlDAOFactoryTemplateBuildHandler(),
+            new XmlDAOFactoryTemplateWritingHandler());
+    }
 }

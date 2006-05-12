@@ -1736,6 +1736,33 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the package name for RepositoryDAO templates.
+     * @param packageName the original package.
+     * @return the package for the associated DAO class.
+     */
+    public String retrieveRepositoryDAOPackage(
+        final String packageName)
+    {
+        return retrieveBaseDAOPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for RepositoryDAO templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated DAO should be
+     * generated.
+     */
+    public File retrieveRepositoryDAOFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders);
+    }
+
+    /**
      * Extracts the class name of given fully-qualified class.
      * @param fqcn such information.
      * @return the class name.
