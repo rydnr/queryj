@@ -198,69 +198,59 @@ public class CustomSqlProvisioningHandler
     {
         boolean result = false;
 
-        try
+        String[] t_astrTableNames = metadataManager.getTableNames();
+
+        int t_iTableCount =
+            (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+
+        String t_strTableName;
+        String t_strResultName;
+        String[] t_astrAttributeNames;
+        String t_strAttributeName;
+        String t_strPropertyName;
+        int t_iAttributeCount;
+        Collection t_cResultData;
+
+        for  (int t_iTableIndex = 0;
+              t_iTableIndex < t_iTableCount;
+              t_iTableIndex++)
         {
-            String[] t_astrTableNames = metadataManager.getTableNames();
+            t_strTableName = t_astrTableNames[t_iTableIndex];
+            t_strResultName = buildResultName(t_strTableName);
 
-            int t_iTableCount =
-                (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+            t_astrAttributeNames =
+                metadataManager.getColumnNames(t_strTableName);
 
-            String t_strTableName;
-            String t_strResultName;
-            String[] t_astrAttributeNames;
-            String t_strAttributeName;
-            String t_strPropertyName;
-            int t_iAttributeCount;
-            Collection t_cResultData;
+            t_iAttributeCount =
+                (t_astrAttributeNames != null)
+                ?  t_astrAttributeNames.length
+                :  0;
 
-            for  (int t_iTableIndex = 0;
-                      t_iTableIndex < t_iTableCount;
-                      t_iTableIndex++)
+            t_cResultData = new ArrayList();
+
+            for  (int t_iAttributeIndex = 0;
+                  t_iAttributeIndex < t_iAttributeCount;
+                  t_iAttributeIndex++)
             {
-                t_strTableName = t_astrTableNames[t_iTableIndex];
-                t_strResultName = buildResultName(t_strTableName);
+                t_strAttributeName =
+                    t_astrAttributeNames[t_iAttributeIndex];
 
-                t_astrAttributeNames =
-                    metadataManager.getColumnNames(t_strTableName);
+                t_strPropertyName =
+                    buildPropertyName(t_strAttributeName);
 
-                t_iAttributeCount =
-                    (t_astrAttributeNames != null)
-                    ?  t_astrAttributeNames.length
-                    :  0;
+                customSqlProvider.addProperty(
+                    t_strPropertyName,
+                    t_strTableName,
+                    metadataTypeManager.getFieldType(
+                        metadataManager.getColumnType(
+                            t_strTableName,
+                            t_strAttributeName),
+                        metadataManager.allowsNull(
+                            t_strTableName,
+                            t_strAttributeName)));
 
-                t_cResultData = new ArrayList();
-
-                for  (int t_iAttributeIndex = 0;
-                          t_iAttributeIndex < t_iAttributeCount;
-                          t_iAttributeIndex++)
-                {
-                    t_strAttributeName =
-                        t_astrAttributeNames[t_iAttributeIndex];
-
-                    t_strPropertyName =
-                        buildPropertyName(t_strAttributeName);
-
-                    customSqlProvider.addProperty(
-                        t_strPropertyName,
-                        t_strTableName,
-                        metadataTypeManager.getFieldType(
-                            metadataManager.getColumnType(
-                                t_strTableName,
-                                t_strAttributeName),
-                            metadataManager.allowsNull(
-                                t_strTableName,
-                                t_strAttributeName)));
-
-                    t_cResultData.add(t_strPropertyName);
-                }
+                t_cResultData.add(t_strPropertyName);
             }
-        }
-        catch   (final QueryJException queryjException)
-        {
-            throw
-                new BuildException(
-                    queryjException.getMessage(),
-                    queryjException.getCause());
         }
 
         return result;
