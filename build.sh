@@ -3,7 +3,7 @@
 usage () {
   echo "Usage $0 [-d] <ant target>"
   echo "Calls given Ant target, managing the directory structure."
-  echo "Options: -d Execute Maven to manage the dependencies."
+  echo "Options: -D Execute Maven to manage the dependencies."
   exit 1;
 }
 
@@ -13,7 +13,7 @@ basedir=`pwd`
 if [[ ! -z "$_DIR" ]]; then
   basedir=$_DIR
 fi
-if  [[ "x$1" == "x-d" ]]; then
+if  [[ "x$1" == "x-D" ]]; then
 shift
 [ -z "$1" ] && usage
 for last_command in "cd ${basedir}/src/toolconf/maven && mkdir -p ../emacs 2> /dev/null" "cd ${basedir}/src/toolconf/maven && maven $ACM_OPTS antdep"; do

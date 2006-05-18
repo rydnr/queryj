@@ -33,8 +33,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate DAO repository implementations according
- *              to database metadata.
+ * Description: Is able to generate base DAO repositories according to database
+ *              metadata.
  *
  */
 package org.acmsl.queryj.tools.templates;
@@ -56,16 +56,15 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import java.util.Collection;
 
 /**
- * Is able to generate DAO repository implementations according to database
- * metadata.
+ * Is able to generate base DAO repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class RepositoryDAOTemplate
+public class BaseRepositoryDAOTemplate
     extends  BasePerRepositoryTemplate
 {
     /**
-     * Builds a <code>RepositoryDAOTemplate</code> using given
+     * Builds a <code>BaseRepositoryDAOTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
      * @param header the header.
@@ -76,7 +75,7 @@ public class RepositoryDAOTemplate
      * @param engineName the engine name.
      * @param tables the tables.
      */
-    public RepositoryDAOTemplate(
+    public BaseRepositoryDAOTemplate(
         final MetadataManager metadataManager,
         final String header,
         final DecoratorFactory decoratorFactory,
@@ -103,7 +102,7 @@ public class RepositoryDAOTemplate
      */
     protected StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/RepositoryDAO.stg");
+        return retrieveGroup("/org/acmsl/queryj/dao/BaseRepositoryDAO.stg");
     }
 
     /**
@@ -112,6 +111,6 @@ public class RepositoryDAOTemplate
      */
     public String getTemplateName()
     {
-        return "Repository DAO";
+        return "Base Repository DAO";
     }
 }

@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate DAO repository implementations.
+ * Description: Is able to generate the DAO repository interface.
  *
  */
 package org.acmsl.queryj.tools.templates;
@@ -62,11 +62,11 @@ import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 /**
- * Is able to generate repository DAO implementations.
+ * Is able to generate the repository DAO interface.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class RepositoryDAOTemplateGenerator
+public class BaseRepositoryDAOTemplateGenerator
     implements  DefaultBasePerRepositoryTemplateFactory,
                 BasePerRepositoryTemplateGenerator
 {
@@ -78,14 +78,14 @@ public class RepositoryDAOTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected RepositoryDAOTemplateGenerator() {};
+    protected BaseRepositoryDAOTemplateGenerator() {};
 
     /**
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
     protected static void setReference(
-        final RepositoryDAOTemplateGenerator generator)
+        final BaseRepositoryDAOTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
     }
@@ -103,20 +103,20 @@ public class RepositoryDAOTemplateGenerator
      * Retrieves a RepositoryDAOTemplateGenerator instance.
      * @return such instance.
      */
-    public static RepositoryDAOTemplateGenerator getInstance()
+    public static BaseRepositoryDAOTemplateGenerator getInstance()
     {
-        RepositoryDAOTemplateGenerator result = null;
+        BaseRepositoryDAOTemplateGenerator result = null;
 
         WeakReference reference = getReference();
 
         if  (reference != null) 
         {
-            result = (RepositoryDAOTemplateGenerator) reference.get();
+            result = (BaseRepositoryDAOTemplateGenerator) reference.get();
         }
 
         if  (result == null) 
         {
-            result = new RepositoryDAOTemplateGenerator();
+            result = new BaseRepositoryDAOTemplateGenerator();
 
             setReference(result);
         }
@@ -147,7 +147,7 @@ public class RepositoryDAOTemplateGenerator
       throws  QueryJException
     {
         return
-            new RepositoryDAOTemplate(
+            new BaseRepositoryDAOTemplate(
                 metadataManager,
                 header,
                 getDecoratorFactory(),
@@ -205,7 +205,6 @@ public class RepositoryDAOTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + template.getEngineName()
             + template.getRepositoryName()
             + "DAO.java",
             template.generate());

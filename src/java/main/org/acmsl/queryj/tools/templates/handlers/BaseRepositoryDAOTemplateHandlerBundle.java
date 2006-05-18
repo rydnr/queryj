@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles a pair of KeywordRepository template build and writing
+ * Description: Bundles a pair of BaseRepositoryDAO template build and writing
  *              handlers.
  *
  */
@@ -42,29 +42,25 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles a pair of KeywordRepository template build and writing
+ * Bundles a pair of BaseRepositoryDAO template build and writing
  * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public class KeywordRepositoryTemplateHandlerBundle
+public class BaseRepositoryDAOTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {
     /**
      * Builds a bundle with given handlers.
-     * @param buildHandler the template build handler.
-     * @param writingHandler the writing handler.
-     * @precondition buildHandler != null
-     * @precondition writingHandler != null
      */
-    public KeywordRepositoryTemplateHandlerBundle()
+    public BaseRepositoryDAOTemplateHandlerBundle()
     {
         super(
-            new KeywordRepositoryTemplateBuildHandler(),
-            new KeywordRepositoryTemplateWritingHandler());
+            new BaseRepositoryDAOTemplateBuildHandler(),
+            new BaseRepositoryDAOTemplateWritingHandler());
     }
 }

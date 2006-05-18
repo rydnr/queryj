@@ -159,7 +159,8 @@ public class RepositoryDAOTemplateBuildHandler
         final String projectPackage,
         final PackageUtils packageUtils)
     {
-        return packageUtils.retrieveRepositoryDAOPackage(projectPackage);
+        return
+    packageUtils.retrieveRepositoryDAOPackage(projectPackage, engineName);
     }
 
     /**
@@ -190,7 +191,8 @@ public class RepositoryDAOTemplateBuildHandler
 
         Collection t_cElements = customSqlProvider.getCollection();
         
-        Iterator t_Iterator = (t_cElements != null) ? t_cElements.iterator() : null;
+        Iterator t_Iterator =
+            (t_cElements != null) ? t_cElements.iterator() : null;
         
         if  (t_Iterator != null)
         {

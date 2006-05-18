@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the table repository.
+ * Description: Writes the repository DAO interface.
  *
  */
 package org.acmsl.queryj.tools.templates.handlers;
@@ -46,7 +46,7 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.RepositoryDAOTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BaseRepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -61,11 +61,11 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Writes the table repository.
+ * Writes the DAO repository interface.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class RepositoryDAOTemplateWritingHandler
+public class BaseRepositoryDAOTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
@@ -74,7 +74,7 @@ public class RepositoryDAOTemplateWritingHandler
      */
     protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        return RepositoryDAOTemplateGenerator.getInstance();
+        return BaseRepositoryDAOTemplateGenerator.getInstance();
     }
 
     /**
@@ -90,7 +90,7 @@ public class RepositoryDAOTemplateWritingHandler
         return
             (BasePerRepositoryTemplate)
                 parameters.get(
-                    TemplateMappingManager.REPOSITORY_DAO_TEMPLATE);
+                    TemplateMappingManager.BASE_REPOSITORY_DAO_TEMPLATE);
     }
 
     /**
@@ -118,10 +118,9 @@ public class RepositoryDAOTemplateWritingHandler
       throws  BuildException
     {
         return
-            packageUtils.retrieveRepositoryDAOFolder(
+            packageUtils.retrieveBaseRepositoryDAOFolder(
                 projectFolder,
                 projectPackage,
-                engineName,
                 useSubfolders);
     }
 }

@@ -56,9 +56,11 @@ import org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.templates.dao.DAOBundle;
+import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundle;
@@ -1104,6 +1106,10 @@ public class QueryJTask
             result.add(new CustomValueObjectImplTemplateHandlerBundle());
 
             result.add(new CustomValueObjectFactoryTemplateHandlerBundle());
+
+            result.add(new BaseRepositoryDAOTemplateHandlerBundle());
+
+            result.add(new RepositoryDAOTemplateHandlerBundle());
 
             result.add(new TestSuiteTemplateHandlerBundle());
 
