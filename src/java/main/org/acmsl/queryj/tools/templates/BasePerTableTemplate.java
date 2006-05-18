@@ -1130,8 +1130,11 @@ public abstract class BasePerTableTemplate
                     {
                         Sql t_Sql = (Sql) t_Content;
 
-                        if  (daoTemplateUtils.matches(
-                                 tableName, t_Sql.getDao()))
+                        String t_strDao = t_Sql.getDao();
+
+                        if  (   (t_strDao != null)
+                             && (daoTemplateUtils.matches(
+                                     tableName, t_strDao)))
                         {
                             boolean t_bAdd = false;
 
@@ -1199,6 +1202,8 @@ public abstract class BasePerTableTemplate
             Sql t_Sql = null;
             ResultRefElement t_ResultRefElement = null;
             ResultElement t_ResultElement = null;
+            String t_strDao;
+
 
             Iterator t_itContentIterator = t_cContents.iterator();
 
@@ -1212,8 +1217,11 @@ public abstract class BasePerTableTemplate
                     {
                         t_Sql = (Sql) t_Content;
 
-                        if  (daoTemplateUtils.matches(
-                                 tableName, t_Sql.getDao()))
+                        t_strDao = t_Sql.getDao();
+
+                        if  (   (t_strDao != null)
+                             && (daoTemplateUtils.matches(
+                                     tableName, t_strDao)))
                         {
                             t_ResultRefElement = t_Sql.getResultRef();
 

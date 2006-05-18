@@ -1079,6 +1079,10 @@ public class QueryJTask
 
             result.add(new ExternallyManagedFieldsRetrievalHandler());
 
+            result.add(new BaseRepositoryDAOTemplateHandlerBundle());
+
+            result.add(new RepositoryDAOTemplateHandlerBundle());
+
             result.add(new TableTemplateHandlerBundle());
 
             result.add(new TableRepositoryTemplateHandlerBundle());
@@ -1106,10 +1110,6 @@ public class QueryJTask
             result.add(new CustomValueObjectImplTemplateHandlerBundle());
 
             result.add(new CustomValueObjectFactoryTemplateHandlerBundle());
-
-            result.add(new BaseRepositoryDAOTemplateHandlerBundle());
-
-            result.add(new RepositoryDAOTemplateHandlerBundle());
 
             result.add(new TestSuiteTemplateHandlerBundle());
 
