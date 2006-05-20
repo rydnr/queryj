@@ -157,6 +157,7 @@ public class CustomResultUtils
         int t_iSqlCount = 0;
 
         boolean t_bBreakLoop = false;
+        String t_strDao;
 
         for  (int t_iTableIndex = 0;
                  (t_iTableIndex < t_iTableCount) && (!t_bBreakLoop);
@@ -172,9 +173,11 @@ public class CustomResultUtils
                       t_iSqlIndex < t_iSqlCount;
                       t_iSqlIndex++)
             {
-                if  (matches(
-                         t_astrTableNames[t_iTableIndex],
-                         t_aSqlElements[t_iSqlIndex].getDao()))
+                t_strDao = t_aSqlElements[t_iSqlIndex].getDao();
+
+                if  (   (t_strDao != null)
+                     && (matches(
+                             t_astrTableNames[t_iTableIndex], t_strDao)))
                 {
                     result = t_astrTableNames[t_iTableIndex];
                     t_bBreakLoop = true;

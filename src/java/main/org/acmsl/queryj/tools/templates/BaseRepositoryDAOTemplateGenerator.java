@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
@@ -181,6 +182,7 @@ public class BaseRepositoryDAOTemplateGenerator
         write(
             template,
             outputDir,
+            DecorationUtils.getInstance(),
             FileUtils.getInstance());
     }
             
@@ -188,6 +190,7 @@ public class BaseRepositoryDAOTemplateGenerator
      * Writes a table repository template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
@@ -197,6 +200,7 @@ public class BaseRepositoryDAOTemplateGenerator
     public void write(
         final BasePerRepositoryTemplate template,
         final File outputDir,
+        final DecorationUtils decorationUtils,
         final FileUtils fileUtils)
       throws  IOException
     {
@@ -205,7 +209,7 @@ public class BaseRepositoryDAOTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + template.getRepositoryName()
+            + decorationUtils.capitalize(template.getRepositoryName())
             + "DAO.java",
             template.generate());
     }

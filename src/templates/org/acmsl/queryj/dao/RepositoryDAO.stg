@@ -78,7 +78,7 @@ source(input) ::= <<
   basePackageName=input.base_package_name,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   voSubpackageName=typeInitMap.voSubpackageName,
-  repository=input.tr_name,
+  repository=input.tr_name_capitalized,
   voName=input.vo_name)>
 
 /*
@@ -124,7 +124,6 @@ project_imports(
  * Importing project classes.
  */
 import <basePackageName>.<baseDAOSubpackageName>.<repository>DAO;
-import <basePackageName>.<voSubpackageName>.<voName>;
 >>
 
 class(input) ::= <<
@@ -140,8 +139,8 @@ class(input) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.engine_name><input.tr_name>DAO
-    implements  <input.tr_name>DAO
+public class <input.engine_name><input.tr_name_capitalized>DAO
+    implements  <input.tr_name_capitalized>DAO
 {
     <input.custom_selects:custom_select(
       cs=it, input=input); separator="\n">

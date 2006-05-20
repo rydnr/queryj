@@ -332,6 +332,8 @@ public abstract class BasePerRepositoryTemplate
 
         input.put("base_package_name", basePackageName);
 
+        input.put("engine_name", engineName);
+
         input.put(
             "dao_subpackage_name",
             retrieveDAOSubpackageName(

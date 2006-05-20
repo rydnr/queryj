@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
@@ -51,7 +52,6 @@ import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JDK classes.
@@ -181,6 +181,7 @@ public class RepositoryDAOTemplateGenerator
         write(
             template,
             outputDir,
+            DecorationUtils.getInstance(),
             FileUtils.getInstance());
     }
             
@@ -188,15 +189,18 @@ public class RepositoryDAOTemplateGenerator
      * Writes a table repository template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
+     * @precondition decorationUtils != null
      * @precondition fileUtils != null
      */
     public void write(
         final BasePerRepositoryTemplate template,
         final File outputDir,
+        final DecorationUtils decorationUtils,
         final FileUtils fileUtils)
       throws  IOException
     {
@@ -206,7 +210,7 @@ public class RepositoryDAOTemplateGenerator
               outputDir.getAbsolutePath()
             + File.separator
             + template.getEngineName()
-            + template.getRepositoryName()
+            + decorationUtils.capitalize(template.getRepositoryName())
             + "DAO.java",
             template.generate());
     }

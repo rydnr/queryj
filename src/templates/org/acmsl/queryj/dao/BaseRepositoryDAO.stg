@@ -112,7 +112,6 @@ project_imports(basePackageName, voSubpackageName, voName) ::= <<
 /*
  * Importing project classes.
  */
-import <basePackageName>.<voSubpackageName>.<voName>;
 >>
 
 class(input) ::= <<
@@ -128,7 +127,7 @@ class(input) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public interface <input.tr_name>DAO
+public interface <input.tr_name_capitalized>DAO
 {
     <input.custom_selects:custom_select(
       cs=it, input=input); separator="\n">
