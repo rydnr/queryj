@@ -71,7 +71,7 @@ source(input) ::= <<
     input.base_package_name,
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
-    input.engine_name,
+    input.engine_name_lowercased,
     input.subpackage_name
   ])>
 

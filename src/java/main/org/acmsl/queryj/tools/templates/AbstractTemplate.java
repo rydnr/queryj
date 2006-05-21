@@ -477,6 +477,20 @@ public abstract class AbstractTemplate
       throws  InvalidTemplateException;
 
     /**
+     * Converts given value to lower-case.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such output.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String lowercase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.lowerCase(value);
+    }
+
+    /**
      * Normalizes given value, in lower-case.
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.

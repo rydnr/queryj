@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -357,6 +358,10 @@ public abstract class BasePerRepositoryTemplate
         input.put("base_package_name", basePackageName);
 
         input.put("engine_name", engineName);
+
+        input.put(
+            "engine_name_lowercased",
+            lowercase(engineName, DecorationUtils.getInstance()));
 
         input.put(
             "dao_subpackage_name",
