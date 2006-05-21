@@ -96,7 +96,7 @@ import java.util.List;
 first_line_description(repository) ::= <<
 <!
   Generates the first line of the generated file description.
-  @param tableName the table name.
+  @param repository the repository.
 !>
 Defines the global queries defined for <repository>.
 >>
@@ -109,9 +109,6 @@ project_imports(basePackageName, voSubpackageName, voName) ::= <<
  @param voSubpackageName the value-object subpackage name.
  @param voName the value-object name.
 !>
-/*
- * Importing project classes.
- */
 >>
 
 class(input) ::= <<
@@ -121,7 +118,7 @@ class(input) ::= <<
 !>
 /**
  * <[
-      first_line_description(tableName=input.table_name)
+      first_line_description(repository=input.tr_name)
     ]:{line |<line>}; separator="\n * ">
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)

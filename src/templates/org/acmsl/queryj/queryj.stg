@@ -160,3 +160,249 @@ indirect_template(name, input) ::= <<
 !>
 <(name)(input=input)>
 >>
+
+custom_select(cs, input) ::= <<
+<!
+  Writes the code for a custom select query.
+  @param cs the custom select.
+  @param input the input.
+!>
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+public <cs.resultClass> <cs.nameUncapitalized>(
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException
+{
+    return
+        <cs.nameUncapitalized>(
+            <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+            new PreparedStatementCreatorFactory(
+                <cs.splittedQuotedValue; separator=" +\n">),
+            new Object[]
+            {
+                <cs.parameters:custom_select_parameter_value(
+                  name=it.nameLowercased,
+                  objectType=it.objectType,
+                  object=it.object); separator=",\n">
+            },
+            getDataSource());
+}
+
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @param preparedStatementCreatorFactory the
+ * \<code>PreparedStatementCreatorFactory\</code> instance
+ * specific for this operation.
+ * @param params the query parameters.
+ * @param dataSource the \<code>DataSource\<code> instance.
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ <precondition_notnull("preparedStatementCreatorFactory")>
+ <precondition_notnull("params")>
+ <precondition_notnull("dataSource")>
+ */
+protected <cs.resultClass> <cs.nameUncapitalized>(
+    <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
+    final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    final Object[] params,
+    final DataSource dataSource)
+  throws DataAccessException
+{
+    return
+        <cs.nameUncapitalized>(
+            <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+            preparedStatementCreatorFactory,
+            params,
+            new DataSourceTransactionManager(dataSource));
+}
+
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @param preparedStatementCreatorFactory the
+ * \<code>PreparedStatementCreatorFactory\</code> instance
+ * specific for this operation.
+ * @param params the query parameters.
+ * @param transactionManager the \<code>PlatformTransactionManager\<code>
+ * instance.
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ <precondition_notnull("preparedStatementCreatorFactory")>
+ <precondition_notnull("params")>
+ <precondition_notnull("transactionManager")>
+ */
+protected <cs.resultClass> <cs.nameUncapitalized>(
+    <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
+    final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    final Object[] params,
+    final PlatformTransactionManager transactionManager)
+  throws DataAccessException
+{
+    <cs.resultClass> result = null;
+
+    // Enabling transactions temporarily.
+    synchronized (DataSourceTransactionManager.class)
+    {
+        result =
+            <cs.nameUncapitalized>(
+                <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+                preparedStatementCreatorFactory,
+                params,
+                new TransactionTemplate(transactionManager));
+    }
+
+    return result;
+}
+
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @param preparedStatementCreatorFactory the
+ * \<code>PreparedStatementCreatorFactory\</code> instance
+ * specific for this operation.
+ * @param params the query parameters.
+ * @param transactionTemplate the \<code>TransactionTemplate\<code>
+ * instance.
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ <precondition_notnull("preparedStatementCreatorFactory")>
+ <precondition_notnull("params")>
+ <precondition_notnull("transactionTemplate")>
+ */
+protected <cs.resultClass> <cs.nameUncapitalized>(
+    <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
+    final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    final Object[] params,
+    final TransactionTemplate transactionTemplate)
+  throws DataAccessException
+{
+    <cs.resultClass> result = null;
+
+   /*
+    preparedStatementCreatorFactory.setResultSetType(..);
+    preparedStatementCreatorFactory.setUpdatableResults(..);
+    preparedStatementCreatorFactory.setReturnGeneratedKeys(..);
+    preparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
+    */
+
+    <cs.parameters:custom_select_parameter_type_specification(
+      type=it.sqlType); separator="\n">
+
+    result =
+        (<cs.resultClass>)
+            transactionTemplate.execute(
+                new QueryTransactionCallback(
+                    preparedStatementCreatorFactory
+                        .newPreparedStatementCreator(params),
+                    null,
+                    // calls setXXX twice
+                    // preparedStatementCreatorFactory
+                    //     .newPreparedStatementSetter(t_aParams),
+                    <cs.resultIdAsConstant>_CUSTOM_EXTRACTOR,
+                    this));
+
+    return result;
+}
+>>
+
+custom_select_parameter_type_specification(type) ::= <<
+<!
+  Specifies the type of the parameter of a custom select.
+  @param type the SQL type.
+!>
+preparedStatementCreatorFactory.addParameter(
+    new SqlParameter(Types.<type>));
+>>
+
+custom_select_parameter_value(
+  name,
+  objectType,
+  object) ::= <<
+<!
+  Writes the value for a parameter of a custom select.
+  @param name the parameter name.
+  @param objectType the object type of the parameter.
+  @param object whether the parameter type is a class or a primitive.
+!>
+<if(object)>
+<name>
+<else>
+new <objectType>(<name>)
+<endif>
+>>
+
+custom_update_or_insert(cs, input) ::= <<
+<!
+ Writes the subtemplate for custom updates or inserts.
+  @param cs the custom sql.
+  @param input the input.
+!>
+/**
+ * Custom sql \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\<b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @throws DataAccessException if the operation fails.
+ */
+public void <cs.nameUncapitalized>(
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException
+{
+    PreparedStatementCreatorFactory
+        preparedStatementCreatorFactory =
+            new PreparedStatementCreatorFactory(
+                <cs.splittedQuotedValue; separator=" +\n">);
+
+    /*
+    t_PreparedStatementCreatorFactory.setResultSetType(..);
+    t_PreparedStatementCreatorFactory.setUpdatableResults(..);
+    t_PreparedStatementCreatorFactory.setReturnGeneratedKeys(..);
+    t_PreparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
+     */
+
+    <cs.parameters:custom_select_parameter_type_specification(
+      type=it.sqlType); separator="\n">
+
+    Object[] params =
+       new Object[]
+       {
+           <cs.parameters:custom_select_parameter_value(
+             name=it.nameLowercased,
+             objectType=it.objectType,
+             object=it.object); separator=",\n">
+        };
+
+    // Enabling transactions temporarily.
+    synchronized (DataSourceTransactionManager.class)
+    {
+       DataSourceTransactionManager transactionManager =
+           new DataSourceTransactionManager(getDataSource());
+       TransactionTemplate transactionTemplate =
+           new TransactionTemplate(transactionManager);
+
+       transactionTemplate.execute(
+           new UpdateTransactionCallback(
+               preparedStatementCreatorFactory
+                  .newPreparedStatementCreator(params),
+               preparedStatementCreatorFactory
+                  .newPreparedStatementSetter(params),
+               this));
+
+       /*
+       update(
+           t_PreparedStatementCreatorFactory
+              .newPreparedStatementCreator(params),
+           t_PreparedStatementCreatorFactory
+             .newPreparedStatementSetter(params));
+        */
+    }
+}
+>>

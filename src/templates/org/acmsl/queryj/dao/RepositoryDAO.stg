@@ -100,7 +100,7 @@ import java.util.List;
 first_line_description(repository) ::= <<
 <!
   Generates the first line of the generated file description.
-  @param tableName the table name.
+  @param repository the repository.
 !>
 Defines the global queries defined for <repository>.
 >>
@@ -132,7 +132,7 @@ class(input) ::= <<
 !>
 /**
  * <[
-      first_line_description(tableName=input.tr_name)
+      first_line_description(repository=input.tr_name)
     ]:{line |<line>}; separator="\n * ">
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
@@ -150,57 +150,4 @@ public class <input.engine_name><input.tr_name_capitalized>DAO
     <input.custom_selects_for_update:custom_select_for_update(
       cs=it, input=input); separator="\n">
 }
->>
-
-custom_select(cs, input) ::= <<
-<!
-  Writes the code for a custom select query.
-  @param cs the custom select.
-  @param input the input.
-!>
-/**
- * Custom select \<i><cs.id>\</i>:\<br/>
- * \<b><cs.description>\<b>.
- <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \<i><cs.resultClass>\</i> information retrieved.
- * @throws DataAccessException if the operation fails.
- */
-public <cs.resultClass> <cs.nameUncapitalized>(
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
-  throws DataAccessException;
->>
-
-custom_update_or_insert(cs, input) ::= <<
-<!
- Writes the subtemplate for custom updates or inserts.
-  @param cs the custom sql.
-  @param input the input.
-!>
-/**
- * Custom sql \<i><cs.id>\</i>:\<br/>
- * \<b><cs.description>\<b>.
- <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @throws DataAccessException if the operation fails.
- */
-public void <cs.nameUncapitalized>(
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
-  throws DataAccessException;
->>
-
-custom_select_for_update(cs, input) ::= <<
-<!
-  Writes the code for a custom select for update.
-  @param cs the custom sql.
-  @param input the input.
-!>
-/**
- * Custom select for update \<i><cs.id>\</i>:\<br/>
- * \<b><cs.description>\<b>.
- <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \<i><cs.resultClass>\</i> information retrieved.
- * @throws DataAccessException if the operation fails.
- */
-public <cs.resultClass> <cs.nameUncapitalized>(
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
-  throws DataAccessException;
 >>

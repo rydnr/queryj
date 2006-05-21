@@ -162,6 +162,23 @@ public class RepositoryDAOTemplate
         final Integer[] copyrightYears,
         final StringUtils stringUtils)
     {
+        super.fillParameters(
+            input,
+            template,
+            header,
+            metadataManager,
+            metadataTypeManager,
+            customSqlProvider,
+            decoratorFactory,
+            subpackageName,
+            basePackageName,
+            tableRepositoryName,
+            engineName,
+            tables,
+            timestamp,
+            copyrightYears,
+            stringUtils);
+
         fillParameters(
             input,
             template,

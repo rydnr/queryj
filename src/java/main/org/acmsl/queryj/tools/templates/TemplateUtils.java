@@ -389,7 +389,8 @@ public class TemplateUtils
 
                         String t_strDao = t_Sql.getDao();
 
-                        if  (t_strDao != null)
+                        if  (   (t_strDao != null)
+                             && (tableName != null))
                         {
                             t_bMatches =
                                 daoTemplateUtils.matches(
@@ -512,7 +513,8 @@ public class TemplateUtils
 
                         t_strDao = t_Sql.getDao();
 
-                        if  (t_strDao != null)
+                        if  (   (t_strDao != null)
+                             && (tableName != null))
                         {
                             t_bMatches =
                                 daoTemplateUtils.matches(
