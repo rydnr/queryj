@@ -74,6 +74,21 @@ source(input) ::= <<
   xmlSubpackageName=typeInitMap.xmlSubpackageName,
   mockSubpackageName=typeInitMap.mockSubpackageName);
  separator="\n\n">
+
+<if(input.repository_dao)>
+<repository_dao_factory_property(
+  engineName=input.engine_name,
+  engineNameLowercased=input.engine_name_lowercased,
+  repository=input.tr_name,
+  repositoryLowercased=input.tr_name_lowercased,
+  repositoryCapitalized=input.tr_name_capitalized,
+  basePackageName=input.base_package_name,
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
+  subpackageName=typeInitMap.rdbSubpackageName,
+  xmlSubpackageName=typeInitMap.xmlSubpackageName,
+  mockSubpackageName=typeInitMap.mockSubpackageName);
+ separator="\n\n">
+<endif>
 >>
 
 header(years,description,timestamp) ::= <<
@@ -151,4 +166,32 @@ dao_factory_property(
 <repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineNameLowercased>.<engineName><table.singularNameCapitalized>DAOFactory
 #<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<xmlSubpackageName>.Xml<table.singularNameCapitalized>DAOFactory
 #<repository>.<table.singularNameNormalizedLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<mockSubpackageName>.Mock<table.singularNameCapitalized>DAOFactory
+>>
+
+repository_dao_factory_property(
+  engineName,
+  engineNameLowercased,
+  repository,
+  repositoryLowercased,
+  repositoryCapitalized,
+  basePackageName,
+  baseDAOSubpackageName,
+  subpackageName,
+  xmlSubpackageName,
+  mockSubpackageName) ::= <<
+<!
+ Generates the properties asociated to the repository DAO.
+ @param engineName the engine name.
+ @param engineNameLowercased the engine name, in lower case.
+ @param repository the repository.
+ @param repositoryLowercased the repository, in lower case.
+ @param repositoryCapitalized the repository, capitalized.
+ @param basePackageName the base package name.
+ @param baseDAOSubpackageName the base DAO subpackage name.
+ @param subpackageName the subpackage name.
+ @param xmlSubpackageName the subpackage for XML implementations.
+ @param mockSubpackageName the subpackage for Mock implementations.
+!>
+# <repository> DAO implementation.
+<repositoryLowercased>.dao=<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineNameLowercased>.<engineName><repositoryCapitalized>DAOFactory
 >>

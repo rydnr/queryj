@@ -145,6 +145,7 @@ public class DAOChooserTemplate
      * Fills the core parameters.
      * @param input the input.
      * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param basePackageName the base package name.
      * @param subpackageName the subpackage name.
@@ -155,6 +156,7 @@ public class DAOChooserTemplate
      * @param stringUtils the <code>StringUtils</code> instance.
      * @precondition input != null
      * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
      * @precondition decoratorFactory != null
      * @precondition subpackageName != null
      * @precondition basePackageName != null
@@ -166,6 +168,7 @@ public class DAOChooserTemplate
     protected void fillCoreParameters(
         final Map input,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final DecoratorFactory decoratorFactory,
         final String basePackageName,
         final String subpackageName,
@@ -178,6 +181,7 @@ public class DAOChooserTemplate
         super.fillCoreParameters(
             input,
             metadataManager,
+            customSqlProvider,
             decoratorFactory,
             basePackageName,
             subpackageName,

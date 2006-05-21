@@ -76,7 +76,6 @@ source(input) ::= <<
  * Importing some JDK classes.
  */
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.util.Properties;
 
 /*
@@ -138,15 +137,26 @@ class(input) ::= <<
 public class <input.tr_name_capitalized>DAOChooser
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implementation to avoid double-checked locking.
      */
-    private static WeakReference singleton;
-
+    private static final class <input.tr_name_capitalized>DAOChooserSingletonContainer
+    {
+        private static final <input.tr_name_capitalized>DAOChooser SINGLETON =
+            new <input.tr_name_capitalized>DAOChooser();
+    }
+ 
     <input.tables:dao_constant(
       table=it,
       repositoryLowercased=input.tr_name_lowercased,
       repositoryUppercased=input.tr_name_uppercased);
       separator="\n\n">
+
+<if(input.repository_dao)>
+    <repository_dao_constant(
+      repositoryLowercased=input.tr_name_lowercased,
+      repositoryUppercased=input.tr_name_uppercased);
+      separator="\n\n">
+<endif>
 
     /**
      * The configuration settings.
@@ -164,45 +174,12 @@ public class <input.tr_name_capitalized>DAOChooser
     public <input.tr_name_capitalized>DAOChooser() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param chooser the new \<code\><input.tr_name_capitalized>DAOChooser\</code\> instance.
-     */
-    protected static void setReference(final <input.tr_name_capitalized>DAOChooser chooser)
-    {
-        singleton = new WeakReference(chooser);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a \<code\><input.tr_name_capitalized>DAOChooser\</code\> instance.
      * @return such instance.
      */
     public static <input.tr_name_capitalized>DAOChooser getInstance()
     {
-        <input.tr_name_capitalized>DAOChooser result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (<input.tr_name_capitalized>DAOChooser) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new <input.tr_name_capitalized>DAOChooser();
-            setReference(result);
-        }
-
-        return result;
+        return <input.tr_name_capitalized>DAOChooserSingletonContainer.SINGLETON;
     }
 
     /**
@@ -337,6 +314,13 @@ public class <input.tr_name_capitalized>DAOChooser
 
     <input.tables:dao_factory_getters(
       table=it, repository=input.tr_name_uppercased); separator="\n\n">
+
+<if(input.repository_dao)>
+    <repository_dao_factory_getters(
+      repositoryCapitalized=input.tr_name_capitalized,
+      repositoryUppercased=input.tr_name_uppercased);
+     separator="\n\n">
+<endif>
 }
 >>
 
@@ -355,6 +339,20 @@ public static final String <repositoryUppercased>_<table.singularNameUppercased>
     "<repositoryLowercased>.<table.singularNameNormalizedLowercased>.dao";
 >>
 
+repository_dao_constant(repositoryLowercased, repositoryUppercased) ::= <<
+<!
+ Writes the constant declaration for the repository DAO.
+ @param repositoryLowercased the repository, in lower-case.
+ @param repositoryUppercased the repository, in upper-case.
+!>
+/**
+ * Used to retrieve the value of \<i\><repositoryLowercased>.dao\</i\>
+ * from the configuration layer.
+ */
+public static final String <repositoryUppercased>_DAO =
+    "<repositoryLowercased>.dao";
+>>
+
 dao_factory_getters(table, repository) ::= <<
 <!
  Generates the getter methods to retrieve the class names of the
@@ -369,5 +367,23 @@ dao_factory_getters(table, repository) ::= <<
 public String get<table.singularNameCapitalized>DAOFactoryClassName()
 {
     return getProperty(<repository>_<table.singularNameUppercased>_DAO);
+}
+>>
+
+repository_dao_factory_getters(
+  repositoryCapitalized, repositoryUppercased) ::= <<
+<!
+ Generates the getter methods to retrieve the class names of the
+ repository DAOFactory implementation.
+ @param repositoryCapitalized the repository, capitalized.
+ @param repositoryUppercased the repository in upper-case.
+!>
+/**
+ * Retrieves the \<code\><repositoryCapitalized>DAOFactory\</code\> class name.
+ * @return such class name.
+ */
+public String get<repositoryCapitalized>DAOFactoryClassName()
+{
+    return getProperty(<repositoryUppercased>_DAO);
 }
 >>

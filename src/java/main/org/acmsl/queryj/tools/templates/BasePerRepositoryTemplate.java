@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -280,6 +281,7 @@ public abstract class BasePerRepositoryTemplate
         fillCoreParameters(
             input,
             metadataManager,
+            customSqlProvider,
             decoratorFactory,
             basePackageName,
             subpackageName,
@@ -321,6 +323,7 @@ public abstract class BasePerRepositoryTemplate
      * Fills the core parameters.
      * @param input the input.
      * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
@@ -331,6 +334,7 @@ public abstract class BasePerRepositoryTemplate
      * @param stringUtils the <code>StringUtils</code> instance.
      * @precondition input != null
      * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
      * @precondition decoratorFactory != null
      * @precondition subpackageName != null
      * @precondition basePackageName != null
@@ -342,6 +346,7 @@ public abstract class BasePerRepositoryTemplate
     protected void fillCoreParameters(
         final Map input,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
@@ -371,6 +376,11 @@ public abstract class BasePerRepositoryTemplate
         input.put(
             "tables",
             decorateTables(tables, metadataManager, decoratorFactory));
+
+        input.put(
+            "repository_dao",
+            definesRepositoryScopedSql(customSqlProvider)
+            ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
@@ -438,5 +448,58 @@ public abstract class BasePerRepositoryTemplate
         final DecoratorFactory decoratorFactory)
     {
         return decoratorFactory.createTableDecorator(table, metadataManager);
+    }
+
+    /**
+     * Checks whether given custom SQL provider defines any repository-scope
+     * SQL or not.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition customSqlProvider != null
+     */
+    protected boolean definesRepositoryScopedSql(
+        final CustomSqlProvider customSqlProvider)
+    {
+        boolean result = false;
+
+        Collection t_cContents = customSqlProvider.getCollection();
+
+        if  (t_cContents != null)
+        {
+            Object t_Content = null;
+            Sql t_Sql = null;
+            String t_strDao;
+            boolean t_bMatches;
+
+            Iterator t_itContentIterator = t_cContents.iterator();
+
+            if  (t_itContentIterator != null)
+            {
+                while  (t_itContentIterator.hasNext())
+                {
+                    t_Content = t_itContentIterator.next();
+
+                    if  (t_Content instanceof Sql)
+                    {
+                        t_Sql = (Sql) t_Content;
+
+                        t_strDao = t_Sql.getDao();
+
+                        if  (t_strDao == null)
+                        {
+                            result =
+                                (t_Sql.getRepositoryScope() != null);
+
+                            if  (result)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }

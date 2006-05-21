@@ -131,6 +131,7 @@ public class KeywordRepositoryTemplate
      * Fills the core parameters.
      * @param input the input.
      * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
@@ -141,6 +142,7 @@ public class KeywordRepositoryTemplate
      * @param stringUtils the <code>StringUtils</code> instance.
      * @precondition input != null
      * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
      * @precondition decoratorFactory != null
      * @precondition subpackageName != null
      * @precondition basePackageName != null
@@ -152,6 +154,7 @@ public class KeywordRepositoryTemplate
     protected void fillCoreParameters(
         final Map input,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
@@ -164,6 +167,7 @@ public class KeywordRepositoryTemplate
         super.fillCoreParameters(
             input,
             metadataManager,
+            customSqlProvider,
             decoratorFactory,
             subpackageName,
             basePackageName,
