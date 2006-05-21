@@ -506,10 +506,22 @@ public class TemplateMappingManager
     public static final String REPOSITORY_DAO_TEMPLATE = "repository.dao";
 
     /**
+     * The repository DAO factory template attribute name.
+     */
+    public static final String REPOSITORY_DAO_FACTORY_TEMPLATE =
+        "repository.dao.factory";
+
+    /**
      * The repository DAO template attribute name.
      */
     public static final String BASE_REPOSITORY_DAO_TEMPLATE =
         "base.repository.dao";
+
+    /**
+     * The repository DAO factory template attribute name.
+     */
+    public static final String BASE_REPOSITORY_DAO_FACTORY_TEMPLATE =
+        "base.repository.dao.factory";
 
     /**
      * The engine-template mapping.

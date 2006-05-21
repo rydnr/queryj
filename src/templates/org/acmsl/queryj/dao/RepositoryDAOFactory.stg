@@ -1,0 +1,313 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate repository DAO factories.
+//
+// Version: $Revision: 563 $ ($Author: chous $ at $Date: 2006-04-26 23:06:32 +0200 (Wed, 26 Apr 2006) $)
+//
+// $Id: DAOFactory.stg 563 2006-04-26 21:06:32Z chous $
+//
+group DAOFactory;
+
+source(input) ::= <<
+<!
+  Generates a RepositoryDAOFactory source file.
+  @param input.copyright_years the copyright's years.
+  @param input.table_name the table name.
+  @param input.package_name the package.
+  @param input.dao_class_name the DAO class name.
+  @param input.dao_factory_class_name the DAO factory class name.
+  @param input.dao_implementation_class_name the DAO implementation class name.
+  @params class
+!>
+<if(input.header)>
+<input.header>
+<else>
+<java_header(
+  years=input.copyright_years,
+  description=
+  [
+    first_line_description(
+      className=input.dao_implementation_class_name,
+      engineName=input.engine_name),
+    second_line_description(
+      className=input.dao_implementation_class_name,
+      engineName=input.engine_name)
+  ],
+  timestamp=input.timestamp)>
+<endif>
+
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName,
+    input.subpackage_name
+  ])>
+
+<project_imports(
+  daoPackageName=input.dao_package_name,
+  daoClassName=input.dao_class_name,
+  daoFactoryPackageName=input.dao_factory_package_name,
+  daoFactoryClassName=input.dao_factory_class_name,
+  daoImplementationPackageName=input.dao_implementation_package_name,
+  daoImplementationClassName=input.dao_implementation_class_name)>
+
+/*
+ * Importing some JDK classes.
+ */
+import java.lang.ref.WeakReference;
+
+/*
+ * Importing some Spring classes.
+ */
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+
+/*
+ * Importing some extension classes.
+ */
+import javax.sql.DataSource;
+
+/*
+ * Importing some commons-logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+
+<class(input=input)>
+>>
+
+first_line_description(engineName) ::= <<
+<!
+  Generates a description for the file.
+  @param engineName the engine name.
+!>
+Is able to create the DAO repository.
+>>
+
+project_imports(
+  daoPackageName,
+  daoClassName,
+  daoFactoryPackageName,
+  daoFactoryClassName,
+  daoImplementationPackageName,
+  daoImplementationClassName) ::= <<
+<!
+  Generates the import statements for the project classes.
+  @param daoPackageName the DAO package name.
+  @param daoClassName the DAO class name.
+  @param daoFactoryPackageName the DAO factory package name.
+  @param daoFactoryClassName the DAO factory class name.
+  @param daoImplementationPackageName the DAO implementation package name.
+  @param daoImplementationClassName the DAO implementation class name.
+!>
+/*
+ * Importing some project classes.
+ */
+import <daoPackageName>.<daoClassName>;
+import <daoFactoryPackageName>.<daoFactoryClassName>;
+import <daoImplementationPackageName>.<daoImplementationClassName>;
+
+/*
+ * Importing some QueryJ classes.
+ */
+import org.acmsl.queryj.dao.JndiUtils;
+import org.acmsl.queryj.dao.ThreadAwareDataSourceWrapper;
+>>
+
+class(input) ::= <<
+<!
+  Generates the class body.
+  @param input.dao_factory_implementation_class_name the class name.
+  @param input.engine_name the engine name.
+  @param input.timestamp the timestamp.
+  @param input.dao_factory_implementation_class_name the DAO factory
+  implementation class name.
+  @param input.dao_factory_class_name the DAO factory class name.
+  @param input.jndi_location the JNDI location.
+  @param input.table_name the table name.
+!>
+/**
+ * <[
+      first_line_description(engineName=input.engine_name)
+    ]:{ line |<line>}; separator="\n * ">
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public class <input.engine_name><input.tr_name_capitalized>DAOFactory
+    extends  <input.tr_name_capitalized>DAOFactory
+{
+    /**
+     * The data source JNDI location.
+     */
+    public static final String JNDI_LOCATION = "<input.jndi_location>";
+
+    /**
+     * Public constructor to allow reflective instantiation.
+     */
+    public <input.tr_name_capitalized>DAOFactory() {};
+
+    /**
+     * Singleton implemented to avoid the double-check locking.
+     */
+    private static final class <input.engine_name><input.tr_name_capitalized>DAOFactoryContainer
+    {
+        /**
+         * The singleton instance, lazily loaded.
+         */
+        private static final <input.engine_name><input.tr_name_capitalized>DAOFactory SINGLETON =
+            new <input.engine_name><input.tr_name_capitalized>DAOFactory();
+    }
+
+    /**
+     * Retrieves a \<code\><input.dao_factory_implementation_class_name>\</code\>
+     * instance.
+     * @return such instance.
+     */
+    public static <input.tr_name_capitalized>DAOFactory get<input.engine_name>Instance()
+    {
+        return SINGLETON;
+    }
+
+    /**
+     * Creates <input.engine_name>-specific <input.table_name> DAO.
+     * @return such DAO.
+     */
+    public <input.tr_name_capitalized> create<input.tr_name_capitalized>DAO()
+    {
+        return create<input.tr_name_capitalized>DAO(getDataSource());
+    }
+
+    /**
+     * Creates <input.engine_name>-specific <input.table_name> DAO
+     * using given data source.
+     * @param dataSource the data source.
+     * @return such DAO.
+     <precondition_notnull("dataSource")>
+     */
+    protected <input.tr_name_capitalized>DAO create<input.tr_name_capitalized>DAO(final DataSource dataSource)
+    {
+        <input.tr_name_capitalized>DAO result = null;
+
+        if  (dataSource != null)
+        {
+            result = new <input.tr_name_capitalized>DAO(dataSource);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the data source.
+     * @return such data source.
+     */
+    protected DataSource getDataSource()
+    {
+        return getDataSource(JndiUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the data source.
+     * @param jndiUtils the \<code\>JndiUtils\</code\> instance.
+     * @return such data source.
+     <precondition_notnull("jndiUtils")>
+     */
+    protected DataSource getDataSource(final JndiUtils jndiUtils)
+    {
+        DataSource result = null;
+
+        try
+        {
+            result = jndiUtils.getDataSourceFromJndi(JNDI_LOCATION);
+        }
+        catch  (final CannotGetJdbcConnectionException cannotGetJdbcConnection)
+        {
+            // Assuming JNDI not available. The only way to retrieve
+            // the DataSource is reduced to transactional (thread-based)
+            // operations.
+            try
+            {
+                LogFactory.getLog(()).info(
+                      "DataSource not present in JNDI context. "
+                    + "Assuming JNDI is not enabled.");
+            }
+            catch  (final Throwable throwable)
+            {
+                // Class loading problem.
+            }
+        }
+
+        if  (result == null)
+        {
+            result = new ThreadAwareDataSourceWrapper();
+        }
+        else
+        {
+            try
+            {
+                result = new ThreadAwareDataSourceWrapper(result);
+            }
+            catch  (final CannotGetJdbcConnectionException exception)
+            {
+                try
+                {
+                    LogFactory.getLog(<input.engine_name><input.tr_name_capitalized>DAOFactory.class).error(
+                        "Cannot retrieve connection", exception);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+            catch  (final Throwable throwable)
+            {
+                try
+                {
+                    LogFactory.getLog(<input.engine_name><input.tr_name_capitalized>DAOFactory.class).error(
+                        "Cannot retrieve data source", throwable);
+                }
+                catch  (final Throwable anotherThrowable)
+                {
+                    // class-loading problem.
+                }
+            }
+        }
+
+        return result;
+    }
+}
+>>

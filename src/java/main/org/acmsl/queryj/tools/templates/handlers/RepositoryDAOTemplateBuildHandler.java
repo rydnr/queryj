@@ -160,7 +160,8 @@ public class RepositoryDAOTemplateBuildHandler
         final PackageUtils packageUtils)
     {
         return
-    packageUtils.retrieveRepositoryDAOPackage(projectPackage, engineName);
+            packageUtils.retrieveRepositoryDAOPackage(
+                projectPackage, engineName);
     }
 
     /**

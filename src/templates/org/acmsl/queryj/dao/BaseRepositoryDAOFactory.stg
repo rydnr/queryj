@@ -1,0 +1,246 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate base DAO factories.
+//
+// Version: $Revision: 591 $ ($Author: chous $ at $Date: 2006-05-02 09:58:39 +0200 (Tue, 02 May 2006) $)
+//
+// $Id: BaseDAOFactory.stg 591 2006-05-02 07:58:39Z chous $
+//
+group BaseDAOFactory;
+
+source(input) ::= <<
+<!
+  Generates a BaseDAOFactory source file.
+  @param input.copyright_years the copyright's years.
+  @param input.base_package_name the package.
+  @param input.tr_name_capitalized the value-object name.
+  @params class
+!>
+<if(input.header)>
+<input.header>
+<else>
+<java_header(
+  years=input.copyright_years,
+  description=
+  [
+    first_line_description(voName=input.tr_name_capitalized),
+    second_line_description(voName=input.tr_name_capitalized)
+  ],
+  timestamp=input.timestamp)>
+<endif>
+
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName
+  ])>
+
+<project_imports(
+  daoPackage=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName
+  ],
+  voName=input.tr_name_capitalized,
+  daoChooserPackage=
+  [
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName
+  ],
+  repository=input.tr_name_capitalized)>
+
+<class(input=input)>
+>>
+
+first_line_description(voName) ::= <<
+<!
+  Generates a description for the file.
+  @param voName the value-object name.
+!>
+Is able to create <voName>DAO instances,
+>>
+
+second_line_description(voName) ::= <<
+<!
+  Generates a description for the file.
+  @param voName the value-object name.
+!>
+following the Abstract Factory pattern.
+>>
+
+project_imports(daoPackage, voName, daoChooserPackage, repository) ::= <<
+<!
+  Generates the import statements for the project classes.
+  @param daoPackage the package parts of the DAO class.
+  @param voName the value-object name.
+  @param daoChooserPackage the DAOChooser package.
+  @param repository the repository, capitalized.
+!>
+/*
+ * Importing some project classes.
+ */
+import <daoPackage:{<it>}; separator=".">.<voName>DAO;
+import <daoChooserPackage:{<it>}; separator=".">.<repository>DAOChooser;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.lang.IllegalAccessException;
+import java.lang.InstantiationException;
+
+/*
+ * Importing some commons-logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+>>
+
+class(input) ::= <<
+<!
+  Generates the class body.
+  @param input.engine_name the engine name.
+  @param input.timestamp the timestamp.
+  @param input.jndi_location the JNDI location.
+  @param input.table_name the table name.
+!>
+/**
+ * <[
+      first_line_description(voName=input.tr_name_capitalized),
+      second_line_description(voName=input.tr_name_capitalized)
+    ]:{ line |<line>}; separator="\n * ">
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public abstract class <input.tr_name_capitalized>DAOFactory
+{
+    /**
+     * Retrieves a <input.tr_name_capitalized>DAOFactory instance.
+     * @return such instance.
+     */
+    public static <input.tr_name_capitalized>DAOFactory getInstance()
+    {
+        return getInstance(<input.tr_name_capitalized>DAOChooser.getInstance());
+    }
+
+    /**
+     * Retrieves a <input.tr_name_capitalized>DAOFactory instance.
+     * @param daoChooser the DAOChooser instance.
+     * @return such instance.
+     <precondition_notnull("daoChooser")>
+     */
+    protected static <input.tr_name_capitalized>DAOFactory getInstance(
+        final <input.tr_name_capitalized>DAOChooser daoChooser)
+    {
+        <input.tr_name_capitalized>DAOFactory result = null;
+
+        String t_str<input.tr_name_capitalized>DAOFactoryClassName =
+            daoChooser.get<input.tr_name_capitalized>DAOFactoryClassName();
+
+        if  (t_str<input.tr_name_capitalized>DAOFactoryClassName != null)
+        {
+            try
+            {
+                Class t_FactoryClass =
+                    Class.forName(
+                        t_str<input.tr_name_capitalized>DAOFactoryClassName);
+
+                result =
+                    (<input.tr_name_capitalized>DAOFactory) t_FactoryClass.newInstance();
+            }
+            catch  (final ClassNotFoundException classNotFoundException)
+            {
+                try
+                {
+                    LogFactory.getLog(<input.tr_name_capitalized>DAOFactory.class).error(
+                        "Cannot find <input.tr_name_capitalized>DAOFactory implementation class",
+                        classNotFoundException);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+            catch  (final InstantiationException instantiationException)
+            {
+                try
+                {
+                    LogFactory.getLog(<input.tr_name_capitalized>DAOFactory.class).error(
+                        "Cannot instantiate <input.tr_name_capitalized>DAOFactory implementation",
+                        instantiationException);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+            catch  (final IllegalAccessException illegalAccessException)
+            {
+                try
+                {
+                    LogFactory.getLog(<input.tr_name_capitalized>DAOFactory.class).error(
+                        "Cannot access <input.tr_name_capitalized>DAOFactory implementation",
+                        illegalAccessException);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                LogFactory.getLog(<input.tr_name_capitalized>DAOFactory.class).error(
+                    "<input.tr_name_capitalized>DAOFactory implementation not specified");
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Creates the \<code><input.tr_name_capitalized>DAO\</code> instance.
+     * @return such DAO.
+     */
+    public abstract <input.tr_name_capitalized>DAO create<input.tr_name_capitalized>DAO();
+}
+>>
