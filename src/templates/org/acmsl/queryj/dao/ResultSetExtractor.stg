@@ -561,7 +561,7 @@ new <attr.objectType>(
     resultSet.get<attr.objectType>(
 <endif>
 
-        <attr.tableNameUppercased>.<attr.nameUppercased>));
+        "<attr.nameUppercased>"));
 >>
 
 primitive_nullable_clobhandling_attribute_extractor(attr) ::= <<

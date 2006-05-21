@@ -71,6 +71,7 @@ source(input) ::= <<
     input.base_package_name,
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
+    input.engine_name,
     input.subpackage_name
   ])>
 
@@ -81,18 +82,64 @@ source(input) ::= <<
   repository=input.tr_name_capitalized,
   voName=input.vo_name)>
 
+<customResults:resultset_extractor_import(
+  basePackageName=basePackageName,
+  baseDAOSubpackageName=baseDAOSubpackageName,
+  rdbSubpackageName=rdbSubpackageName,
+  subpackageName=subpackageName,
+  crseIdCapitalized=it.idCapitalized); separator="\n">
+
+/*
+ * Importing some ACM-SL classes.
+ */
+import org.acmsl.queryj.dao.QueryjJdbcTemplate;
+
 /*
  * Importing Spring classes.
  */
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ParameterDisposer;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.object.SqlQuery;
+import org.springframework.jdbc.support.JdbcUtils;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.TransactionStatus;
 
 /*
  * Importing some JDK classes.
  */
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.Types;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+/*
+ * Importing some JDK extension classes
+ */
+import javax.sql.DataSource;
+
+/*
+ * Importing Jakarta Commons Logging classes
+ */
+import org.apache.commons.logging.LogFactory;
 
 <class(input=input)>
 >>
@@ -139,8 +186,25 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public class <input.engine_name><input.tr_name_capitalized>DAO
+    extends     QueryjJdbcTemplate
     implements  <input.tr_name_capitalized>DAO
 {
+    <input.custom_results:resultset_extractor_constants(
+      crseid=it.id,
+      crseidCapitalized=it.idCapitalized,
+      crseidNormalizedUppercased=it.idNormalizedUppercased); separator="\n\n">
+
+    /**
+     * Builds a \<code><input.class_name>\</code> instance
+     * with given data source.
+     * @param dataSource the required data source.
+     <precondition_notnull("dataSource")>
+     */
+    public <input.engine_name><input.tr_name_capitalized>DAO(final DataSource dataSource)
+    {
+        super(dataSource);
+    }
+
     <input.custom_selects:custom_select(
       cs=it, input=input); separator="\n">
 
@@ -149,5 +213,9 @@ public class <input.engine_name><input.tr_name_capitalized>DAO
 
     <input.custom_selects_for_update:custom_select_for_update(
       cs=it, input=input); separator="\n">
+
+    <inner_transaction_callbacks(
+      daoName=input.engine_name+input.tr_name_capitalized,
+      clobHandling=input.clobHandling)>
 }
 >>
