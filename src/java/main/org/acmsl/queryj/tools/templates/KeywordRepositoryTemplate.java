@@ -42,9 +42,11 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some StringTemplate classes.
@@ -88,6 +90,8 @@ public class KeywordRepositoryTemplate
      * Builds a <code>KeywordRepositoryTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
+     * @param metadataTypeManager the database metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
@@ -98,6 +102,8 @@ public class KeywordRepositoryTemplate
      */
     public KeywordRepositoryTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
@@ -107,6 +113,8 @@ public class KeywordRepositoryTemplate
     {
         super(
             metadataManager,
+            metadataTypeManager,
+            customSqlProvider,
             header,
             decoratorFactory,
             packageName,

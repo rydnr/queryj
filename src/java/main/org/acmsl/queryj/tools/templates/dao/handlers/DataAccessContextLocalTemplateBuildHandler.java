@@ -43,8 +43,10 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplateFactory;
@@ -93,6 +95,8 @@ public class DataAccessContextLocalTemplateBuildHandler
     /**
      * Uses the factory to create the template.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param factory the template factory.
      * @param packageName the package name.
      * @param projectPackage the base package.
@@ -103,6 +107,8 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @return the template.
      * @throws QueryJException on invalid input.
      * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition customSqlProvider != null
      * @precondition packageName != null
      * @precondition projectPackage != null
      * @precondition repository != null
@@ -112,6 +118,8 @@ public class DataAccessContextLocalTemplateBuildHandler
      */
     protected BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
@@ -130,6 +138,8 @@ public class DataAccessContextLocalTemplateBuildHandler
                 ((DataAccessContextLocalTemplateFactory) templateFactory)
                     .createTemplate(
                         metadataManager,
+                        metadataTypeManager,
+                        customSqlProvider,
                         packageName,
                         projectPackage,
                         repository,

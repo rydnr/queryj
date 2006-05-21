@@ -43,9 +43,11 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
@@ -134,6 +136,8 @@ public class ConfigurationPropertiesTemplateGenerator
     /**
      * Generates a ConfigurationProperties template.
      * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -151,6 +155,8 @@ public class ConfigurationPropertiesTemplateGenerator
      */
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String basePackageName,
         final String repositoryName,
@@ -162,6 +168,8 @@ public class ConfigurationPropertiesTemplateGenerator
         return
             new ConfigurationPropertiesTemplate(
                 metadataManager,
+                metadataTypeManager,
+                customSqlProvider,
                 header,
                 getDecoratorFactory(),
                 packageName,

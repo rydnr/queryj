@@ -45,6 +45,7 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
@@ -249,6 +250,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
             BasePerRepositoryTemplate t_Template =
                 createTemplate(
                     metadataManager,
+                    metadataManager.getMetadataTypeManager(),
+                    customSqlProvider,
                     templateFactory,
                     packageName,
                     projectPackage,
@@ -271,6 +274,9 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     /**
      * Uses the factory to create the template.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param factory the template factory.
      * @param packageName the package name.
      * @param projectPackage the base package.
@@ -281,6 +287,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @return the template.
      * @throws QueryJException on invalid input.
      * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition customSqlProvider != null
      * @precondition packageName != null
      * @precondition projectPackage != null
      * @precondition repository != null
@@ -290,6 +298,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      */
     protected BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
@@ -308,6 +318,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 ((DefaultBasePerRepositoryTemplateFactory) templateFactory)
                     .createTemplate(
                         metadataManager,
+                        metadataTypeManager,
+                        customSqlProvider,
                         packageName,
                         projectPackage,
                         repository,

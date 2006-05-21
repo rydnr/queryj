@@ -42,10 +42,12 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingTableDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.TableDecorator;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
@@ -86,6 +88,8 @@ public class ConfigurationPropertiesTemplate
      * Builds a <code>ConfigurationPropertiesTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
@@ -96,6 +100,8 @@ public class ConfigurationPropertiesTemplate
      */
     public ConfigurationPropertiesTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
@@ -106,6 +112,8 @@ public class ConfigurationPropertiesTemplate
     {
         super(
             metadataManager,
+            metadataTypeManager,
+            customSqlProvider,
             header,
             decoratorFactory,
             packageName,

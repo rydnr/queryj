@@ -43,9 +43,11 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateFactory;
 
@@ -129,6 +131,8 @@ public class KeywordRepositoryTemplateGenerator
     /**
      * Generates a <i>per-repository</i> template.
      * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the database metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param engineName the engine name.
@@ -140,6 +144,8 @@ public class KeywordRepositoryTemplateGenerator
      */
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String basePackageName,
         final String repositoryName,
@@ -150,6 +156,8 @@ public class KeywordRepositoryTemplateGenerator
         return
             new KeywordRepositoryTemplate(
                 metadataManager,
+                metadataTypeManager,
+                customSqlProvider,
                 header,
                 getDecoratorFactory(),
                 packageName,

@@ -190,6 +190,7 @@ public abstract class BasePerTableTemplate
                 StringValidator.getInstance(),
                 EnglishGrammarUtils.getInstance(),
                 DAOTemplateUtils.getInstance(),
+                TemplateUtils.getInstance(),
                 MetaLanguageUtils.getInstance(),
                 MetadataUtils.getInstance());
     }
@@ -214,6 +215,7 @@ public abstract class BasePerTableTemplate
      * @param stringValidator the StringValidator instance.
      * @param englishGrammarUtils the EnglishGrammarUtils instance.
      * @param daoTemplateUtils the DAOTemplateUtils instance.
+     * @param templateUtils the <code>TemplateUtils</code> instance.
      * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @return such code.
@@ -249,6 +251,7 @@ public abstract class BasePerTableTemplate
         final StringValidator stringValidator,
         final EnglishGrammarUtils englishGrammarUtils,
         final DAOTemplateUtils daoTemplateUtils,
+        final TemplateUtils templateUtils,
         final MetaLanguageUtils metaLanguageUtils,
         final MetadataUtils metadataUtils)
     {
@@ -395,7 +398,8 @@ public abstract class BasePerTableTemplate
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory,
-                daoTemplateUtils);
+                daoTemplateUtils,
+                templateUtils);
 
         Collection t_cCustomUpdatesOrInserts =
             retrieveCustomUpdatesOrInserts(
@@ -404,7 +408,8 @@ public abstract class BasePerTableTemplate
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory,
-                daoTemplateUtils);
+                daoTemplateUtils,
+                templateUtils);
 
         Collection t_cCustomSelectsForUpdate =
             retrieveCustomSelectsForUpdate(
@@ -413,7 +418,8 @@ public abstract class BasePerTableTemplate
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory,
-                daoTemplateUtils);
+                daoTemplateUtils,
+                templateUtils);
 
         // items must contain
         // getId()
@@ -425,7 +431,8 @@ public abstract class BasePerTableTemplate
                 customSqlProvider,
                 metadataManager,
                 decoratorFactory,
-                daoTemplateUtils);
+                daoTemplateUtils,
+                templateUtils);
 
         fillParameters(
             new HashMap(),
@@ -975,6 +982,7 @@ public abstract class BasePerTableTemplate
      * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom selects.
      * @precondition tableName != null
      * @precondition customSqlProvider != null
@@ -982,6 +990,8 @@ public abstract class BasePerTableTemplate
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
+     * @precondition templateUtils != null
+     * @precondition templateUtils != null
      */
     protected Collection retrieveCustomSelects(
         final String tableName,
@@ -989,14 +999,11 @@ public abstract class BasePerTableTemplate
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        final DAOTemplateUtils daoTemplateUtils,
+        final TemplateUtils templateUtils)
     {
         return
-            retrieveCustomSql(
-                new String[]
-                {
-                    Sql.SELECT,
-                },
+            templateUtils.retrieveCustomSelects(
                 tableName,
                 customSqlProvider,
                 metadataManager,
@@ -1013,6 +1020,7 @@ public abstract class BasePerTableTemplate
      * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom sql.
      * @precondition tableName != null
      * @precondition customSqlProvider != null
@@ -1020,6 +1028,7 @@ public abstract class BasePerTableTemplate
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
+     * @precondition templateUtils != null
      */
     protected Collection retrieveCustomUpdatesOrInserts(
         final String tableName,
@@ -1027,16 +1036,11 @@ public abstract class BasePerTableTemplate
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        final DAOTemplateUtils daoTemplateUtils,
+        final TemplateUtils templateUtils)
     {
         return
-            retrieveCustomSql(
-                new String[]
-                {
-                    Sql.INSERT,
-                    Sql.UPDATE,
-                    Sql.DELETE
-                },
+            templateUtils.retrieveCustomUpdatesOrInserts(
                 tableName,
                 customSqlProvider,
                 metadataManager,
@@ -1053,6 +1057,7 @@ public abstract class BasePerTableTemplate
      * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom selects.
      * @precondition tableName != null
      * @precondition customSqlProvider != null
@@ -1060,6 +1065,7 @@ public abstract class BasePerTableTemplate
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
+     * @precondition templateUtils != null
      */
     protected Collection retrieveCustomSelectsForUpdate(
         final String tableName,
@@ -1067,14 +1073,11 @@ public abstract class BasePerTableTemplate
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        final DAOTemplateUtils daoTemplateUtils,
+        final TemplateUtils templateUtils)
     {
         return
-            retrieveCustomSql(
-                new String[]
-                {
-                    Sql.SELECT_FOR_UPDATE,
-                },
+            templateUtils.retrieveCustomSelectsForUpdate(
                 tableName,
                 customSqlProvider,
                 metadataManager,
@@ -1084,201 +1087,36 @@ public abstract class BasePerTableTemplate
     }
 
     /**
-     * Retrieves the custom sql.
-     * @param types the sql types.
-     * @param tableName the table name.
-     * @param customSqlProvider the provider.
-     * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
-     * @return the custom sql.
-     * @precondition sqlTypes != null
-     * @precondition tableName != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     * @precondition daoTemplateUtils != null
-     */
-    protected Collection retrieveCustomSql(
-        final String[] types,
-        final String tableName,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
-    {
-        Collection result = new ArrayList();
-
-        Collection t_cContents = customSqlProvider.getCollection();
-
-        if  (t_cContents != null)
-        {
-            Iterator t_itContentIterator = t_cContents.iterator();
-
-            if  (t_itContentIterator != null)
-            {
-                int t_iTypes = (types != null) ? types.length : 0;
-
-                while  (t_itContentIterator.hasNext())
-                {
-                    Object t_Content = t_itContentIterator.next();
-
-                    if  (t_Content instanceof Sql)
-                    {
-                        Sql t_Sql = (Sql) t_Content;
-
-                        String t_strDao = t_Sql.getDao();
-
-                        if  (   (t_strDao != null)
-                             && (daoTemplateUtils.matches(
-                                     tableName, t_strDao)))
-                        {
-                            boolean t_bAdd = false;
-
-                            String t_strCurrentType = null;
-
-                            for  (int t_iIndex = 0;
-                                      t_iIndex < t_iTypes;
-                                      t_iIndex++)
-                            {
-                                t_strCurrentType = types[t_iIndex];
-
-                                if  (   (t_strCurrentType != null)
-                                     && (t_strCurrentType.equals(
-                                             t_Sql.getType())))
-                                {
-                                    t_bAdd = true;
-                                }
-                            }
-
-                            if  (t_bAdd)
-                            {
-                                result.add(
-                                    decoratorFactory.createDecorator(
-                                        t_Sql,
-                                        customSqlProvider,
-                                        metadataManager));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Retrieves the custom results.
      * @param tableName the table name.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom results.
      * @precondition tableName != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
+     * @precondition templateUtils != null
      */
     protected Collection retrieveCustomResults(
         final String tableName,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        final DAOTemplateUtils daoTemplateUtils,
+        final TemplateUtils templateUtils)
     {
-        Collection result = new ArrayList();
-
-        Collection t_cContents = customSqlProvider.getCollection();
-
-        if  (t_cContents != null)
-        {
-            Object t_Content = null;
-            Sql t_Sql = null;
-            ResultRefElement t_ResultRefElement = null;
-            ResultElement t_ResultElement = null;
-            String t_strDao;
-
-
-            Iterator t_itContentIterator = t_cContents.iterator();
-
-            if  (t_itContentIterator != null)
-            {
-                while  (t_itContentIterator.hasNext())
-                {
-                    t_Content = t_itContentIterator.next();
-
-                    if  (t_Content instanceof Sql)
-                    {
-                        t_Sql = (Sql) t_Content;
-
-                        t_strDao = t_Sql.getDao();
-
-                        if  (   (t_strDao != null)
-                             && (daoTemplateUtils.matches(
-                                     tableName, t_strDao)))
-                        {
-                            t_ResultRefElement = t_Sql.getResultRef();
-
-                            if  (t_ResultRefElement != null)
-                            {
-                                t_ResultElement =
-                                    customSqlProvider.resolveReference(
-                                        t_ResultRefElement);
-
-                                if  (t_ResultElement != null)
-                                {
-                                    if  (!result.contains(t_ResultElement))
-                                    {
-                                        result.add(
-                                            new CachingResultDecorator(
-                                                t_ResultElement,
-                                                customSqlProvider,
-                                                metadataManager,
-                                                decoratorFactory));
-                                    }
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        // todo throw something.
-                                        LogFactory.getLog(BasePerTableTemplate.class).warn(
-                                              "Referenced result not found:"
-                                            + t_ResultRefElement.getId());
-                                    }
-                                    catch  (final Throwable throwable)
-                                    {
-                                        // class-loading problem.
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    // todo throw something.
-                                    LogFactory.getLog(BasePerTableTemplate.class).warn(
-                                          "Referenced result not found:"
-                                        + t_ResultRefElement.getId());
-                                }
-                                catch  (final Throwable throwable)
-                                {
-                                    // class-loading problem.
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return result;
+        return
+            templateUtils.retrieveCustomResults(
+                tableName,
+                customSqlProvider,
+                metadataManager,
+                decoratorFactory,
+                daoTemplateUtils);
     }
 
     /**

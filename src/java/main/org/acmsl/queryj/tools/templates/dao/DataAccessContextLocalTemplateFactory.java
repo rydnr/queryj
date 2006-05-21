@@ -43,7 +43,9 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 
@@ -63,6 +65,8 @@ public interface DataAccessContextLocalTemplateFactory
     /**
      * Generates a <code>DataAccessContextLocal</code> template.
      * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -75,6 +79,8 @@ public interface DataAccessContextLocalTemplateFactory
      */
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String basePackageName,
         final String repositoryName,

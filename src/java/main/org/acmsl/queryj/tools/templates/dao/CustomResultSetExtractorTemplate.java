@@ -155,9 +155,12 @@ public class CustomResultSetExtractorTemplate
                 metadataManager,
                 CustomResultUtils.getInstance());
 
-        input.put("table", t_strTable);
-        input.put(
-            "tableNormalizedLowercased", normalizeLowercase(t_strTable));
+        if  (t_strTable != null)
+        {
+            input.put("table", t_strTable);
+            input.put(
+                "tableNormalizedLowercased", normalizeLowercase(t_strTable));
+        }
     }
 
     /**

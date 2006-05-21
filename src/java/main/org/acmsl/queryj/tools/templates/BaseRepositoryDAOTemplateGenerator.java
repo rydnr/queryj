@@ -42,10 +42,12 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
 
 /*
@@ -128,6 +130,8 @@ public class BaseRepositoryDAOTemplateGenerator
     /**
      * Generates a <i>per-repository</i> template.
      * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param engineName the engine name.
@@ -139,6 +143,8 @@ public class BaseRepositoryDAOTemplateGenerator
      */
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String basePackageName,
         final String repositoryName,
@@ -150,6 +156,8 @@ public class BaseRepositoryDAOTemplateGenerator
         return
             new BaseRepositoryDAOTemplate(
                 metadataManager,
+                metadataTypeManager,
+                customSqlProvider,
                 header,
                 getDecoratorFactory(),
                 packageName,

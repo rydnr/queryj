@@ -42,8 +42,10 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some StringTemplate classes.
@@ -67,6 +69,8 @@ public class TableRepositoryTemplate
      * Builds a <code>TableRepositoryTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
@@ -77,6 +81,8 @@ public class TableRepositoryTemplate
      */
     public TableRepositoryTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
@@ -87,6 +93,8 @@ public class TableRepositoryTemplate
     {
         super(
             metadataManager,
+            metadataTypeManager,
+            customSqlProvider,
             header,
             decoratorFactory,
             packageName,

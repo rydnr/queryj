@@ -42,7 +42,9 @@ package org.acmsl.queryj.tools.templates;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 
 /*
@@ -61,6 +63,8 @@ public interface KeywordRepositoryTemplateFactory
     /**
      * Generates a <i>per-repository</i> template.
      * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param engineName the engine name.
@@ -72,6 +76,8 @@ public interface KeywordRepositoryTemplateFactory
      */
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String basePackageName,
         final String repositoryName,

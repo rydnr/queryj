@@ -44,6 +44,7 @@ package org.acmsl.queryj.tools.templates.handlers;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.AntFieldElement;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -92,6 +93,8 @@ public class KeywordRepositoryTemplateBuildHandler
     /**
      * Uses the factory to create the template.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param factory the template factory.
      * @param packageName the package name.
      * @param projectPackage the base package.
@@ -102,6 +105,8 @@ public class KeywordRepositoryTemplateBuildHandler
      * @return the template.
      * @throws QueryJException on invalid input.
      * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition customSqlProvider != null
      * @precondition packageName != null
      * @precondition projectPackage != null
      * @precondition repository != null
@@ -111,6 +116,8 @@ public class KeywordRepositoryTemplateBuildHandler
      */
     protected BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
@@ -130,6 +137,8 @@ public class KeywordRepositoryTemplateBuildHandler
                     ((KeywordRepositoryTemplateFactory) templateFactory)
                         .createTemplate(
                             metadataManager,
+                            metadataTypeManager,
+                            customSqlProvider,
                             packageName,
                             projectPackage,
                             repository,
