@@ -79,7 +79,7 @@ source(input) ::= <<
   voSubpackageName=typeInitMap.voSubpackageName,
   voName=input.vo_name,
   trSubpackageName=typeInitMap.tableRepositorySubpackageName,
-  trName=input.tr_name)>
+  trName=input.tr_name_capitalized)>
 
 /*
  * Importing some ACM-SL classes.
@@ -173,7 +173,7 @@ class(input) ::= <<
  */
 public class <input.vo_name>AttributesStatementSetter
     implements  PreparedStatementSetter,
-                <input.tr_name>TableRepository
+                <input.tr_name_capitalized>TableRepository
 {
     <input.attributes:attribute_member_declaration(attr=it); separator="\n\n">
 

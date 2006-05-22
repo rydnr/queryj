@@ -77,7 +77,7 @@ source(input) ::= <<
   voSubpackageName=typeInitMap.voSubpackageName,
   voName=input.vo_name,
   trSubpackageName=typeInitMap.tableRepositorySubpackageName,
-  trName=input.tr_name)>
+  trName=input.tr_name_capitalized)>
 
 /*
  * Importing some ACM-SL classes.
@@ -153,7 +153,7 @@ class(input) ::= <<
  */
 public class <input.vo_name>ResultSetExtractor
     implements  ResultSetExtractor,
-                <input.tr_name>TableRepository
+                <input.tr_name_capitalized>TableRepository
 {
 <if(input.clobHandling)>
     <indirect_template(name=input.clobHandling+"Extractor", input=input)>

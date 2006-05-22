@@ -191,10 +191,23 @@ public class DAOChooserTemplate
             timestamp,
             stringUtils);
 
-        input.put("tr_name_uppercased", tableRepositoryName.toUpperCase());
-        input.put("tr_name_lowercased", tableRepositoryName.toLowerCase());
-        input.put("tr_name_capitalized", capitalize(tableRepositoryName));
-        input.put("properties_file_name", retrievePropertiesFileName(tableRepositoryName));
+        DecorationUtils decorationUtils = DecorationUtils.getInstance();
+
+        input.put(
+            "tr_name_uppercased",
+            normalizeUppercase(tableRepositoryName, decorationUtils));
+        input.put(
+            "tr_name_lowercased",
+            lowercase(tableRepositoryName, decorationUtils));
+        input.put(
+            "tr_name_normalized",
+            normalize(tableRepositoryName, decorationUtils));
+        input.put(
+            "tr_name_capitalized",
+            capitalize(tableRepositoryName, decorationUtils));
+        input.put(
+            "properties_file_name",
+            retrievePropertiesFileName(tableRepositoryName));
     }
 
     /**
