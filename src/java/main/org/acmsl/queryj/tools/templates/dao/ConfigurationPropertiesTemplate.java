@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -41,10 +42,12 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingTableDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.TableDecorator;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
@@ -80,6 +83,8 @@ public class ConfigurationPropertiesTemplate
      * Builds a <code>ConfigurationPropertiesTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
@@ -90,6 +95,8 @@ public class ConfigurationPropertiesTemplate
      */
     public ConfigurationPropertiesTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
@@ -100,6 +107,8 @@ public class ConfigurationPropertiesTemplate
     {
         super(
             metadataManager,
+            metadataTypeManager,
+            customSqlProvider,
             header,
             decoratorFactory,
             packageName,
@@ -131,6 +140,8 @@ public class ConfigurationPropertiesTemplate
      * Fills the core parameters.
      * @param input the input.
      * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param basePackageName the base package name.
      * @param subpackageName the subpackage name.
      * @param tableRepositoryName the table repository name.
@@ -140,6 +151,8 @@ public class ConfigurationPropertiesTemplate
      * @param stringUtils the <code>StringUtils</code> instance.
      * @precondition input != null
      * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
+     * @precondition decoratorFactory != null
      * @precondition subpackageName != null
      * @precondition basePackageName != null
      * @precondition tableRepositoryName != null
@@ -150,6 +163,8 @@ public class ConfigurationPropertiesTemplate
     protected void fillCoreParameters(
         final Map input,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final DecoratorFactory decoratorFactory,
         final String basePackageName,
         final String subpackageName,
         final String tableRepositoryName,
@@ -158,19 +173,21 @@ public class ConfigurationPropertiesTemplate
         final String timestamp,
         final StringUtils stringUtils)
     {
-        input.put("tr_name", tableRepositoryName);
+        super.fillCoreParameters(
+            input,
+            metadataManager,
+            customSqlProvider,
+            decoratorFactory,
+            basePackageName,
+            subpackageName,
+            tableRepositoryName,
+            engineName,
+            tables,
+            timestamp,
+            stringUtils);
 
         input.put("engine_name", engineName);
         input.put("engine_name_lowercased", engineName.toLowerCase());
-
-        input.put("base_package_name", basePackageName);
-
-        input.put(
-            "dao_subpackage_name",
-            retrieveDAOSubpackageName(
-                basePackageName, engineName, PackageUtils.getInstance()));
-
-        input.put("tables", decorateTables(tables, metadataManager));
         input.put("splitted_header", split(getProcessedHeader(input)));
     }
 
@@ -194,62 +211,5 @@ public class ConfigurationPropertiesTemplate
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.split(value);
-    }
-    
-    /**
-     * Retrieves the DAO subpackage name.
-     * @param basePackageName the base package name.
-     * @param engineName the engine name.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return such information.
-     */
-    protected String retrieveDAOSubpackageName(
-        final String basePackageName,
-        final String engineName,
-        final PackageUtils packageUtils)
-    {
-        return packageUtils.retrieveDAOPackage(basePackageName, engineName);
-    }
-
-    /**
-     * Decorates the tables.
-     * @param tables the tables.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the decorated tables.
-     * @precondition tables != null
-     * @precondition metadataManager != null
-     */
-    protected Collection decorateTables(
-        final Collection tables, final MetadataManager metadataManager)
-    {
-        Collection result = new ArrayList();
-
-        Iterator t_itTableIterator = tables.iterator();
-        
-        if  (t_itTableIterator != null)
-        {
-            while  (t_itTableIterator.hasNext())
-            {
-                result.add(
-                    decorate(
-                        (String) t_itTableIterator.next(), metadataManager));
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Decorates given table.
-     * @param table the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the decorated table.
-     * @precondition table != null
-     * @precondition metadataManager != null
-     */
-    protected TableDecorator decorate(
-        final String table, final MetadataManager metadataManager)
-    {
-        return new CachingTableDecorator(table, metadataManager);
     }
 }

@@ -32,23 +32,23 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate BaseValueObject implementations according
- *              to database metadata.
+ * Description: Is able to generate base DAO factories.
  *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
 /*
- * Importing project-specific classes.
+ * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -65,13 +65,13 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Is able to generate base value object implementations according to
- * database metadata.
+ * Is able to generate base DAO factories.
  * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ *         >Jose San Leandro</a>
  */
 public class BaseValueObjectTemplateGenerator
-    implements  BaseValueObjectTemplateFactory
+    implements  BasePerTableTemplateFactory,
+                BasePerTableTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -87,7 +87,7 @@ public class BaseValueObjectTemplateGenerator
      * Specifies a new weak reference.
      * @param generator the generator instance to use.
      */
-    protected static void setReference(
+    private static void setReference(
         final BaseValueObjectTemplateGenerator generator)
     {
         singleton = new WeakReference(generator);
@@ -97,13 +97,13 @@ public class BaseValueObjectTemplateGenerator
      * Retrieves the weak reference.
      * @return such reference.
      */
-    protected static WeakReference getReference()
+    private static WeakReference getReference()
     {
         return singleton;
     }
 
     /**
-     * Retrieves a ValueObjectTemplateGenerator instance.
+     * Retrieves a <code>BaseValueObjectTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static BaseValueObjectTemplateGenerator getInstance()
@@ -128,31 +128,52 @@ public class BaseValueObjectTemplateGenerator
     }
 
     /**
-     * Generates a value object template.
+     * Creates a <code>BaseValueObjectTemplate</code> using given
+     * information.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
      * @param header the header.
-     * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition packageName != null
-     * @precondition tableTemplate != null
+     * @return the fresh new template.
+     * @precondition tableName != null
      * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition basePackageName != null
+     * @precondition repositoryName != null
      */
-    public BaseValueObjectTemplate createBaseValueObjectTemplate(
-        final String packageName,
-        final TableTemplate tableTemplate,
+    public BasePerTableTemplate createTemplate(
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName,
         final String header)
-      throws  QueryJException
     {
         return
             new BaseValueObjectTemplate(
-                packageName,
-                tableTemplate,
+                tableName,
                 metadataManager,
+                customSqlProvider,
                 header,
-                getDecoratorFactory());
+                getDecoratorFactory(),
+                packageName,
+                engineName,
+                engineVersion,
+                quote,
+                basePackageName,
+                repositoryName);
     }
 
     /**
@@ -165,30 +186,33 @@ public class BaseValueObjectTemplateGenerator
     }
 
     /**
-     * Writes a value object template to disk.
-     * @param baseValueObjectTemplate the base value object template to write.
+     * Writes a <code>BaseValueObject</code> template to disk.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition baseValueObjectTemplate != null
+     * @precondition template instanceof BaseDAOFactoryTemplate
      * @precondition outputDir != null
      */
     public void write(
-        final BaseValueObjectTemplate baseValueObjectTemplate,
-        final File outputDir)
+        final BasePerTableTemplate template, final File outputDir)
       throws  IOException
     {
         write(
-            baseValueObjectTemplate,
+            template,
             outputDir, 
+            ValueObjectTemplateGenerator.getInstance(),
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
             FileUtils.getInstance());
     }
 
     /**
-     * Writes a base value object template to disk.
-     * @param baseValueObjectTemplate the base value object template to write.
+     * Writes a value object template to disk.
+     * @param baseValueObjectTemplate the value object implementation template
+     * to write.
      * @param outputDir the output folder.
+     * @param valueObjectTemplateGenerator the
+     * <code>ValueObjectTemplateGenerator</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
@@ -201,8 +225,9 @@ public class BaseValueObjectTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final BaseValueObjectTemplate baseValueObjectTemplate,
+        final BasePerTableTemplate baseValueObjectTemplate,
         final File outputDir,
+        final ValueObjectTemplateGenerator valueObjectTemplateGenerator,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
         final FileUtils fileUtils)
@@ -213,14 +238,12 @@ public class BaseValueObjectTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    baseValueObjectTemplate
-                        .getTableTemplate()
-                            .getTableName()
-                                .toLowerCase()),
-                '_')
-            + ".java",
+            + "Abstract"
+            + valueObjectTemplateGenerator.getVoClassName(
+                  baseValueObjectTemplate.getTableName(),
+                  englishGrammarUtils,
+                  stringUtils)
+            + "ValueObject.java",
             baseValueObjectTemplate.generate());
     }
 }

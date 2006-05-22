@@ -1,0 +1,134 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-2005  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: $RCSfile$
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate Table repositories.
+//
+// Version: $Revision: 569 $ ($Author: chous $ at $Date: 2006-04-27 10:02:57 +0200 (Thu, 27 Apr 2006) $)
+//
+// $Id: Table.stg 569 2006-04-27 08:02:57Z chous $
+//
+group Table;
+
+source(input) ::= <<
+<!
+  Generates a TableRepository source file.
+  @param input.copyright_years the copyright's years.
+  @param input.table_name the table name.
+  @param input.package the package.
+  @params project_imports
+  @params class
+!>
+<if(input.header)>
+<input.header>
+<else>
+<java_header(
+  years=input.copyright_years,
+  description=
+    [
+      first_line_description(repository=input.tr_name)
+    ],
+  timestamp=input.timestamp)>
+<endif>
+
+<package_declaration(
+  packageNames=
+  [
+    input.base_package_name,
+    typeInitMap.tableRepositorySubpackageName
+  ])>
+
+/*
+ * Importing some ACM-SL classes.
+ */
+import org.acmsl.queryj.BigDecimalField;
+import org.acmsl.queryj.CalendarField;
+import org.acmsl.queryj.ClobField;
+import org.acmsl.queryj.DateField;
+import org.acmsl.queryj.DoubleField;
+import org.acmsl.queryj.Field;
+import org.acmsl.queryj.IntField;
+import org.acmsl.queryj.LongField;
+import org.acmsl.queryj.StringField;
+import org.acmsl.queryj.Table;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.math.BigDecimal;
+import java.lang.ref.WeakReference;
+import java.util.Calendar;
+import java.util.Date;
+
+<class(input=input)>
+>>
+
+first_line_description(repository) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param repository the repository name.
+!>
+Defines the table repository for "<repository>".
+>>
+
+class(input) ::= <<
+<!
+ Generates the class body.
+ @param input the input.
+!>
+/**
+ * <[
+      first_line_description(repository=input.tr_name)
+    ]:{line |<line>}; separator="\n * ">
+ * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @since <input.timestamp>
+ */
+public interface <input.tr_name_capitalized>TableRepository
+{
+    <input.tables:table_constant(table=it); separator="\n\n">
+}
+>>
+
+table_constant(table) ::= <<
+<!
+ Writes the constant declaration for each table.
+ @param table the table.
+!>
+/**
+ * The <table.name>.
+ */
+public final <table.nameCapitalized>Table <table.nameUppercased> =
+    new <table.nameCapitalized>Table("<table.name>");
+>>

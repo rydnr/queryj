@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -62,8 +63,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public class ResultElement
-    extends  AbstractIdElement
-    implements  Result
+    extends  AbstractResult
 {
     /**
      * The <i>class</i> attribute.
@@ -71,17 +71,7 @@ public class ResultElement
     public String m__strClass;
 
     /**
-     * The <i>matches</i> attribute.
-     */
-    private String m__strMatches;
-
-    /**
-     * The <i>property-ref> elements.
-     */
-    private Collection m__cPropertyRefs;
-
-    /**
-     * Creates a PropertyElement with given information.
+     * Creates a <code>ResultElement</code> with given information.
      * @param id the <i>id</i> attribute.
      * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
@@ -93,9 +83,8 @@ public class ResultElement
         final String classValue,
         final String matches)
     {
-        super(id);
+        super(id, matches);
         immutableSetClassValue(classValue);
-        immutableSetMatches(matches);
     }
 
     /**
@@ -123,88 +112,6 @@ public class ResultElement
     public String getClassValue()
     {
         return m__strClass;
-    }
-
-    /**
-     * Specifies the <i>matches</i> attribute.
-     * @param matches such value.
-     */
-    protected final void immutableSetMatches(final String matches)
-    {
-        m__strMatches = matches;
-    }
-
-    /**
-     * Specifies the <i>matches</i> attribute.
-     * @param matches such value.
-     */
-    protected void setMatches(final String matches)
-    {
-        immutableSetMatches(matches);
-    }
-
-    /**
-     * Retrieves the <i>matches</i> attribute.
-     * @return such value.
-     */
-    public String getMatches()
-    {
-        return m__strMatches;
-    }
-
-    /**
-     * Specifies the &lt;property-ref&gt; elements.
-     * @param propertyRefs such elements.
-     */
-    protected final void immutableSetPropertyRefs(final Collection collection)
-    {
-        m__cPropertyRefs = collection;
-    }
-
-    /**
-     * Specifies the &lt;property-ref&gt; elements.
-     * @param propertyRefs such elements.
-     */
-    protected void setPropertyRefs(final Collection collection)
-    {
-        immutableSetPropertyRefs(collection);
-    }
-
-    /**
-     * Retrieves the &lt;property-ref&gt; elements.
-     * @return such elements.
-     */
-    public Collection getPropertyRefs()
-    {
-        return m__cPropertyRefs;
-    }
-
-    /**
-     * Adds a new &lt;property-ref&gt; element.
-     * @param propertyRef such element.
-     */
-    public void add(final PropertyRefElement propertyRef)
-    {
-        add(propertyRef, getPropertyRefs());
-    }
-
-    /**
-     * Adds a new &lt;property-ref&gt; element.
-     * @param propertyRef such element.
-     * @param propertyRefs thhe &ltproperty-ref&gt; elements.
-     */
-    protected synchronized void add(
-        final PropertyRefElement propertyRef, final Collection propertyRefs)
-    {
-        Collection t_cPropertyRefs = propertyRefs;
-
-        if  (t_cPropertyRefs == null)
-        {
-            t_cPropertyRefs = new ArrayList();
-            setPropertyRefs(t_cPropertyRefs);
-        }
-
-        t_cPropertyRefs.add(propertyRef);
     }
 
     /**

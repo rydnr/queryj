@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -142,7 +143,7 @@ public class CachingDecoratorFactory
 
     /**
      * Creates a <code>ResultDecorator</code> for given
-     * property instance.
+     * result instance.
      * @param result the result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
@@ -159,8 +160,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Creates a <code>SqlDecorator</code> for given
-     * property instance.
+     * Creates a <code>SqlDecorator</code>.
      * @param sql the custom sql.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
@@ -174,5 +174,17 @@ public class CachingDecoratorFactory
         return
             new CachingSqlDecorator(
                 sql, customSqlProvider, metadataManager);
+    }
+
+    /**
+     * Creates a <code>TableDecorator</code>.
+     * @param table the table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated sql for the concrete template.
+     */
+    public TableDecorator createTableDecorator(
+        final String table, final MetadataManager metadataManager)
+    {
+        return new CachingTableDecorator(table, metadataManager);
     }
 }

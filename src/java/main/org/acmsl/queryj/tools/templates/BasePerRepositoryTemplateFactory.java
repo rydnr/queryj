@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,16 +39,9 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Collection;
+import org.acmsl.commons.patterns.Factory;
 
 /**
  * Represents entities able to create per-repository templates.
@@ -56,25 +50,4 @@ import java.util.Collection;
  */
 public interface BasePerRepositoryTemplateFactory
 {
-    /**
-     * Generates a <i>per-repository</i> template.
-     * @param metadataManager the metadata manager.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param engineName the engine name.
-     * @param repositoryName the name of the repository.
-     * @param tables the tables.
-     * @param header the header.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
-     */
-    public BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables,
-        final String header)
-      throws  QueryJException;
 }

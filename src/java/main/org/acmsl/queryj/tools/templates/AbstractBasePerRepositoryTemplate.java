@@ -41,8 +41,10 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some JDK classes.
@@ -67,6 +69,16 @@ public abstract class AbstractBasePerRepositoryTemplate
      */
     private MetadataManager m__MetadataManager;
     
+    /**
+     * The <code>MetadataTypeManager</code> instance.
+     */
+    private MetadataTypeManager m__MetadataTypeManager;
+    
+    /**
+     * The custom-sql provider.
+     */
+    private CustomSqlProvider m__CustomSqlProvider;
+
     /**
      * The subpackage name.
      */
@@ -96,6 +108,8 @@ public abstract class AbstractBasePerRepositoryTemplate
      * Builds an <code>AbstractBasePerRepositoryTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
+     * @param metadataTypeManager the database metadata type manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param subpackageName the subpackage name.
@@ -106,6 +120,8 @@ public abstract class AbstractBasePerRepositoryTemplate
      */
     public AbstractBasePerRepositoryTemplate(
         final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String header,
         final DecoratorFactory decoratorFactory,
         final String subpackageName,
@@ -116,6 +132,8 @@ public abstract class AbstractBasePerRepositoryTemplate
     {
         super(header, decoratorFactory);
         immutableSetMetadataManager(metadataManager);
+        immutableSetMetadataTypeManager(metadataTypeManager);
+        immutableSetCustomSqlProvider(customSqlProvider);
         immutableSetSubpackageName(subpackageName);
         immutableSetBasePackageName(basePackageName);
         immutableSetRepositoryName(repositoryName);
@@ -149,6 +167,64 @@ public abstract class AbstractBasePerRepositoryTemplate
     public MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
+    }
+
+    /**
+     * Specifies the <code>MetadataTypeManager</code> instance.
+     * @param metadataTypeManager such instance.
+     */
+    protected final void immutableSetMetadataTypeManager(
+        final MetadataTypeManager metadataTypeManager)
+    {
+        m__MetadataTypeManager = metadataTypeManager;
+    }
+
+    /**
+     * Specifies the <code>MetadataTypeManager</code> instance.
+     * @param metadataTypeManager such instance.
+     */
+    protected void setMetadataTypeManager(
+        final MetadataTypeManager metadataTypeManager)
+    {
+        immutableSetMetadataTypeManager(metadataTypeManager);
+    }
+
+    /**
+     * Retrieves the <code>MetadataTypeManager</code> instance.
+     * @return such instance.
+     */
+    public MetadataTypeManager getMetadataTypeManager()
+    {
+        return m__MetadataTypeManager;
+    }
+
+    /**
+     * Specifies the custom-sql provider.
+     * @param customSqlProvider the customsql provider.
+     */
+    private void immutableSetCustomSqlProvider(
+        final CustomSqlProvider customSqlProvider)
+    {
+        m__CustomSqlProvider = customSqlProvider;
+    }
+
+    /**
+     * Specifies the custom-sql provider.
+     * @param customSqlProvider the customsql provider.
+     */
+    protected void setCustomSqlProvider(
+        final CustomSqlProvider customSqlProvider)
+    {
+        immutableSetCustomSqlProvider(customSqlProvider);
+    }
+
+    /**
+     * Retrieves the custom-sql provider.
+     * @return such provider.
+     */
+    public CustomSqlProvider getCustomSqlProvider()
+    {
+        return m__CustomSqlProvider;
     }
 
     /**

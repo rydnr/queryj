@@ -68,7 +68,7 @@ public class OracleTableRepositoryBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition command != null
-     */
+     *
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
@@ -79,4 +79,5 @@ public class OracleTableRepositoryBuildHandler
         
         return false;
     }
+    */
 }

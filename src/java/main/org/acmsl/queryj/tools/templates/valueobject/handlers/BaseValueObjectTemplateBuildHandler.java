@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a value object template using database metadata.
+ * Description: Builds a ValueObject templates using database metadata.
  *
  */
 package org.acmsl.queryj.tools.templates.valueobject.handlers;
@@ -40,21 +40,12 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplateFactory;
-import org.acmsl.queryj.tools.templates.valueobject
-    .BaseValueObjectTemplateGenerator;
 
 /*
  * Importing some Ant classes.
@@ -64,209 +55,63 @@ import org.apache.tools.ant.BuildException;
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Builds a value object template using database metadata.
+ * Builds <code>BaseValueObjectTemplate</code> instances using database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class BaseValueObjectTemplateBuildHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateBuildHandler
+    extends  BasePerTableTemplateBuildHandler
 {
     /**
-     * A cached empty table template array.
-     */
-    public static final TableTemplate[] EMPTY_TABLE_TEMPLATE_ARRAY =
-        new TableTemplate[0];
-
-    /**
-     * Creates a <code>BaseValueObjectTemplateBuildHandler</code>.
+     * Creates a <code>BaseValueObjectTemplateBuildHandler</code> instance.
      */
     public BaseValueObjectTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * Retrieves the template factory.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerTableTemplateFactory retrieveTemplateFactory()
     {
-        return handle(command.getAttributeMap());
+        return BaseValueObjectTemplateGenerator.getInstance();
     }
 
     /**
-     * Handles given command.
-     * @param attributes the attributes.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition attributes != null
-     */
-    public boolean handle(final Map attributes)
-        throws  BuildException
-    {
-        return
-            handle(
-                attributes,
-                retrieveDatabaseMetaData(attributes),
-                retrieveMetadataManager(attributes),
-                retrievePackage(attributes),
-                retrieveHeader(attributes),
-                BaseValueObjectTemplateGenerator.getInstance(),
-                retrieveTableTemplates(attributes));
-    }
-
-    /**
-     * Handles given command.
-     * @param attributes the attributes.
-     * @param databaseMetaData the <code>DatabaseMetaData</code> instance.
-     * @param metadataManager the metadata manager.
-     * instance.
-     * @param packageName the package name.
-     * @param header the header.
-     * @param templateFactory the template factory.
-     * @param tableTemplates the table templates.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition attributes != null
-     * @precondition databaseMetaData != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition templateFactory != null
-     * @precondition tableTemplates != null
-     */
-    public boolean handle(
-        final Map attributes,
-        final DatabaseMetaData databaseMetaData,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String header,
-        final BaseValueObjectTemplateFactory templateFactory,
-        final TableTemplate[] tableTemplates)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try
-        {
-            BaseValueObjectTemplate[] t_aBaseValueObjectTemplates =
-                new BaseValueObjectTemplate[tableTemplates.length];
-
-            int t_iLength =
-                (t_aBaseValueObjectTemplates != null)
-                ?  t_aBaseValueObjectTemplates.length
-                :  0;
-            
-            for  (int t_iBaseValueObjectIndex = 0;
-                      t_iBaseValueObjectIndex < t_iLength;
-                      t_iBaseValueObjectIndex++) 
-            {
-                String t_strQuote =
-                    databaseMetaData.getIdentifierQuoteString();
-
-                if  (t_strQuote == null)
-                {
-                    t_strQuote = "\"";
-                }
-
-                if  (t_strQuote.equals("\""))
-                {
-                    t_strQuote = "\\\"";
-                }
-
-                t_aBaseValueObjectTemplates[t_iBaseValueObjectIndex] =
-                    templateFactory.createBaseValueObjectTemplate(
-                        packageName,
-                        tableTemplates[t_iBaseValueObjectIndex],
-                        metadataManager,
-                        header);
-            }
-
-            storeBaseValueObjectTemplates(t_aBaseValueObjectTemplates, attributes);
-        }
-        catch  (final SQLException sqlException)
-        {
-            throw new BuildException(sqlException);
-        }
-        catch  (final QueryJException queryjException)
-        {
-            throw new BuildException(queryjException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    public static String retrievePackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            retrievePackage(parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
+     * Retrieves the package name.
+     * @param tableName the table name.
+     * @param engineName the engine name.
+     * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
+     * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
-    protected static String retrievePackage(
-        final Map parameters, final PackageUtils packageUtils)
+    protected String retrievePackage(
+        final String tableName,
+        final String engineName,
+        final String projectPackage,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
         return
-            packageUtils.retrieveBaseValueObjectPackage(
-                (String)
-                    parameters.get(ParameterValidationHandler.PACKAGE));
+            packageUtils.retrieveValueObjectPackage(projectPackage);
     }
 
     /**
-     * Stores the value object template collection in given attribute map.
-     * @param valueObjectTemplates the value object templates.
+     * Stores the template collection in given attribute map.
+     * @param templates the templates.
      * @param parameters the parameter map.
-     * @throws BuildException if the templates cannot be stored for any reason.
-     * @precondition valueObjectTemplates != null
+     * @precondition templates != null
      * @precondition parameters != null
      */
-    protected void storeBaseValueObjectTemplates(
-        final BaseValueObjectTemplate[] valueObjectTemplates,
-        final Map parameters)
-      throws  BuildException
+    protected void storeTemplates(
+        final BasePerTableTemplate[] templates, final Map parameters)
     {
         parameters.put(
-            TemplateMappingManager.BASE_VALUE_OBJECT_TEMPLATES,
-            valueObjectTemplates);
-    }
-
-    /**
-     * Retrieves the table templates.
-     * @param parameters the parameter map.
-     * @return such templates.
-     * @throws BuildException if the templates cannot be stored for any reason.
-     * @precondition parameters != null
-     */
-    protected TableTemplate[] retrieveTableTemplates(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (TableTemplate[])
-                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
+            TemplateMappingManager.BASE_VALUE_OBJECT_TEMPLATES, templates);
     }
 }

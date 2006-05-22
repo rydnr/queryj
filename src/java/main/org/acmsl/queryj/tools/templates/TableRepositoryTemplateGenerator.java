@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -41,10 +42,13 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.TableRepositoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -58,6 +62,7 @@ import org.acmsl.commons.utils.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 
 /**
  * Is able to generate Table repositories according to database metadata.
@@ -65,7 +70,8 @@ import java.lang.ref.WeakReference;
            >Jose San Leandro</a>
  */
 public class TableRepositoryTemplateGenerator
-    implements  TableRepositoryTemplateFactory
+    implements  DefaultBasePerRepositoryTemplateFactory,
+                BasePerRepositoryTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -122,25 +128,43 @@ public class TableRepositoryTemplateGenerator
     }
 
     /**
-     * Generates a table repository template.
+     * Generates a <i>per-repository</i> template.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param packageName the package name.
-     * @param repository the repository.
+     * @param basePackageName the base package name.
+     * @param engineName the engine name.
+     * @param repositoryName the name of the repository.
+     * @param tables the tables.
      * @param header the header.
-     * @return such template.
-     * @precondition packageName != null
-     * @precondition repository != null
+     * @return a template.
+     * @throws QueryJException if the input values are invalid.
      */
-    public TableRepositoryTemplate createTableRepositoryTemplate(
+    public BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String repository,
+        final String basePackageName,
+        final String repositoryName,
+        final String engineName,
+        final Collection tables,
         final String header)
+      throws  QueryJException
     {
         return
             new TableRepositoryTemplate(
+                metadataManager,
+                metadataTypeManager,
+                customSqlProvider,
                 header,
                 getDecoratorFactory(),
                 packageName,
-                repository);
+                basePackageName,
+                repositoryName,
+                engineName,
+                tables);
     }
 
     /**
@@ -154,17 +178,17 @@ public class TableRepositoryTemplateGenerator
 
     /**
      * Writes a table repository template to disk.
-     * @param tableRepositoryTemplate the table repository template to write.
+     * @param template the table repository template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
      */
     public void write(
-        final TableRepositoryTemplate tableRepositoryTemplate,
+        final BasePerRepositoryTemplate template,
         final File outputDir)
       throws  IOException
     {
         write(
-            tableRepositoryTemplate,
+            template,
             outputDir,
             FileUtils.getInstance(),
             TableRepositoryTemplateUtils.getInstance());
@@ -172,19 +196,19 @@ public class TableRepositoryTemplateGenerator
             
     /**
      * Writes a table repository template to disk.
-     * @param tableRepositoryTemplate the table repository template to write.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @param tableRepositoryTemplateUtils the
      * <code>TableRepositoryTemplateUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition tableRepositoryTemplate != null
+     * @precondition template != null
      * @precondition outputDir != null
      * @precondition fileUtils != null
      * @precondition tableRepositoryTemplateUtils != null
      */
     public void write(
-        final TableRepositoryTemplate tableRepositoryTemplate,
+        final BasePerRepositoryTemplate template,
         final File outputDir,
         final FileUtils fileUtils,
         final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
@@ -196,8 +220,8 @@ public class TableRepositoryTemplateGenerator
               outputDir.getAbsolutePath()
             + File.separator
             + tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
-                  tableRepositoryTemplate.getRepository())
+                  template.getRepositoryName())
             + ".java",
-            tableRepositoryTemplate.generate());
+            template.generate());
     }
 }

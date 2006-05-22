@@ -506,7 +506,74 @@ attribute_preparedstatement_specification(attr) ::= <<
  @param attr the attribute.
 !>
 <if(!attr.clob)>
+<if(attr.allowsNull)>
+if  (<attr.nameLowercased> == null)
+{
+    preparedStatement.setNull(t_iIndex++, <attr.type>);
+}
+else
+{
+    preparedStatement.set<attr.objectType>(
+        t_iIndex++, <indirect_template(name=attr.objectType + "_to_primitive", input=attr)>);
+}
+<else>
 preparedStatement.set<attr.objectType>(
     t_iIndex++, <attr.nameLowercased>);
 <endif>
+<endif>
 >>
+
+Integer_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into an int primitive.
+ @param input the attribute.
+!><input.nameLowercased>.intValue()>>
+
+Long_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into a long primitive.
+ @param input the attribute.
+!><input.nameLowercased>.longValue()>>
+
+Float_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into a float primitive.
+ @param input the attribute.
+!><input.nameLowercased>.floatValue()>>
+
+Double_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into a double primitive.
+ @param input the attribute.
+!><input.nameLowercased>.doubleValue()>>
+
+String_to_primitive(input) ::= <<
+<!
+ Don't try to convert the String to anything.
+ @param input the attribute.
+!><Object_to_primitive(input=input)>
+>>
+
+BigDecimal_to_primitive(input) ::= <<
+<!
+ Don't try to convert the BigDecimal to anything.
+ @param input the attribute.
+!><Object_to_primitive(input=input)>
+>>
+
+Timestamp_to_primitive(input) ::= <<
+<!
+ Don't try to convert the Timestamp to anything.
+ @param input the attribute.
+!><Object_to_primitive(input=input)>
+>>
+
+Object_to_primitive(input) ::= <<
+<!
+ Don't try to convert the attribute to anything.
+ @param input the attribute.
+!><input.nameLowercased>
+>>
+
+
+

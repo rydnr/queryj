@@ -48,9 +48,6 @@ source(input) ::= <<
   @param input.copyright_years the copyright's years.
   @param input.table_name the table name.
   @param input.package the package.
-  @param input.dao_class_name the DAO class name.
-  @param input.dao_factory_class_name the DAO factory class name.
-  @param input.dao_implementation_class_name the DAO implementation class name.
   @params project_imports
   @params class
 !>
@@ -61,7 +58,7 @@ source(input) ::= <<
   years=input.copyright_years,
   description=
   [
-    first_line_description(tableName=input.table_name)
+    first_line_description(result=input.result)
   ],
   timestamp=input.timestamp)>
 <endif>
@@ -101,7 +98,7 @@ class(input, result) ::= <<
 !>
 /**
  * <[
-      first_line_description(tableName=input.table_name)
+      first_line_description(result=input.result)
     ]:{line |<line>}; separator="\n * ">
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
@@ -114,7 +111,7 @@ public abstract class Abstract<input.vo_name>ValueObject
      separator="\n\n">
 
     /**
-     * Creates a \<code\>Abstract<input.vo_name>\</code> instance.
+     * Creates a \<code\>Abstract<input.vo_name>ValueObject\</code> instance.
      <result.properties:property_javadoc(attribute=it); separator="\n">
      */
     public Abstract<input.vo_name>ValueObject(

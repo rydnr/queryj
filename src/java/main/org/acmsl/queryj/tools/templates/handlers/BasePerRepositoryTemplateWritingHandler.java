@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -163,13 +164,16 @@ public abstract class BasePerRepositoryTemplateWritingHandler
         final BasePerRepositoryTemplateGenerator templateGenerator)
       throws  BuildException
     {
-        try 
+        if  (template != null)
         {
-            templateGenerator.write(template, outputDir);
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
+            try 
+            {
+                templateGenerator.write(template, outputDir);
+            }
+            catch  (final IOException ioException)
+            {
+                throw new BuildException(ioException);
+            }
         }
     }
 

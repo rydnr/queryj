@@ -61,6 +61,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public interface Sql
+    extends  IdentifiableElement
 {
     /**
      * The <b>select</b> value for <i>type</i> attribute.
@@ -128,12 +129,6 @@ public interface Sql
     public static final String ALL = "all";
 
     /**
-     * Retrieves the <i>id</i> attribute.
-     * @return such value.
-     */
-    public String getId();
-
-    /**
      * Retrieves the <i>description</i> attribute.
      * @return such value.
      */
@@ -144,6 +139,12 @@ public interface Sql
      * @return such value.
      */
     public String getDao();
+
+    /**
+     * Retrieves the <i>repositoryScope</i> attribute.
+     * @return such value.
+     */
+    public String getRepositoryScope();
 
     /**
      * Retrieves the <i>name</i> attribute.

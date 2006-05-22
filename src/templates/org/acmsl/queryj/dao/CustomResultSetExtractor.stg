@@ -232,6 +232,7 @@ public class <result.idCapitalized>Extractor
               attr=it, input=input)>
             <result.lobProperties:special_attribute_extraction(
               attr=it, input=input)>
+
 <if(result.multiple)>
             result.add(
 <else>

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -32,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a Mock DAO factory template.
+ * Description: Builds Mock DAO factory templates using database metadata.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.mock.handlers;
@@ -40,22 +41,12 @@ package org.acmsl.queryj.tools.templates.dao.mock.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
 
 /*
  * Importing some Ant classes.
@@ -65,173 +56,63 @@ import org.apache.tools.ant.BuildException;
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Builds a Mock DAO factory template.
+ * Builds Mock DAO factory templates using database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class MockDAOFactoryTemplateBuildHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateBuildHandler
+    extends  BasePerTableTemplateBuildHandler
 {
     /**
-     * A cached empty table template array.
-     */
-    public static final TableTemplate[] EMPTY_TABLE_TEMPLATE_ARRAY =
-        new TableTemplate[0];
-
-    /**
-     * Creates a MockDAOFactoryTemplateBuildHandler.
+     * Creates a <code>MockDAOFactoryTemplateBuildHandler</code> instance.
      */
     public MockDAOFactoryTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * Retrieves the template factory.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerTableTemplateFactory retrieveTemplateFactory()
     {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            try
-            {
-                Map attributes = command.getAttributeMap();
-
-                String t_strBasePackage = retrieveProjectPackage(attributes);
-
-                String t_strPackage = retrievePackage(t_strBasePackage);
-
-                MockDAOFactoryTemplateGenerator
-                    t_MockDAOFactoryTemplateGenerator =
-                        MockDAOFactoryTemplateGenerator.getInstance();
-
-                if  (t_MockDAOFactoryTemplateGenerator != null)
-                {
-                    TableTemplate[] t_aTableTemplates =
-                        retrieveTableTemplates(attributes);
-
-                    if  (t_aTableTemplates != null)
-                    {
-                        MockDAOFactoryTemplate[] t_aMockDAOFactoryTemplates =
-                            new MockDAOFactoryTemplate[t_aTableTemplates.length];
-
-                        for  (int t_iMockDAOFactoryIndex = 0;
-                                    t_iMockDAOFactoryIndex
-                                  < t_aMockDAOFactoryTemplates.length;
-                                  t_iMockDAOFactoryIndex++) 
-                        {
-                            t_aMockDAOFactoryTemplates[t_iMockDAOFactoryIndex] =
-                                t_MockDAOFactoryTemplateGenerator.createMockDAOFactoryTemplate(
-                                    t_aTableTemplates[t_iMockDAOFactoryIndex],
-                                    t_strPackage,
-                                    t_strBasePackage);
-                        }
-
-                        storeMockDAOFactoryTemplates(t_aMockDAOFactoryTemplates, attributes);
-                    }
-                }
-            }
-            catch  (QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
-        }
-        
-        return result;
+        return MockDAOFactoryTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
+     * Retrieves the package name.
+     * @param tableName the table name.
+     * @param engineName the engine name.
+     * @param projectPackage the project package.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
      */
-    protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param basePackage the base package.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     */
-    protected String retrievePackage(final String basePackage)
-        throws  BuildException
-    {
-        String result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (basePackage    != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveMockDAOFactoryPackage(
-                    basePackage);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Stores the Mock DAO factory template collection in given attribute map.
-     * @param mockDAOFactoryTemplates the Mock DAO factory templates.
-     * @param parameters the parameter map.
-     * @throws BuildException if the templates cannot be stored for any reason.
-     */
-    protected void storeMockDAOFactoryTemplates(
-        final MockDAOFactoryTemplate[] mockDAOFactoryTemplates,
-        final Map                      parameters)
+    protected String retrievePackage(
+        final String tableName,
+        final String engineName,
+        final String projectPackage,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
-        if  (   (mockDAOFactoryTemplates != null)
-             && (parameters              != null))
-        {
-            parameters.put(
-                TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATES,
-                mockDAOFactoryTemplates);
-        }
+        return
+            packageUtils.retrieveMockDAOFactoryPackage(projectPackage);
     }
 
     /**
-     * Retrieves the table templates.
+     * Stores the template collection in given attribute map.
+     * @param templates the templates.
      * @param parameters the parameter map.
-     * @return such templates.
-     * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition templates != null
+     * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(
-        final Map parameters)
-      throws  BuildException
+    protected void storeTemplates(
+        final BasePerTableTemplate[] templates, final Map parameters)
     {
-        TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (TableTemplate[])
-                    parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-        }
-
-        return result;
+        parameters.put(
+            TemplateMappingManager.MOCK_DAO_FACTORY_TEMPLATES, templates);
     }
 }

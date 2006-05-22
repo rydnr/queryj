@@ -52,7 +52,7 @@ public interface TestSuiteTemplateDefaults
      */
     public static final String TEST_SUITE_TEMPLATE =
           "{0}"
-        + " *****************************************************************"
+        + "/*****************************************************************"
         + "*************\n"
         + " *\n"
         + " * Filename: $" + "RCSfile: $\n"

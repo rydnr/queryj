@@ -48,6 +48,7 @@ typeInitMap ::= [
   "voFactorySubpackageName":"vo",
   "rdbSubpackageName":"rdb",
   "tableRepositorySubpackageName":"tables",
+  "functionsRepositorySubpackageName":"functions",
   "dataAccessManagerSubpackageName":"dao",
   "foreignKeyStatementSetterSubpackageName":"dao.rdb",
   "xmlSubpackageName":"xml",
@@ -158,4 +159,862 @@ indirect_template(name, input) ::= <<
   @param input the arguments.
 !>
 <(name)(input=input)>
+>>
+
+custom_select(cs, input) ::= <<
+<!
+  Writes the code for a custom select query.
+  @param cs the custom select.
+  @param input the input.
+!>
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+public <cs.resultClass> <cs.nameUncapitalized>(
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException
+{
+    return
+        <cs.nameUncapitalized>(
+            <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+            new PreparedStatementCreatorFactory(
+                <cs.splittedQuotedValue; separator=" +\n">),
+            new Object[]
+            {
+                <cs.parameters:custom_select_parameter_value(
+                  name=it.nameLowercased,
+                  objectType=it.objectType,
+                  object=it.object); separator=",\n">
+            },
+            getDataSource());
+}
+
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @param preparedStatementCreatorFactory the
+ * \<code>PreparedStatementCreatorFactory\</code> instance
+ * specific for this operation.
+ * @param params the query parameters.
+ * @param dataSource the \<code>DataSource\<code> instance.
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ <precondition_notnull("preparedStatementCreatorFactory")>
+ <precondition_notnull("params")>
+ <precondition_notnull("dataSource")>
+ */
+protected <cs.resultClass> <cs.nameUncapitalized>(
+    <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
+    final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    final Object[] params,
+    final DataSource dataSource)
+  throws DataAccessException
+{
+    return
+        <cs.nameUncapitalized>(
+            <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+            preparedStatementCreatorFactory,
+            params,
+            new DataSourceTransactionManager(dataSource));
+}
+
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @param preparedStatementCreatorFactory the
+ * \<code>PreparedStatementCreatorFactory\</code> instance
+ * specific for this operation.
+ * @param params the query parameters.
+ * @param transactionManager the \<code>PlatformTransactionManager\<code>
+ * instance.
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ <precondition_notnull("preparedStatementCreatorFactory")>
+ <precondition_notnull("params")>
+ <precondition_notnull("transactionManager")>
+ */
+protected <cs.resultClass> <cs.nameUncapitalized>(
+    <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
+    final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    final Object[] params,
+    final PlatformTransactionManager transactionManager)
+  throws DataAccessException
+{
+    <cs.resultClass> result = null;
+
+    // Enabling transactions temporarily.
+    synchronized (DataSourceTransactionManager.class)
+    {
+        result =
+            <cs.nameUncapitalized>(
+                <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+                preparedStatementCreatorFactory,
+                params,
+                new TransactionTemplate(transactionManager));
+    }
+
+    return result;
+}
+
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @param preparedStatementCreatorFactory the
+ * \<code>PreparedStatementCreatorFactory\</code> instance
+ * specific for this operation.
+ * @param params the query parameters.
+ * @param transactionTemplate the \<code>TransactionTemplate\<code>
+ * instance.
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ <precondition_notnull("preparedStatementCreatorFactory")>
+ <precondition_notnull("params")>
+ <precondition_notnull("transactionTemplate")>
+ */
+protected <cs.resultClass> <cs.nameUncapitalized>(
+    <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
+    final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    final Object[] params,
+    final TransactionTemplate transactionTemplate)
+  throws DataAccessException
+{
+    <cs.resultClass> result = null;
+
+   /*
+    preparedStatementCreatorFactory.setResultSetType(..);
+    preparedStatementCreatorFactory.setUpdatableResults(..);
+    preparedStatementCreatorFactory.setReturnGeneratedKeys(..);
+    preparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
+    */
+
+    <cs.parameters:custom_select_parameter_type_specification(
+      type=it.sqlType); separator="\n">
+
+    result =
+        (<cs.resultClass>)
+            transactionTemplate.execute(
+                new QueryTransactionCallback(
+                    preparedStatementCreatorFactory
+                        .newPreparedStatementCreator(params),
+                    null,
+                    // calls setXXX twice
+                    // preparedStatementCreatorFactory
+                    //     .newPreparedStatementSetter(t_aParams),
+                    <cs.resultIdAsConstant>_CUSTOM_EXTRACTOR,
+                    this));
+
+    return result;
+}
+>>
+
+custom_select_parameter_type_specification(type) ::= <<
+<!
+  Specifies the type of the parameter of a custom select.
+  @param type the SQL type.
+!>
+preparedStatementCreatorFactory.addParameter(
+    new SqlParameter(Types.<type>));
+>>
+
+custom_select_parameter_value(
+  name,
+  objectType,
+  object) ::= <<
+<!
+  Writes the value for a parameter of a custom select.
+  @param name the parameter name.
+  @param objectType the object type of the parameter.
+  @param object whether the parameter type is a class or a primitive.
+!>
+<if(object)>
+<name>
+<else>
+new <objectType>(<name>)
+<endif>
+>>
+
+custom_update_or_insert(cs, input) ::= <<
+<!
+ Writes the subtemplate for custom updates or inserts.
+  @param cs the custom sql.
+  @param input the input.
+!>
+/**
+ * Custom sql \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @throws DataAccessException if the operation fails.
+ */
+public void <cs.nameUncapitalized>(
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException
+{
+    PreparedStatementCreatorFactory
+        preparedStatementCreatorFactory =
+            new PreparedStatementCreatorFactory(
+                <cs.splittedQuotedValue; separator=" +\n">);
+
+    /*
+    t_PreparedStatementCreatorFactory.setResultSetType(..);
+    t_PreparedStatementCreatorFactory.setUpdatableResults(..);
+    t_PreparedStatementCreatorFactory.setReturnGeneratedKeys(..);
+    t_PreparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
+     */
+
+    <cs.parameters:custom_select_parameter_type_specification(
+      type=it.sqlType); separator="\n">
+
+    Object[] params =
+       new Object[]
+       {
+           <cs.parameters:custom_select_parameter_value(
+             name=it.nameLowercased,
+             objectType=it.objectType,
+             object=it.object); separator=",\n">
+        };
+
+    // Enabling transactions temporarily.
+    synchronized (DataSourceTransactionManager.class)
+    {
+       DataSourceTransactionManager transactionManager =
+           new DataSourceTransactionManager(getDataSource());
+       TransactionTemplate transactionTemplate =
+           new TransactionTemplate(transactionManager);
+
+       transactionTemplate.execute(
+           new UpdateTransactionCallback(
+               preparedStatementCreatorFactory
+                  .newPreparedStatementCreator(params),
+               preparedStatementCreatorFactory
+                  .newPreparedStatementSetter(params),
+               this));
+
+       /*
+       update(
+           t_PreparedStatementCreatorFactory
+              .newPreparedStatementCreator(params),
+           t_PreparedStatementCreatorFactory
+             .newPreparedStatementSetter(params));
+        */
+    }
+}
+>>
+
+
+custom_select_for_update(cs, input) ::= <<
+<!
+  Writes the code for a custom select for update.
+  @param cs the custom select.
+  @param input the input.
+!>
+/**
+ * Custom select for update \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+<if(cs.resultClass)>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<else>
+public void <cs.nameUncapitalized>(
+<endif>
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+  throws DataAccessException
+{
+<if(cs.resultClass)>
+    <cs.resultClass> result = null;
+<endif>
+    SqlQuery t_Query =
+        new SqlQuery(
+            getDataSource(),
+            <cs.splittedQuotedValue; separator=" +\n">);
+
+<if(cs.resultClass)>
+    List t_lResult = t_Query.execute();
+
+    if  (   (t_lResult != null)
+         && (t_lResult.size() > 0))
+    {
+        result = (<cs.resultClass>) t_lResult.get(0);
+    }
+
+    return result;
+<else>
+    t_Query.execute();
+<endif>
+}
+>>
+
+inner_transaction_callbacks(daoName, voName, clobHandling) ::= <<
+<!
+ Generates the inner classes for transaction callbacks.
+ @param daoName the DAO name.
+ @param voName the value object for select-for-update operations.
+ @param clobHandling whether the CLOBs need to be handled or not.
+!>
+/**
+ * Transaction callback implementation to perform
+ * \<code>JdbcTemplate.update(PreparedStatementCreator, PreparedStatementSetter)\</code>.
+ */
+protected static class AbstractTransactionCallback
+    implements TransactionCallback
+{
+    /**
+     * The \<code>PreparedStatementCreator\</code>.
+     */
+    private PreparedStatementCreator m__PreparedStatementCreator;
+
+    /**
+     * The \<code>PreparedStatementSetter\</code>.
+     */
+    private PreparedStatementSetter m__PreparedStatementSetter;
+
+    /**
+     * The \<code><daoName>DAO\</code>.
+     */
+    private <daoName>DAO m__<daoName>DAO;
+
+    /**
+     * Creates a transaction callback.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param dao the \<code><daoName>DAO\</code> instance.
+     */
+    public AbstractTransactionCallback(
+        final PreparedStatementCreator creator,
+        final PreparedStatementSetter setter,
+        final <daoName>DAO dao)
+    {
+        immutableSetPreparedStatementCreator(creator);
+        immutableSetPreparedStatementSetter(setter);
+        immutableSet<daoName>DAO(dao);
+    }
+
+    /**
+     * Specifies the \<code>PreparedStatementCreator\</code> instance.
+     * @param creator such instance.
+     */
+    private void immutableSetPreparedStatementCreator(
+        final PreparedStatementCreator creator)
+    {
+        m__PreparedStatementCreator = creator;
+    }
+
+    /**
+     * Specifies the \<code>PreparedStatementCreator\</code> instance.
+     * @param creator such instance.
+     */
+    protected void setPreparedStatementCreator(
+        final PreparedStatementCreator creator)
+    {
+        immutableSetPreparedStatementCreator(creator);
+    }
+
+    /**
+     * Retrieves the \<code>PreparedStatementCreator\</code> instance.
+     * @return such instance.
+     */
+    public PreparedStatementCreator getPreparedStatementCreator()
+    {
+        return m__PreparedStatementCreator;
+    }
+
+    /**
+     * Specifies the \<code>PreparedStatementSetter\</code> instance.
+     * @param setter such instance.
+     */
+    private void immutableSetPreparedStatementSetter(
+        final PreparedStatementSetter setter)
+    {
+        m__PreparedStatementSetter = setter;
+    }
+
+    /**
+     * Specifies the \<code>PreparedStatementSetter\</code> instance.
+     * @param setter such instance.
+     */
+    protected void setPreparedStatementSetter(
+        final PreparedStatementSetter setter)
+    {
+        immutableSetPreparedStatementSetter(setter);
+    }
+
+    /**
+     * Retrieves the \<code>PreparedStatementSetter\</code> instance.
+     * @return such instance.
+     */
+    public PreparedStatementSetter getPreparedStatementSetter()
+    {
+        return m__PreparedStatementSetter;
+    }
+
+    /**
+     * Specifies the \<code><daoName>DAO\</code> instance.
+     * @param dao the DAO instance.
+     */
+    private void immutableSet<daoName>DAO(final <daoName>DAO dao)
+    {
+        m__<daoName>DAO = dao;
+    }
+
+    /**
+     * Specifies the \<code><daoName>DAO\</code> instance.
+     * @param dao the DAO instance.
+     */
+    protected void set<daoName>DAO(final <daoName>DAO dao)
+    {
+        immutableSet<daoName>DAO(dao);
+    }
+
+    /**
+     * Retrieves the \<code><daoName>DAO\</code> instance.
+     * @return such DAO.
+     */
+    public <daoName>DAO get<daoName>DAO()
+    {
+        return m__<daoName>DAO;
+    }
+
+    /**
+     * Executes the transactional operation.
+     * @param status the transaction status.
+     * @return the transaction result.
+     */
+    public Object doInTransaction(final TransactionStatus status)
+    {
+        return
+            doInTransaction(
+                status,
+                getPreparedStatementCreator(),
+                getPreparedStatementSetter(),
+                get<daoName>DAO());
+    }
+
+    /**
+     * Executes the transactional operation.
+     * @param status the transaction status.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @return \<code>null\</code> in either case (this method is meant
+     * to be overriden by subclasses, but cannot be defined \<i>abstract\</i>
+     * since the inner class is \<i>static\</i>.
+     */
+    protected Object doInTransaction(
+        final TransactionStatus status,
+        final PreparedStatementCreator creator,
+        final PreparedStatementSetter setter,
+        final <daoName>DAO dao)
+    {
+        return null;
+    }
+}
+
+/**
+ * Transaction callback implementation to perform
+ * \<code>JdbcTemplate.update(PreparedStatementCreator, PreparedStatementSetter)\</code>.
+ */
+protected static class UpdateTransactionCallback
+    extends AbstractTransactionCallback
+{
+    /**
+     * Creates a transaction callback.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param dao the \<code><daoName>DAO\</code> instance.
+     */
+    public UpdateTransactionCallback(
+        final PreparedStatementCreator creator,
+        final PreparedStatementSetter setter,
+        final <daoName>DAO dao)
+    {
+        super(creator, setter, dao);
+    }
+
+    /**
+     * Executes the transactional operation.
+     * @param status the transaction status.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @return the transaction result.
+     */
+    protected Object doInTransaction(
+        final TransactionStatus status,
+        final PreparedStatementCreator creator,
+        final PreparedStatementSetter setter,
+        final <daoName>DAO dao)
+    {
+        return new Integer(dao.update(creator, setter));
+    }
+}
+
+/**
+ * Transaction callback implementation to perform
+ * \<code>JdbcTemplate.query(PreparedStatementCreator, PreparedStatementSetter)\</code>.
+ */
+protected static class QueryTransactionCallback
+    extends AbstractTransactionCallback
+{
+    /**
+     * The optional SQL.
+     */
+    private String m__strSQL;
+
+    /**
+     * The \<code>ResultSetExtractor\</code>.
+     */
+    private ResultSetExtractor m__ResultSetExtractor;
+
+    /**
+     * Creates a transaction callback.
+     * @param sql the SQL sentence.
+     * @param extractor the \<code>ResultSetExtractor\</code> instance.
+     * @param dao the \<code><daoName>DAO\</code> instance.
+     */
+    public QueryTransactionCallback(
+        final String sql,
+        final ResultSetExtractor extractor,
+        final <daoName>DAO dao)
+    {
+        super(null, null, dao);
+        immutableSetSQL(sql);
+        immutableSetResultSetExtractor(extractor);
+    }
+
+    /**
+     * Creates a transaction callback.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param extractor the \<code>ResultSetExtractor\</code> instance.
+     * @param dao the \<code><daoName>DAO\</code> instance.
+     */
+    public QueryTransactionCallback(
+        final PreparedStatementCreator creator,
+        final PreparedStatementSetter setter,
+        final ResultSetExtractor extractor,
+        final <daoName>DAO dao)
+    {
+        super(creator, setter, dao);
+        immutableSetResultSetExtractor(extractor);
+    }
+
+    /**
+     * Specifies the SQL sentence.
+     * @param sql such sentence.
+     */
+    private void immutableSetSQL(final String sql)
+    {
+        m__strSQL = sql;
+    }
+
+    /**
+     * Specifies the SQL sentence.
+     * @param sql such sentence.
+     */
+    protected void setSQL(final String sql)
+    {
+        immutableSetSQL(sql);
+    }
+
+    /**
+     * Retrieves the SQL sentence.
+     * @return such sentence.
+     */
+    public String getSQL()
+    {
+        return m__strSQL;
+    }
+
+    /**
+     * Specifies the \<code>ResultSetExtractor\</code> instance.
+     * @param extractor such instance.
+     */
+    private void immutableSetResultSetExtractor(
+        final ResultSetExtractor extractor)
+    {
+        m__ResultSetExtractor = extractor;
+    }
+
+    /**
+     * Specifies the \<code>ResultSetExtractor\</code> instance.
+     * @param extractor such instance.
+     */
+    protected void setResultSetExtractor(
+        final ResultSetExtractor extractor)
+    {
+        immutableSetResultSetExtractor(extractor);
+    }
+
+    /**
+     * Retrieves the \<code>ResultSetExtractor\</code> instance.
+     * @return such instance.
+     */
+    public ResultSetExtractor getResultSetExtractor()
+    {
+        return m__ResultSetExtractor;
+    }
+
+        /**
+     * Executes the transactional operation.
+     * @param status the transaction status.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @return the transaction result.
+     */
+    protected Object doInTransaction(
+        final TransactionStatus status,
+        final PreparedStatementCreator creator,
+        final PreparedStatementSetter setter,
+        final <daoName>DAO dao)
+    {
+        return
+            doInTransaction(
+                status,
+                creator,
+                setter,
+                getSQL(),
+                getResultSetExtractor(),
+                dao);
+    }
+
+    /**
+     * Executes the transactional operation.
+     * @param status the transaction status.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param sql the sql (optional).
+     * @param extractor the \<code>ResultSetExtractor\</code> instance.
+     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @result the transaction result.
+     */
+    protected Object doInTransaction(
+        final TransactionStatus status,
+        final PreparedStatementCreator creator,
+        final PreparedStatementSetter setter,
+        final String sql,
+        final ResultSetExtractor extractor,
+        final <daoName>DAO dao)
+    {
+        Object result = null;
+
+        if  (sql == null)
+        {
+            result = dao.query(creator, setter, extractor);
+        }
+        else
+        {
+            result = dao.query(sql, extractor);
+        }
+
+        return result;
+    }
+}
+
+<if(clobHandling)>
+<if(voName)>
+/**
+ * Transaction callback implementation to perform a
+ * \<i>select for update\</code>.
+ */
+protected static class SelectForUpdateTransactionCallback
+    extends QueryTransactionCallback
+    implements PreparedStatementCallback
+{
+    /**
+     * The result of the query. This make the class stateful, so
+     * instances cannot be reused.
+     */
+    private <voName> m__Result;
+
+    /**
+     * Creates a transaction callback.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param extractor the \<code>ResultSetExtractor\</code> instance.
+     * @param dao the \<code><daoName>DAO\</code>
+     * instance.
+     */
+    public SelectForUpdateTransactionCallback(
+        final PreparedStatementCreator creator,
+        final PreparedStatementSetter setter,
+        final ResultSetExtractor extractor,
+        final <daoName>DAO dao)
+    {
+        super(creator, setter, extractor, dao);
+    }
+
+    /**
+     * Specifies the result of the operation.
+     * @param operationResult such information.
+     */
+    protected final void immutableSetOperationResult(
+        final <voName> operationResult)
+    {
+        m__Result = operationResult;
+    }
+
+    /**
+     * Specifies the result of the operation.
+     * @param operationResult such information.
+     */
+    protected void setOperationResult(
+        final <voName> operationResult)
+    {
+        immutableSetOperationResult(operationResult);
+    }
+
+    /**
+     * Specifies the result of the operation.
+     * @return such information.
+     */
+    public <voName> getOperationResult()
+    {
+        return m__Result;
+    }
+
+    /**
+     * Executes the transactional operation.
+     * @param status the transaction status.
+     * @return the transaction result.
+     */
+    public Object doInTransaction(final TransactionStatus status)
+    {
+        return
+            doInTransaction(
+                status,
+                getPreparedStatementCreator(),
+                get<daoName>DAO());
+    }
+
+    /**
+     * Executes the transactional operation.
+     * @param status the transaction status.
+     * @param creator the \<code>PreparedStatementCreator\</code> instance.
+     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @return the transaction result.
+     */
+    protected Object doInTransaction(
+        final TransactionStatus status,
+        final PreparedStatementCreator creator,
+        final <daoName>DAO dao)
+    {
+        return dao.execute(creator, (PreparedStatementCallback) this);
+    }
+
+    /**
+     * Manages the prepared statement logic.
+     * @param preparedStatement the statement.
+     * @return the result of the operation.
+     * @throws SQLException if it gets thrown as result of the operation.
+     * @throws DataAccessException if the data cannot be accessed for some
+     * reason.
+     */
+    public Object doInPreparedStatement(
+        final PreparedStatement preparedStatement)
+      throws SQLException,
+             DataAccessException
+    {
+        return
+            doInPreparedStatement(
+                preparedStatement,
+                getPreparedStatementSetter(),
+                getResultSetExtractor());
+    }
+
+    /**
+     * Manages the prepared statement logic.
+     * @param preparedStatement the statement.
+     * @param preparedStatementSetter the prepared statement setter.
+     * @param resultSetExtractor the result set extractor.
+     * @return the result of the operation.
+     * @throws SQLException if it gets thrown as result of the operation.
+     * @throws DataAccessException if the data cannot be accessed for some
+     * reason.
+     */
+    protected Object doInPreparedStatement(
+        final PreparedStatement preparedStatement,
+        final PreparedStatementSetter preparedStatementSetter,
+        final ResultSetExtractor resultSetExtractor)
+      throws SQLException,
+             DataAccessException
+    {
+        Object result = null;
+
+        // taken from JdbcTemplate, Spring 1.1.4
+        ResultSet t_ResultSet = null;
+
+        try
+        {
+            if  (preparedStatementSetter != null)
+            {
+                preparedStatementSetter.setValues(preparedStatement);
+            }
+
+            t_ResultSet = preparedStatement.executeQuery();
+
+            result = resultSetExtractor.extractData(t_ResultSet);
+        }
+        finally
+        {
+            if  (preparedStatementSetter instanceof ParameterDisposer)
+            {
+                ((ParameterDisposer) preparedStatementSetter)
+                    .cleanupParameters();
+            }
+
+            JdbcUtils.closeResultSet(t_ResultSet);
+        }
+
+        return result;
+    }
+}
+<endif>
+<endif>
+>>
+
+resultset_extractor_import(
+  basePackageName,
+  baseDAOSubpackageName,
+  rdbSubpackageName,
+  subpackageName,
+  crseIdCapitalized) ::= <<
+<!
+  Generates the import statement of a custom resultset extractor.
+  @param basePackageName the base package.
+  @param baseDAOSubpackageName the base DAO subpackage.
+  @param rdbSubpackageName the rdb subpackage.
+  @param subpackageName the subpackage.
+  @param crseIdCapitalized the custom resultset extractor identifier, capitalized.
+!>
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<crseIdCapitalized>Extractor;
+>>
+
+resultset_extractor_constants(
+  crseid,
+  crseidCapitalized,
+  crseidNormalizedUppercased) ::= <<
+<!
+  Generates the class constants for a custom resultset extractor.
+  @param crseId the custom resultset extractor identifier.
+  @param crseIdCapitalized the capitalized identifier of the custom resultset
+  extractor.
+  @param crseIdNormalizedUppercased the normalized, upper-cased identifier
+  of the custom resultset extractor.
+!>
+/**
+ * The result set extractor for \<i><crseid>\</i> custom query.
+ */
+public static final ResultSetExtractor
+    <crseidNormalizedUppercased>_CUSTOM_EXTRACTOR =
+        new <crseidCapitalized>Extractor();
 >>

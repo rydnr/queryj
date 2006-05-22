@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -50,9 +51,13 @@ import org.acmsl.queryj.tools.customsql.xml.ElementFactory;
 import org.acmsl.commons.utils.ConversionUtils;
 
 /*
- * Importing some additional classes.
+ * Importing some Digester classes.
  */
 import org.apache.commons.digester.Digester;
+
+/*
+ * Importing some SAX classes.
+ */
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -93,6 +98,8 @@ public class SqlElementFactory
 
         String t_strDAO = attributes.getValue("dao");
 
+        String t_strRepositoryScope = attributes.getValue("repositoryScope");
+
         String t_strName = attributes.getValue("name");
 
         String t_strType = attributes.getValue("type");
@@ -108,14 +115,28 @@ public class SqlElementFactory
             t_bValidate = conversionUtils.toBoolean(t_strValidate);
         }
 
-        result =
-            new SqlElement(
-                t_strId,
-                t_strDAO,
-                t_strName,
-                t_strType,
-                t_strImplementation,
-                t_bValidate);
+        if  (t_strRepositoryScope == null)
+        {
+            result =
+                new SqlElement(
+                    t_strId,
+                    t_strDAO,
+                    t_strName,
+                    t_strType,
+                    t_strImplementation,
+                    t_bValidate);
+        }
+        else
+        {
+            result =
+                new SqlElement(
+                    t_strId,
+                    t_strName,
+                    t_strType,
+                    t_strImplementation,
+                    t_bValidate,
+                    t_strRepositoryScope);
+        }
 
         return result;
     }

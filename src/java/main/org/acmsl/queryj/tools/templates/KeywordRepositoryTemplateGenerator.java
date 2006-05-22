@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -41,8 +42,12 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateFactory;
 
@@ -66,7 +71,8 @@ import java.lang.ref.WeakReference;
            >Jose San Leandro</a>
  */
 public class KeywordRepositoryTemplateGenerator
-    implements  KeywordRepositoryTemplateFactory
+    implements  KeywordRepositoryTemplateFactory,
+                BasePerRepositoryTemplateGenerator
 {
     /**
      * Singleton implemented as a weak reference.
@@ -123,26 +129,41 @@ public class KeywordRepositoryTemplateGenerator
     }
 
     /**
-     * Generates a keyword repository template.
+     * Generates a <i>per-repository</i> template.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the database metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param packageName the package name.
-     * @param repository the repository.
+     * @param basePackageName the base package name.
+     * @param engineName the engine name.
+     * @param repositoryName the name of the repository.
+     * @param tables the tables.
      * @param header the header.
-     * @return such template.
-     * @throws IOException if the file cannot be created.
-     * @precondition packageName != null
-     * @precondition repository != null
+     * @return a template.
+     * @throws QueryJException if the input values are invalid.
      */
-    public KeywordRepositoryTemplate createKeywordRepositoryTemplate(
+    public BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String repository,
+        final String basePackageName,
+        final String repositoryName,
+        final String engineName,
         final String header)
+      throws  QueryJException
     {
         return
             new KeywordRepositoryTemplate(
+                metadataManager,
+                metadataTypeManager,
+                customSqlProvider,
                 header,
                 getDecoratorFactory(),
                 packageName,
-                repository);
+                basePackageName,
+                repositoryName,
+                engineName);
     }
 
     /**
@@ -156,17 +177,17 @@ public class KeywordRepositoryTemplateGenerator
 
     /**
      * Writes a keyword repository template to disk.
-     * @param keywordRepositoryTemplate the keyword repository to write.
+     * @param template the keyword repository to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
      */
     public void write(
-        final KeywordRepositoryTemplate keywordRepositoryTemplate,
+        final BasePerRepositoryTemplate template,
         final File outputDir)
       throws  IOException
     {
         write(
-            keywordRepositoryTemplate,
+            template,
             outputDir,
             StringUtils.getInstance(),
             FileUtils.getInstance());
@@ -174,16 +195,16 @@ public class KeywordRepositoryTemplateGenerator
 
     /**
      * Writes a keyword repository template to disk.
-     * @param keywordRepositoryTemplate the keyword repository to write.
+     * @param template the keyword repository to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition keywordRepositoryTemplate != null
+     * @precondition template != null
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final KeywordRepositoryTemplate keywordRepositoryTemplate,
+        final BasePerRepositoryTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
         final FileUtils fileUtils)
@@ -193,13 +214,13 @@ public class KeywordRepositoryTemplateGenerator
 
         String t_strNormalizedRepository =
             stringUtils.capitalize(
-                keywordRepositoryTemplate.getRepository());
+                template.getRepositoryName());
 
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
             + t_strNormalizedRepository
             + "KeywordRepository.java",
-            keywordRepositoryTemplate.generate());
+            template.generate());
     }
 }

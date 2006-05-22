@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -40,15 +41,11 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DAOChooserTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -60,7 +57,6 @@ import org.apache.tools.ant.BuildException;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -69,8 +65,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class DAOChooserTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
      * Creates a DAOChooserTemplateWritingHandler.
@@ -78,110 +73,57 @@ public class DAOChooserTemplateWritingHandler
     public DAOChooserTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @param command != null
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        return handle(command.getAttributeMap());
+        return DAOChooserTemplateGenerator.getInstance();
     }
 
     /**
-     * Handles given command.
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @param parameters != null
+     * Retrieves the templates from the attribute map.
+     * @param parameters the parameter map.
+     * @return the template.
+     * @throws BuildException if the template retrieval process if faulty.
      */
-    protected boolean handle(final Map parameters)
-        throws  BuildException
-    {
-        return
-            handle(
-                parameters,
-                retrieveDAOChooserTemplate(parameters),
-                retrieveOutputDir(parameters),
-                DAOChooserTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Handles given command.
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @param parameters != null
-     */
-    protected boolean handle(
-        final Map parameters,
-        final DAOChooserTemplate template,
-        final File outputDir,
-        final DAOChooserTemplateGenerator generator)
+    protected BasePerRepositoryTemplate retrieveTemplate(final Map parameters)
       throws  BuildException
     {
-        boolean result = false;
-
-        try 
-        {
-            generator.write(template, outputDir);
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the DAOChooser template from the attribute map.
-     * @param parameters the parameter map.
-     * @return the repository instance.
-     * @throws BuildException if the DAOChooser template process if faulty.
-     * @precondition parameters != null
-     */
-    protected DAOChooserTemplate retrieveDAOChooserTemplate(final Map parameters)
-        throws  BuildException
-    {
         return
-            (DAOChooserTemplate)
-                parameters.get(
-                    TemplateMappingManager.DAO_CHOOSER_TEMPLATE);
+            (BasePerRepositoryTemplate)
+                parameters.get(TemplateMappingManager.DAO_CHOOSER_TEMPLATE);
     }
-
+ 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveOutputDir(final Map parameters)
-      throws  BuildException
-    {
-        return retrieveOutputDir(parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
+     * @precondition projectFolder != null
+     * @precondition projectPackage != null
+     * @precondition engineName != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveDAOChooserFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters));
+                projectFolder,
+                projectPackage,
+                useSubfolders);
     }
 }

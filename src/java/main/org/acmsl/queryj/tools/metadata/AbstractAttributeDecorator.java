@@ -270,6 +270,29 @@ public abstract class AbstractAttributeDecorator
     }
 
     /**
+     * Retrieves the uncapitalized name.
+     * @return such name.
+     */
+    public String getNameUncapitalized()
+    {
+        return uncapitalize(getName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Uncapitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the alternate version of the value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String uncapitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.uncapitalize(value.toLowerCase());
+    }
+
+    /**
      * Converts given value to upper-case.
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
@@ -327,21 +350,6 @@ public abstract class AbstractAttributeDecorator
     public String getUncapitalizedTableName()
     {
         return uncapitalize(getTableName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Uncapitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the modified version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
-     */
-    protected String uncapitalize(
-        final String value, final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.uncapitalize(value);
-
     }
 
     /**

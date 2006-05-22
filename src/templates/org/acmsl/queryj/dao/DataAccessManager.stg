@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: $RCSfile$
+// Filename: $RCSfile: $
 //
 // Author: Jose San Leandro Armendariz
 //
@@ -46,7 +46,7 @@ source(input) ::= <<
  Generates the DataAccessManager.
  @param input.copyright_years the copyright's years.
  @param input.tables the tables.
- @param input.repository the repository.
+ @param input.tr_name the repository name.
 !>
 <if(input.header)>
 <input.header>
@@ -55,8 +55,8 @@ source(input) ::= <<
   years=input.copyright_years,
   description=
     [
-      first_line_description(model=input.repository),
-      second_line_description(model=input.repository)
+      first_line_description(model=input.tr_name),
+      second_line_description(model=input.tr_name)
     ],
     timestamp=input.timestamp)>
 <endif>
@@ -64,18 +64,14 @@ source(input) ::= <<
 <package_declaration(
   packageNames=
   [
-    input.base_package_name
+    input.base_package_name,
+    typeInitMap.baseDAOSubpackageName
   ])>
 
 /*
  * Importing project-specific classes.
  */
 <tables:dao_import(table=it); separator="\n">
-
-/*
- * Importing some JDK classes.
- */
-import java.lang.ref.WeakReference;
 
 <class(input=input,foreign_keys_by_table=input.foreign_keys_by_table)>
 >>
@@ -112,71 +108,53 @@ class(input) ::= <<
 !>
 /**
  * <[
-      first_line_description(model=input.repository),
-      second_line_description(model=input.repository)
+      first_line_description(model=input.tr_name),
+      second_line_description(model=input.tr_name)
     ]:{line |<line>}; separator="\n * ")>
  * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.repository>DataAccessManager
+public class <input.tr_name_capitalized>DataAccessManager
 {
-    /**
-     * Singleton implemented as a weak reference.
-     */
-    private static WeakReference singleton;
-
     <input.tables:dao_attribute_declaration(table=it); separator="\n\n">
 
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected DataAccessManager() {};
+<if(input.repository_dao)>
+    <repository_dao_attribute_declaration(
+      repositoryCapitalized=input.tr_name_capitalized);
+     separator="\n\n">
+<endif>
 
     /**
-     * Specifies a new weak reference.
-     * @param manager the new manager instance.
+     * Public constructor to allow reflective access.
      */
-    private static void setReference(final DataAccessManager manager)
+    public <input.tr_name_capitalized>DataAccessManager() {};
+
+    /**
+     * Singleton implementation to avoid double-checked locking.
+     */
+    private static final class <input.tr_name_capitalized>DataAccessManagerSingletonContainer
     {
-        singleton = new WeakReference(manager);
+        private static final <input.tr_name_capitalized>DataAccessManager SINGLETON =
+            new <input.tr_name_capitalized>DataAccessManager();
     }
-
+ 
     /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a \<code>DataAccessManager\</code> instance.
+     * Retrieves a \<code\><input.tr_name_capitalized>DataAccessManager\</code\> instance.
      * @return such instance.
      */
-    public static DataAccessManager getInstance()
+    public static <input.tr_name_capitalized>DataAccessManager getInstance()
     {
-        DataAccessManager result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (DataAccessManager) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new DataAccessManager();
-
-            setReference(result);
-        }
-
-        return result;
+        return <input.tr_name_capitalized>DataAccessManagerSingletonContainer.SINGLETON;
     }
 
     <input.tables:dao_methods(table=it); separator="\n\n">
+<if(input.repository_dao)>
+    <repository_dao_methods(
+      repository=input.tr_name,
+      repositoryCapitalized=input.tr_name_capitalized);
+     separator="\n\n">
+<endif>
 }
 >>
 
@@ -190,6 +168,18 @@ dao_attribute_declaration(table) ::= <<
  * instance is not garbage collected).
  */
 private <table.voName>DAO m__<table.voName>DAO;
+>>
+
+repository_dao_attribute_declaration(repositoryCapitalized) ::= <<
+<!
+ Generates the attribute declaration for the repository DAO.
+ @param repositoryCapitalized the repository, capitalized.
+!>
+/**
+ * The \<code><repositoryCapitalized>DAO\</code> reference (cached whereas Manager
+ * instance is not garbage collected).
+ */
+private <repositoryCapitalized>DAO m__<repositoryCapitalized>DAO;
 >>
 
 dao_methods(table) ::= <<
@@ -233,6 +223,55 @@ public <table.voName>DAO get<table.voName>DAO()
             result = t_<table.voName>DAOFactory.create<table.voName>DAO();
 
             set<table.voName>DAOReference(result);
+        }
+    }
+
+    return result;
+}
+>>
+
+repository_dao_methods(repository, repositoryCapitalized) ::= <<
+<!
+ Generates the methods for the repository DAO.
+ @param repository the repository.
+ @param repositoryCapitalized the repository, capitalized.
+!>
+/**
+ * Specifies the new \<code><repositoryCapitalized>DAO\</code> reference to keep.
+ * @param dao the new DAO.
+ */
+protected void set<repositoryCapitalized>DAOReference(final <repositoryCapitalized>DAO dao)
+{
+    m__<repositoryCapitalized>DAO = dao;
+}
+
+/**
+ * Retrieves the existing \<code><repositoryCapitalized>DAO\</code> reference.
+ * @return a DAO instance for accessing the <repository>-wide DAO.
+ */
+protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAOReference()
+{
+    return m__<repositoryCapitalized>DAO;
+}
+
+/**
+ * Retrieves a \<code><repositoryCapitalized>DAO\</code>.
+ * @return a DAO instance for accessing the <repository>-wide DAO.
+ */
+public <repositoryCapitalized>DAO get<repositoryCapitalized>DAO()
+{
+    <repositoryCapitalized>DAO result = get<repositoryCapitalized>DAOReference();
+
+    if  (result == null)
+    {
+        <repositoryCapitalized>DAOFactory t_<repositoryCapitalized>DAOFactory =
+            <repositoryCapitalized>DAOFactory.getInstance();
+
+        if  (t_<repositoryCapitalized>DAOFactory != null)
+        {
+            result = t_<repositoryCapitalized>DAOFactory.create<repositoryCapitalized>DAO();
+
+            set<repositoryCapitalized>DAOReference(result);
         }
     }
 

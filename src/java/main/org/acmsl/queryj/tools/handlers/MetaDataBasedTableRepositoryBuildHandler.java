@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -68,15 +69,16 @@ public class MetaDataBasedTableRepositoryBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition command != null
-     */
+     *
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        storeTableRepositoryTemplate(
+        storeTemplate(
             buildTableRepositoryTemplate(
                 command.getAttributeMap()),
             command.getAttributeMap());
         
         return false;
     }
+    */
 }

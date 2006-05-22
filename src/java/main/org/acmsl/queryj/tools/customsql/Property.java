@@ -43,13 +43,8 @@ package org.acmsl.queryj.tools.customsql;
  *         >Jose San Leandro</a>
  */
 public interface Property
+    extends  IdentifiableElement
 {
-    /**
-     * Retrieves the <i>id</i> value.
-     * @return such information.
-     */
-    public String getId();
-
     /**
      * Retrieves the <i>column_name</i> attribute.
      * @return such information.

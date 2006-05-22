@@ -10,7 +10,7 @@
     version 2 of the License, or any later version.
 
     This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    but WITHOUT ANY WARRANTY; without even the factoryied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     General Public License for more details.
 
@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes value object factory templates.
+ * Description: Writes ValueObject templates.
  *
  */
 package org.acmsl.queryj.tools.templates.valueobject.handlers;
@@ -40,17 +40,12 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.handlers
-    .ValueObjectFactoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate;
-import org.acmsl.queryj.tools.templates.valueobject
-    .ValueObjectFactoryTemplateGenerator;
 
 /*
  * Importing some Ant classes.
@@ -65,139 +60,72 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Writes value object factory templates.
+ * Writes <code>ValueObjectFactoryTemplate</code> instances.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public class ValueObjectFactoryTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler
 {
     /**
-     * A cached empty value object template array.
-     */
-    public static final ValueObjectFactoryTemplate[]
-        EMPTY_VALUE_OBJECT_FACTORY_TEMPLATE_ARRAY =
-            new ValueObjectFactoryTemplate[0];
-
-    /**
-     * Creates a ValueObjectFactoryTemplateWritingHandler.
+     * Creates a <code>ValueObjectFactoryTemplateWritingHandler</code> instance.
      */
     public ValueObjectFactoryTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
     {
-        return handle(command.getAttributeMap());
+        return ValueObjectFactoryTemplateGenerator.getInstance();
     }
 
     /**
-     * Handles given parameters.
-     * @param parameters the parameters to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     */
-    protected boolean handle(final Map parameters)
-        throws  BuildException
-    {
-        return
-            handle(
-                retrieveValueObjectFactoryTemplates(parameters),
-                retrieveOutputDir(parameters),
-                ValueObjectFactoryTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Writes the ValueObjectFactory templates.
-     * @param templates the templates to write.
-     * @param generator the <code>ValueObjectFactoryTemplateGenerator</code>
-     * instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition templates != null
-     * @precondition generator != null
-     */
-    protected boolean handle(
-        final ValueObjectFactoryTemplate[] templates,
-        final File outputDir,
-        final ValueObjectFactoryTemplateGenerator generator)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try 
-        {
-            int t_iLength = (templates != null) ? templates.length : 0;
-
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-            {
-                generator.write(templates[t_iIndex], outputDir);
-            }
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the value object factory template from the attribute map.
+     * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
-     * @precondition parameters != null
      */
-    protected ValueObjectFactoryTemplate[] retrieveValueObjectFactoryTemplates(
+    protected BasePerTableTemplate[] retrieveTemplates(
         final Map parameters)
       throws  BuildException
     {
         return
-            (ValueObjectFactoryTemplate[])
+            (BasePerTableTemplate[])
                 parameters.get(
-                    TemplateMappingManager
-                        .VALUE_OBJECT_FACTORY_TEMPLATES);
+                    TemplateMappingManager.VALUE_OBJECT_FACTORY_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return retrieveOutputDir(parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param tableName the table name.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
+     * @precondition projectFolder != null
+     * @precondition projectPackage != null
+     * @precondition engineName != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
+        final String tableName,
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
         return
-            packageUtils.retrieveValueObjectFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters));
+            packageUtils.retrieveValueObjectFactoryFolder(
+                projectFolder, projectPackage, useSubfolders);
     }
 }

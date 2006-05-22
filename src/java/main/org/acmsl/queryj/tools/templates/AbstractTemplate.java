@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -476,6 +477,20 @@ public abstract class AbstractTemplate
       throws  InvalidTemplateException;
 
     /**
+     * Converts given value to lower-case.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such output.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String lowercase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.lowerCase(value);
+    }
+
+    /**
      * Normalizes given value, in lower-case.
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
@@ -487,6 +502,17 @@ public abstract class AbstractTemplate
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @return such output.
+     * @precondition value != null
+     */
+    protected String capitalize(final String value)
+    {
+        return capitalize(value, DecorationUtils.getInstance());
     }
 
     /**

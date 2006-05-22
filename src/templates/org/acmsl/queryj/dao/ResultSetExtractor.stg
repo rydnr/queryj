@@ -134,7 +134,6 @@ project_imports(
  * Importing project classes.
  */
 import <basePackageName>.<voSubpackageName>.<voName>;
-import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
 import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
@@ -172,7 +171,7 @@ defaultExtractor(input) ::= <<
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
- * @return the \<code><input.vo_name>ValueObject\</code> or
+ * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
@@ -195,7 +194,7 @@ public Object extractData(final ResultSet resultSet)
  * @param resultSet the result set.
  * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
  * instance.
- * @return the \<code><input.vo_name>ValueObject\</code> or
+ * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
@@ -209,7 +208,7 @@ protected <input.vo_name> extractData(
   throws  SQLException,
           DataAccessException
 {
-    <input.vo_name>ValueObject result = null;
+    <input.vo_name> result = null;
 
     if  (resultSet.next())
     {
@@ -315,7 +314,7 @@ public boolean getSelectForUpdateMode()
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
- * @return the \<code><input.vo_name>ValueObject\</code> or
+ * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
@@ -344,7 +343,7 @@ public Object extractData(final ResultSet resultSet)
  * \<i>select for update\</i>.
  * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
  * instance.
- * @return the \<code><input.vo_name>ValueObject\</code> or
+ * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
@@ -361,7 +360,7 @@ protected Object extractData(
   throws  SQLException,
           DataAccessException
 {
-    <input.vo_name>ValueObject result = null;
+    <input.vo_name> result = null;
 
     if  (resultSet.next())
     {
@@ -550,7 +549,7 @@ new <attr.objectType>(
     resultSet.get<attr.objectType>(
 <endif>
 
-        <attr.tableNameUppercased>.<attr.nameUppercased>));
+        "<attr.nameUppercased>"));
 >>
 
 primitive_nullable_clobhandling_attribute_extractor(attr) ::= <<
@@ -575,7 +574,7 @@ object_nullable_attribute_extractor(attr) ::= <<
 resultSet.get<attr.objectType>(
 <endif>
 
-    <attr.tableNameUppercased>.<attr.nameUppercased>);
+    "<attr.nameUppercased>");
 >>
 
 object_nullable_clobhandling_attribute_extractor(attr) ::= <<
@@ -614,7 +613,7 @@ t_<attr.nameCapitalized>As<attr.objectType>
 <if(attr.numberSmallerThanInt)>
 resultSet.getInt(<attr.tableNameUppercased>.<attr.nameUppercased>)
 <else>
-resultSet.get<attr.objectType>(<attr.tableNameUppercased>.<attr.nameUppercased>)
+resultSet.get<attr.objectType>("<attr.nameUppercased>")
 <endif>
 <endif>
 >>

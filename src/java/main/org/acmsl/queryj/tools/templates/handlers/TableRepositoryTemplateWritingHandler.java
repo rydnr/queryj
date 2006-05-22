@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -40,13 +41,11 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
@@ -54,14 +53,11 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -70,124 +66,61 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class TableRepositoryTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
-     * Creates a TableRepositoryTemplateWritingHandler.
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public TableRepositoryTemplateWritingHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        return handle(command.getAttributeMap());
+        return TableRepositoryTemplateGenerator.getInstance();
     }
 
     /**
-     * Handles given parameters.
-     * @param parameters the parameters to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     */
-    protected boolean handle(final Map parameters)
-        throws  BuildException
-    {
-        return
-            handle(
-                retrieveTableRepositoryTemplate(parameters),
-                retrieveOutputDir(parameters),
-                TableRepositoryTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Writes the TableRepository template.
-     * @param template the template to write.
-     * @param outputDir the output dir.
-     * @param generator the <code>TableRepositoryTemplateGenerator</code>
-     * instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition generator != null
-     */
-    protected boolean handle(
-        final TableRepositoryTemplate template,
-        final File outputDir,
-        final TableRepositoryTemplateGenerator generator)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try 
-        {
-            generator.write(template, outputDir);
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the table repository template from the attribute map.
+     * Retrieves the template from the attribute map.
      * @param parameters the parameter map.
-     * @return the table repository template.
-     * @exception BuildException if the repository template retrieval process
-     * is faulty.
-     * @precondition parameters != null
+     * @return the template.
+     * @throws BuildException if the template retrieval process if faulty.
      */
-    protected TableRepositoryTemplate retrieveTableRepositoryTemplate(
+    protected BasePerRepositoryTemplate retrieveTemplate(
         final Map parameters)
       throws  BuildException
     {
         return
-            (TableRepositoryTemplate)
+            (BasePerRepositoryTemplate)
                 parameters.get(
                     TemplateMappingManager.TABLE_REPOSITORY_TEMPLATE);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return retrieveOutputDir(parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
+     * @precondition engineName != null
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        final File projectFolder,
+        final String projectPackage,
+        final boolean useSubfolders,
+        final String engineName,
+        final Map parameters,
+        final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveTableRepositoryFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters));
+                projectFolder,
+                projectPackage,
+                useSubfolders);
     }
 }

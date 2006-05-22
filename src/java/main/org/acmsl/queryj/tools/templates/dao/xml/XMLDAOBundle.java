@@ -43,7 +43,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
  */
 import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.xml.handlers.XmlDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
@@ -64,7 +64,7 @@ public class XMLDAOBundle
             {
                 new XMLDAOTemplateHandlerBundle(),
                 new XMLValueObjectFactoryTemplateHandlerBundle(),
-                new XMLDAOFactoryTemplateHandlerBundle(),
+                new XmlDAOFactoryTemplateHandlerBundle(),
                 new XMLDAOTestTemplateHandlerBundle()
             });
     }

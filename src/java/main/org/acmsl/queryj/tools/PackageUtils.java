@@ -1281,7 +1281,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO factory class.
      */
-    public String retrieveXMLDAOFactoryPackage(final String packageName)
+    public String retrieveXmlDAOFactoryPackage(final String packageName)
     {
         return retrieveXMLDAOPackage(packageName);
     }
@@ -1294,7 +1294,7 @@ public class PackageUtils
      * @return the folder in which  the associated DAO factory should be
      * generated.
      */
-    public File retrieveXMLDAOFactoryFolder(
+    public File retrieveXmlDAOFactoryFolder(
         final File parentFolder,
         final String packageName,
         final boolean useSubfolders)
@@ -1735,6 +1735,64 @@ public class PackageUtils
                 useSubfolders);
     }
 
+    /**
+     * Retrieves the package name for RepositoryDAO templates.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @return the package for the associated DAO class.
+     */
+    public String retrieveRepositoryDAOPackage(
+        final String packageName, final String engineName)
+    {
+        return retrieveDAOPackage(packageName, engineName);
+    }
+
+    /**
+     * Retrieves the folder for RepositoryDAO templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param engineName the engine.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated DAO should be
+     * generated.
+     */
+    public File retrieveRepositoryDAOFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final boolean useSubfolders)
+    {
+        return
+            retrieveDAOFolder(
+                parentFolder, packageName, engineName, useSubfolders);
+    }
+
+    /**
+     * Retrieves the package name for BaseRepositoryDAO templates.
+     * @param packageName the original package.
+     * @return the package for the associated DAO class.
+     */
+    public String retrieveBaseRepositoryDAOPackage(
+        final String packageName)
+    {
+        return retrieveBaseDAOPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for BaseRepositoryDAO templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated DAO should be
+     * generated.
+     */
+    public File retrieveBaseRepositoryDAOFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders);
+    }
     /**
      * Extracts the class name of given fully-qualified class.
      * @param fqcn such information.
