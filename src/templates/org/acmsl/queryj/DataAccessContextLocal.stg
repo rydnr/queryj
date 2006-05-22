@@ -85,6 +85,18 @@ source(input) ::= <<
     baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
     subpackageName=typeInitMap.rdbSubpackageName);
    separator="\n\n">
+
+<if(input.repository_dao)>
+  <repository_dao_definition(
+    repository=input.tr_name,
+    repositoryCapitalized=input.tr_name_capitalized,
+    engineName=input.engine_name,
+    engineNameLowercased=input.engine_name_lowercased,
+    basePackageName=input.base_package_name,
+    baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
+    subpackageName=typeInitMap.rdbSubpackageName)>
+<endif>
+
 \</beans\>
 >>
 
@@ -111,10 +123,48 @@ dao_definition(
   class="<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineNameLowercased>.<engineName><table.singularNameCapitalized>DAO"\>
   \<property name="dataSource"\>\<ref local="dataSource"/\>\</property\>
 \</bean>
-\<!-- Transactional declaration for <table.name> --\>
+\<!-- Transactional declaration for <table.name> DAO --\>
 \<bean id="<table.voName>" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"\>
   \<property name="transactionManager"\>\<ref local="transactionManager"/\>\</property\>
   \<property name="target"\>\<ref bean="<input.voName>DAO"/\>\</property\>
+  \<property name="transactionAttributes"\>
+    \<props\>
+      \<!-- See 17.6.2.7, table 14, of EJB Specification 2.1 Final Release --\>
+      \<prop key="*"\>PROPAGATION_REQUIRED\</prop\>
+    \</props\>
+  \</property\>
+\</bean\>
+>>
+
+repository_dao_definition(
+  repository,
+  repositoryCapitalized,
+  engineName,
+  engineNameLowercased,
+  basePackageName,
+  baseDAOSubpackageName,
+  subpackageName) ::= <<
+<!
+ Generates the DAO Spring definition.
+ @param repository the repository.
+ @param repositoryCapitalized the repository, capitalized.
+ @param engineName the engine name.
+ @param engineNameLowercased the engine name, in lower case.
+ @param basePackageName the base package name.
+ @param baseDAOSubpackageName the base DAO subpackage name.
+ @param subpackageName the subpackage name.
+!>
+# <repository> DAO implementation.
+\<!-- DAO declaration for the whole <repository> repository --\>
+\<bean
+  id="<repositoryCapitalized>DAO"
+  class="<basePackageName>.<baseDAOSubpackageName>.<subpackageName>.<engineNameLowercased>.<engineName><repositoryCapitalized>DAO"\>
+  \<property name="dataSource"\>\<ref local="dataSource"/\>\</property\>
+\</bean>
+\<!-- Transactional declaration for <repository> DAO --\>
+\<bean id="<repositoryCapitalized>" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"\>
+  \<property name="transactionManager"\>\<ref local="transactionManager"/\>\</property\>
+  \<property name="target"\>\<ref bean="<repositoryCapitalized>DAO"/\>\</property\>
   \<property name="transactionAttributes"\>
     \<props\>
       \<!-- See 17.6.2.7, table 14, of EJB Specification 2.1 Final Release --\>

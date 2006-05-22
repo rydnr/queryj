@@ -145,7 +145,7 @@ custom_select(cs, input) ::= <<
 !>
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
- * \<b><cs.description>\<b>.
+ * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
@@ -163,7 +163,7 @@ custom_update_or_insert(cs, input) ::= <<
 !>
 /**
  * Custom sql \<i><cs.id>\</i>:\<br/>
- * \<b><cs.description>\<b>.
+ * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @throws DataAccessException if the operation fails.
  */
@@ -180,7 +180,7 @@ custom_select_for_update(cs, input) ::= <<
 !>
 /**
  * Custom select for update \<i><cs.id>\</i>:\<br/>
- * \<b><cs.description>\<b>.
+ * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.

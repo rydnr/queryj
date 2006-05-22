@@ -321,6 +321,7 @@ public class <input.tr_name_capitalized>DAOChooser
       repositoryUppercased=input.tr_name_uppercased);
      separator="\n\n">
 <endif>
+
 }
 >>
 
