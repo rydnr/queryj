@@ -39,9 +39,9 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing some project classes.
  */
-import org.acmsl.commons.utils.StringUtils;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
  * Importing some JDK classes.
@@ -119,20 +119,20 @@ public class TableRepositoryTemplateUtils
     {
         return
             retrieveTableRepositoryClassName(
-                repository, StringUtils.getInstance());
+                repository, DecorationUtils.getInstance());
     }
 
     /**
      * Retrieves the name of the <code>TableRepository</code> instance.
      * @param repository the repository name.
-     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return such name.
      * @precondition repository != null
-     * @precondition stringUtils != null
+     * @precondition decorationUtils != null
      */
     protected String retrieveTableRepositoryClassName(
-        final String repository, final StringUtils stringUtils)
+        final String repository, final DecorationUtils decorationUtils)
     {
-        return stringUtils.capitalize(repository, '_') + "TableRepository";
+        return decorationUtils.capitalize(repository) + "TableRepository";
     }
 }

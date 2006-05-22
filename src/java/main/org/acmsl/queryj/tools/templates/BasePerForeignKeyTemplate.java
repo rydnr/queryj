@@ -447,6 +447,8 @@ public abstract class BasePerForeignKeyTemplate
         input.put("timestamp", timestamp);
 
         input.put("tr_name", tableRepositoryName);
+        input.put("tr_name_normalized", normalize(tableRepositoryName));
+        input.put("tr_name_capitalized", capitalize(tableRepositoryName));
     }
 
     /**

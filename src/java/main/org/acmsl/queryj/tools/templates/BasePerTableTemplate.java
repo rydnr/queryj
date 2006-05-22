@@ -900,6 +900,8 @@ public abstract class BasePerTableTemplate
 
         input.put("tr_name", tableRepositoryName);
         input.put("tr_name_capitalized", capitalize(tableRepositoryName));
+        input.put("tr_name_normalized", normalize(tableRepositoryName));
+
         input.put("table_name", tableName);
         input.put("table_name_uppercased", tableName.toUpperCase());
         input.put(

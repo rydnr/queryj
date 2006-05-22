@@ -491,6 +491,31 @@ public abstract class AbstractTemplate
     }
 
     /**
+     * Normalizes given value.
+     * @param value the value.
+     * @return such output.
+     * @precondition value != null
+     */
+    protected String normalize(final String value)
+    {
+        return normalize(value, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Normalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such output.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.normalize(value);
+    }
+
+    /**
      * Normalizes given value, in lower-case.
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
@@ -502,6 +527,20 @@ public abstract class AbstractTemplate
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
+    }
+
+    /**
+     * Normalizes given value, in upper-case.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such output.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String normalizeUppercase(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.normalizeUppercase(value);
     }
 
     /**

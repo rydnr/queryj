@@ -76,7 +76,7 @@ source(input) ::= <<
   result=input.result,
   basePackageName=input.base_package_name,
   trSubpackageName=typeInitMap.tableRepositorySubpackageName,
-  trName=input.tr_name)>
+  trName=input.tr_name_capitalized)>
 
 /*
  * Importing some ACM-SL classes.
@@ -162,7 +162,7 @@ class(result, input) ::= <<
  */
 public class <result.idCapitalized>Extractor
     implements  ResultSetExtractor,
-                <input.tr_name>TableRepository
+                <input.tr_name_capitalized>TableRepository
 {
     // \<extract data\>
     /**

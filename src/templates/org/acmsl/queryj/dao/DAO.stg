@@ -98,7 +98,7 @@ source(input) ::= <<
   voFactorySubpackageName=typeInitMap.voFactorySubpackageName,
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
   trSubpackageName=typeInitMap.tableRepositorySubpackageName,
-  trName=input.tr_name,
+  trName=input.tr_name_capitalized,
   damSubpackageName=typeInitMap.dataAccessManagerSubpackageName,
   fkssSubpackageName=typeInitMap.foreignKeyStatementSetterSubpackageName,
   fkAttributes=input.fk_attributes,
@@ -319,7 +319,7 @@ class(input,foreign_keys_by_table) ::= <<
 public class <input.engine_name><input.vo_name>DAO
   extends     QueryjJdbcTemplate
   implements  <input.vo_name>DAO,
-              <input.tr_name>TableRepository
+              <input.tr_name_capitalized>TableRepository
 {
     /**
      * The result set extractor for \<i><input.vo_name>\</i>
@@ -398,7 +398,7 @@ public class <input.engine_name><input.vo_name>DAO
         query.select(<input.table_name_uppercased>.getAll());
         query.from(<input.table_name_uppercased>);
         <input.pk_attributes:attribute_query_filter(
-          tableRepositoryName=input.tr_name,
+          tableRepositoryName=input.tr_name_capitalized,
           tableNameUppercased=input.table_name_uppercased,
           nameUppercased=it.nameUppercased); separator="\n">
     }
@@ -552,11 +552,11 @@ public class <input.engine_name><input.vo_name>DAO
     {
         query.update(<input.table_name_uppercased>);
         <input.nonpk_attributes:attribute_query_update(
-          tableRepositoryName=input.tr_name,
+          tableRepositoryName=input.tr_name_capitalized,
           tableNameUppercased=input.table_name_uppercased,
           nameUppercased=it.nameUppercased); separator="\n">
         <input.pk_attributes:attribute_query_filter(
-          tableRepositoryName=input.tr_name,
+          tableRepositoryName=input.tr_name_capitalized,
           tableNameUppercased=input.table_name_uppercased,
           nameUppercased=it.nameUppercased); separator="\n">
     }
@@ -707,7 +707,7 @@ public class <input.engine_name><input.vo_name>DAO
     {
         query.deleteFrom(<input.table_name_uppercased>);
         <input.pk_attributes:attribute_query_filter(
-          tableRepositoryName=input.tr_name,
+          tableRepositoryName=input.tr_name_capitalized,
           tableNameUppercased=input.table_name_uppercased,
           nameUppercased=it.nameUppercased); separator="\n">
     }
@@ -1316,7 +1316,7 @@ protected void buildInsertQuery(final InsertQuery query)
 {
     query.insertInto(<input.table_name_uppercased>);
     <input.attributes:attribute_query_insert(
-      tableRepositoryName=input.tr_name,
+      tableRepositoryName=input.tr_name_capitalized,
       tableNameUppercased=input.table_name_uppercased,
       nameUppercased=it.nameUppercased); separator="\n">
 }
