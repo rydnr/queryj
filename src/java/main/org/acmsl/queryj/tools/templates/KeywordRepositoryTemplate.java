@@ -376,7 +376,8 @@ public class KeywordRepositoryTemplate
      * @precondition value != null
      * @precondition decorationUtils != null
      */
-    protected String uncapitalize(final String value, final DecorationUtils decorationUtils)
+    protected String uncapitalize(
+        final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(decorationUtils.capitalize(value));
     }

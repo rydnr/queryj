@@ -149,14 +149,15 @@ public class KeywordRepositoryTemplateBuildHandler
 
             AntExternallyManagedFieldsElement
                 t_ExternallyManagedFieldsElement =
-                        retrieveExternallyManagedFieldsElement(parameters);
+                    retrieveExternallyManagedFieldsElement(parameters);
 
             if  (t_ExternallyManagedFieldsElement != null)
             {
                 MetadataTypeManager t_MetadataTypeManager =
                     metadataManager.getMetadataTypeManager();
 
-                StringValidator t_StringValidator = StringValidator.getInstance();
+                StringValidator t_StringValidator =
+                    StringValidator.getInstance();
                 
                 t_cFieldElements =
                     t_ExternallyManagedFieldsElement.getFields();
@@ -175,7 +176,8 @@ public class KeywordRepositoryTemplateBuildHandler
 
                         if  (t_Field != null)
                         {
-                            if  (!t_StringValidator.isEmpty(t_Field.getKeyword()))
+                            if  (!t_StringValidator.isEmpty(
+                                     t_Field.getKeyword()))
                             {
                                 result.addKeyword(
                                     t_Field.getKeyword(),
