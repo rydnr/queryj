@@ -45,6 +45,7 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -55,7 +56,6 @@ import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateFactory;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JDK classes.
@@ -189,7 +189,7 @@ public class KeywordRepositoryTemplateGenerator
         write(
             template,
             outputDir,
-            StringUtils.getInstance(),
+            DecorationUtils.getInstance(),
             FileUtils.getInstance());
     }
 
@@ -197,29 +197,28 @@ public class KeywordRepositoryTemplateGenerator
      * Writes a keyword repository template to disk.
      * @param template the keyword repository to write.
      * @param outputDir the output folder.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
-     * @precondition stringUtils != null
+     * @precondition decorationUtils != null
      * @precondition fileUtils != null
      */
     protected void write(
         final BasePerRepositoryTemplate template,
         final File outputDir,
-        final StringUtils stringUtils,
+        final DecorationUtils decorationUtils,
         final FileUtils fileUtils)
       throws  IOException
     {
         outputDir.mkdirs();
 
-        String t_strNormalizedRepository =
-            stringUtils.capitalize(
-                template.getRepositoryName());
-
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + t_strNormalizedRepository
+            + decorationUtils.capitalize(
+                  template.getRepositoryName())
             + "KeywordRepository.java",
             template.generate());
     }

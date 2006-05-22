@@ -224,7 +224,11 @@ public class DataAccessContextLocalTemplate
 
         input.put("engine_name", engineName);
         input.put("engine_name_lowercased", engineName.toLowerCase());
-        input.put("splitted_header", split(getProcessedHeader(input)));
+        String t_strProcessedHeader = getProcessedHeader(input);
+        if  (t_strProcessedHeader != null)
+        {
+            input.put("splitted_header", split(t_strProcessedHeader));
+        }
         fillJndiLocation(input, getJNDILocation());
     }
 
