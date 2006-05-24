@@ -84,6 +84,11 @@ public class CachingPropertyDecorator
     private String m__strCachedColumnNameNormalizedCapitalized;
 
     /**
+     * The cached capitalized column name.
+     */
+    private String m__strCachedColumnNameCapitalized;
+
+    /**
      * The cached normalized/uncapitalized column name.
      */
     private String m__strCachedColumnNameNormalizedUncapitalized;
@@ -337,7 +342,7 @@ public class CachingPropertyDecorator
     }
 
     /**
-     * Specifies the cached capitalized name.
+     * Specifies the cached capitalized normalized column name.
      * @param name such name.
      */
     protected final void immutableSetCachedColumnNameNormalizedCapitalized(
@@ -347,7 +352,7 @@ public class CachingPropertyDecorator
     }
 
     /**
-     * Specifies the cached capitalized name.
+     * Specifies the cached capitalized normalized column name.
      * @param name such name.
      */
     protected void setCachedColumnNameNormalizedCapitalized(
@@ -357,7 +362,7 @@ public class CachingPropertyDecorator
     }
 
     /**
-     * Retrieves the cached capitalized name.
+     * Retrieves the cached capitalized normalized column name.
      * @return such name.
      */
     public String getCachedColumnNameNormalizedCapitalized()
@@ -366,7 +371,7 @@ public class CachingPropertyDecorator
     }
 
     /**
-     * Retrieves the capitalized name.
+     * Retrieves the capitalized normalized column name.
      * @return such name.
      */
     public String getColumnNameNormalizedCapitalized()
@@ -377,6 +382,52 @@ public class CachingPropertyDecorator
         {
             result = super.getColumnNameNormalizedCapitalized();
             setCachedColumnNameNormalizedCapitalized(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached capitalized column name.
+     * @param name such name.
+     */
+    protected final void immutableSetCachedColumnNameCapitalized(
+        final String name)
+    {
+        m__strCachedColumnNameCapitalized = name;
+    }
+
+    /**
+     * Specifies the cached capitalized column name.
+     * @param name such name.
+     */
+    protected void setCachedColumnNameCapitalized(
+        final String name)
+    {
+        immutableSetCachedColumnNameCapitalized(name);
+    }
+
+    /**
+     * Retrieves the cached capitalized column name.
+     * @return such name.
+     */
+    public String getCachedColumnNameCapitalized()
+    {
+        return m__strCachedColumnNameCapitalized;
+    }
+
+    /**
+     * Retrieves the capitalized column name.
+     * @return such name.
+     */
+    public String getColumnNameCapitalized()
+    {
+        String result = getCachedColumnNameCapitalized();
+
+        if  (result == null)
+        {
+            result = super.getColumnNameCapitalized();
+            setCachedColumnNameCapitalized(result);
         }
 
         return result;
