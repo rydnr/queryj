@@ -50,12 +50,19 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 /*
  * Importing some StringTemplate classes.
  */
+import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JDK classes.
  */
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Is able to generate repository DAO factories according to database
@@ -66,6 +73,11 @@ import java.util.Collection;
 public class RepositoryDAOFactoryTemplate
     extends  RepositoryDAOTemplate
 {
+    /**
+     * The datasource's JNDI location.
+     */
+    private String m__strJNDIDataSource;
+
     /**
      * Builds a <code>RepositoryDAOFactoryTemplate</code> using given
      * information.
@@ -78,6 +90,7 @@ public class RepositoryDAOFactoryTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param engineName the engine name.
+     * @param jndiDataSource the JNDI location of the data source.
      * @param tables the tables.
      */
     public RepositoryDAOFactoryTemplate(
@@ -90,6 +103,7 @@ public class RepositoryDAOFactoryTemplate
         final String basePackageName,
         final String repositoryName,
         final String engineName,
+        final String jndiDataSource,
         final Collection tables)
     {
         super(
@@ -103,8 +117,106 @@ public class RepositoryDAOFactoryTemplate
             repositoryName,
             engineName,
             tables);
+
+        immutableSetJNDIDataSource(jndiDataSource);
     }
 
+
+    /**
+     * Specifies the JNDI data source.
+     * @param jndiDataSource the new JNDI data source.
+     */
+    private void immutableSetJNDIDataSource(final String jndiDataSource)
+    {
+        m__strJNDIDataSource = jndiDataSource;
+    }
+
+    /**
+     * Specifies the JNDI data source.
+     * @param jndiDataSource the new JNDI data source.
+     */
+    protected void setJNDIDataSource(final String jndiDataSource)
+    {
+        immutableSetJNDIDataSource(jndiDataSource);
+    }
+
+    /**
+     * Retrieves the JNDI data source.
+     * @return such information.
+     */
+    public String getJNDIDataSource() 
+    {
+        return m__strJNDIDataSource;
+    }
+
+    /**
+     * Fills the template parameters.
+     * @param input the parameter container.
+     * @param template the template.
+     * @param header the header.
+     * @param metadataManager the database metadata manager.
+     * @param metadataTypeManager the database metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param subpackageName the subpackage name.
+     * @param basePackageName the base package name.
+     * @param timestamp the timestamp.
+     * @param tableRepositoryName the table repository.
+     * @param engineName the engine name.
+     * @param tables the table names.
+     * @param timestamp the timestamp.
+     * @param copyrightYears the copyright years.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @precondition input != null
+     * @precondition template != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
+     * @precondition basePackageName != null
+     * @precondition subpackageName != null
+     * @precondition tableRepositoryName != null
+     * @precondition tables != null
+     * @precondition timestamp != null
+     * @precondition copyrightYears != null
+     * @precondition stringUtils != null
+     */
+    protected void fillParameters(
+        final Map input,
+        final StringTemplate template,
+        final String header,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
+        final DecoratorFactory decoratorFactory,
+        final String subpackageName,
+        final String basePackageName,
+        final String tableRepositoryName,
+        final String engineName,
+        final Collection tables,
+        final String timestamp,
+        final Integer[] copyrightYears,
+        final StringUtils stringUtils)
+    {
+        super.fillParameters(
+            input,
+            template,
+            header,
+            metadataManager,
+            metadataTypeManager,
+            customSqlProvider,
+            decoratorFactory,
+            subpackageName,
+            basePackageName,
+            tableRepositoryName,
+            engineName,
+            tables,
+            timestamp,
+            copyrightYears,
+            stringUtils);
+
+        input.put("jndi_location", getJNDIDataSource());
+    }
     /**
      * Retrieves the string template group.
      * @return such instance.

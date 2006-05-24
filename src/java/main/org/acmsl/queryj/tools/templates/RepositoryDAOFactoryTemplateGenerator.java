@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
+import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -70,7 +71,7 @@ import java.util.Collection;
            >Jose San Leandro</a>
  */
 public class RepositoryDAOFactoryTemplateGenerator
-    implements  DefaultBasePerRepositoryTemplateFactory,
+    implements  RepositoryDAOFactoryTemplateFactory,
                 BasePerRepositoryTemplateGenerator
 {
     /**
@@ -135,8 +136,9 @@ public class RepositoryDAOFactoryTemplateGenerator
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
-     * @param engineName the engine name.
      * @param repositoryName the name of the repository.
+     * @param engineName the engine name.
+     * @param jndiDataSource the JNDI location of the data source.
      * @param tables the tables.
      * @param header the header.
      * @return a template.
@@ -150,6 +152,7 @@ public class RepositoryDAOFactoryTemplateGenerator
         final String basePackageName,
         final String repositoryName,
         final String engineName,
+        final String jndiDataSource,
         final Collection tables,
         final String header)
       throws  QueryJException
@@ -165,6 +168,7 @@ public class RepositoryDAOFactoryTemplateGenerator
                 basePackageName,
                 repositoryName,
                 engineName,
+                jndiDataSource,
                 tables);
     }
 
