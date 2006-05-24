@@ -169,7 +169,7 @@ immutable_setter_call(attribute) ::= <<
  Writes the method call for the immutable setter of given attribute.
  @param attribute the attribute.
 !>
-immutableSet<attribute.columnNameNormalizedCapitalized>(<attribute.columnNameNormalizedUncapitalized>);
+immutableSet<attribute.columnNameCapitalized>(<attribute.columnNameNormalizedUncapitalized>);
 <endif>
 
 >>
