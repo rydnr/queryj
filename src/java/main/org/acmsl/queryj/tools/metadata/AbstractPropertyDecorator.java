@@ -435,7 +435,18 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
-     * Retrieves the capitalized name.
+     * Retrieves the capitalized column name.
+     * @return such name.
+     */
+    public String getColumnNameCapitalized()
+    {
+        return
+            capitalize(
+                getColumnName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the capitalized normalized column name.
      * @return such name.
      */
     public String getColumnNameNormalizedCapitalized()
@@ -446,7 +457,7 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
-     * Retrieves the capitalized name.
+     * Retrieves the uncapitalized normalized column name.
      * @return such name.
      */
     public String getColumnNameNormalizedUncapitalized()

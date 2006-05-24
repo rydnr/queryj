@@ -136,9 +136,9 @@ property_declaration(attribute) ::= <<
  * The \<i\><attribute.columnName>\</i\> value.
  */
 <if(attribute.allowsNull)>
-private <attribute.objectType> m__<attribute.columnNameNormalizedCapitalized>;
+private <attribute.objectType> m__<attribute.columnNameCapitalized>;
 <else>
-private <attribute.javaType> m__<attribute.columnNameNormalizedCapitalized>;
+private <attribute.javaType> m__<attribute.columnNameCapitalized>;
 <endif>
 
 >>
@@ -193,9 +193,9 @@ property_setter(attribute) ::= <<
  * @param value such information.
  */
 <if(attribute.allowsNull)>
-protected final void immutableSet<attribute.columnNameNormalizedCapitalized>(final <attribute.objectType> value)
+protected final void immutableSet<attribute.columnNameCapitalized>(final <attribute.objectType> value)
 <else>
-protected final void immutableSet<attribute.columnNameNormalizedCapitalized>(final <attribute.javaType> value)
+protected final void immutableSet<attribute.columnNameCapitalized>(final <attribute.javaType> value)
 <endif>
 
 {
@@ -207,13 +207,13 @@ protected final void immutableSet<attribute.columnNameNormalizedCapitalized>(fin
  * @param value such information.
  */
 <if(attribute.allowsNull)>
-protected void set<attribute.columnNameNormalizedCapitalized>(final <attribute.objectType> value)
+protected void set<attribute.columnNameCapitalized>(final <attribute.objectType> value)
 <else>
-protected void set<attribute.columnNameNormalizedCapitalized>(final <attribute.javaType> value)
+protected void set<attribute.columnNameCapitalized>(final <attribute.javaType> value)
 <endif>
 
 {
-    immutableSet<attribute.columnNameNormalizedCapitalized>(value);
+    immutableSet<attribute.columnNameCapitalized>(value);
 }
 >>
 
@@ -227,9 +227,9 @@ property_getter(attribute) ::= <<
  * @return such information.
  */
 <if(attribute.allowsNull)>
-public <attribute.objectType> get<attribute.columnNameNormalizedCapitalized>()
+public <attribute.objectType> get<attribute.columnNameCapitalized>()
 <else>
-public <attribute.javaType> get<attribute.columnNameNormalizedCapitalized>()
+public <attribute.javaType> get<attribute.columnNameCapitalized>()
 <endif>
 
 {
