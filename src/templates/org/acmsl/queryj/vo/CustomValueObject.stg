@@ -124,9 +124,9 @@ property_getter(attribute) ::= <<
  * @return such information.
  */
 <if(attribute.allowsNull)>
-public <attribute.objectType> get<attribute.columnNameNormalizedCapitalized>();
+public <attribute.objectType> get<attribute.columnNameCapitalized>();
 <else>
-public <attribute.javaType> get<attribute.columnNameNormalizedCapitalized>();
+public <attribute.javaType> get<attribute.columnNameCapitalized>();
 <endif>
 
 >>

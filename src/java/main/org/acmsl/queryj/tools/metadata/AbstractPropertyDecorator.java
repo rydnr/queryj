@@ -278,6 +278,15 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
+     * Retrieves the name, capitalized.
+     * @return such information.
+     */
+    public String getNameCapitalized()
+    {
+        return capitalize(getName());
+    }
+
+    /**
      * Lowers the case of given value.
      * @param value the value.
      * @return the value, after being processed.
