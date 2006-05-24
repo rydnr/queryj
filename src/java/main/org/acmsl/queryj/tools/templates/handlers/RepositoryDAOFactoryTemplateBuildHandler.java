@@ -41,16 +41,33 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.BuildException;
+
+/*
  * Importing some JDK classes.
  */
+import java.util.Collection;
 import java.util.Map;
+
+/*
+ * Importing some Apache Commons-Logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Builds the repository DAO factory implementation if requested.
@@ -69,6 +86,88 @@ public class RepositoryDAOFactoryTemplateBuildHandler
         return RepositoryDAOFactoryTemplateGenerator.getInstance();
     }
     
+    /**
+     * Uses the factory to create the template.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param factory the template factory.
+     * @param packageName the package name.
+     * @param projectPackage the base package.
+     * @param repository the repository.
+     * @param engineName the engine name.
+     * @param tableNames the table names.
+     * @param header the header.
+     * @return the template.
+     * @throws QueryJException on invalid input.
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition customSqlProvider != null
+     * @precondition packageName != null
+     * @precondition projectPackage != null
+     * @precondition repository != null
+     * @precondition engineName != null
+     * @precondition tableNames != null
+     * @precondition factory != null
+     */
+    protected BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
+        final BasePerRepositoryTemplateFactory templateFactory,
+        final String projectPackage,
+        final String packageName,
+        final String repository,
+        final String engineName,
+        final String header,
+        final Collection tableNames,
+        final Map parameters)
+      throws  QueryJException
+    {
+        BasePerRepositoryTemplate result = null;
+
+        if  (templateFactory instanceof RepositoryDAOFactoryTemplateFactory)
+        {
+            result =
+                ((RepositoryDAOFactoryTemplateFactory) templateFactory)
+                    .createTemplate(
+                        metadataManager,
+                        metadataTypeManager,
+                        customSqlProvider,
+                        packageName,
+                        projectPackage,
+                        repository,
+                        engineName,
+                        retrieveJNDIDataSource(parameters),
+                        tableNames,
+                        header);
+        }
+        else
+        {
+            LogFactory.getLog(RepositoryDAOFactoryTemplateBuildHandler.class).warn(
+                "Unexpected RepositoryDAOFactory template factory.");
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the JNDI location of the data source from the attribute map.
+     * @param parameters the parameter map.
+     * @return the JNDI location.
+     * @throws BuildException if the JNDI location retrieval process if faulty.
+     * @precondition parameters != null
+     */
+    protected String retrieveJNDIDataSource(final Map parameters)
+        throws  BuildException
+    {
+        return
+            (String)
+                parameters.get(
+                    ParameterValidationHandler.JNDI_DATASOURCES);
+    }
+
     /**
      * Retrieves the package name.
      * @param engineName the engine name.

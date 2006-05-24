@@ -217,7 +217,7 @@ public class KeywordRepositoryTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + decoration.capitalize(
+            + decorationUtils.capitalize(
                   template.getRepositoryName())
             + "KeywordRepository.java",
             template.generate());
