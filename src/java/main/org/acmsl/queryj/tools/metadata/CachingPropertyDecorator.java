@@ -74,17 +74,23 @@ public class CachingPropertyDecorator
     private Boolean m__bCachedNumberSmallerThanInt;
 
     /**
-     * The cached normalized/capitalized name.
+     * The cached capitalized name.
+     */
+    private String m__strCachedNameCapitalized;
+
+    /**
+     * The cached normalized/capitalized column name.
      */
     private String m__strCachedColumnNameNormalizedCapitalized;
 
     /**
-     * The cached normalized/uncapitalized name.
+     * The cached normalized/uncapitalized column name.
      */
     private String m__strCachedColumnNameNormalizedUncapitalized;
 
     /**
-     * Creates a <code>CachingPropertyDecorator</code> to decorate given property.
+     * Creates a <code>CachingPropertyDecorator</code> to decorate given
+     * property.
      * @param property the property to decorate.
      * @precondition property != null
      * @precondition metadataManager != null
@@ -123,6 +129,23 @@ public class CachingPropertyDecorator
     }
 
     /**
+     * Retrieves the Java type of the property.
+     * @return such information.
+     */
+    public String getJavaType()
+    {
+        String result = getCachedJavaType();
+
+        if  (result == null)
+        {
+            result = super.getJavaType();
+            setCachedJavaType(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Specifies the cached name lowercased.
      * @param nameLowercased such value.
      */
@@ -152,17 +175,63 @@ public class CachingPropertyDecorator
     }
 
     /**
-     * Retrieves the Java type of the property.
+     * Retrieves the name, in lower case.
      * @return such information.
      */
-    public String getJavaType()
+    public String getNameLowercased()
     {
-        String result = getCachedJavaType();
+        String result = getCachedNameLowercased();
 
         if  (result == null)
         {
-            result = super.getJavaType();
-            setCachedJavaType(result);
+            result = super.getNameLowercased();
+            setCachedNameLowercased(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached name capitalized.
+     * @param nameCapitalized such value.
+     */
+    protected final void immutableSetCachedNameCapitalized(
+        final String nameCapitalized)
+    {
+        m__strCachedNameCapitalized = nameCapitalized;
+    }
+
+    /**
+     * Specifies the cached name capitalized.
+     * @param nameCapitalized such value.
+     */
+    protected void setCachedNameCapitalized(
+        final String nameCapitalized)
+    {
+        immutableSetCachedNameCapitalized(nameCapitalized);
+    }
+
+    /**
+     * Retrieves the cached name capitalized.
+     * @return such value.
+     */
+    public String getCachedNameCapitalized()
+    {
+        return m__strCachedNameCapitalized;
+    }
+
+    /**
+     * Retrieves the name, in lower case.
+     * @return such information.
+     */
+    public String getNameCapitalized()
+    {
+        String result = getCachedNameCapitalized();
+
+        if  (result == null)
+        {
+            result = super.getNameCapitalized();
+            setCachedNameCapitalized(result);
         }
 
         return result;
@@ -208,23 +277,6 @@ public class CachingPropertyDecorator
         {
             result = super.getObjectType();
             setCachedObjectType(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the name, in lower case.
-     * @return such information.
-     */
-    public String getNameLowercased()
-    {
-        String result = getCachedNameLowercased();
-
-        if  (result == null)
-        {
-            result = super.getNameLowercased();
-            setCachedNameLowercased(result);
         }
 
         return result;
