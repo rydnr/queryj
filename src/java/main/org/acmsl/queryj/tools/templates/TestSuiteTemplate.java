@@ -78,7 +78,7 @@ public class TestSuiteTemplate
         final String suiteName)
     {
         super(
-            header,
+            (header != null) ? header : ACMSL_HEADER,
             decoratorFactory,
             packageName,
             testPackageName,

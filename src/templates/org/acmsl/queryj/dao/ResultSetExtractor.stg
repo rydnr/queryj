@@ -134,7 +134,7 @@ project_imports(
  * Importing project classes.
  */
 import <basePackageName>.<voSubpackageName>.<voName>;
-import <basePackageName>.<voSubpackageName>.<voName>Factory;
+import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
 
@@ -186,13 +186,13 @@ public Object extractData(final ResultSet resultSet)
     return
         extractData(
             (QueryResultSet) resultSet,
-            <input.vo_name>Factory.getInstance());
+            <input.vo_name>ValueObjectFactory.getInstance());
 }
 
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
- * @param factory the \<code><input.vo_name>Factory\</code>
+ * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
  * instance.
  * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
@@ -204,7 +204,7 @@ public Object extractData(final ResultSet resultSet)
  */
 protected <input.vo_name> extractData(
     final QueryResultSet resultSet,
-    final <input.vo_name>Factory factory)
+    final <input.vo_name>ValueObjectFactory factory)
   throws  SQLException,
           DataAccessException
 {
@@ -331,7 +331,7 @@ public Object extractData(final ResultSet resultSet)
             <input.lob_attributes:{get<it.nameCapitalized>()};
               separator=",\n">,
             getSelectForUpdateMode(),
-            <input.vo_name>Factory.getInstance());
+            <input.vo_name>ValueObjectFactory.getInstance());
 }
 
 /**
@@ -341,7 +341,7 @@ public Object extractData(final ResultSet resultSet)
    separator="\n">
  * @param selectForUpdate whether the operation is a
  * \<i>select for update\</i>.
- * @param factory the \<code><input.vo_name>Factory\</code>
+ * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
  * instance.
  * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
@@ -356,7 +356,7 @@ protected Object extractData(
     <input.lob_attributes:attribute_method_declaration(attr=it);
       separator=",\n">,
     final boolean selectForUpdateMode,
-    final <input.vo_name>Factory factory)
+    final <input.vo_name>ValueObjectFactory factory)
   throws  SQLException,
           DataAccessException
 {
