@@ -1074,7 +1074,6 @@ public class QueryJTask
             result.add(new MySQL4xMetaDataRetrievalHandler());
             result.add(new OracleMetaDataRetrievalHandler());
             result.add(new JdbcMetaDataRetrievalHandler());
-
             result.add(new CustomSqlValidationHandler());
 
             result.add(new DatabaseMetaDataLoggingHandler());
@@ -1091,7 +1090,7 @@ public class QueryJTask
 
             result.add(new TableRepositoryTemplateHandlerBundle());
 
-            result.add(new FunctionsBundle());
+            //result.add(new FunctionsBundle());
 
             result.add(new ProcedureRepositoryTemplateHandlerBundle());
 

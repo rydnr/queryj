@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.customsql.ParameterRefElement;
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -82,6 +83,7 @@ import java.text.SimpleDateFormat;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -352,13 +354,19 @@ public class CustomSqlValidationHandler
                 {
                     t_ResultSet = t_PreparedStatement.executeQuery();
 
-                    validateResultSet(
-                        t_ResultSet,
-                        sql,
-                        customSqlProvider.resolveReference(sql.getResultRef()),
-                        customSqlProvider,
-                        metadataTypeManager,
-                        log);
+                    ResultRefElement t_ResultRef =
+                        sql.getResultRef();
+                    
+                    if  (t_ResultRef != null)
+                    {
+                        validateResultSet(
+                            t_ResultSet,
+                            sql,
+                            customSqlProvider.resolveReference(t_ResultRef),
+                            customSqlProvider,
+                            metadataTypeManager,
+                            log);
+                    }
                 }
             }
             catch  (final SQLException sqlException)
@@ -946,14 +954,14 @@ public class CustomSqlValidationHandler
                         {
                             t_Method =
                                 retrieveMethod(
-                                    resultSet.getClass(),
+                                    ResultSet.class,
                                     getGetterMethod(
                                         t_Property.getType(),
                                         metadataTypeManager),
                                     new Class[]
                                     {
                                         (t_Property.getIndex() > 0)
-                                        ?  Integer.class
+                                        ?  Integer.TYPE
                                         :  String.class
                                     });
                         }
@@ -961,14 +969,51 @@ public class CustomSqlValidationHandler
                         {
                             throw
                                 new BuildException(
-                                      "Cannot retrieve result for property type"
+                                      "Cannot retrieve result for property type "
                                     + t_Property.getType()
                                     + " (" + t_Property.getId() + ")",
                                     noSuchMethod);
                         }
 
                         invokeResultSetGetter(
-                            t_Method, resultSet, t_Property, log);
+                            t_Method, resultSet, t_Property, sql, log);
+                    }
+                }
+            }
+            else if  (t_cProperties != null)
+            {
+                ResultSetMetaData t_Metadata = resultSet.getMetaData();
+
+                int t_iColumnCount = t_Metadata.getColumnCount();
+                
+                if  (t_iColumnCount < t_cProperties.size())
+                {
+                    throw
+                        new BuildException(
+                              "Invalid number of columns (" + t_iColumnCount + "): "
+                            + "expecting at least " + t_cProperties.size());
+                }
+
+                String t_strColumnName;
+                int t_iColumnType;
+                
+                for  (int t_iIndex = 1; t_iIndex <= t_iColumnCount; t_iIndex++)
+                {
+                    t_strColumnName = t_Metadata.getColumnName(t_iIndex);
+                    t_iColumnType = t_Metadata.getColumnType(t_iIndex);
+
+                    if  (!matches(
+                             t_strColumnName,
+                             t_iColumnType,
+                             t_iIndex,
+                             t_cProperties,
+                             metadataTypeManager))
+                    {
+                        log.warn(
+                              "Column not mapped ("
+                            + t_iIndex + ", "
+                            + t_strColumnName
+                            + ", " + t_iColumnType + ")");
                     }
                 }
             }
@@ -980,16 +1025,19 @@ public class CustomSqlValidationHandler
      * @param method the <code>ResultSet</code> getter method for given property.
      * @param resultSet the <code>ResultSet</code> instance.
      * @param property the property.
+     * @param sql the SQL element.
      * @param log the log.
      * @precondition method != null
      * @precondition resultSet != null
      * @precondition property != null
+     * @precondition sql != null
      * @precondition log != null
      */
     protected void invokeResultSetGetter(
         final Method method,
         final ResultSet resultSet,
         final Property property,
+        final Sql sql,
         final QueryJLog log)
     {
         try
@@ -1014,7 +1062,8 @@ public class CustomSqlValidationHandler
             if  (log != null)
             {
                 log.warn(
-                    "Could not retrieve result via "
+                      "Validation failed for " + sql.getId() + ":\n"
+                    + "Could not retrieve result via "
                     + "ResultSet." + method.getName()
                     + "("
                     + (   (property.getIndex() > 0)
@@ -1027,7 +1076,9 @@ public class CustomSqlValidationHandler
             throw
                 new BuildException(
                       "Could not retrieve result property "
-                    + property.getName(),
+                    + (   (property.getIndex() > 0)
+                       ?  "" + property.getIndex()
+                       :  property.getColumnName()),
                     illegalAccessException);
         }
         catch  (final InvocationTargetException invocationTargetException)
@@ -1035,7 +1086,8 @@ public class CustomSqlValidationHandler
             if  (log != null)
             {
                 log.warn(
-                    "Could not retrieve result via "
+                      "Validation failed for " + sql.getId() + ":\n"
+                    + "Could not retrieve result via "
                     + "ResultSet." + method.getName()
                     + "("
                     + (   (property.getIndex() > 0)
@@ -1047,8 +1099,11 @@ public class CustomSqlValidationHandler
 
             throw
                 new BuildException(
-                      "Could not retrieve result property "
-                    + property.getName(),
+                      "Validation failed for " + sql.getId() + ":\n"
+                    + "Could not retrieve result property "
+                    + (   (property.getIndex() > 0)
+                       ?  "" + property.getIndex()
+                       :  property.getColumnName()),
                     invocationTargetException);
         }
     }
@@ -1147,5 +1202,105 @@ public class CustomSqlValidationHandler
       throws  NoSuchMethodException
     {       
         return instanceClass.getDeclaredMethod(methodName, parameterClasses);
+    }
+
+    /**
+     * Checks whether given column information is represented by any of the
+     * defined properties.
+     * @param name the column name.
+     * @param type the column type.
+     * @param index the column index.
+     * @param properties the properties.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition properties != null
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean matches(
+        final String name,
+        final int type,
+        final int index,
+        final Collection properties,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        boolean result = false;
+
+        Iterator t_Iterator =
+            (properties != null) ? properties.iterator() : null;
+        
+        if  (t_Iterator != null)
+        {
+            Object t_Item;
+            int t_iPropertyIndex = 1;
+
+            while  (t_Iterator.hasNext())
+            {
+                t_Item = t_Iterator.next();
+               
+                if  (t_Item instanceof Property)
+                {
+                    if  (matches(
+                             name,
+                             type,
+                             index,
+                             (Property) t_Item,
+                             t_iPropertyIndex,
+                             metadataTypeManager))
+                    {
+                        result = true;
+                        break;
+                    }
+                    t_iPropertyIndex++;
+                }
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Checks whether given column information is represented by the
+     * defined property.
+     * @param name the column name.
+     * @param type the column type.
+     * @param index the column index.
+     * @param property the property.
+     * @param propertyIndex the property index.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition property != null
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean matches(
+        final String name,
+        final int type,
+        final int index,
+        final Property property,
+        final int propertyIndex,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        boolean result = true;
+
+        if  (   (name != null)
+             && (!name.equalsIgnoreCase(property.getName()))
+             && (!name.equalsIgnoreCase(property.getColumnName())))
+        {
+            result = false;
+        }
+
+        // This doesn't seem to work well for Oracle (2 != -5)
+//         if  (   (result)
+//              && (type != metadataTypeManager.getJavaType(property.getType())))
+//         {
+//             result = false;
+//         }
+
+        if  (   (result)
+             && (index != propertyIndex))
+        {
+            result = false;
+        }
+
+        return result;
     }
 }
