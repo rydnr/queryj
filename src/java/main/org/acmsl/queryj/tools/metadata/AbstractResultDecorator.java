@@ -40,8 +40,10 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Property;
+import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.ResultElement;
@@ -352,71 +354,122 @@ public abstract class AbstractResultDecorator
         return
             getProperties(
                 getPropertyRefs(),
+                getResult(),
                 getCustomSqlProvider(),
                 getMetadataManager(),
-                getDecoratorFactory());
+                getDecoratorFactory(),
+                CustomResultUtils.getInstance());
     }
 
     /**
      * Retrieves the properties.
      * @todo fix reference to customSqlProvider.
      * @param propertyRefs the property references.
+     * @param resultElement the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code>.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @return such information.
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
+     * @precondition customResultUtils != null
      */
     public Collection getProperties(
         final Collection propertyRefs,
+        final Result resultElement,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        final DecoratorFactory decoratorFactory,
+        final CustomResultUtils customResultUtils)
     {
         Collection result = new ArrayList();
 
-        if  (propertyRefs != null)
+        Iterator t_PropertyRefIterator =
+            (propertyRefs != null) ? propertyRefs.iterator() : null;
+
+        if  (t_PropertyRefIterator != null)
         {
-            Iterator t_PropertyRefIterator = propertyRefs.iterator();
+            PropertyRefElement t_PropertyRef = null;
+            Property t_Property = null;
 
-            if  (t_PropertyRefIterator != null)
+            while  (t_PropertyRefIterator.hasNext())
             {
-                PropertyRefElement t_PropertyRef = null;
-                Property t_Property = null;
+                t_PropertyRef =
+                    (PropertyRefElement) t_PropertyRefIterator.next();
 
-                while  (t_PropertyRefIterator.hasNext())
+                if  (t_PropertyRef != null)
                 {
-                    t_PropertyRef =
-                        (PropertyRefElement) t_PropertyRefIterator.next();
-
-                    if  (t_PropertyRef != null)
-                    {
-                        t_Property =
+                    t_Property =
                             customSqlProvider.resolveReference(t_PropertyRef);
 
-                        if  (t_Property != null)
+                    if  (t_Property != null)
+                    {
+                        result.add(
+                            decoratorFactory.createDecorator(
+                                t_Property, metadataManager));
+                    }
+                    else
+                    {
+                        try
                         {
-                            result.add(
-                                decoratorFactory.createDecorator(
-                                    t_Property, metadataManager));
+                            // todo throw something.
+                            LogFactory.getLog(ResultDecorator.class).warn(
+                                "Referenced property not found:"
+                                + t_PropertyRef.getId());
                         }
-                        else
+                        catch  (final Throwable throwable)
                         {
-                            try
-                            {
-                                // todo throw something.
-                                LogFactory.getLog(ResultDecorator.class).warn(
-                                    "Referenced property not found:"
-                                    + t_PropertyRef.getId());
-                            }
-                            catch  (final Throwable throwable)
-                            {
-                                // class-loading problem.
-                            }
+                            // class-loading problem.
                         }
                     }
+                }
+            }
+        }
+        else
+        {
+            String t_strTable =
+                customResultUtils.retrieveTable(
+                    resultElement,
+                    customSqlProvider,
+                    metadataManager);
+
+            MetadataTypeManager t_MetadataTypeManager =
+                metadataManager.getMetadataTypeManager();
+            
+            if  (   (t_strTable != null)
+                 && (t_MetadataTypeManager != null))
+            {
+                String[] t_astrColumnNames =
+                    metadataManager.getColumnNames(t_strTable);
+
+                int t_iCount =
+                    (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
+
+                String t_strColumnName;
+                boolean t_bAllowsNull;
+                for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+                {
+                    t_strColumnName = t_astrColumnNames[t_iIndex];
+
+                    t_bAllowsNull = 
+                        metadataManager.allowsNull(
+                            t_strTable, t_strColumnName);
+
+                    result.add(
+                        decoratorFactory.createDecorator(
+                            new PropertyElement(
+                                t_strTable + "." + t_strColumnName,
+                                t_strColumnName,
+                                t_iIndex + 1,
+                                t_strColumnName,
+                                t_MetadataTypeManager.getNativeType(
+                                    metadataManager.getColumnType(
+                                        t_strTable, t_strColumnName),
+                                    t_bAllowsNull),
+                                t_bAllowsNull),
+                            metadataManager));
                 }
             }
         }

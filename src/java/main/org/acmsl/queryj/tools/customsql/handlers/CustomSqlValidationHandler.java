@@ -45,7 +45,11 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
-import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.Property;
+import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
@@ -78,6 +82,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -225,21 +231,20 @@ public class CustomSqlValidationHandler
             {
                 Object t_CurrentItem = null;
 
-                SqlElement t_SqlElement = null;
+                Sql t_Sql = null;
 
                 while  (t_itElements.hasNext())
                 {
                     t_CurrentItem = t_itElements.next();
 
-                    if  (   (t_CurrentItem != null)
-                         && (t_CurrentItem instanceof SqlElement))
+                    if  (t_CurrentItem instanceof Sql)
                     {
-                        t_SqlElement = (SqlElement) t_CurrentItem;
+                        t_Sql = (Sql) t_CurrentItem;
 
-                        if  (t_SqlElement.isValidate())
+                        if  (t_Sql.isValidate())
                         {
                             validate(
-                                t_SqlElement,
+                                t_Sql,
                                 customSqlProvider,
                                 connection,
                                 metadataManager.getMetadataTypeManager(),
@@ -253,26 +258,26 @@ public class CustomSqlValidationHandler
 
     /**
      * Validates given sql element.
-     * @param sqlElement such element.
+     * @param sql such element.
      * @param customSqlProvider the custom sql provider.
      * @param connection the connection.
      * @param metadataTypeManager the metadata type manager.
      * @param log the log instance.
      * @throws BuildException if the sql is not valid.
-     * @precondition sqlElement != null
+     * @precondition sql != null
      * @precondition customSqlProvider != null
      * @precondition connection != null
      * @precondition metadataTypeManager != null
      */
     protected void validate(
-        final SqlElement sqlElement,
+        final Sql sql,
         final CustomSqlProvider customSqlProvider,
         final Connection connection,
         final MetadataTypeManager metadataTypeManager,
         final QueryJLog log)
       throws  BuildException
     {
-        String t_strSql = sqlElement.getValue();
+        String t_strSql = sql.getValue();
 
         SQLException t_ExceptionToWrap = null;
 
@@ -285,6 +290,7 @@ public class CustomSqlValidationHandler
         }
         
         PreparedStatement t_PreparedStatement = null;
+        ResultSet t_ResultSet = null;
 
         // The standard is true, but we assume false.
         boolean t_bLastAutoCommit = false;
@@ -332,21 +338,35 @@ public class CustomSqlValidationHandler
             try
             {
                 bindParameters(
-                    sqlElement,
+                    sql,
                     t_PreparedStatement,
                     customSqlProvider,
                     metadataTypeManager,
                     ConversionUtils.getInstance(),
                     log);
 
-                if  (   (SqlElement.INSERT.equals(sqlElement.getType()))
-                     || (SqlElement.DELETE.equals(sqlElement.getType())))
+                if  (   (Sql.INSERT.equals(sql.getType()))
+                     || (Sql.DELETE.equals(sql.getType())))
                 {
                     t_PreparedStatement.executeUpdate();
                 }
                 else
                 {
-                    t_PreparedStatement.executeQuery();
+                    t_ResultSet = t_PreparedStatement.executeQuery();
+
+                    ResultRefElement t_ResultRef =
+                        sql.getResultRef();
+                    
+                    if  (t_ResultRef != null)
+                    {
+                        validateResultSet(
+                            t_ResultSet,
+                            sql,
+                            customSqlProvider.resolveReference(t_ResultRef),
+                            customSqlProvider,
+                            metadataTypeManager,
+                            log);
+                    }
                 }
             }
             catch  (final SQLException sqlException)
@@ -358,6 +378,22 @@ public class CustomSqlValidationHandler
                 t_ExceptionToThrow = buildException;
             }
 
+            if  (t_ResultSet != null)
+            {
+                try
+                {
+                    t_ResultSet.close();
+                }
+                catch  (final SQLException sqlException)
+                {
+                    if  (log != null)
+                    {
+                        log.warn(
+                            "Cannot close result set.",
+                            sqlException);
+                    }
+                }
+            }
             try
             {
                 t_PreparedStatement.close();
@@ -415,7 +451,7 @@ public class CustomSqlValidationHandler
 
     /**
      * Binds the parameters to given statement.
-     * @param sqlElement the sql element.
+     * @param sql the sql.
      * @param statement the prepared statement.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataTypeManager the metadata type manager.
@@ -423,14 +459,14 @@ public class CustomSqlValidationHandler
      * @param log the log instance.
      * @throws SQLException if the binding process fails.
      * @throws BuildException if some problem occurs.
-     * @precondition sqlElement != null
+     * @precondition sql != null
      * @precondition statement != null
      * @precondition customSqlProvider != null
      * @precondition metadataTypeManager != null
      * @precondition conversionUtils != null
      */
     protected void bindParameters(
-        final SqlElement sqlElement,
+        final Sql sql,
         final PreparedStatement statement,
         final CustomSqlProvider customSqlProvider,
         final MetadataTypeManager metadataTypeManager,
@@ -442,7 +478,7 @@ public class CustomSqlValidationHandler
         BuildException exceptionToThrow = null;
 
         ParameterElement[] t_aParameters =
-            retrieveParameterElements(sqlElement, customSqlProvider);
+            retrieveParameterElements(sql, customSqlProvider);
 
         ParameterElement t_Parameter = null;
 
@@ -462,10 +498,6 @@ public class CustomSqlValidationHandler
         {
             t_Method = null;
 
-            t_Type = null;
-
-            t_strType = null;
-
             t_Parameter = t_aParameters[t_iParameterIndex];
 
             t_cSetterParams = new ArrayList();
@@ -477,7 +509,7 @@ public class CustomSqlValidationHandler
                 exceptionToThrow =
                     new BuildException(
                           "Invalid parameter at position " + t_iParameterIndex
-                        + " in sql element whose id is " + sqlElement.getId());
+                        + " in sql element whose id is " + sql.getId());
 
                 break;
             }
@@ -488,69 +520,12 @@ public class CustomSqlValidationHandler
                         metadataTypeManager.getJavaType(
                             t_Parameter.getType()));
 
-                try
-                {
-                    t_Type = Class.forName("java.lang." + t_strType);
-                }
-                catch  (final ClassNotFoundException firstClassNotFoundException)
-                {
-                    // Second try
-                    try
-                    {
-                        t_Type = Class.forName("java.util." + t_strType);
-                    }
-                    catch  (final ClassNotFoundException secondClassNotFoundException)
-                    {
-                        // third try
-                        try
-                        {
-                            t_Type = Class.forName("java.sql." + t_strType);
-                        }
-                        catch  (final ClassNotFoundException thirddClassNotFoundException)
-                        {
-                            // fourth try
-                            try
-                            {
-                                t_Type = Class.forName(t_strType);
-                            }
-                            catch  (final ClassNotFoundException fourthClassNotFoundException)
-                            {
-                                if  (log != null)
-                                {
-                                    log.warn(
-                                        "Cannot find parameter class: " + t_strType,
-                                        fourthClassNotFoundException);
-                                }
-                            }
-                        }
-                    }
-                }
+                t_Type =
+                    retrieveType(t_strType, t_Parameter.getType(), log);
             }
 
             if  (t_Type != null)
             {
-                if  (!t_strType.equals(t_Parameter.getType()))
-                {
-                    try
-                    {
-                        t_Type =
-                            (Class) t_Type.getDeclaredField("TYPE").get(t_Type);
-                    }
-                    catch  (final NoSuchFieldException noSuchFieldException)
-                    {
-                        // Nothing to do.
-                    }
-                    catch  (final IllegalAccessException illegalAccessException)
-                    {
-                        // Nothing to do.
-                    }
-                }
-
-                if  (t_Type.equals(java.util.Date.class))
-                {
-                    t_Type = Timestamp.class;
-                }
-
                 t_cSetterParams.add(t_Type);
 
                 Object t_ParameterValue = null;
@@ -558,11 +533,10 @@ public class CustomSqlValidationHandler
                 try
                 {
                     t_Method =
-                        statement.getClass().getDeclaredMethod(
+                        retrieveMethod(
+                            statement.getClass(),
                             getSetterMethod(t_strType, metadataTypeManager),
-                            (Class[])
-                                t_cSetterParams.toArray(EMPTY_CLASS_ARRAY));
-
+                            (Class[]) t_cSetterParams.toArray(EMPTY_CLASS_ARRAY));
                 }
                 catch  (final NoSuchMethodException noSuchMethodException)
                 {
@@ -716,7 +690,7 @@ public class CustomSqlValidationHandler
                     exceptionToThrow =
                         new BuildException(
                               "Cannot bind parameter [" + t_Parameter.getId()
-                            + "] in sql [" + sqlElement.getId() + "]");
+                            + "] in sql [" + sql.getId() + "]");
                 }
 
                 if  (exceptionToThrow == null)
@@ -782,19 +756,19 @@ public class CustomSqlValidationHandler
 
     /**
      * Retrieves the parameters for given sql element.
-     * @param sqlElement such element.
+     * @param sql such element.
      * @param customSqlProvider the custom sql provider.
      * @return the parameter elements.
-     * @precondition sqlElement != null
+     * @precondition sql != null
      * @precondition customSqlProvider != null
      */
     protected ParameterElement[] retrieveParameterElements(
-        final SqlElement sqlElement,
+        final Sql sql,
         final CustomSqlProvider customSqlProvider)
     {
         Collection t_cResult = new ArrayList();
 
-        Collection t_cParameterRefs = sqlElement.getParameterRefs();
+        Collection t_cParameterRefs = sql.getParameterRefs();
 
         if  (t_cParameterRefs != null)
         {
@@ -845,26 +819,44 @@ public class CustomSqlValidationHandler
         final String type, final MetadataTypeManager metadataTypeManager)
     {
         return
-            getSetterMethod(
-                type, metadataTypeManager, StringUtils.getInstance());
+            getAccessorMethod(
+                "set",  type, metadataTypeManager, StringUtils.getInstance());
     }
 
     /**
-     * Retrieves the setter method name.
+     * Retrieves the getter method name.
+     * @param type the data type.
+     * @param metadataTypeManager the metadata type manager.
+     * @return the associated getter method.
+     * @precondition type != null
+     * @precondition metadataTypeManager the metadata type manager.
+     */
+    protected String getGetterMethod(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            getAccessorMethod(
+                "get", type, metadataTypeManager, StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the accessor method name.
+     * @param prefix the prefix (set/get).
      * @param type the data type.
      * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @return the associated setter method.
+     * @return the associated getter method.
      * @precondition type != null
      * @precondition metaDataUtils != null
      * @precondition stringUtils != null
      */
-    protected String getSetterMethod(
+    protected String getAccessorMethod(
+        final String prefix,
         final String type,
         final MetadataTypeManager metadataTypeManager,
         final StringUtils stringUtils)
     {
-        String result = "set";
+        String result = prefix;
 
         if  (   ("Date".equals(type))
              || ("Timestamp".equals(type)))
@@ -877,6 +869,436 @@ public class CustomSqlValidationHandler
                 stringUtils.capitalize(
                     metadataTypeManager.getNativeType(
                         metadataTypeManager.getJavaType(type)), '|');
+        }
+
+        return result;
+    }
+
+    /**
+     * Validates the result set.
+     * @param resultSet the result set to validate.
+     * @param sql the sql.
+     * @param sqlResult the custom sql result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param log the log.
+     * @throws SQLException if the SQL operation fails.
+     * @throws BuildException if the expected result cannot be extracted.
+     * @precondition resultSet != null
+     * @precondition sql != null
+     * @precondition sqlResult != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataTypeManager != null
+     */
+    protected void validateResultSet(
+        final ResultSet resultSet,
+        final Sql sql,
+        final Result sqlResult,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataTypeManager metadataTypeManager,
+        final QueryJLog log)
+      throws SQLException,
+             BuildException
+    {
+        Collection t_cPropertyRefs =
+            (sqlResult != null) ? sqlResult.getPropertyRefs() : null;
+
+        if  (t_cPropertyRefs == null)
+        {
+            throw new BuildException("No return properties for " + sql.getId());
+        }
+        else
+        {
+            Iterator t_Iterator = t_cPropertyRefs.iterator();
+
+            Collection t_cProperties = null;
+
+            Object t_Item;
+            Property t_Property;
+
+            if  (t_Iterator != null)
+            {
+                t_cProperties = new ArrayList();
+
+                while  (t_Iterator.hasNext())
+                {
+                    t_Item = t_Iterator.next();
+
+                    if  (t_Item instanceof PropertyRefElement)
+                    {
+                        t_Property =
+                            customSqlProvider.resolveReference(
+                                (PropertyRefElement) t_Item);
+
+                        if  (t_Property != null)
+                        {
+                            t_cProperties.add(t_Property);
+                        }
+                    }
+                }
+            }
+
+            if  (resultSet.next())
+            {
+                t_Iterator = (t_cProperties != null) ? t_cProperties.iterator() : null;
+
+                if  (t_Iterator != null)
+                {
+                    Method t_Method;
+
+                    while  (t_Iterator.hasNext())
+                    {
+                        t_Property = (Property) t_Iterator.next();
+
+                        try
+                        {
+                            t_Method =
+                                retrieveMethod(
+                                    ResultSet.class,
+                                    getGetterMethod(
+                                        t_Property.getType(),
+                                        metadataTypeManager),
+                                    new Class[]
+                                    {
+                                        (t_Property.getIndex() > 0)
+                                        ?  Integer.TYPE
+                                        :  String.class
+                                    });
+                        }
+                        catch  (final NoSuchMethodException noSuchMethod)
+                        {
+                            throw
+                                new BuildException(
+                                      "Cannot retrieve result for property type "
+                                    + t_Property.getType()
+                                    + " (" + t_Property.getId() + ")",
+                                    noSuchMethod);
+                        }
+
+                        invokeResultSetGetter(
+                            t_Method, resultSet, t_Property, sql, log);
+                    }
+                }
+            }
+            else if  (t_cProperties != null)
+            {
+                ResultSetMetaData t_Metadata = resultSet.getMetaData();
+
+                int t_iColumnCount = t_Metadata.getColumnCount();
+                
+                if  (t_iColumnCount < t_cProperties.size())
+                {
+                    throw
+                        new BuildException(
+                              "Invalid number of columns (" + t_iColumnCount + "): "
+                            + "expecting at least " + t_cProperties.size());
+                }
+
+                String t_strColumnName;
+                int t_iColumnType;
+                
+                for  (int t_iIndex = 1; t_iIndex <= t_iColumnCount; t_iIndex++)
+                {
+                    t_strColumnName = t_Metadata.getColumnName(t_iIndex);
+                    t_iColumnType = t_Metadata.getColumnType(t_iIndex);
+
+                    if  (!matches(
+                             t_strColumnName,
+                             t_iColumnType,
+                             t_iIndex,
+                             t_cProperties,
+                             metadataTypeManager))
+                    {
+                        log.warn(
+                              "Column not mapped ("
+                            + t_iIndex + ", "
+                            + t_strColumnName
+                            + ", " + t_iColumnType + ")");
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Executes the <code>ResultSet.getXXX</code> method.
+     * @param method the <code>ResultSet</code> getter method for given property.
+     * @param resultSet the <code>ResultSet</code> instance.
+     * @param property the property.
+     * @param sql the SQL element.
+     * @param log the log.
+     * @precondition method != null
+     * @precondition resultSet != null
+     * @precondition property != null
+     * @precondition sql != null
+     * @precondition log != null
+     */
+    protected void invokeResultSetGetter(
+        final Method method,
+        final ResultSet resultSet,
+        final Property property,
+        final Sql sql,
+        final QueryJLog log)
+    {
+        try
+        {
+            Object[] t_aParameters = new Object[1];;
+
+            if  (property.getIndex() > 0)
+            {
+                t_aParameters[0] =
+                    new Integer(property.getIndex());
+            }
+            else
+            {
+                t_aParameters[0] =
+                    property.getColumnName();
+            }
+
+            method.invoke(resultSet, t_aParameters);
+        }
+        catch  (final IllegalAccessException illegalAccessException)
+        {
+            if  (log != null)
+            {
+                log.warn(
+                      "Validation failed for " + sql.getId() + ":\n"
+                    + "Could not retrieve result via "
+                    + "ResultSet." + method.getName()
+                    + "("
+                    + (   (property.getIndex() > 0)
+                       ?  "" + property.getIndex()
+                       :  property.getColumnName())
+                    + ")",
+                    illegalAccessException);
+            }
+
+            throw
+                new BuildException(
+                      "Could not retrieve result property "
+                    + (   (property.getIndex() > 0)
+                       ?  "" + property.getIndex()
+                       :  property.getColumnName()),
+                    illegalAccessException);
+        }
+        catch  (final InvocationTargetException invocationTargetException)
+        {
+            if  (log != null)
+            {
+                log.warn(
+                      "Validation failed for " + sql.getId() + ":\n"
+                    + "Could not retrieve result via "
+                    + "ResultSet." + method.getName()
+                    + "("
+                    + (   (property.getIndex() > 0)
+                       ?  "" + property.getIndex()
+                       :  property.getColumnName())
+                    + ")",
+                    invocationTargetException);
+            }
+
+            throw
+                new BuildException(
+                      "Validation failed for " + sql.getId() + ":\n"
+                    + "Could not retrieve result property "
+                    + (   (property.getIndex() > 0)
+                       ?  "" + property.getIndex()
+                       :  property.getColumnName()),
+                    invocationTargetException);
+        }
+    }
+
+    /**
+     * Retrieves the object type.
+     * @param type the type name.
+     * @param parameterType the parameter type.
+     * @param log the log.
+     * @return such class.
+     * @precondition type != null
+     * @precondition parameterType != null
+     */
+    protected Class retrieveType(
+        final String type, final String parameterType, final QueryJLog log)
+    {
+        Class result = null;
+
+        try
+        {
+            result = Class.forName("java.lang." + type);
+        }
+        catch  (final ClassNotFoundException firstClassNotFoundException)
+        {
+            // Second try
+            try
+            {
+                result = Class.forName("java.util." + type);
+            }
+            catch  (final ClassNotFoundException secondClassNotFoundException)
+            {
+                // third try
+                try
+                {
+                    result = Class.forName("java.sql." + type);
+                }
+                catch  (final ClassNotFoundException thirddClassNotFoundException)
+                {
+                    // fourth try
+                    try
+                    {
+                        result = Class.forName(type);
+                    }
+                    catch  (final ClassNotFoundException fourthClassNotFoundException)
+                    {
+                        if  (log != null)
+                        {
+                            log.warn(
+                                "Cannot find class: " + type,
+                                fourthClassNotFoundException);
+                        }
+                    }
+                }
+            }
+        }
+
+        if  (result != null)
+        {
+            if  (!type.equals(parameterType))
+            {
+                try
+                {
+                    result =
+                        (Class) result.getDeclaredField("TYPE").get(result);
+                }
+                catch  (final NoSuchFieldException noSuchFieldException)
+                {
+                    // Nothing to do.
+                }
+                catch  (final IllegalAccessException illegalAccessException)
+                {
+                    // Nothing to do.
+                }
+            }
+
+            if  (result.equals(java.util.Date.class))
+            {
+                result = Timestamp.class;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the method to call.
+     * @param instanceClass the instance class.
+     * @param methodName the method name.
+     * @return the <code>Method</code> instance.
+     * @throws NoSuchMethodException if the desired method is not available.
+     * @precondition instanceClass != null
+     * @precondition methodName != null
+     */
+    protected Method retrieveMethod(
+        final Class instanceClass, final String methodName, final Class[] parameterClasses)
+      throws  NoSuchMethodException
+    {       
+        return instanceClass.getDeclaredMethod(methodName, parameterClasses);
+    }
+
+    /**
+     * Checks whether given column information is represented by any of the
+     * defined properties.
+     * @param name the column name.
+     * @param type the column type.
+     * @param index the column index.
+     * @param properties the properties.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition properties != null
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean matches(
+        final String name,
+        final int type,
+        final int index,
+        final Collection properties,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        boolean result = false;
+
+        Iterator t_Iterator =
+            (properties != null) ? properties.iterator() : null;
+        
+        if  (t_Iterator != null)
+        {
+            Object t_Item;
+            int t_iPropertyIndex = 1;
+
+            while  (t_Iterator.hasNext())
+            {
+                t_Item = t_Iterator.next();
+               
+                if  (t_Item instanceof Property)
+                {
+                    if  (matches(
+                             name,
+                             type,
+                             index,
+                             (Property) t_Item,
+                             t_iPropertyIndex,
+                             metadataTypeManager))
+                    {
+                        result = true;
+                        break;
+                    }
+                    t_iPropertyIndex++;
+                }
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Checks whether given column information is represented by the
+     * defined property.
+     * @param name the column name.
+     * @param type the column type.
+     * @param index the column index.
+     * @param property the property.
+     * @param propertyIndex the property index.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition property != null
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean matches(
+        final String name,
+        final int type,
+        final int index,
+        final Property property,
+        final int propertyIndex,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        boolean result = true;
+
+        if  (   (name != null)
+             && (!name.equalsIgnoreCase(property.getName()))
+             && (!name.equalsIgnoreCase(property.getColumnName())))
+        {
+            result = false;
+        }
+
+        // This doesn't seem to work well for Oracle (2 != -5)
+//         if  (   (result)
+//              && (type != metadataTypeManager.getJavaType(property.getType())))
+//         {
+//             result = false;
+//         }
+
+        if  (   (result)
+             && (index != propertyIndex))
+        {
+            result = false;
         }
 
         return result;
