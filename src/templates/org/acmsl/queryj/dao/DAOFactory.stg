@@ -88,11 +88,6 @@ source(input) ::= <<
   daoImplementationClassName=input.dao_implementation_class_name)>
 
 /*
- * Importing some JDK classes.
- */
-import java.lang.ref.WeakReference;
-
-/*
  * Importing some Spring classes.
  */
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -193,34 +188,23 @@ public class <input.class_name>
     public static final String JNDI_LOCATION = "<input.jndi_location>";
 
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the
+     * \<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.html#dcl"
+     * >double-checked locking\</a>.
      */
-    private static WeakReference singleton;
+    private static class <input.class_name>SingletonContainer
+    {
+        /**
+         * The concrete singleton instance.
+         */
+        public static final <input.class_name> SINGLETON =
+            new <input.class_name>();
+    }
 
     /**
      * Public constructor to allow reflective instantiation.
      */
     public <input.class_name>() {};
-
-    /**
-     * Specifies a new weak reference.
-     * @param factory the new \<code\><input.class_name>\</code\>
-     * instance.
-     */
-    private static void setReference(
-        final <input.class_name> factory)
-    {
-        singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
-    }
 
     /**
      * Retrieves a \<code\><input.dao_factory_implementation_class_name>\</code\>
@@ -229,23 +213,7 @@ public class <input.class_name>
      */
     public static <input.class_name> get<input.engine_name>Instance()
     {
-        <input.class_name> result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (<input.class_name>) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new <input.class_name>();
-
-            setReference(result);
-        }
-
-        return result;
+        return <input.class_name>SingletonContainer.SINGLETON;
     }
 
     /**

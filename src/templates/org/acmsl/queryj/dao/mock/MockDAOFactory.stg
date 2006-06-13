@@ -84,11 +84,6 @@ source(input) ::= <<
   voName=input.vo_name)>
 
 /*
- * Importing some JDK classes.
- */
-import java.lang.ref.WeakReference;
-
-/*
  * Importing some Spring classes.
  */
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -176,33 +171,17 @@ public class Mock<table.voName>DAOFactory
     extends  <table.voName>DAOFactory
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the
+     * \<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.html#dcl"
+     * >double-checked locking\</a>.
      */
-    private static WeakReference singleton;
-
-    /**
-     * Public constructor to allow reflective instantiation.
-     */
-    public Mock<table.voName>DAOFactory() {};
-
-    /**
-     * Specifies a new weak reference.
-     * @param factory the new \<code\>Mock<table.voName>DAOFactory\</code\>
-     * instance.
-     */
-    private static void setReference(
-        final Mock<table.voName>DAOFactory factory)
+    private static class Mock<table.voName>DAOFactorySingletonContainer
     {
-        singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
+        /**
+         * The concrete singleton instance.
+         */
+        public static final Mock<table.voName>DAOFactory SINGLETON =
+            new Mock<table.voName>DAOFactory();
     }
 
     /**
@@ -212,23 +191,7 @@ public class Mock<table.voName>DAOFactory
      */
     public static Mock<table.voName>DAOFactory getMockInstance()
     {
-        Mock<table.voName>DAOFactory result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (Mock<table.voName>DAOFactory) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new Mock<table.voName>DAOFactory();
-
-            setReference(result);
-        }
-
-        return result;
+        return Mock<table.voName>DAOFactorySingletonContainer.SINGLETON;
     }
 
     /**

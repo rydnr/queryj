@@ -84,11 +84,6 @@ source(input) ::= <<
   voName=input.vo_name)>
 
 /*
- * Importing some JDK classes.
- */
-import java.lang.ref.WeakReference;
-
-/*
  * Importing some commons-logging classes.
  */
 import org.apache.commons.logging.LogFactory;
@@ -165,34 +160,23 @@ public class Xml<table.voName>DAOFactory
     extends  <table.voName>DAOFactory
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the
+     * \<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.html#dcl"
+     * >double-checked locking\</a>.
      */
-    private static WeakReference singleton;
+    private static class Xml<table.voName>DAOFactorySingletonContainer
+    {
+        /**
+         * The concrete singleton instance.
+         */
+        public static final Xml<table.voName>DAOFactory SINGLETON =
+            new Xml<table.voName>DAOFactory();
+    }
 
     /**
      * Public constructor to allow reflective instantiation.
      */
     public Xml<table.voName>DAOFactory() {};
-
-    /**
-     * Specifies a new weak reference.
-     * @param factory the new \<code\>Xml<table.voName>DAOFactory\</code\>
-     * instance.
-     */
-    private static void setReference(
-        final Xml<table.voName>DAOFactory factory)
-    {
-        singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
-    }
 
     /**
      * Retrieves a \<code\>Xml<table.voName>DAOFactory\</code\>
@@ -201,23 +185,7 @@ public class Xml<table.voName>DAOFactory
      */
     public static Xml<table.voName>DAOFactory getXmlInstance()
     {
-        Xml<table.voName>DAOFactory result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (Xml<table.voName>DAOFactory) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new Xml<table.voName>DAOFactory();
-
-            setReference(result);
-        }
-
-        return result;
+        return Xml<table.voName>DAOFactorySingletonContainer.SINGLETON;
     }
 
     /**
