@@ -41,11 +41,13 @@ package org.acmsl.queryj.tools.customsql.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.AntCommand;
+import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
 import org.acmsl.queryj.tools.customsql.Property;
+import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
@@ -247,6 +249,7 @@ public class CustomSqlValidationHandler
                                 t_Sql,
                                 customSqlProvider,
                                 connection,
+                                metadataManager,
                                 metadataManager.getMetadataTypeManager(),
                                 log);
                         }
@@ -261,18 +264,21 @@ public class CustomSqlValidationHandler
      * @param sql such element.
      * @param customSqlProvider the custom sql provider.
      * @param connection the connection.
+     * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param log the log instance.
      * @throws BuildException if the sql is not valid.
      * @precondition sql != null
      * @precondition customSqlProvider != null
      * @precondition connection != null
+     * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
     protected void validate(
         final Sql sql,
         final CustomSqlProvider customSqlProvider,
         final Connection connection,
+        final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final QueryJLog log)
       throws  BuildException
@@ -364,6 +370,7 @@ public class CustomSqlValidationHandler
                             sql,
                             customSqlProvider.resolveReference(t_ResultRef),
                             customSqlProvider,
+                            metadataManager,
                             metadataTypeManager,
                             log);
                     }
@@ -763,8 +770,7 @@ public class CustomSqlValidationHandler
      * @precondition customSqlProvider != null
      */
     protected ParameterElement[] retrieveParameterElements(
-        final Sql sql,
-        final CustomSqlProvider customSqlProvider)
+        final Sql sql, final CustomSqlProvider customSqlProvider)
     {
         Collection t_cResult = new ArrayList();
 
@@ -797,8 +803,7 @@ public class CustomSqlValidationHandler
      * @throws BuildException if the provider cannot be stored for any reason.
      * @precondition parameters != null
      */
-    protected Connection retrieveConnection(
-        final Map parameters)
+    protected Connection retrieveConnection(final Map parameters)
       throws  BuildException
     {
         return
@@ -880,6 +885,7 @@ public class CustomSqlValidationHandler
      * @param sql the sql.
      * @param sqlResult the custom sql result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @param log the log.
      * @throws SQLException if the SQL operation fails.
@@ -888,6 +894,7 @@ public class CustomSqlValidationHandler
      * @precondition sql != null
      * @precondition sqlResult != null
      * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
     protected void validateResultSet(
@@ -895,56 +902,37 @@ public class CustomSqlValidationHandler
         final Sql sql,
         final Result sqlResult,
         final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final QueryJLog log)
       throws SQLException,
              BuildException
     {
-        Collection t_cPropertyRefs =
-            (sqlResult != null) ? sqlResult.getPropertyRefs() : null;
-
-        if  (t_cPropertyRefs == null)
+        Collection t_cProperties =
+            retrieveProperties(
+                sql,
+                sqlResult,
+                customSqlProvider,
+                metadataManager,
+                metadataTypeManager);
+        
+        if  (   (t_cProperties == null)
+             || (t_cProperties.size() == 0))
         {
             throw new BuildException("No return properties for " + sql.getId());
         }
         else
         {
-            Iterator t_Iterator = t_cPropertyRefs.iterator();
-
-            Collection t_cProperties = null;
-
-            Object t_Item;
-            Property t_Property;
-
-            if  (t_Iterator != null)
-            {
-                t_cProperties = new ArrayList();
-
-                while  (t_Iterator.hasNext())
-                {
-                    t_Item = t_Iterator.next();
-
-                    if  (t_Item instanceof PropertyRefElement)
-                    {
-                        t_Property =
-                            customSqlProvider.resolveReference(
-                                (PropertyRefElement) t_Item);
-
-                        if  (t_Property != null)
-                        {
-                            t_cProperties.add(t_Property);
-                        }
-                    }
-                }
-            }
-
             if  (resultSet.next())
             {
-                t_Iterator = (t_cProperties != null) ? t_cProperties.iterator() : null;
+                Iterator t_Iterator =
+                    (t_cProperties != null) ? t_cProperties.iterator() : null;
 
                 if  (t_Iterator != null)
                 {
                     Method t_Method;
+
+                    Property t_Property;
 
                     while  (t_Iterator.hasNext())
                     {
@@ -1019,7 +1007,176 @@ public class CustomSqlValidationHandler
             }
         }
     }
+    
+    /**
+     * Retrieves the properties declared for given result.
+     * @param resultSet the result set to validate.
+     * @param sql the sql.
+     * @param sqlResult the custom sql result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return such properties.
+     * @precondition sql != null
+     * @precondition sqlResult != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    protected Collection retrieveProperties(
+        final Sql sql,
+        final Result sqlResult,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        Collection result = new ArrayList();
+        
+        Collection t_cPropertyRefs =
+            (sqlResult != null) ? sqlResult.getPropertyRefs() : null;
 
+        if  (t_cPropertyRefs == null)
+        {
+            result =
+                retrieveImplicitProperties(
+                    sqlResult,
+                    customSqlProvider,
+                    metadataManager,
+                    metadataTypeManager);
+        }
+        else
+        {
+            Iterator t_Iterator = t_cPropertyRefs.iterator();
+
+            Object t_Item;
+            Property t_Property;
+
+            if  (t_Iterator != null)
+            {
+                while  (t_Iterator.hasNext())
+                {
+                    t_Item = t_Iterator.next();
+
+                    if  (t_Item instanceof PropertyRefElement)
+                    {
+                        t_Property =
+                            customSqlProvider.resolveReference(
+                                (PropertyRefElement) t_Item);
+
+                        if  (t_Property != null)
+                        {
+                            result.add(t_Property);
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the implicit properties declared for given result.
+     * @param sqlResult the custom sql result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return such properties.
+     * @precondition sql != null
+     * @precondition sqlResult != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    protected Collection retrieveImplicitProperties(
+        final Result sqlResult,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            retrieveImplicitProperties(
+                sqlResult,
+                customSqlProvider,
+                metadataManager,
+                metadataTypeManager,
+                CustomResultUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the implicit properties declared for given result.
+     * @param sqlResult the custom sql result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @return such properties.
+     * @precondition sql != null
+     * @precondition sqlResult != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition customResultUtils != null
+     */
+    protected Collection retrieveImplicitProperties(
+        final Result sqlResult,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomResultUtils customResultUtils)
+    {
+        Collection result = new ArrayList();
+
+        String t_strTable =
+            customResultUtils.retrieveTable(
+                sqlResult,
+                customSqlProvider,
+                metadataManager);
+
+        if  (t_strTable != null)
+        {
+            String[] t_astrColumnNames =
+                metadataManager.getColumnNames(t_strTable);
+
+            int t_iCount =
+                (t_astrColumnNames != null)
+                ? t_astrColumnNames.length : 0;
+
+            String t_strId;
+            String t_strColumnName;
+            String t_strName;
+            String t_strType;
+            boolean t_bNullable;
+
+            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                t_strColumnName = t_astrColumnNames[t_iIndex];
+
+                t_strId = t_strTable + "." + t_strColumnName + ".property";
+                
+                t_strName = t_strColumnName;
+                t_strType =
+                    metadataTypeManager.getNativeType(
+                        metadataManager.getColumnType(
+                            t_strTable, t_strColumnName));
+                
+                t_bNullable =
+                    metadataManager.allowsNull(t_strTable, t_strColumnName);
+
+                result.add(
+                    new PropertyElement(
+                        t_strId,
+                        t_strColumnName,
+                        t_iIndex + 1,
+                        t_strName,
+                        t_strType,
+                        t_bNullable));
+            }
+        }
+
+        return result;
+    }
+    
     /**
      * Executes the <code>ResultSet.getXXX</code> method.
      * @param method the <code>ResultSet</code> getter method for given property.
@@ -1042,7 +1199,7 @@ public class CustomSqlValidationHandler
     {
         try
         {
-            Object[] t_aParameters = new Object[1];;
+            Object[] t_aParameters = new Object[1];
 
             if  (property.getIndex() > 0)
             {

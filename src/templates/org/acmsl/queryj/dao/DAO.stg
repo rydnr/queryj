@@ -808,16 +808,16 @@ public class <input.engine_name><input.vo_name>DAO
         deleteNoFk(
             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
     }
-<input.foreign_keys:fk_delete_method(
-  foreignKey=it, input=input); separator="\n">
+    <input.foreign_keys:fk_delete_method(
+      foreignKey=it, input=input); separator="\n">
 
-<input.custom_selects:custom_select(
-  cs=it,
-  input=input); separator="\n">
+    <input.custom_selects:custom_select(
+      cs=it,
+      input=input); separator="\n">
 
-<input.custom_updates_or_inserts:custom_update_or_insert(
-  cs=it,
-  input=input); separator="\n">
+    <input.custom_updates_or_inserts:custom_update_or_insert(
+      cs=it,
+      input=input); separator="\n">
 
     /**
      * Extracts \<i><input.vo_name>\</i> value objects from result sets.
@@ -1158,7 +1158,7 @@ protected Query buildDeleteBy<foreignKey:{<it.nameCapitalized>}>Query()
  <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @return the \<code>DeleteQuery\</code> instance.
  */
-protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query()
+protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(final QueryFactory queryFactory)
 {
     DeleteQuery result = queryFactory.createDeleteQuery();
 
@@ -1169,12 +1169,12 @@ protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query()
 
 /**
  * Builds the query required to \<i>delete\</i> a concrete
- * \<code><input.table_name>\</code> entity, determined by a concrete foreign key.
+ * \<code><input.table_name>\</code> entity, determined by a foreign key.
  <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @param query the query to initialize.
  <precondition_notnull("query")>
  */
-protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(
+protected void buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(
     final DeleteQuery query)
 {
     query.deleteFrom(<input.table_name_uppercased>);
@@ -1188,6 +1188,7 @@ protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(
 /**
  * Deletes <input.table_name> information from the persistence layer filtering
  * by given foreign keys.
+ * \<br/>\<b>This method is not implemented yet\</b>.
  <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
  */
 public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
@@ -1195,13 +1196,14 @@ public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
 {
     deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
         <foreignKey:{<it.nameLowercased>}; separator=",\n">,
-        buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query,
+        buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(),
         getDataSource());
 }
 
 /**
  * Deletes <input.table_name> information from the persistence layer filtering
  * by given foreign keys.
+ * \<br/>\<b>This method is not implemented yet\</b>.
  <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @param query the delete query.
  * @param dataSource the \<code>DataSource\<code> instance.
@@ -1222,6 +1224,7 @@ protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
 /**
  * Deletes <input.table_name> information from the persistence layer filtering
  * by given foreign keys.
+ * \<br/>\<b>This method is not implemented yet\</b>.
  <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @param query the delete query.
  * @param transactionManager the
@@ -1247,6 +1250,7 @@ protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
 /**
  * Deletes <input.table_name> information from the persistence layer filtering
  * by given foreign keys.
+ * \<br/>\<b>This method is not implemented yet\</b>.
  <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @param query the delete query.
  * @param transactionTemplate the \<code>TransactionTemplate\<code>
@@ -1259,12 +1263,15 @@ protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
     final Query query,
     final TransactionTemplate transactionTemplate)
 {
+    throw new IllegalArgumentException("Not implemented yet");
+    /*
     transactionTemplate.execute(
         new UpdateTransactionCallback(
             new QueryPreparedStatementCreator(query),
             new <input.vo_name>By<foreignKey:{attr |<attr.nameCapitalized>}>StatementSetter(
-                <foreignKey:{attr |<attr.name>}; separator=",\n">),
+                <foreignKey:{attr |<attr.nameLowercased>}; separator=",\n">),
             this));
+    */
 }
 >>
 
