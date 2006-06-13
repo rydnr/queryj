@@ -143,11 +143,80 @@ public class CustomResultSetExtractorTemplateBuildHandler
     protected void storeTemplates(
         final BasePerCustomResultTemplate[] templates, final Map parameters)
     {
+        Collection t_cFilteredTemplates = new ArrayList();
+        
+        int t_iCount = (templates != null) ? templates.length : 0;
+
+        BasePerCustomResultTemplate t_Template;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_Template = templates[t_iIndex];
+            
+            if  (matchesSqlFilter(t_Template))
+            {
+                t_cFilteredTemplates.add(t_Template);
+            }
+        }
+        
         parameters.put(
             TemplateMappingManager.CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES,
-            templates);
+            t_cFilteredTemplates.toArray(EMPTY_BASEPERCUSTOMRESULTTEMPLATE_ARRAY));
     }
 
+    /**
+     * Checks whether the template matches the filter consisting of
+     * finding out if there's any custom sql defined for the custom result.
+     * @param template the template to check.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean matchesSqlFilter(final BasePerCustomResultTemplate template)
+    {
+        boolean result = false;
+
+        if  (template != null)
+        {
+            result =
+                matchesSqlFilter(
+                    template.getResult(),
+                    template.getCustomSqlProvider(),
+                    template.getMetadataManager(),
+                    CustomResultUtils.getInstance());
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Checks whether the template matches the filter consisting of
+     * finding out if there's any custom sql defined for the custom result.
+     * @param resultElement the custom result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition resultElement != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition customResultUtils != null
+     */
+    protected boolean matchesSqlFilter(
+        final Result resultElement,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final CustomResultUtils customResultUtils)
+    {
+        boolean result = false;
+
+        String t_strTable =
+            customResultUtils.retrieveTable(
+                resultElement, customSqlProvider, metadataManager);
+        
+        result = (t_strTable != null);
+
+        return result;
+    }
+    
     /**
      * Retrieves the package name from the attribute map.
      * @param projectPackage the project package.
