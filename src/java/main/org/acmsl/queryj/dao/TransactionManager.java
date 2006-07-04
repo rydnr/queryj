@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -58,9 +59,14 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 
 /*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Manager;
+import org.acmsl.commons.patterns.Singleton;
+
+/*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -75,11 +81,20 @@ import javax.sql.DataSource;
  *         >Jose San Leandro Armendariz</a>
  */
 public class TransactionManager
+    implements Manager,
+               Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class TransactionManagerSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final TransactionManager SINGLETON =
+            new TransactionManager();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -88,46 +103,12 @@ public class TransactionManager
     protected TransactionManager() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param manager the new manager instance.
-     */
-    protected static void setReference(final TransactionManager manager)
-    {
-        singleton = new WeakReference(manager);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a TransactionManager instance.
+     * Retrieves a <code>TransactionManager</code> instance.
      * @return such instance.
      */
     public static TransactionManager getInstance()
     {
-        TransactionManager result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (TransactionManager) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new TransactionManager();
-
-            setReference(result);
-        }
-
-        return result;
+        return TransactionManagerSingletonContainer.SINGLETON;
     }
 
     /**

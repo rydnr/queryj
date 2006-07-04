@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -50,23 +51,26 @@ import org.acmsl.queryj.UpdateQuery;
  * Importing ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
-
-/*
- * Importing some JDK classes.
- */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Singleton;
 
 /**
  * Has the responsiblity of knowing how to create queries.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
 public class QueryFactory
-    implements  Factory
+    implements  Factory,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class QueryFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final QueryFactory SINGLETON = new QueryFactory();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -74,46 +78,12 @@ public class QueryFactory
     protected QueryFactory() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param factory the factory instance to use.
-     */
-    protected static void setReference(final QueryFactory factory)
-    {
-        singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a QueryFactory instance.
+     * Retrieves a <code>QueryFactory</code> instance.
      * @return such instance.
      */
     public static QueryFactory getInstance()
     {
-        QueryFactory result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (QueryFactory) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new QueryFactory();
-
-            setReference(result);
-        }
-
-        return result;
+        return QueryFactorySingletonContainer.SINGLETON;
     }
 
     /**

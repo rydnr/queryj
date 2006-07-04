@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -54,6 +55,7 @@ import org.acmsl.queryj.tools.templates.dao.xml
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
@@ -63,7 +65,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 /**
  * Is able to generate XML value object factories according to database
@@ -73,12 +74,20 @@ import java.lang.ref.WeakReference;
  * @version $Revision$ at $Date$ by $Author$
  */
 public class XMLValueObjectFactoryTemplateGenerator
-    implements  XMLValueObjectFactoryTemplateFactory
+    implements  XMLValueObjectFactoryTemplateFactory,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class XMLValueObjectFactoryTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final XMLValueObjectFactoryTemplateGenerator SINGLETON =
+            new XMLValueObjectFactoryTemplateGenerator();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -86,47 +95,12 @@ public class XMLValueObjectFactoryTemplateGenerator
     protected XMLValueObjectFactoryTemplateGenerator() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    protected static void setReference(
-        XMLValueObjectFactoryTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a XMLValueObjectFactoryTemplateGenerator instance.
+     * Retrieves a <code>XMLValueObjectFactoryTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static XMLValueObjectFactoryTemplateGenerator getInstance()
     {
-        XMLValueObjectFactoryTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (XMLValueObjectFactoryTemplateGenerator) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new XMLValueObjectFactoryTemplateGenerator();
-
-            setReference(result);
-        }
-
-        return result;
+        return XMLValueObjectFactoryTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

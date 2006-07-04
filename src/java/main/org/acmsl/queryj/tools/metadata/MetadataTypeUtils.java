@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -41,12 +41,8 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing ACM-SL Commons classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
-
-/*
- * Importing some JDK classes.
- */
-import java.lang.ref.WeakReference;
 
 /**
  * Provides some methods commonly-used when working with types of metadata.
@@ -54,12 +50,20 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class MetadataTypeUtils
-    implements Utils
+    implements  Singleton,
+                Utils
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class MetadataTypeUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final MetadataTypeUtils SINGLETON =
+            new MetadataTypeUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -67,46 +71,12 @@ public class MetadataTypeUtils
     protected MetadataTypeUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final MetadataTypeUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>MetadataTypeUtils</code> instance.
      * @return such instance.
      */
     public static MetadataTypeUtils getInstance()
     {
-        MetadataTypeUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (MetadataTypeUtils) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new MetadataTypeUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return MetadataTypeUtilsSingletonContainer.SINGLETON;
     }
 
     /**

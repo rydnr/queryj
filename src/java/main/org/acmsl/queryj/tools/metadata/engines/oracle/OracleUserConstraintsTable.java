@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armend?riz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armend?riz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -51,9 +52,9 @@ import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Singleton;
 
 /**
  * Represents the USER_CONSTRAINTS table in the persistence domain.
@@ -61,11 +62,19 @@ import java.lang.ref.WeakReference;
  */
 public class OracleUserConstraintsTable
     extends  Table
+    implements  Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class OracleUserConstraintsTableSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final OracleUserConstraintsTable SINGLETON =
+            new OracleUserConstraintsTable();
+    }
 
     /**
      * The user_constraints table constraint_name field.
@@ -121,24 +130,6 @@ public class OracleUserConstraintsTable
     }
 
     /**
-     * Specifies a new weak reference.
-     * @param table the table instance to use.
-     */
-    protected static void setReference(final OracleUserConstraintsTable table)
-    {
-        singleton = new WeakReference(table);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a OracleUserConstraintsTable instance.
      * @param alias the desired table alias.
      * @return such instance.
@@ -165,23 +156,7 @@ public class OracleUserConstraintsTable
      */
     public static OracleUserConstraintsTable getInstance()
     {
-        OracleUserConstraintsTable result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (OracleUserConstraintsTable) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new OracleUserConstraintsTable() { };
-
-            setReference(result);
-        }
-
-        return result;
+        return OracleUserConstraintsTableSingletonContainer.SINGLETON;
     }
 
     /**

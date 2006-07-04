@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -50,9 +50,9 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Singleton;
 
 /**
  * Abstract factory for template-specific decorators.
@@ -60,12 +60,20 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class CachingDecoratorFactory
-    implements  DecoratorFactory
+    implements  DecoratorFactory,
+                Singleton
 {
     /**
-     * A singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference m__Singleton;
+    private static class CachingDecoratorFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final CachingDecoratorFactory SINGLETON =
+            new CachingDecoratorFactory();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -73,46 +81,12 @@ public class CachingDecoratorFactory
     protected CachingDecoratorFactory() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param factory the factory instance to use.
-     */
-    protected static void setReference(final CachingDecoratorFactory factory)
-    {
-        m__Singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return m__Singleton;
-    }
-
-    /**
      * Retrieves a <code>CachingDecoratorFactory</code> instance.
      * @return such instance.
      */
     public static CachingDecoratorFactory getInstance()
     {
-        CachingDecoratorFactory result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (CachingDecoratorFactory) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new CachingDecoratorFactory();
-
-            setReference(result);
-        }
-
-        return result;
+        return CachingDecoratorFactorySingletonContainer.SINGLETON;
     }
 
     /**

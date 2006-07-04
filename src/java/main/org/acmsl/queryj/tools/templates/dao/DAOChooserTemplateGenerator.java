@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -57,6 +57,7 @@ import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -65,7 +66,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 /**
@@ -76,12 +76,19 @@ import java.util.Collection;
  */
 public class DAOChooserTemplateGenerator
     implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator
+                BasePerRepositoryTemplateGenerator,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class DAOChooserTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final DAOChooserTemplateGenerator SINGLETON = new DAOChooserTemplateGenerator();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -89,47 +96,12 @@ public class DAOChooserTemplateGenerator
     protected DAOChooserTemplateGenerator() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    protected static void setReference(
-        final DAOChooserTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a DAOChooserTemplateGenerator instance.
+     * Retrieves a <code>DAOChooserTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static DAOChooserTemplateGenerator getInstance()
     {
-        DAOChooserTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (DAOChooserTemplateGenerator) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new DAOChooserTemplateGenerator();
-
-            setReference(result);
-        }
-
-        return result;
+        return DAOChooserTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

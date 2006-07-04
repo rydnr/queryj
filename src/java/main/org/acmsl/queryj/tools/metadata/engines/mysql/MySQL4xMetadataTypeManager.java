@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -45,9 +46,14 @@ package org.acmsl.queryj.tools.metadata.engines.mysql;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
 
 /*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Manager;
+import org.acmsl.commons.patterns.Singleton;
+
+/*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.sql.Types;
 import java.util.Map;
 import java.util.HashMap;
@@ -59,11 +65,19 @@ import java.util.HashMap;
  */
 public class MySQL4xMetadataTypeManager
     extends  JdbcMetadataTypeManager
+    implements  Manager
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class MySQL4xMetadataTypeManagerSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final MySQL4xMetadataTypeManager SINGLETON =
+            new MySQL4xMetadataTypeManager();
+    }
 
     /**
      * Creates an empty <code>MySQL4xMetadataTypeManager</code>.
@@ -71,46 +85,12 @@ public class MySQL4xMetadataTypeManager
     public MySQL4xMetadataTypeManager() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param manager the manager instance to use.
-     */
-    private static void setReference(final MySQL4xMetadataTypeManager manager)
-    {
-        singleton = new WeakReference(manager);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>MySQL4xMetadataTypeManager</code> instance.
      * @return such instance.
      */
     public static JdbcMetadataTypeManager getInstance()
     {
-        MySQL4xMetadataTypeManager result = null;
-
-        WeakReference t_Reference = getReference();
-
-        if  (t_Reference != null)
-        {
-            result = (MySQL4xMetadataTypeManager) t_Reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new MySQL4xMetadataTypeManager();
-
-            setReference(result);
-        }
-
-        return result;
+        return MySQL4xMetadataTypeManagerSingletonContainer.SINGLETON;
     }
 
     /**

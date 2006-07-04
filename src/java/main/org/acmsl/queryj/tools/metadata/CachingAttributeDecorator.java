@@ -150,6 +150,11 @@ public class CachingAttributeDecorator
     private Boolean m__bCachedNumberSmallerThanInt;
 
     /**
+     * The cached Java type.
+     */
+    private String m__strCachedJavaType;
+
+    /**
      * Creates a <code>CachingAttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
@@ -1026,5 +1031,49 @@ public class CachingAttributeDecorator
         }
 
         return result.booleanValue();
+    }
+
+    /**
+     * Specifies the cached Java type.
+     * @param type such type.
+     */
+    protected final void immutableSetCachedJavaType(final String type)
+    {
+        m__strCachedJavaType = type;
+    }
+
+    /**
+     * Specifies the cached Java type.
+     * @param type such type.
+     */
+    protected void setCachedJavaType(final String type)
+    {
+        immutableSetCachedJavaType(type);
+    }
+
+    /**
+     * Retrieves the cached Java type.
+     * @return such type.
+     */
+    public String getCachedJavaType()
+    {
+        return m__strCachedJavaType;
+    }
+
+    /**
+     * Retrieves the Java type of the property.
+     * @return such information.
+     */
+    public String getJavaType()
+    {
+        String result = getCachedJavaType();
+
+        if  (result == null)
+        {
+            result = super.getJavaType();
+            setCachedJavaType(result);
+        }
+
+        return result;
     }
 }

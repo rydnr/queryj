@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -12,7 +13,7 @@
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    General Public License for more details.
 
     You should have received a copy of the GNU General Public
     License along with this library; if not, write to the Free Software
@@ -42,9 +43,10 @@ package org.acmsl.queryj.dao;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.patterns.Utils;
 
 /*
  * Importing Java extension classes.
@@ -57,11 +59,19 @@ import javax.sql.DataSource;
  *         >Jose San Leandro Armendariz</a>
  */
 public class JndiUtils
+    implements  Singleton,
+                Utils
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class JndiUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final JndiUtils SINGLETON = new JndiUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -70,46 +80,12 @@ public class JndiUtils
     protected JndiUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the new <code>JndiUtils</code> instance.
-     */
-    protected static void setReference(final JndiUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>JndiUtils</code> instance.
      * @return such instance.
      */
     public static JndiUtils getInstance()
     {
-        JndiUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (JndiUtils) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new JndiUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return JndiUtilsSingletonContainer.SINGLETON;
     }
 
     /**

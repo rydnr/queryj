@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -47,6 +48,7 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -57,7 +59,6 @@ import org.apache.commons.logging.Log;
 /*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.sql.Types;
 import java.util.Map;
 import java.util.HashMap;
@@ -69,11 +70,19 @@ import java.util.HashMap;
  */
 public class OracleMetadataTypeManager
     extends  JdbcMetadataTypeManager
+    implements  Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class OracleMetadataTypeManagerSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final OracleMetadataTypeManager SINGLETON =
+            new OracleMetadataTypeManager();
+    }
 
     /**
      * Creates an empty <code>OracleMetadataTypeManager</code>.
@@ -81,47 +90,12 @@ public class OracleMetadataTypeManager
     public OracleMetadataTypeManager() {};
     
     /**
-     * Specifies a new weak reference.
-     * @param manager the manager instance to use.
-     */
-    private static void setReference(
-        final OracleMetadataTypeManager manager)
-    {
-        singleton = new WeakReference(manager);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves an <code>OracleMetadataTypeManager</code> instance.
      * @return such instance.
      */
     public static JdbcMetadataTypeManager getInstance()
     {
-        OracleMetadataTypeManager result = null;
-
-        WeakReference t_Reference = getReference();
-
-        if  (t_Reference != null) 
-        {
-            result = (OracleMetadataTypeManager) t_Reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new OracleMetadataTypeManager();
-
-            setReference(result);
-        }
-
-        return result;
+        return OracleMetadataTypeManagerSingletonContainer.SINGLETON;
     }
 
     /**

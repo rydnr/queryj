@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -54,6 +55,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -62,7 +64,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 /**
  * Is able to generate the JUnit classes to test the Database's text functions.
@@ -70,12 +71,20 @@ import java.lang.ref.WeakReference;
            >Jose San Leandro</a>
  */
 public class TextFunctionsTestTemplateGenerator
-    implements  TextFunctionsTestTemplateFactory
+    implements  TextFunctionsTestTemplateFactory,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class TextFunctionsTestTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final TextFunctionsTestTemplateGenerator SINGLETON =
+            new TextFunctionsTestTemplateGenerator();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -83,47 +92,12 @@ public class TextFunctionsTestTemplateGenerator
     protected TextFunctionsTestTemplateGenerator() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    protected static void setReference(
-        final TextFunctionsTestTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a TextFunctionsTestTemplateGenerator instance.
+     * Retrieves a <code>TextFunctionsTestTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static TextFunctionsTestTemplateGenerator getInstance()
     {
-        TextFunctionsTestTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (TextFunctionsTestTemplateGenerator) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new TextFunctionsTestTemplateGenerator() {};
-
-            setReference(result);
-        }
-
-        return result;
+        return TextFunctionsTestTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
     Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -55,12 +56,12 @@ import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
 /*
  * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
 /*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -72,7 +73,8 @@ import java.util.Iterator;
  *         >Jose San Leandro</a>
  */
 public class DAOTemplateUtils
-    implements  Utils
+    implements  Singleton,
+                Utils
 {
     /**
      * An empty String array.
@@ -210,9 +212,16 @@ public class DAOTemplateUtils
     }
 
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class DAOTemplateUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final DAOTemplateUtils SINGLETON =
+            new DAOTemplateUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -220,46 +229,12 @@ public class DAOTemplateUtils
     protected DAOTemplateUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final DAOTemplateUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a DAOTemplateUtils instance.
      * @return such instance.
      */
     public static DAOTemplateUtils getInstance()
     {
-        DAOTemplateUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (DAOTemplateUtils) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new DAOTemplateUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return DAOTemplateUtilsSingletonContainer.SINGLETON;
     }
 
     /**

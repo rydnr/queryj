@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -46,6 +47,7 @@ import org.acmsl.queryj.tools.customsql.xml.SqlXmlParser;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JDK classes.
@@ -55,7 +57,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 /*
  * Importing some commons-logging classes.
@@ -68,7 +69,8 @@ import org.apache.commons.logging.LogFactory;
            >Jose San Leandro</a>
  */
 public class SqlXmlParserFactory
-    implements  Factory
+    implements  Factory,
+                Singleton
 {
     /**
      * The default file location.
@@ -76,9 +78,16 @@ public class SqlXmlParserFactory
     protected static final String FILE_PATH = "sql.xml";
 
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class SqlXmlParserFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final SqlXmlParserFactory SINGLETON =
+            new SqlXmlParserFactory();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -87,46 +96,12 @@ public class SqlXmlParserFactory
     protected SqlXmlParserFactory() { };
 
     /**
-     * Specifies a new weak reference.
-     * @param factory the new factory instance.
-     */
-    protected static void setReference(final SqlXmlParserFactory factory)
-    {
-        singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a SqlXmlParserFactory instance.
      * @return such instance.
      */
     public static SqlXmlParserFactory getInstance()
     {
-        SqlXmlParserFactory result = null;
-
-        WeakReference t_Reference = getReference();
-
-        if  (t_Reference != null) 
-        {
-            result = (SqlXmlParserFactory) t_Reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new SqlXmlParserFactory();
-
-            setReference(result);
-        }
-
-        return result;
+        return SqlXmlParserFactorySingletonContainer.SINGLETON;
     }
 
     /**

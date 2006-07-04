@@ -3,7 +3,7 @@
                         QueryJ
 
     Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing ACM-SL Commons classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
 /*
@@ -54,7 +55,6 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  */
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
 import java.util.Map;
 
@@ -64,7 +64,8 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class STUtils
-    implements Utils
+    implements  Singleton,
+                Utils
 {
     /**
      * The cached template groups.
@@ -72,9 +73,15 @@ public class STUtils
     private static final Map ST_GROUPS = new WeakHashMap();
 
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class STUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final STUtils SINGLETON = new STUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -82,46 +89,12 @@ public class STUtils
     protected STUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final STUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>STUtils</code> instance.
      * @return such instance.
      */
     public static STUtils getInstance()
     {
-        STUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (STUtils) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new STUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return STUtilsSingletonContainer.SINGLETON;
     }
     
     /**

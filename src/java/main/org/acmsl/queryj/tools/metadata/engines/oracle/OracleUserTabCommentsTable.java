@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armend?riz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armend?riz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -51,9 +52,9 @@ import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Singleton;
 
 /**
  * Represents the USER_TAB_TABUMNS table in the persistence domain.
@@ -61,11 +62,19 @@ import java.lang.ref.WeakReference;
  */
 public class OracleUserTabCommentsTable
     extends  Table
+    implements  Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class OracleUserTabCommentsTableSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final OracleUserTabCommentsTable SINGLETON =
+            new OracleUserTabCommentsTable();
+    }
 
     /**
      * The user_tab_comments table table_name field.
@@ -103,25 +112,6 @@ public class OracleUserTabCommentsTable
     }
 
     /**
-     * Specifies a new weak reference.
-     * @param table the table instance to use.
-     */
-    protected static void setReference(
-        final OracleUserTabCommentsTable table)
-    {
-        singleton = new WeakReference(table);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a OracleUserTabCommentsTable instance.
      * @param alias the desired table alias.
      * @return such instance.
@@ -148,23 +138,7 @@ public class OracleUserTabCommentsTable
      */
     public static OracleUserTabCommentsTable getInstance()
     {
-        OracleUserTabCommentsTable result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (OracleUserTabCommentsTable) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new OracleUserTabCommentsTable();
-
-            setReference(result);
-        }
-
-        return result;
+        return OracleUserTabCommentsTableSingletonContainer.SINGLETON;
     }
 
     /**

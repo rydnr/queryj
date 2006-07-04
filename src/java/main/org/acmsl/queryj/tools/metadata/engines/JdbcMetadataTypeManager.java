@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -48,6 +49,7 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
@@ -58,7 +60,6 @@ import org.apache.commons.logging.Log;
 /*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.sql.Types;
 import java.util.Map;
 import java.util.HashMap;
@@ -71,12 +72,20 @@ import java.util.HashMap;
  *         >Jose San Leandro</a>
  */
 public class JdbcMetadataTypeManager
-    implements  MetadataTypeManager
+    implements  MetadataTypeManager,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class JdbcMetadataTypeManagerSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final JdbcMetadataTypeManager SINGLETON =
+            new JdbcMetadataTypeManager();
+    }
 
     /**
      * The native to Java type mapping.
@@ -89,46 +98,12 @@ public class JdbcMetadataTypeManager
     public JdbcMetadataTypeManager() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param manager the manager instance to use.
-     */
-    private static void setReference(final JdbcMetadataTypeManager manager)
-    {
-        singleton = new WeakReference(manager);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>JdbcMetadataTypeManager</code> instance.
      * @return such instance.
      */
     public static JdbcMetadataTypeManager getInstance()
     {
-        JdbcMetadataTypeManager result = null;
-
-        WeakReference t_Reference = getReference();
-
-        if  (t_Reference != null)
-        {
-            result = (JdbcMetadataTypeManager) t_Reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new JdbcMetadataTypeManager();
-
-            setReference(result);
-        }
-
-        return result;
+        return JdbcMetadataTypeManagerSingletonContainer.SINGLETON;
     }
 
     /**

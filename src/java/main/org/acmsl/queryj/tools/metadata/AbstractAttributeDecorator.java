@@ -660,6 +660,98 @@ public abstract class AbstractAttributeDecorator
     }
 
     /**
+     * Retrieves the Java type of the attribute.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * @return such information.
+     * @precondition type != null
+     * @precondition metadataTypeManager != null
+     */
+    public String getJavaType()
+    {
+        return getJavaType(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves the Java type of the property.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * @return such information.
+     * @precondition type != null
+     * @precondition metadataTypeManager != null
+     */
+    protected String getJavaType(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.getObjectType(type);
+    }
+
+    /**
+     * Retrieves the Java type of the attribute, which would be
+     * only a primitive Java type if the attribute type matches,
+     * and the column allows nulls.
+     * @return such information.
+     */
+    protected String retrieveJavaType()
+    {
+        return
+            retrieveJavaType(getType(), getMetadataManager(), getAllowsNull());
+    }
+
+    /**
+     * Retrieves the Java type of the attribute, which would be
+     * only a primitive Java type if the attribute type matches,
+     * and the column allows nulls.
+     * @param type the type.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param allowsNull whether the attribute allows null.
+     * @return such information.
+     * @precondition metadataManager != null
+     */
+    protected String retrieveJavaType(
+        final int type,
+        final MetadataManager metadataManager,
+        final boolean allowsNull)
+    {
+        return
+            retrieveJavaType(
+                type,
+                metadataManager.getMetadataTypeManager(),
+                allowsNull,
+                MetadataTypeUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the Java type of the attribute, which would be
+     * only a primitive Java type if the attribute type matches,
+     * and the column allows nulls.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param allowsNull whether the attribute allows null.
+     * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
+     * @return such information.
+     * @precondition metadataTypeManager != null
+     * @precondition metadataTypeUtils != null
+     */
+    protected String retrieveJavaType(
+        final int type,
+        final MetadataTypeManager metadataTypeManager,
+        final boolean allowsNull,
+        final MetadataTypeUtils metadataTypeUtils)
+    {
+        String result = metadataTypeManager.getNativeType(type);
+
+        if  (allowsNull)
+        {
+            result = metadataTypeUtils.getWrapperClass(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the attribute name.
      * @return such information.
      */

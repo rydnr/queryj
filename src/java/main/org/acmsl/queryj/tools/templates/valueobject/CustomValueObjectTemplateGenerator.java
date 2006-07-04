@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -43,18 +44,18 @@ package org.acmsl.queryj.tools.templates.valueobject;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
@@ -64,7 +65,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 /**
  * Is able to generate custom ValueObject templates.
@@ -73,12 +73,20 @@ import java.lang.ref.WeakReference;
  */
 public class CustomValueObjectTemplateGenerator
     implements  BasePerCustomResultTemplateFactory,
-                BasePerCustomResultTemplateGenerator
+                BasePerCustomResultTemplateGenerator,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class CustomValueObjectTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final CustomValueObjectTemplateGenerator SINGLETON =
+            new CustomValueObjectTemplateGenerator();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -86,48 +94,12 @@ public class CustomValueObjectTemplateGenerator
     protected CustomValueObjectTemplateGenerator() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    protected static void setReference(
-        final CustomValueObjectTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a CustomValueObjectTemplateGenerator instance.
+     * Retrieves a <code>CustomValueObjectTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static CustomValueObjectTemplateGenerator getInstance()
     {
-        CustomValueObjectTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result =
-                (CustomValueObjectTemplateGenerator) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new CustomValueObjectTemplateGenerator();
-
-            setReference(result);
-        }
-
-        return result;
+        return CustomValueObjectTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

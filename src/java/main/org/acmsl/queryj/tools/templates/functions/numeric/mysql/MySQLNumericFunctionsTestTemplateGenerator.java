@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -56,6 +57,7 @@ import org.acmsl.queryj.tools.templates.functions.numeric
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -64,7 +66,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 /**
  * Is able to generate the JUnit classes to test the Database's numeric functions.
@@ -73,11 +74,19 @@ import java.lang.ref.WeakReference;
  */
 public class MySQLNumericFunctionsTestTemplateGenerator
     extends  NumericFunctionsTestTemplateGenerator
+    implements  Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class MySQLNumericFunctionsTestTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final MySQLNumericFunctionsTestTemplateGenerator SINGLETON =
+            new MySQLNumericFunctionsTestTemplateGenerator();
+    }
 
     /**
      * Public constructor to allow reflective instantiation.
@@ -85,51 +94,13 @@ public class MySQLNumericFunctionsTestTemplateGenerator
     public MySQLNumericFunctionsTestTemplateGenerator() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    protected static void setReference(
-        final MySQLNumericFunctionsTestTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a NumericFunctionsTestTemplateGenerator instance.
+     * Retrieves a <code>MySQLNumericFunctionsTestTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static MySQLNumericFunctionsTestTemplateGenerator
         getMySQLInstance()
     {
-        MySQLNumericFunctionsTestTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result =
-                (MySQLNumericFunctionsTestTemplateGenerator)
-                    reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result =
-                new MySQLNumericFunctionsTestTemplateGenerator();
-
-            setReference(result);
-        }
-
-        return result;
+        return MySQLNumericFunctionsTestTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

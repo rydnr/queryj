@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -77,8 +78,8 @@ public abstract class Table
      */
     protected Table(final String name, final String alias)
     {
-        inmutableSetName(name);
-        inmutableSetTableAliasName(alias);
+        immutableSetName(name);
+        immutableSetTableAliasName(alias);
     }
 
     /**
@@ -102,7 +103,7 @@ public abstract class Table
      * Specifies the table name.
      * @param name the name.
      */
-    private void inmutableSetName(final String name)
+    private void immutableSetName(final String name)
     {
         m__strName = name;
     }
@@ -113,7 +114,7 @@ public abstract class Table
      */
     protected void setName(final String name)
     {
-        inmutableSetName(name);
+        immutableSetName(name);
     }
 
     /**
@@ -129,7 +130,7 @@ public abstract class Table
      * Specifies the table alias.
      * @param alias the alias.
      */
-    private void inmutableSetTableAliasName(final String alias)
+    private void immutableSetTableAliasName(final String alias)
     {
         m__strTableAliasName = alias;
     }
@@ -140,7 +141,7 @@ public abstract class Table
      */
     protected void setTableAliasName(final String alias)
     {
-        inmutableSetTableAliasName(alias);
+        immutableSetTableAliasName(alias);
     }
 
     /**

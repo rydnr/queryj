@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -44,9 +45,14 @@ import org.acmsl.queryj.Query;
 import org.acmsl.queryj.SelectQuery;
 
 /*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Factory;
+import org.acmsl.commons.patterns.Singleton;
+
+/*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,11 +64,20 @@ import java.util.Date;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
 public class ConditionFactory
+    implements  Factory,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class ConditionFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final ConditionFactory SINGLETON =
+            new ConditionFactory();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -70,46 +85,12 @@ public class ConditionFactory
     protected ConditionFactory() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param factory the factory instance to use.
-     */
-    protected static void setReference(final ConditionFactory factory)
-    {
-        singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>ConditionFactory</code> instance.
      * @return such instance.
      */
     public static ConditionFactory getInstance()
     {
-        ConditionFactory result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (ConditionFactory) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new ConditionFactory();
-
-            setReference(result);
-        }
-
-        return result;
+        return ConditionFactorySingletonContainer.SINGLETON;
     }
 
     /**
@@ -125,7 +106,7 @@ public class ConditionFactory
      */
     public Condition createCondition(
         final Field leftSideField,
-        final ConditionOperator  operator,
+        final ConditionOperator operator,
         final Field rightSideField)
     {
         return

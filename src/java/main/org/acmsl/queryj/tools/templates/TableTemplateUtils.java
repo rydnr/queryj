@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -44,9 +45,10 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.patterns.Utils;
 
 /**
  * Provides some useful methods when generating Table class.
@@ -54,11 +56,19 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class TableTemplateUtils
+    implements  Singleton,
+                Utils
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class TableTemplateUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final TableTemplateUtils SINGLETON = new TableTemplateUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -66,46 +76,12 @@ public class TableTemplateUtils
     protected TableTemplateUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final TableTemplateUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>TableTemplateUtils</code> instance.
      * @return such instance.
      */
     public static TableTemplateUtils getInstance()
     {
-        TableTemplateUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (TableTemplateUtils) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new TableTemplateUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return TableTemplateUtilsSingletonContainer.SINGLETON;
     }
 
     /**

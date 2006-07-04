@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -53,6 +54,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -61,7 +63,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 /**
  * Is able to generate system function repositories according to database
@@ -70,12 +71,20 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class SystemFunctionsTemplateGenerator
-    implements  SystemFunctionsTemplateFactory
+    implements  SystemFunctionsTemplateFactory,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class SystemFunctionsTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final SystemFunctionsTemplateGenerator SINGLETON =
+            new SystemFunctionsTemplateGenerator();
+    }
 
     /**
      * Public constructor to allow reflective instantiation.
@@ -94,47 +103,12 @@ public class SystemFunctionsTemplateGenerator
     }
 
     /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    protected static void setReference(
-        SystemFunctionsTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a SystemFunctionsTemplateGenerator instance.
+     * Retrieves a <code>SystemFunctionsTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static SystemFunctionsTemplateGenerator getInstance()
     {
-        SystemFunctionsTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (SystemFunctionsTemplateGenerator) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new SystemFunctionsTemplateGenerator();
-
-            setReference(result);
-        }
-
-        return result;
+        return SystemFunctionsTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

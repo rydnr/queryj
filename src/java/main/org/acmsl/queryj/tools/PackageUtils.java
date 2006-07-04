@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -41,6 +42,8 @@ package org.acmsl.queryj.tools;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
 
@@ -48,7 +51,6 @@ import org.acmsl.commons.utils.StringValidator;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.lang.ref.WeakReference;
 
 /**
  * Provides some useful methods for retrieving package information about
@@ -57,6 +59,8 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class PackageUtils
+    implements  Singleton,
+                Utils
 {
     /**
      * The package prefix for unit tests.
@@ -121,9 +125,15 @@ public class PackageUtils
     public static final String XML_DAO_SUBPACKAGE = "xml";
 
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class PackageUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final PackageUtils SINGLETON = new PackageUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -131,46 +141,12 @@ public class PackageUtils
     protected PackageUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final PackageUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a PackageUtils instance.
      * @return such instance.
      */
     public static PackageUtils getInstance()
     {
-        PackageUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (PackageUtils) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new PackageUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return PackageUtilsSingletonContainer.SINGLETON;
     }
 
     /**

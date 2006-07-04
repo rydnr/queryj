@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -50,9 +50,9 @@ import org.acmsl.queryj.tools.metadata.PropertyDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Singleton;
 
 /**
  * Provides custom decorators for the DAO template.
@@ -61,35 +61,24 @@ import java.lang.ref.WeakReference;
  */
 public class DAODecoratorFactory
     extends  CachingDecoratorFactory
+    implements  Singleton
 {
     /**
-     * A singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference m__Singleton;
-    
+    private static class DAODecoratorFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final DAODecoratorFactory SINGLETON =
+            new DAODecoratorFactory();
+    }
+
     /**
      * Protected constructor to avoid accidental instantiation.
      */
     protected DAODecoratorFactory() {};
-
-    /**
-     * Specifies a new weak reference.
-     * @param factory the factory instance to use.
-     */
-    protected static void setReference(
-        final DAODecoratorFactory factory)
-    {
-        m__Singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return m__Singleton;
-    }
 
     /**
      * Retrieves a <code>DAODecoratorFactory</code> instance.
@@ -97,23 +86,7 @@ public class DAODecoratorFactory
      */
     public static CachingDecoratorFactory getInstance()
     {
-        CachingDecoratorFactory result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (CachingDecoratorFactory) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new DAODecoratorFactory();
-
-            setReference(result);
-        }
-
-        return result;
+        return DAODecoratorFactorySingletonContainer.SINGLETON;
     }
 
     /**

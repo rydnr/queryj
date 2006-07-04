@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armend?riz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armend?riz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -51,9 +52,9 @@ import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Singleton;
 
 /**
  * Represents the USER_TAB_COLUMNS table in the persistence domain.
@@ -62,11 +63,19 @@ import java.lang.ref.WeakReference;
 
 public class OracleUserTabColumnsTable
     extends  Table
+    implements  Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class OracleUserTabColumnsTableSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final OracleUserTabColumnsTable SINGLETON =
+            new OracleUserTabColumnsTable();
+    }
 
     /**
      * The user_tab_columns table table_name field.
@@ -110,25 +119,6 @@ public class OracleUserTabColumnsTable
     }
 
     /**
-     * Specifies a new weak reference.
-     * @param table the table instance to use.
-     */
-    protected static void setReference(
-        final OracleUserTabColumnsTable table)
-    {
-        singleton = new WeakReference(table);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a OracleUserTabColumnsTable instance.
      * @param alias the desired table alias.
      * @return such instance.
@@ -155,23 +145,7 @@ public class OracleUserTabColumnsTable
      */
     public static OracleUserTabColumnsTable getInstance()
     {
-        OracleUserTabColumnsTable result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (OracleUserTabColumnsTable) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new OracleUserTabColumnsTable();
-
-            setReference(result);
-        }
-
-        return result;
+        return OracleUserTabColumnsTableSingletonContainer.SINGLETON;
     }
 
     /**

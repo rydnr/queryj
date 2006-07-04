@@ -56,11 +56,6 @@ public class DAOAttributeDecorator
     extends  CachingAttributeDecorator
 {
     /**
-     * The cached Java type.
-     */
-    private String m__strCachedJavaType;
-    
-    /**
      * Creates a <code>DAOAttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
@@ -76,33 +71,6 @@ public class DAOAttributeDecorator
     }
 
     /**
-     * Specifies the cached Java type.
-     * @param type such type.
-     */
-    protected final void immutableSetCachedJavaType(final String type)
-    {
-        m__strCachedJavaType = type;
-    }
-    
-    /**
-     * Specifies the cached Java type.
-     * @param type such type.
-     */
-    protected void setCachedJavaType(final String type)
-    {
-        immutableSetCachedJavaType(type);
-    }
-
-    /**
-     * Retrieves the cached Java type.
-     * @return such type.
-     */
-    public String getCachedJavaType()
-    {
-        return m__strCachedJavaType;
-    }
-
-    /**
      * Retrieves the Java type of the attribute, which would be
      * only a primitive Java type if the attribute type matches,
      * and the column allows nulls.
@@ -111,76 +79,14 @@ public class DAOAttributeDecorator
     public String getJavaType()
     {
         String result = getCachedJavaType();
-        
+
         if  (result == null)
         {
             result = retrieveJavaType();
             setCachedJavaType(result);
         }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the Java type of the attribute, which would be
-     * only a primitive Java type if the attribute type matches,
-     * and the column allows nulls.
-     * @return such information.
-     */
-    protected String retrieveJavaType()
-    {
-        return
-            retrieveJavaType(getType(), getMetadataManager(), getAllowsNull());
-    }
-
-    /**
-     * Retrieves the Java type of the attribute, which would be
-     * only a primitive Java type if the attribute type matches,
-     * and the column allows nulls.
-     * @param type the type.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param allowsNull whether the attribute allows null.
-     * @return such information.
-     * @precondition metadataManager != null
-     */
-    protected String retrieveJavaType(
-        final int type,
-        final MetadataManager metadataManager,
-        final boolean allowsNull)
-    {
-        return
-            retrieveJavaType(
-                type,
-                metadataManager.getMetadataTypeManager(),
-                allowsNull,
-                MetadataTypeUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the Java type of the attribute, which would be
-     * only a primitive Java type if the attribute type matches,
-     * and the column allows nulls.
-     * @param type the type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @param allowsNull whether the attribute allows null.
-     * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
-     * @return such information.
-     * @precondition metadataTypeManager != null
-     * @precondition metadataTypeUtils != null
-     */
-    protected String retrieveJavaType(
-        final int type,
-        final MetadataTypeManager metadataTypeManager,
-        final boolean allowsNull,
-        final MetadataTypeUtils metadataTypeUtils)
-    {
-        String result = metadataTypeManager.getNativeType(type);
-        
-        if  (allowsNull)
-        {
-            result = metadataTypeUtils.getWrapperClass(result);
-        }
 
         return result;
     }
+
 }
