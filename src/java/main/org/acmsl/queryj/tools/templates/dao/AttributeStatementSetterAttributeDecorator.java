@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -88,4 +88,27 @@ public class AttributeStatementSetterAttributeDecorator
 
         return result;
     }
+
+    /**
+     * Retrieves the object type.
+     * @return such information.
+     */
+    public String getObjectType()
+    {
+        return getObjectType(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves the attribute's object type.
+     * @param type the attribute type.
+     * @param metadataTypeManager the metadata type manager.
+     * @return such type.
+     * @precondition metadataTypeManager != null
+     */
+    protected String getObjectType(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.getStatementSetterFieldType(type);
+    }
+
 }
