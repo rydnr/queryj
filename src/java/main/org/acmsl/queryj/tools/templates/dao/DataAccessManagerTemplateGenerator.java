@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -57,6 +57,7 @@ import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
@@ -66,7 +67,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 /**
@@ -77,36 +77,24 @@ import java.util.Collection;
  */
 public class DataAccessManagerTemplateGenerator
     implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator
+                BasePerRepositoryTemplateGenerator,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
-
+    private static class DataAccessManagerTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final DataAccessManagerTemplateGenerator SINGLETON =
+            new DataAccessManagerTemplateGenerator();
+    }
     /**
      * Protected constructor to avoid accidental instantiation.
      */
     protected DataAccessManagerTemplateGenerator() {};
-
-    /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    private static void setReference(
-        final DataAccessManagerTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
-    }
 
     /**
      * Retrieves a <code>DataAccessManagerTemplateGenerator</code>
@@ -115,23 +103,7 @@ public class DataAccessManagerTemplateGenerator
      */
     public static DataAccessManagerTemplateGenerator getInstance()
     {
-        DataAccessManagerTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (DataAccessManagerTemplateGenerator) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new DataAccessManagerTemplateGenerator();
-
-            setReference(result);
-        }
-
-        return result;
+        return DataAccessManagerTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

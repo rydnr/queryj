@@ -314,7 +314,10 @@ public abstract class BasePerForeignKeyTemplate
         fillJavaHeaderParameters(input, header, copyrightYears, timestamp);
 
         fillPackageDeclarationParameters(
-            input, basePackageName, subpackageName);
+            input,
+            basePackageName,
+            subpackageName,
+            foreignKey.getSourceTableName());
 
         fillProjectImportsParameters(
             input,
@@ -383,17 +386,23 @@ public abstract class BasePerForeignKeyTemplate
      * @param input the input.
      * @param basePackageName the base package name.
      * @param subpackageName the subpackage.
+     * @param tableName the table name.
      * @precondition input != null
      * @precondition basePackageName != null
      * @precondition subpackageName != null
+     * @precondition tableName != null
      */
     protected void fillPackageDeclarationParameters(
         final Map input,
         final String basePackageName,
-        final String subpackageName)
+        final String subpackageName,
+        final String tableName)
     {
         input.put("base_package_name", basePackageName);
         input.put("subpackage_name", subpackageName);
+        input.put(
+            "table_name_normalized_lowercased",
+            normalizeLowercase(tableName, DecorationUtils.getInstance()));
     }
 
     /**

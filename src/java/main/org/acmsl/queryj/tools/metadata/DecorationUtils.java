@@ -1,7 +1,8 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armend&aacute;riz
+    Copyright (C) 2002-2006  Jose San Leandro Armend&aacute;riz
                              chous@acm-sl.org
      
     This library is free software; you can redistribute it and/or
@@ -40,13 +41,13 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing ACM-SL Commons classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -56,7 +57,8 @@ import java.util.Collection;
  *         >Jose San Leandro Armend&aacute;riz</a>
  */
 public class DecorationUtils
-    implements  Utils
+    implements  Singleton,
+                Utils
 {
     /**
      * An empty cached String array.
@@ -64,9 +66,15 @@ public class DecorationUtils
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class DecorationUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final DecorationUtils SINGLETON = new DecorationUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -74,46 +82,12 @@ public class DecorationUtils
     protected DecorationUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final DecorationUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>DecorationUtils</code> instance.
      * @return such instance.
      */
     public static DecorationUtils getInstance()
     {
-        DecorationUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (DecorationUtils) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new DecorationUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return DecorationUtilsSingletonContainer.SINGLETON;
     }
 
     /**

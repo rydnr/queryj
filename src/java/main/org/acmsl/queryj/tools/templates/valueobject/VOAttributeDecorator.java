@@ -33,10 +33,10 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Decorates attributes for ResultSetExtractor templates.
+ * Description: Decorates attributes for ValueObject-related templates.
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.valueobject;
 
 /*
  * Importing project classes.
@@ -48,22 +48,22 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /**
- * Decorates attributes for ResultSetExtractor templates.
+ * Decorates attributes for ValueObject-related templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class ResultSetExtractorAttributeDecorator
+public class VOAttributeDecorator
     extends  CachingAttributeDecorator
 {
     /**
-     * Creates a <code>ResultSetExtractorAttributeDecorator</code> with the
+     * Creates a <code>VOAttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
      * @param metadataManager the metadata manager.
      * @precondition attribute != null
      * @precondition metadataManager != null
      */
-    public ResultSetExtractorAttributeDecorator(
+    public VOAttributeDecorator(
         final Attribute attribute,
         final MetadataManager metadataManager)
     {

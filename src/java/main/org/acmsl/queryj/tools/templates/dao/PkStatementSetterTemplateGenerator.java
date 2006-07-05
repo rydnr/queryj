@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -53,6 +54,7 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
@@ -62,7 +64,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 /**
  * Is able to generate PkStatementSetter templates.
@@ -71,12 +72,20 @@ import java.lang.ref.WeakReference;
  */
 public class PkStatementSetterTemplateGenerator
     implements  BasePerTableTemplateFactory,
-                BasePerTableTemplateGenerator
+                BasePerTableTemplateGenerator,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class PkStatementSetterTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final PkStatementSetterTemplateGenerator SINGLETON =
+            new PkStatementSetterTemplateGenerator();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -84,48 +93,12 @@ public class PkStatementSetterTemplateGenerator
     protected PkStatementSetterTemplateGenerator() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    private static void setReference(
-        final PkStatementSetterTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a PkStatementSetterTemplateGenerator instance.
+     * Retrieves a <code>PkStatementSetterTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static PkStatementSetterTemplateGenerator getInstance()
     {
-        PkStatementSetterTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result =
-                (PkStatementSetterTemplateGenerator) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new PkStatementSetterTemplateGenerator();
-
-            setReference(result);
-        }
-
-        return result;
+        return PkStatementSetterTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

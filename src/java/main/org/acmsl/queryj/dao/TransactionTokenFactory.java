@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -12,7 +13,7 @@
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    General Public License for more details.
 
     You should have received a copy of the GNU General Public
     License along with this library; if not, write to the Free Software
@@ -46,9 +47,10 @@ package org.acmsl.queryj.dao;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Factory;
+import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some extension classes.
@@ -63,11 +65,20 @@ import javax.sql.DataSource;
  *         >Jose San Leandro Armendariz</a>
  */
 public class TransactionTokenFactory
+    implements  Factory,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class TransactionTokenFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final TransactionTokenFactory SINGLETON =
+            new TransactionTokenFactory();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -75,46 +86,12 @@ public class TransactionTokenFactory
     protected TransactionTokenFactory() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param factory the factory instance to use.
-     */
-    protected static void setReference(final TransactionTokenFactory factory)
-    {
-        singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a TransactionTokenFactory instance.
+     * Retrieves a <code>TransactionTokenFactory</code> instance.
      * @return such instance.
      */
     public static TransactionTokenFactory getInstance()
     {
-        TransactionTokenFactory result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (TransactionTokenFactory) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new TransactionTokenFactory();
-
-            setReference(result);
-        }
-
-        return result;
+        return TransactionTokenFactorySingletonContainer.SINGLETON;
     }
 
     /**

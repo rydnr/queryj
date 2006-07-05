@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -52,9 +52,9 @@ import org.acmsl.queryj.tools.metadata.PropertyDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Singleton;
 
 /**
  * Provides custom decorators for the ResultSetExtractor template.
@@ -63,35 +63,24 @@ import java.lang.ref.WeakReference;
  */
 public class ResultSetExtractorDecoratorFactory
     extends  CachingDecoratorFactory
+    implements  Singleton
 {
     /**
-     * A singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference m__Singleton;
-    
+    private static class ResultSetExtractorDecoratorFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final ResultSetExtractorDecoratorFactory SINGLETON =
+            new ResultSetExtractorDecoratorFactory();
+    }
+
     /**
      * Protected constructor to avoid accidental instantiation.
      */
     protected ResultSetExtractorDecoratorFactory() {};
-
-    /**
-     * Specifies a new weak reference.
-     * @param factory the factory instance to use.
-     */
-    protected static void setReference(
-        final ResultSetExtractorDecoratorFactory factory)
-    {
-        m__Singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return m__Singleton;
-    }
 
     /**
      * Retrieves a <code>ResultSetExtractorDecoratorFactory</code> instance.
@@ -99,23 +88,7 @@ public class ResultSetExtractorDecoratorFactory
      */
     public static CachingDecoratorFactory getInstance()
     {
-        CachingDecoratorFactory result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (CachingDecoratorFactory) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new ResultSetExtractorDecoratorFactory();
-
-            setReference(result);
-        }
-
-        return result;
+        return ResultSetExtractorDecoratorFactorySingletonContainer.SINGLETON;
     }
 
     /**

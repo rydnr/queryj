@@ -1,7 +1,8 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armend&aacute;riz
+    Copyright (C) 2002-2006  Jose San Leandro Armend&aacute;riz
                              chous@acm-sl.org
      
     This library is free software; you can redistribute it and/or
@@ -41,12 +42,8 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
-
-/*
- * Importing some JDK classes.
- */
-import java.lang.ref.WeakReference;
 
 /**
  * Provides some useful methods when working with templates for the default
@@ -55,12 +52,19 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro Armend&aacute;riz</a>
  */
 public class DefaultThemeUtils
-    implements Utils
+    implements  Singleton,
+                Utils
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class DefaultThemeUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final DefaultThemeUtils SINGLETON = new DefaultThemeUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -68,46 +72,12 @@ public class DefaultThemeUtils
     protected DefaultThemeUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final DefaultThemeUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>DefaultThemeUtils</code> instance.
      * @return such instance.
      */
     public static DefaultThemeUtils getInstance()
     {
-        DefaultThemeUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (DefaultThemeUtils) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new DefaultThemeUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return DefaultThemeUtilsSingletonContainer.SINGLETON;
     }
     
     /**

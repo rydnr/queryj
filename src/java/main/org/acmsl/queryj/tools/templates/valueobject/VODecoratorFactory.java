@@ -33,61 +33,72 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Provides some useful methods when generating DAOChooser class.
+ * Description: Provides custom decorators for ValueObject-related templates.
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.valueobject;
+
+/*
+ * Importing project-specific classes.
+ */
+import org.acmsl.queryj.tools.customsql.Property;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.AttributeDecorator;
+import org.acmsl.queryj.tools.metadata.PropertyDecorator;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.patterns.Utils;
 
 /**
- * Provides some useful methods when generating DAOChooser class.
+ * Provides custom decorators for ValueObject-related templates.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class DAOChooserTemplateUtils
-    implements  Singleton,
-                Utils
+public class VODecoratorFactory
+    extends  CachingDecoratorFactory
+    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
-    private static class DAOChooserTemplateUtilsSingletonContainer
+    private static class VODecoratorFactorySingletonContainer
     {
         /**
          * The actual singleton.
          */
-        public static final DAOChooserTemplateUtils SINGLETON =
-            new DAOChooserTemplateUtils();
+        public static final VODecoratorFactory SINGLETON =
+            new VODecoratorFactory();
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DAOChooserTemplateUtils() {};
+    protected VODecoratorFactory() {};
 
     /**
-     * Retrieves a <code>DAOChooserTemplateUtils</code> instance.
+     * Retrieves a <code>VODecoratorFactory</code> instance.
      * @return such instance.
      */
-    public static DAOChooserTemplateUtils getInstance()
+    public static CachingDecoratorFactory getInstance()
     {
-        return DAOChooserTemplateUtilsSingletonContainer.SINGLETON;
+        return VODecoratorFactorySingletonContainer.SINGLETON;
     }
 
     /**
-     * Retrieves the name of the <code>DAOChooser</code> properties
-     * file.
-     * @param repository the repository name.
-     * @return such name.
-     * @precondition repository != null
+     * Creates an <code>AttributeDecorator</code> for given
+     * attribute instance.
+     * @param attribute the attribute.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated attribute for the concrete template.
      */
-    public String retrievePropertiesFileName(final String repository)
+    public AttributeDecorator createDecorator(
+        final Attribute attribute, final MetadataManager metadataManager)
     {
-        return repository.toLowerCase() + "-queryj.properties";
+        return new VOAttributeDecorator(attribute, metadataManager);
     }
 }

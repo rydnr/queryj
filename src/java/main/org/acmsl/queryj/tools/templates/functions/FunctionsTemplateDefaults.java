@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -97,7 +98,6 @@ public interface FunctionsTemplateDefaults
           "/*\n"
         + " * Importing some JDK classes.\n"
         + " */\n"
-        + "import java.lang.ref.WeakReference;\n"
         + "import java.math.BigDecimal;\n"
         + "import java.util.Calendar;\n\n";
 
@@ -121,55 +121,31 @@ public interface FunctionsTemplateDefaults
      * The class start.
      */
     public static final String DEFAULT_CLASS_START =
-          "{\n"
-        + "    /**\n"
-        + "     * Singleton implemented as a weak reference.\n"
-        + "     */\n"
-        + "    private static WeakReference singleton;\n\n";
+          "{\n";
 
     /**
      * The class singleton logic.
      */
     public static final String SINGLETON_BODY =
           "    /**\n"
-        + "     * Specifies a new weak reference.\n"
-        + "     * @param functions the instance to use.\n"
+        + "     * Singleton implemented to avoid the double-checked locking.\n"
         + "     */\n"
-        + "    public static void setReference({0}Functions functions)\n"
-         // class name prefix
+        + "    private static class {0}FunctionsSingletonContainer\n"
         + "    '{'\n"
-        + "        singleton = new WeakReference(functions);\n"
+        + "        /**\n"
+        + "         * The actual singleton.\n"
+        + "         */\n"
+        + "        public static final {0}Function SINGLETON =\n"
+        + "            new {0}Functions();\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Retrieves the weak reference.\n"
-        + "     * @return such reference.\n"
-        + "     */\n"
-        + "    public static WeakReference getReference()\n"
-        + "    '{'\n"
-        + "        return singleton;\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Retrieves a {0}Functions instance.\n"
+        + "     * Retrieves a <code>{0}Functions</code> instance.\n"
          // class name prefix
         + "     * @return such instance.\n"
         + "     */\n"
         + "    public static {0}Functions getInstance()\n"
         + "    '{'\n"
-        + "        {0}Functions result = null;\n\n"
-         // class name prefix 
-       + "        WeakReference reference = getReference();\n\n"
-        + "        if  (reference != null) \n"
-        + "        '{'\n"
-        + "            result = ({0}Functions) reference.get();\n"
-         // class name prefix
-        + "        '}'\n\n"
-        + "        if  (result == null) \n"
-        + "        '{'\n"
-        + "            result = new {0}Functions() '{' '}';\n\n"
-         // class name prefix
-        + "            setReference(result);\n"
-        + "        '}'\n\n"
-        + "        return result;\n"
+        + "        return {0}FunctionsSingletonContainer.SINGLETON;\n\n"
         + "    '}'\n\n";
 
     /**

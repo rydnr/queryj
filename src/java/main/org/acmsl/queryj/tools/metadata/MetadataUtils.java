@@ -55,12 +55,12 @@ import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 /*
  * Importing ACM-SL Commons classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
 /*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -74,7 +74,8 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class MetadataUtils
-    implements Utils
+    implements Singleton,
+               Utils
 {
     /**
      * An empty <code>String</code> array.
@@ -87,9 +88,15 @@ public class MetadataUtils
     public static final ForeignKey[] EMPTY_FOREIGNKEY_ARRAY = new ForeignKey[0];
 
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class MetadataUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final MetadataUtils SINGLETON = new MetadataUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -97,46 +104,12 @@ public class MetadataUtils
     protected MetadataUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final MetadataUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>MetadataUtils</code> instance.
      * @return such instance.
      */
     public static MetadataUtils getInstance()
     {
-        MetadataUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (MetadataUtils) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new MetadataUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return MetadataUtilsSingletonContainer.SINGLETON;
     }
 
     /**

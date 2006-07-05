@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -42,6 +43,11 @@ package org.acmsl.queryj.tools.templates.dao.xml;
  */
 import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
 
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Singleton;
+
 /**
  * Is able to generate value object factories according to
  * database metadata.
@@ -50,7 +56,8 @@ import org.acmsl.queryj.tools.templates.JavaTemplateDefaults;
  * @version $Revision$ at $Date$ by $Author$
  */
 public interface XMLValueObjectFactoryTemplateDefaults
-    extends  JavaTemplateDefaults
+    extends  JavaTemplateDefaults,
+             Singleton
 {
     /**
      * The default header.
@@ -100,7 +107,6 @@ public interface XMLValueObjectFactoryTemplateDefaults
           "/*\n"
         + " * Importing some JDK classes.\n"
         + " */\n"
-        + "import java.lang.ref.WeakReference;\n"
         + "import java.math.BigDecimal;\n"
         + "import java.util.Calendar;\n"
         + "import java.util.Date;\n\n";
@@ -141,10 +147,6 @@ public interface XMLValueObjectFactoryTemplateDefaults
     public static final String DEFAULT_CLASS_START =
           "{\n"
         + "    /**\n"
-        + "     * Singleton implemented as a weak reference.\n"
-        + "     */\n"
-        + "    private static WeakReference singleton;\n\n"
-        + "    /**\n"
         + "     * Temporary Digester reference.\n"
         + "     */\n"
         + "    private Digester m__Digester;\n\n";
@@ -154,27 +156,22 @@ public interface XMLValueObjectFactoryTemplateDefaults
      */
     public static final String DEFAULT_SINGLETON_BODY =
           "    /**\n"
+        + "     * Singleton implemented to avoid the double-checked locking.\n"
+        + "     */\n"
+        + "    private static class XML{0}ValueObjectFactorySingletonContainer\n"
+        + "    '{'\n"
+        + "        /**\n"
+        + "         * The actual singleton.\n"
+        + "         */\n"
+        + "        public static final XML{0}ValueObjectFactory SINGLETON =\n"
+        + "             new XML{0}ValueObjectFactory();\n"
+        + "    '}'\n\n"
+        + "    /**\n"
         + "     * Protected constructor to avoid accidental instantiation.\n"
         + "     */\n"
         + "    protected XML{0}ValueObjectFactory() '{' '}';\n\n" // table
         + "    /**\n"
-        + "     * Specifies a new weak reference.\n"
-        + "     * @param factory the factory instance to use.\n"
-        + "     */\n"
-        + "    protected static void setReference(final XML{0}ValueObjectFactory factory)\n" // table
-        + "    '{'\n"
-        + "        singleton = new WeakReference(factory);\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Retrieves the weak reference.\n"
-        + "     * @return such reference.\n"
-        + "     */\n"
-        + "    protected static WeakReference getReference()\n"
-        + "    '{'\n"
-        + "        return singleton;\n"
-        + "    '}'\n\n"
-        + "    /**\n"
-        + "     * Retrieves a XML{0}ValueObjectFactory instance.\n"
+        + "     * Retrieves a <code>XML{0}ValueObjectFactory</code> instance.\n"
         + "     * @return such instance.\n"
         + "     */\n"
         + "    public static {0}ValueObjectFactory getInstance()\n"
@@ -182,23 +179,12 @@ public interface XMLValueObjectFactoryTemplateDefaults
         + "        return getXMLInstance();\n"
         + "    '}'\n\n"
         + "    /**\n"
-        + "     * Retrieves a XML{0}ValueObjectFactory instance.\n"
+        + "     * Retrieves a <code>XML{0}ValueObjectFactory</code> instance.\n"
         + "     * @return such instance.\n"
         + "     */\n"
         + "    public static XML{0}ValueObjectFactory getXMLInstance()\n"
         + "    '{'\n"
-        + "        XML{0}ValueObjectFactory result = null;\n\n"
-        + "        WeakReference reference = getReference();\n\n"
-        + "        if  (reference != null) \n"
-        + "        '{'\n"
-        + "            result = (XML{0}ValueObjectFactory) reference.get();\n"
-        + "        '}'\n\n"
-        + "        if  (result == null) \n"
-        + "        '{'\n"
-        + "            result = new XML{0}ValueObjectFactory();\n\n"
-        + "            setReference(result);\n"
-        + "        '}'\n\n"
-        + "        return result;\n"
+        + "        return XML{0}ValueObjectFactorySingletonContainer.SINGLETON;\n"
         + "    '}'\n\n";
 
     /**

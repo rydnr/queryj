@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -44,25 +44,12 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 /**

@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -117,9 +118,14 @@ import org.acmsl.queryj.tools.templates.functions.time
 import org.acmsl.queryj.tools.templates.TemplateFactory;
 
 /*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Manager;
+import org.acmsl.commons.patterns.Singleton;
+
+/*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -135,6 +141,8 @@ import org.apache.commons.logging.LogFactory;
            >Jose San Leandro</a>
  */
 public class TemplateMappingManager
+    implements  Manager,
+                Singleton
 {
     /**
      * The default template type.
@@ -529,9 +537,16 @@ public class TemplateMappingManager
     private Map m__mMapping;
 
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class TemplateMappingManagerSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final TemplateMappingManager SINGLETON =
+            new TemplateMappingManager();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -542,46 +557,12 @@ public class TemplateMappingManager
     }
 
     /**
-     * Specifies a new weak reference.
-     * @param manager the manager instance to use.
-     */
-    protected static void setReference(final TemplateMappingManager manager)
-    {
-        singleton = new WeakReference(manager);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a TemplateMappingManager instance.
+     * Retrieves a <code>TemplateMappingManager</code> instance.
      * @return such instance.
      */
     public static TemplateMappingManager getInstance()
     {
-        TemplateMappingManager result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (TemplateMappingManager) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new TemplateMappingManager();
-
-            setReference(result);
-        }
-
-        return result;
+        return TemplateMappingManagerSingletonContainer.SINGLETON;
     }
 
     /**

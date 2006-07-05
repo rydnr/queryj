@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -38,26 +39,36 @@
 package org.acmsl.queryj;
 
 /*
- * Importing ACM-SL classes.
+ * Importing project classes.
  */
 import org.acmsl.queryj.ConditionOperator;
 import org.acmsl.queryj.NestedConditionOperator;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Repository;
+import org.acmsl.commons.patterns.Singleton;
 
 /**
  * Contains references to declared operators.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
 public class ConditionOperatorRepository
+    implements  Repository,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class ConditionOperatorRepositorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final ConditionOperatorRepository SINGLETON =
+            new ConditionOperatorRepository();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -65,47 +76,12 @@ public class ConditionOperatorRepository
     protected ConditionOperatorRepository() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param repository the repository instance to use.
-     */
-    protected static void setReference(
-        final ConditionOperatorRepository repository)
-    {
-        singleton = new WeakReference(repository);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a ConditionOperatorRepository instance.
+     * Retrieves a <code>ConditionOperatorRepository</code> instance.
      * @return such instance.
      */
     public static ConditionOperatorRepository getInstance()
     {
-        ConditionOperatorRepository result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (ConditionOperatorRepository) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new ConditionOperatorRepository();
-
-            setReference(result);
-        }
-
-        return result;
+        return ConditionOperatorRepositorySingletonContainer.SINGLETON;
     }
 
     /**

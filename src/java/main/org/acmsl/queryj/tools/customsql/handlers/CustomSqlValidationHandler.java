@@ -283,7 +283,7 @@ public class CustomSqlValidationHandler
         final QueryJLog log)
       throws  BuildException
     {
-        String t_strSql = sql.getValue();
+        String t_strSql = sql.getValue().trim();
 
         SQLException t_ExceptionToWrap = null;
 
@@ -292,7 +292,7 @@ public class CustomSqlValidationHandler
         if  (log != null)
         {
             log.trace(
-                "Validating [" + t_strSql + "]");
+                "Validating " + sql.getId() + " [\n" + t_strSql + "\n]");
         }
         
         PreparedStatement t_PreparedStatement = null;
@@ -451,7 +451,7 @@ public class CustomSqlValidationHandler
         else if  (t_ExceptionToWrap != null)
         {
             throw new BuildException(
-                "Invalid SQL: " + t_strSql,
+                "Invalid SQL (" + sql.getId() + "):\n"+ t_strSql,
                 t_ExceptionToWrap);
         }
     }
@@ -914,7 +914,8 @@ public class CustomSqlValidationHandler
                 sqlResult,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager);
+                metadataTypeManager,
+                log);
         
         if  (   (t_cProperties == null)
              || (t_cProperties.size() == 0))
@@ -1016,19 +1017,22 @@ public class CustomSqlValidationHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param log the log.
      * @return such properties.
      * @precondition sql != null
      * @precondition sqlResult != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition log != null
      */
     protected Collection retrieveProperties(
         final Sql sql,
         final Result sqlResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final QueryJLog log)
     {
         Collection result = new ArrayList();
         
@@ -1042,7 +1046,8 @@ public class CustomSqlValidationHandler
                     sqlResult,
                     customSqlProvider,
                     metadataManager,
-                    metadataTypeManager);
+                    metadataTypeManager,
+                    log);
         }
         else
         {
@@ -1081,18 +1086,21 @@ public class CustomSqlValidationHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param log the log.
      * @return such properties.
      * @precondition sql != null
      * @precondition sqlResult != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition log != null
      */
     protected Collection retrieveImplicitProperties(
         final Result sqlResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final QueryJLog log)
     {
         return
             retrieveImplicitProperties(
@@ -1100,6 +1108,7 @@ public class CustomSqlValidationHandler
                 customSqlProvider,
                 metadataManager,
                 metadataTypeManager,
+                log,
                 CustomResultUtils.getInstance());
     }
 
@@ -1109,6 +1118,7 @@ public class CustomSqlValidationHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param log the log.
      * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @return such properties.
      * @precondition sql != null
@@ -1116,6 +1126,7 @@ public class CustomSqlValidationHandler
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition log != null
      * @precondition customResultUtils != null
      */
     protected Collection retrieveImplicitProperties(
@@ -1123,6 +1134,7 @@ public class CustomSqlValidationHandler
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final QueryJLog log,
         final CustomResultUtils customResultUtils)
     {
         Collection result = new ArrayList();
@@ -1172,6 +1184,18 @@ public class CustomSqlValidationHandler
                         t_strType,
                         t_bNullable));
             }
+        }
+        else
+        {
+            String t_strErrorMessage =
+                "Cannot retrieve table associated to SQL result " + sqlResult.getId();
+
+            if  (log != null)
+            {
+                log.warn(t_strErrorMessage);
+            }
+
+            throw new BuildException(t_strErrorMessage);
         }
 
         return result;

@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -53,9 +54,13 @@ import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
 
 /*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Singleton;
+
+/*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
@@ -65,28 +70,18 @@ import java.util.Calendar;
  * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
  */
 public class OracleTextFunctions
+    implements  Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
-
-    /**
-     * Specifies a new weak reference.
-     * @param functions the instance to use.
-     */
-    public static void setReference(final OracleTextFunctions functions)
+    private static class OracleTextFunctionsSingletonContainer
     {
-        singleton = new WeakReference(functions);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    public static WeakReference getReference()
-    {
-        return singleton;
+        /**
+         * The actual singleton.
+         */
+        public static final OracleTextFunctions SINGLETON =
+            new OracleTextFunctions();
     }
 
     /**
@@ -95,23 +90,7 @@ public class OracleTextFunctions
      */
     public static OracleTextFunctions getInstance()
     {
-        OracleTextFunctions result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (OracleTextFunctions) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new OracleTextFunctions();
-
-            setReference(result);
-        }
-
-        return result;
+        return OracleTextFunctionsSingletonContainer.SINGLETON;
     }
 
     /**

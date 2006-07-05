@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -55,6 +56,7 @@ import org.acmsl.queryj.tools.templates.functions.numeric.oracle
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -63,7 +65,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 /**
  * Is able to generate Oracle's numeric function repositories.
@@ -72,11 +73,19 @@ import java.lang.ref.WeakReference;
  */
 public class OracleNumericFunctionsTemplateGenerator
     extends  NumericFunctionsTemplateGenerator
+    implements  Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class OracleNumericFunctionsTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final OracleNumericFunctionsTemplateGenerator SINGLETON =
+            new OracleNumericFunctionsTemplateGenerator();
+    }
 
     /**
      * Public constructor to allow reflective instantiation.
@@ -84,46 +93,12 @@ public class OracleNumericFunctionsTemplateGenerator
     public OracleNumericFunctionsTemplateGenerator() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    protected static void setOracleReference(OracleNumericFunctionsTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a OracleNumericFunctionsTemplateGenerator instance.
+     * Retrieves a <code>OracleNumericFunctionsTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static OracleNumericFunctionsTemplateGenerator getOracleInstance()
     {
-        OracleNumericFunctionsTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (OracleNumericFunctionsTemplateGenerator) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new OracleNumericFunctionsTemplateGenerator() {};
-
-            setReference(result);
-        }
-
-        return result;
+        return OracleNumericFunctionsTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

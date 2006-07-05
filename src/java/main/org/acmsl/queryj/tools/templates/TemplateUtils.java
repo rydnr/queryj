@@ -1,7 +1,8 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armend&aacute;riz
+    Copyright (C) 2002-2006  Jose San Leandro Armend&aacute;riz
                              chous@acm-sl.org
      
     This library is free software; you can redistribute it and/or
@@ -53,6 +54,7 @@ import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 /*
  * Importing ACM-SL Commons classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
 /*
@@ -63,7 +65,6 @@ import org.apache.commons.logging.LogFactory;
 /*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -74,12 +75,19 @@ import java.util.Iterator;
  *         >Jose San Leandro Armend&aacute;riz</a>
  */
 public class TemplateUtils
-    implements  Utils
+    implements  Singleton, 
+                Utils
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class TemplateUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final TemplateUtils SINGLETON = new TemplateUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -87,46 +95,12 @@ public class TemplateUtils
     protected TemplateUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final TemplateUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>TemplateUtils</code> instance.
      * @return such instance.
      */
     public static TemplateUtils getInstance()
     {
-        TemplateUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (TemplateUtils) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new TemplateUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return TemplateUtilsSingletonContainer.SINGLETON;
     }
 
     /**

@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.RowDecorator;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -78,6 +79,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 /*
@@ -263,7 +265,7 @@ public class BaseDAOTemplate
                 input,
                 tableName,
                 staticAttributeName,
-                attributes.size(),
+                attributes,
                 getMetadataManager(),
                 getDecoratorFactory());
         }
@@ -274,13 +276,13 @@ public class BaseDAOTemplate
      * @param input the input.
      * @param tableName the table name.
      * @param staticAttributeName the name of the static attribute.
-     * @param columnCount the number of columns.
+     * @param attributes the attributes.
      * @param metadataManager the metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @throws InvalidTemplateException if the template is invalid.
      * @precondition tableName != null
      * @precondition staticAttributeName != null
-     * @precondition columnCount > 0
+     * @precondition attributes != null
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
@@ -288,7 +290,7 @@ public class BaseDAOTemplate
         final Map input,
         final String tableName,
         final String staticAttributeName,
-        final int columnCount,
+        final Collection attributes,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
       throws  InvalidTemplateException
@@ -297,7 +299,7 @@ public class BaseDAOTemplate
             input,
             tableName,
             staticAttributeName,
-            columnCount,
+            attributes,
             metadataManager,
             metadataManager.getMetadataTypeManager(),
             decoratorFactory,
@@ -309,7 +311,7 @@ public class BaseDAOTemplate
      * @param input the input.
      * @param tableName the table name.
      * @param staticAttributeName the name of the static attribute.
-     * @param columnCount the number of columns.
+     * @param attributes the attributes.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -317,7 +319,7 @@ public class BaseDAOTemplate
      * @throws InvalidTemplateException if the template is invalid.
      * @precondition tableName != null
      * @precondition staticAttributeName != null
-     * @precondition columnCount > 0
+     * @precondition attributes != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
@@ -327,7 +329,7 @@ public class BaseDAOTemplate
         final Map input,
         final String tableName,
         final String staticAttributeName,
-        final int columnCount,
+        final Collection attributes,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final DecoratorFactory decoratorFactory,
@@ -340,7 +342,7 @@ public class BaseDAOTemplate
                 input,
                 tableName,
                 staticAttributeName,
-                columnCount,
+                attributes,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory,
@@ -362,7 +364,7 @@ public class BaseDAOTemplate
      * @param input the input.
      * @param tableName the table name.
      * @param staticAttributeName the static attribute name.
-     * @param columnCount the number of columns.
+     * @param attributes the attributes.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -371,7 +373,7 @@ public class BaseDAOTemplate
      * @throws InvalidTemplateException if the template is invalid.
      * @precondition tableName != null
      * @precondition staticAttributeName != null
-     * @precondition columnCount > 0
+     * @precondition attributes != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
@@ -382,7 +384,7 @@ public class BaseDAOTemplate
         final Map input,
         final String tableName,
         final String staticAttributeName,
-        final int columnCount,
+        final Collection attributes,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final DecoratorFactory decoratorFactory,
@@ -393,6 +395,8 @@ public class BaseDAOTemplate
         Log t_Log = UniqueLogFactory.getLog(BaseDAOTemplate.class);
         
         Collection t_cRows = new ArrayList();
+
+        int t_iColumnCount = (attributes != null) ? attributes.size() : 0;
 
         ResultSet t_rsResults = null;
 
@@ -406,9 +410,9 @@ public class BaseDAOTemplate
 
             t_rsResults = t_PreparedStatement.executeQuery();
 
-            String[] t_astrColumnNames = new String[columnCount];
+            String[] t_astrColumnNames = new String[t_iColumnCount];
 
-            String[] t_astrColumnValues = new String[columnCount];
+            String[] t_astrColumnValues = new String[t_iColumnCount];
 
             String t_strRowName = null;
 
@@ -424,7 +428,7 @@ public class BaseDAOTemplate
                     int t_iArrayIndex = 0;
 
                     for  (int t_iIndex = 1;
-                              t_iIndex <= columnCount;
+                              t_iIndex <= t_iColumnCount;
                               t_iIndex++)
                     {
                         t_iArrayIndex = t_iIndex - 1;
@@ -441,6 +445,9 @@ public class BaseDAOTemplate
                             t_strRowName = t_astrColumnValues[t_iArrayIndex];
                         }
                     }
+
+                    reorderAttributes(
+                        attributes, t_astrColumnNames, t_astrColumnValues);
 
                     t_cRows.add(
                         buildRow(
@@ -535,5 +542,108 @@ public class BaseDAOTemplate
     public String getTemplateName()
     {
         return "BaseDAO";
+    }
+
+    /**
+     * Reorders the attributes in the same order as the original ones.
+     * @param attributes the original attributes.
+     * @param names the retrieved attribute names.
+     * @param values the retrieved attribute values.
+     * @precondition attributes != null
+     * @precondition names != null
+     * @precondition values != null
+     * @precondition attributes.size() == names.length
+     * @precondition names.length == values.length
+     */
+    protected void reorderAttributes(
+        final Collection attributes,
+        final String[] names,
+        final String[] values)
+    {
+        Iterator t_itAttributeIterator =
+            (attributes != null) ? attributes.iterator() : null;
+
+        if  (t_itAttributeIterator != null)
+        {
+            Object t_Item;
+            Attribute t_CurrentAttribute;
+            int t_iIndex = 0;
+            int t_iPosition;
+            int t_iCount = (attributes != null) ? attributes.size() : 0;
+
+            String[] t_astrAuxNames = new String[t_iCount];
+            String[] t_astrAuxValues = new String[t_iCount];
+
+            while  (t_itAttributeIterator.hasNext())
+            {
+                t_Item = t_itAttributeIterator.next();
+
+                if  (t_Item instanceof Attribute)
+                {
+                    t_CurrentAttribute = (Attribute) t_Item;
+
+                    t_iPosition =
+                        retrieveAttributeIndex(
+                            t_CurrentAttribute.getName(), names);
+
+                    if  (   (t_iPosition >= 0)
+                         && (t_iPosition < t_iCount))
+                    {
+                        t_astrAuxNames[t_iIndex] = names[t_iPosition];
+                        t_astrAuxValues[t_iIndex] = values[t_iPosition];
+                    }
+
+                    t_iIndex++;
+                }
+            }
+
+            copyArray(t_astrAuxNames, names);
+            copyArray(t_astrAuxValues, values);
+        }
+    }
+
+    /**
+     * Retrieves the index of the attribute in given collection.
+     * @param name the attribute name.
+     * @param attributes the attributes.
+     * @return such index.
+     * @precondition name != null
+     * @precondition attributes != null
+     */
+    protected int retrieveAttributeIndex(
+        final String name, final String[] attributes)
+    {
+        int result = -1;
+
+        int t_iCount = (attributes != null) ? attributes.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            if  (name.equals(attributes[t_iIndex]))
+            {
+                result = t_iIndex;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Copies given array.
+     * @param source the source.
+     * @param target the target.
+     * @precondition source != null
+     * @precondition target != null
+     * @precondition source.length <= target.lenght
+     */
+    protected void copyArray(final String[] source, final String[] target)
+    {
+        int t_iCount = (source != null) ? source.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            target[t_iIndex] = source[t_iIndex];
+        }
     }
 }

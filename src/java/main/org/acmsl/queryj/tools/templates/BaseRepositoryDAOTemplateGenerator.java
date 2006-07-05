@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -61,7 +62,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 /**
@@ -71,12 +71,20 @@ import java.util.Collection;
  */
 public class BaseRepositoryDAOTemplateGenerator
     implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator
+                BasePerRepositoryTemplateGenerator,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class BaseRepositoryDAOTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final BaseRepositoryDAOTemplateGenerator SINGLETON =
+            new BaseRepositoryDAOTemplateGenerator();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -84,47 +92,12 @@ public class BaseRepositoryDAOTemplateGenerator
     protected BaseRepositoryDAOTemplateGenerator() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    protected static void setReference(
-        final BaseRepositoryDAOTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a RepositoryDAOTemplateGenerator instance.
+     * Retrieves a <code>RepositoryDAOTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static BaseRepositoryDAOTemplateGenerator getInstance()
     {
-        BaseRepositoryDAOTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (BaseRepositoryDAOTemplateGenerator) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new BaseRepositoryDAOTemplateGenerator();
-
-            setReference(result);
-        }
-
-        return result;
+        return BaseRepositoryDAOTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

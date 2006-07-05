@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
     Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -48,12 +49,13 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 /*
  * Importing ACM-SL Commons classes.
  */
+import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -64,6 +66,8 @@ import java.util.Iterator;
  *         >Jose San Leandro</a>
  */
 public class CustomResultUtils
+    implements  Singleton,
+                Utils
 {
     /**
      * An empty SqlElement array.
@@ -78,9 +82,16 @@ public class CustomResultUtils
         new Result[0];
 
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class CustomResultUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final CustomResultUtils SINGLETON =
+            new CustomResultUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -88,46 +99,12 @@ public class CustomResultUtils
     protected CustomResultUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final CustomResultUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>CustomResultUtils</code> instance.
      * @return such instance.
      */
     public static CustomResultUtils getInstance()
     {
-        CustomResultUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (CustomResultUtils) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new CustomResultUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return CustomResultUtilsSingletonContainer.SINGLETON;
     }
 
     /**

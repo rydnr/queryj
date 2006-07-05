@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armend?riz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armend?riz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -50,9 +51,9 @@ import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
 
 /*
- * Importing some JDK classes.
+ * Importing some ACM-SL Commons classes.
  */
-import java.lang.ref.WeakReference;
+import org.acmsl.commons.patterns.Singleton;
 
 /**
  * Represents the USER_TABLES table in the persistence domain.
@@ -60,11 +61,19 @@ import java.lang.ref.WeakReference;
  */
 public class OracleUserTablesTable
     extends  Table
+    implements  Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class OracleUserTablesTableSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final OracleUserTablesTable SINGLETON =
+            new OracleUserTablesTable();
+    }
 
     /**
      * The user_tables table table_name field.
@@ -87,24 +96,6 @@ public class OracleUserTablesTable
     protected OracleUserTablesTable()
     {
         this(null);
-    }
-
-    /**
-     * Specifies a new weak reference.
-     * @param table the table instance to use.
-     */
-    protected static void setReference(final OracleUserTablesTable table)
-    {
-        singleton = new WeakReference(table);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
     }
 
     /**
@@ -134,23 +125,7 @@ public class OracleUserTablesTable
      */
     public static OracleUserTablesTable getInstance()
     {
-        OracleUserTablesTable result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (OracleUserTablesTable) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new OracleUserTablesTable();
-
-            setReference(result);
-        }
-
-        return result;
+        return OracleUserTablesTableSingletonContainer.SINGLETON;
     }
 
     /**

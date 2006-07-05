@@ -1,7 +1,8 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armend&aacute;riz
+    Copyright (C) 2002-2006  Jose San Leandro Armend&aacute;riz
                              chous@acm-sl.org
      
     This library is free software; you can redistribute it and/or
@@ -46,6 +47,7 @@ import org.acmsl.queryj.SelectQuery;
 /*
  * Importing ACM-SL Commons classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
 /*
@@ -54,7 +56,6 @@ import org.acmsl.commons.patterns.Utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.ref.WeakReference;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -71,12 +72,19 @@ import org.apache.commons.logging.LogFactory;
  *         >Jose San Leandro Armend&aacute;riz</a>
  */
 public class QueryUtils
-    implements  Utils
+    implements  Singleton,
+                Utils
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class QueryUtilsSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final QueryUtils SINGLETON = new QueryUtils();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -84,46 +92,12 @@ public class QueryUtils
     protected QueryUtils() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param utils the utils instance to use.
-     */
-    protected static void setReference(final QueryUtils utils)
-    {
-        singleton = new WeakReference(utils);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a <code>QueryUtils</code> instance.
      * @return such instance.
      */
     public static QueryUtils getInstance()
     {
-        QueryUtils result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (QueryUtils) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new QueryUtils();
-
-            setReference(result);
-        }
-
-        return result;
+        return QueryUtilsSingletonContainer.SINGLETON;
     }
 
     /**

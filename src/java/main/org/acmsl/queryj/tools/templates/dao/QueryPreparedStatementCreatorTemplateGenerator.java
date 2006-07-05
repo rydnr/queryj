@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -51,6 +52,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
@@ -60,7 +62,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 /**
  * Is able to generate QueryPreparedStatementCreator templates.
@@ -68,12 +69,20 @@ import java.lang.ref.WeakReference;
  *         >Jose San Leandro</a>
  */
 public class QueryPreparedStatementCreatorTemplateGenerator
-    implements  QueryPreparedStatementCreatorTemplateFactory
+    implements  QueryPreparedStatementCreatorTemplateFactory,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class QueryPreparedStatementCreatorTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final QueryPreparedStatementCreatorTemplateGenerator SINGLETON =
+            new QueryPreparedStatementCreatorTemplateGenerator();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -81,48 +90,13 @@ public class QueryPreparedStatementCreatorTemplateGenerator
     protected QueryPreparedStatementCreatorTemplateGenerator() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    protected static void setReference(
-        final QueryPreparedStatementCreatorTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
-     * Retrieves a QueryPreparedStatementCreatorTemplateGenerator instance.
+     * Retrieves a <code>QueryPreparedStatementCreatorTemplateGenerator</code>
+     * instance.
      * @return such instance.
      */
     public static QueryPreparedStatementCreatorTemplateGenerator getInstance()
     {
-        QueryPreparedStatementCreatorTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result =
-                (QueryPreparedStatementCreatorTemplateGenerator) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new QueryPreparedStatementCreatorTemplateGenerator();
-
-            setReference(result);
-        }
-
-        return result;
+        return QueryPreparedStatementCreatorTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**

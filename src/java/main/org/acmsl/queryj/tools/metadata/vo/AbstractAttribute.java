@@ -84,7 +84,7 @@ public abstract class AbstractAttribute
     /**
      * Whether the attribute allows null values or not.
      */
-    private boolean m__bAllowsNull;
+    private boolean m__bAllowsNull = false;
 
     /**
      * The optional value.

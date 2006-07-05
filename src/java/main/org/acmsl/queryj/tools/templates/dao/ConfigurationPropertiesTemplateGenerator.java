@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -56,6 +56,7 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
@@ -65,7 +66,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 /**
@@ -76,36 +76,25 @@ import java.util.Collection;
  */
 public class ConfigurationPropertiesTemplateGenerator
     implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator
+                BasePerRepositoryTemplateGenerator,
+                Singleton
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid the double-checked locking.
      */
-    private static WeakReference singleton;
+    private static class ConfigurationPropertiesTemplateGeneratorSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final ConfigurationPropertiesTemplateGenerator SINGLETON =
+            new ConfigurationPropertiesTemplateGenerator();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
     protected ConfigurationPropertiesTemplateGenerator() {};
-
-    /**
-     * Specifies a new weak reference.
-     * @param generator the generator instance to use.
-     */
-    private static void setReference(
-        final ConfigurationPropertiesTemplateGenerator generator)
-    {
-        singleton = new WeakReference(generator);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
-    }
 
     /**
      * Retrieves a <code>ConfigurationPropertiesTemplateGenerator</code>
@@ -114,23 +103,7 @@ public class ConfigurationPropertiesTemplateGenerator
      */
     public static ConfigurationPropertiesTemplateGenerator getInstance()
     {
-        ConfigurationPropertiesTemplateGenerator result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null) 
-        {
-            result = (ConfigurationPropertiesTemplateGenerator) reference.get();
-        }
-
-        if  (result == null) 
-        {
-            result = new ConfigurationPropertiesTemplateGenerator();
-
-            setReference(result);
-        }
-
-        return result;
+        return ConfigurationPropertiesTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**
