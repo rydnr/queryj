@@ -1,0 +1,463 @@
+<!--
+ @license
+                        QueryJ
+
+    Copyright (C) 2002-2006  Jose San Leandro Armend&aacute;riz
+                             chous@acm-sl.org
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+    Thanks to ACM S.L. for distributing this library under the GPL license.
+    Contact info: jose.sanleandro@acm-sl.com
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecaba&ntilde;as
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
+
+ @header
+  
+   Filename: $RCSfile$
+
+   Author: Jose San Leandro Armendariz
+
+   Description: Instruments QueryJ using JRat.
+
+-->
+
+<!--
+ Instruments QueryJ using JRat.
+ @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ @default description
+-->
+<project name="${project.name}" default="description" basedir="../../..">
+
+    <!--
+     Displays the build script purpose, and the folder structure required.
+     @return the output of the described message.
+    -->
+    <target
+      name="description"
+      description="Displays the build script purpose.">
+
+      <echo>
+        This script builds QueryJ using JRat.
+      </echo>
+    </target>
+
+    <!--
+     Defines the required variables in all tasks.
+     @calls property to initialize the required properties.
+     @calls path to define each one of the class and source paths.
+     @return the asignment of correct values to the required properties.
+    -->
+    <target name="init.properties">
+
+      <!--
+       Dependencies base folder.
+      -->
+      <property name="dependencies.dir" value="dependencies"/>
+
+      <!--
+       Libraries base folder.
+      -->
+      <property name="lib.dir" value="${dependencies.dir}/lib"/>
+
+      <!--
+       Compilation and distribution base folder.
+      -->
+      <property name="dist.dir" value="dist"/>
+
+      <!--
+       Classes folder.
+      -->
+      <property name="classes.dir" value="${dist.dir}/classes"/>
+
+      <!--
+       Base folder for all kind of source files.
+      -->
+      <property name="src.dir" value="src"/>
+
+      <!--
+       Java source folder.
+      -->
+      <property name="java.src.dir" value="${src.dir}/java"/>
+
+      <!--
+       Base folder for all kind of Autotools source files.
+      -->
+      <property name="autotools.dir" value="${src.dir}/toolconf/autotools"/>
+
+      <!--
+       Java source path.
+      -->
+      <path id="java.source.path">
+
+        <!--
+         Source files.
+        -->
+        <pathelement location="${java.src.dir}"/>
+
+      </path>
+
+      <!--
+       Compilation and distribution base folder.
+      -->
+      <property name="dist.dir" value="${project.base.folder}/dist"/>
+
+      <!--
+       Where the .class files are created while compiling.
+      -->
+      <property name="classes.dir" value="${dist.dir}/classes"/>
+
+      <!--
+       Defines where to look for M4 macro files: acinclude.m4, ...
+      -->
+      <property name="macros.dir" value="${autotools.dir}"/>
+
+      <!--
+       Java libraries folder. Files under this folder are needed for
+       compiling the Java sources and also at runtime.
+      -->
+      <property name="java.lib.dir" value="${lib.dir}/java"/>
+
+      <!--
+       Java libraries needed ONLY for building the project, not required
+       at runtime.
+      -->
+      <property
+        name="java.build.lib.dir"
+        value="${java.lib.dir}/development"/>
+
+      <!--
+       Java libraries needed ONLY at runtime, not required for building
+       the project.
+      -->   
+      <property
+          name="java.runtime.lib.dir"
+          value="${java.lib.dir}/runtime"/>
+
+      <!--
+       Java libraries needed ONLY for unit tests, not required
+       for building the project.
+      -->   
+      <property
+          name="java.unit.test.lib.dir"
+          value="${java.lib.dir}/unittest"/>
+
+      <!--
+       Java compilation classpath.
+      -->
+      <path id="java.compile.class.path">
+
+        <!--
+         Project own classes.
+        -->
+        <pathelement location="${classes.dir}"/>
+
+        <!--
+         Java libraries needed for compilation and at runtime.
+        -->
+        <fileset dir="${java.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <!--
+         Java libraries needed only for compilation.
+        -->
+        <fileset dir="${java.build.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <!--
+         Java libraries needed compiling the unit tests.
+        -->
+        <fileset dir="${java.unit.test.lib.dir}">
+
+            <include name="*.jar"/>
+
+        </fileset>
+
+        <!-- In order to find macros to copy -->
+        <pathelement location="${macros.dir}"/>
+
+      </path>
+
+      <!--
+       Using externally-defined properties.
+      -->
+      <property file="src/toolconf/ant/version.properties"/>
+      <property file="src/toolconf/ant/project.properties"/>
+      <property file="src/toolconf/jrat/jrat.properties"/>
+
+      <!--
+       Defines where to store the GNU Autotools-enabled folder structure.
+      -->
+      <property name="jrat.outputdir" value="jrat-output"/>
+
+      <!--
+       Defines the classpath to use for executing JRat.
+      -->
+      <path id="jrat.classpath">
+
+        <pathelement location="${classes.dir}"/>
+
+        <fileset dir="${java.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <fileset dir="${java.runtime.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+        <fileset dir="${java.build.lib.dir}">
+
+          <include name="*.jar"/>
+
+        </fileset>
+
+      </path>
+
+      <!--
+        Defines the classpath to use for declaring JRat.
+      -->
+      <path id="jrat.declaration.classpath">
+
+        <path refid="jrat.classpath"/>
+
+      </path>
+
+    </target>
+
+    <!--
+     Declares JRat task.
+     @return the correctly declared JRat task.
+    -->
+    <target name="declare.jrat.task">
+
+      <description>Declares JRat task</description>
+
+      <!--
+       Defines the <i>JRat</i> task.
+      -->
+      <taskdef
+        name="jrat"
+        classname="org.shiftone.jrat.inject.ant.InjectCopyTask"
+        classpathref="jrat.classpath"/>
+
+    </target>
+
+    <!--
+     Executes JRat.
+     @return the result of executing JRat.
+    -->
+    <target
+      name="jrat"
+      depends="init.properties, declare.jrat.task"
+      description="Executes JRat">
+
+      <jrat todir="${jrat.output}" verbose="true">
+        <fileset dir="${classes.dir}"/>
+      </jrat>
+
+    </target>
+
+
+    <!--
+     Creates a jar with the classes.
+     @depends init to set up required properties and paths.
+     @param build.dir the folder that will contain the jar file(s).
+     @param classes.dir the classes folder.
+     @param log4j.dir the Log4J configuration files.
+     @param properties.dir the configuration properties.
+     @param xml.dir the XML configuration files.
+     @param project.name the project's name.
+     @param project.version the project's current version.
+     @param project.status the project's status.
+     @param build.number the count of builds.
+     @param organization.name the name of the organization.
+     @calls mkdir to create the <i>build.dir</i> folder.
+     @calls copy to copy some needed files to the jar.
+     @calls mkdir to create the <i>classes.dir</i>/META-INF folder.
+     @calls manifest to create the jar manifest file.
+     @calls jar to actually create the jar file.
+     @return the jar with all compiled classes, in folder <i>build.dir</i>.
+    -->
+    <target
+        name="jar"
+        depends="init.properties"
+        description="Creates a jar with the classes.">
+
+        <!--
+         Creates the distribution directory.
+        -->
+        <mkdir dir="dist/build"/>
+
+        <!--
+         Copy all configuration files.
+        -->
+        <copy todir="${jrat.output}">
+
+            <!--
+             Log4J's.
+            -->
+            <fileset dir="conf/log4j" includes="**/*.lcf"/>
+            <fileset dir="conf/log4j" includes="**/*.xml"/>
+
+            <!--
+             Properties
+            -->
+            <fileset dir="conf/properties" includes="**/*.properties"/>
+
+            <!--
+             XML
+            -->
+            <fileset dir="conf/xml" includes="**/*.xml"/>
+
+            <!--
+             DTD
+            -->
+            <fileset dir="conf/xml" includes="**/*.dtd"/>
+
+            <!--
+             Templates
+            -->
+            <fileset dir="src/templates">
+              <include name="**/*"/>
+              <exclude name="**/CVS"/>
+              <exclude name="**/.svn"/>
+            </fileset>
+
+        </copy>
+
+        <!--
+         Puts everything in ${build.dir} into a jar file.
+        -->
+        <jar
+          jarfile="dist/build/${project.name}-jrat-${project.version}${project.status}.jar"
+          basedir="${jrat.output}"
+          manifest="${classes.dir}/META-INF/MANIFEST.MF"/>
+
+        <condition property="isUnix">
+          <os family="unix"/>
+        </condition>
+
+        <antcall target="_jar.copy"/>
+        <antcall target="_jar.symlink"/>
+
+    </target>
+
+    <!--
+     Copies project's latest jar file to files with no version in their name, so they can
+     be referred without explicit version information.
+     @depends init to define all properties.
+     @calls  copy to copy the file.
+     @return the new files.
+    -->
+    <target
+      name="_jar.copy"
+      depends="init.properties"
+      description="Copies to version-less filenames the project's latest jar file."
+      unless="isUnix">
+
+        <property environment="env"/>
+
+        <condition property="maven.available.locally">
+          <available type="dir" file="${env.MAVEN_HOME}/repository"/>
+        </condition>
+
+        <antcall target="_jar.copy.to.maven"/>
+
+    </target>
+
+    <!--
+     Copies the latest jar file to the local Maven repository, if it's installed.
+     @depends init to set required properties.
+     @param env.MAVEN_HOME/repository the local Maven repository
+     @calls copy to copy the new jar file to Maven.
+     @return the publishing of the jar file to Maven.
+    -->
+    <target
+      name="_jar.copy.to.maven"
+      depends="init.properties"
+      description="Copies the latest jar file to the local Maven repository, if it's installed."
+      if="maven.available.locally">
+
+      <copy
+        file="${basedir}/dist/build/${project.name}-jrat-${project.version}${project.status}.jar"
+        tofile="${env.MAVEN_HOME}/repository/${project.name}/jars/${project.name}-jrat-${project.version}${project.status}.jar"/>
+
+    </target>
+
+    <!--
+     Creates symbolic links for project's latest jar file.
+     @depends init to define all properties.
+     @calls symlink to declare the symbolic links.
+     @return the new links.
+    -->
+    <target
+      name="_jar.symlink"
+      depends="init.properties"
+      description="Creates symbolic links for project's latest jar file."
+      if="isUnix">
+
+      <property environment="env"/>
+
+      <condition property="maven.available.locally">
+        <available type="dir" file="${env.MAVEN_HOME}/repository"/>
+      </condition>
+
+      <antcall target="_jar.symlink.to.maven"/>
+
+    </target>
+
+    <!--
+     Creates symlinks to the latest jar file in the local Maven repository, if it's installed.
+     @depends init to set required properties.
+     @param env.MAVEN_HOME/repository the local Maven repository
+     @calls symlink to create the symlink to the new jar file in Maven.
+     @return the publishing of the jar file to Maven.
+    -->
+    <target
+      name="_jar.symlink.to.maven"
+      depends="init.properties"
+      description="Creates symlinks to the latest jar file in the local Maven repository, if it's installed."
+      if="maven.available.locally">
+
+      <move
+        file="${basedir}/dist/build/${project.name}-jrat-${project.version}${project.status}.jar"
+        tofile="${env.MAVEN_HOME}/repository/${project.name}/jars/${project.name}-jrat-${project.version}${project.status}.jar"/>
+
+      <delete
+        file="${env.MAVEN_HOME}/repository/${project.group}/jars/${project.name}-jrat-${project.version}${project.status}.jar"/>
+
+      <symlink
+        action="single"
+        overwrite="true"
+        resource="${env.MAVEN_HOME}/repository/${project.group}/jars/${project.name}-jrat-${project.version}${project.status}.jar"
+        link="${basedir}/dist/build/${project.name}-jrat-${project.version}${project.status}.jar"/>
+
+    </target>
+
+</project>
