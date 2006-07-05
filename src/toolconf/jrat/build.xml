@@ -281,6 +281,9 @@
         <fileset dir="${classes.dir}"/>
       </jrat>
 
+      <echo>Remember, start QueryJ (or Ant itself) with
+-Djrat.configuration=jrat-queryj.xml
+      </echo>
     </target>
 
 

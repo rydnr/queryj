@@ -1,0 +1,22 @@
+<jrat>
+<!-- record stats for foo and bar servlets -->
+  <handler>
+    <include className="org.acmsl.queryj.tools.handlers.*BuildHandler"/>
+    <include className="org.acmsl.queryj.tools.template.handlers.*BuildHandler"/>
+    <include className="org.acmsl.queryj.tools.template.dao.handlers.*BuildHandler"/>
+    <include className="org.acmsl.queryj.tools.template.valueobject.handlers.*BuildHandler"/>
+    <factory
+      class="org.shiftone.jrat.provider.stats.StatMethodHandlerFactory">
+      <property name="OutputFile" value="BuildHandlers"/>
+    <factory/>
+  </handler>
+
+  <handler>
+    <include className="org.acmsl.queryj.tools.handlers.*BuildHandler"/>
+    <include className="org.acmsl.queryj.tools.template.handlers.*BuildHandler"/>
+    <include className="org.acmsl.queryj.tools.template.dao.handlers.*BuildHandler"/>
+    <include className="org.acmsl.queryj.tools.template.valueobject.handlers.*BuildHandler"/>
+    <factory
+      class="org.shiftone.jrat.provider.rate.RateMethodHandlerFactory"/>
+  </handler>
+</jrat>
