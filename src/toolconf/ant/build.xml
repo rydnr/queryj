@@ -2058,7 +2058,7 @@
     -->
     <target
       name="compile"
-      depends="init, clean"
+      depends="init"
       description="Compiles the source files.">
 
       <!--

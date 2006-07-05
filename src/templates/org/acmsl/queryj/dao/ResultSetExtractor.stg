@@ -161,6 +161,7 @@ public class <input.vo_name>ResultSetExtractor
 <else>
     <defaultExtractor(input=input)>
 <endif>
+
 }
 >>
 

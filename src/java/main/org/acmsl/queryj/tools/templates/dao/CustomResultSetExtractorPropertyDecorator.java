@@ -182,4 +182,36 @@ public class CustomResultSetExtractorPropertyDecorator
     {
         return type;
     }
+
+    /**
+     * Retrieves the object type.
+     * @return such information.
+     */
+    public String getObjectType()
+    {
+        String result = getCachedObjectType();
+
+        if  (result == null)
+        {
+            result = getObjectType(getType(), getMetadataTypeManager());
+            setCachedObjectType(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the attribute's object type.
+     * @param type the attribute type.
+     * @param metadataTypeManager the metadata type manager.
+     * @return such type.
+     * @precondition metadataTypeManager != null
+     */
+    protected String getObjectType(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            metadataTypeManager.getStatementSetterFieldType(
+                metadataTypeManager.getJavaType(type));
+    }
 }
