@@ -123,7 +123,9 @@ public class RepositoryDAOTemplateBuildHandler
     {
         boolean result = false;
 
-        if  (definesRepositoryScopedSql(customSqlProvider))
+        if  (definesRepositoryScopedSql(
+                 customSqlProvider,
+                 getAllowEmptyRepositoryDAOSetting(parameters)))
         {
             result =
                 super.handle(
@@ -182,41 +184,63 @@ public class RepositoryDAOTemplateBuildHandler
     /**
      * Checks whether there's any custom SQL for the whole repository.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param allowEmptyRepositoryDAO whether to generate the repository DAO
+     * in any case.
      * @return <code>true</code> in such case.
      * @precondition customSqlProvider != null
      */
     protected boolean definesRepositoryScopedSql(
-        final CustomSqlProvider customSqlProvider)
+        final CustomSqlProvider customSqlProvider,
+        final boolean allowEmptyRepositoryDAO)
     {
-        boolean result = false;
+        boolean result = allowEmptyRepositoryDAO;
 
-        Collection t_cElements = customSqlProvider.getCollection();
-        
-        Iterator t_Iterator =
-            (t_cElements != null) ? t_cElements.iterator() : null;
-        
-        if  (t_Iterator != null)
+        if  (!result)
         {
-            Object t_Item;
-            Sql t_Sql;
-            
-            while  (t_Iterator.hasNext())
+            Collection t_cElements = customSqlProvider.getCollection();
+        
+            Iterator t_Iterator =
+                (t_cElements != null) ? t_cElements.iterator() : null;
+        
+            if  (t_Iterator != null)
             {
-                t_Item = t_Iterator.next();
-                
-                if  (t_Item instanceof Sql)
+                Object t_Item;
+                Sql t_Sql;
+            
+                while  (t_Iterator.hasNext())
                 {
-                    t_Sql = (Sql) t_Item;
-
-                    if  (t_Sql.getRepositoryScope() != null)
+                    t_Item = t_Iterator.next();
+                
+                    if  (t_Item instanceof Sql)
                     {
-                        result = true;
-                        break;
+                        t_Sql = (Sql) t_Item;
+
+                        if  (t_Sql.getRepositoryScope() != null)
+                        {
+                            result = true;
+                            break;
+                        }
                     }
                 }
             }
         }
 
         return result;
+    }
+
+    /**
+     * Checks whether empty repository DAO is allowed explicitly.
+     * @param parameters the parameters.
+     * @return <code>true</code> in such case.
+     * @precondition parameters != null
+     */
+    protected boolean getAllowEmptyRepositoryDAO(final Map parameters)
+    {
+        Boolean t_Result =
+            (Boolean)
+                parameters.get(
+                    ParameterValidationHander.ALLOW_EMPTY_REPOSITORY_DAO);
+
+        return (t_Result != null) ? t_Result.booleanValue() : false;
     }
 }

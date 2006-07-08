@@ -452,9 +452,6 @@
         file="${basedir}/dist/build/${project.name}-jrat-${project.version}${project.status}.jar"
         tofile="${env.MAVEN_HOME}/repository/${project.name}/jars/${project.name}-jrat-${project.version}${project.status}.jar"/>
 
-      <delete
-        file="${env.MAVEN_HOME}/repository/${project.group}/jars/${project.name}-jrat-${project.version}${project.status}.jar"/>
-
       <symlink
         action="single"
         overwrite="true"

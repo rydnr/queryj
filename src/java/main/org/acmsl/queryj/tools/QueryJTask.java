@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -239,6 +239,16 @@ public class QueryJTask
      * The "grammar-bundle" property.
      */
     private String m__strGrammarBundleName;
+
+    /**
+     * The <i>allowEmptyRepositoryDAO</i> flag.
+     */
+    private boolean m__bAllowEmptyRepositoryDAO = false;
+
+    /**
+     * The <i>allowEmptyRepositoryDAO</i> property.
+     */
+    private String m__strAllowEmptyRepositoryDAO;
 
     /**
      * The nested tables.
@@ -917,6 +927,57 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to allow empty DAO repository.
+     * @param allow such setting.
+     */
+    protected final void immutableSetAllowEmptyRepositoryDAO(
+        final String allow)
+    {
+        m__strAllowEmptyRepositoryDAO = allow;
+    }
+
+    /**
+     * Specifies whether to allow empty DAO repository.
+     * @param allow such setting.
+     */
+    public void setAllowEmptyRepositoryDAO(final String allow)
+    {
+        immutableSetAllowEmptyRepositoryDAO(allow);
+
+        setAllowEmptyRepositoryDAOFlag(
+            (   (allow == null)
+             || (   (allow.trim().toLowerCase().equals("yes"))
+                 || (allow.trim().toLowerCase().equals("true")))));
+    }
+
+    /**
+     * Retrieves whether to allow empty DAO repository.
+     * @return such setting.
+     */
+    public String getAllowEmptyRepositoryDAO()
+    {
+        return m__strAllowEmptyRepositoryDAO;
+    }
+
+    /**
+     * Specifies the "allow-empty-dao-repository" flag.
+     * @param flag such flag.
+     */
+    protected void setAllowEmptyRepositoryDAOFlag(final boolean flag)
+    {
+        m__bAllowEmptyRepositoryDAO = flag;
+    }
+
+    /**
+     * Retrieves the "allow-empty-dao-repository" flag.
+     * @return such flag.
+     */
+    protected boolean getAllowEmptyRepositoryDAOFlag()
+    {
+        return m__bAllowEmptyRepositoryDAO;
+    }
+
+    /**
      * Specifies the "tables" nested element.
      * @param tables the tables xml element.
      */
@@ -1168,6 +1229,12 @@ public class QueryJTask
             boolean t_bGenerateMockDAOImplementation =
                 getGenerateMockDAOImplementationFlag();
 
+            boolean t_bGenerateXmlDAOImplementation =
+                getGenerateXmlDAOImplementationFlag();
+
+            boolean t_bAllowEmptyRepositoryDAO =
+                getAllowEmptyRepositoryDAOFlag();
+
             String t_strCustomSqlModel = getCustomSqlModel();
             File t_SqlXmlFile = getSqlXmlFile();
 
@@ -1291,6 +1358,18 @@ public class QueryJTask
                 t_mAttributes.put(
                     ParameterValidationHandler.GENERATE_MOCK_DAO,
                     (t_bGenerateMockDAOImplementation
+                     ?  Boolean.TRUE
+                     :  Boolean.FALSE));
+
+                t_mAttributes.put(
+                    ParameterValidationHandler.GENERATE_XML_DAO,
+                    (t_bGenerateXmlDAOImplementation
+                     ?  Boolean.TRUE
+                     :  Boolean.FALSE));
+
+                t_mAttributes.put(
+                    ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO,
+                    (t_bAllowEmptyRepositoryDAO
                      ?  Boolean.TRUE
                      :  Boolean.FALSE));
 
