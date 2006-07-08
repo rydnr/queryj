@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates.handlers;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Sql;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
@@ -234,12 +235,12 @@ public class RepositoryDAOTemplateBuildHandler
      * @return <code>true</code> in such case.
      * @precondition parameters != null
      */
-    protected boolean getAllowEmptyRepositoryDAO(final Map parameters)
+    protected boolean getAllowEmptyRepositoryDAOSetting(final Map parameters)
     {
         Boolean t_Result =
             (Boolean)
                 parameters.get(
-                    ParameterValidationHander.ALLOW_EMPTY_REPOSITORY_DAO);
+                    ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO);
 
         return (t_Result != null) ? t_Result.booleanValue() : false;
     }

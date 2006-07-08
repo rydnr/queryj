@@ -1230,7 +1230,7 @@ public class QueryJTask
                 getGenerateMockDAOImplementationFlag();
 
             boolean t_bGenerateXmlDAOImplementation =
-                getGenerateXmlDAOImplementationFlag();
+                getGenerateXMLDAOImplementationFlag();
 
             boolean t_bAllowEmptyRepositoryDAO =
                 getAllowEmptyRepositoryDAOFlag();
