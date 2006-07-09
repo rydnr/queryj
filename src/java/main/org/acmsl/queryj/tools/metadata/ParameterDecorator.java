@@ -181,6 +181,30 @@ public class ParameterDecorator
     }
 
     /**
+     * Retrieves whether the parameter type is a String or not.
+     * @return such information.
+     */
+    public boolean isString()
+    {
+        return isString(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the parameter type is a String or not.
+     * @param type the type.
+     * @param metadataTypeManager the metadata type manager.
+     * @return such information.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isString(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            metadataTypeManager.isString(
+                metadataTypeManager.getJavaType(type));
+    }
+
+    /**
      * Retrieves the field type of the parameter.
      * @return such information.
      */

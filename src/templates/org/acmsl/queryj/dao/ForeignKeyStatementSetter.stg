@@ -180,11 +180,6 @@ public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
     <foreignKey.attributes:attribute_member_declaration(attr=it); separator="\n">
 
     /**
-     * The update operation.
-     */
-    private boolean m__bUpdateOperation;
-
-    /**
      * Creates a \<code><foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter\</code>
      * instance.
      <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased);

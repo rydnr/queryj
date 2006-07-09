@@ -2,7 +2,7 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2005  ACM-SL
+//  Copyright (C) 2002-2006  ACM-SL
 //                           chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
@@ -228,12 +228,34 @@ property_getter(attribute) ::= <<
  * @return such information.
  */
 <if(attribute.allowsNull)>
+public <attribute.objectType> immutableGet<attribute.columnNameCapitalized>()
+<else>
+public <attribute.javaType> immutableGet<attribute.columnNameCapitalized>()
+<endif>
+
+{
+    return m__<attribute.columnNameCapitalized>;
+}
+
+<if(attribute.allowsNull)>
 public <attribute.objectType> get<attribute.columnNameCapitalized>()
 <else>
 public <attribute.javaType> get<attribute.columnNameCapitalized>()
 <endif>
 
 {
-    return m__<attribute.columnNameCapitalized>;
+<if(attribute.date)>
+    Date result = immutableGet<attribute.columnNameCapitalized>();
+
+    if  (result != null)
+    {
+        result = new Date(result.getTime());
+    }
+
+    return result;
+<else>
+    return immutableGet<attribute.columnNameCapitalized>();
+<endif>
+
 }
 >>

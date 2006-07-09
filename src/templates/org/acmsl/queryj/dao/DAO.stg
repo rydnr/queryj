@@ -845,7 +845,7 @@ public class <input.engine_name><input.vo_name>DAO
 
             if  (resultSet.next())
             {
-                int index = 1;
+                int t_iIndex = 1;
 
                 <input.pk_attributes:pk_resultset_extractor_parameter_retrieval(
                   name=it.nameLowercased,
@@ -905,9 +905,9 @@ pk_resultset_extractor_parameter_retrieval(
 result.put(
     "<name>",
 <if(isPrimitive)>
-    new <objectType>(resultSet.<getterMethod>(index++)));
+    new <objectType>(resultSet.<getterMethod>(t_iIndex++)));
 <else>
-    resultSet.<getterMethod>(index++));
+    resultSet.<getterMethod>(t_iIndex++));
 <endif>
 >>
 
