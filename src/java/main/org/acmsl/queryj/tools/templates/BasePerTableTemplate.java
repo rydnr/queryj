@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -286,11 +286,8 @@ public abstract class BasePerTableTemplate
         int t_iPrimaryKeysLength =
             (t_astrPrimaryKeys != null) ? t_astrPrimaryKeys.length : 0;
 
-        String t_strTableComment =
-            metadataManager.getTableComment(tableName);
-
         String t_strStaticAttributeName =
-            metaLanguageUtils.retrieveStaticAttribute(t_strTableComment);
+            retrieveStaticAttribute(tableName, metadataManager);
 
         String t_strStaticAttributeType =
             metadataTypeManager.getFieldType(
@@ -1213,5 +1210,43 @@ public abstract class BasePerTableTemplate
         final DecoratorFactory decoratorFactory)
     {
         return decoratorFactory.createTableDecorator(table, metadataManager);
+    }
+
+    /**
+     * Retrieves the static attribute.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such attribute, from the table's comment (@static keyword).
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     */
+    protected String retrieveStaticAttribute(
+        final String tableName, final MetadataManager metadataManager)
+    {
+        return
+            retrieveStaticAttribute(
+                tableName,
+                metadataManager,
+                MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the static attribute.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return such attribute, from the table's comment (@static keyword).
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected String retrieveStaticAttribute(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        return
+            metaLanguageUtils.retrieveStaticAttribute(
+                tableName, metadataManager);
     }
 }

@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes base DAO templates.
+ * Description: Writes base abstract DAO templates.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.BaseAbstractDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
@@ -60,17 +60,17 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Writes base DAO templates.
+ * Writes base abstract DAO templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class BaseDAOTemplateWritingHandler
+public class BaseAbstractDAOTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
 {
     /**
-     * Creates a <code>BaseDAOTemplateWritingHandler</code> instance.
+     * Creates a <code>BaseAbstractDAOTemplateWritingHandler</code> instance.
      */
-    public BaseDAOTemplateWritingHandler() {};
+    public BaseAbstractDAOTemplateWritingHandler() {};
 
     /**
      * Retrieves the template generator.
@@ -78,7 +78,7 @@ public class BaseDAOTemplateWritingHandler
      */
     protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
     {
-        return BaseDAOTemplateGenerator.getInstance();
+        return BaseAbstractDAOTemplateGenerator.getInstance();
     }
 
     /**
@@ -93,7 +93,8 @@ public class BaseDAOTemplateWritingHandler
     {
         return
             (BasePerTableTemplate[])
-                parameters.get(TemplateMappingManager.BASE_DAO_TEMPLATES);
+                parameters.get(
+                    TemplateMappingManager.BASE_ABSTRACT_DAO_TEMPLATES);
     }
 
     /**
@@ -124,7 +125,7 @@ public class BaseDAOTemplateWritingHandler
       throws  BuildException
     {
         return
-            packageUtils.retrieveBaseDAOFolder(
+            packageUtils.retrieveBaseAbstractDAOFolder(
                 projectFolder,
                 projectPackage,
                 useSubfolders);

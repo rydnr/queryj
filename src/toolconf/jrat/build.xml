@@ -324,43 +324,46 @@ or
         -->
         <copy todir="${jrat.output}">
 
-            <!--
-             Log4J's.
-            -->
-            <fileset dir="conf/log4j" includes="**/*.lcf"/>
-            <fileset dir="conf/log4j" includes="**/*.xml"/>
+          <!--
+           Log4J's.
+          -->
+          <fileset dir="conf/log4j" includes="**/*.lcf"/>
+          <fileset dir="conf/log4j" includes="**/*.xml"/>
 
-            <!--
-             Properties
-            -->
-            <fileset dir="conf/properties" includes="**/*.properties"/>
+          <!--
+           Properties
+          -->
+          <fileset dir="conf/properties" includes="**/*.properties"/>
 
-            <!--
-             XML
-            -->
-            <fileset dir="conf/xml" includes="**/*.xml"/>
+          <!--
+           XML
+          -->
+          <fileset dir="conf/xml" includes="**/*.xml"/>
 
-            <!--
-             DTD
-            -->
-            <fileset dir="conf/xml" includes="**/*.dtd"/>
+          <!--
+           DTD
+          -->
+          <fileset dir="conf/xml" includes="**/*.dtd"/>
 
-            <!--
-             Templates
-            -->
-            <fileset dir="src/templates">
-              <include name="**/*"/>
-              <exclude name="**/CVS"/>
-              <exclude name="**/.svn"/>
-            </fileset>
+          <!--
+           Templates
+          -->
+          <fileset dir="src/templates">
+            <include name="**/*"/>
+            <exclude name="**/CVS"/>
+            <exclude name="**/.svn"/>
+          </fileset>
 
         </copy>
+
+        <delete
+          file="${basedir}/dist/build/${project.name}-jrat-${project.version}${project.status}.jar"/>
 
         <!--
          Puts everything in ${build.dir} into a jar file.
         -->
         <jar
-          jarfile="dist/build/${project.name}-jrat-${project.version}${project.status}.jar"
+          jarfile="${basedir}/dist/build/${project.name}-jrat-${project.version}${project.status}.jar"
           basedir="${jrat.output}"
           manifest="${classes.dir}/META-INF/MANIFEST.MF"/>
 
@@ -450,8 +453,18 @@ or
       description="Creates symlinks to the latest jar file in the local Maven repository, if it's installed."
       if="maven.available.locally">
 
-      <move
+      <copy
         file="${basedir}/dist/build/${project.name}-jrat-${project.version}${project.status}.jar"
+        tofile="${basedir}/dist/build/tmp.jar"/>
+
+      <delete
+        file="${basedir}/dist/build/${project.name}-jrat-${project.version}${project.status}.jar"/>
+
+      <delete
+        file="${env.MAVEN_HOME}/repository/${project.name}/jars/${project.name}-jrat-${project.version}${project.status}.jar"/>
+
+      <move
+        file="${basedir}/dist/build/tmp.jar"
         tofile="${env.MAVEN_HOME}/repository/${project.name}/jars/${project.name}-jrat-${project.version}${project.status}.jar"/>
 
       <symlink

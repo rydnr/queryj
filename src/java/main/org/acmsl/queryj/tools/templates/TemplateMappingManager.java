@@ -532,6 +532,12 @@ public class TemplateMappingManager
         "base.repository.dao.factory";
 
     /**
+     * The base abstract DAO templates attribute name.
+     */
+    public static final String BASE_ABSTRACT_DAO_TEMPLATES =
+        "base.abstract.DAO.templates";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;

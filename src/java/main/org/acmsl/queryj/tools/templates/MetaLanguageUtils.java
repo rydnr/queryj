@@ -39,6 +39,11 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
+ * Importing some project classes.
+ */
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+
+/*
  * Importing ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
@@ -115,5 +120,46 @@ public class MetaLanguageUtils
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the static attribute.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return such attribute, from the table's comment (@static keyword).
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metaLanguageUtils != null
+     */
+    public String retrieveStaticAttribute(
+        final String tableName, final MetadataManager metadataManager)
+    {
+        String result = null;
+
+        String t_strTableComment =
+            metadataManager.getTableComment(tableName);
+
+        if  (t_strTableComment != null)
+        {
+            result = retrieveStaticAttribute(t_strTableComment);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether the table contains static values or not.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such information, from the table's comment (@static keyword).
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     */
+    public boolean containsStaticValues(
+        final String tableName, final MetadataManager metadataManager)
+    {
+        return
+            retrieveStaticAttribute(tableName, metadataManager) != null;
     }
 }

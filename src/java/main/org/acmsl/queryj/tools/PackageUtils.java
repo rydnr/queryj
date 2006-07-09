@@ -1769,6 +1769,40 @@ public class PackageUtils
     {
         return retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders);
     }
+
+    /**
+     * Retrieves the package name for base abstract DAO templates.
+     * @param packageName the original package.
+     * @return the package for the associated base DAO interface.
+     * @precondition packageName != null
+     */
+    public String retrieveBaseAbstractDAOPackage(final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for base abstract DAO templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated DAO class should be
+     * generated.
+     * @precondition parentFolder != null
+     * @precondition packageName != null
+     */
+    public File retrieveBaseAbstractDAOFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return
+            retrieveRdbFolder(
+                parentFolder,
+                packageName,
+                useSubfolders);
+    }
+
     /**
      * Extracts the class name of given fully-qualified class.
      * @param fqcn such information.

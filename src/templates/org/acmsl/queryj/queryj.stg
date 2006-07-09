@@ -694,7 +694,7 @@ protected static class QueryTransactionCallback
         final <daoName>DAO dao)
     {
         super(null, null, dao);
-        immutableSetSQL(sql);
+        immutableSetSql(sql);
         immutableSetResultSetExtractor(extractor);
     }
 
@@ -719,7 +719,7 @@ protected static class QueryTransactionCallback
      * Specifies the SQL sentence.
      * @param sql such sentence.
      */
-    private void immutableSetSQL(final String sql)
+    private void immutableSetSql(final String sql)
     {
         m__strSQL = sql;
     }
@@ -728,7 +728,7 @@ protected static class QueryTransactionCallback
      * Specifies the SQL sentence.
      * @param sql such sentence.
      */
-    protected void setSQL(final String sql)
+    protected void setSql(final String sql)
     {
         immutableSetSQL(sql);
     }
@@ -737,7 +737,7 @@ protected static class QueryTransactionCallback
      * Retrieves the SQL sentence.
      * @return such sentence.
      */
-    public String getSQL()
+    public String getSql()
     {
         return m__strSQL;
     }
@@ -790,7 +790,7 @@ protected static class QueryTransactionCallback
                 status,
                 creator,
                 setter,
-                getSQL(),
+                getSql(),
                 getResultSetExtractor(),
                 dao);
     }

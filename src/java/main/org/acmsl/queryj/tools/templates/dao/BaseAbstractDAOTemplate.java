@@ -27,15 +27,14 @@
                     28660 Madrid
                     Spain
 
- *****************************************************************************
+ ******************************************************************************
  *
  * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create engine-specific DAO interfaces for each
- *              table in the persistence model.
- *
+ * Description: Is able to create abstract DAO implementations for certain
+ *              tables in the persistence model.
  */
 package org.acmsl.queryj.tools.templates.dao;
 
@@ -43,42 +42,65 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.CachingRowDecorator;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.MetadataUtils;
+import org.acmsl.queryj.tools.metadata.RowDecorator;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.Row;
+import org.acmsl.queryj.tools.templates.InvalidTemplateException;
+import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
  * Importing StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.commons.utils.StringUtils;
+import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing some Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
  */
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
+/*
+ * Importing Commons-Logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+
 /**
- * Is able to create engine-specific DAO interfaces for each
- * table in the persistence model.
+ * Is able to create abstract DAO implementations for certain tables in the
+ * persistence model.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class DAOTemplate
-    extends  BasePerTableTemplate
+public class BaseAbstractDAOTemplate
+    extends  DAOTemplate
 {
     /**
-     * Builds a <code>DAOTemplate</code> using given information.
+     * Builds a <code>BaseAbstractDAOTemplate</code> using given information.
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
-     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -86,8 +108,9 @@ public class DAOTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param header the header.
      */
-    public DAOTemplate(
+    public BaseAbstractDAOTemplate(
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
@@ -120,16 +143,6 @@ public class DAOTemplate
      */
     protected StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/DAO.stg");
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    public String getTemplateName()
-    {
-        return "DAO";
+        return retrieveGroup("/org/acmsl/queryj/dao/BaseAbstractDAO.stg");
     }
 }
-            

@@ -228,9 +228,9 @@ property_getter(attribute) ::= <<
  * @return such information.
  */
 <if(attribute.allowsNull)>
-public <attribute.objectType> immutableGet<attribute.columnNameCapitalized>()
+protected final <attribute.objectType> immutableGet<attribute.columnNameCapitalized>()
 <else>
-public <attribute.javaType> immutableGet<attribute.columnNameCapitalized>()
+protected final <attribute.javaType> immutableGet<attribute.columnNameCapitalized>()
 <endif>
 
 {
