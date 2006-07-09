@@ -283,6 +283,8 @@
 
       <echo>Remember, start QueryJ (or Ant itself) with
 -Djrat.configuration=jrat-queryj.xml
+or
+-Djrat.factory=org.shiftone.jrat.provider.tree.TreeMethodHandlerFactory
       </echo>
     </target>
 
@@ -309,7 +311,7 @@
     -->
     <target
         name="jar"
-        depends="init.properties"
+        depends="init.properties, jrat"
         description="Creates a jar with the classes.">
 
         <!--

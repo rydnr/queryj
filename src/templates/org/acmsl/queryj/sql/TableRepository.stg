@@ -88,7 +88,6 @@ import org.acmsl.queryj.Table;
  * Importing some JDK classes.
  */
 import java.math.BigDecimal;
-import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
 
