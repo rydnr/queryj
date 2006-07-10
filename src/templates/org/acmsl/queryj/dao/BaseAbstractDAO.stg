@@ -180,10 +180,12 @@ public abstract class Abstract<input.vo_name>DAO
      */
     public <input.vo_name>[] getStaticValues()
     {
-        return
-            copyArray(
-                _ALL_QUERYJ_CONSTANTS_,
-                new <input.vo_name>[_ALL_QUERYJ_CONSTANTS_.length]);
+        <input.vo_name>[] result =
+            new <input.vo_name>[_ALL_QUERYJ_CONSTANTS_.length];
+
+        copyArray(_ALL_QUERYJ_CONSTANTS_, result);
+
+        return result;
     }
 
     /**
