@@ -260,6 +260,12 @@ public class ParameterValidationHandler
         "allow.empty.repository.dao";
 
     /**
+     * The implement-marker-interfaces attribute name.
+     */
+    public static final String IMPLEMENT_MARKER_INTERFACES =
+        "implement.marker.interfaces";
+
+    /**
      * The tables element name.
      */
     public static final String TABLES = "tables";
