@@ -316,4 +316,25 @@ public abstract class AbstractAntCommandHandler
         return (String) parameters.get(ParameterValidationHandler.HEADER);
     }
 
+    /**
+     * Retrieves whether to implement marker interfaces or not.
+     * @param parameters the parameter map.
+     * @return such condition.
+     * @precondition parameters != null
+     */
+    protected boolean retrieveImplementMarkerInterfaces(
+        final Map parameters)
+    {
+        Boolean result =
+            (Boolean)
+                parameters.get(
+                    ParameterValidationHandler.IMPLEMENT_MARKER_INTERFACES);
+
+        if  (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result.booleanValue();
+    }
 }
