@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -174,6 +175,7 @@ public class ResultSetExtractorTemplateBuildHandler
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveHeader(parameters),
+                retrieveImplementMarkerInterfaces(parameters),
                 ResultSetExtractorTemplateGenerator.getInstance(),
                 filterTableTemplates(
                     retrieveTableTemplates(parameters),
@@ -191,6 +193,8 @@ public class ResultSetExtractorTemplateBuildHandler
      * @param basePackageName the base package name.
      * @param repository the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
@@ -215,6 +219,7 @@ public class ResultSetExtractorTemplateBuildHandler
         final String basePackageName,
         final String repositoryName,
         final String header,
+        final boolean implementMarkerInterfaces,
         final ResultSetExtractorTemplateFactory templateFactory,
         final TableTemplate[] tableTemplates)
       throws  BuildException
@@ -246,7 +251,8 @@ public class ResultSetExtractorTemplateBuildHandler
                         quote,
                         basePackageName,
                         repositoryName,
-                        header);
+                        header,
+                        implementMarkerInterfaces);
             }
 
             storeTemplates(t_aTemplates, parameters);

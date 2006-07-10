@@ -85,6 +85,13 @@ source(input) ::= <<
  */
 import org.springframework.dao.DataAccessException;
 
+<if(input.implement_markers)>
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.DAO;
+<endif>
+
 /*
  * Importing some JDK classes.
  */
@@ -141,6 +148,10 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public interface <input.vo_name>DAO
+<if(input.implement_markers)>
+    extends  DAO
+<endif>
+
 {
 <if(input.static_table)>
     <input.cached_rows:cached_constants(

@@ -115,6 +115,8 @@ public class DAOTemplateGenerator
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableName != null
@@ -136,7 +138,8 @@ public class DAOTemplateGenerator
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final String header)
+        final String header,
+        final boolean implementMarkerInterfaces)
       throws  QueryJException
     {
         return
@@ -151,7 +154,8 @@ public class DAOTemplateGenerator
                 engineVersion,
                 quote,
                 basePackageName,
-                repositoryName);
+                repositoryName,
+                implementMarkerInterfaces);
     }
 
     /**

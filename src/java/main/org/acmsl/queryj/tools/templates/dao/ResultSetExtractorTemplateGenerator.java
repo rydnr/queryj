@@ -111,6 +111,8 @@ public class ResultSetExtractorTemplateGenerator
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @return such template.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -130,7 +132,8 @@ public class ResultSetExtractorTemplateGenerator
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final String header)
+        final String header,
+        final boolean implementMarkerInterfaces)
       throws  QueryJException
     {
         return
@@ -145,7 +148,8 @@ public class ResultSetExtractorTemplateGenerator
                 engineVersion,
                 quote,
                 basePackageName,
-                repositoryName);
+                repositoryName,
+                implementMarkerInterfaces);
     }
 
     /**

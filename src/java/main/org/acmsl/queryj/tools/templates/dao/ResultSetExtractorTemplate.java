@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -80,6 +81,8 @@ public class ResultSetExtractorTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      */
     public ResultSetExtractorTemplate(
         final String tableName,
@@ -92,7 +95,8 @@ public class ResultSetExtractorTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean implementMarkerInterfaces)
     {
         super(
             tableName,
@@ -105,7 +109,8 @@ public class ResultSetExtractorTemplate
             engineVersion,
             quote,
             basePackageName,
-            repositoryName);
+            repositoryName,
+            implementMarkerInterfaces);
     }
 
     /**

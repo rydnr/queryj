@@ -191,6 +191,7 @@ public abstract class BasePerTableTemplateBuildHandler
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveHeader(parameters),
+                retrieveImplementMarkerInterfaces(parameters),
                 retrieveTableTemplates(parameters));
     }
 
@@ -212,6 +213,8 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param projectPackage the project package.
      * @param repository the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -235,6 +238,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final String projectPackage,
         final String repository,
         final String header,
+        final boolean implementMarkerInterfaces,
         final TableTemplate[] tableTemplates)
       throws  BuildException
     {
@@ -268,6 +272,7 @@ public abstract class BasePerTableTemplateBuildHandler
                         projectPackage,
                         repository,
                         header,
+                        implementMarkerInterfaces,
                         parameters);
 
                 if  (t_Template != null)
@@ -365,6 +370,8 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param projectPackage the project package.
      * @param repository the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param parameters the parameters.
      * @return the template.
      * @throws QueryJException if the template cannot be created.
@@ -389,6 +396,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final String projectPackage,
         final String repository,
         final String header,
+        final boolean implementMarkerInterfaces,
         final Map parameters)
       throws  QueryJException
     {        
@@ -403,7 +411,8 @@ public abstract class BasePerTableTemplateBuildHandler
                 quote,
                 projectPackage,
                 repository,
-                header);
+                header,
+                implementMarkerInterfaces);
     }
 
     /**

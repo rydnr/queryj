@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -66,6 +67,8 @@ public interface ResultSetExtractorTemplateFactory
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @return such template.
      */
     public ResultSetExtractorTemplate createResultSetExtractorTemplate(
@@ -78,6 +81,7 @@ public interface ResultSetExtractorTemplateFactory
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final String header)
+        final String header,
+        final boolean implementMarkerInterfaces)
       throws  QueryJException;
 }

@@ -251,6 +251,16 @@ public class QueryJTask
     private String m__strAllowEmptyRepositoryDAO;
 
     /**
+     * The <i>implementMarkerInterfaces</i> flag.
+     */
+    private boolean m__bImplementMarkerInterfaces = false;
+
+    /**
+     * The <i>implementMarkerInterfaces</i> property.
+     */
+    private String m__strImplementMarkerInterfaces;
+
+    /**
      * The nested tables.
      */
     private AntTablesElement m__Tables;
@@ -978,6 +988,57 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to implement marker interfaces.
+     * @param allow such setting.
+     */
+    protected final void immutableSetImplementMarkerInterfaces(
+        final String allow)
+    {
+        m__strImplementMarkerInterfaces = allow;
+    }
+
+    /**
+     * Specifies whether to implement marker interfaces.
+     * @param allow such setting.
+     */
+    public void setImplementMarkerInterfaces(final String allow)
+    {
+        immutableSetImplementMarkerInterfaces(allow);
+
+        setImplementMarkerInterfacesFlag(
+            (   (allow == null)
+             || (   (allow.trim().toLowerCase().equals("yes"))
+                 || (allow.trim().toLowerCase().equals("true")))));
+    }
+
+    /**
+     * Retrieves whether to implement marker interfaces.
+     * @return such setting.
+     */
+    public String getImplementMarkerInterfaces()
+    {
+        return m__strImplementMarkerInterfaces;
+    }
+
+    /**
+     * Specifies the "implement-marker-interfaces" flag.
+     * @param flag such flag.
+     */
+    protected void setImplementMarkerInterfacesFlag(final boolean flag)
+    {
+        m__bImplementMarkerInterfaces = flag;
+    }
+
+    /**
+     * Retrieves the "implement-marker-interfaces" flag.
+     * @return such flag.
+     */
+    protected boolean getImplementMarkerInterfacesFlag()
+    {
+        return m__bImplementMarkerInterfaces;
+    }
+
+    /**
      * Specifies the "tables" nested element.
      * @param tables the tables xml element.
      */
@@ -1235,6 +1296,9 @@ public class QueryJTask
             boolean t_bAllowEmptyRepositoryDAO =
                 getAllowEmptyRepositoryDAOFlag();
 
+            boolean t_bImplementMarkerInterfaces =
+                getImplementMarkerInterfacesFlag();
+
             String t_strCustomSqlModel = getCustomSqlModel();
             File t_SqlXmlFile = getSqlXmlFile();
 
@@ -1370,6 +1434,12 @@ public class QueryJTask
                 t_mAttributes.put(
                     ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO,
                     (t_bAllowEmptyRepositoryDAO
+                     ?  Boolean.TRUE
+                     :  Boolean.FALSE));
+
+                t_mAttributes.put(
+                    ParameterValidationHandler.IMPLEMENT_MARKER_INTERFACES,
+                    (t_bImplementMarkerInterfaces
                      ?  Boolean.TRUE
                      :  Boolean.FALSE));
 

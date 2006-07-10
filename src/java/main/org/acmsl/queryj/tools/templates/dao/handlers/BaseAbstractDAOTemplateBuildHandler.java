@@ -133,6 +133,8 @@ public class BaseAbstractDAOTemplateBuildHandler
      * @param projectPackage the project package.
      * @param repository the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param parameters the parameters.
      * @return the template.
      * @throws QueryJException if the template cannot be created.
@@ -157,6 +159,7 @@ public class BaseAbstractDAOTemplateBuildHandler
         final String projectPackage,
         final String repository,
         final String header,
+        final boolean implementMarkerInterfaces,
         final Map parameters)
       throws  QueryJException
     {        
@@ -187,6 +190,7 @@ public class BaseAbstractDAOTemplateBuildHandler
                     projectPackage,
                     repository,
                     header,
+                    implementMarkerInterfaces,
                     t_cStaticValues);
         }
         else
@@ -204,6 +208,7 @@ public class BaseAbstractDAOTemplateBuildHandler
                     projectPackage,
                     repository,
                     header,
+                    implementMarkerInterfaces,
                     parameters);
         }
 

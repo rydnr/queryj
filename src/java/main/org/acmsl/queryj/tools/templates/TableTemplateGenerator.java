@@ -110,6 +110,8 @@ public class TableTemplateGenerator
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -123,7 +125,8 @@ public class TableTemplateGenerator
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean implementMarkerInterfaces)
       throws  QueryJException
     {
         return
@@ -138,7 +141,8 @@ public class TableTemplateGenerator
                 engineVersion,
                 quote,
                 basePackageName,
-                repositoryName);
+                repositoryName,
+                implementMarkerInterfaces);
     }
 
     /**

@@ -71,6 +71,13 @@ source(input) ::= <<
     typeInitMap.voSubpackageName
   ])>
 
+<if(input.implement_markers)>
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.ValueObject;
+<endif>
+
 /*
  * Importing some JDK classes.
  */
@@ -105,7 +112,13 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public abstract class Abstract<input.vo_name>ValueObject
+<if(input.implement_markers)>
+    implements  <input.vo_name>,
+                ValueObject
+<else>
     implements  <input.vo_name>
+<endif>
+
 {
     <input.attributes:attribute_declaration(attribute=it);
      separator="\n\n">

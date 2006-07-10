@@ -117,6 +117,8 @@ public class BaseDAOTemplateGenerator
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableName != null
@@ -138,7 +140,8 @@ public class BaseDAOTemplateGenerator
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final String header)
+        final String header,
+        final boolean implementMarkerInterfaces)
       throws  QueryJException
     {
         return
@@ -153,7 +156,8 @@ public class BaseDAOTemplateGenerator
                 engineVersion,
                 quote,
                 basePackageName,
-                repositoryName);
+                repositoryName,
+                implementMarkerInterfaces);
     }
 
     /**
@@ -168,6 +172,8 @@ public class BaseDAOTemplateGenerator
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param staticValues the static values, if the table's comment contains
      * the @static keyword.
      * @return a template.
@@ -193,6 +199,7 @@ public class BaseDAOTemplateGenerator
         final String basePackageName,
         final String repositoryName,
         final String header,
+        final boolean implementMarkerInterfaces,
         final Collection staticValues)
       throws  QueryJException
     {
@@ -209,6 +216,7 @@ public class BaseDAOTemplateGenerator
                 quote,
                 basePackageName,
                 repositoryName,
+                implementMarkerInterfaces,
                 staticValues);
     }
 

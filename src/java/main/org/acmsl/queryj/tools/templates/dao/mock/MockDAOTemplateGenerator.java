@@ -114,6 +114,8 @@ public class MockDAOTemplateGenerator
      * @param mockPackageName the mock package name.
      * @param repositoryName the name of the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableName != null
@@ -135,7 +137,8 @@ public class MockDAOTemplateGenerator
         final String quote,
         final String mockPackageName,
         final String repositoryName,
-        final String header)
+        final String header,
+        final boolean implementMarkerInterfaces)
       throws  QueryJException
     {
         return
@@ -150,7 +153,8 @@ public class MockDAOTemplateGenerator
                 engineVersion,
                 quote,
                 mockPackageName,
-                repositoryName);
+                repositoryName,
+                implementMarkerInterfaces);
     }
 
     /**

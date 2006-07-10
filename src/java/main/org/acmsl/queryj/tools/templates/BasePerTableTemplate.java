@@ -116,6 +116,7 @@ public abstract class BasePerTableTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param implementMarkerInterfaces whether to implement marker interfaces.
      */
     public BasePerTableTemplate(
         final String tableName,
@@ -128,7 +129,8 @@ public abstract class BasePerTableTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean implementMarkerInterfaces)
     {
         super(
             tableName,
@@ -141,7 +143,8 @@ public abstract class BasePerTableTemplate
             engineVersion,
             quote,
             basePackageName,
-            repositoryName);
+            repositoryName,
+            implementMarkerInterfaces);
     }
 
     /**
@@ -183,6 +186,7 @@ public abstract class BasePerTableTemplate
                 getBasePackageName(),
                 getRepositoryName(),
                 header,
+                getImplementMarkerInterfaces(),
                 getDecoratorFactory(),
                 StringUtils.getInstance(),
                 DefaultThemeUtils.getInstance(),
@@ -208,6 +212,8 @@ public abstract class BasePerTableTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param stringUtils the StringUtils instance.
      * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
@@ -244,6 +250,7 @@ public abstract class BasePerTableTemplate
         final String basePackageName,
         final String repositoryName,
         final String header,
+        final boolean implementMarkerInterfaces,
         final DecoratorFactory decoratorFactory,
         final StringUtils stringUtils,
         final DefaultThemeUtils defaultThemeUtils,
@@ -470,6 +477,7 @@ public abstract class BasePerTableTemplate
             metadataManager,
             metadataTypeManager,
             header,
+            implementMarkerInterfaces,
             decoratorFactory,
             metadataUtils,
             stringUtils);
@@ -522,6 +530,8 @@ public abstract class BasePerTableTemplate
      * @param metadataManager the database metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
@@ -591,6 +601,7 @@ public abstract class BasePerTableTemplate
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final String header,
+        final boolean implementMarkerInterfaces,
         final DecoratorFactory decoratorFactory,
         final MetadataUtils metadataUtils,
         final StringUtils stringUtils)
@@ -602,11 +613,12 @@ public abstract class BasePerTableTemplate
             tableName,
             engineName,
             engineVersion,
+            implementMarkerInterfaces,
             metadataManager,
             decoratorFactory);
 
         fillJavaHeaderParameters(
-            input,header,  copyrightYears, timestamp, metadataManager);
+            input, header, copyrightYears, timestamp, metadataManager);
 
         fillPackageDeclarationParameters(
             input, basePackageName, subpackageName, metadataManager);
@@ -686,6 +698,8 @@ public abstract class BasePerTableTemplate
      * @param tableName the table name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param metadataManager the database metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition input != null
@@ -700,6 +714,7 @@ public abstract class BasePerTableTemplate
         final String tableName,
         final String engineName,
         final String engineVersion,
+        final boolean implementMarkerInterfaces,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
@@ -709,6 +724,9 @@ public abstract class BasePerTableTemplate
             decorate(tableName, metadataManager, decoratorFactory));
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);
+        input.put(
+            "implement_markers",
+            (implementMarkerInterfaces) ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**

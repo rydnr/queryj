@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -65,6 +66,8 @@ public interface TableTemplateFactory
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -78,6 +81,7 @@ public interface TableTemplateFactory
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean implementMarkerInterfaces)
       throws  QueryJException;
 }

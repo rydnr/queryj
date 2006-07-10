@@ -114,6 +114,8 @@ public class BaseDAOFactoryTemplateGenerator
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @return the fresh new template.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -133,7 +135,8 @@ public class BaseDAOFactoryTemplateGenerator
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final String header)
+        final String header,
+        final boolean implementMarkerInterfaces)
     {
         return
             new BaseDAOFactoryTemplate(
@@ -147,7 +150,8 @@ public class BaseDAOFactoryTemplateGenerator
                 engineVersion,
                 quote,
                 basePackageName,
-                repositoryName);
+                repositoryName,
+                implementMarkerInterfaces);
     }
 
     /**

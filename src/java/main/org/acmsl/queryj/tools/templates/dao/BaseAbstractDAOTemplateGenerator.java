@@ -118,6 +118,8 @@ public class BaseAbstractDAOTemplateGenerator
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableName != null
@@ -139,7 +141,8 @@ public class BaseAbstractDAOTemplateGenerator
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final String header)
+        final String header,
+        final boolean implementMarkerInterfaces)
       throws  QueryJException
     {
         BasePerTableTemplate result = null;
@@ -158,7 +161,8 @@ public class BaseAbstractDAOTemplateGenerator
                     engineVersion,
                     quote,
                     basePackageName,
-                    repositoryName);
+                    repositoryName,
+                    implementMarkerInterfaces);
         }
 
         return result;
@@ -176,6 +180,8 @@ public class BaseAbstractDAOTemplateGenerator
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param staticValues the static values.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
@@ -200,6 +206,7 @@ public class BaseAbstractDAOTemplateGenerator
         final String basePackageName,
         final String repositoryName,
         final String header,
+        final boolean implementMarkerInterfaces,
         final Collection staticValues)
       throws  QueryJException
     {
@@ -220,6 +227,7 @@ public class BaseAbstractDAOTemplateGenerator
                     quote,
                     basePackageName,
                     repositoryName,
+                    implementMarkerInterfaces,
                     staticValues);
         }
         else
@@ -235,7 +243,8 @@ public class BaseAbstractDAOTemplateGenerator
                     quote,
                     basePackageName,
                     repositoryName,
-                    header);
+                    header,
+                    implementMarkerInterfaces);
         }
                 
         return result;

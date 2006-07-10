@@ -91,6 +91,8 @@ public class DAOTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      */
     public DAOTemplate(
         final String tableName,
@@ -103,7 +105,8 @@ public class DAOTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean implementMarkerInterfaces)
     {
         super(
             tableName,
@@ -116,11 +119,12 @@ public class DAOTemplate
             engineVersion,
             quote,
             basePackageName,
-            repositoryName);
+            repositoryName,
+            implementMarkerInterfaces);
     }
 
     /**
-     * Builds a <code>BaseDAOTemplate</code> using given information.
+     * Builds a <code>DAOTemplate</code> using given information.
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
@@ -132,6 +136,8 @@ public class DAOTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param staticValues the static values.
      */
     public DAOTemplate(
@@ -146,6 +152,7 @@ public class DAOTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
+        final boolean implementMarkerInterfaces,
         final Collection staticValues)
     {
         super(
@@ -159,7 +166,8 @@ public class DAOTemplate
             engineVersion,
             quote,
             basePackageName,
-            repositoryName);
+            repositoryName,
+            implementMarkerInterfaces);
 
         immutableSetStaticValues(staticValues);
     }

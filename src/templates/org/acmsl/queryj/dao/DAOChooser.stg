@@ -73,6 +73,13 @@ source(input) ::= <<
     typeInitMap.baseDAOSubpackageName
   ])>
 
+<if(input.implement_markers)>
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Singleton;
+<endif>
+
 /*
  * Importing some JDK classes.
  */
@@ -137,6 +144,10 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public class <input.tr_name_capitalized>DAOChooser
+<if(input.implement_markers)>
+    implements  Singleton
+<endif>
+
 {
     /**
      * Singleton implementation to avoid double-checked locking.

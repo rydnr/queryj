@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -85,6 +85,8 @@ public class MockDAOTemplate
      * @param mockPackageName the mock package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      */
     public MockDAOTemplate(
         final String tableName,
@@ -97,7 +99,8 @@ public class MockDAOTemplate
         final String engineVersion,
         final String quote,
         final String mockPackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean implementMarkerInterfaces)
     {
         super(
             tableName,
@@ -110,7 +113,8 @@ public class MockDAOTemplate
             engineVersion,
             quote,
             mockPackageName,
-            repositoryName);
+            repositoryName,
+            implementMarkerInterfaces);
     }
 
     /**

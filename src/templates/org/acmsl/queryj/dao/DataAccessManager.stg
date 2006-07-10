@@ -2,7 +2,7 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2005  ACM-SL
+//  Copyright (C) 2002-2006  ACM-SL
 //                           chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
@@ -74,6 +74,13 @@ source(input) ::= <<
  */
 <tables:dao_import(table=it); separator="\n">
 
+<if(input.implement_markers)>
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Singleton;
+<endif>
+
 <class(input=input,foreign_keys_by_table=input.foreign_keys_by_table)>
 >>
 
@@ -117,6 +124,10 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public class <input.tr_name_capitalized>DataAccessManager
+<if(input.implement_markers)>
+    implements  Singleton
+<endif>
+
 {
     <input.tables:dao_attribute_declaration(table=it); separator="\n\n">
 

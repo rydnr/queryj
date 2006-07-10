@@ -1,7 +1,7 @@
 #!/bin/sh -f
 
 usage () {
-  echo "Usage $0 [-d] <ant target>"
+  echo "Usage $0 [-D] <ant target>"
   echo "Calls given Ant target, managing the directory structure."
   echo "Options: -D Execute Maven to manage the dependencies."
   exit 1;
@@ -23,10 +23,23 @@ for last_command in "cd ${basedir}/src/toolconf/maven && mkdir -p ../emacs 2> /d
   fi
 done;
 fi
-for last_command in "cd ${basedir}/src/toolconf/ant && ant $*"; do
+opts=$*
+if [ "x$1" == "xjrat" ]; then
+opts="rebuild"
+fi
+for last_command in "cd ${basedir}/src/toolconf/ant && ant ${opts}"; do
   echo "Executing $last_command"
   echo "$last_command" | sh
   if [[ ! $? == 0 ]]; then
     exit 1
   fi
 done;
+if [ "x$1" == "xjrat" ]; then
+for last_command in "cd ${basedir}/src/toolconf/jrat && ant jar"; do
+  echo "Executing $last_command"
+  echo "$last_command" | sh
+  if [[ ! $? == 0 ]]; then
+    exit 1
+  fi
+done;
+fi

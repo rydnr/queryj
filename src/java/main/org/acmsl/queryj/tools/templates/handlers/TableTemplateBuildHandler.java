@@ -188,7 +188,8 @@ public class TableTemplateBuildHandler
                 retrieveProjectPackage(parameters),
                 retrievePackage(engineName, parameters),
                 retrieveTableRepositoryName(parameters),
-                retrieveHeader(parameters));
+                retrieveHeader(parameters),
+                retrieveImplementMarkerInterfaces(parameters));
     }
 
     /**
@@ -204,6 +205,8 @@ public class TableTemplateBuildHandler
      * @param packageName the package name.
      * @param repository the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @throws QueryJException in case of error.
@@ -227,7 +230,8 @@ public class TableTemplateBuildHandler
         final String projectPackage,
         final String packageName,
         final String repository,
-        final String header)
+        final String header,
+        final boolean implementMarkerInterfaces)
       throws  BuildException,
               QueryJException
     {
@@ -253,7 +257,8 @@ public class TableTemplateBuildHandler
                       t_iTableIndex++)
             {
                 t_aTableTemplates[t_iTableIndex] =
-                    templateFactory.createTableTemplate(
+                    createTemplate(
+                        templateFactory,
                         t_astrTableNames[t_iTableIndex],
                         metadataManager,
                         customSqlProvider,
@@ -263,7 +268,8 @@ public class TableTemplateBuildHandler
                         engineVersion,
                         quote,
                         projectPackage,
-                        repository);
+                        repository,
+                        implementMarkerInterfaces);
 
                 t_astrColumnNames =
                     metadataManager.getColumnNames(
@@ -366,5 +372,62 @@ public class TableTemplateBuildHandler
         throws  BuildException
     {
         parameters.put(TABLE_TEMPLATES, tableTemplates);
+    }
+
+    /**
+     * Creates the template.
+     * @param templateFactory the template factory.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param header the header.
+     * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
+     * @param projectPackage the project package.
+     * @param repository the repository name.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
+     * @return such template.
+     * @throws QueryJException if the template cannot be created.
+     * @precondition templateFactory != null
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
+     * @precondition header != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition projectPackage != null
+     * @precondition repository != null
+     */
+    protected TableTemplate createTemplate(
+        final TableTemplateFactory templateFactory,
+        final String tableName,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String header,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String projectPackage,
+        final String repository,
+        final boolean implementMarkerInterfaces)
+      throws  QueryJException
+    {
+        return
+            templateFactory.createTableTemplate(
+                tableName,
+                metadataManager,
+                customSqlProvider,
+                header,
+                packageName,
+                engineName,
+                engineVersion,
+                quote,
+                projectPackage,
+                repository,
+                implementMarkerInterfaces);
     }
 }

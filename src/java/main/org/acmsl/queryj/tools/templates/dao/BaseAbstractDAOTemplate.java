@@ -109,6 +109,8 @@ public class BaseAbstractDAOTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      */
     public BaseAbstractDAOTemplate(
         final String tableName,
@@ -121,7 +123,8 @@ public class BaseAbstractDAOTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean implementMarkerInterfaces)
     {
         super(
             tableName,
@@ -134,7 +137,8 @@ public class BaseAbstractDAOTemplate
             engineVersion,
             quote,
             basePackageName,
-            repositoryName);
+            repositoryName,
+            implementMarkerInterfaces);
     }
 
     /**
@@ -150,6 +154,8 @@ public class BaseAbstractDAOTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker
+     * interfaces.
      * @param staticValues the static values.
      */
     public BaseAbstractDAOTemplate(
@@ -164,6 +170,7 @@ public class BaseAbstractDAOTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
+        final boolean implementMarkerInterfaces,
         final Collection staticValues)
     {
         super(
@@ -178,6 +185,7 @@ public class BaseAbstractDAOTemplate
             quote,
             basePackageName,
             repositoryName,
+            implementMarkerInterfaces,
             staticValues);
     }
 
