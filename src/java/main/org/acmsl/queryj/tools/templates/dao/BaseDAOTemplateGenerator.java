@@ -66,6 +66,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Is able to generate base DAO implementations according to database
@@ -153,6 +154,62 @@ public class BaseDAOTemplateGenerator
                 quote,
                 basePackageName,
                 repositoryName);
+    }
+
+    /**
+     * Generates a BaseDAO template.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
+     * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the name of the repository.
+     * @param header the header.
+     * @param staticValues the static values, if the table's comment contains
+     * the @static keyword.
+     * @return a template.
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition packageName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition quote != null
+     * @precondition basePackageName != null
+     * @precondition repositoryName != null
+     * @precondition staticValues != null
+     */
+    public BasePerTableTemplate createTemplate(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName,
+        final String header,
+        final Collection staticValues)
+      throws  QueryJException
+    {
+        return
+            new BaseDAOTemplate(
+                tableName,
+                metadataManager,
+                customSqlProvider,
+                header,
+                getDecoratorFactory(),
+                packageName,
+                engineName,
+                engineVersion,
+                quote,
+                basePackageName,
+                repositoryName,
+                staticValues);
     }
 
     /**

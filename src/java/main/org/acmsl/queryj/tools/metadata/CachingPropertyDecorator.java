@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -92,6 +93,11 @@ public class CachingPropertyDecorator
      * The cached normalized/uncapitalized column name.
      */
     private String m__strCachedColumnNameNormalizedUncapitalized;
+
+    /**
+     * The cached isDate value.
+     */
+    private Boolean m__bCachedDate;
 
     /**
      * Creates a <code>CachingPropertyDecorator</code> to decorate given
@@ -474,6 +480,52 @@ public class CachingPropertyDecorator
         {
             result = super.getColumnNameNormalizedUncapitalized();
             setCachedColumnNameNormalizedUncapitalized(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Caches whether the property is a Date or not.
+     * @param flag such flag.
+     */
+    protected final void immutableSetCachedDate(final Boolean flag)
+    {
+        m__bCachedDate = flag;
+    }
+
+    /**
+     * Caches whether the property is a Date or not.
+     * @param flag such flag.
+     */
+    protected void setCachedDate(final Boolean flag)
+    {
+        immutableSetCachedDate(flag);
+    }
+
+    /**
+     * Retrieves the cached flag indicating whether the property is a
+     * Date or not.
+     * @return such information.
+     */
+    protected Boolean getCachedDate()
+    {
+        return m__bCachedDate;
+    }
+
+    /**
+     * Retrieves whether the property is a Date or not.
+     * @return such information.
+     */
+    public boolean isDate()
+    {
+        Boolean result = getCachedDate();
+
+        if  (result == null)
+        {
+            result = super.isDate() ? Boolean.TRUE : Boolean.FALSE;
+
+            setCachedDate(result);
         }
 
         return result;

@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.templates.dao.handlers.AttributesStatementSetterTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.BaseAbstractDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.ConfigurationPropertiesTemplateHandlerBundle;
@@ -82,6 +83,7 @@ public class DAOBundle
                 new AttributesStatementSetterTemplateHandlerBundle(),
                 new BaseDAOFactoryTemplateHandlerBundle(),
                 new BaseDAOTemplateHandlerBundle(),
+                new BaseAbstractDAOTemplateHandlerBundle(),
                 new ConfigurationPropertiesTemplateHandlerBundle(),
                 new CustomResultSetExtractorTemplateHandlerBundle(),
                 new DAOChooserTemplateHandlerBundle(),

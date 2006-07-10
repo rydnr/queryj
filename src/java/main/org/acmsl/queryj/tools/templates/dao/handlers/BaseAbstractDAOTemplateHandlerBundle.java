@@ -3,7 +3,7 @@
                         QueryJ
 
     Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles a pair of BaseDAO template build and writing
+ * Description: Bundles a pair of BaseAbstractDAO template build and writing
  *              handlers.
  *
  */
@@ -47,11 +47,11 @@ import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateWritingHandl
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles a pair of template BaseDAO template build and writing
+ * Bundles a pair of template BaseAbstractDAO template build and writing
  * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public class BaseDAOTemplateHandlerBundle
+public class BaseAbstractDAOTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {
     /**
@@ -61,10 +61,10 @@ public class BaseDAOTemplateHandlerBundle
      * @precondition buildHandler != null
      * @precondition writingHandler != null
      */
-    public BaseDAOTemplateHandlerBundle()
+    public BaseAbstractDAOTemplateHandlerBundle()
     {
         super(
-            new BaseDAOTemplateBuildHandler(),
-            new BaseDAOTemplateWritingHandler());
+            new BaseAbstractDAOTemplateBuildHandler(),
+            new BaseAbstractDAOTemplateWritingHandler());
     }
 }

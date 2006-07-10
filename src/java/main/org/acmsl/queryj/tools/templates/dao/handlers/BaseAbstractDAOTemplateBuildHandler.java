@@ -41,6 +41,9 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
@@ -56,6 +59,7 @@ import org.apache.tools.ant.BuildException;
 /*
  * Importing some JDK classes.
  */
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -114,5 +118,95 @@ public class BaseAbstractDAOTemplateBuildHandler
     {
         parameters.put(
             TemplateMappingManager.BASE_ABSTRACT_DAO_TEMPLATES, templates);
+    }
+
+    /**
+     * Creates the template with given parameters.
+     * @param templateFactory the template factory.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
+     * @param projectPackage the project package.
+     * @param repository the repository name.
+     * @param header the header.
+     * @param parameters the parameters.
+     * @return the template.
+     * @throws QueryJException if the template cannot be created.
+     * @precondition templateFactory != null
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
+     * @precondition engineName != null
+     * @precondition projectPackage != null
+     * @precondition repository != null
+     * @precondition parameters != null
+     */
+    protected BasePerTableTemplate createTemplate(
+        final BasePerTableTemplateFactory templateFactory,
+        final String tableName,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String projectPackage,
+        final String repository,
+        final String header,
+        final Map parameters)
+      throws  QueryJException
+    {        
+        BasePerTableTemplate result = null;
+
+        if  (   (templateFactory instanceof BaseAbstractDAOTemplateGenerator)
+             && (isStaticTable(tableName, metadataManager)))
+        {
+            BaseAbstractDAOTemplateGenerator t_Generator = 
+                (BaseAbstractDAOTemplateGenerator) templateFactory;
+
+            Collection t_cStaticValues =
+                retrieveStaticContent(
+                    parameters,
+                    tableName,
+                    metadataManager,
+                    t_Generator.getDecoratorFactory());
+
+            result =
+                t_Generator.createTemplate(
+                    tableName,
+                    metadataManager,
+                    customSqlProvider,
+                    packageName,
+                    engineName,
+                    engineVersion,
+                    quote,
+                    projectPackage,
+                    repository,
+                    header,
+                    t_cStaticValues);
+        }
+        else
+        {
+            result =
+                super.createTemplate(
+                    templateFactory,
+                    tableName,
+                    metadataManager,
+                    customSqlProvider,
+                    packageName,
+                    engineName,
+                    engineVersion,
+                    quote,
+                    projectPackage,
+                    repository,
+                    header,
+                    parameters);
+        }
+
+        return result;
     }
 }

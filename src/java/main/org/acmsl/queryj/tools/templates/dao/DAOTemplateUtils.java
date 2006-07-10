@@ -52,19 +52,39 @@ import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
 import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
+import org.acmsl.queryj.tools.metadata.CachingRowDecorator;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.MetadataUtils;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.Row;
+import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
 /*
  * Importing some JDK classes.
  */
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Provides some useful methods when generating DAO classes
@@ -813,5 +833,445 @@ public class DAOTemplateUtils
         }
 
         return result;
+    }
+
+    /**
+     * Queries the contents of given table.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return the retrieved rows.
+     * @throws SQLException if the operation fails.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    public Collection queryContents(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+      throws  SQLException
+    {
+        return
+            queryContents(
+                tableName,
+                metadataManager,
+                decoratorFactory,
+                MetaLanguageUtils.getInstance(),
+                MetadataUtils.getInstance());
+    }
+
+    /**
+     * Queries the contents of given table.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @param metadataUtils the <code>MetadataUtils</code> instance.
+     * @return the retrieved rows.
+     * @throws SQLException if the operation fails.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     * @precondition metaLanguageUtils != null
+     * @precondition metadataUtils != null
+     */
+    public Collection queryContents(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
+        final MetaLanguageUtils metaLanguageUtils,
+        final MetadataUtils metadataUtils)
+      throws  SQLException
+    {
+        return
+            queryContents(
+                tableName,
+                metaLanguageUtils.retrieveStaticAttribute(
+                    tableName, metadataManager),
+                metadataUtils.retrieveAttributes(
+                    tableName,
+                    metadataManager,
+                    metadataManager.getMetadataTypeManager(),
+                    decoratorFactory),
+                metadataManager,
+                decoratorFactory);
+    }
+
+    /**
+     * Queries the contents of given table.
+     * @param tableName the table name.
+     * @param staticAttributeName the name of the static attribute.
+     * @param attributes the attributes.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return the retrieved rows.
+     * @throws SQLException if the operation fails.
+     * @precondition tableName != null
+     * @precondition staticAttributeName != null
+     * @precondition attributes != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    public Collection queryContents(
+        final String tableName,
+        final String staticAttributeName,
+        final Collection attributes,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+      throws  SQLException
+    {
+        return
+            queryContents(
+                tableName,
+                staticAttributeName,
+                attributes,
+                metadataManager,
+                metadataManager.getMetadataTypeManager(),
+                decoratorFactory,
+                metadataManager.getMetaData());
+    }
+
+    /**
+     * Queries the contents of given table.
+     * @param input the input.
+     * @param tableName the table name.
+     * @param staticAttributeName the name of the static attribute.
+     * @param attributes the attributes.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param metaData the metadata.
+     * @return the retrieved rows.
+     * @throws SQLException if the operation fails.
+     * @precondition tableName != null
+     * @precondition staticAttributeName != null
+     * @precondition attributes != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
+     * @precondition metaData != null
+     */
+    protected Collection queryContents(
+        final String tableName,
+        final String staticAttributeName,
+        final Collection attributes,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory,
+        final DatabaseMetaData metaData)
+      throws  SQLException
+    {
+        Collection result = null;
+
+        try
+        {
+            result =
+                queryContents(
+                    tableName,
+                    staticAttributeName,
+                    attributes,
+                    metadataManager,
+                    metadataTypeManager,
+                    decoratorFactory,
+                    MetadataUtils.getInstance(),
+                    metaData.getConnection());
+        }
+        catch  (final SQLException sqlException)
+        {
+//             throw
+//                 new InvalidTemplateException(
+//                     "cannot.retrieve.connection",
+//                     new Object[0],
+//                     sqlException);
+            throw sqlException;
+        }
+
+        if  (result == null)
+        {
+            result = new ArrayList();
+        }
+
+        return result;
+    }
+
+    /**
+     * Queries the contents of given table.
+     * @param input the input.
+     * @param tableName the table name.
+     * @param staticAttributeName the static attribute name.
+     * @param attributes the attributes.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param metadataUtils the <code>MetadataUtils</code> instance.
+     * @param connection the connection.
+     * @return the retrieved rows.
+     * @throws SQLException if the operation fails.
+     * @precondition tableName != null
+     * @precondition staticAttributeName != null
+     * @precondition attributes != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
+     * @precondition metadataUtils != null
+     * @precondition connection != null
+     */
+    protected Collection queryContents(
+        final String tableName,
+        final String staticAttributeName,
+        final Collection attributes,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory,
+        final MetadataUtils metadataUtils,
+        final Connection connection)
+      throws  SQLException
+    {
+        Collection result = new ArrayList();
+
+        Log t_Log = UniqueLogFactory.getLog(DAOTemplateUtils.class);
+        
+        int t_iColumnCount = (attributes != null) ? attributes.size() : 0;
+
+        ResultSet t_rsResults = null;
+
+        PreparedStatement t_PreparedStatement = null;
+
+        try
+        {
+            t_PreparedStatement =
+                connection.prepareStatement(
+                    "select * from " + tableName);
+
+            t_rsResults = t_PreparedStatement.executeQuery();
+
+            String[] t_astrColumnNames = new String[t_iColumnCount];
+
+            String[] t_astrColumnValues = new String[t_iColumnCount];
+
+            String t_strRowName = null;
+
+            if  (t_rsResults != null)
+            {
+                while  (t_rsResults.next())
+                {
+                    t_strRowName = null;
+
+                    ResultSetMetaData t_rsMetaData =
+                        t_rsResults.getMetaData();
+
+                    int t_iArrayIndex = 0;
+
+                    for  (int t_iIndex = 1;
+                              t_iIndex <= t_iColumnCount;
+                              t_iIndex++)
+                    {
+                        t_iArrayIndex = t_iIndex - 1;
+
+                        t_astrColumnNames[t_iArrayIndex] =
+                            t_rsMetaData.getColumnName(t_iIndex);
+
+                        t_astrColumnValues[t_iArrayIndex] =
+                            t_rsResults.getString(t_iIndex);
+
+                        if  (staticAttributeName.equalsIgnoreCase(
+                                 t_astrColumnNames[t_iArrayIndex]))
+                        {
+                            t_strRowName = t_astrColumnValues[t_iArrayIndex];
+                        }
+                    }
+
+                    reorderAttributes(
+                        attributes, t_astrColumnNames, t_astrColumnValues);
+
+                    result.add(
+                        buildRow(
+                            t_strRowName,
+                            tableName,
+                            metadataUtils.buildAttributes(
+                                t_astrColumnNames,
+                                t_astrColumnValues,
+                                tableName,
+                                metadataManager,
+                                metadataTypeManager,
+                                decoratorFactory),
+                            metadataTypeManager));
+                }
+            }
+        }
+        catch  (final SQLException sqlException)
+        {
+//             throw
+//                 new InvalidTemplateException(
+//                     "cannot.retrieve.fixed.table.contents",
+//                     new Object[] { tableName },
+//                     sqlException);
+            throw sqlException;
+        }
+        finally 
+        {
+            try 
+            {
+                if  (t_rsResults != null)
+                {
+                    t_rsResults.close();
+                }
+            }
+            catch  (final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot close the result set.",
+                        sqlException);
+                }
+            }
+
+            try 
+            {
+                if  (t_PreparedStatement != null)
+                {
+                    t_PreparedStatement.close();
+                }
+            }
+            catch  (final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot close the statement.",
+                        sqlException);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Builds a row with given information.
+     * @param rowName the row name.
+     * @param tableName the table name.
+     * @param attributes the attributes.
+     * @param metadataTypeManager the metadata type manager.
+     * @return the row.
+     * @precondition rowName != null
+     * @precondition tableName != null
+     * @precondition attributes != null
+     * @precondition metadatTypeManager != null
+     */
+    protected Row buildRow(
+        final String rowName,
+        final String tableName,
+        final Collection attributes,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            new CachingRowDecorator(
+                rowName, tableName, attributes, metadataTypeManager);
+    }
+
+    /**
+     * Reorders the attributes in the same order as the original ones.
+     * @param attributes the original attributes.
+     * @param names the retrieved attribute names.
+     * @param values the retrieved attribute values.
+     * @precondition attributes != null
+     * @precondition names != null
+     * @precondition values != null
+     * @precondition attributes.size() == names.length
+     * @precondition names.length == values.length
+     */
+    protected void reorderAttributes(
+        final Collection attributes,
+        final String[] names,
+        final String[] values)
+    {
+        Iterator t_itAttributeIterator =
+            (attributes != null) ? attributes.iterator() : null;
+
+        if  (t_itAttributeIterator != null)
+        {
+            Object t_Item;
+            Attribute t_CurrentAttribute;
+            int t_iIndex = 0;
+            int t_iPosition;
+            int t_iCount = (attributes != null) ? attributes.size() : 0;
+
+            String[] t_astrAuxNames = new String[t_iCount];
+            String[] t_astrAuxValues = new String[t_iCount];
+
+            while  (t_itAttributeIterator.hasNext())
+            {
+                t_Item = t_itAttributeIterator.next();
+
+                if  (t_Item instanceof Attribute)
+                {
+                    t_CurrentAttribute = (Attribute) t_Item;
+
+                    t_iPosition =
+                        retrieveAttributeIndex(
+                            t_CurrentAttribute.getName(), names);
+
+                    if  (   (t_iPosition >= 0)
+                         && (t_iPosition < t_iCount))
+                    {
+                        t_astrAuxNames[t_iIndex] = names[t_iPosition];
+                        t_astrAuxValues[t_iIndex] = values[t_iPosition];
+                    }
+
+                    t_iIndex++;
+                }
+            }
+
+            copyArray(t_astrAuxNames, names);
+            copyArray(t_astrAuxValues, values);
+        }
+    }
+
+    /**
+     * Retrieves the index of the attribute in given collection.
+     * @param name the attribute name.
+     * @param attributes the attributes.
+     * @return such index.
+     * @precondition name != null
+     * @precondition attributes != null
+     */
+    protected int retrieveAttributeIndex(
+        final String name, final String[] attributes)
+    {
+        int result = -1;
+
+        int t_iCount = (attributes != null) ? attributes.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            if  (name.equals(attributes[t_iIndex]))
+            {
+                result = t_iIndex;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Copies given array.
+     * @param source the source.
+     * @param target the target.
+     * @precondition source != null
+     * @precondition target != null
+     * @precondition source.length <= target.length
+     */
+    protected void copyArray(final String[] source, final String[] target)
+    {
+        int t_iCount = (source != null) ? source.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            target[t_iIndex] = source[t_iIndex];
+        }
     }
 }

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -43,11 +44,14 @@ package org.acmsl.queryj.tools.templates.handlers;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
+import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -56,6 +60,7 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some Ant classes.
@@ -68,7 +73,14 @@ import org.apache.tools.ant.BuildException;
 import java.io.File;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Builds a per-table template using database metadata.
@@ -79,6 +91,12 @@ public abstract class BasePerTableTemplateBuildHandler
     extends    AbstractAntCommandHandler
     implements TemplateBuildHandler
 {
+    /**
+     * An empty <code>BasePerTableTemplate</code> array.
+     */
+    protected static final BasePerTableTemplate[] EMPTY_BASEPERTABLETEMPLATE_ARRAY =
+        new BasePerTableTemplate[0];
+
     /**
      * Creates a <code>BasePerTableTemplateBuildHandler</code> instance.
      */
@@ -223,20 +241,22 @@ public abstract class BasePerTableTemplateBuildHandler
         boolean result = false;
 
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
-        
-        BasePerTableTemplate[] t_aTemplates =
-            new BasePerTableTemplate[t_iLength];
+
+        Collection t_cTemplates = new ArrayList();
+
+        BasePerTableTemplate t_Template;
+
+        String t_strTableName;
 
         try
         {
-            String t_strTableName = null;
-
             for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
             {
                 t_strTableName = tableTemplates[t_iIndex].getTableName();
 
-                t_aTemplates[t_iIndex] =
-                    templateFactory.createTemplate(
+                t_Template =
+                    createTemplate(
+                        templateFactory,
                         t_strTableName,
                         metadataManager,
                         customSqlProvider,
@@ -247,10 +267,19 @@ public abstract class BasePerTableTemplateBuildHandler
                         quote,
                         projectPackage,
                         repository,
-                        header);
+                        header,
+                        parameters);
+
+                if  (t_Template != null)
+                {
+                    t_cTemplates.add(t_Template);
+                }
             }
 
-            storeTemplates(t_aTemplates, parameters);
+            storeTemplates(
+                (BasePerTableTemplate[])
+                    t_cTemplates.toArray(EMPTY_BASEPERTABLETEMPLATE_ARRAY),
+                parameters);
         }
         catch  (final QueryJException queryjException)
         {
@@ -321,5 +350,214 @@ public abstract class BasePerTableTemplateBuildHandler
         return
             (TableTemplate[])
                 parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
+    }
+
+    /**
+     * Creates the template with given parameters.
+     * @param templateFactory the template factory.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
+     * @param projectPackage the project package.
+     * @param repository the repository name.
+     * @param header the header.
+     * @param parameters the parameters.
+     * @return the template.
+     * @throws QueryJException if the template cannot be created.
+     * @precondition templateFactory != null
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
+     * @precondition engineName != null
+     * @precondition projectPackage != null
+     * @precondition repository != null
+     * @precondition parameters != null
+     */
+    protected BasePerTableTemplate createTemplate(
+        final BasePerTableTemplateFactory templateFactory,
+        final String tableName,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String projectPackage,
+        final String repository,
+        final String header,
+        final Map parameters)
+      throws  QueryJException
+    {        
+        return
+            templateFactory.createTemplate(
+                tableName,
+                metadataManager,
+                customSqlProvider,
+                packageName,
+                engineName,
+                engineVersion,
+                quote,
+                projectPackage,
+                repository,
+                header);
+    }
+
+    /**
+     * Checks whether given table contains static values or not.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such information.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     */
+    protected boolean isStaticTable(
+        final String tableName,
+        final MetadataManager metadataManager)
+    {
+        return
+            isStaticTable(
+                tableName, metadataManager, MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Checks whether given table contains static values or not.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return such information.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean isStaticTable(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        return
+            metaLanguageUtils.containsStaticValues(
+                tableName, metadataManager);
+    }
+
+    /**
+     * Checks whether given table contains static values or not.
+     * @param parameters the parameter map.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the decorator factory.
+     * @return such information.
+     * @precondition parameters != null
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected Collection retrieveStaticContent(
+        final Map parameters,
+        final String tableName,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        Collection result =
+            retrieveCachedStaticContent(parameters, tableName);
+
+        if  (result == null)
+        {
+            try
+            {
+                result =
+                    retrieveStaticContent(
+                        tableName,
+                        metadataManager,
+                        decoratorFactory,
+                        DAOTemplateUtils.getInstance());
+                storeCachedStaticContent(result, parameters, tableName);
+            }
+            catch  (final SQLException sqlException)
+            {
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        BasePerTableTemplateBuildHandler.class);
+                
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Error retrieving static content for " + tableName,
+                        sqlException);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given table contains static values or not.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the decorator factory.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @return such information.
+     * @throws SQLException if the operation fails.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     * @precondition daoTemplateUtils != null
+     */
+    protected Collection retrieveStaticContent(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
+        final DAOTemplateUtils daoTemplateUtils)
+      throws  SQLException
+    {
+        return
+            daoTemplateUtils.queryContents(
+                tableName, metadataManager, decoratorFactory);
+    }
+
+    /**
+     * Retrieves the cached static content for given table.
+     * @param parameters the parameter map.
+     * @param tableName the table name.
+     * @return such content, if present.
+     * @precondition parameters != null
+     * @precondition tableName != null
+     */
+    protected Collection retrieveCachedStaticContent(
+        final Map parameters, final String tableName)
+    {
+        return (Collection) parameters.get(buildStaticContentKey(tableName));
+    }
+
+    /**
+     * Stores the static content of a concrete table.
+     * @param contents the contents to cache.
+     * @param parameters the parameters.
+     * @param tableName the table name.
+     * @precondition contents != null
+     * @precondition parameters != null
+     * @precondition tableName != null
+     */
+    protected void storeCachedStaticContent(
+        final Collection contents,
+        final Map parameters,
+        final String tableName)
+    {
+        parameters.put(buildStaticContentKey(tableName), contents);
+    }
+
+    /**
+     * Builds a key for storing the static content for given table.
+     * @param tableName the table name.
+     * @return such key.
+     * @precondition tableName != null
+     */
+    protected Object buildStaticContentKey(final String tableName)
+    {
+        return "..static-contents-for-table-" + tableName + "..";
     }
 }

@@ -2,7 +2,7 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2005  ACM-SL
+//  Copyright (C) 2002-2006  ACM-SL
 //                           chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
@@ -147,14 +147,10 @@ public interface <input.vo_name>DAO
       row=it, voName=input.vo_name); separator="\n\n">
 
     /**
-     * The whole constants.
+     * Retrieves the static (pre-cached) values.
+     * @return such information.
      */
-    public static final <input.vo_name>[] _ALL_QUERYJ_CONSTANTS_ =
-        new <input.vo_name>[]
-        {
-            <input.cached_rows:{<it.nameNormalizedUppercased>};
-              separator=",\n">
-        };
+    public <input.vo_name>[] getStaticValues();
 
     <input.static_attribute:find_constant_methods(
       attribute=it,

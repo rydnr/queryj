@@ -111,6 +111,14 @@ package_declaration(packageNames) ::= <<
 package <packageNames; separator=".">;
 >>
 
+precondition(condition) ::= <<
+<!
+  Writes the Javadoc precondition for a concrete condition.
+  @param condition the condition
+!>
+* @precondition <condition>
+>>
+
 precondition_notnull(name) ::= <<
 <!
   Writes the Javadoc precondition for a concrete parameter.
@@ -730,7 +738,7 @@ protected static class QueryTransactionCallback
      */
     protected void setSql(final String sql)
     {
-        immutableSetSQL(sql);
+        immutableSetSql(sql);
     }
 
     /**

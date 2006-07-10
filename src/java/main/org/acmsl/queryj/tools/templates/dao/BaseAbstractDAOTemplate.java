@@ -138,6 +138,59 @@ public class BaseAbstractDAOTemplate
     }
 
     /**
+     * Builds a <code>BaseAbstractDAOTemplate</code> using given information.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
+     * @param header the header.
+     * @param staticValues the static values.
+     */
+    public BaseAbstractDAOTemplate(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String header,
+        final DecoratorFactory decoratorFactory,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final String basePackageName,
+        final String repositoryName,
+        final Collection staticValues)
+    {
+        super(
+            tableName,
+            metadataManager,
+            customSqlProvider,
+            header,
+            decoratorFactory,
+            packageName,
+            engineName,
+            engineVersion,
+            quote,
+            basePackageName,
+            repositoryName,
+            staticValues);
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    public String getTemplateName()
+    {
+        return "Abstract DAO";
+    }
+
+    /**
      * Retrieves the string template group.
      * @return such instance.
      */
