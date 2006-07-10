@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -103,6 +103,11 @@ public abstract class AbstractBasePerTableTemplate
     private String m__strRepositoryName;
 
     /**
+     * Whether to implement marker interfaces.
+     */
+    private boolean m__bImplementMarkerInterfaces;
+
+    /**
      * Builds an <code>AbstractBasePerTableTemplate</code> using given
      * information.
      * @param tableName the table name.
@@ -116,6 +121,7 @@ public abstract class AbstractBasePerTableTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param implementMarkerInterfaces whether to implement marker interfaces.
      */
     protected AbstractBasePerTableTemplate(
         final String tableName,
@@ -128,7 +134,8 @@ public abstract class AbstractBasePerTableTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean implementMarkerInterfaces)
     {
         super(header, decoratorFactory);
 
@@ -159,6 +166,8 @@ public abstract class AbstractBasePerTableTemplate
         immutableSetRepositoryName(
             repositoryName);
 
+        immutableSetImplementMarkerInterfaces(
+            implementMarkerInterfaces);
     }
 
     /**
@@ -406,6 +415,35 @@ public abstract class AbstractBasePerTableTemplate
     public String getRepositoryName()
     {
         return m__strRepositoryName;
+    }
+
+    /**
+     * Specifies whether to implement marker interfaces.
+     * @param flag such condition.
+     */
+    protected final void immutableSetImplementMarkerInterfaces(
+        final boolean flag)
+    {
+        m__bImplementMarkerInterfaces = flag;
+    }
+
+    /**
+     * Specifies whether to implement marker interfaces.
+     * @param flag such condition.
+     */
+    protected void setImplementMarkerInterfaces(
+        final boolean flag)
+    {
+        immutableSetImplementMarkerInterfaces(flag);
+    }
+
+    /**
+     * Retrieves whether to implement marker interfaces.
+     * @return such condition.
+     */
+    public boolean getImplementMarkerInterfaces()
+    {
+        return m__bImplementMarkerInterfaces;
     }
 
     /**
