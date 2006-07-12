@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -32,22 +33,11 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Contains all information regarding the tables to be managed by
- *              QueryJ task.
+ * Description: Contains all information inside a "field" XML element in Ant scripts,
+ *              under QueryJ task.
  *
  */
-package org.acmsl.queryj.tools;
-
-/*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.tools.AntTableElement;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.ArrayList;
-import java.util.Collection;
+package org.acmsl.queryj.tools.ant;
 
 /*
  * Importing some Ant classes.
@@ -56,52 +46,58 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
 
 /**
- * Contains all information regarding the tables to be managed by
- * QueryJ task.
+ * Contains all information inside a "fk" XML element in Ant scripts,
+ * under QueryJ task.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class AntTablesElement
+public class AntFieldFkElement
     implements  DynamicConfigurator
 {
     /**
-     * The table collection.
+     * The table name.
      */
-    private Collection m__cTables;
+    private String m__strTable;
 
     /**
-     * Creates an empty "tables" element.
+     * The fk field.
      */
-    public AntTablesElement()
+    private String m__strField;
+
+    /**
+     * Specifies the table name.
+     * @param table the table name.
+     */
+    protected void setTable(String table)
     {
-        inmutableSetTables(new ArrayList());
+        m__strTable = table;
     }
 
     /**
-     * Specifies the table collection.
-     * @param tables the collection
+     * Retrieves the table name.
+     * @return such table.
      */
-    private void inmutableSetTables(Collection tables)
+    public String getTable()
     {
-        m__cTables = tables;
+        return m__strTable;
     }
 
     /**
-     * Specifies the table collection.
-     * @param tables the collection
+     * Specifies the fk field.
+     * @param field the field.
      */
-    private void setTables(Collection tables)
+    protected void setField(String field)
     {
-        inmutableSetTables(tables);
+        m__strField = field;
     }
 
     /**
-     * Retrieves the table collection.
-     * @return such collection.
+     * Retrieves the fk field.
+     * @return such field.
      */
-    public Collection getTables()
+    public String getField()
     {
-        return m__cTables;
+        return m__strField;
     }
 
     /**
@@ -111,9 +107,18 @@ public class AntTablesElement
      */
     public void setDynamicAttribute(String name, String value)
     {
-        throw
-            new BuildException(
-                "No dynamic attributes are supported (" + name + "=" + value + ")");
+        if  ("table".equals(name))
+        {
+            setTable(value);
+        }
+        else if  ("field".equals(name))
+        {
+            setField(value);
+        }
+        else 
+        {
+            throw new BuildException("Attribute " + name + "is not supported");
+        }
     }
 
     /**
@@ -124,27 +129,6 @@ public class AntTablesElement
      */
     public Object createDynamicElement(String name)
     {
-        AntTableElement result = null;
-
-        if  ("table".equals(name)) 
-        {
-            result = new AntTableElement();
-
-            Collection t_cTables = getTables();
-
-            if  (t_cTables == null)
-            {
-                t_cTables = new ArrayList();
-                setTables(t_cTables);
-            }
-
-            t_cTables.add(result);
-        }
-        else 
-        {
-            throw new BuildException(name + " elements are not supported");
-        }
-
-        return result;
+        throw new BuildException("Nested elements inside <fk> are not supported");
     }
 }

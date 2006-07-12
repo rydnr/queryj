@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -32,22 +33,16 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Contains all information inside a "table" XML element in Ant scripts,
- *              under QueryJ task.
+ * Description: Contains all information regarding the tables to be managed by
+ *              QueryJ task.
  *
  */
-package org.acmsl.queryj.tools;
+package org.acmsl.queryj.tools.ant;
 
 /*
- * Importing project-specific classes.
+ * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.AntFieldElement;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.DynamicConfigurator;
+import org.acmsl.queryj.tools.ant.AntTableElement;
 
 /*
  * Importing some JDK classes.
@@ -55,68 +50,59 @@ import org.apache.tools.ant.DynamicConfigurator;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/*
+ * Importing some Ant classes.
+ */
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.DynamicConfigurator;
+
 /**
- * Contains all information inside a "table" XML element in Ant scripts,
- * under QueryJ task.
+ * Contains all information regarding the tables to be managed by
+ * QueryJ task.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class AntTableElement
+public class AntTablesElement
     implements  DynamicConfigurator
 {
     /**
-     * The table name.
+     * The table collection.
      */
-    private String m__strTableName;
+    private Collection m__cTables;
 
     /**
-     * The field collection.
+     * Creates an empty "tables" element.
      */
-    private Collection m__cFields;
-
-    /**
-     * Specifies the table name.
-     * @param name the table name.
-     */
-    protected void setName(String name)
+    public AntTablesElement()
     {
-        m__strTableName = name;
+        inmutableSetTables(new ArrayList());
     }
 
     /**
-     * Retrieves the table name.
-     * @return such name.
+     * Specifies the table collection.
+     * @param tables the collection
      */
-    public String getName()
+    private void inmutableSetTables(Collection tables)
     {
-        return m__strTableName;
+        m__cTables = tables;
     }
 
     /**
-     * Specifies the field collection.
-     * @param fields the collection
+     * Specifies the table collection.
+     * @param tables the collection
      */
-    private void inmutableSetFields(Collection fields)
+    private void setTables(Collection tables)
     {
-        m__cFields = fields;
+        inmutableSetTables(tables);
     }
 
     /**
-     * Specifies the field collection.
-     * @param fields the collection
-     */
-    private void setFields(Collection fields)
-    {
-        inmutableSetFields(fields);
-    }
-
-    /**
-     * Retrieves the field collection.
+     * Retrieves the table collection.
      * @return such collection.
      */
-    public Collection getFields()
+    public Collection getTables()
     {
-        return m__cFields;
+        return m__cTables;
     }
 
     /**
@@ -126,14 +112,9 @@ public class AntTableElement
      */
     public void setDynamicAttribute(String name, String value)
     {
-        if  ("name".equals(name))
-        {
-            setName(value);
-        }
-        else 
-        {
-            throw new BuildException("Attribute are supported");
-        }
+        throw
+            new BuildException(
+                "No dynamic attributes are supported (" + name + "=" + value + ")");
     }
 
     /**
@@ -144,21 +125,21 @@ public class AntTableElement
      */
     public Object createDynamicElement(String name)
     {
-        AntFieldElement result = null;
+        AntTableElement result = null;
 
-        if  ("field".equals(name)) 
+        if  ("table".equals(name)) 
         {
-            result = new AntFieldElement();
+            result = new AntTableElement();
 
-            Collection t_cFields = getFields();
+            Collection t_cTables = getTables();
 
-            if  (t_cFields == null)
+            if  (t_cTables == null)
             {
-                t_cFields = new ArrayList();
-                setFields(t_cFields);
+                t_cTables = new ArrayList();
+                setTables(t_cTables);
             }
 
-            t_cFields.add(result);
+            t_cTables.add(result);
         }
         else 
         {

@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -32,11 +33,16 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Contains all information inside a "field" XML element in Ant scripts,
+ * Description: Contains all information inside a "table" XML element in Ant scripts,
  *              under QueryJ task.
  *
  */
-package org.acmsl.queryj.tools;
+package org.acmsl.queryj.tools.ant;
+
+/*
+ * Importing project-specific classes.
+ */
+import org.acmsl.queryj.tools.ant.AntFieldElement;
 
 /*
  * Importing some Ant classes.
@@ -44,59 +50,74 @@ package org.acmsl.queryj.tools;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
- * Contains all information inside a "fk" XML element in Ant scripts,
+ * Contains all information inside a "table" XML element in Ant scripts,
  * under QueryJ task.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class AntFieldFkElement
+public class AntTableElement
     implements  DynamicConfigurator
 {
     /**
      * The table name.
      */
-    private String m__strTable;
+    private String m__strTableName;
 
     /**
-     * The fk field.
+     * The field collection.
      */
-    private String m__strField;
+    private Collection m__cFields;
 
     /**
      * Specifies the table name.
-     * @param table the table name.
+     * @param name the table name.
      */
-    protected void setTable(String table)
+    protected void setName(String name)
     {
-        m__strTable = table;
+        m__strTableName = name;
     }
 
     /**
      * Retrieves the table name.
-     * @return such table.
+     * @return such name.
      */
-    public String getTable()
+    public String getName()
     {
-        return m__strTable;
+        return m__strTableName;
     }
 
     /**
-     * Specifies the fk field.
-     * @param field the field.
+     * Specifies the field collection.
+     * @param fields the collection
      */
-    protected void setField(String field)
+    private void inmutableSetFields(Collection fields)
     {
-        m__strField = field;
+        m__cFields = fields;
     }
 
     /**
-     * Retrieves the fk field.
-     * @return such field.
+     * Specifies the field collection.
+     * @param fields the collection
      */
-    public String getField()
+    private void setFields(Collection fields)
     {
-        return m__strField;
+        inmutableSetFields(fields);
+    }
+
+    /**
+     * Retrieves the field collection.
+     * @return such collection.
+     */
+    public Collection getFields()
+    {
+        return m__cFields;
     }
 
     /**
@@ -106,17 +127,13 @@ public class AntFieldFkElement
      */
     public void setDynamicAttribute(String name, String value)
     {
-        if  ("table".equals(name))
+        if  ("name".equals(name))
         {
-            setTable(value);
-        }
-        else if  ("field".equals(name))
-        {
-            setField(value);
+            setName(value);
         }
         else 
         {
-            throw new BuildException("Attribute " + name + "is not supported");
+            throw new BuildException("Attribute are supported");
         }
     }
 
@@ -128,6 +145,27 @@ public class AntFieldFkElement
      */
     public Object createDynamicElement(String name)
     {
-        throw new BuildException("Nested elements inside <fk> are not supported");
+        AntFieldElement result = null;
+
+        if  ("field".equals(name)) 
+        {
+            result = new AntFieldElement();
+
+            Collection t_cFields = getFields();
+
+            if  (t_cFields == null)
+            {
+                t_cFields = new ArrayList();
+                setFields(t_cFields);
+            }
+
+            t_cFields.add(result);
+        }
+        else 
+        {
+            throw new BuildException(name + " elements are not supported");
+        }
+
+        return result;
     }
 }

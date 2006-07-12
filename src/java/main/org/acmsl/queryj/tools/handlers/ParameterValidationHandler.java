@@ -41,9 +41,9 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.AntExternallyManagedFieldsElement;
-import org.acmsl.queryj.tools.AntTablesElement;
+import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
+import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 
 /*

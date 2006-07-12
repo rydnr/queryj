@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -36,12 +36,12 @@
  * Description: Manages a sequential chain of Ant actions.
  *
  */
-package org.acmsl.queryj.tools;
+package org.acmsl.queryj.tools.ant;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
+import org.acmsl.queryj.tools.ant.AntCommand;
 import org.acmsl.queryj.tools.handlers.AntCommandHandler;
 
 /*

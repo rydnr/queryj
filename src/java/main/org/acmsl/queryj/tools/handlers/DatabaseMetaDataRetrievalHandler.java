@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2004  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -41,11 +42,11 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.AntFieldElement;
-import org.acmsl.queryj.tools.AntFieldFkElement;
-import org.acmsl.queryj.tools.AntTableElement;
-import org.acmsl.queryj.tools.AntTablesElement;
+import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.ant.AntFieldElement;
+import org.acmsl.queryj.tools.ant.AntFieldFkElement;
+import org.acmsl.queryj.tools.ant.AntTableElement;
+import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataManager;

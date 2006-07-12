@@ -36,15 +36,15 @@
  * Description: Generates QueryJ classes using Ant.
  *
  */
-package org.acmsl.queryj.tools;
+package org.acmsl.queryj.tools.ant;
 
 /*
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.AntExternallyManagedFieldsElement;
-import org.acmsl.queryj.tools.AntTablesElement;
+import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
+import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
