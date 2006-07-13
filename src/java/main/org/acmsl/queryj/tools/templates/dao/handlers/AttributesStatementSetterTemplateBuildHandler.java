@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -40,18 +41,13 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -88,7 +84,6 @@ public class AttributesStatementSetterTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition tableName != null
      * @precondition projectPackage != null
      * @precondition packageUtils != null
@@ -98,7 +93,6 @@ public class AttributesStatementSetterTemplateBuildHandler
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveAttributesStatementSetterPackage(

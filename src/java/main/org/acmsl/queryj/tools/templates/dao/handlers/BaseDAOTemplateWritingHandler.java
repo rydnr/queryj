@@ -49,11 +49,6 @@ import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHand
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -85,11 +80,9 @@ public class BaseDAOTemplateWritingHandler
      * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
      */
     protected BasePerTableTemplate[] retrieveTemplates(
         final Map parameters)
-      throws  BuildException
     {
         return
             (BasePerTableTemplate[])
@@ -107,7 +100,6 @@ public class BaseDAOTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition projectFolder != null
      * @precondition projectPackage != null
      * @precondition engineName != null
@@ -121,7 +113,6 @@ public class BaseDAOTemplateWritingHandler
         final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveBaseDAOFolder(

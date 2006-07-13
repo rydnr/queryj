@@ -41,8 +41,9 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
@@ -50,11 +51,6 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
  */
 import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.logging.UniqueLogFactory;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some Commons-Logging classes.
@@ -76,86 +72,37 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class DatabaseMetaDataLoggingHandler
-    extends  AbstractAntCommandHandler
+    extends  AbstractQueryJCommandHandler
 {
     /**
-     * Creates a DatabaseMetaDataLoggingHandler.
+     * Creates a <code>DatabaseMetaDataLoggingHandler</code> instance.
      */
     public DatabaseMetaDataLoggingHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(final Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            AntCommand t_AntCommand = (AntCommand) command;
-
-            try 
-            {
-                result = handle(t_AntCommand);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(
-                        DatabaseMetaDataLoggingHandler.class);
-                
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Cannot log database metadata.",
-                        buildException);
-                }
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition project != null
      * @precondition task != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        return
-            handle(
-                retrieveDatabaseMetaData(parameters));
+        return handle(retrieveDatabaseMetaData(parameters));
     }
 
     /**
      * Handles given information.
      * @param metaData the database metadata.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition metaData != null
      */
     protected boolean handle(final DatabaseMetaData metaData)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         boolean result = false;
 
@@ -163,7 +110,8 @@ public class DatabaseMetaDataLoggingHandler
         
         try 
         {
-            t_Log = UniqueLogFactory.getLog(getClass());
+            t_Log =
+                UniqueLogFactory.getLog(DatabaseMetaDataLoggingHandler.class);
             
             if  (t_Log != null)
             {
@@ -786,22 +734,5 @@ public class DatabaseMetaDataLoggingHandler
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (DatabaseMetaData)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
     }
 }

@@ -113,7 +113,7 @@ public class AntExternallyManagedFieldsElement
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
-    public Object createDynamicElement(String name)
+    public Object createDynamicElement(final String name)
     {
         AntFieldElement result = null;
 

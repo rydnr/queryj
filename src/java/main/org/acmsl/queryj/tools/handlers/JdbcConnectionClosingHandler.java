@@ -41,8 +41,9 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 
 /*
@@ -50,11 +51,6 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some Commons-Logging classes.
@@ -74,60 +70,12 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class JdbcConnectionClosingHandler
-    extends  AbstractAntCommandHandler
+    extends  AbstractQueryJCommandHandler
 {
     /**
-     * Creates a JdbcConnectionClosingHandler.
+     * Creates a <code>JdbcConnectionClosingHandler</code> instance.
      */
     public JdbcConnectionClosingHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(final Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            AntCommand t_AntCommand = (AntCommand) command;
-            
-            try 
-            {
-                result = handle(t_AntCommand);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(
-                        JdbcConnectionClosingHandler.class);
-                
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Cannot close JDBC connection.",
-                        buildException);
-                }
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
 
     /**
      * Handles given information.
@@ -137,7 +85,7 @@ public class JdbcConnectionClosingHandler
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         closeConnection(parameters);
 
@@ -149,11 +97,11 @@ public class JdbcConnectionClosingHandler
     /**
      * Closes the JDBC connection stored in the attribute map.
      * @param parameters the parameter map.
-     * @throws BuildException if the connection cannot be closed.
+     * @throws QueryJBuildException if the connection cannot be closed.
      * @precondition parameters != null
      */
     protected void closeConnection(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         closeConnection(
             (Connection)
@@ -164,11 +112,11 @@ public class JdbcConnectionClosingHandler
     /**
      * Closes the connection.
      * @param connection the JDBC connection.
-     * @throws org.apache.tools.ant.BuildException whenever the required
+     * @throws QueryJBuildException whenever the required
      * connection is not present or valid.
      */
     protected void closeConnection(final Connection connection)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         if  (connection != null)
         {
@@ -178,7 +126,9 @@ public class JdbcConnectionClosingHandler
             }
             catch  (final SQLException sqlException)
             {
-                throw new BuildException(sqlException);
+                throw
+                    new QueryJBuildException(
+                        "Cannot close the database connection", sqlException);
             }
         }
     }
@@ -186,11 +136,12 @@ public class JdbcConnectionClosingHandler
     /**
      * Removes the JDBC connection in given attribute map.
      * @param parameters the parameter map.
-     * @throws BuildException if the connection cannot be removed for any reason.
+     * @throws QueryJBuildException if the connection cannot be removed for
+     * any reason.
      * @precondition parameters != null
      */
     protected void removeConnection(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         parameters.remove(JdbcConnectionOpeningHandler.JDBC_CONNECTION);
     }

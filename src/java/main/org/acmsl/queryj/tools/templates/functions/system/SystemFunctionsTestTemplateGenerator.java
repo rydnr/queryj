@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.functions.system;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTestTemplate;
 
@@ -55,6 +55,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -63,6 +64,11 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Is able to generate the JUnit classes to test the Database's system functions.
@@ -157,11 +163,11 @@ public class SystemFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      */
     protected SystemFunctionsTestTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         SystemFunctionsTestTemplateFactory result = null;
 
@@ -181,7 +187,7 @@ public class SystemFunctionsTestTemplateGenerator
                 if  (!(t_TemplateFactory instanceof SystemFunctionsTestTemplateFactory))
                 {
                     throw
-                        new QueryJException(
+                        new QueryJBuildException(
                             "invalid.system.function.test.template.factory");
                 }
                 else 
@@ -202,15 +208,13 @@ public class SystemFunctionsTestTemplateGenerator
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      * @return a template.
-     * @throws QueryJException if the template factory is invalid.
      */
     public SystemFunctionsTestTemplate createSystemFunctionsTestTemplate(
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote)
-      throws  QueryJException
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         SystemFunctionsTestTemplate result = null;
 
@@ -219,8 +223,26 @@ public class SystemFunctionsTestTemplateGenerator
              && (engineVersion != null)
              && (quote         != null))
         {
-            SystemFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
+            SystemFunctionsTestTemplateFactory t_TemplateFactory = null;
+
+            try
+            {
+                t_TemplateFactory =
+                    getTemplateFactory(engineName, engineVersion);
+            }
+            catch  (final QueryJBuildException buildException)
+            {
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        SystemFunctionsTemplateGenerator.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Cannot retrieve system-functions test template",
+                        buildException);
+                }
+            }
 
             if  (   (t_TemplateFactory != null)
                  && (!t_TemplateFactory.getClass().equals(getClass())))

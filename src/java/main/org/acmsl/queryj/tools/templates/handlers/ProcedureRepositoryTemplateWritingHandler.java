@@ -41,18 +41,13 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -67,95 +62,74 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class ProcedureRepositoryTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * Creates a ProcedureRepositoryTemplateWritingHandler.
+     * Creates a <code>ProcedureRepositoryTemplateWritingHandler</code>
+     * instance.
      */
     public ProcedureRepositoryTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws QueryJBuildException
     {
-        boolean result = false;
+        writeTemplate(
+            retrieveProcedureRepositoryTemplate(parameters),
+            retrieveProjectOutputDir(parameters),
+            ProcedureRepositoryTemplateGenerator.getInstance());
 
-        if  (command != null) 
+        return false;
+    }
+
+    /**
+     * Writes the <code>ProcedureRepository</code> template.
+     * @param parameters the parameters to handle.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected void writeTemplate(
+        final ProcedureRepositoryTemplate template,
+        final File outputDir,
+        final ProcedureRepositoryTemplateGenerator generator)
+      throws QueryJBuildException
+    {
+        if  (template != null)
         {
             try 
             {
-                Map attributes = command.getAttributeMap();
-
-                ProcedureRepositoryTemplateGenerator t_ProcedureRepositoryTemplateGenerator =
-                    ProcedureRepositoryTemplateGenerator.getInstance();
-
-                ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate =
-                    retrieveProcedureRepositoryTemplate(attributes);
-
-                File t_OutputDir = retrieveOutputDir(attributes);
-
-                if  (   (t_OutputDir                            != null) 
-                     && (t_ProcedureRepositoryTemplate          != null)
-                     && (t_ProcedureRepositoryTemplateGenerator != null))
-                {
-                    t_ProcedureRepositoryTemplateGenerator.write(
-                        t_ProcedureRepositoryTemplate, t_OutputDir);
-                }
+                generator.write(template, outputDir);
             }
-            catch  (IOException ioException)
+            catch  (final IOException ioException)
             {
-                throw new BuildException(ioException);
+                throw
+                    new QueryJBuildException(
+                        "Cannot write the ProcedureRepository template",
+                        ioException);
             }
         }
-        
-        return result;
     }
 
     /**
      * Retrieves the procedure repository template from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the repository retrieval process if faulty.
+     * @precondition parameters != null
      */
-    protected ProcedureRepositoryTemplate retrieveProcedureRepositoryTemplate(Map parameters)
-        throws  BuildException
+    protected ProcedureRepositoryTemplate retrieveProcedureRepositoryTemplate(
+        final Map parameters)
     {
-        ProcedureRepositoryTemplate result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (ProcedureRepositoryTemplate)
-                    parameters.get(
-                        ProcedureRepositoryTemplateBuildHandler.PROCEDURE_REPOSITORY_TEMPLATE);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     */
-    protected File retrieveOutputDir(Map parameters)
-        throws  BuildException
-    {
-        File result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
-        }
-        
-        return result;
+        return
+            (ProcedureRepositoryTemplate)
+                parameters.get(
+                    ProcedureRepositoryTemplateBuildHandler
+                        .PROCEDURE_REPOSITORY_TEMPLATE);
     }
 }

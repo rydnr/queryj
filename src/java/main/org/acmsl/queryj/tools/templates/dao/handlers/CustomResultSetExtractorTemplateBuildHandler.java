@@ -59,16 +59,6 @@ import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuil
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -116,7 +106,6 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      */
     protected String retrievePackage(
         final Result customResult,
@@ -125,7 +114,6 @@ public class CustomResultSetExtractorTemplateBuildHandler
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils)
-      throws BuildException
     {
         return
             packageUtils.retrieveCustomResultSetExtractorPackage(
@@ -160,7 +148,8 @@ public class CustomResultSetExtractorTemplateBuildHandler
         
         parameters.put(
             TemplateMappingManager.CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES,
-            t_cFilteredTemplates.toArray(EMPTY_BASEPERCUSTOMRESULTTEMPLATE_ARRAY));
+            t_cFilteredTemplates.toArray(
+                EMPTY_BASEPERCUSTOMRESULTTEMPLATE_ARRAY));
     }
 
     /**
@@ -222,7 +211,6 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @param engineName the engine name.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition engineName != null
      * @precondition projectPackage != null
      * @precondition packageUtils != null
@@ -231,7 +219,6 @@ public class CustomResultSetExtractorTemplateBuildHandler
         final String projectPackage,
         final String engineName,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveCustomResultSetExtractorPackage(

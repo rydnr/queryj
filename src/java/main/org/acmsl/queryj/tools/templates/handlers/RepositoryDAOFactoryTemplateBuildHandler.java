@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -54,9 +54,9 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
- * Importing some Ant classes.
+ * Importing some ACM-SL Commons classes.
  */
-import org.apache.tools.ant.BuildException;
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some JDK classes.
@@ -67,7 +67,7 @@ import java.util.Map;
 /*
  * Importing some Apache Commons-Logging classes.
  */
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * Builds the repository DAO factory implementation if requested.
@@ -100,7 +100,7 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * @param tableNames the table names.
      * @param header the header.
      * @return the template.
-     * @throws QueryJException on invalid input.
+     * @throws QueryJBuildException on invalid input.
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition customSqlProvider != null
@@ -123,7 +123,7 @@ public class RepositoryDAOFactoryTemplateBuildHandler
         final String header,
         final Collection tableNames,
         final Map parameters)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         BasePerRepositoryTemplate result = null;
 
@@ -145,8 +145,14 @@ public class RepositoryDAOFactoryTemplateBuildHandler
         }
         else
         {
-            LogFactory.getLog(RepositoryDAOFactoryTemplateBuildHandler.class).warn(
-                "Unexpected RepositoryDAOFactory template factory.");
+            Log t_Log = UniqueLogFactory.getLog(
+                RepositoryDAOFactoryTemplateBuildHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.warn(
+                    "Unexpected RepositoryDAOFactory template factory.");
+            }
         }
 
         return result;
@@ -156,11 +162,9 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * Retrieves the JNDI location of the data source from the attribute map.
      * @param parameters the parameter map.
      * @return the JNDI location.
-     * @throws BuildException if the JNDI location retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrieveJNDIDataSource(final Map parameters)
-        throws  BuildException
     {
         return
             (String)
@@ -174,7 +178,7 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @throws QueryJBuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */

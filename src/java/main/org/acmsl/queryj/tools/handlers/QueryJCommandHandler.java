@@ -43,24 +43,20 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.CommandHandler;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
 /**
  * Inside a Chain Of Responsibility, these are the chain links.
  * This means they perform specific actions when receiving the command.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public interface AntCommandHandler
+public interface QueryJCommandHandler
     extends  CommandHandler
 {
     /**
@@ -68,8 +64,8 @@ public interface AntCommandHandler
      * @param command the command.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException;
+    public boolean handle(final QueryJCommand command)
+        throws  QueryJBuildException;
 }

@@ -41,11 +41,12 @@ package org.acmsl.queryj.tools.customsql.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.xml.SqlXmlParser;
 import org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.QueryJException;
 
@@ -54,12 +55,6 @@ import org.acmsl.queryj.QueryJException;
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.util.ClasspathUtils;
 
 /*
  * Importing some Commons-Logging classes.
@@ -78,7 +73,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class CustomSqlProviderRetrievalHandler
-    extends  AbstractAntCommandHandler
+    extends  AbstractQueryJCommandHandler
 {
     /**
      * The custom-sql provider key.
@@ -86,98 +81,36 @@ public class CustomSqlProviderRetrievalHandler
     public static final String CUSTOM_SQL_PROVIDER = "..custom-sql.provider..";
 
     /**
-     * Creates a CustomSqlProviderRetrievalHandler.
+     * Creates a <code>CustomSqlProviderRetrievalHandler</code> instance.
      */
     public CustomSqlProviderRetrievalHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(final Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            AntCommand t_AntCommand = (AntCommand) command;
-
-            try 
-            {
-                result = handle(t_AntCommand);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(
-                        CustomSqlProviderRetrievalHandler.class);
-
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Cannot load custom SQL information.",
-                        buildException);
-                }
-
-                result = true;
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
 
     /**
      * Handles given parameters.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        boolean result = false;
+        storeCustomSqlProvider(
+            buildCustomSqlProvider(parameters),
+            parameters);
 
-        try
-        {
-            storeCustomSqlProvider(
-                buildCustomSqlProvider(parameters),
-                parameters);
-        }
-        catch   (final QueryJException queryjException)
-        {
-            throw
-                new BuildException(
-                    queryjException.getMessage(),
-                    queryjException.getCause());
-        }
-
-        return result;
+        return false;
     }
 
     /**
      * Builds the custom SQL provider.
      * @param parameters the parameter map.
      * @return such provider.
-     * @throws QueryJException if some problem occurs.
+     * @throws QueryJBuildException if some problem occurs.
      * @precondition parameters != null
      */
     protected CustomSqlProvider buildCustomSqlProvider(final Map parameters)
-        throws  QueryJException
+        throws  QueryJBuildException
     {
         return
             buildCustomSqlProvider(
@@ -217,7 +150,7 @@ public class CustomSqlProviderRetrievalHandler
      * @param xmlFile the XML file.
      * @param factory the <code>SqlXmlParserFactory</code> instance.
      * @return such provider..
-     * @throws QueryJException if some problem occurs.
+     * @throws QueryJBuildException if some problem occurs.
      * @precondition model != null
      * @precondition sqlXmlParserFactory != null
      */
@@ -225,7 +158,7 @@ public class CustomSqlProviderRetrievalHandler
         final String model,
         final File xmlFile,
         final SqlXmlParserFactory factory)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         CustomSqlProvider result = null;
 
@@ -235,7 +168,7 @@ public class CustomSqlProviderRetrievalHandler
                      model))
             {
                 throw
-                    new BuildException(
+                    new QueryJBuildException(
                           "Custom queries can only be provided via sql.xml "
                         + "so far.");
             }
@@ -247,7 +180,8 @@ public class CustomSqlProviderRetrievalHandler
 
             /*
               t_Parser.setClassLoader(
-                  ClasspathUtils.getDelegate(task.getClassLoader());
+                  org.apache.tools.ant.util.ClasspathUtils.getDelegate(
+                      task.getClassLoader());
             */
 
             t_Parser.parse();
@@ -262,14 +196,12 @@ public class CustomSqlProviderRetrievalHandler
      * Stores the CustomSqlProvider instance.
      * @param provider the provider to store.
      * @param parameters the parameter map.
-     * @throws BuildException if the provider cannot be stored for any reason.
      * @precondition provider != null
      * @precondition parameters != null
      */
     protected void storeCustomSqlProvider(
         final CustomSqlProvider provider,
         final Map parameters)
-      throws  BuildException
     {
         parameters.put(CUSTOM_SQL_PROVIDER, provider);
     }

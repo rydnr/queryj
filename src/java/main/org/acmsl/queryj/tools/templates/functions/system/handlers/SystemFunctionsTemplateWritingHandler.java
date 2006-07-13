@@ -41,20 +41,15 @@ package org.acmsl.queryj.tools.templates.functions.system.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -69,42 +64,30 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class SystemFunctionsTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * Creates a SystemFunctionsTemplateWritingHandler.
+     * Creates a <code>SystemFunctionsTemplateWritingHandler</code> instance.
      */
     public SystemFunctionsTemplateWritingHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
 
     /**
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        return
-            handle(
-                retrieveSystemFunctionsTemplate(parameters),
-                retrieveOutputDir(parameters),
-                SystemFunctionsTemplateGenerator.getInstance());
+        writeTemplate(
+            retrieveSystemFunctionsTemplate(parameters),
+            retrieveOutputDir(parameters),
+            SystemFunctionsTemplateGenerator.getInstance());
+
+        return false;
     }
 
     /**
@@ -113,19 +96,16 @@ public class SystemFunctionsTemplateWritingHandler
      * @param outputDir the output dir.
      * @param generator the <code>SystemFunctionsTemplateGenerator</code>
      * instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition outputDir != null
      * @precondition generator != null
      */
-    protected boolean handle(
+    protected void writeTemplate(
         final SystemFunctionsTemplate template,
         final File outputDir,
         final SystemFunctionsTemplateGenerator generator)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         if  (template != null)
         {
             try 
@@ -134,39 +114,36 @@ public class SystemFunctionsTemplateWritingHandler
             }
             catch  (final IOException ioException)
             {
-                throw new BuildException(ioException);
+                throw
+                    new QueryJBuildException(
+                        "Cannot write SystemFunctions template", ioException);
             }
         }
-        
-        return result;
     }
 
     /**
      * Retrieves the system functions template from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
     protected SystemFunctionsTemplate retrieveSystemFunctionsTemplate(
         final Map parameters)
-      throws  BuildException
     {
         return
             (SystemFunctionsTemplate)
                 parameters.get(
-                    SystemFunctionsTemplateBuildHandler.SYSTEM_FUNCTIONS_TEMPLATE);
+                    SystemFunctionsTemplateBuildHandler
+                        .SYSTEM_FUNCTIONS_TEMPLATE);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
     {
         return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
@@ -176,13 +153,11 @@ public class SystemFunctionsTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
         final Map parameters, final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveFunctionsFolder(

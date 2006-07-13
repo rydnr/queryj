@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.functions.numeric;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTestTemplate;
 
@@ -55,6 +55,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -63,6 +64,11 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Is able to generate the JUnit classes to test the Database's numeric functions.
@@ -157,11 +163,11 @@ public class NumericFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      */
     protected NumericFunctionsTestTemplateFactory getTemplateFactory(
             String engineName, String engineVersion)
-        throws  QueryJException
+        throws  QueryJBuildException
     {
         NumericFunctionsTestTemplateFactory result = null;
 
@@ -181,12 +187,13 @@ public class NumericFunctionsTestTemplateGenerator
                 if  (!(t_TemplateFactory instanceof NumericFunctionsTestTemplateFactory))
                 {
                     throw
-                        new QueryJException(
+                        new QueryJBuildException(
                             "invalid.numeric.function.test.template.factory");
                 }
                 else 
                 {
-                    result = (NumericFunctionsTestTemplateFactory) t_TemplateFactory;
+                    result =
+                        (NumericFunctionsTestTemplateFactory) t_TemplateFactory;
                 }
             }
         }
@@ -220,7 +227,6 @@ public class NumericFunctionsTestTemplateGenerator
      * @param innerTable the inner table.
      * @param classEnd the class end.
      * @return a template.
-     * @throws QueryJException if the template factory is invalid.
      */
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
         final String header,
@@ -245,7 +251,6 @@ public class NumericFunctionsTestTemplateGenerator
         final String innerClass,
         final String innerTable,
         final String classEnd)
-      throws  QueryJException
     {
         NumericFunctionsTestTemplate result = null;
 
@@ -254,8 +259,26 @@ public class NumericFunctionsTestTemplateGenerator
              && (engineVersion != null)
              && (quote         != null))
         {
-            NumericFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
+            NumericFunctionsTestTemplateFactory t_TemplateFactory = null;
+
+            try
+            {
+                t_TemplateFactory =
+                    getTemplateFactory(engineName, engineVersion);
+            }
+            catch  (final QueryJBuildException buildException)
+            {
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        NumericFunctionsTemplateGenerator.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Cannot retrieve numeric-functions template",
+                        buildException);
+                }
+            }
 
             if  (   (t_TemplateFactory != null)
                  && (!t_TemplateFactory.getClass().equals(getClass())))
@@ -299,7 +322,6 @@ public class NumericFunctionsTestTemplateGenerator
      * @param quote the identifier quote string.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the template factory is invalid.
      */
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
         final String packageName,
@@ -308,7 +330,6 @@ public class NumericFunctionsTestTemplateGenerator
         final String engineVersion,
         final String quote,
         final String header)
-      throws  QueryJException
     {
         NumericFunctionsTestTemplate result = null;
 
@@ -317,8 +338,26 @@ public class NumericFunctionsTestTemplateGenerator
              && (engineVersion != null)
              && (quote         != null))
         {
-            NumericFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
+            NumericFunctionsTestTemplateFactory t_TemplateFactory = null;
+
+            try
+            {
+                t_TemplateFactory =
+                    getTemplateFactory(engineName, engineVersion);
+            }
+            catch  (final QueryJBuildException buildException)
+            {
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        NumericFunctionsTemplateGenerator.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Cannot retrieve numeric-functions template",
+                        buildException);
+                }
+            }
 
             if  (   (t_TemplateFactory != null)
                  && (!t_TemplateFactory.getClass().equals(getClass())))

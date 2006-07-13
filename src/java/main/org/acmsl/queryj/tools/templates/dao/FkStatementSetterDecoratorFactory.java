@@ -99,6 +99,8 @@ public class FkStatementSetterDecoratorFactory
     public AttributeDecorator createDecorator(
         final Attribute attribute, final MetadataManager metadataManager)
     {
-        return new FkStatementSetterAttributeDecorator(attribute, metadataManager);
+        return
+            new FkStatementSetterAttributeDecorator(
+                attribute, metadataManager);
     }
 }

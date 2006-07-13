@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -41,7 +42,6 @@ package org.acmsl.queryj.tools.templates.functions.system;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTestTemplate;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
@@ -63,13 +63,11 @@ public interface SystemFunctionsTestTemplateFactory
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      * @return a template.
-     * @throws QueryJException if the template factory is invalid.
      */
     public SystemFunctionsTestTemplate createSystemFunctionsTestTemplate(
-        final String  packageName,
-        final String  testedPackageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
-      throws  QueryJException;
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote);
 }

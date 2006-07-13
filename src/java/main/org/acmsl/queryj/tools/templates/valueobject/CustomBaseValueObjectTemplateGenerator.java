@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
@@ -114,7 +113,6 @@ public class CustomBaseValueObjectTemplateGenerator
      * @param repositoryName the repository name.
      * @param header the header.
      * @return the new template.
-     * @throws QueryJException if the factory class is invalid.
      * @precondition resultElement != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
@@ -132,7 +130,6 @@ public class CustomBaseValueObjectTemplateGenerator
         final String basePackageName,
         final String repositoryName,
         final String header)
-      throws  QueryJException
     {
         BasePerCustomResultTemplate result = null;
 

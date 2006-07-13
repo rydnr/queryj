@@ -41,9 +41,8 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
@@ -59,16 +58,6 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -87,7 +76,7 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class FkStatementSetterTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
@@ -103,32 +92,19 @@ public class FkStatementSetterTemplateBuildHandler
             new FkStatementSetterTemplate[0];
 
     /**
-     * Creates a FkStatementSetterTemplateBuildHandler.
+     * Creates a <code>FkStatementSetterTemplateBuildHandler</code> instance.
      */
     public FkStatementSetterTemplateBuildHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         return
             handle(
@@ -141,13 +117,13 @@ public class FkStatementSetterTemplateBuildHandler
      * @param parameters the parameters.
      * @param metaData the database metadata.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
      */
     protected boolean handle(
         final Map parameters, final DatabaseMetaData metaData)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         boolean result = false;
 
@@ -161,7 +137,11 @@ public class FkStatementSetterTemplateBuildHandler
         }
         catch  (final SQLException sqlException)
         {
-            throw new BuildException(sqlException);
+            throw
+                new QueryJBuildException(
+                      "Cannot retrieve database product name, "
+                    + "version or quote string",
+                    sqlException);
         }
 
         return result;
@@ -174,7 +154,7 @@ public class FkStatementSetterTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param quote the quote.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      */
@@ -183,7 +163,7 @@ public class FkStatementSetterTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String quote)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         return
             handle(
@@ -201,7 +181,7 @@ public class FkStatementSetterTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param quote the quote.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      */
@@ -211,26 +191,27 @@ public class FkStatementSetterTemplateBuildHandler
         final String engineVersion,
         final String quote,
         final FkStatementSetterTemplateFactory templateFactory)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        return
-            handle(
-                parameters,
-                engineName,
-                engineVersion,
-                quote,
-                retrieveMetadataManager(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveTableRepositoryName(parameters),
-                retrieveHeader(parameters),
-                templateFactory,
-                templateFactory.getDecoratorFactory(),
-                retrieveTableTemplates(parameters),
-                MetadataUtils.getInstance());
+        buildTemplates(
+            parameters,
+            engineName,
+            engineVersion,
+            quote,
+            retrieveMetadataManager(parameters),
+            retrieveProjectPackage(parameters),
+            retrieveTableRepositoryName(parameters),
+            retrieveHeader(parameters),
+            templateFactory,
+            templateFactory.getDecoratorFactory(),
+            retrieveTableTemplates(parameters),
+            MetadataUtils.getInstance());
+
+        return false;
     }
 
     /**
-     * Handles given information.
+     * Builds the <code>FkStatementSetter</code> templates.
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -242,8 +223,7 @@ public class FkStatementSetterTemplateBuildHandler
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      * @precondition metadataManager != null
@@ -254,7 +234,7 @@ public class FkStatementSetterTemplateBuildHandler
      * @precondition tableTemplates != null
      * @precondition metadataUtils != null
      */
-    protected boolean handle(
+    protected void buildTemplates(
         final Map parameters,
         final String engineName,
         final String engineVersion,
@@ -267,65 +247,54 @@ public class FkStatementSetterTemplateBuildHandler
         final DecoratorFactory decoratorFactory,
         final TableTemplate[] tableTemplates,
         final MetadataUtils metadataUtils)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         Collection t_cTemplates = new ArrayList();
 
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
         
         int t_iFkCount = 0;
         
-        String t_strTableName = null;
-        String t_strPackageName = null;
-        ForeignKey[] t_aForeignKeys = null;
+        String t_strTableName;
+        String t_strPackageName;
+        ForeignKey[] t_aForeignKeys;
 
-        try
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
         {
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
+            t_strTableName =
+                tableTemplates[t_iIndex].getTableName();
+                
+            t_strPackageName =
+                retrievePackage(engineName, t_strTableName, parameters);
+
+            t_aForeignKeys =
+                metadataUtils.retrieveForeignKeys(
+                    t_strTableName, metadataManager, decoratorFactory);
+                
+            t_iFkCount =
+                (t_aForeignKeys != null) ? t_aForeignKeys.length : 0;
+                
+            for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
             {
-                t_strTableName =
-                    tableTemplates[t_iIndex].getTableName();
-                
-                t_strPackageName =
-                    retrievePackage(engineName, t_strTableName, parameters);
-
-                t_aForeignKeys =
-                    metadataUtils.retrieveForeignKeys(
-                        t_strTableName, metadataManager, decoratorFactory);
-                
-                t_iFkCount =
-                    (t_aForeignKeys != null) ? t_aForeignKeys.length : 0;
-                
-                for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
-                {
-                    t_cTemplates.add(
-                        templateFactory.createTemplate(
-                            t_aForeignKeys[t_iFkIndex],
-                            metadataManager,
-                            t_strPackageName,
-                            engineName,
-                            engineVersion,
-                            quote,
-                            basePackageName,
-                            repositoryName,
-                            header));
-                }
+                t_cTemplates.add(
+                    templateFactory.createTemplate(
+                        t_aForeignKeys[t_iFkIndex],
+                        metadataManager,
+                        t_strPackageName,
+                        engineName,
+                        engineVersion,
+                        quote,
+                        basePackageName,
+                        repositoryName,
+                        header));
             }
+        }
 
-            storeTemplates(
-                (FkStatementSetterTemplate[])
-                    t_cTemplates.toArray(
-                        EMPTY_FKSTATEMENTSETTERTEMPLATE_ARRAY),
-                parameters);
-        }
-        catch  (final QueryJException queryjException)
-        {
-            throw new BuildException(queryjException);
-        }
-        
-        return result;
+        storeTemplates(
+            (FkStatementSetterTemplate[])
+            t_cTemplates.toArray(
+                EMPTY_FKSTATEMENTSETTERTEMPLATE_ARRAY),
+            parameters);
     }
 
     /**
@@ -334,7 +303,6 @@ public class FkStatementSetterTemplateBuildHandler
      * @param tableName the table name.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      * @precondition engineName != null
      * @precondition tableName != null
@@ -343,7 +311,6 @@ public class FkStatementSetterTemplateBuildHandler
         final String engineName,
         final String tableName,
         final Map parameters)
-      throws  BuildException
     {
         return
             retrievePackage(
@@ -360,7 +327,6 @@ public class FkStatementSetterTemplateBuildHandler
      * @param tableName the table name.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition engineName != null
      * @precondition projectPackage != null
      * @precondition tableName != null
@@ -371,7 +337,6 @@ public class FkStatementSetterTemplateBuildHandler
         final String engineName,
         final String tableName,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveFkStatementSetterPackage(
@@ -398,11 +363,9 @@ public class FkStatementSetterTemplateBuildHandler
      * Retrieves the table templates.
      * @param parameters the parameter map.
      * @return such templates.
-     * @throws BuildException if the templates cannot be stored for any reason.
      * @precondition parameters != null
      */
     protected TableTemplate[] retrieveTableTemplates(final Map parameters)
-        throws  BuildException
     {
         return
             (TableTemplate[])

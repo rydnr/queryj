@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.templates.dao.mock.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -51,13 +51,6 @@ import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -74,67 +67,52 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class MockDAOTestTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * Creates a MockDAOTestTemplateWritingHandler.
+     * Creates a <code>MockDAOTestTemplateWritingHandler</code> instance.
      */
     public MockDAOTestTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        return
-            handle(
-                parameters,
-                retrieveMockDAOTestTemplates(parameters),
-                MockDAOTestTemplateGenerator.getInstance(),
-                retrieveOutputDir(parameters));
+        writeTemplates(
+            parameters,
+            retrieveMockDAOTestTemplates(parameters),
+            MockDAOTestTemplateGenerator.getInstance(),
+            retrieveOutputDir(parameters));
+
+        return false;
     }
 
     /**
-     * Handles given information.
+     * Writes the <code>MockDAOTest</code> templates..
      * @param parameters the parameters.
      * @param templates the templates.
      * @param generator the generator.
      * @param outputDir the output dir.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition templates != null
      * @precondition generator != null
      * @precondition outputDir != null
      */
-    protected boolean handle(
+    protected void writeTemplates(
         final Map parameters,
         final MockDAOTestTemplate[] templates,
         final MockDAOTestTemplateGenerator generator,
         final File outputDir)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         try 
         {
             int t_iLength = (templates != null) ? templates.length : 0;
@@ -150,22 +128,20 @@ public class MockDAOTestTemplateWritingHandler
         }
         catch  (final IOException ioException)
         {
-            throw new BuildException(ioException);
+            throw
+                new QueryJBuildException(
+                    "Cannot write the templates", ioException);
         }
-        
-        return result;
     }
 
     /**
      * Retrieves the dao test templates from the attribute map.
      * @param parameters the parameter map.
      * @return the templates.
-     * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
     protected MockDAOTestTemplate[] retrieveMockDAOTestTemplates(
         final Map parameters)
-      throws  BuildException
     {
         return
             (MockDAOTestTemplate[])
@@ -177,11 +153,9 @@ public class MockDAOTestTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
     {
         return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
@@ -191,13 +165,11 @@ public class MockDAOTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
         final Map parameters, final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveMockDAOTestFolder(

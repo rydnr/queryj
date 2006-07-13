@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -55,9 +55,9 @@ import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildH
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
+ * Importing some ACM-SL Commons classes.
  */
-import org.apache.tools.ant.BuildException;
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some JDK classes.
@@ -68,7 +68,7 @@ import java.util.Map;
 /*
  * Importing some Commons-Collection classes.
  */
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * Builds the Spring DAO declaration file.
@@ -79,7 +79,8 @@ public class DataAccessContextLocalTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
 {
     /**
-     * Creates a DataAccessContextLocalTemplateBuildHandler.
+     * Creates a <code>DataAccessContextLocalTemplateBuildHandler</code>
+     * instance.
      */
     public DataAccessContextLocalTemplateBuildHandler() {};
 
@@ -105,7 +106,7 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @param tableNames the table names.
      * @param header the header.
      * @return the template.
-     * @throws QueryJException on invalid input.
+     * @throws QueryJBuildException on invalid input.
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition customSqlProvider != null
@@ -128,7 +129,7 @@ public class DataAccessContextLocalTemplateBuildHandler
         final String header,
         final Collection tableNames,
         final Map parameters)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         BasePerRepositoryTemplate result = null;
 
@@ -150,9 +151,16 @@ public class DataAccessContextLocalTemplateBuildHandler
         }
         else
         {
-            LogFactory.getLog(BasePerRepositoryTemplateBuildHandler.class).warn(
-                  "Unexpected BasePerRepository factory. "
-                + "Expecting DataAccessContextLocalTemplateFactory.");
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    BasePerRepositoryTemplateBuildHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.warn(
+                      "Unexpected BasePerRepository factory. "
+                    + "Expecting DataAccessContextLocalTemplateFactory.");
+            }
         }
 
         return result;
@@ -164,7 +172,6 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
@@ -172,7 +179,6 @@ public class DataAccessContextLocalTemplateBuildHandler
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return "";
     }

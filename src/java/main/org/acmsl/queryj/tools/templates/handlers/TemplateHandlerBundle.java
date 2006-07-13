@@ -41,22 +41,17 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.handlers.CompositeAntCommandHandler;
+import org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /**
  * Bundles a pair of template build and writing handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
 public class TemplateHandlerBundle
-    extends    CompositeAntCommandHandler
+    extends    CompositeQueryJCommandHandler
     implements TemplateHandler
 {
     /**

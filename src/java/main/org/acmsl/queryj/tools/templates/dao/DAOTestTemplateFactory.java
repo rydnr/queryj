@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -38,12 +39,16 @@
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Factory;
 
 /**
  * Is able to create DAO test templates.
@@ -51,6 +56,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  *         >Jose San Leandro</a>
  */
 public interface DAOTestTemplateFactory
+    extends  Factory
 {
     /**
      * Generates a DAO test template.
@@ -68,7 +74,6 @@ public interface DAOTestTemplateFactory
      * @param jdbcPassword the JDBC password.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      */
     public DAOTestTemplate createDAOTestTemplate(
         final TableTemplate tableTemplate,
@@ -83,6 +88,5 @@ public interface DAOTestTemplateFactory
         final String jdbcUrl,
         final String jdbcUsername,
         final String jdbcPassword,
-        final String header)
-      throws QueryJException;
+        final String header);
 } 

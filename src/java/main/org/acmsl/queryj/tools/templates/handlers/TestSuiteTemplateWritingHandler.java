@@ -41,19 +41,15 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TestSuiteTemplate;
 import org.acmsl.queryj.tools.templates.TestSuiteTemplateGenerator;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -68,42 +64,30 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class TestSuiteTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * Creates a TestSuiteTemplateWritingHandler.
+     * Creates a <code>TestSuiteTemplateWritingHandler</code> instance.
      */
     public TestSuiteTemplateWritingHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
 
     /**
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        return
-            handle(
-                retrieveTestSuiteTemplate(parameters),
-                retrieveOutputDir(parameters),
-                TestSuiteTemplateGenerator.getInstance());
+        writeTemplate(
+            retrieveTestSuiteTemplate(parameters),
+            retrieveOutputDir(parameters),
+            TestSuiteTemplateGenerator.getInstance());
+
+        return false;
     }
 
     /**
@@ -112,41 +96,37 @@ public class TestSuiteTemplateWritingHandler
      * @param outputDir the output dir.
      * @param generator the <code>TestSuiteTemplateGenerator</code> instance.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition template != null
      * @precondition outputDir != null
      * @precondition generator != null
      */
-    protected boolean handle(
+    protected void writeTemplate(
         final TestSuiteTemplate template,
         final File outputDir,
         final TestSuiteTemplateGenerator generator)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         try 
         {
             generator.write(template, outputDir);
         }
         catch  (final IOException ioException)
         {
-            throw new BuildException(ioException);
+            throw
+                new QueryJBuildException(
+                    "Cannot write the TestSuite template", ioException);
         }
-        
-        return result;
     }
 
     /**
      * Retrieves the test suite template from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
     protected TestSuiteTemplate retrieveTestSuiteTemplate(
         final Map parameters)
-      throws  BuildException
     {
         return
             (TestSuiteTemplate)
@@ -158,11 +138,9 @@ public class TestSuiteTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
     {
         return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
@@ -172,13 +150,11 @@ public class TestSuiteTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
         final Map parameters, final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveBaseTestSuiteFolder(

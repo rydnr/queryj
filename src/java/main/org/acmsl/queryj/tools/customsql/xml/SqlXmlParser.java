@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -67,7 +68,12 @@ import org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.SqlElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.StatementFlagsElementFactory;
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some JDK classes.
@@ -88,7 +94,7 @@ import org.apache.commons.digester.Digester;
 /*
  * Importing Jakarta Commons Logging classes
  */
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * Is able to read the contents contained in QueryJ's sql.xml files.
@@ -211,11 +217,11 @@ public class SqlXmlParser
 
     /**
      * Loads the information from the XML resource.
-     * @return the Customer information.
-     * @throws QueryJException if the information cannot be read.
+     * @return the custom SQL information.
+     * @throws QueryJBuildException if the information cannot be read.
      */
     protected Map load()
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         return load(configureDigester(getClassLoader()), getInput());
     }
@@ -225,12 +231,12 @@ public class SqlXmlParser
      * @param digester the Digester instance.
      * @param stream the input stream.
      * @return the information.
-     * @throws QueryJException if the information cannot be read.
+     * @throws QueryJBuildException if the information cannot be read.
      * @precondition (stream != null)
      */
     protected synchronized Map load(
         final Digester digester, final InputStream input)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         Map result = null;
 
@@ -260,9 +266,14 @@ public class SqlXmlParser
             {
                 try
                 {
-                    LogFactory.getLog(SqlXmlParser.class).error(
-                        "Cannot read sql.xml information.",
-                        exception);
+                    Log t_Log = UniqueLogFactory.getLog(SqlXmlParser.class);
+
+                    if  (t_Log != null)
+                    {
+                        t_Log.error(
+                            "Cannot read sql.xml information.",
+                            exception);
+                    }
                 }
                 catch  (final Throwable throwable)
                 {
@@ -270,7 +281,7 @@ public class SqlXmlParser
                 }
 
                 throw
-                    new QueryJException(
+                    new QueryJBuildException(
                         "cannot.read.custom.sql.xml",
                         exception);
             }
@@ -502,10 +513,10 @@ public class SqlXmlParser
 
     /**
      * Parses the sql.xml associated to this instance.
-     * @throws QueryJException if the information cannot be read.
+     * @throws QueryJBuildException if the information cannot be read.
      */
     public void parse()
-        throws  QueryJException
+        throws  QueryJBuildException
     {
         Map t_mSqlXmlMap = getMap();
 
@@ -531,7 +542,8 @@ public class SqlXmlParser
      * @param parameterElement such element.
      * @return the key.
      */
-    protected Object buildParameterKey(final AbstractIdElement parameterElement)
+    protected Object buildParameterKey(
+        final AbstractIdElement parameterElement)
     {
         return buildParameterKey(parameterElement.getId());
     }

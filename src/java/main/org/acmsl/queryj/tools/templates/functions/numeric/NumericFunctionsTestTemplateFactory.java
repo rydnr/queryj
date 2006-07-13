@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -41,7 +42,6 @@ package org.acmsl.queryj.tools.templates.functions.numeric;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTestTemplate;
@@ -81,7 +81,6 @@ public interface NumericFunctionsTestTemplateFactory
      * @param innerTable the inner table.
      * @param classEnd the class end.
      * @return a template.
-     * @throws QueryJException if the template factory is invalid.
      */
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
         final String header,
@@ -105,8 +104,7 @@ public interface NumericFunctionsTestTemplateFactory
         final String getInstanceTest,
         final String innerClass,
         final String innerTable,
-        final String classEnd)
-      throws  QueryJException;
+        final String classEnd);
 
     /**
      * Generates a numeric functions template.
@@ -117,7 +115,6 @@ public interface NumericFunctionsTestTemplateFactory
      * @param quote the identifier quote string.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the template factory is invalid.
      */
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
         final String packageName,
@@ -125,6 +122,5 @@ public interface NumericFunctionsTestTemplateFactory
         final String engineName,
         final String engineVersion,
         final String quote,
-        final String header)
-      throws  QueryJException;
+        final String header);
 }

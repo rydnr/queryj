@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -38,13 +39,17 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerCustomSqlTemplate;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Factory;
 
 /**
  * Represents entities able to create per-<i>custom result</i> templates.
@@ -52,6 +57,7 @@ import org.acmsl.queryj.tools.templates.BasePerCustomSqlTemplate;
  *         >Jose San Leandro</a>
  */
 public interface BasePerCustomResultTemplateFactory
+    extends  Factory
 {
     /**
      * Creates a per-<i>custom result</i> template.
@@ -74,6 +80,5 @@ public interface BasePerCustomResultTemplateFactory
         final String engineVersion,
         final String basePackageName,
         final String repositoryName,
-        final String header)
-      throws  QueryJException;
+        final String header);
 }

@@ -1,7 +1,8 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -43,12 +44,18 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
 
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Factory;
+
 /**
  * Is able to create procedure repository templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public interface ProcedureRepositoryTemplateFactory
+    extends  Factory
 {
     /**
      * Generates a procedure repository template.

@@ -42,12 +42,13 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -58,11 +59,6 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some Commons-Logging classes.
@@ -88,7 +84,7 @@ import java.util.Map;
  * @version $Revision$ ($Author$ at $Date$)
  */
 public abstract class DatabaseMetaDataRetrievalHandler
-    extends  AbstractAntCommandHandler
+    extends  AbstractQueryJCommandHandler
 {
     /**
      * The Database Metadata attribute name.
@@ -122,30 +118,19 @@ public abstract class DatabaseMetaDataRetrievalHandler
         "metadata.extraction.already.done";
 
     /**
-     * Creates a DatabaseMetaDataRetrievalHandler.
+     * Creates a <code>DatabaseMetaDataRetrievalHandler</code> instance.
      */
     public DatabaseMetaDataRetrievalHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-    {
-        return handle(command.getAttributeMap());
-    }
 
     /**
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
         return
             handle(
@@ -161,7 +146,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * extraction has already been done.
      * @param metaData the database metadata.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
      */
@@ -169,7 +154,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final Map parameters,
         final boolean alreadyDone,
         final DatabaseMetaData metaData)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         boolean result = false;
 
@@ -196,10 +181,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean oldHandle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         boolean result = false;
 
@@ -492,7 +477,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param enableTableExtraction whether to extract tables.
      * @param enableProcedureExtractor whether to extract procedures.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
      */
@@ -501,6 +486,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final DatabaseMetaData metaData,
         final boolean enableTableExtraction,
         final boolean enableProcedureExtraction)
+      throws  QueryJBuildException
     {
         boolean result = false;
 
@@ -552,7 +538,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the command parameters.
      * @param tablesElement the &lt;tables&gt; element.
      * @return such table names.
-     * @throws BuildException if the process fails.
+     * @throws QueryJBuildException if the process fails.
      * @precondition parameters != null
      */
     protected String[] extractTableNames(
@@ -572,7 +558,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves the fields of the user-defined tables.
      * @param tables the table definitions.
      * @return such fields.
-     * @throws BuildException if the process fails.
+     * @throws QueryJBuildException if the process fails.
      * @precondition tables != null
      */
     protected String[] extractTableNames(final Collection tables)
@@ -613,7 +599,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves whether the tables should be extracted on demand.
      * @param tablesElement the tables element.
      * @return the result of such analysis..
-     * @throws BuildException if the process fails.
      * @precondition tablesElement != null
      */
     protected boolean lazyTableExtraction(final AntTablesElement tablesElement)
@@ -632,7 +617,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves whether the tables should be extracted on demand.
      * @param tables the table definitions.
      * @return the result of such analysis..
-     * @throws BuildException if the process fails.
      * @precondition tables != null
      */
     protected boolean lazyTableExtraction(final Collection tables)
@@ -679,7 +663,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param tablesElement the tables element.
      * @param metadataTypeManager the metadata type manager.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
      * @precondition metadataManager != null
@@ -712,7 +695,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param tableKey the key to store the tables.
      * @param metadataTypeManager the metadata type manager.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
      * @precondition metadataManager != null
@@ -899,7 +881,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param extractedMap the already-extracted information.
      * @param metadataManager the database metadata manager.
      * @param tableKey the key to store the tables.
-     * @throws BuildException if the build process cannot be performed.
      * @precondition tables != null
      * @precondition extractedMap != null
      * @precondition metadataManager != null
@@ -986,47 +967,43 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * attribute map.
      * @param parameters the parameter map.
      * @return the metadata instance.
-     * @throws BuildException if the retrieval process cannot be performed.
+     * @throws QueryJBuildException if the metadata cannot be retrieved.
+     * @precondition parameters != null
      */
     protected DatabaseMetaData retrieveMetadata(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null) 
-        {
-            result =
+        return
+            (DatabaseMetaData)
                 retrieveMetadata(
                     (Connection)
                         parameters.get(
                             JdbcConnectionOpeningHandler.JDBC_CONNECTION));
-        }
-
-        return result;
     }
 
     /**
      * Retrieves the database metadata.
      * @param connection the JDBC connection.
      * @return the metadata instance.
-     * @throws org.apache.tools.ant.BuildException whenever the required
+     * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
+     * @precondition connection != null
      */
     protected DatabaseMetaData retrieveMetadata(final Connection connection)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        DatabaseMetaData result = null;
+        DatabaseMetaData result;
 
-        if  (connection != null)
+        try 
         {
-            try 
-            {
-                result = connection.getMetaData();
-            }
-            catch  (final SQLException exception)
-            {
-                throw new BuildException(exception);
-            }
+            result = connection.getMetaData();
+        }
+        catch  (final SQLException exception)
+        {
+            throw
+                new QueryJBuildException(
+                    "Cannot retrieve database metadata",
+                    exception);
         }
 
         return result;
@@ -1037,11 +1014,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * attribute map.
      * @param parameters the parameter map.
      * @return the table information.
-     * @throws BuildException if the retrieval process cannot be performed.
      * @precondition parameters != null
      */
     protected AntTablesElement retrieveTablesElement(final Map parameters)
-        throws  BuildException
     {
         return
             (AntTablesElement)
@@ -1052,10 +1027,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves whether the table extraction is disabled or not.
      * @param parameters the parameter map.
      * @return such setting.
-     * @throws BuildException if the retrieval process cannot be performed.
      */
     protected boolean retrieveExtractTables(final Map parameters)
-        throws  BuildException
     {
         return
             retrieveBoolean(
@@ -1066,10 +1039,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves whether the procedure extraction is disabled or not.
      * @param parameters the parameter map.
      * @return such setting.
-     * @throws BuildException if the retrieval process cannot be performed.
      */
     protected boolean retrieveExtractProcedures(final Map parameters)
-        throws  BuildException
     {
         return
             retrieveBoolean(
@@ -1081,11 +1052,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param name the key name.
      * @param parameters the parameter map.
      * @return the boolean value.
-     * @throws BuildException if the retrieval process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean retrieveBoolean(final String name, final Map parameters)
-        throws  BuildException
     {
         boolean result = false;
 
@@ -1113,7 +1082,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * extracted inmediately.
      * @param parameters the parameter map.
      * @return the metadata manager instance.
-     * @throws BuildException if the retrieval process cannot be performed.
+     * @throws QueryJBuildException if the retrieval process cannot be
+     * performed.
      * @precondition parameters != null
      */
     protected MetadataManager buildMetadataManager(
@@ -1122,32 +1092,28 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
         final Map parameters)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        MetadataManager result = null;
+        MetadataManager result =
+            retrieveMetadataManager(parameters);
 
-        if  (parameters != null) 
+        if  (result == null) 
         {
-            result = retrieveMetadataManager(parameters);
-
-            if  (result == null) 
-            {
-                result =
-                    buildMetadataManager(
-                        (String[]) parameters.get(TABLE_NAMES),
-                        (String[]) parameters.get(PROCEDURE_NAMES),
-                        disableTableExtraction,
-                        lazyTableExtraction,
-                        disableProcedureExtraction,
-                        lazyProcedureExtraction,
-                        retrieveDatabaseMetaData(parameters),
-                        (String)
-                            parameters.get(
-                                ParameterValidationHandler.JDBC_CATALOG),
-                        (String)
-                            parameters.get(
-                                ParameterValidationHandler.JDBC_SCHEMA));
-            }
+            result =
+                buildMetadataManager(
+                    (String[]) parameters.get(TABLE_NAMES),
+                    (String[]) parameters.get(PROCEDURE_NAMES),
+                    disableTableExtraction,
+                    lazyTableExtraction,
+                    disableProcedureExtraction,
+                    lazyProcedureExtraction,
+                    retrieveDatabaseMetaData(parameters),
+                    (String)
+                    parameters.get(
+                        ParameterValidationHandler.JDBC_CATALOG),
+                    (String)
+                    parameters.get(
+                        ParameterValidationHandler.JDBC_SCHEMA));
         }
 
         if  (result != null)
@@ -1159,13 +1125,13 @@ public abstract class DatabaseMetaDataRetrievalHandler
             catch  (final SQLException sqlException)
             {
                 throw
-                    new BuildException(
+                    new QueryJBuildException(
                         "Cannot retrieve metadata.", sqlException);
             }
             catch  (final QueryJException queryjException)
             {
                 throw
-                    new BuildException(
+                    new QueryJBuildException(
                         "Cannot retrieve metadata.", queryjException);
             }
         }
@@ -1189,7 +1155,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param catalog the database catalog.
      * @param schema the database schema.
      * @return the metadata manager instance.
-     * @throws org.apache.tools.ant.BuildException whenever the required
+     * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      * @precondition metaData != null
      */
@@ -1203,7 +1169,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final DatabaseMetaData metaData,
         final String catalog,
         final String schema)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         MetadataManager result = null;
 
@@ -1238,7 +1204,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     exception);
             }
 
-            throw new BuildException(exception);
+            throw
+                new QueryJBuildException(
+                    "Cannot retrieve database metadata", exception);
         }
 
         return result;
@@ -1248,13 +1216,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Stores the database metadata in the attribute map.
      * @param metaData the database metadata.
      * @param parameters the parameter map.
-     * @throws BuildException if the metadata cannot be stored for any reason.
      * @precondition metaData != null
      * @precondition parameters != null
      */
     protected void storeMetadata(
         final DatabaseMetaData metaData, final Map parameters)
-      throws  BuildException
     {
         parameters.put(DATABASE_METADATA, metaData);
     }
@@ -1294,13 +1260,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Stores the table names in the attribute map.
      * @param tableNames the table names.
      * @param parameters the parameter map.
-     * @throws BuildException if the table names cannot be stored for any reason.
      * @precondition tableNames != null
      * @precondition parameters != null
      */
     protected void storeTableNames(
         final String[] tableNames, final Map parameters)
-      throws  BuildException
     {
         parameters.put(TABLE_NAMES, tableNames);
     }
@@ -1309,13 +1273,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Stores the database metadata manager in the attribute map.
      * @param metadataManager the metadata manager.
      * @param parameters the parameter map.
-     * @throws BuildException if the manager cannot be stored for any reason.
      * @precondition metadataManager != null
      * @precondition parameters != null
      */
     protected void storeMetadataManager(
         final MetadataManager metadataManager, final Map parameters)
-      throws  BuildException
     {
         parameters.put(METADATA_MANAGER, metadataManager);
     }
@@ -1386,15 +1348,15 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Checks whether the database vendor matches this handler.
      * @param metaData the database metadata.
      * @return <code>true</code> in case it matches.
-     * @throws BuildException if the check fails.
+     * @throws QueryJBuildException if the check fails.
      * @precondition metaData != null
      */
     protected boolean checkVendor(final DatabaseMetaData metaData)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         boolean result = false;
 
-        BuildException t_ExceptionToThrow = null;
+        QueryJBuildException t_ExceptionToThrow = null;
 
         Log t_Log =
             UniqueLogFactory.getLog(
@@ -1419,7 +1381,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             }
 
             t_ExceptionToThrow =
-                new BuildException(
+                new QueryJBuildException(
                     "cannot.retrieve.vendor.product.name",
                     sqlException);
         }

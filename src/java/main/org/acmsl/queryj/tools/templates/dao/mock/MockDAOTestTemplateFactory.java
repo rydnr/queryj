@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -40,7 +41,6 @@ package org.acmsl.queryj.tools.templates.dao.mock;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -61,7 +61,6 @@ public interface MockDAOTestTemplateFactory
      * @param valueObjectPackageName the value object's package name.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      */
     public MockDAOTestTemplate createMockDAOTestTemplate(
         final TableTemplate tableTemplate,
@@ -69,6 +68,5 @@ public interface MockDAOTestTemplateFactory
         final String packageName,
         final String daoPackageName,
         final String valueObjectPackageName,
-        final String header)
-      throws  QueryJException;
+        final String header);
 }

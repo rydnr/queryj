@@ -43,12 +43,12 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.logging.QueryJLog;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
@@ -56,11 +56,7 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
  */
 import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.patterns.CommandHandler;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing JDK classes.
@@ -69,13 +65,18 @@ import java.io.File;
 import java.sql.DatabaseMetaData;
 import java.util.Map;
 
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
+
 /**
  * Inside a Chain Of Responsibility, these are the chain links.
  * This means they perform specific actions when receiving the command.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public abstract class AbstractAntCommandHandler
-    implements  AntCommandHandler
+public abstract class AbstractQueryJCommandHandler
+    implements  QueryJCommandHandler
 {
     /**
      * Handles given command.
@@ -87,23 +88,23 @@ public abstract class AbstractAntCommandHandler
     {
         boolean result = false;
 
-        if  (command instanceof AntCommand) 
+        if  (command instanceof QueryJCommand)
         {
-            AntCommand t_Command = (AntCommand) command;
+            QueryJCommand t_Command = (QueryJCommand) command;
             
             try 
             {
                 result = handle(t_Command);
             }
-            catch  (final BuildException buildException)
+            catch  (final QueryJBuildException buildException)
             {
-                QueryJLog t_Log = t_Command.getLog();
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        AbstractQueryJCommandHandler.class);
 
                 if  (t_Log != null)
                 {
-                    t_Log.error(
-                        "Chain step failed.",
-                        buildException);
+                    t_Log.error("Chain step failed.", buildException);
                 }
             }
         }
@@ -112,14 +113,35 @@ public abstract class AbstractAntCommandHandler
     }
 
     /**
+     * Handles given command.
+     * @param command the command to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws BuildException if the build process cannot be performed.
+     * @precondition command != null
+     */
+    public boolean handle(final QueryJCommand command)
+        throws  QueryJBuildException
+    {
+        return handle(command.getAttributeMap());
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters.
+     * @return <code>true</code> to avoid further processing of such command
+     * by different handlers.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     */
+    protected abstract boolean handle(final Map parameters)
+        throws  QueryJBuildException;
+
+    /**
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
     protected File retrieveProjectOutputDir(final Map parameters)
-        throws  BuildException
     {
         return
             (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
@@ -129,11 +151,9 @@ public abstract class AbstractAntCommandHandler
      * Retrieves the package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters !0 null
      */
     protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
     {
         return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
@@ -142,12 +162,10 @@ public abstract class AbstractAntCommandHandler
      * Retrieves the database metadata from the attribute map.
      * @param parameters the parameter map.
      * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
      * @precondition parameters != null
      */
     protected DatabaseMetaData retrieveDatabaseMetaData(
         final Map parameters)
-      throws  BuildException
     {
         return
             (DatabaseMetaData)
@@ -160,12 +178,10 @@ public abstract class AbstractAntCommandHandler
      * Retrieves the database metadata manager from the attribute map.
      * @param parameters the parameter map.
      * @return the manager.
-     * @throws BuildException if the manager retrieval process if faulty.
      * @precondition parameters != null
      */
     protected MetadataManager retrieveMetadataManager(
         final Map parameters)
-      throws  BuildException
     {
         return
             (MetadataManager)
@@ -199,11 +215,9 @@ public abstract class AbstractAntCommandHandler
      * Retrieves the JDBC driver from the attribute map.
      * @param parameters the parameter map.
      * @return the driver name.
-     * @throws BuildException if the driver retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrieveJdbcDriver(final Map parameters)
-        throws  BuildException
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_DRIVER);
@@ -213,11 +227,9 @@ public abstract class AbstractAntCommandHandler
      * Retrieves the JDBC url from the attribute map.
      * @param parameters the parameter map.
      * @return the url name.
-     * @throws BuildException if the url retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrieveJdbcUrl(final Map parameters)
-        throws  BuildException
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_URL);
@@ -227,11 +239,9 @@ public abstract class AbstractAntCommandHandler
      * Retrieves the JDBC username from the attribute map.
      * @param parameters the parameter map.
      * @return the username name.
-     * @throws BuildException if the username retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrieveJdbcUsername(final Map parameters)
-        throws  BuildException
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_USERNAME);
@@ -241,11 +251,9 @@ public abstract class AbstractAntCommandHandler
      * Retrieves the JDBC password from the attribute map.
      * @param parameters the parameter map.
      * @return the password name.
-     * @throws BuildException if the password retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrieveJdbcPassword(final Map parameters)
-        throws  BuildException
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);
@@ -277,12 +285,10 @@ public abstract class AbstractAntCommandHandler
      * Retrieves the custom-sql provider from the attribute map.
      * @param parameters the parameter map.
      * @return the provider.
-     * @throws BuildException if the manager retrieval process if faulty.
      * @precondition parameters != null
      */
     public static CustomSqlProvider retrieveCustomSqlProvider(
         final Map parameters)
-      throws  BuildException
     {
         return
             (CustomSqlProvider)
@@ -308,11 +314,9 @@ public abstract class AbstractAntCommandHandler
      * Retrieves the header from the attribute map.
      * @param parameters the parameter map.
      * @return the header.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters !0 null
+     * @precondition parameters != null
      */
     protected String retrieveHeader(final Map parameters)
-        throws  BuildException
     {
         return (String) parameters.get(ParameterValidationHandler.HEADER);
     }

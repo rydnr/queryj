@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -40,6 +41,8 @@ package org.acmsl.queryj.tools.handlers.mysql;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.engines.mysql.MySQL4xMetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
@@ -47,19 +50,14 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.version.VersionUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
  */
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -130,7 +128,7 @@ public class MySQL4xMetaDataRetrievalHandler
      * @param catalog the database catalog.
      * @param schema the database schema.
      * @return the metadata manager instance.
-     * @throws org.apache.tools.ant.BuildException whenever the required
+     * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      * @precondition metaData != null
      */
@@ -144,11 +142,11 @@ public class MySQL4xMetaDataRetrievalHandler
         final DatabaseMetaData metaData,
         final String catalog,
         final String schema)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        MetadataManager result = null;
+        MetadataManager result;
 
-        try 
+        try
         {
             result =
                 new MySQL4xMetadataManager(
@@ -162,13 +160,18 @@ public class MySQL4xMetaDataRetrievalHandler
                     catalog,
                     schema);
         }
-        catch  (final RuntimeException exception)
+        catch  (final SQLException sqlException)
         {
-            throw exception;
+            throw
+                new QueryJBuildException(
+                    "Cannot process MySQL metadata", sqlException);
         }
-        catch  (final Exception exception)
+
+        catch  (final QueryJException queryjException)
         {
-            throw new BuildException(exception);
+            throw
+                new QueryJBuildException(
+                    "Cannot process MySQL metadata", queryjException);
         }
 
         return result;

@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -51,12 +51,6 @@ import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.handlers.FkStatementSetterTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 /*
  * Importing some JDK classes.
@@ -73,61 +67,45 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class FkStatementSetterTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * Creates a FkStatementSetterTemplateWritingHandler.
+     * Creates a <code>FkStatementSetterTemplateWritingHandler</code>
+     * instance.
      */
     public FkStatementSetterTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        return
-            handle(
-                parameters,
-                retrieveDatabaseMetaData(parameters));
+        writeTemplates(parameters, retrieveDatabaseMetaData(parameters));
+
+        return false;
     }
 
     /**
-     * Handles given information.
+     * Writes the <code>FkStatementSetter</code> templates.
      * @param parameters the parameters.
      * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
      */
-    protected boolean handle(
+    protected void writeTemplates(
         final Map parameters, final DatabaseMetaData metaData)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         try
         {
-            handle(
+            writeTemplates(
                 parameters,
                 metaData.getDatabaseProductName(),
                 retrieveTemplates(parameters),
@@ -135,49 +113,57 @@ public class FkStatementSetterTemplateWritingHandler
         }
         catch  (final SQLException sqlException)
         {
-            throw new BuildException(sqlException);
+            throw
+                new QueryJBuildException(
+                    "Cannot retrieve database product name", sqlException);
         }
-
-        return result;
     }
 
     /**
-     * Handles given information.
+     * Writes the <code>FkStatementSetter</code> templates.
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @param templates the templates.
      * @param templateGenerator the template generator.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      * @precondition templates != null
      * @precondition templateGenerator != null
      */
-    protected void handle(
+    protected void writeTemplates(
         final Map parameters,
         final String engineName,
         final FkStatementSetterTemplate[] templates,
         final FkStatementSetterTemplateGenerator templateGenerator)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         try 
         {
             int t_iLength = (templates != null) ? templates.length : 0;
 
+            FkStatementSetterTemplate t_Template;
+
             for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
             {
-                templateGenerator.write(
-                    templates[t_iIndex],
-                    retrieveOutputDir(
-                        engineName,
-                        templates[t_iIndex]
-                            .getForeignKey().getSourceTableName(),
-                        parameters));
+                t_Template = templates[t_iIndex];
+
+                if  (t_Template != null)
+                {
+                    templateGenerator.write(
+                        t_Template,
+                        retrieveOutputDir(
+                            engineName,
+                            t_Template.getForeignKey().getSourceTableName(),
+                            parameters));
+                }
             }
         }
         catch  (final IOException ioException)
         {
-            throw new BuildException(ioException);
+            throw
+                new QueryJBuildException(
+                    "Cannot write the templates", ioException);
         }
     }
 
@@ -185,12 +171,10 @@ public class FkStatementSetterTemplateWritingHandler
      * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the templates.
-     * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
     protected FkStatementSetterTemplate[] retrieveTemplates(
         final Map parameters)
-      throws  BuildException
     {
         return
             (FkStatementSetterTemplate[])
@@ -204,14 +188,12 @@ public class FkStatementSetterTemplateWritingHandler
      * @param tableName the table name.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition engineName != null
      * @precondition tableName != null
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(
         final String engineName, final String tableName, final Map parameters)
-      throws  BuildException
     {
         return
             retrieveOutputDir(
@@ -232,7 +214,6 @@ public class FkStatementSetterTemplateWritingHandler
      * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition engineName != null
      * @precondition projectOutputDir != null
      * @precondition projectPackage != null
@@ -246,7 +227,6 @@ public class FkStatementSetterTemplateWritingHandler
         final String tableName,
         final boolean subFolders,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveFkStatementSetterFolder(

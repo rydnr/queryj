@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -38,9 +39,8 @@
 package org.acmsl.queryj.tools.templates.functions.numeric;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
@@ -61,13 +61,11 @@ public interface NumericFunctionsTemplateFactory
      * @param quote the identifier quote string.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      */
     public NumericFunctionsTemplate createNumericFunctionsTemplate(
         final String packageName,
         final String engineName,
         final String engineVersion,
         final String quote,
-        final String header)
-      throws  QueryJException;
+        final String header);
 }

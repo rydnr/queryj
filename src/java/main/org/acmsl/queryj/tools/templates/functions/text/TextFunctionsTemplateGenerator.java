@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.functions.text;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTemplate;
 
@@ -55,6 +55,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -63,6 +64,11 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Is able to generate text function repositories according to database
@@ -199,11 +205,11 @@ public class TextFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      */
     protected TextFunctionsTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         return
             getTemplateFactory(
@@ -219,14 +225,14 @@ public class TextFunctionsTemplateGenerator
      * @param templateMappingManager the <code>TemplateMappingManager</code>
      * instance.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      * @precondition templateMappingManager != null
      */
     protected TextFunctionsTemplateFactory getTemplateFactory(
         final String engineName,
         final String engineVersion,
         final TemplateMappingManager templateMappingManager)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         TextFunctionsTemplateFactory result = null;
 
@@ -241,7 +247,7 @@ public class TextFunctionsTemplateGenerator
             if  (!(t_TemplateFactory instanceof TextFunctionsTemplateFactory))
             {
                 throw
-                    new QueryJException(
+                    new QueryJBuildException(
                         "invalid.text.function.template.factory");
             }
             else 
@@ -260,7 +266,6 @@ public class TextFunctionsTemplateGenerator
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      * @return a template.
-     * @throws QueryJException if the input information is invalid.
      * @precondition packageName != null
      * @precondition engineName != null
      * @precondition quote != null
@@ -270,12 +275,29 @@ public class TextFunctionsTemplateGenerator
         final String engineName,
         final String engineVersion,
         final String quote)
-      throws  QueryJException
     {
         TextFunctionsTemplate result = null;
 
-        TextFunctionsTemplateFactory t_TemplateFactory =
-            getTemplateFactory(engineName, engineVersion);
+        TextFunctionsTemplateFactory t_TemplateFactory = null;
+
+        try
+        {
+            t_TemplateFactory =
+                getTemplateFactory(engineName, engineVersion);
+        }
+        catch  (final QueryJBuildException buildException)
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    TextFunctionsTemplateGenerator.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.warn(
+                    "Cannot retrieve text-functions template",
+                    buildException);
+            }
+        }
 
         if  (   (t_TemplateFactory != null)
              && (!t_TemplateFactory.getClass().equals(getClass())))
@@ -286,15 +308,6 @@ public class TextFunctionsTemplateGenerator
                     engineName,
                     engineVersion,
                     quote);
-        }
-        else 
-        {
-            throw
-                new QueryJException(
-                      "Cannot find text functions' "
-                    + "template factory for "
-                    + engineName + "\n"
-                    + "Disable extractfunctions setting.");
         }
 
         return result;

@@ -41,10 +41,9 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
@@ -54,16 +53,6 @@ import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplat
 import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -79,91 +68,66 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class QueryPreparedStatementCreatorTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
-     * Creates a QueryPreparedStatementCreatorTemplateBuildHandler.
+     * Creates a <code>QueryPreparedStatementCreatorTemplateBuildHandler</code>
+     * instance.
      */
     public QueryPreparedStatementCreatorTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        return
-            handle(
-                parameters,
-                retrievePackage(parameters),
-                retrieveHeader(parameters),
-                QueryPreparedStatementCreatorTemplateGenerator.getInstance());
+        buildTemplates(
+            parameters,
+            retrievePackage(parameters),
+            retrieveHeader(parameters),
+            QueryPreparedStatementCreatorTemplateGenerator.getInstance());
+
+        return false;
     }
 
     /**
-     * Handles given information.
+     * Builds the <code>QueryPreparedStatementCreator</code> templates.
      * @param parameters the parameters.
      * @param packageName the package name.
      * @param header the header.
      * @param templateFactory the template factory.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition packageName != null
      * @precondition templateFactory != null
      */
-    protected boolean handle(
+    protected void buildTemplates(
         final Map parameters,
         final String packageName,
         final String header,
         final QueryPreparedStatementCreatorTemplateFactory templateFactory)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
+        QueryPreparedStatementCreatorTemplate t_Template =
+            templateFactory.createQueryPreparedStatementCreatorTemplate(
+                packageName, header);
 
-        try
-        {
-            QueryPreparedStatementCreatorTemplate t_Template =
-                templateFactory.createQueryPreparedStatementCreatorTemplate(
-                    packageName, header);
-
-            storeTemplate(t_Template, parameters);
-        }
-        catch  (final QueryJException queryjException)
-        {
-            throw new BuildException(queryjException);
-        }
-        
-        return result;
+        storeTemplate(t_Template, parameters);
     }
 
     /**
      * Retrieves the package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrievePackage(final Map parameters)
-      throws  BuildException
     {
         return
             retrievePackage(
@@ -176,14 +140,12 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
         final String projectPackage,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveQueryPreparedStatementCreatorPackage(

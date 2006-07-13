@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates.functions.text.oracle;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.text.oracle
@@ -107,7 +106,6 @@ public class OracleTextFunctionsTemplateGenerator
      * @param quote the identifier quote string.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      */
     public TextFunctionsTemplate createTextFunctionsTemplate(
         final String packageName,
@@ -115,7 +113,6 @@ public class OracleTextFunctionsTemplateGenerator
         final String engineVersion,
         final String quote,
         final String header)
-      throws  QueryJException
     {
         TextFunctionsTemplate result = null;
 

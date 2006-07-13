@@ -41,12 +41,10 @@ package org.acmsl.queryj.tools.templates.functions.numeric.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateFactory;
@@ -57,11 +55,6 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -78,7 +71,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class NumericFunctionsTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
@@ -88,220 +81,157 @@ public class NumericFunctionsTemplateBuildHandler
         "numeric.functions.template";
 
     /**
-     * Creates a NumericFunctionsTemplateBuildHandler.
+     * Creates a <code>NumericFunctionsTemplateBuildHandler</code> instance.
      */
     public NumericFunctionsTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
-        boolean result = false;
-
-        if  (command != null) 
+        if  (retrieveExtractFunctions(parameters))
         {
-            try 
+            buildTemplate(
+                retrieveDatabaseMetaData(parameters),
+                retrievePackage(parameters),
+                retrieveHeader(parameters),
+                NumericFunctionsTemplateGenerator.getInstance(),
+                parameters,
+                StringUtils.getInstance());
+        }            
+
+        return false;
+    }
+
+    /**
+     * Builds the <code>NumericFunctions</code> template.
+     * @param metadata the <code>DatabaseMetaData</code> instance.
+     * @param packageName the name of the package.
+     * @param header the header.
+     * @param generator the <code>NumericFunctionsTemplateGenerator</code>
+     * instance.
+     * @param parameters the parameters to handle.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition metadata != null
+     * @precondition packageName != null
+     * @precondition header != null
+     * @precondition generator != null
+     * @precondition parameters != null
+     * @precondition stringUtils != null
+     */
+    protected void buildTemplate(
+        final DatabaseMetaData metadata,
+        final String packageName,
+        final String header,
+        final NumericFunctionsTemplateGenerator generator,
+        final Map parameters,
+        final StringUtils stringUtils)
+      throws  QueryJBuildException
+    {
+        try 
+        {
+            NumericFunctionsTemplate t_Template =
+                generator.createNumericFunctionsTemplate(
+                    packageName,
+                    metadata.getDatabaseProductName(),
+                    metadata.getDatabaseProductVersion(),
+                    fixQuote(metadata.getIdentifierQuoteString()),
+                    header);
+
+            Collection t_cFunctions =
+                stringUtils.tokenize(metadata.getNumericFunctions(), ",");
+
+            Iterator t_itFunctions =
+                (t_cFunctions != null) ? t_cFunctions.iterator() : null;
+
+            if  (t_itFunctions != null)
             {
-                Map attributes = command.getAttributeMap();
+                String t_strFunctions;
 
-                boolean t_bExtractFunctions =
-                    retrieveExtractFunctions(attributes);
-
-                if  (t_bExtractFunctions)
+                while  (t_itFunctions.hasNext())
                 {
-                    DatabaseMetaData t_MetaData =
-                        retrieveDatabaseMetaData(attributes);
+                    t_strFunctions = (String) t_itFunctions.next();
 
-                    NumericFunctionsTemplateGenerator
-                        t_NumericFunctionsTemplateGenerator =
-                            NumericFunctionsTemplateGenerator.getInstance();
-
-                    String t_strPackage = retrievePackage(attributes);
-                    String t_strHeader = retrieveHeader(attributes);
-                    
-                    StringUtils t_StringUtils = StringUtils.getInstance();
-
-                    if  (   (t_MetaData                          != null)
-                         && (t_StringUtils                       != null)
-                         && (t_NumericFunctionsTemplateGenerator != null))
-                    {
-                        String t_strQuote =
-                            t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
-                        {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
-                        NumericFunctionsTemplate
-                            t_NumericFunctionsTemplate =
-                                t_NumericFunctionsTemplateGenerator
-                                    .createNumericFunctionsTemplate(
-                                        t_strPackage,
-                                        t_MetaData.getDatabaseProductName(),
-                                        t_MetaData.getDatabaseProductVersion(),
-                                        t_strQuote,
-                                        t_strHeader);
-
-                        Collection t_cFunctions =
-                            t_StringUtils.tokenize(
-                                t_MetaData.getNumericFunctions(),
-                                ",");
-
-                        if  (t_cFunctions != null) 
-                        {
-                            Iterator t_itFunctions = t_cFunctions.iterator();
-
-                            while  (   (t_itFunctions != null)
-                                    && (t_itFunctions.hasNext()))
-                            {
-                                String t_strFunctions =
-                                    (String) t_itFunctions.next();
-
-                                t_NumericFunctionsTemplate.addFunction(
-                                    t_strFunctions);
-                            }
-                        }
-
-                        storeNumericFunctionsTemplate(
-                            t_NumericFunctionsTemplate, attributes);
-                    }
+                    t_Template.addFunction(t_strFunctions);
                 }
             }
-            catch  (SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-            catch  (QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
+
+            storeNumericFunctionsTemplate(t_Template, parameters);
         }
-        
-        return result;
+        catch  (final SQLException sqlException)
+        {
+            throw
+                new QueryJBuildException(
+                      "Cannot retrieve database product name, "
+                    + "version or quote string",
+                    sqlException);
+        }
     }
 
     /**
      * Retrieves whether the functions should be extracted or not.
      * @param parameters the parameter map.
      * @return such information.
-     * @throws BuildException if such condition cannot be retrieved.
      */
-    protected boolean retrieveExtractFunctions(
-            Map parameters)
-        throws  BuildException
+    protected boolean retrieveExtractFunctions(final Map parameters)
     {
         boolean result = true;
 
-        if  (parameters != null)
-        {
-            Boolean t_bResult =
-                (Boolean)
-                    parameters.get(
-                        ParameterValidationHandler.EXTRACT_FUNCTIONS);
+        Boolean t_bResult =
+            (Boolean)
+                parameters.get(ParameterValidationHandler.EXTRACT_FUNCTIONS);
 
-            if  (t_bResult != null)
-            {
-                result = t_bResult.booleanValue();
-            }
+        if  (t_bResult != null)
+        {
+            result = t_bResult.booleanValue();
         }
 
-        return result;
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-            Map parameters)
-        throws  BuildException
-    {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
         return result;
     }
 
     /**
      * Stores given template.
-     * @param numericFunctionsTemplate the template to store.
+     * @param template the template to store.
      * @param parameters the parameter map.
-     * @throws BuildException if the template cannot be stored for some
-     * reason.
+     * @precondition template != null
+     * @precondition parameters != null
      */
     protected void storeNumericFunctionsTemplate(
-            NumericFunctionsTemplate template,
-            Map                      parameters)
-        throws  BuildException
+        final NumericFunctionsTemplate template, final Map parameters)
     {
-        if  (   (template   != null)
-             && (parameters != null))
-        {
-            parameters.put(NUMERIC_FUNCTIONS_TEMPLATE, template);
-        }
+        parameters.put(NUMERIC_FUNCTIONS_TEMPLATE, template);
     }
 
     /**
      * Retrieves the package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      */
-    protected String retrieveProjectPackage(Map parameters)
-        throws  BuildException
+    protected String retrievePackage(final Map parameters)
     {
-        String result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (String) parameters.get(ParameterValidationHandler.PACKAGE);
-        }
-        
-        return result;
+        return
+            retrievePackage(
+                retrieveProjectPackage(parameters),
+                PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the package name from the attribute map.
-     * @param parameters the parameter map.
+     * Retrieves the package name.
+     * @param projectPackage the project package.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
      */
-    protected String retrievePackage(Map parameters)
-        throws  BuildException
+    protected String retrievePackage(
+        final String projectPackage, final PackageUtils packageUtils)
     {
-        String result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveFunctionsPackage(
-                    retrieveProjectPackage(parameters));
-        }
-        
-        return result;
+        return packageUtils.retrieveFunctionsPackage(projectPackage);
     }
 }

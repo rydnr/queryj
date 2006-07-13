@@ -41,9 +41,8 @@ package org.acmsl.queryj.tools.templates.functions.text.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -63,11 +62,6 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
-/*
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
@@ -83,145 +77,131 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class TextFunctionsTestTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
-     * Creates a TextFunctionsTestTemplateBuildHandler.
+     * Creates a <code>TextFunctionsTestTemplateBuildHandler</code> instance.
      */
     public TextFunctionsTestTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
-        boolean result = false;
-
-        if  (command != null) 
+        if  (retrieveExtractFunctions(parameters))
         {
-            try 
+            buildTemplate(
+                retrieveDatabaseMetaData(parameters),
+                retrievePackage(parameters),
+                retrieveTestedPackage(parameters),
+                TextFunctionsTestTemplateGenerator.getInstance(),
+                parameters,
+                StringUtils.getInstance());
+        }
+
+        return false;
+    }
+        
+    /**
+     * Builds the <code>TextFunctionsTest</code> template.
+     * @param metadata the <code>DatabaseMetaData</code> instance.
+     * @param packageName the package name.
+     * @param testedPackage the tested package.
+     * @param generator the <code>TextFunctionsTestTemplateGenerator</code>
+     * instance.
+     * @param parameters the map to store the template into.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition metadata != null
+     * @precondition packageName != null
+     * @precondition testedPackage != null
+     * @precondition generator != null
+     * @precondition parameters != null
+     * @precondition stringUtils != null
+     */
+    protected void buildTemplate(
+        final DatabaseMetaData metadata,
+        final String packageName,
+        final String testedPackage,
+        final TextFunctionsTestTemplateGenerator generator,
+        final Map parameters,
+        final StringUtils stringUtils)
+      throws  QueryJBuildException
+    {
+        try 
+        {
+            TextFunctionsTestTemplate t_Template =
+                generator.createTextFunctionsTestTemplate(
+                    packageName,
+                    testedPackage,
+                    metadata.getDatabaseProductName(),
+                    metadata.getDatabaseProductVersion(),
+                    fixQuote(metadata.getIdentifierQuoteString()));
+
+            Collection t_cFunctions =
+                stringUtils.tokenize(metadata.getStringFunctions(), ",");
+
+            Iterator t_itFunctions =
+                (t_cFunctions != null) ? t_cFunctions.iterator() : null;
+
+            if  (t_itFunctions != null) 
             {
-                Map attributes = command.getAttributeMap();
+                String t_strFunction;
 
-                boolean t_bExtractFunctions =
-                    retrieveExtractFunctions(attributes);
-
-                if  (t_bExtractFunctions)
+                while  (t_itFunctions.hasNext())
                 {
-                    DatabaseMetaData t_MetaData =
-                        retrieveDatabaseMetaData(attributes);
+                    t_strFunction = (String) t_itFunctions.next();
 
-                    String t_strPackage = retrievePackage(attributes);
-
-                    String t_strTestedPackage = retrieveTestedPackage(attributes);
-
-                    TextFunctionsTestTemplateGenerator
-                        t_TextFunctionsTestTemplateGenerator =
-                            TextFunctionsTestTemplateGenerator.getInstance();
-
-                    StringUtils t_StringUtils = StringUtils.getInstance();
-
-                    if  (   (t_MetaData                           != null)
-                         && (t_StringUtils                        != null)
-                         && (t_TextFunctionsTestTemplateGenerator != null))
+                    if  ("CHAR".equals(t_strFunction))
                     {
-                        String t_strQuote =
-                            t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
-                        {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
-                        TextFunctionsTestTemplate t_TextFunctionsTestTemplate =
-                            t_TextFunctionsTestTemplateGenerator
-                                .createTextFunctionsTestTemplate(
-                                    t_strPackage,
-                                    t_strTestedPackage,
-                                    t_MetaData.getDatabaseProductName(),
-                                    t_MetaData.getDatabaseProductVersion(),
-                                    t_strQuote);
-
-                        Collection t_cFunctions =
-                            t_StringUtils.tokenize(
-                                t_MetaData.getStringFunctions(),
-                                ",");
-
-                        if  (t_cFunctions != null) 
-                        {
-                            Iterator t_itFunctions = t_cFunctions.iterator();
-
-                            while  (   (t_itFunctions != null)
-                                    && (t_itFunctions.hasNext()))
-                            {
-                                String t_strFunction =
-                                    (String) t_itFunctions.next();
-
-                                if  ("CHAR".equals(t_strFunction))
-                                {
-                                    t_strFunction = "CHAR_";
-                                }
-                                else if  ("ACII".equals(t_strFunction))
-                                {
-                                    t_strFunction = "ASCII";
-                                }
-
-                                t_TextFunctionsTestTemplate.addFunction(
-                                    t_strFunction);
-                            }
-                        }
-
-                        storeTextFunctionsTestTemplate(
-                            t_TextFunctionsTestTemplate, attributes);
+                        t_strFunction = "CHAR_";
                     }
+                    else if  ("ACII".equals(t_strFunction))
+                    {
+                        t_strFunction = "ASCII";
+                    }
+
+                    t_Template.addFunction(t_strFunction);
                 }
             }
-            catch  (final SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-            catch  (final QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
+
+            storeTextFunctionsTestTemplate(t_Template, parameters);
         }
-        
-        return result;
+        catch  (final SQLException sqlException)
+        {
+            throw
+                new QueryJBuildException(
+                      "Cannot retrieve database product name, "
+                    + "version or quote string",
+                    sqlException);
+        }
     }
 
     /**
      * Retrieves whether the functions should be extracted or not.
      * @param parameters the parameter map.
      * @return such information.
-     * @throws BuildException if such condition cannot be retrieved.
+     * @precondition parameters != null
      */
-    protected boolean retrieveExtractFunctions(
-            Map parameters)
-        throws  BuildException
+    protected boolean retrieveExtractFunctions(final Map parameters)
     {
         boolean result = true;
 
-        if  (parameters != null)
-        {
-            Boolean t_bResult =
-                (Boolean)
-                    parameters.get(
-                        ParameterValidationHandler.EXTRACT_FUNCTIONS);
+        Boolean t_bResult =
+            (Boolean)
+                parameters.get(
+                    ParameterValidationHandler.EXTRACT_FUNCTIONS);
 
-            if  (t_bResult != null)
-            {
-                result = t_bResult.booleanValue();
-            }
+        if  (t_bResult != null)
+        {
+            result = t_bResult.booleanValue();
         }
 
         return result;
@@ -231,11 +211,9 @@ public class TextFunctionsTestTemplateBuildHandler
      * Retrieves the package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrievePackage(final Map parameters)
-        throws  BuildException
     {
         return
             retrievePackage(parameters, PackageUtils.getInstance());
@@ -246,13 +224,11 @@ public class TextFunctionsTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
         final Map parameters, final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveTestFunctionsPackage(
@@ -264,11 +240,9 @@ public class TextFunctionsTestTemplateBuildHandler
      * Retrieves the tested package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrieveTestedPackage(final Map parameters)
-        throws  BuildException
     {
         return retrieveTestedPackage(parameters, PackageUtils.getInstance());
     }
@@ -278,13 +252,11 @@ public class TextFunctionsTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected String retrieveTestedPackage(
         final Map parameters, final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveFunctionsPackage(
@@ -295,33 +267,24 @@ public class TextFunctionsTestTemplateBuildHandler
      * Retrieves the test template collection.
      * @param parameters the parameter map.
      * @return the test templates.
-     * @throws BuildException if the test template retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected Collection retrieveTestTemplates(Map parameters)
-        throws  BuildException
     {
-        Collection result = null;
-
-        if  (parameters != null)
-        {
-            result = (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
-        }
-        
-        return result;
+        return
+            (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
     }
 
     /**
      * Stores the text functions test template.
      * @param template the test template.
      * @param parameters the parameter map.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition template != null
      * @precondition parameters != null
      */
     protected void storeTextFunctionsTestTemplate(
         final TextFunctionsTestTemplate template,
         final Map parameters)
-      throws  BuildException
     {
         parameters.put(
             TemplateMappingManager.TEXT_FUNCTIONS_TEST_TEMPLATE, template);
@@ -334,13 +297,11 @@ public class TextFunctionsTestTemplateBuildHandler
      * @param templates the test templates.
      * @param parameters the parameter map.
      * @return the test templates.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition templates != null
      * @precondition parameters != null
      */
     protected void storeTestTemplates(
         final Collection templates, final Map parameters)
-      throws  BuildException
     {
         parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
     }
@@ -349,13 +310,11 @@ public class TextFunctionsTestTemplateBuildHandler
      * Stores a new test template.
      * @param testTemplate the test template.
      * @param parameters the parameter map.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition template != null
      * @precondition parameters != null
      */
     protected void storeTestTemplate(
         final TestTemplate template, final Map parameters)
-      throws  BuildException
     {
         Collection t_cTestTemplates = retrieveTestTemplates(parameters);
 

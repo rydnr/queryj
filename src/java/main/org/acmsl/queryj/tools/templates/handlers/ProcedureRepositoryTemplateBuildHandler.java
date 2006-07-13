@@ -41,8 +41,9 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
@@ -52,11 +53,6 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -69,7 +65,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class ProcedureRepositoryTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
@@ -79,68 +75,63 @@ public class ProcedureRepositoryTemplateBuildHandler
         "procedure.repository.template";
 
     /**
-     * Creates a ProcedureRepositoryTemplateBuildHandler.
+     * Creates a <code>ProcedureRepositoryTemplateBuildHandler</code> instance.
      */
     public ProcedureRepositoryTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws QueryJBuildException
     {
         boolean result = false;
 
-        if  (command != null) 
-        {
-            Map attributes = command.getAttributeMap();
+        MetadataManager t_MetadataManager =
+            retrieveMetadataManager(parameters);
 
-            MetadataManager t_MetadataManager =
-                retrieveMetadataManager(attributes);
-
-            ProcedureMetadata[] t_aProceduresMetadata = null;
-            ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate = null;
+        ProcedureMetadata[] t_aProceduresMetadata = null;
+        ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate = null;
             
-            if  (t_MetadataManager != null)
-            {
-                t_aProceduresMetadata = 
-                    t_MetadataManager.getProceduresMetadata();
+        if  (t_MetadataManager != null)
+        {
+            t_aProceduresMetadata = 
+                t_MetadataManager.getProceduresMetadata();
 
-                t_ProcedureRepositoryTemplate =
-                    buildProcedureRepositoryTemplate(
-                        attributes,
-                        t_MetadataManager.getMetadataTypeManager());
-            }
+            t_ProcedureRepositoryTemplate =
+                buildProcedureRepositoryTemplate(
+                    parameters,
+                    t_MetadataManager.getMetadataTypeManager());
+        }
 
-            if  (t_ProcedureRepositoryTemplate != null)
-            {
-                int t_iCount =
-                    (t_aProceduresMetadata != null)
-                    ? t_aProceduresMetadata.length : 0;
+        if  (t_ProcedureRepositoryTemplate != null)
+        {
+            int t_iCount =
+                (t_aProceduresMetadata != null)
+                ? t_aProceduresMetadata.length : 0;
                 
-                for  (int t_iIndex = 0;
-                          t_iIndex < t_iCount;
-                          t_iIndex++) 
-                {
-                    ProcedureParameterMetadata[] t_aProcedureParametersMetadata =
-                        t_MetadataManager.getProcedureParametersMetadata(
-                            t_aProceduresMetadata[t_iIndex]);
-
-                    t_ProcedureRepositoryTemplate.addProcedureMetadata(
+            for  (int t_iIndex = 0;
+                  t_iIndex < t_iCount;
+                  t_iIndex++) 
+            {
+                ProcedureParameterMetadata[] t_aProcedureParametersMetadata =
+                    t_MetadataManager.getProcedureParametersMetadata(
                         t_aProceduresMetadata[t_iIndex]);
 
-                    t_ProcedureRepositoryTemplate
-                        .addProcedureParametersMetadata(
-                            t_aProceduresMetadata[t_iIndex],
-                            t_aProcedureParametersMetadata);
-                }
+                t_ProcedureRepositoryTemplate.addProcedureMetadata(
+                    t_aProceduresMetadata[t_iIndex]);
 
-                storeProcedureRepositoryTemplate(
-                    t_ProcedureRepositoryTemplate, attributes);
+                t_ProcedureRepositoryTemplate
+                    .addProcedureParametersMetadata(
+                        t_aProceduresMetadata[t_iIndex],
+                        t_aProcedureParametersMetadata);
             }
+
+            storeProcedureRepositoryTemplate(
+                t_ProcedureRepositoryTemplate, parameters);
         }
         
         return result;
@@ -150,10 +141,10 @@ public class ProcedureRepositoryTemplateBuildHandler
      * Retrieves the package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @throws QueryJBuildException if the package retrieval process if faulty.
      */
     protected String retrievePackage(final Map parameters)
-        throws  BuildException
+        throws QueryJBuildException
     {
         String result = null;
 
@@ -172,11 +163,11 @@ public class ProcedureRepositoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @param metadataTypeManager the metadata type manager.
      * @return the ProcedureRepositoryTemplate instance.
-     * @throws BuildException if the repository cannot be created.
+     * @throws QueryJBuildException if the repository cannot be created.
      */
     protected ProcedureRepositoryTemplate buildProcedureRepositoryTemplate(
         final Map parameters, final MetadataTypeManager metadataTypeManager)
-      throws  BuildException
+      throws QueryJBuildException
     {
         ProcedureRepositoryTemplate result = null;
 
@@ -224,7 +215,7 @@ public class ProcedureRepositoryTemplateBuildHandler
      * @param metadataTypeManager the metadata type manager.
      * @param header the header.
      * @return such template.
-     * @throws org.apache.tools.ant.BuildException whenever the repository
+     * @throws QueryJBuildException whenever the repository
      * information is not valid.
      */
     protected ProcedureRepositoryTemplate buildProcedureRepositoryTemplate(
@@ -232,7 +223,7 @@ public class ProcedureRepositoryTemplateBuildHandler
         final String repository,
         final MetadataTypeManager metadataTypeManager,
         final String header)
-      throws  BuildException
+      throws QueryJBuildException
     {
         ProcedureRepositoryTemplate result = null;
 
@@ -258,12 +249,13 @@ public class ProcedureRepositoryTemplateBuildHandler
      * Stores the procedure repository template in given attribute map.
      * @param procedureRepositoryTemplate the table repository template.
      * @param parameters the parameter map.
-     * @throws BuildException if the repository cannot be stored for any reason.
+     * @throws QueryJBuildException if the repository cannot be stored for
+     * any reason.
      */
     protected void storeProcedureRepositoryTemplate(
         final ProcedureRepositoryTemplate procedureRepositoryTemplate,
         final Map parameters)
-      throws  BuildException
+      throws QueryJBuildException
     {
         if  (   (procedureRepositoryTemplate != null)
              && (parameters != null))

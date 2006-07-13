@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -52,11 +52,6 @@ import org.acmsl.queryj.tools.templates.dao.handlers
     .DAOTestTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -73,7 +68,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class DAOTestTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
@@ -83,88 +78,70 @@ public class DAOTestTemplateWritingHandler
         new DAOTestTemplate[0];
 
     /**
-     * Creates a DAOTestTemplateWritingHandler.
+     * Creates a <code>DAOTestTemplateWritingHandler</code> instance.
      */
     public DAOTestTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        return handle(parameters, retrieveDatabaseMetaData(parameters));
+        writeTemplates(parameters, retrieveDatabaseMetaData(parameters));
+
+        return false;
     }
                 
     /**
-     * Handles given parameters.
+     * Writes the templates.
      * @param parameters the parameters to handle.
      * @param metadata the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metadata != null
      */
-    protected boolean handle(
+    protected void writeTemplates(
         final Map parameters, final DatabaseMetaData metadata)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         try
         {
-            result =
-                handle(
-                    retrieveDAOTestTemplates(parameters),
-                    retrieveOutputDir(
-                        metadata.getDatabaseProductName(),
-                        parameters),
-                    DAOTestTemplateGenerator.getInstance());
+            writeTemplates(
+                retrieveDAOTestTemplates(parameters),
+                retrieveOutputDir(
+                    metadata.getDatabaseProductName(),
+                    parameters),
+                DAOTestTemplateGenerator.getInstance());
         }
         catch  (final SQLException sqlException)
         {
-            throw new BuildException(sqlException);
+            throw
+                new QueryJBuildException(
+                    "Cannot retrieve database product name", sqlException);
         }
-
-        return result;
     }
                 
     /**
-     * Writes the DAO test templates.
+     * Writes the <code>DAOTest</code> templates.
      * @param templates the templates.
      * @param outputDir the output dir.
      * @param generator the <code>DAOTestTemplateGenerator</code> instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition templates != null
      * @precondition outputDir != null
      * @precondition generator != null
      */
-    protected boolean handle(
+    protected void writeTemplates(
         final DAOTestTemplate[] templates,
         final File outputDir,
         final DAOTestTemplateGenerator generator)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         try 
         {
             int t_iLength = (templates != null) ? templates.length : 0;
@@ -178,21 +155,19 @@ public class DAOTestTemplateWritingHandler
         }
         catch  (final IOException ioException)
         {
-            throw new BuildException(ioException);
+            throw
+                new QueryJBuildException(
+                    "Cannot write the templates", ioException);
         }
-        
-        return result;
     }
 
     /**
      * Retrieves the dao test templates from the attribute map.
      * @param parameters the parameter map.
      * @return the templates.
-     * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
     protected DAOTestTemplate[] retrieveDAOTestTemplates(final Map parameters)
-        throws  BuildException
     {
         return
             (DAOTestTemplate[])
@@ -205,13 +180,11 @@ public class DAOTestTemplateWritingHandler
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition engineName != null
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(
         final String engineName, final Map parameters)
-      throws  BuildException
     {
         return
             retrieveOutputDir(
@@ -224,7 +197,6 @@ public class DAOTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition engineName != null
      * @precondition parameters != null
      * @precondition packageUtils != null
@@ -233,7 +205,6 @@ public class DAOTestTemplateWritingHandler
         final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveDAOTestFolder(

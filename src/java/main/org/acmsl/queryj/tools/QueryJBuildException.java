@@ -33,61 +33,72 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Triggered whenever an invalid template is generated.
+ * Description: Represents abnormal situations regarding QueryJ generation
+ *              process.
  *
  */
-package org.acmsl.queryj.tools.templates;
+package org.acmsl.queryj.tools;
 
 /*
- * Importing ACM-SL classes.
+ * Importing some project classes.
  */
-import org.acmsl.commons.NonCheckedException;
+import org.acmsl.queryj.QueryJException;
 
 /**
- * Triggered whenever an invalid template is generated.
+ * Represents abnormal situations regarding QueryJ generation process.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class InvalidTemplateException
-    extends  NonCheckedException
+public class QueryJBuildException
+    extends  QueryJException
 {
     /**
-     * Creates a InvalidTemplateException with given message.
-     * @param messageKey the key to build the exception message.
-     * @param params the parameters to build the exception message.
-     * @precondition messageKey != null
-     * @precondition params != null
+     * Builds a QueryJ build exception with a certain message.
+     * @param message the message.
      */
-    public InvalidTemplateException(
-        final String messageKey,
-        final Object[] params)
+    public QueryJBuildException(final String message)
     {
-        super(messageKey, params);
+        super(message);
     }
 
     /**
-     * Creates a InvalidTemplateException with given cause.
-     * @param messageKey the key to build the exception message.
-     * @param params the parameters to build the exception message.
-     * @param cause the error cause.
-     * @precondition messageKey != null
-     * @precondition params != null
-     * @precondition cause != null
+     * Builds a QueryJ exception to wrap given one.
+     * @param message the message.
+     * @param cause the exception to wrap.
      */
-    public InvalidTemplateException(
-        final String messageKey,
-        final Object[] params,
-        final Throwable cause)
+    public QueryJBuildException(final String message, final Throwable cause)
     {
-        super(messageKey, params, cause);
+        super(message, cause);
     }
 
     /**
-     * Retrieves the exceptions bundle.
-     * @return such bundle name.
+     * Outputs a text representation of this exception.
+     * @return the error description.
      */
-    protected String retrieveExceptionsBundleName()
+    public String toString()
     {
-        return "queryj-exceptions";
+        return toString(getMessage(), getCause());
+    }
+
+    /**
+     * Outputs a text representation of this exception.
+     * @param message the message.
+     * @param cause the cause.
+     * @return the error description.
+     */
+    public String toString(final String message, final Throwable cause)
+    {
+        StringBuffer t_sbResult = new StringBuffer();
+
+        t_sbResult.append(message);
+
+        if  (cause != null) 
+        {
+            t_sbResult.append(" (");
+            t_sbResult.append(cause.getMessage());
+            t_sbResult.append(")");
+        }
+
+        return t_sbResult.toString();
     }
 }

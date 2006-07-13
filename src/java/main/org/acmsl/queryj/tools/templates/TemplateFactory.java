@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -37,11 +38,17 @@
  */
 package org.acmsl.queryj.tools.templates;
 
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Factory;
+
 /**
  * Marker interface to identify all template factories.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
 public interface TemplateFactory
+    extends  Factory
 {
 }

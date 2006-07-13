@@ -42,7 +42,6 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
@@ -109,7 +108,6 @@ public class DAOFactoryTemplateGenerator
      * @param jndiDataSource the JNDI location of the data source.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the input values are invalid.
      * @precondition tableTemplate != null
      * @precondition packageName != null
      * @precondition engineName != null
@@ -121,7 +119,6 @@ public class DAOFactoryTemplateGenerator
         final String basePackageName,
         final String jndiDataSource,
         final String header)
-      throws  QueryJException
     {
         return
             new DAOFactoryTemplate(

@@ -88,7 +88,9 @@ public class AttributeStatementSetterDecoratorFactory
      */
     public static CachingDecoratorFactory getInstance()
     {
-        return AttributeStatementSetterDecoratorFactorySingletonContainer.SINGLETON;
+        return
+            AttributeStatementSetterDecoratorFactorySingletonContainer
+                .SINGLETON;
     }
 
     /**

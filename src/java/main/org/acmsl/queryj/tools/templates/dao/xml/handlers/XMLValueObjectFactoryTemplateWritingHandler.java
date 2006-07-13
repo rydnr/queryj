@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
@@ -50,11 +50,6 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplateGenerator;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -69,7 +64,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class XMLValueObjectFactoryTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
@@ -80,38 +75,27 @@ public class XMLValueObjectFactoryTemplateWritingHandler
             new XMLValueObjectFactoryTemplate[0];
 
     /**
-     * Creates a XMLValueObjectFactoryTemplateWritingHandler.
+     * Creates a <code>XMLValueObjectFactoryTemplateWritingHandler</code>
+     * instance.
      */
     public XMLValueObjectFactoryTemplateWritingHandler() {};
 
     /**
      * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
-     * Handles given command.
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        return
-            handle(
-                retrieveXMLValueObjectFactoryTemplates(parameters),
-                retrieveOutputDir(parameters),
-                XMLValueObjectFactoryTemplateGenerator.getInstance());
+        writeTemplates(
+            retrieveXMLValueObjectFactoryTemplates(parameters),
+            retrieveOutputDir(parameters),
+            XMLValueObjectFactoryTemplateGenerator.getInstance());
+
+        return false;
     }
                 
     /**
@@ -120,20 +104,17 @@ public class XMLValueObjectFactoryTemplateWritingHandler
      * @param outputDir the output dir.
      * @param generator the <code>XMLValueObjectFactoryTemplateGenerator</code>
      * instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition templates != null
      * @precondition outputDir != null
      * @precondition generator != null
      */
-    protected boolean handle(
+    protected void writeTemplates(
         final XMLValueObjectFactoryTemplate[] templates,
         final File outputDir,
         final XMLValueObjectFactoryTemplateGenerator generator)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         try 
         {
             int t_iLength = (templates != null) ? templates.length : 0;
@@ -148,50 +129,35 @@ public class XMLValueObjectFactoryTemplateWritingHandler
         }
         catch  (final IOException ioException)
         {
-            throw new BuildException(ioException);
+            throw
+                new QueryJBuildException(
+                    "Error writing XML Value Object templates",
+                    ioException);
         }
-        catch  (final Throwable throwable)
-        {
-            throw new BuildException(throwable);
-        }
-        
-        return result;
     }
 
     /**
      * Retrieves the value object factory template from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected XMLValueObjectFactoryTemplate[] retrieveXMLValueObjectFactoryTemplates(
         final Map parameters)
-      throws  BuildException
     {
-        XMLValueObjectFactoryTemplate[] result =
-            EMPTY_XML_VALUE_OBJECT_FACTORY_TEMPLATE_ARRAY;
-
-        if  (parameters != null)
-        {
-            result =
-                (XMLValueObjectFactoryTemplate[])
-                    parameters.get(
-                        TemplateMappingManager
-                            .XML_VALUE_OBJECT_FACTORY_TEMPLATES);
-        }
-        
-        return result;
+        return
+            (XMLValueObjectFactoryTemplate[])
+                parameters.get(
+                    TemplateMappingManager.XML_VALUE_OBJECT_FACTORY_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
     {
         return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
@@ -201,13 +167,11 @@ public class XMLValueObjectFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
         final Map parameters, final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveXMLValueObjectFactoryFolder(

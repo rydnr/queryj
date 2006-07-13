@@ -42,7 +42,6 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -117,7 +116,6 @@ public class DAOTestTemplateGenerator
      * @param jdbcPassword the JDBC password.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
      * @precondition metadataManager != null
      * @precondition packageName != null
@@ -145,7 +143,6 @@ public class DAOTestTemplateGenerator
         final String jdbcUsername,
         final String jdbcPassword,
         final String header)
-      throws  QueryJException
     {
         return
             new DAOTestTemplate(

@@ -42,11 +42,10 @@ package org.acmsl.queryj.tools.templates.functions.time;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.functions.time
     .TimeFunctionsTestTemplate;
-
 import org.acmsl.queryj.tools.templates.functions.time
     .TimeFunctionsTestTemplateFactory;
 
@@ -54,6 +53,7 @@ import org.acmsl.queryj.tools.templates.functions.time
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -62,6 +62,11 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Is able to generate the JUnit classes to test the Database's time functions.
@@ -103,12 +108,12 @@ public class TimeFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      * @precondition engineName != null
      */
     protected TimeFunctionsTestTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         return
             getTemplateFactory(
@@ -124,7 +129,7 @@ public class TimeFunctionsTestTemplateGenerator
      * @param templateMappingManager the <code>TemplateMappingManager</code>
      * instance.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      * @precondition engineName != null
      * @precondition templateMappingManager != null
      */
@@ -132,7 +137,7 @@ public class TimeFunctionsTestTemplateGenerator
         final String engineName,
         final String engineVersion,
         final TemplateMappingManager templateMappingManager)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         TimeFunctionsTestTemplateFactory result = null;
 
@@ -147,7 +152,7 @@ public class TimeFunctionsTestTemplateGenerator
             if  (!(t_TemplateFactory instanceof TimeFunctionsTestTemplateFactory))
             {
                 throw
-                    new QueryJException(
+                    new QueryJBuildException(
                         "invalid.time.function.test.template.factory");
             }
             else 
@@ -167,7 +172,6 @@ public class TimeFunctionsTestTemplateGenerator
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      * @return a template.
-     * @throws QueryJException if the template factory is invalid.
      * @precondition packageName != null
      * @precondition engineName != null
      * @precondition engineVersion != null
@@ -179,12 +183,29 @@ public class TimeFunctionsTestTemplateGenerator
         final String engineName,
         final String engineVersion,
         final String quote)
-      throws  QueryJException
     {
         TimeFunctionsTestTemplate result = null;
 
-        TimeFunctionsTestTemplateFactory t_TemplateFactory =
-            getTemplateFactory(engineName, engineVersion);
+        TimeFunctionsTestTemplateFactory t_TemplateFactory = null;
+
+        try
+        {
+            t_TemplateFactory =
+                getTemplateFactory(engineName, engineVersion);
+        }
+        catch  (final QueryJBuildException buildException)
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    TimeFunctionsTestTemplateGenerator.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.warn(
+                    "Cannot retrieve time-functions test template",
+                    buildException);
+            }
+        }
 
         if  (t_TemplateFactory != null)
         {
@@ -195,13 +216,6 @@ public class TimeFunctionsTestTemplateGenerator
                     engineName,
                     engineVersion,
                     quote);
-        }
-        else 
-        {
-            throw
-                new QueryJException(
-                      "cannot.find.test.template.factory.for."
-                    + engineName);
         }
 
         return result;

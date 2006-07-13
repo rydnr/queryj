@@ -42,19 +42,10 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -70,63 +61,25 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class DatabaseEngineHandler
-    extends  AbstractAntCommandHandler
+    extends  AbstractQueryJCommandHandler
 {
     /**
-     * Creates a DatabaseEngineHandler.
+     * Creates a <code>DatabaseEngineHandler</code> instance.
      */
     public DatabaseEngineHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            Map t_mAttributes = command.getAttributeMap();
-
-            try 
-            {
-                retrieveDatabaseMetaData(t_mAttributes);
-
-                throw new SQLException();
-            }
-            catch  (final SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-        }
+        retrieveDatabaseMetaData(parameters);
         
-        return result;
-    }
-
-    /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
-     */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
-      throws  BuildException
-    {
-        DatabaseMetaData result = null;
-
-        if  (parameters != null)
-        {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
-        }
-        
-        return result;
+        return false;
     }
 }

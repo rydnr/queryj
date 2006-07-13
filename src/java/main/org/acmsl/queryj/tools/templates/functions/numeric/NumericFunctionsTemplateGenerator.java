@@ -42,17 +42,23 @@ package org.acmsl.queryj.tools.templates.functions.numeric;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateFactory;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
@@ -112,11 +118,11 @@ public class NumericFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      */
     protected NumericFunctionsTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         return
             getTemplateFactory(
@@ -132,14 +138,14 @@ public class NumericFunctionsTemplateGenerator
      * @param templateMappingManager the <code>TemplateMappingManager</code>
      * instance.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      * @precondition templateMappingManager != null
      */
     protected NumericFunctionsTemplateFactory getTemplateFactory(
         final String engineName,
         final String engineVersion,
         final TemplateMappingManager templateMappingManager)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         NumericFunctionsTemplateFactory result = null;
 
@@ -154,7 +160,7 @@ public class NumericFunctionsTemplateGenerator
             if  (!(t_TemplateFactory instanceof NumericFunctionsTemplateFactory))
             {
                 throw
-                    new QueryJException(
+                    new QueryJBuildException(
                         "invalid.numeric.function.template.factory");
             }
             else 
@@ -174,7 +180,6 @@ public class NumericFunctionsTemplateGenerator
      * @param quote the identifier quote string.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
      * @precondition engineName != null
      * @precondition quote != null
@@ -185,32 +190,38 @@ public class NumericFunctionsTemplateGenerator
         final String engineVersion,
         final String quote,
         final String header)
-      throws  QueryJException
     {
         NumericFunctionsTemplate result = null;
 
-        NumericFunctionsTemplateFactory t_TemplateFactory =
-            getTemplateFactory(engineName, engineVersion);
+        try
+        {
+            NumericFunctionsTemplateFactory t_TemplateFactory =
+                getTemplateFactory(engineName, engineVersion);
 
-        if  (   (t_TemplateFactory != null)
-             && (!t_TemplateFactory.getClass().equals(getClass())))
-        {
-            result =
-                t_TemplateFactory.createNumericFunctionsTemplate(
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    header);
+            if  (   (t_TemplateFactory != null)
+                 && (!t_TemplateFactory.getClass().equals(getClass())))
+            {
+                result =
+                    t_TemplateFactory.createNumericFunctionsTemplate(
+                        packageName,
+                        engineName,
+                        engineVersion,
+                        quote,
+                        header);
+            }
         }
-        else 
+        catch  (final QueryJBuildException buildException)
         {
-            throw
-                new QueryJException(
-                      "Cannot find numeric functions' "
-                    + "template factory for "
-                    + engineName + "\n"
-                    + "Disable extractfunctions setting.");
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    NumericFunctionsTemplateGenerator.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.warn(
+                    "Cannot retrieve numeric-functions template",
+                    buildException);
+            }
         }
 
         return result;

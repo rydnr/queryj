@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -51,12 +51,6 @@ import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplat
 import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 /*
  * Importing some JDK classes.
@@ -73,42 +67,32 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class QueryPreparedStatementCreatorTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * Creates a QueryPreparedStatementCreatorTemplateWritingHandler.
+     * Creates a
+     * <code>QueryPreparedStatementCreatorTemplateWritingHandler</code>
+     * instance.
      */
     public QueryPreparedStatementCreatorTemplateWritingHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
 
     /**
      * Handles given information.
      * @param parameters the information to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        return
-            handle(
-                retrieveTemplate(parameters),
-                retrieveOutputDir(parameters),
-                QueryPreparedStatementCreatorTemplateGenerator.getInstance());
+        writeTemplate(
+            retrieveTemplate(parameters),
+            retrieveOutputDir(parameters),
+            QueryPreparedStatementCreatorTemplateGenerator.getInstance());
+
+        return false;
     }
                 
     /**
@@ -116,42 +100,37 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      * @param template the template.
      * @param outputDir the output dir.
      * @param generator the generator.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition template != null
      * @precondition outputDir != null
      * @precondition generator != null
      */
-    protected boolean handle(
+    protected void writeTemplate(
         final QueryPreparedStatementCreatorTemplate template,
         final File outputDir,
         final QueryPreparedStatementCreatorTemplateGenerator generator)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         try 
         {
             generator.write(template, outputDir);
         }
         catch  (final IOException ioException)
         {
-            throw new BuildException(ioException);
+            throw
+                new QueryJBuildException(
+                    "Cannot write the template", ioException);
         }
-        
-        return result;
     }
 
     /**
      * Retrieves the template from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
     protected QueryPreparedStatementCreatorTemplate retrieveTemplate(
         final Map parameters)
-        throws  BuildException
     {
         return
             (QueryPreparedStatementCreatorTemplate)
@@ -164,11 +143,9 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
     {
         return
             retrieveOutputDir(
@@ -185,7 +162,6 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition projectOutputDir != null
      * @precondition projectPackage != null
      * @precondition packageUtils != null
@@ -195,7 +171,6 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
         final String projectPackage,
         final boolean subFolders,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveQueryPreparedStatementCreatorFolder(

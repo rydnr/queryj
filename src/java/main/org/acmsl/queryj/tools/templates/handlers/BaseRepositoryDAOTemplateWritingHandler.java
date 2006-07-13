@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -50,11 +50,6 @@ import org.acmsl.queryj.tools.templates.BaseRepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -81,11 +76,9 @@ public class BaseRepositoryDAOTemplateWritingHandler
      * Retrieves the template from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
      */
     protected BasePerRepositoryTemplate retrieveTemplate(
         final Map parameters)
-      throws  BuildException
     {
         return
             (BasePerRepositoryTemplate)
@@ -103,7 +96,6 @@ public class BaseRepositoryDAOTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition engineName != null
      * @precondition parameters != null
      * @precondition packageUtils != null
@@ -115,7 +107,6 @@ public class BaseRepositoryDAOTemplateWritingHandler
         final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveBaseRepositoryDAOFolder(

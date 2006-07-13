@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -49,11 +49,6 @@ import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandle
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.Map;
@@ -87,7 +82,6 @@ public class BaseDAOFactoryTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
@@ -96,7 +90,6 @@ public class BaseDAOFactoryTemplateBuildHandler
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveBaseDAOFactoryPackage(projectPackage);

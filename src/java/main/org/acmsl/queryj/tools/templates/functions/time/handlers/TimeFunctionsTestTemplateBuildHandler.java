@@ -41,10 +41,9 @@ package org.acmsl.queryj.tools.templates.functions.time.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.functions.time
@@ -59,11 +58,6 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -81,136 +75,122 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class TimeFunctionsTestTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
-     * Creates a TimeFunctionsTestTemplateBuildHandler.
+     * Creates a <code>TimeFunctionsTestTemplateBuildHandler</code> instance.
      */
     public TimeFunctionsTestTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
-        boolean result = false;
-
-        if  (command != null) 
+        if  (retrieveExtractFunctions(parameters))
         {
-            try 
+            buildTemplate(
+                retrieveDatabaseMetaData(parameters),
+                retrievePackage(parameters),
+                retrieveTestedPackage(parameters),
+                TimeFunctionsTestTemplateGenerator.getInstance(),
+                parameters,
+                StringUtils.getInstance());
+        }
+
+        return false;
+    }
+        
+    /**
+     * Builds the <code>TimeFunctionsTest</code> template.
+     * @param metadata the <code>DatabaseMetaData</code> instance.
+     * @param packageName the package name.
+     * @param testedPackage the tested package.
+     * @param generator the <code>TimeFunctionsTestTemplateGenerator</code>
+     * instance.
+     * @param parameters the map to store the template into.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition metadata != null
+     * @precondition packageName != null
+     * @precondition testedPackage != null
+     * @precondition generator != null
+     * @precondition parameters != null
+     * @precondition stringUtils != null
+     */
+    protected void buildTemplate(
+        final DatabaseMetaData metadata,
+        final String packageName,
+        final String testedPackage,
+        final TimeFunctionsTestTemplateGenerator generator,
+        final Map parameters,
+        final StringUtils stringUtils)
+      throws  QueryJBuildException
+    {
+        try 
+        {
+            TimeFunctionsTestTemplate t_Template =
+                generator.createTimeFunctionsTestTemplate(
+                    packageName,
+                    testedPackage,
+                    metadata.getDatabaseProductName(),
+                    metadata.getDatabaseProductVersion(),
+                    fixQuote(metadata.getIdentifierQuoteString()));
+
+            Collection t_cFunctions =
+                stringUtils.tokenize(metadata.getTimeDateFunctions(), ",");
+
+            Iterator t_itFunctions =
+                (t_cFunctions != null) ? t_cFunctions.iterator() : null;
+
+            if  (t_itFunctions != null) 
             {
-                Map attributes = command.getAttributeMap();
+                String t_strFunction;
 
-                boolean t_bExtractFunctions =
-                    retrieveExtractFunctions(attributes);
-
-                if  (t_bExtractFunctions)
+                while  (t_itFunctions.hasNext())
                 {
-                    DatabaseMetaData t_MetaData =
-                        retrieveDatabaseMetaData(attributes);
+                    t_strFunction = (String) t_itFunctions.next();
 
-                    String t_strPackage = retrievePackage(attributes);
-
-                    String t_strTestedPackage = retrieveTestedPackage(attributes);
-
-                    TimeFunctionsTestTemplateGenerator
-                        t_TimeFunctionsTestTemplateGenerator =
-                            TimeFunctionsTestTemplateGenerator.getInstance();
-
-                    StringUtils t_StringUtils = StringUtils.getInstance();
-
-                    if  (   (t_MetaData                           != null)
-                         && (t_StringUtils                        != null)
-                         && (t_TimeFunctionsTestTemplateGenerator != null))
-                    {
-                        String t_strQuote =
-                            t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
-                        {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
-                        TimeFunctionsTestTemplate t_TimeFunctionsTestTemplate =
-                            t_TimeFunctionsTestTemplateGenerator
-                                .createTimeFunctionsTestTemplate(
-                                    t_strPackage,
-                                    t_strTestedPackage,
-                                    t_MetaData.getDatabaseProductName(),
-                                    t_MetaData.getDatabaseProductVersion(),
-                                    t_strQuote);
-
-                        Collection t_cFunctions =
-                            t_StringUtils.tokenize(
-                                t_MetaData.getTimeDateFunctions(),
-                                ",");
-
-                        if  (t_cFunctions != null) 
-                        {
-                            Iterator t_itFunctions = t_cFunctions.iterator();
-
-                            while  (   (t_itFunctions != null)
-                                    && (t_itFunctions.hasNext()))
-                            {
-                                String t_strFunctions =
-                                    (String) t_itFunctions.next();
-
-                                t_TimeFunctionsTestTemplate.addFunction(
-                                    t_strFunctions);
-                            }
-                        }
-
-                        storeTimeFunctionsTestTemplate(
-                            t_TimeFunctionsTestTemplate, attributes);
-                    }
+                    t_Template.addFunction(t_strFunction);
                 }
             }
-            catch  (final SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-            catch  (final QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
+
+            storeTimeFunctionsTestTemplate(t_Template, parameters);
         }
-        
-        return result;
+        catch  (final SQLException sqlException)
+        {
+            throw
+                new QueryJBuildException(
+                      "Cannot retrieve database product name, "
+                    + "version or quote string",
+                    sqlException);
+        }
     }
 
     /**
      * Retrieves whether the functions should be extracted or not.
      * @param parameters the parameter map.
      * @return such information.
-     * @throws BuildException if such condition cannot be retrieved.
+     * @precondition parameters != null
      */
-    protected boolean retrieveExtractFunctions(
-            Map parameters)
-        throws  BuildException
+    protected boolean retrieveExtractFunctions(final Map parameters)
     {
         boolean result = true;
 
-        if  (parameters != null)
-        {
-            Boolean t_bResult =
-                (Boolean)
-                    parameters.get(
-                        ParameterValidationHandler.EXTRACT_FUNCTIONS);
+        Boolean t_bResult =
+            (Boolean)
+                parameters.get(
+                    ParameterValidationHandler.EXTRACT_FUNCTIONS);
 
-            if  (t_bResult != null)
-            {
-                result = t_bResult.booleanValue();
-            }
+        if  (t_bResult != null)
+        {
+            result = t_bResult.booleanValue();
         }
 
         return result;
@@ -220,13 +200,12 @@ public class TimeFunctionsTestTemplateBuildHandler
      * Retrieves the package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrievePackage(final Map parameters)
-        throws  BuildException
     {
-        return retrievePackage(parameters, PackageUtils.getInstance());
+        return
+            retrievePackage(parameters, PackageUtils.getInstance());
     }
 
     /**
@@ -234,13 +213,11 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
         final Map parameters, final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveTestFunctionsPackage(
@@ -252,14 +229,11 @@ public class TimeFunctionsTestTemplateBuildHandler
      * Retrieves the tested package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrieveTestedPackage(final Map parameters)
-        throws  BuildException
     {
-        return
-            retrieveTestedPackage(parameters, PackageUtils.getInstance());
+        return retrieveTestedPackage(parameters, PackageUtils.getInstance());
     }
 
     /**
@@ -267,13 +241,11 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected String retrieveTestedPackage(
         final Map parameters, final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveFunctionsPackage(
@@ -284,32 +256,27 @@ public class TimeFunctionsTestTemplateBuildHandler
      * Retrieves the test template collection.
      * @param parameters the parameter map.
      * @return the test templates.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected Collection retrieveTestTemplates(final Map parameters)
-        throws  BuildException
+    protected Collection retrieveTestTemplates(Map parameters)
     {
         return
             (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
     }
 
     /**
-     * Stores the time functions test template.
+     * Stores the text functions test template.
      * @param template the test template.
      * @param parameters the parameter map.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition template != null
      * @precondition parameters != null
      */
     protected void storeTimeFunctionsTestTemplate(
         final TimeFunctionsTestTemplate template,
         final Map parameters)
-      throws  BuildException
     {
         parameters.put(
-            TemplateMappingManager.TIME_FUNCTIONS_TEST_TEMPLATE,
-            template);
+            TemplateMappingManager.TIME_FUNCTIONS_TEST_TEMPLATE, template);
 
         storeTestTemplate(template, parameters);
     }
@@ -319,13 +286,11 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @param templates the test templates.
      * @param parameters the parameter map.
      * @return the test templates.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition templates != null
      * @precondition parameters != null
      */
     protected void storeTestTemplates(
         final Collection templates, final Map parameters)
-      throws  BuildException
     {
         parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
     }
@@ -334,13 +299,11 @@ public class TimeFunctionsTestTemplateBuildHandler
      * Stores a new test template.
      * @param testTemplate the test template.
      * @param parameters the parameter map.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition template != null
      * @precondition parameters != null
      */
     protected void storeTestTemplate(
         final TestTemplate template, final Map parameters)
-      throws  BuildException
     {
         Collection t_cTestTemplates = retrieveTestTemplates(parameters);
 

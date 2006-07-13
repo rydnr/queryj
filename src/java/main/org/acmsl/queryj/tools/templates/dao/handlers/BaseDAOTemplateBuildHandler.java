@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -50,11 +51,6 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -91,7 +87,6 @@ public class BaseDAOTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
@@ -100,7 +95,6 @@ public class BaseDAOTemplateBuildHandler
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveBaseDAOPackage(projectPackage);
@@ -137,7 +131,7 @@ public class BaseDAOTemplateBuildHandler
      * interfaces.
      * @param parameters the parameters.
      * @return the template.
-     * @throws QueryJException if the template cannot be created.
+     * @throws QueryJBuildException if the template cannot be created.
      * @precondition templateFactory != null
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -161,7 +155,7 @@ public class BaseDAOTemplateBuildHandler
         final String header,
         final boolean implementMarkerInterfaces,
         final Map parameters)
-      throws  QueryJException
+      throws  QueryJBuildException
     {        
         BasePerTableTemplate result = null;
 

@@ -40,7 +40,6 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplate;
@@ -104,7 +103,6 @@ public class JdbcDAOTemplateGenerator
      */
     public JdbcDAOTemplate createJdbcDAOTemplate(
         final String packageName, final String header)
-      throws  QueryJException
     {
         return new JdbcDAOTemplate(header, getDecoratorFactory(), packageName);
     }

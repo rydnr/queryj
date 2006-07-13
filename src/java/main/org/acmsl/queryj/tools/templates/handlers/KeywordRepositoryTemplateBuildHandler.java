@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
@@ -103,7 +103,7 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param tableNames the table names.
      * @param header the header.
      * @return the template.
-     * @throws QueryJException on invalid input.
+     * @throws QueryJBuildException on invalid input.
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition customSqlProvider != null
@@ -126,7 +126,7 @@ public class KeywordRepositoryTemplateBuildHandler
         final String header,
         final Collection tableNames,
         final Map parameters)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         KeywordRepositoryTemplate result = null;
 
@@ -223,7 +223,6 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */

@@ -40,12 +40,16 @@
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Factory;
 
 /**
  * Represents entities able to create ResultSetExtractor templates.
@@ -53,6 +57,7 @@ import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
  *         >Jose San Leandro</a>
  */
 public interface ResultSetExtractorTemplateFactory
+    extends  Factory
 {
     /**
      * Creates a <code>ResultSetExtractorTemplate</code> using given
@@ -82,6 +87,5 @@ public interface ResultSetExtractorTemplateFactory
         final String basePackageName,
         final String repositoryName,
         final String header,
-        final boolean implementMarkerInterfaces)
-      throws  QueryJException;
+        final boolean implementMarkerInterfaces);
 }

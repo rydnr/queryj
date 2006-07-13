@@ -41,28 +41,15 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
 
 /*
  * Importing some JDK classes.
@@ -75,71 +62,56 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class JdbcDAOTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
-     * Creates a JdbcDAOTemplateBuildHandler.
+     * Creates a <code>JdbcDAOTemplateBuildHandler</code> instance.
      */
     public JdbcDAOTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
-        return
-            handle(
-                command.getAttributeMap(),
-                JdbcDAOTemplateGenerator.getInstance());
+        buildTemplates(parameters, JdbcDAOTemplateGenerator.getInstance());
+
+        return false;
     }
                 
     /**
-     * Handles given information.
+     * Builds the <code>JdbcDAO</code> templates..
      * @param parameters the attributes.
      * @param jdbcDAOTemplateFactory the template factory.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition jdbcDAOTemplateFactory != null
      */
-    protected boolean handle(
+    protected void buildTemplates(
         final Map parameters,
         final JdbcDAOTemplateFactory jdbcDAOTemplateFactory)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
-        try
-        {
-            storeJdbcDAOTemplate(
-                jdbcDAOTemplateFactory.createJdbcDAOTemplate(
-                    retrievePackage(parameters),
-                    retrieveHeader(parameters)),
-                parameters);
-        }
-        catch  (final QueryJException queryjException)
-        {
-            throw new BuildException(queryjException);
-        }
-        
-        return result;
+        storeJdbcDAOTemplate(
+            jdbcDAOTemplateFactory.createJdbcDAOTemplate(
+                retrievePackage(parameters),
+                retrieveHeader(parameters)),
+            parameters);
     }
 
     /**
      * Retrieves the package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrievePackage(final Map parameters)
-        throws  BuildException
     {
         return
             retrievePackage(parameters, PackageUtils.getInstance());
@@ -150,13 +122,11 @@ public class JdbcDAOTemplateBuildHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
         final Map parameters, final PackageUtils packageUtils)
-        throws  BuildException
     {
         return
             packageUtils.retrieveJdbcDAOPackage(
@@ -167,14 +137,12 @@ public class JdbcDAOTemplateBuildHandler
      * Stores the JDBC DAO template in given attribute map.
      * @param jdbcDAOTemplate the DAO template.
      * @param parameters the parameter map.
-     * @throws BuildException if the template cannot be stored for any reason.
      * @precondition jdbcDAOTemplate != null
      * @precondition parameters != null
      */
     protected void storeJdbcDAOTemplate(
         final JdbcDAOTemplate jdbcDAOTemplate,
         final Map parameters)
-        throws  BuildException
     {
         parameters.put(
             TemplateMappingManager.JDBC_DAO_TEMPLATE, jdbcDAOTemplate);

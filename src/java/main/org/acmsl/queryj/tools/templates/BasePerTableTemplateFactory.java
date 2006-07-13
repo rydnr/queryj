@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
@@ -74,7 +73,6 @@ public interface BasePerTableTemplateFactory
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
      * @return a template.
-     * @throws QueryJException if the input values are invalid.
      */
     public BasePerTableTemplate createTemplate(
         final String tableName,
@@ -87,6 +85,5 @@ public interface BasePerTableTemplateFactory
         final String basePackageName,
         final String repositoryName,
         final String header,
-        final boolean implementMarkerInterfaces)
-      throws  QueryJException;
+        final boolean implementMarkerInterfaces);
 }

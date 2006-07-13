@@ -42,13 +42,14 @@ package org.acmsl.queryj.tools.customsql.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.xml.SqlXmlParser;
 import org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.QueryJException;
 
@@ -57,12 +58,6 @@ import org.acmsl.queryj.QueryJException;
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.util.ClasspathUtils;
 
 /*
  * Importing some Commons-Logging classes.
@@ -84,7 +79,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class CustomSqlProvisioningHandler
-    extends  AbstractAntCommandHandler
+    extends  AbstractQueryJCommandHandler
 {
     /**
      * Creates a <code>CustomSqlProvisioningHandler</code> instance.
@@ -92,65 +87,14 @@ public class CustomSqlProvisioningHandler
     public CustomSqlProvisioningHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(final Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            AntCommand t_AntCommand = (AntCommand) command;
-
-            try 
-            {
-                result = handle(t_AntCommand);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(
-                        CustomSqlProvisioningHandler.class);
-
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                          "Cannot include default elements in the "
-                        + "custom SQL model.",
-                        buildException);
-                }
-
-                result = true;
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
      * Handles given parameters.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         return
             handle(
@@ -163,14 +107,13 @@ public class CustomSqlProvisioningHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
     protected boolean handle(
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         return
             handle(
@@ -194,7 +137,7 @@ public class CustomSqlProvisioningHandler
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         boolean result = false;
 
@@ -212,8 +155,8 @@ public class CustomSqlProvisioningHandler
         Collection t_cResultData;
 
         for  (int t_iTableIndex = 0;
-              t_iTableIndex < t_iTableCount;
-              t_iTableIndex++)
+                  t_iTableIndex < t_iTableCount;
+                  t_iTableIndex++)
         {
             t_strTableName = t_astrTableNames[t_iTableIndex];
             t_strResultName = buildResultName(t_strTableName);
@@ -229,8 +172,8 @@ public class CustomSqlProvisioningHandler
             t_cResultData = new ArrayList();
 
             for  (int t_iAttributeIndex = 0;
-                  t_iAttributeIndex < t_iAttributeCount;
-                  t_iAttributeIndex++)
+                      t_iAttributeIndex < t_iAttributeCount;
+                      t_iAttributeIndex++)
             {
                 t_strAttributeName =
                     t_astrAttributeNames[t_iAttributeIndex];

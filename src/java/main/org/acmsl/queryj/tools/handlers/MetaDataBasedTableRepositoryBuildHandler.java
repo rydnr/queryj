@@ -41,7 +41,8 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 
@@ -59,24 +60,23 @@ public class MetaDataBasedTableRepositoryBuildHandler
     extends  TableRepositoryTemplateBuildHandler
 {
     /**
-     * Creates a MetaDataBasedTableRepositoryBuildHandler.
+     * Creates a <code>MetaDataBasedTableRepositoryBuildHandler</code>
+     * instance.
      */
     public MetaDataBasedTableRepositoryBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition command != null
      *
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    public boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
         storeTemplate(
-            buildTableRepositoryTemplate(
-                command.getAttributeMap()),
-            command.getAttributeMap());
+            buildTableRepositoryTemplate(parameters), parameters);
         
         return false;
     }

@@ -41,12 +41,10 @@ package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplate;
@@ -56,16 +54,6 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -79,51 +67,39 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class XMLDAOTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
-     * Creates a XMLDAOTemplateBuildHandler.
+     * Creates a <code>XMLDAOTemplateBuildHandler</code> instance.
      */
     public XMLDAOTemplateBuildHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        return
-            handle(
-                parameters,
-                retrieveMetadataManager(parameters),
-                retrieveProjectPackage(parameters),
-                retrievePackage(parameters),
-                retrieveTableRepositoryName(parameters),
-                retrieveTableTemplates(parameters),
-                retrieveHeader(parameters),
-                XMLDAOTemplateGenerator.getInstance());
+        buildTemplates(
+            parameters,
+            retrieveMetadataManager(parameters),
+            retrieveProjectPackage(parameters),
+            retrievePackage(parameters),
+            retrieveTableRepositoryName(parameters),
+            retrieveTableTemplates(parameters),
+            retrieveHeader(parameters),
+            XMLDAOTemplateGenerator.getInstance());
+
+        return false;
     }
 
     /**
-     * Handles given information.
+     * Builds the <code>XMLDAO</code> templates..
      * @param parameters the parameters.
      * @param metadataManager the database metadata manager.
      * @param basePackage the base package.
@@ -132,8 +108,7 @@ public class XMLDAOTemplateBuildHandler
      * @param tableTemplates the table templates.
      * @param header the header.
      * @param templateFactory the template factory.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metadataManager != null
      * @precondition basePackage != null
@@ -142,7 +117,7 @@ public class XMLDAOTemplateBuildHandler
      * @precondition tableTemplates != null
      * @precondition templateFactory != null
      */
-    protected boolean handle(
+    protected void buildTemplates(
         final Map parameters,
         final MetadataManager metadataManager,
         final String basePackage,
@@ -151,49 +126,37 @@ public class XMLDAOTemplateBuildHandler
         final TableTemplate[] tableTemplates,
         final String header,
         final XMLDAOTemplateFactory templateFactory)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
-        try
-        {
-            XMLDAOTemplate[] t_aXMLDAOTemplates =
-                new XMLDAOTemplate[t_iLength];
 
-            for  (int t_iXMLDAOIndex = 0;
-                      t_iXMLDAOIndex < t_iLength;
-                      t_iXMLDAOIndex++) 
-            {
-                t_aXMLDAOTemplates[t_iXMLDAOIndex] =
-                    templateFactory.createXMLDAOTemplate(
-                        tableTemplates[t_iXMLDAOIndex],
-                        metadataManager,
-                        packageName,
-                        basePackage,
-                        repositoryName,
-                        header);
-            }
+        XMLDAOTemplate[] t_aXMLDAOTemplates =
+            new XMLDAOTemplate[t_iLength];
 
-            storeXMLDAOTemplates(t_aXMLDAOTemplates, parameters);
-        }
-        catch  (final QueryJException queryjException)
+        for  (int t_iXMLDAOIndex = 0;
+                  t_iXMLDAOIndex < t_iLength;
+                  t_iXMLDAOIndex++) 
         {
-            throw new BuildException(queryjException);
+            t_aXMLDAOTemplates[t_iXMLDAOIndex] =
+                templateFactory.createXMLDAOTemplate(
+                    tableTemplates[t_iXMLDAOIndex],
+                    metadataManager,
+                    packageName,
+                    basePackage,
+                    repositoryName,
+                    header);
         }
-        
-        return result;
+
+        storeXMLDAOTemplates(t_aXMLDAOTemplates, parameters);
     }
 
     /**
      * Retrieves the package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrievePackage(final Map parameters)
-      throws  BuildException
     {
         return
             retrievePackage(
@@ -206,13 +169,11 @@ public class XMLDAOTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
         final String projectPackage, final PackageUtils packageUtils)
-      throws  BuildException
     {
         return packageUtils.retrieveXMLDAOPackage(projectPackage);
     }
@@ -235,14 +196,12 @@ public class XMLDAOTemplateBuildHandler
      * Stores the XML DAO template collection in given attribute map.
      * @param mockDAOTemplates the XML DAO templates.
      * @param parameters the parameter map.
-     * @throws BuildException if the templates cannot be stored for any reason.
      * @precondition mockDAOTemplates != null
      * @precondition parameters != null
      */
     protected void storeXMLDAOTemplates(
         final XMLDAOTemplate[] mockDAOTemplates,
         final Map parameters)
-      throws  BuildException
     {
         parameters.put(
             TemplateMappingManager.XML_DAO_TEMPLATES, mockDAOTemplates);
@@ -252,11 +211,9 @@ public class XMLDAOTemplateBuildHandler
      * Retrieves the table templates.
      * @param parameters the parameter map.
      * @return such templates.
-     * @throws BuildException if the templates cannot be stored for any reason.
      * @precondition parameters != null
      */
     protected TableTemplate[] retrieveTableTemplates(final Map parameters)
-      throws  BuildException
     {
         return
             (TableTemplate[])

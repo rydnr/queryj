@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -72,7 +71,6 @@ public interface DefaultBasePerRepositoryTemplateFactory
      * @param tables the tables.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the input values are invalid.
      */
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
@@ -83,6 +81,5 @@ public interface DefaultBasePerRepositoryTemplateFactory
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
-      throws  QueryJException;
+        final String header);
 }

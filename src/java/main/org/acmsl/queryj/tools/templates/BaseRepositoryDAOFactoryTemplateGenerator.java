@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -112,7 +111,6 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
      * @param tables the tables.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the input values are invalid.
      */
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
@@ -124,7 +122,6 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
         final String engineName,
         final Collection tables,
         final String header)
-      throws  QueryJException
     {
         return
             new BaseRepositoryDAOFactoryTemplate(

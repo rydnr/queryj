@@ -42,20 +42,19 @@ package org.acmsl.queryj.tools.templates.functions.text;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplate;
-
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplateFactory;
-
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -64,6 +63,11 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Is able to generate the JUnit classes to test the Database's text functions.
@@ -158,11 +162,11 @@ public class TextFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      */
     protected TextFunctionsTestTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         TextFunctionsTestTemplateFactory result = null;
 
@@ -183,7 +187,7 @@ public class TextFunctionsTestTemplateGenerator
                        instanceof TextFunctionsTestTemplateFactory))
                 {
                     throw
-                        new QueryJException(
+                        new QueryJBuildException(
                             "invalid.text.function.test.template.factory");
                 }
                 else 
@@ -205,16 +209,13 @@ public class TextFunctionsTestTemplateGenerator
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      * @return a template.
-     * @throws QueryJException if the provided information is
-     * invalid.
      */
     public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        String  packageName,
-        String  testedPackageName,
-        String  engineName,
-        String  engineVersion,
-        String  quote)
-      throws  QueryJException
+        final String packageName,
+        final String testedPackageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         TextFunctionsTestTemplate result = null;
 
@@ -223,8 +224,26 @@ public class TextFunctionsTestTemplateGenerator
              && (engineVersion != null)
              && (quote         != null))
         {
-            TextFunctionsTestTemplateFactory t_TemplateFactory =
-                getTemplateFactory(engineName, engineVersion);
+            TextFunctionsTestTemplateFactory t_TemplateFactory = null;
+
+            try
+            {
+                t_TemplateFactory =
+                    getTemplateFactory(engineName, engineVersion);
+            }
+            catch  (final QueryJBuildException buildException)
+            {
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        TextFunctionsTestTemplateGenerator.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Cannot retrieve text-functions test template",
+                        buildException);
+                }
+            }
 
             if  (   (t_TemplateFactory != null)
                  && (!t_TemplateFactory.getClass().equals(getClass())))

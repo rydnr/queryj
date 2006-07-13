@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplate;
@@ -50,12 +50,6 @@ import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 /*
  * Importing some JDK classes.
@@ -70,62 +64,48 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class XMLDAOTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * Creates a XMLDAOTemplateWritingHandler.
+     * Creates a <code>XMLDAOTemplateWritingHandler</code> instance.
      */
     public XMLDAOTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-                
-    /**
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
-        return
-            handle(
-                retrieveXMLDAOTemplates(parameters),
-                retrieveOutputDir(parameters),
-                XMLDAOTemplateGenerator.getInstance());
+        writeTemplates(
+            retrieveXMLDAOTemplates(parameters),
+            retrieveOutputDir(parameters),
+            XMLDAOTemplateGenerator.getInstance());
+
+        return false;
     }
 
     /**
-     * Handles given information.
+     * Writes the <code>XMLDAO</code> templates.
      * @param templates the templates.
      * @param outputDir the output dir.
      * @param generator the generator.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition templates != null
      * @precondition outputDir != null
      * @precondition generator != null
      */
-    protected boolean handle(
+    protected void writeTemplates(
         final XMLDAOTemplate[] templates,
         final File outputDir,
         final XMLDAOTemplateGenerator generator)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         try 
         {
             int t_iLength = (templates != null) ? templates.length : 0;
@@ -139,21 +119,19 @@ public class XMLDAOTemplateWritingHandler
         }
         catch  (final IOException ioException)
         {
-            throw new BuildException(ioException);
+            throw
+                new QueryJBuildException(
+                    "Cannot write the templates", ioException);
         }
-        
-        return result;
     }
 
     /**
      * Retrieves the XML DAO templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
      * @precondition parameters != null
      */
     protected XMLDAOTemplate[] retrieveXMLDAOTemplates(final Map parameters)
-        throws  BuildException
     {
         return
             (XMLDAOTemplate[])
@@ -165,11 +143,9 @@ public class XMLDAOTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
     {
         return
             retrieveOutputDir(
@@ -186,7 +162,6 @@ public class XMLDAOTemplateWritingHandler
      * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition outputDir != null
      * @precondition projectPackage != null
      * @precondition packageUtils != null
@@ -196,7 +171,6 @@ public class XMLDAOTemplateWritingHandler
         final String projectPackage,
         final boolean subFolders,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveXMLDAOFolder(

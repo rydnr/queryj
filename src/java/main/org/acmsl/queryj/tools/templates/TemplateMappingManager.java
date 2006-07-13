@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTemplateGenerator;
 
@@ -736,11 +736,11 @@ public class TemplateMappingManager
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      */
     public TemplateFactory getTemplateFactory(
         final String type, final String engineName, final String engineVersion)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         TemplateFactory result = null;
 
@@ -766,28 +766,28 @@ public class TemplateMappingManager
                 else
                 {
                     throw
-                        new QueryJException(
+                        new QueryJBuildException(
                             type + ".template.factory.class.not.available");
                 }
             }
             catch  (final ClassNotFoundException classNotFoundException)
             {
                 throw
-                    new QueryJException(
+                    new QueryJBuildException(
                         type + ".template.factory.not.found",
                         classNotFoundException);
             }
             catch  (final InstantiationException instantiationException)
             {
                 throw
-                    new QueryJException(
+                    new QueryJBuildException(
                         "invalid." + type + ".template.factory",
                         instantiationException);
             }
             catch  (final IllegalAccessException illegalAccessException)
             {
                 throw
-                    new QueryJException(
+                    new QueryJBuildException(
                         "access.to." + type + ".template.factory.not.allowed",
                         illegalAccessException);
             }

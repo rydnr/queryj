@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.functions.system;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTemplate;
 
@@ -55,6 +55,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -63,6 +64,11 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Is able to generate system function repositories according to database
@@ -180,7 +186,6 @@ public class SystemFunctionsTemplateGenerator
      * @param templateMappingManager the <code>TemplateMappingManager</code>
      * instance.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
      * @preocndition engineName != null
      * @precondition templateMappingManager != null
      */
@@ -201,12 +206,12 @@ public class SystemFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      * @preocndition engineName != null
      */
     protected SystemFunctionsTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         return
             getTemplateFactory(
@@ -222,7 +227,7 @@ public class SystemFunctionsTemplateGenerator
      * @param templateMappingManager the <code>TemplateMappingManager</code>
      * instance.
      * @return the template factory class name.
-     * @throws QueryJException if the factory class is invalid.
+     * @throws QueryJBuildException if the factory class is invalid.
      * @preocndition engineName != null
      * @precondition templateMappingManager != null
      */
@@ -230,7 +235,7 @@ public class SystemFunctionsTemplateGenerator
         final String engineName,
         final String engineVersion,
         final TemplateMappingManager templateMappingManager)
-      throws  QueryJException
+      throws  QueryJBuildException
     {
         SystemFunctionsTemplateFactory result = null;
 
@@ -245,7 +250,7 @@ public class SystemFunctionsTemplateGenerator
             if  (!(t_TemplateFactory instanceof SystemFunctionsTemplateFactory))
             {
                 throw
-                    new QueryJException(
+                    new QueryJBuildException(
                         "invalid.system.function.template.factory");
             }
             else 
@@ -264,23 +269,39 @@ public class SystemFunctionsTemplateGenerator
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
      * @precondition engineName != null
      * @precondition engineVersion != null
      * @precondition quote != null
      */
     public SystemFunctionsTemplate createSystemFunctionsTemplate(
-        final String  packageName,
-        final String  engineName,
-        final String  engineVersion,
-        final String  quote)
-      throws  QueryJException
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String quote)
     {
         SystemFunctionsTemplate result = null;
 
-        SystemFunctionsTemplateFactory t_TemplateFactory =
-            getTemplateFactory(engineName, engineVersion);
+        SystemFunctionsTemplateFactory t_TemplateFactory = null;
+
+        try
+        {
+            t_TemplateFactory =
+                getTemplateFactory(engineName, engineVersion);
+        }
+        catch  (final QueryJBuildException buildException)
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    SystemFunctionsTemplateGenerator.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.warn(
+                    "Cannot retrieve system-functions template",
+                    buildException);
+            }
+        }
 
         if  (   (t_TemplateFactory != null)
              && (!t_TemplateFactory.getClass().equals(getClass())))
@@ -291,15 +312,6 @@ public class SystemFunctionsTemplateGenerator
                     engineName,
                     engineVersion,
                     quote);
-        }
-        else 
-        {
-            throw
-                new QueryJException(
-                      "Cannot find system functions' "
-                    + "template factory for "
-                    + engineName + "\n"
-                    + "Disable extractfunctions setting.");
         }
 
         return result;

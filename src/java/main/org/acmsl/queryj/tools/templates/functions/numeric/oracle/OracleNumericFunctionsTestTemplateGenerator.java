@@ -42,7 +42,6 @@ package org.acmsl.queryj.tools.templates.functions.numeric.oracle;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.numeric
@@ -65,7 +64,6 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Is able to generate the JUnit classes to test the Database's numeric functions.
@@ -111,7 +109,6 @@ public class OracleNumericFunctionsTestTemplateGenerator
      * @param quote the identifier quote string.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the template factory is invalid.
      */
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
         final String packageName,
@@ -120,7 +117,6 @@ public class OracleNumericFunctionsTestTemplateGenerator
         final String engineVersion,
         final String quote,
         final String header)
-      throws  QueryJException
     {
         NumericFunctionsTestTemplate result = null;
 

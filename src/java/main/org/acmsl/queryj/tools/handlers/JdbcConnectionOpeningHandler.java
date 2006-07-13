@@ -41,21 +41,14 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 /*
  * Importing some Commons-Logging classes.
@@ -67,6 +60,7 @@ import org.apache.commons.logging.Log;
  */
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -75,7 +69,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class JdbcConnectionOpeningHandler
-    extends  AbstractAntCommandHandler
+    extends  AbstractQueryJCommandHandler
 {
     /**
      * The JDBC connection attribute name.
@@ -83,63 +77,23 @@ public class JdbcConnectionOpeningHandler
     public static final String JDBC_CONNECTION = "jdbc.connection";
 
     /**
-     * Creates a JdbcConnectionOpeningHandler.
+     * Creates a <code>JdbcConnectionOpeningHandler</code> instance.
      */
     public JdbcConnectionOpeningHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    public boolean handle(final Command command)
+    protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            AntCommand t_AntCommand = (AntCommand) command;
-            
-            try 
-            {
-                result = handle(t_AntCommand);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(JdbcConnectionOpeningHandler.class);
-                
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Cannot open JDBC connection.",
-                        buildException);
-                }
-            }
-        }
+        storeConnection(openConnection(parameters), parameters);
         
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            storeConnection(
-                openConnection(command.getAttributeMap()),
-                command.getAttributeMap());
-        }
-        
-        return result;
+        return false;
     }
 
     /**
@@ -147,32 +101,26 @@ public class JdbcConnectionOpeningHandler
      * attribute map.
      * @param parameters the parameter map.
      * @return the JDBC connection.
-     * @throws BuildException if the connection cannot be opened.
+     * @throws QueryJBuildException if the connection cannot be opened.
+     * @precondition parameters != null
      */
     protected Connection openConnection(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        Connection result = null;
-
-        if  (parameters != null) 
-        {
-            result =
-                openConnection(
-                    (String)
-                        parameters.get(
-                            ParameterValidationHandler.JDBC_DRIVER),
-                    (String)
-                        parameters.get(
-                            ParameterValidationHandler.JDBC_URL),
-                    (String)
-                        parameters.get(
-                            ParameterValidationHandler.JDBC_USERNAME),
-                    (String)
-                        parameters.get(
-                            ParameterValidationHandler.JDBC_PASSWORD));
-        }
-
-        return result;
+        return
+            openConnection(
+                (String)
+                    parameters.get(
+                        ParameterValidationHandler.JDBC_DRIVER),
+                (String)
+                    parameters.get(
+                        ParameterValidationHandler.JDBC_URL),
+                (String)
+                    parameters.get(
+                        ParameterValidationHandler.JDBC_USERNAME),
+                (String)
+                    parameters.get(
+                        ParameterValidationHandler.JDBC_PASSWORD));
     }
 
     /**
@@ -182,37 +130,44 @@ public class JdbcConnectionOpeningHandler
      * @param username the username.
      * @param password the password.
      * @return the JDBC connection.
-     * @throws org.apache.tools.ant.BuildException whenever the required
+     * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
+     * @precondition driver != null
+     * @precondition url != null
+     * @precondition username != null
      */
     protected Connection openConnection(
         final String driver,
         final String url,
         final String username,
         final String password)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         Connection result = null;
 
-        if  (   (driver != null)
-             && (url    != null))
+        try 
         {
-            try 
-            {
-                Class.forName(driver);
+            Class.forName(driver);
 
-                result =
-                    DriverManager.getConnection(
-                        url, username, password);
-            }
-            catch  (final RuntimeException exception)
-            {
-                throw exception;
-            }
-            catch  (final Exception exception)
-            {
-                throw new BuildException(exception);
-            }
+            result =
+                DriverManager.getConnection(
+                    url, username, password);
+        }
+        catch  (final RuntimeException exception)
+        {
+            throw exception;
+        }
+        catch  (final ClassNotFoundException classNotFoundException)
+        {
+            throw
+                new QueryJBuildException(
+                    "JDBC driver not found", classNotFoundException);
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw
+                new QueryJBuildException(
+                    "Cannot establish the database connection", sqlException);
         }
 
         return result;
@@ -222,14 +177,11 @@ public class JdbcConnectionOpeningHandler
      * Stores the JDBC connection in given attribute map.
      * @param connection the connection to store.
      * @param parameters the parameter map.
-     * @throws BuildException if the connection cannot be stored for any reason.
      * @precondition connection != null
      * @precondition parameters != null
      */
     protected void storeConnection(
-        final Connection connection,
-        final Map parameters)
-      throws  BuildException
+        final Connection connection, final Map parameters)
     {
         parameters.put(JDBC_CONNECTION, connection);
     }

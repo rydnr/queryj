@@ -41,12 +41,11 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
@@ -59,13 +58,7 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.logging.UniqueLogFactory;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -88,7 +81,7 @@ import org.apache.commons.logging.Log;
  *         >Jose San Leandro</a>
  */
 public abstract class BasePerTableTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
@@ -103,96 +96,79 @@ public abstract class BasePerTableTemplateBuildHandler
     public BasePerTableTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        return handle(parameters, retrieveDatabaseMetaData(parameters));
+        buildTemplate(parameters, retrieveDatabaseMetaData(parameters));
+
+        return false;
     }
 
     /**
-     * Handles given information.
+     * Builds the template.
      * @param parameters the parameters.
      * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition metaData != null
      */
-    protected boolean handle(
+    protected void buildTemplate(
         final Map parameters, final DatabaseMetaData metaData)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         try
         {
-            result =
-                handle(
-                    parameters,
-                    metaData.getDatabaseProductName(),
-                    metaData.getDatabaseProductVersion(),
-                    fixQuote(metaData.getIdentifierQuoteString()));
+            buildTemplate(
+                parameters,
+                metaData.getDatabaseProductName(),
+                metaData.getDatabaseProductVersion(),
+                fixQuote(metaData.getIdentifierQuoteString()));
         }
         catch  (final SQLException sqlException)
         {
-            throw new BuildException(sqlException);
+            throw
+                new QueryJBuildException(
+                    "Cannot build the table-specific template", sqlException);
         }
-
-        return result;
     }
 
     /**
-     * Handles given information.
+     * Builds the template.
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the quote character.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      * @precondition quote != null
      */
-    protected boolean handle(
+    protected void buildTemplate(
         final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        return
-            handle(
-                parameters,
-                engineName,
-                engineVersion,
-                quote,
-                retrieveMetadataManager(parameters),
-                retrieveCustomSqlProvider(parameters),
-                retrieveTemplateFactory(),
-                retrieveProjectPackage(parameters),
-                retrieveTableRepositoryName(parameters),
-                retrieveHeader(parameters),
-                retrieveImplementMarkerInterfaces(parameters),
-                retrieveTableTemplates(parameters));
+        buildTemplate(
+            parameters,
+            engineName,
+            engineVersion,
+            quote,
+            retrieveMetadataManager(parameters),
+            retrieveCustomSqlProvider(parameters),
+            retrieveTemplateFactory(),
+            retrieveProjectPackage(parameters),
+            retrieveTableRepositoryName(parameters),
+            retrieveHeader(parameters),
+            retrieveImplementMarkerInterfaces(parameters),
+            retrieveTableTemplates(parameters));
     }
 
     /**
@@ -202,7 +178,7 @@ public abstract class BasePerTableTemplateBuildHandler
     protected abstract BasePerTableTemplateFactory retrieveTemplateFactory();
 
     /**
-     * Handles given information.
+     * Builds the template.
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -216,8 +192,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
      * @param tableTemplates the table templates.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      * @precondition metadataManager != null
@@ -227,7 +202,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition repository != null
      * @precondition tableTemplates != null
      */
-    protected boolean handle(
+    protected void buildTemplate(
         final Map parameters,
         final String engineName,
         final String engineVersion,
@@ -240,10 +215,8 @@ public abstract class BasePerTableTemplateBuildHandler
         final String header,
         final boolean implementMarkerInterfaces,
         final TableTemplate[] tableTemplates)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
 
         Collection t_cTemplates = new ArrayList();
@@ -252,46 +225,37 @@ public abstract class BasePerTableTemplateBuildHandler
 
         String t_strTableName;
 
-        try
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
         {
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
+            t_strTableName = tableTemplates[t_iIndex].getTableName();
+
+            t_Template =
+                createTemplate(
+                    templateFactory,
+                    t_strTableName,
+                    metadataManager,
+                    customSqlProvider,
+                    retrievePackage(
+                        t_strTableName, engineName, parameters),
+                    engineName,
+                    engineVersion,
+                    quote,
+                    projectPackage,
+                    repository,
+                    header,
+                    implementMarkerInterfaces,
+                    parameters);
+
+            if  (t_Template != null)
             {
-                t_strTableName = tableTemplates[t_iIndex].getTableName();
-
-                t_Template =
-                    createTemplate(
-                        templateFactory,
-                        t_strTableName,
-                        metadataManager,
-                        customSqlProvider,
-                        retrievePackage(
-                            t_strTableName, engineName, parameters),
-                        engineName,
-                        engineVersion,
-                        quote,
-                        projectPackage,
-                        repository,
-                        header,
-                        implementMarkerInterfaces,
-                        parameters);
-
-                if  (t_Template != null)
-                {
-                    t_cTemplates.add(t_Template);
-                }
+                t_cTemplates.add(t_Template);
             }
+        }
 
-            storeTemplates(
-                (BasePerTableTemplate[])
-                    t_cTemplates.toArray(EMPTY_BASEPERTABLETEMPLATE_ARRAY),
-                parameters);
-        }
-        catch  (final QueryJException queryjException)
-        {
-            throw new BuildException(queryjException);
-        }
-        
-        return result;
+        storeTemplates(
+            (BasePerTableTemplate[])
+                t_cTemplates.toArray(EMPTY_BASEPERTABLETEMPLATE_ARRAY),
+            parameters);
     }
 
     /**
@@ -300,12 +264,12 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @throws QueryJBuildException if the package retrieval process if faulty.
      * @precondition parameters != null
      */
     protected String retrievePackage(
         final String tableName, final String engineName, final Map parameters)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         return
             retrievePackage(
@@ -322,7 +286,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @throws QueryJBuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
@@ -346,11 +310,12 @@ public abstract class BasePerTableTemplateBuildHandler
      * Retrieves the table templates.
      * @param parameters the parameter map.
      * @return such templates.
-     * @throws BuildException if the templates cannot be stored for any reason.
+     * @throws QueryJBuildException if the templates cannot be stored for
+     * any reason.
      * @precondition parameters != null
      */
     protected TableTemplate[] retrieveTableTemplates(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         return
             (TableTemplate[])
@@ -374,7 +339,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * interfaces.
      * @param parameters the parameters.
      * @return the template.
-     * @throws QueryJException if the template cannot be created.
+     * @throws QueryJBuildException if the template cannot be created.
      * @precondition templateFactory != null
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -398,8 +363,8 @@ public abstract class BasePerTableTemplateBuildHandler
         final String header,
         final boolean implementMarkerInterfaces,
         final Map parameters)
-      throws  QueryJException
-    {        
+      throws  QueryJBuildException
+    {
         return
             templateFactory.createTemplate(
                 tableName,

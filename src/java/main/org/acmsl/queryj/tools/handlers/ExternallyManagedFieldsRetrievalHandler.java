@@ -42,12 +42,13 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
@@ -57,11 +58,6 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.utils.StringValidator;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some Commons-Logging classes.
@@ -86,120 +82,89 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class ExternallyManagedFieldsRetrievalHandler
-    extends  AbstractAntCommandHandler
+    extends  AbstractQueryJCommandHandler
 {
     /**
-     * Creates an ExternallyManagedFieldsRetrievalHandler.
+     * Creates an <code>ExternallyManagedFieldsRetrievalHandler</code>
+     * instance.
      */
     public ExternallyManagedFieldsRetrievalHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    public boolean handle(final Command command)
+    protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            AntCommand t_AntCommand = (AntCommand) command;
-            
-            try 
-            {
-                result = handle(t_AntCommand);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(
-                        ExternallyManagedFieldsRetrievalHandler.class);
-                
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Cannot retrieve externally-managed fields.",
-                        buildException);
-                }
-            }
-        }
-        
-        return result;
+        return
+            handle(
+                retrieveMetadataManager(parameters),
+                retrieveExternallyManagedFieldsElement(parameters),
+                StringValidator.getInstance());
     }
-
+                
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param externallyManagedFields information about the
+     * externally-managed fields.
+     * @param stringValidator the <code>StringValidator</code> instance.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition metadataManager != null
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected boolean handle(
+        final MetadataManager metadataManager,
+        final AntExternallyManagedFieldsElement externallyManagedFields,
+        final StringValidator stringValidator)
+      throws  QueryJBuildException
     {
         boolean result = false;
 
-        if  (command != null) 
+        if  (externallyManagedFields != null)
         {
-            Map t_mAttributes = command.getAttributeMap();
+            Collection t_cFieldElements =
+                externallyManagedFields.getFields();
 
-            MetadataManager t_MetadataManager =
-                retrieveMetadataManager(t_mAttributes);
+            Iterator t_itFieldIterator =
+                (t_cFieldElements != null)
+                ?  t_cFieldElements.iterator()
+                :  null;
 
-            Collection t_cFieldElements = null;
-
-            AntExternallyManagedFieldsElement t_ExternallyManagedFieldsElement =
-                retrieveExternallyManagedFieldsElement(t_mAttributes);
-
-            if  (   (t_MetadataManager != null)
-                 && (t_ExternallyManagedFieldsElement != null))
+            if  (t_itFieldIterator != null)
             {
-                t_cFieldElements = t_ExternallyManagedFieldsElement.getFields();
+                AntFieldElement t_Field;
 
-                if  (   (t_cFieldElements != null)
-                     && (t_cFieldElements.size() > 0))
+                while  (t_itFieldIterator.hasNext())
                 {
-                    StringValidator t_StringValidator = StringValidator.getInstance();
+                    t_Field = (AntFieldElement) t_itFieldIterator.next();
 
-                    if  (t_StringValidator == null)
+                    if  (t_Field != null)
                     {
-                        throw new BuildException(
-                            "Cannot continue: StringValidator not available");
-                    }
-                    else 
-                    {
-                        Iterator t_itFieldIterator =
-                            t_cFieldElements.iterator();
-
-                        while  (   (t_itFieldIterator != null)
-                                && (t_itFieldIterator.hasNext()))
+                        if  (stringValidator.isEmpty(t_Field.getName()))
                         {
-                            AntFieldElement t_Field =
-                                (AntFieldElement) t_itFieldIterator.next();
-
-                            if  (t_Field != null)
-                            {
-                                if  (t_StringValidator.isEmpty(
-                                         t_Field.getName()))
-                                {
-                                    throw new BuildException(
-                                        "Field name not specified.");
-                                }
-                                else if  (t_StringValidator.isEmpty(
-                                              t_Field.getTableName()))
-                                {
-                                    throw new BuildException(
-                                        "Field name not specified.");
-                                }
-                                else 
-                                {
-                                    t_MetadataManager.addExternallyManagedField(
-                                        t_Field.getTableName(),
-                                        t_Field.getName(),
-                                        t_Field.getKeyword(),
-                                        t_Field.getRetrievalQuery());
-                                }
-                            }
+                            throw
+                                new QueryJBuildException(
+                                    "Field name not specified.");
+                        }
+                        else if  (stringValidator.isEmpty(
+                                      t_Field.getTableName()))
+                        {
+                            throw
+                                new QueryJBuildException(
+                                    "Field name not specified.");
+                        }
+                        else 
+                        {
+                            metadataManager.addExternallyManagedField(
+                                t_Field.getTableName(),
+                                t_Field.getName(),
+                                t_Field.getKeyword(),
+                                t_Field.getRetrievalQuery());
                         }
                     }
                 }
@@ -214,12 +179,10 @@ public class ExternallyManagedFieldsRetrievalHandler
      * attribute map.
      * @param parameters the parameter map.
      * @return the externally-managed-fields information.
-     * @throws BuildException if the retrieval process cannot be performed.
      * @precondition parameters != null
      */
     protected AntExternallyManagedFieldsElement
         retrieveExternallyManagedFieldsElement(final Map parameters)
-        throws  BuildException
     {
         return
             (AntExternallyManagedFieldsElement)

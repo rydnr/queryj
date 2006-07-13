@@ -43,13 +43,15 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
 /*
- * Importing some Ant classes.
+ * Importing some ACM-SL Commons classes.
  */
-import org.apache.tools.ant.BuildException;
+import org.acmsl.commons.patterns.Command;
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some JDK classes.
@@ -58,14 +60,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
+
 /**
  * General-purpose AntCommandHandler composed of an arbitrary number
  * of handlers, to which the logic is delegated to, following GoF's
  * <b>Composite pattern</b>.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public class CompositeAntCommandHandler
-    extends  AbstractAntCommandHandler
+public class CompositeQueryJCommandHandler
+    implements  QueryJCommandHandler
 {
     /**
      * The handler collection.
@@ -73,9 +80,9 @@ public class CompositeAntCommandHandler
     private Collection m__cHandlers;
 
     /**
-     * Builds a composite handler.
+     * Builds a <code>CompositeQueryJCommandHandler</code> instance.
      */
-    public CompositeAntCommandHandler()
+    public CompositeQueryJCommandHandler()
     {
         immutableSetHandlerCollection(new ArrayList());
     }
@@ -113,7 +120,7 @@ public class CompositeAntCommandHandler
      * Adds a new handler to the collection.
      * @param handler the new handler to add.
      */
-    protected void addHandler(final AntCommandHandler handler)
+    protected void addHandler(final QueryJCommandHandler handler)
     {
         addHandler(handler, getHandlerCollection());
     }
@@ -124,7 +131,7 @@ public class CompositeAntCommandHandler
      * @param collection the handler collection.
      */
     protected void addHandler(
-        final AntCommandHandler handler, final Collection handlerCollection)
+        final QueryJCommandHandler handler, final Collection handlerCollection)
     {
         if  (   (handler != null)
              && (handlerCollection != null))
@@ -135,13 +142,47 @@ public class CompositeAntCommandHandler
 
     /**
      * Handles given command.
+     * @param command the command to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @precondition command != null
+     */
+    public boolean handle(final Command command)
+    {
+        boolean result = false;
+
+        if  (command instanceof QueryJCommand)
+        {
+            QueryJCommand t_Command = (QueryJCommand) command;
+            
+            try 
+            {
+                result = handle(t_Command);
+            }
+            catch  (final QueryJBuildException buildException)
+            {
+                Log t_Log =
+                    UniqueLogFactory.getLog(
+                        CompositeQueryJCommandHandler.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error("Chain step failed.", buildException);
+                }
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Handles given command.
      * @param command the command.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    public boolean handle(final QueryJCommand command)
+        throws  QueryJBuildException
     {
         return handle(command, getHandlerCollection());
     }
@@ -152,35 +193,34 @@ public class CompositeAntCommandHandler
      * @param handlerCollection the handler collection.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(
-        final AntCommand command, final Collection handlerCollection)
-      throws  BuildException
+        final QueryJCommand command, final Collection handlerCollection)
+      throws  QueryJBuildException
     {
         boolean result = false;
 
-        if  (handlerCollection != null)
+        Iterator t_itHandlerIterator =
+            (handlerCollection != null)
+            ?  handlerCollection.iterator()
+            :  null;
+
+        if  (t_itHandlerIterator != null)
         {
-            Iterator t_itHandlerIterator = handlerCollection.iterator();
-
-            if  (t_itHandlerIterator != null)
+            while  (t_itHandlerIterator.hasNext())
             {
-                while  (t_itHandlerIterator.hasNext())
+                Object t_Handler = t_itHandlerIterator.next();
+
+                if  (t_Handler instanceof QueryJCommandHandler)
                 {
-                    Object t_Handler = t_itHandlerIterator.next();
+                    result =
+                        handle(command, (QueryJCommandHandler) t_Handler);
+                }
 
-                    if  (   (t_Handler != null)
-                         && (t_Handler instanceof AntCommandHandler))
-                    {
-                        result =
-                            handle(command, (AntCommandHandler) t_Handler);
-                    }
-
-                    if  (result)
-                    {
-                        break;
-                    }
+                if  (result)
+                {
+                    break;
                 }
             }
         }
@@ -194,12 +234,12 @@ public class CompositeAntCommandHandler
      * @param handler the concrete handler.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition handler != null
      */
     protected boolean handle(
-        final AntCommand command, final AntCommandHandler handler)
-      throws  BuildException
+        final QueryJCommand command, final QueryJCommandHandler handler)
+      throws  QueryJBuildException
     {
         return handler.handle(command);
     }

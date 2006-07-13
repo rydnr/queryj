@@ -33,15 +33,14 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents workflow commands associated to Ant actions.
+ * Description: Represents QueryJ workflow commands.
  *
  */
-package org.acmsl.queryj.tools.ant;
+package org.acmsl.queryj.tools;
 
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.logging.QueryJAntLog;
 import org.acmsl.queryj.tools.logging.QueryJLog;
 
 /*
@@ -50,21 +49,16 @@ import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.commons.patterns.Command;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.Project;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents workflow commands associated to Ant actions.
+ * Represents QueryJ workflow commands.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public class AntCommand
+public class QueryJCommand
     implements  Command
 {
     /**
@@ -80,7 +74,7 @@ public class AntCommand
     /**
      * Constructs an empty map command.
      */
-    public AntCommand()
+    public QueryJCommand()
     {
         immutableSetAttributeMap(new HashMap());
     }
@@ -89,21 +83,10 @@ public class AntCommand
      * Constructs an empty map command.
      * @param log the log instance.
      */
-    public AntCommand(final QueryJLog log)
+    public QueryJCommand(final QueryJLog log)
     {
         this();
         immutableSetLog(log);
-    }
-
-    /**
-     * Constructs an empty map command.
-     * @param project the project, for logging purposes
-     * (optional).
-     * @param task the task, for logging purposes (optional).
-     */
-    public AntCommand(final Project project)
-    {
-        this(new QueryJAntLog(project));
     }
 
     /**

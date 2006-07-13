@@ -42,7 +42,6 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplate;
@@ -104,12 +103,10 @@ public class QueryPreparedStatementCreatorTemplateGenerator
      * @param packageName the package name.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
      */
     public QueryPreparedStatementCreatorTemplate createQueryPreparedStatementCreatorTemplate(
         final String packageName, final String header)
-      throws  QueryJException
     {
         return
             new QueryPreparedStatementCreatorTemplate(

@@ -42,13 +42,11 @@ package org.acmsl.queryj.tools.templates.dao.xml.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -56,11 +54,6 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplateGenerator;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -76,7 +69,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class XMLValueObjectFactoryTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
@@ -86,190 +79,167 @@ public class XMLValueObjectFactoryTemplateBuildHandler
         new TableTemplate[0];
 
     /**
-     * Creates a XMLValueObjectFactoryTemplateBuildHandler.
+     * Creates a <code>XMLValueObjectFactoryTemplateBuildHandler</code>
+     * instance.
      */
     public XMLValueObjectFactoryTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
-        boolean result = false;
+        buildTemplates(
+            retrieveMetadataManager(parameters),
+            retrievePackage(parameters),
+            retrieveValueObjectPackage(parameters),
+            retrieveHeader(parameters),
+            retrieveTableTemplates(parameters),
+            XMLValueObjectFactoryTemplateGenerator.getInstance(),
+            parameters);
 
-        if  (command != null) 
-        {
-            try
-            {
-                Map attributes = command.getAttributeMap();
-
-                DatabaseMetaData t_MetaData =
-                    retrieveDatabaseMetaData(attributes);
-
-                MetadataManager t_MetadataManager =
-                    retrieveMetadataManager(attributes);
-
-                String t_strPackage = retrievePackage(attributes);
-                String t_strValueObjectPackage = retrieveValueObjectPackage(attributes);
-                String t_strHeader = retrieveHeader(attributes);
-                
-                XMLValueObjectFactoryTemplateGenerator t_XMLValueObjectFactoryTemplateGenerator =
-                    XMLValueObjectFactoryTemplateGenerator.getInstance();
-
-                TableTemplate[] t_aTableTemplates = retrieveTableTemplates(attributes);
-
-                if  (t_aTableTemplates != null)
-                {
-                    XMLValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
-                        new XMLValueObjectFactoryTemplate[t_aTableTemplates.length];
-
-                    for  (int t_iValueObjectFactoryIndex = 0;
-                              t_iValueObjectFactoryIndex < t_aValueObjectFactoryTemplates.length;
-                              t_iValueObjectFactoryIndex++) 
-                    {
-                        String t_strQuote = t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
-                        {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
-                        t_aValueObjectFactoryTemplates[t_iValueObjectFactoryIndex] =
-                            t_XMLValueObjectFactoryTemplateGenerator.createXMLValueObjectFactoryTemplate(
-                                t_strPackage,
-                                t_strValueObjectPackage,
-                                t_aTableTemplates[t_iValueObjectFactoryIndex],
-                                t_MetadataManager,
-                                t_strHeader);
-                        }
-
-                    storeXMLValueObjectFactoryTemplates(t_aValueObjectFactoryTemplates, attributes);
-                }
-            }
-            catch  (final SQLException sqlException)
-            {
-                throw new BuildException(sqlException);
-            }
-            catch  (final QueryJException queryjException)
-            {
-                throw new BuildException(queryjException);
-            }
-        }
-        
-        return result;
+        return false;
     }
 
     /**
-     * Retrieves the database metadata from the attribute map.
-     * @param parameters the parameter map.
-     * @return the metadata.
-     * @throws BuildException if the metadata retrieval process if faulty.
+     * Builds the <code>XMLValueObjectFactory</code> templates.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param packageName the name of the package.
+     * @param valueObjectPackage the package for the value objects.
+     * @param header the header.
+     * @param tableTemplates the table templates.
+     * @param generator the <code>XMLValueObjectFactoryTemplateGenerator</code>
+     * instance.
+     * @param parameters the parameters to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition metadataManager != null
+     * @precondition packageName != null
+     * @precondition valueObjectPackage != null
+     * @precondition header != null
+     * @precondition tableTemplates != null
+     * @precondition generator != null
+     * @precondition parameters != null
      */
-    protected DatabaseMetaData retrieveDatabaseMetaData(
+    protected void buildTemplates(
+        final MetadataManager metadataManager,
+        final String packageName,
+        final String valueObjectPackage,
+        final String header,
+        final TableTemplate[] tableTemplates,
+        final XMLValueObjectFactoryTemplateGenerator generator,
         final Map parameters)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        DatabaseMetaData result = null;
+        int t_iCount =
+            (tableTemplates != null) ? tableTemplates.length : 0;
 
-        if  (parameters != null)
+        XMLValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
+            new XMLValueObjectFactoryTemplate[t_iCount];
+
+        for  (int t_iValueObjectFactoryIndex = 0;
+                  t_iValueObjectFactoryIndex < t_iCount;
+                  t_iValueObjectFactoryIndex++) 
         {
-            result =
-                (DatabaseMetaData)
-                    parameters.get(
-                        DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
+            t_aValueObjectFactoryTemplates[t_iValueObjectFactoryIndex] =
+                generator.createXMLValueObjectFactoryTemplate(
+                    packageName,
+                    valueObjectPackage,
+                    tableTemplates[t_iValueObjectFactoryIndex],
+                    metadataManager,
+                    header);
         }
-        
-        return result;
+
+        storeXMLValueObjectFactoryTemplates(
+            t_aValueObjectFactoryTemplates, parameters);
     }
 
     /**
      * Retrieves the package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      */
     protected String retrievePackage(final Map parameters)
-        throws  BuildException
     {
-        String result = null;
+        return
+            retrievePackage(
+                retrieveProjectPackage(parameters),
+                PackageUtils.getInstance());
+    }
 
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveXMLValueObjectFactoryPackage(
-                    (String)
-                        parameters.get(ParameterValidationHandler.PACKAGE));
-        }
-        
-        return result;
+    /**
+     * Retrieves the package name.
+     * @param projectPackage the project package.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @precondition packageName != null
+     * @precondition packageUtils != null
+     */
+    protected String retrievePackage(
+        final String projectPackage, final PackageUtils packageUtils)
+    {
+        return
+            packageUtils.retrieveXMLValueObjectFactoryPackage(projectPackage);
     }
 
     /**
      * Retrieves the value object package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @precondition parameters != null
      */
     protected String retrieveValueObjectPackage(final Map parameters)
-        throws  BuildException
     {
-        String result = null;
-
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
-
-        if  (   (parameters     != null)
-             && (t_PackageUtils != null))
-        {
-            result =
-                t_PackageUtils.retrieveValueObjectFactoryPackage(
-                    (String)
-                        parameters.get(ParameterValidationHandler.PACKAGE));
-        }
-        
-        return result;
+        return
+            retrieveValueObjectPackage(
+                retrieveProjectPackage(parameters),
+                PackageUtils.getInstance());
     }
 
     /**
-     * Stores the value object factory template collection in given attribute map.
+     * Retrieves the value object package name from the attribute map.
+     * @param projectPackage the project package.
+     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @return the package name.
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
+     */
+    protected String retrieveValueObjectPackage(
+        final String projectPackage, final PackageUtils packageUtils)
+    {
+        return
+            packageUtils.retrieveValueObjectFactoryPackage(projectPackage);
+    }
+
+    /**
+     * Stores the value object factory template collection in given attribute
+     * map.
      * @param valueObjectFactoryTemplates the value object factory templates.
      * @param parameters the parameter map.
-     * @throws BuildException if the templates cannot be stored for any reason.
+     * @precondition valueObjectFactoryTemplates != null
+     * @precondition parameters != null
      */
     protected void storeXMLValueObjectFactoryTemplates(
         final XMLValueObjectFactoryTemplate[] valueObjectFactoryTemplates,
-        final Map                             parameters)
-      throws  BuildException
+        final Map parameters)
     {
-        if  (   (valueObjectFactoryTemplates != null)
-             && (parameters                  != null))
-        {
-            parameters.put(
-                TemplateMappingManager.XML_VALUE_OBJECT_FACTORY_TEMPLATES,
-                valueObjectFactoryTemplates);
-        }
+        parameters.put(
+            TemplateMappingManager.XML_VALUE_OBJECT_FACTORY_TEMPLATES,
+            valueObjectFactoryTemplates);
     }
 
     /**
      * Retrieves the table templates.
      * @param parameters the parameter map.
      * @return such templates.
-     * @throws BuildException if the templates cannot be stored for any reason.
      */
     protected TableTemplate[] retrieveTableTemplates(
         final Map parameters)
-      throws  BuildException
     {
         TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
 

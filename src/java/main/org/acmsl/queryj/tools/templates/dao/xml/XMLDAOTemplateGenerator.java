@@ -42,7 +42,6 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -109,7 +108,6 @@ public class XMLDAOTemplateGenerator
      * @param repositoryName the name of the repository.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      * @precondition tableTemplate != null
      * @precondition metadataManager != null
      * @precondition packageName != null
@@ -121,7 +119,6 @@ public class XMLDAOTemplateGenerator
         final String basePackageName,
         final String repositoryName,
         final String header)
-      throws  QueryJException
     {
         return
             new XMLDAOTemplate(

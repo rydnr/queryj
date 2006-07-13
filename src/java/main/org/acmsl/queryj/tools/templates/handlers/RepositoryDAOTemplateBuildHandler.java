@@ -45,17 +45,13 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.RepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
-
-/*
- * Importing some Apache Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -82,7 +78,7 @@ public class RepositoryDAOTemplateBuildHandler
     }
 
     /**
-     * Handles given information.
+     * Builds the template.
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -95,8 +91,7 @@ public class RepositoryDAOTemplateBuildHandler
      * @param repository the repository.
      * @param header the header.
      * @param tableTemplates the table templates.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      * @precondition metadataManager != null
@@ -107,7 +102,7 @@ public class RepositoryDAOTemplateBuildHandler
      * @precondition repository != null
      * @precondition tableTemplates != null
      */
-    protected boolean handle(
+    protected void buildTemplate(
         final Map parameters,
         final String engineName,
         final String engineVersion,
@@ -120,31 +115,26 @@ public class RepositoryDAOTemplateBuildHandler
         final String repository,
         final String header,
         final TableTemplate[] tableTemplates)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         if  (definesRepositoryScopedSql(
                  customSqlProvider,
                  getAllowEmptyRepositoryDAOSetting(parameters)))
         {
-            result =
-                super.handle(
-                    parameters,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    metadataManager,
-                    customSqlProvider,
-                    templateFactory,
-                    projectPackage,
-                    packageName,
-                    repository,
-                    header,
-                    tableTemplates);
+            super.buildTemplate(
+                parameters,
+                engineName,
+                engineVersion,
+                quote,
+                metadataManager,
+                customSqlProvider,
+                templateFactory,
+                projectPackage,
+                packageName,
+                repository,
+                header,
+                tableTemplates);
         }
-
-        return result;
     }
     
     /**
@@ -153,7 +143,6 @@ public class RepositoryDAOTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */

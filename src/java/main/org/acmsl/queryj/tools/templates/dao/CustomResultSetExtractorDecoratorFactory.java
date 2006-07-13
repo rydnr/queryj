@@ -87,7 +87,9 @@ public class CustomResultSetExtractorDecoratorFactory
      */
     public static CachingDecoratorFactory getInstance()
     {
-        return CustomResultSetExtractorDecoratorFactorySingletonContainer.SINGLETON;
+        return
+            CustomResultSetExtractorDecoratorFactorySingletonContainer
+                .SINGLETON;
     }
 
     /**
@@ -100,6 +102,8 @@ public class CustomResultSetExtractorDecoratorFactory
     public PropertyDecorator createDecorator(
         final Property property, final MetadataManager metadataManager)
     {
-        return new CustomResultSetExtractorPropertyDecorator(property, metadataManager);
+        return
+            new CustomResultSetExtractorPropertyDecorator(
+                property, metadataManager);
     }
 }

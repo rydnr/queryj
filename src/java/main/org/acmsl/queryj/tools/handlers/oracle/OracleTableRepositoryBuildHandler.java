@@ -41,14 +41,7 @@ package org.acmsl.queryj.tools.handlers.oracle;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.templates.handlers
-    .TableRepositoryTemplateBuildHandler;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
+import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandler;
 
 /**
  * Builds an Oracle-specific table repository.
@@ -59,24 +52,22 @@ public class OracleTableRepositoryBuildHandler
     extends  TableRepositoryTemplateBuildHandler
 {
     /**
-     * Creates a OracleTableRepositoryBuildHandler.
+     * Creates a <code>OracleTableRepositoryBuildHandler</code> instance.
      */
     public OracleTableRepositoryBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      *
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    public boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
         storeTableRepositoryTemplate(
-            buildTableRepositoryTemplate(
-                command.getAttributeMap()),
-            command.getAttributeMap());
+            buildTableRepositoryTemplate(parameters), parameters);
         
         return false;
     }

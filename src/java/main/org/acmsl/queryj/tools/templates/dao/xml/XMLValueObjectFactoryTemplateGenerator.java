@@ -42,7 +42,6 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -111,7 +110,6 @@ public class XMLValueObjectFactoryTemplateGenerator
      * @param metadataManager the metadata manager.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
      * @precondition packageName != null
      * @precondition valueObjectPackageName != null
      * @precondition tableTemplate != null
@@ -123,7 +121,6 @@ public class XMLValueObjectFactoryTemplateGenerator
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
         final String header)
-      throws  QueryJException
     {
         return
             new XMLValueObjectFactoryTemplate(

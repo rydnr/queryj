@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -54,12 +55,6 @@ import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWrit
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -75,7 +70,8 @@ public class CustomResultSetExtractorTemplateWritingHandler
     extends  BasePerCustomResultTemplateWritingHandler
 {
     /**
-     * Creates a CustomResultSetExtractorTemplateWritingHandler.
+     * Creates a <code>CustomResultSetExtractorTemplateWritingHandler</code>
+     * instance.
      */
     public CustomResultSetExtractorTemplateWritingHandler() {};
 
@@ -92,11 +88,9 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the templates.
-     * @throws BuildException if the template retrieval process if faulty.
      */
     protected BasePerCustomResultTemplate[] retrieveTemplates(
         final Map parameters)
-        throws  BuildException
     {
         return
             (BasePerCustomResultTemplate[])
@@ -118,7 +112,6 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      */
     protected File retrieveOutputDir(
         final Result result,
@@ -130,7 +123,6 @@ public class CustomResultSetExtractorTemplateWritingHandler
         final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             retrieveOutputDir(
@@ -149,7 +141,6 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @param useSubfolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition engineName != null
      * @precondition projectOutputDir != null
      * @precondition projectPackage != null
@@ -161,7 +152,6 @@ public class CustomResultSetExtractorTemplateWritingHandler
         final boolean useSubfolders,
         final String engineName,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveCustomResultSetExtractorFolder(

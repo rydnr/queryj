@@ -42,7 +42,6 @@ package org.acmsl.queryj.tools.templates.functions.system.oracle;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.system.oracle
@@ -111,7 +110,6 @@ public class OracleSystemFunctionsTestTemplateGenerator
      * @param quote the identifier quote string.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the template factory is invalid.
      */
     public SystemFunctionsTestTemplate createSystemFunctionsTestTemplate(
         final String packageName,
@@ -120,7 +118,6 @@ public class OracleSystemFunctionsTestTemplateGenerator
         final String engineVersion,
         final String quote,
         final String header)
-      throws  QueryJException
     {
         OracleSystemFunctionsTestTemplate result = null;
 

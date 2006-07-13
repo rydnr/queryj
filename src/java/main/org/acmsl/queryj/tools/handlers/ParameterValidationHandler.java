@@ -41,10 +41,11 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -56,7 +57,6 @@ import org.acmsl.commons.utils.io.FileUtils;
 /*
  * Importing some Ant classes.
  */
-import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 
@@ -81,7 +81,7 @@ import java.util.ResourceBundle;
            >Jose San Leandro</a>
  */
 public class ParameterValidationHandler
-    extends  AbstractAntCommandHandler
+    extends  AbstractQueryJCommandHandler
 {
     /**
      * The JDBC driver attribute name.
@@ -321,59 +321,23 @@ public class ParameterValidationHandler
         "Specified grammar bundle cannot be found";
     
     /**
-     * Creates a ParameterValidationHandler.
+     * Creates a <code>ParameterValidationHandler</code> instance.
      */
     public ParameterValidationHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
-    public boolean handle(final Command command)
+    protected boolean handle(final Map parameters)
+        throws  QueryJBuildException
     {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            try 
-            {
-                result = handle((AntCommand) command);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(ParameterValidationHandler.class);
-                
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Error validating parameters.",
-                        buildException);
-                }
-            }
-        }
+        validateParameters(parameters);
         
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        boolean result = false;
-
-        if  (command != null) 
-        {
-            validateParameters(command.getAttributeMap());
-        }
-        
-        return result;
+        return false;
     }
 
     /**
@@ -381,38 +345,36 @@ public class ParameterValidationHandler
      * @param parameters the parameter map.
      * @return <code>false</code> if the chain should be stopped because
      * of invalid parameters.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
      */
     public void validateParameters(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        if  (parameters != null) 
-        {
-            validateParameters(
-                (String) parameters.get(JDBC_DRIVER),
-                (String) parameters.get(JDBC_URL),
-                (String) parameters.get(JDBC_USERNAME),
-                (String) parameters.get(JDBC_PASSWORD),
-                (String) parameters.get(JDBC_CATALOG),
-                (String) parameters.get(JDBC_SCHEMA),
-                (String) parameters.get(REPOSITORY),
-                (String) parameters.get(PACKAGE),
-                (Path) parameters.get(CLASSPATH),
-                (File) parameters.get(OUTPUT_DIR),
-                (File) parameters.get(HEADER_FILE),
-                (Boolean) parameters.get(OUTPUT_DIR_SUBFOLDERS),
-                (Boolean) parameters.get(EXTRACT_PROCEDURES),
-                (Boolean) parameters.get(EXTRACT_FUNCTIONS),
-                (String) parameters.get(JNDI_DATASOURCES),
-                (Boolean) parameters.get(GENERATE_MOCK_DAO),
-                (AntTablesElement) parameters.get(TABLES),
-                (AntExternallyManagedFieldsElement)
-                    parameters.get(EXTERNALLY_MANAGED_FIELDS),
-                (String) parameters.get(CUSTOM_SQL_MODEL),
-                (File) parameters.get(SQL_XML_FILE),
-                (String) parameters.get(GRAMMAR_BUNDLE_NAME),
-                parameters);
-        }
+        validateParameters(
+            (String) parameters.get(JDBC_DRIVER),
+            (String) parameters.get(JDBC_URL),
+            (String) parameters.get(JDBC_USERNAME),
+            (String) parameters.get(JDBC_PASSWORD),
+            (String) parameters.get(JDBC_CATALOG),
+            (String) parameters.get(JDBC_SCHEMA),
+            (String) parameters.get(REPOSITORY),
+            (String) parameters.get(PACKAGE),
+            (Path) parameters.get(CLASSPATH),
+            (File) parameters.get(OUTPUT_DIR),
+            (File) parameters.get(HEADER_FILE),
+            (Boolean) parameters.get(OUTPUT_DIR_SUBFOLDERS),
+            (Boolean) parameters.get(EXTRACT_PROCEDURES),
+            (Boolean) parameters.get(EXTRACT_FUNCTIONS),
+            (String) parameters.get(JNDI_DATASOURCES),
+            (Boolean) parameters.get(GENERATE_MOCK_DAO),
+            (AntTablesElement) parameters.get(TABLES),
+            (AntExternallyManagedFieldsElement)
+                parameters.get(EXTERNALLY_MANAGED_FIELDS),
+            (String) parameters.get(CUSTOM_SQL_MODEL),
+            (File) parameters.get(SQL_XML_FILE),
+            (String) parameters.get(GRAMMAR_BUNDLE_NAME),
+            parameters);
     }
 
     /**
@@ -441,7 +403,7 @@ public class ParameterValidationHandler
      * @param grammarBundleName the grammar bundle name.
      * @param parameters the parameter map, to store processed information
      * such as the header contents.
-     * @throws BuildException whenever the required
+     * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
     protected void validateParameters(
@@ -467,63 +429,63 @@ public class ParameterValidationHandler
         final File sqlXmlFile,
         final String grammarBundleName,
         final Map parameters)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         Log t_Log =
             UniqueLogFactory.getLog(ParameterValidationHandler.class);
                 
         if  (driver == null) 
         {
-            throw new BuildException(DRIVER_MISSING);
+            throw new QueryJBuildException(DRIVER_MISSING);
         }
 
         if  (url == null) 
         {
-            throw new BuildException(URL_MISSING);
+            throw new QueryJBuildException(URL_MISSING);
         }
 
         if  (username == null) 
         {
-            throw new BuildException(USERNAME_MISSING);
+            throw new QueryJBuildException(USERNAME_MISSING);
         }
 
         /* Not mandatory.
         if  (password == null)
         {
-            throw new BuildException(PASSWORD_MISSING);
+            throw new QueryJBuildException(PASSWORD_MISSING);
         }
         */
 
         /* Not mandatory.
         if  (catalog == null) 
         {
-            throw new BuildException(CATALOG_MISSING);
+            throw new QueryJBuildException(CATALOG_MISSING);
         }
         */
 
         if  (schema == null) 
         {
-            throw new BuildException(SCHEMA_MISSING);
+            throw new QueryJBuildException(SCHEMA_MISSING);
         }
 
         if  (repository == null) 
         {
-            throw new BuildException(REPOSITORY_MISSING);
+            throw new QueryJBuildException(REPOSITORY_MISSING);
         }
 
         if  (packageName == null) 
         {
-            throw new BuildException(PACKAGE_MISSING);
+            throw new QueryJBuildException(PACKAGE_MISSING);
         }
 
         if  (classpath == null) 
         {
-            throw new BuildException(CLASSPATH_MISSING);
+            throw new QueryJBuildException(CLASSPATH_MISSING);
         }
 
         if  (outputdir == null) 
         {
-            throw new BuildException(OUTPUTDIR_MISSING);
+            throw new QueryJBuildException(OUTPUTDIR_MISSING);
         }
 
         if  (header == null) 
@@ -580,45 +542,45 @@ public class ParameterValidationHandler
             {
                 if  (t_bExceptionReadingHeader)
                 {
-                    throw new BuildException(HEADER_NOT_READABLE);
+                    throw new QueryJBuildException(HEADER_NOT_READABLE);
                 }
             }
         }
         
         if  (!outputdir.isDirectory())
         {
-            throw new BuildException(OUTPUTDIR_NOT_FOLDER);
+            throw new QueryJBuildException(OUTPUTDIR_NOT_FOLDER);
         }
 
         if  (jndiDataSources == null)
         {
-            throw new BuildException(JNDI_DATASOURCES_MISSING);
+            throw new QueryJBuildException(JNDI_DATASOURCES_MISSING);
         }
 
         if  (   (jndiDataSources.indexOf("\"") != -1)
              || (jndiDataSources.indexOf("\n") != -1))
         {
-            throw new BuildException(JNDI_DATASOURCES_INVALID);
+            throw new QueryJBuildException(JNDI_DATASOURCES_INVALID);
         }
 
         if  (   (tables != null)
              && (   (tables.getTables() == null)
                  || (tables.getTables().size() == 0)))
         {
-            throw new BuildException(TABLES_MISSING);
+            throw new QueryJBuildException(TABLES_MISSING);
         }
 
         if  (   (externallyManagedFields != null)
              && (   (externallyManagedFields.getFields() == null)
                  || (externallyManagedFields.getFields().size() == 0)))
         {
-            throw new BuildException(EXTERNALLY_MANAGED_FIELDS_MISSING);
+            throw new QueryJBuildException(EXTERNALLY_MANAGED_FIELDS_MISSING);
         }
 
         /* Not mandatory
         if  (customSqlModel == null)
         {
-            throw new BuildException(CUSTOM_SQL_MODEL_MISSING);
+            throw new QueryJBuildException(CUSTOM_SQL_MODEL_MISSING);
         }
         */
         if  (   (CUSTOM_SQL_MODEL_XML.equals(customSqlModel))
@@ -626,7 +588,7 @@ public class ParameterValidationHandler
                  || (!sqlXmlFile.exists())
                  || (!sqlXmlFile.canRead())))
         {
-            throw new BuildException(SQL_XML_FILE_MISSING);
+            throw new QueryJBuildException(SQL_XML_FILE_MISSING);
         }
 
         // Not mandatory
@@ -638,7 +600,7 @@ public class ParameterValidationHandler
             }
             catch  (final MissingResourceException missingResourceException)
             {
-                throw new BuildException(GRAMMAR_BUNDLE_NOT_FOUND);
+                throw new QueryJBuildException(GRAMMAR_BUNDLE_NOT_FOUND);
             }
         }
     }

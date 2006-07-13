@@ -41,9 +41,9 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -55,13 +55,7 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -77,7 +71,7 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class TestSuiteTemplateBuildHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
@@ -91,27 +85,14 @@ public class TestSuiteTemplateBuildHandler
     public TestSuiteTemplateBuildHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
      * Handles given parameters.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     public boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         return
             handle(
@@ -134,7 +115,7 @@ public class TestSuiteTemplateBuildHandler
      * @param templateFactory the template factory.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition testTemplates != null
      * @precondition projectPackage != null
@@ -149,7 +130,7 @@ public class TestSuiteTemplateBuildHandler
         final boolean subFolders,
         final TestSuiteTemplateFactory templateFactory,
         final StringUtils stringUtils)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         boolean result = false;
 
@@ -160,15 +141,16 @@ public class TestSuiteTemplateBuildHandler
                 header,
                 subFolders);
 
-        if  (testTemplates != null)
-        {
-            Iterator t_itTestTemplates = testTemplates.iterator();
+        Iterator t_itTestTemplates =
+            (testTemplates != null) ? testTemplates.iterator() : null;
 
-            while  (   (t_itTestTemplates != null)
-                    && (t_itTestTemplates.hasNext()))
+        if  (t_itTestTemplates != null)
+        {
+            TestTemplate t_TestTemplate;
+
+            while  (t_itTestTemplates.hasNext())
             {
-                TestTemplate t_TestTemplate =
-                    (TestTemplate) t_itTestTemplates.next();
+                t_TestTemplate = (TestTemplate) t_itTestTemplates.next();
 
                 if  (t_TestTemplate != null)
                 {
@@ -185,11 +167,9 @@ public class TestSuiteTemplateBuildHandler
      * Retrieves the test template collection.
      * @param parameters the parameter map.
      * @return the test templates.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition parameters != null
      */
     protected Collection retrieveTestTemplates(final Map  parameters)
-        throws  BuildException
     {
         return
             (Collection)
@@ -200,13 +180,11 @@ public class TestSuiteTemplateBuildHandler
      * Stores a new test suite template.
      * @param testSuiteTemplate the test suite template.
      * @param parameters the parameter map.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition testSuiteTemplate != null
      * @precondition parameters != null
      */
     protected void storeTestSuiteTemplate(
         final TestSuiteTemplate testSuiteTemplate, final Map parameters)
-      throws  BuildException
     {
         parameters.put(TEST_SUITE_TEMPLATE, testSuiteTemplate);
     }

@@ -41,19 +41,15 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -70,7 +66,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public abstract class BasePerTableTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
@@ -79,72 +75,60 @@ public abstract class BasePerTableTemplateWritingHandler
     public BasePerTableTemplateWritingHandler() {};
 
     /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        return handle(parameters, retrieveDatabaseMetaData(parameters));
+        writeTemplates(parameters, retrieveDatabaseMetaData(parameters));
+
+        return false;
     }
 
     /**
-     * Handles given information.
+     * Writes the templates.
      * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @param metadata the database metadata.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
-     * @precondition metaData != null
+     * @precondition metadata != null
      */
-    protected boolean handle(
-        final Map parameters, final DatabaseMetaData metaData)
-      throws  BuildException
+    protected void writeTemplates(
+        final Map parameters, final DatabaseMetaData metadata)
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         try
         {
-            handle(
-                parameters,
-                metaData.getDatabaseProductName());
+            writeTemplates(
+                parameters, metadata.getDatabaseProductName());
         }
         catch  (final SQLException sqlException)
         {
-            throw new BuildException(sqlException);
+            throw
+                new QueryJBuildException(
+                      "Cannot retrieve database product name, "
+                    + "version or quote string",
+                    sqlException);
         }
-
-        return result;
     }
 
     /**
-     * Handles given information.
+     * Writes the templates.
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      */
-    protected void handle(final Map parameters, final String engineName)
-      throws  BuildException
+    protected void writeTemplates(
+        final Map parameters, final String engineName)
+      throws  QueryJBuildException
     {
-        handle(
+        writeTemplates(
             retrieveTemplates(parameters),
             engineName,
             parameters,
@@ -152,38 +136,50 @@ public abstract class BasePerTableTemplateWritingHandler
     }
             
     /**
-     * Handles given information.
+     * Writes the templates.
      * @param templates the templates.
      * @param engineName the engine name.
      * @param parameters the parameters.
      * @param templateGenerator the template generator.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition templates != null
      * @precondition parameters != null
      * @precondition templateGenerator != null
      */
-    protected void handle(
+    protected void writeTemplates(
         final BasePerTableTemplate[] templates,
         final String engineName,
         final Map parameters,
         final BasePerTableTemplateGenerator templateGenerator)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         try 
         {
-            for  (int t_iIndex = 0; t_iIndex < templates.length; t_iIndex++)
+            int t_iCount =
+                (templates != null) ? templates.length : 0;
+
+            BasePerTableTemplate t_Template;
+
+            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                templateGenerator.write(
-                    templates[t_iIndex],
-                    retrieveOutputDir(
-                        templates[t_iIndex].getTableName(),
-                        engineName,
-                        parameters));
+                t_Template = templates[t_iIndex];
+
+                if  (t_Template != null)
+                {
+                    templateGenerator.write(
+                        t_Template,
+                        retrieveOutputDir(
+                            t_Template.getTableName(),
+                            engineName,
+                            parameters));
+                }
             }
         }
         catch  (final IOException ioException)
         {
-            throw new BuildException(ioException);
+            throw
+                new QueryJBuildException(
+                    "Cannot write the templates", ioException);
         }
     }
 
@@ -197,11 +193,11 @@ public abstract class BasePerTableTemplateWritingHandler
      * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
+     * @throws QueryJBuildException if the template retrieval process if faulty.
      */
     protected abstract BasePerTableTemplate[] retrieveTemplates(
         final Map parameters)
-      throws  BuildException;
+      throws  QueryJBuildException;
 
     /**
      * Retrieves the output dir from the attribute map.
@@ -209,12 +205,12 @@ public abstract class BasePerTableTemplateWritingHandler
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(
         final String tableName, final String engineName, final Map parameters)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         return
             retrieveOutputDir(
@@ -238,7 +234,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      * @precondition engineName != null
      * @precondition parameters != null
      * @precondition packageUtils != null
@@ -251,5 +247,5 @@ public abstract class BasePerTableTemplateWritingHandler
         final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)
-      throws  BuildException;
+      throws  QueryJBuildException;
 }

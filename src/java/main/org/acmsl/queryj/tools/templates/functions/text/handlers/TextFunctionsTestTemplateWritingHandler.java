@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.templates.functions.text.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.text
@@ -52,11 +52,6 @@ import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
@@ -71,42 +66,30 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class TextFunctionsTestTemplateWritingHandler
-    extends    AbstractAntCommandHandler
+    extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * Creates a TextFunctionsTestTemplateWritingHandler.
+     * Creates a <code>TextFunctionsTestTemplateWritingHandler</code> instance.
      */
     public TextFunctionsTestTemplateWritingHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
 
     /**
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
+        throws  QueryJBuildException
     {
-        return
-            handle(
-                retrieveTextFunctionsTestTemplate(parameters),
-                retrieveOutputDir(parameters),
-                TextFunctionsTestTemplateGenerator.getInstance());
+        writeTemplate(
+            retrieveTextFunctionsTestTemplate(parameters),
+            retrieveOutputDir(parameters),
+            TextFunctionsTestTemplateGenerator.getInstance());
+
+        return false;
     }
 
     /**
@@ -115,19 +98,16 @@ public class TextFunctionsTestTemplateWritingHandler
      * @param outputDir the output dir.
      * @param generator the <code>TextFunctionsTestTemplateGenerator</code>
      * instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition outputDir != null
      * @precondition generator != null
      */
-    protected boolean handle(
+    protected void writeTemplate(
         final TextFunctionsTestTemplate template,
         final File outputDir,
         final TextFunctionsTestTemplateGenerator generator)
-      throws  BuildException
+      throws  QueryJBuildException
     {
-        boolean result = false;
-
         if  (template != null)
         {
             try 
@@ -136,23 +116,22 @@ public class TextFunctionsTestTemplateWritingHandler
             }
             catch  (final IOException ioException)
             {
-                throw new BuildException(ioException);
+                throw
+                    new QueryJBuildException(
+                        "Cannot write the TextFunctionsTest template",
+                        ioException);
             }
         }
-        
-        return result;
     }
 
     /**
      * Retrieves the text functions test template from the attribute map.
      * @param parameters the parameter map.
      * @return the test template.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition parameters != null
      */
     protected TextFunctionsTestTemplate retrieveTextFunctionsTestTemplate(
         final Map parameters)
-      throws  BuildException
     {
         return
             (TextFunctionsTestTemplate)
@@ -164,11 +143,9 @@ public class TextFunctionsTestTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
     protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
     {
         return
             retrieveOutputDir(parameters, PackageUtils.getInstance());
@@ -179,13 +156,11 @@ public class TextFunctionsTestTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
         final Map parameters, final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveTestFunctionsFolder(

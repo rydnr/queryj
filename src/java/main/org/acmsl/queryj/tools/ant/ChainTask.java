@@ -41,8 +41,10 @@ package org.acmsl.queryj.tools.ant;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntCommand;
-import org.acmsl.queryj.tools.handlers.AntCommandHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
+import org.acmsl.queryj.tools.logging.QueryJAntLog;
 
 /*
  * Importing some ACM-SL classes.
@@ -125,15 +127,25 @@ public abstract class ChainTask
 
     /**
      * Requests the chained logic to be performed.
-     * @throws org.apache.tools.ant.BuildException whenever the required
+     * @throws BuildException whenever the required
      * parameters are not present or valid.
      */
     public void execute()
         throws  BuildException
     {
-        process(
-            buildChain(getChain()),
-            buildCommand(new AntCommand(getProject())));
+        try
+        {
+            process(
+                buildChain(getChain()),
+                buildCommand(
+                    new QueryJCommand(new QueryJAntLog(getProject()))));
+        }
+        catch  (final QueryJBuildException buildException)
+        {
+            throw
+                new BuildException(
+                    buildException.getMessage(), buildException);
+        }
     }
 
     /**
@@ -141,14 +153,14 @@ public abstract class ChainTask
      * @param chain the chain to be configured.
      * @return the updated chain.
      */
-    protected abstract Chain buildChain(Chain chain);
+    protected abstract Chain buildChain(final Chain chain);
 
     /**
      * Builds the command.
      * @param command the command to be initialized.
      * @return the initialized command.
      */
-    protected abstract AntCommand buildCommand(final AntCommand command);
+    protected abstract QueryJCommand buildCommand(final QueryJCommand command);
 
     /**
      * Retrieves the link of the chain just after the one given command
@@ -158,11 +170,10 @@ public abstract class ChainTask
      * @return the next hanlder in the chain.
      * @precondition chain != null
      */
-    public AntCommandHandler getNextChainLink(
-        final Chain chain,
-        final AntCommandHandler commandHandler)
+    public QueryJCommandHandler getNextChainLink(
+        final Chain chain, final QueryJCommandHandler commandHandler)
     {
-        AntCommandHandler result = null;
+        QueryJCommandHandler result = null;
 
         if  (   (chain != null)
              && (!chain.isEmpty()))
@@ -170,17 +181,17 @@ public abstract class ChainTask
             if  (   (commandHandler == null)
                  || (!chain.contains(commandHandler)))
             {
-                result = (AntCommandHandler) chain.get(0);
+                result = (QueryJCommandHandler) chain.get(0);
             }
             else
             {
-                int currentIndex = chain.indexOf(commandHandler);
+                int t_iCurrentIndex = chain.indexOf(commandHandler);
 
-                if  (   (currentIndex >= 0)
-                     && (currentIndex < chain.size() - 1))
+                if  (   (t_iCurrentIndex >= 0)
+                     && (t_iCurrentIndex < chain.size() - 1))
                 {
                     result =
-                        (AntCommandHandler) chain.get(currentIndex + 1);
+                        (QueryJCommandHandler) chain.get(t_iCurrentIndex + 1);
                 }
             }
         }
@@ -192,32 +203,32 @@ public abstract class ChainTask
      * @param chain the concrete chain.
      * @param command the command that represents which actions should be done.
      * @return <code>true</code> if the command is processed by the chain.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean process(
-        final Chain chain, final AntCommand command)
-      throws  BuildException
+        final Chain chain, final QueryJCommand command)
+      throws QueryJBuildException
     {
         boolean result = false;
 
         try 
         {
-            AntCommandHandler currentCommandHandler = null;
+            QueryJCommandHandler t_CurrentCommandHandler = null;
 
             do
             {
-                currentCommandHandler =
-                    getNextChainLink(chain, currentCommandHandler);
+                t_CurrentCommandHandler =
+                    getNextChainLink(chain, t_CurrentCommandHandler);
 
-                if  (currentCommandHandler != null)
+                if  (t_CurrentCommandHandler != null)
                 {
-                    result = currentCommandHandler.handle(command);
+                    result = t_CurrentCommandHandler.handle(command);
                 }
             }
             while  (   (!result)
-                    && (currentCommandHandler != null));
+                    && (t_CurrentCommandHandler != null));
         }
-        catch  (BuildException buildException)
+        catch  (QueryJBuildException buildException)
         {
             cleanUpOnError(buildException, command);
 
@@ -233,5 +244,6 @@ public abstract class ChainTask
      * @param command the command.
      */
     protected abstract void cleanUpOnError(
-        final BuildException buildException, final AntCommand command);
+        final QueryJBuildException buildException,
+        final QueryJCommand command);
 }

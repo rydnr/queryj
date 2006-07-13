@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -54,7 +55,7 @@ public interface MockDAOTestTemplateDefaults
           "/*\n"
         + "                        QueryJ\n"
         + "\n"
-        + "    Copyright (C) 2002-2005  Jose San Leandro Armendariz\n"
+        + "    Copyright (C) 2002-2006  Jose San Leandro Armendariz\n"
         + "                        chous@acm-sl.org\n"
         + "                        chousz@yahoo.com\n"
         + "\n"

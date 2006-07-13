@@ -41,8 +41,8 @@ package org.acmsl.queryj.tools.ant;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.ant.AntCommand;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
@@ -1250,10 +1250,18 @@ public class QueryJTask
      * @param command the command.
      */
     protected void cleanUpOnError(
-        BuildException buildException, AntCommand command)
+        final QueryJBuildException buildException, final QueryJCommand command)
     {
         log("Performing clean up");
-        new JdbcConnectionClosingHandler().handle(command);
+
+        try
+        {
+            new JdbcConnectionClosingHandler().handle(command);
+        }
+        catch  (final QueryJBuildException closingException)
+        {
+            log("Error closing the connection");
+        }
     }
 
     /**
@@ -1261,9 +1269,9 @@ public class QueryJTask
      * @param command the command to be initialized.
      * @return the initialized command.
      */
-    protected AntCommand buildCommand(final AntCommand command)
+    protected QueryJCommand buildCommand(final QueryJCommand command)
     {
-        AntCommand result = command;
+        QueryJCommand result = command;
 
         if  (result != null)
         {
@@ -1488,11 +1496,13 @@ public class QueryJTask
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setDynamicAttribute(String name, String value)
+    public void setDynamicAttribute(
+        final String name, final String value)
     {
         throw
             new BuildException(
-                "No dynamic attributes are supported (" + name + "=" + value + ")");
+                  "No dynamic attributes are supported ("
+                + name + "=" + value + ")");
     }
 
     /**
@@ -1501,7 +1511,7 @@ public class QueryJTask
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
-    public Object createDynamicElement(String name)
+    public Object createDynamicElement(final String name)
     {
         Object result = null;
 
