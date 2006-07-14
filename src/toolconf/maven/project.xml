@@ -380,7 +380,6 @@
       </properties>
     </dependency>
 
-
     <dependency>
       <groupId>spring</groupId>
       <artifactId>spring-core</artifactId>
@@ -392,6 +391,19 @@
         <required.to.test>true</required.to.test>
         <required.to.build>true</required.to.build>
         <injected.by>spring/spring-dao</injected.by>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-cli</groupId>
+      <artifactId>commons-cli</artifactId>
+      <version>1.0</version>
+      <url>http://jakarta.apache.org/commons/cli</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
       </properties>
     </dependency>
 
