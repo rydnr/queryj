@@ -1,0 +1,105 @@
+##;-*- mode: props -*-
+#                        QueryJ
+#
+#    Copyright (C) 2002-2006  Jose San Leandro Armendáriz
+#                             chous@acm-sl.org
+#
+#    This library is free software; you can redistribute it and/or
+#    modify it under the terms of the GNU General Public
+#    License as published by the Free Software Foundation; either
+#    version 2 of the License, or any later version.
+#
+#    This library is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public
+#    License along with this library; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#
+#    Thanks to ACM S.L. for distributing this library under the GPL license.
+#    Contact info: jose.sanleandro@acm-sl.com
+#    Postal Address: c/Playa de Lagoa, 1
+#                    Urb. Valdecabañas
+#                    Boadilla del monte
+#                    28660 Madrid
+#                    Spain
+#
+###############################################################################
+#                                                                             
+# Filename: $ RCSfile: build.properties,v $
+#
+# Author: Jose San Leandro Armendáriz
+#
+# Description: Defines sample QueryJ settings.
+#
+
+# Defines the JDBC driver to use for executing QueryJ
+queryj.driver=oracle.jdbc.driver.OracleDriver
+
+# Defines the JDBC url to use for executing QueryJ
+queryj.url=jdbc:oracle:thin:@XXX.XXX.XXX.XXX:YYYY:ZZZ
+
+# Defines the JDBC username to use for executing QueryJ
+queryj.username=user
+
+# Defines the JDBC password to use for executing QueryJ
+queryj.password=secret
+
+# Defines the database catalog to use for executing QueryJ.
+# Blank is usually fine.
+queryj.catalog=
+
+# Defines the database schema to use for executing QueryJ.
+queryj.schema=schema
+
+# Defines the table repository name.
+queryj.repository=myapp
+
+# The base package of the generated classes.
+queryj.package=com.mycompany.myapp
+
+# The output folder.
+queryj.outputdir=
+
+# The optional copyright header (if not specified, the GPL is ued.
+queryj.header=header.txt
+
+# Whether to generate a main/ and test/ subfolders under ${queryj.outputdir}
+# or use unittests.com.mycompany.myapp for unit tests.
+queryj.outputDirSubfolders=true
+
+# Whether to extract the table information.
+queryj.extractTables=true
+
+# Whether to extract the procedures.
+queryj.extractProcedures=false
+
+# Whether to extract the vendor's SQL functions.
+queryj.extractFunctions=false
+
+# The location of the datasource in JNDI.
+queryj.jndiDataSource=java:comp/env/jdbc/myds
+
+# Whether to generate Mock implementation for the DAOs.
+queryj.generateMockImplementation=false
+
+# Whether to generate XML implementation for the DAOs.
+queryj.generateXmlImplementation=false
+
+# The format of the custom SQL model.
+queryj.customSqlModel=xml
+
+# The XML file defining the custom SQL.
+queryj.sqlXml=sql.xml
+
+# The grammar defining irregular singular and plural forms for the table names.
+queryj.grammarBundle=table-names.properties
+
+# Whether to allow empty repository-scoped DAO or not.
+queryj.allowEmptyRepositoryDAO=false
+
+# Whether to implement org.acmsl.commons.patterns marker interfaces.
+queryj.implementMarkerInterfaces=true

@@ -528,6 +528,6 @@ public class CachingPropertyDecorator
             setCachedDate(result);
         }
 
-        return result;
+        return result.booleanValue();
     }
 }

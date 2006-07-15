@@ -161,12 +161,13 @@ public class QueryJCLIHelper
      * Validates the configuration properties specified as command-line
      * option.
      * @param configurationFile the file to validate.
-     * @return <code>true</code> if the file exists and is valid.
+     * @return the <code>Properties</code> instance with the configuration
+     * settings.
      */
-    public boolean validateConfigurationOption(
+    public Properties readConfigurationSettings(
         final String configurationFile)
     {
-        boolean result = false;
+        Properties result = null;
 
         if  (configurationFile != null)
         {
@@ -180,15 +181,15 @@ public class QueryJCLIHelper
                         && (t_File.canRead()))
                 {
                     stream = new FileInputStream(t_File);
-                    result = validateConfigurationOption(stream);
+                    result = readConfigurationSettings(stream, false);
                 }
 
-                if  (!result)
+                if  (result == null)
                 {
                     stream = getClass().getResourceAsStream(configurationFile);
-                    result = validateConfigurationOption(stream);
+                    result = readConfigurationSettings(stream, true);
 
-                    if  (result)
+                    if  (result != null)
                     {
                         Log t_Log =
                             UniqueLogFactory.getLog(QueryJCLIHelper.class);
@@ -197,7 +198,7 @@ public class QueryJCLIHelper
                         {
                             t_Log.info(
                                   "Configuration properties have been read "
-                                + " from classpath");
+                                + "from classpath");
                         }
                     }
                 }
@@ -243,53 +244,40 @@ public class QueryJCLIHelper
     }
 
     /**
-     * Validates the configuration properties specified as command-line
+     * Reads the configuration properties specified as a command-line
      * option.
      * @param stream the input stream of the properties file.
-     * @return <code>true</code> if the content is complete.
+     * @param log whether to log errors or not.
+     * @return the <code>Properties</code> instance with the configuration
+     * settings.
      * @precondition stream != null
      */
-    public boolean validateConfigurationOption(
-        final InputStream stream)
+    public Properties readConfigurationSettings(
+        final InputStream stream, final boolean log)
     {
-        boolean result = false;
-
-        Properties t_Properties = new Properties();
+        Properties result = new Properties();
 
         try
         {
-            t_Properties.load(stream);
-
-            result = validateConfigurationProperties(t_Properties);
+            result.load(stream);
         }
         catch  (final IOException ioException)
         {
-            Log t_Log =
-                UniqueLogFactory.getLog(QueryJCLIHelper.class);
+            result = null;
 
-            if  (t_Log != null)
+            if  (log)
             {
-                t_Log.error(
-                    "Cannot read the configuration properties file.",
-                    ioException);
+                Log t_Log =
+                    UniqueLogFactory.getLog(QueryJCLIHelper.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot read the configuration properties file.",
+                        ioException);
+                }
             }
         }
-
-        return result;
-    }
-
-    /**
-     * Validates the contents of the configuration properties.
-     * @param properties such properties.
-     * @return <code>true</code> if the contents are complete.
-     * @precondition properties != null
-     */
-    public boolean validateConfigurationProperties(
-        final Properties properties)
-    {
-        boolean result = false;
-
-        // TODO
 
         return result;
     }

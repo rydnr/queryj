@@ -41,8 +41,6 @@ package org.acmsl.queryj.tools.ant;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
@@ -55,6 +53,9 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.QueryJSettings;
 import org.acmsl.queryj.tools.templates.dao.DAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
@@ -80,12 +81,17 @@ import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectImplTemp
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Chain;
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Properties;
 
 /*
  * Importing some Ant classes.
@@ -96,6 +102,11 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
+
 /**
  * Generates QueryJ classes using Ant.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -103,8 +114,14 @@ import org.apache.tools.ant.types.Reference;
  */
 public class QueryJTask
     extends     ChainTask
-    implements  DynamicConfigurator
+    implements  QueryJSettings,
+                DynamicConfigurator
 {
+    /**
+     * The properties file (to include all other settings).
+     */
+    private File m__Settings;
+
     /**
      * The driver.
      */
@@ -271,9 +288,36 @@ public class QueryJTask
     private AntExternallyManagedFieldsElement m__ExternallyManagedFields;
 
     /**
-     * Creates a QueryJTask.
+     * Creates a <code>QueryJTask</code> instance.
      */
     public QueryJTask() {};
+
+    /**
+     * Specifies the properties file.
+     * @param file such file.
+     */
+    protected final void immutableSetSettings(final File file)
+    {
+        m__Settings = file;
+    }
+
+    /**
+     * Specifies the properties file.
+     * @param file such file.
+     */
+    public void setSettings(final File file)
+    {
+        immutableSetSettings(file);
+    }
+
+    /**
+     * Retrieves the properties file.
+     * @return such file.
+     */
+    public File getSettings()
+    {
+        return m__Settings;
+    }
 
     /**
      * Specifies the driver.
@@ -300,6 +344,25 @@ public class QueryJTask
     public String getDriver()
     {
         return m__strDriver;
+    }
+
+    /**
+     * Retrieves the driver, using given properties if necessary.
+     * @param properties the properties.
+     * @return the JDBC driver.
+     */
+    protected String getDriver(final Properties properties)
+    {
+        String result = getDriver();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(JDBC_DRIVER);
+            setDriver(result);
+        }
+
+        return result;
     }
 
     /**
@@ -330,6 +393,25 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the url, using given properties if necessary.
+     * @param properties the properties.
+     * @return the JDBC url.
+     */
+    protected String getUrl(final Properties properties)
+    {
+        String result = getUrl();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(JDBC_URL);
+            setUrl(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Specifies the username.
      * @param username the new username.
      */
@@ -354,6 +436,25 @@ public class QueryJTask
     public String getUsername()
     {
         return m__strUsername;
+    }
+
+    /**
+     * Retrieves the username, using given properties if necessary.
+     * @param properties the properties.
+     * @return the JDBC username.
+     */
+    protected String getUsername(final Properties properties)
+    {
+        String result = getUsername();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(JDBC_USERNAME);
+            setUsername(result);
+        }
+
+        return result;
     }
 
     /**
@@ -384,6 +485,25 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the password, using given properties if necessary.
+     * @param properties the properties.
+     * @return the JDBC password.
+     */
+    protected String getPassword(final Properties properties)
+    {
+        String result = getPassword();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(JDBC_PASSWORD);
+            setPassword(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Specifies the catalog.
      * @param catalog the new catalog.
      */
@@ -408,6 +528,25 @@ public class QueryJTask
     public String getCatalog()
     {
         return m__strCatalog;
+    }
+
+    /**
+     * Retrieves the catalog, using given properties if necessary.
+     * @param properties the properties.
+     * @return the JDBC catalog.
+     */
+    protected String getCatalog(final Properties properties)
+    {
+        String result = getCatalog();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(JDBC_CATALOG);
+            setCatalog(result);
+        }
+
+        return result;
     }
 
     /**
@@ -438,6 +577,25 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the schema, using given properties if necessary.
+     * @param properties the properties.
+     * @return the JDBC schema.
+     */
+    protected String getSchema(final Properties properties)
+    {
+        String result = getSchema();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(JDBC_SCHEMA);
+            setSchema(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Specifies the repository.
      * @param repository the new repository.
      */
@@ -465,6 +623,25 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the repository, using given properties if necessary.
+     * @param properties the properties.
+     * @return the repository.
+     */
+    protected String getRepository(final Properties properties)
+    {
+        String result = getRepository();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(REPOSITORY);
+            setRepository(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Specifies the package.
      * @param packageName the new package.
      */
@@ -489,6 +666,25 @@ public class QueryJTask
     public String getPackage()
     {
         return m__strPackage;
+    }
+
+    /**
+     * Retrieves the package, using given properties if necessary.
+     * @param properties the properties.
+     * @return the package.
+     */
+    protected String getPackage(final Properties properties)
+    {
+        String result = getPackage();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(PACKAGE);
+            setPackage(result);
+        }
+
+        return result;
     }
 
     /**
@@ -577,6 +773,29 @@ public class QueryJTask
         return m__Outputdir;
     }
 
+    /**
+     * Retrieves the output folder, using given properties if necessary.
+     * @param properties the properties.
+     * @return the output folder.
+     */
+    protected File getOutputdir(final Properties properties)
+    {
+        File result = getOutputdir();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            String t_strOutputdir = properties.getProperty(OUTPUT_FOLDER);
+
+            if  (t_strOutputdir != null)
+            {
+                result = new File(t_strOutputdir);
+                setOutputdir(result);
+            }
+        }
+
+        return result;
+    }
 
     /**
      * Specifies the header.
@@ -606,6 +825,30 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the header file, using given properties if necessary.
+     * @param properties the properties.
+     * @return the header file.
+     */
+    protected File getHeaderfile(final Properties properties)
+    {
+        File result = getHeaderfile();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            String t_strHeader = properties.getProperty(HEADER_FILE);
+
+            if  (t_strHeader != null)
+            {
+                result = new File(t_strHeader);
+                setHeaderfile(result);
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Specifies whether to use subfolders.
      * @param outputDirSubFolders such setting.
      */
@@ -623,10 +866,7 @@ public class QueryJTask
     {
         immutableSetOutputdirsubfolders(outputDirSubFolders);
 
-        setOutputdirsubfoldersFlag(
-            (   (outputDirSubFolders == null)
-             || (outputDirSubFolders.trim().toLowerCase().equals("yes")
-             || (outputDirSubFolders.trim().toLowerCase().equals("true")))));
+        setOutputdirsubfoldersFlag(toBoolean(outputDirSubFolders));
     }
 
     /**
@@ -657,6 +897,26 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the output dir subfolders flag, using given properties if
+     * necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getOutputdirsubfoldersFlag(final Properties properties)
+    {
+        String t_strResult = getOutputdirsubfolders();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult = properties.getProperty(OUTPUT_DIR_SUBFOLDERS);
+            setOutputdirsubfolders(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+    /**
      * Specifies whether to extract the tables.
      * @param extractTables the procedure extraction setting.
      */
@@ -673,10 +933,7 @@ public class QueryJTask
     {
         immutableSetExtractTables(extractTables);
 
-        setExtractTablesFlag(
-            (   (extractTables == null)
-             || (extractTables.trim().toLowerCase().equals("yes")
-             || (extractTables.trim().toLowerCase().equals("true")))));
+        setExtractTablesFlag(toBoolean(extractTables));
     }
 
     /**
@@ -707,6 +964,25 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the extract-tables flag, using given properties if necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getExtractTablesFlag(final Properties properties)
+    {
+        String t_strResult = getExtractTables();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult = properties.getProperty(EXTRACT_TABLES);
+            setExtractTables(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+    /**
      * Specifies whether to extract the procedures.
      * @param extractProcedures the procedure extraction setting.
      */
@@ -724,10 +1000,7 @@ public class QueryJTask
     {
         immutableSetExtractProcedures(extractProcedures);
 
-        setExtractProceduresFlag(
-            (   (extractProcedures == null)
-             || (   (extractProcedures.trim().toLowerCase().equals("yes"))
-                 || (extractProcedures.trim().toLowerCase().equals("true")))));
+        setExtractProceduresFlag(toBoolean(extractProcedures));
     }
 
     /**
@@ -758,10 +1031,31 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the extract-procedures flag, using given properties
+     * if necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getExtractProceduresFlag(final Properties properties)
+    {
+        String t_strResult = getExtractProcedures();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult = properties.getProperty(EXTRACT_PROCEDURES);
+            setExtractProcedures(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+    /**
      * Specifies whether to extract the functions.
      * @param extractFunctions the function extraction setting.
      */
-    protected final void immutableSetExtractFunctions(final String extractFunctions)
+    protected final void immutableSetExtractFunctions(
+        final String extractFunctions)
     {
         m__strExtractFunctions = extractFunctions;
     }
@@ -774,10 +1068,7 @@ public class QueryJTask
     {
         immutableSetExtractFunctions(extractFunctions);
 
-        setExtractFunctionsFlag(
-            (   (extractFunctions == null)
-             || (   (extractFunctions.trim().toLowerCase().equals("yes"))
-                 || (extractFunctions.trim().toLowerCase().equals("true")))));
+        setExtractFunctionsFlag(toBoolean(extractFunctions));
     }
 
     /**
@@ -808,6 +1099,26 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the extract-functions flag, using given properties if
+     * necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getExtractFunctionsFlag(final Properties properties)
+    {
+        String t_strResult = getExtractFunctions();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult = properties.getProperty(EXTRACT_FUNCTIONS);
+            setExtractFunctions(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+    /**
      * Specifices the JNDI location for the data sources.
      * @param jndiLocation the JNDI location.
      */
@@ -835,6 +1146,25 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the JNDI path, using given properties if necessary.
+     * @param properties the properties.
+     * @return the JNDI location of the DataSource..
+     */
+    protected String getJndiDataSource(final Properties properties)
+    {
+        String result = getJndiDataSource();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(JNDI_DATASOURCE);
+            setJndiDataSource(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Specifies whether to generate Mock DAO implementations.
      * @param generate such setting.
      */
@@ -852,10 +1182,7 @@ public class QueryJTask
     {
         immutableSetGenerateMockDAOImplementation(generate);
 
-        setGenerateMockDAOImplementationFlag(
-            (   (generate == null)
-             || (   (generate.trim().toLowerCase().equals("yes"))
-                 || (generate.trim().toLowerCase().equals("true")))));
+        setGenerateMockDAOImplementationFlag(toBoolean(generate));
     }
 
     /**
@@ -886,6 +1213,28 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the generate-mock-dao-implementation flag, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getGenerateMockDAOImplementationFlag(
+        final Properties properties)
+    {
+        String t_strResult = getGenerateMockDAOImplementation();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult =
+                properties.getProperty(GENERATE_MOCK_DAO_IMPLEMENTATION);
+            setGenerateMockDAOImplementation(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+    /**
      * Specifies whether to generate XML DAO implementations.
      * @param generate such setting.
      */
@@ -903,10 +1252,7 @@ public class QueryJTask
     {
         immutableSetGenerateXMLDAOImplementation(generate);
 
-        setGenerateXMLDAOImplementationFlag(
-            (   (generate == null)
-             || (   (generate.trim().toLowerCase().equals("yes"))
-                 || (generate.trim().toLowerCase().equals("true")))));
+        setGenerateXMLDAOImplementationFlag(toBoolean(generate));
     }
 
     /**
@@ -937,7 +1283,29 @@ public class QueryJTask
     }
 
     /**
-     * Specifies whether to allow empty DAO repository.
+     * Retrieves the generate-xml-dao-implementation flag, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getGenerateXMLDAOImplementationFlag(
+        final Properties properties)
+    {
+        String t_strResult = getGenerateXMLDAOImplementation();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult =
+                properties.getProperty(GENERATE_XML_DAO_IMPLEMENTATION);
+            setGenerateXMLDAOImplementation(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+    /**
+     * Specifies whether to allow empty repository DAO.
      * @param allow such setting.
      */
     protected final void immutableSetAllowEmptyRepositoryDAO(
@@ -947,21 +1315,18 @@ public class QueryJTask
     }
 
     /**
-     * Specifies whether to allow empty DAO repository.
+     * Specifies whether to allow empty repository DAO.
      * @param allow such setting.
      */
     public void setAllowEmptyRepositoryDAO(final String allow)
     {
         immutableSetAllowEmptyRepositoryDAO(allow);
 
-        setAllowEmptyRepositoryDAOFlag(
-            (   (allow == null)
-             || (   (allow.trim().toLowerCase().equals("yes"))
-                 || (allow.trim().toLowerCase().equals("true")))));
+        setAllowEmptyRepositoryDAOFlag(toBoolean(allow));
     }
 
     /**
-     * Retrieves whether to allow empty DAO repository.
+     * Retrieves whether to allow empty repository DAO.
      * @return such setting.
      */
     public String getAllowEmptyRepositoryDAO()
@@ -970,7 +1335,7 @@ public class QueryJTask
     }
 
     /**
-     * Specifies the "allow-empty-dao-repository" flag.
+     * Specifies the "allow-empty-repository-dao" flag.
      * @param flag such flag.
      */
     protected void setAllowEmptyRepositoryDAOFlag(final boolean flag)
@@ -979,12 +1344,33 @@ public class QueryJTask
     }
 
     /**
-     * Retrieves the "allow-empty-dao-repository" flag.
+     * Retrieves the "allow-empty-repository-dao" flag.
      * @return such flag.
      */
     protected boolean getAllowEmptyRepositoryDAOFlag()
     {
         return m__bAllowEmptyRepositoryDAO;
+    }
+
+    /**
+     * Retrieves the allow-empty-repository-dao flag, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getAllowEmptyRepositoryDAOFlag(
+        final Properties properties)
+    {
+        String t_strResult = getAllowEmptyRepositoryDAO();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult = properties.getProperty(ALLOW_EMPTY_REPOSITORY_DAO);
+            setAllowEmptyRepositoryDAO(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
     }
 
     /**
@@ -999,16 +1385,13 @@ public class QueryJTask
 
     /**
      * Specifies whether to implement marker interfaces.
-     * @param allow such setting.
+     * @param implement such setting.
      */
-    public void setImplementMarkerInterfaces(final String allow)
+    public void setImplementMarkerInterfaces(final String implement)
     {
-        immutableSetImplementMarkerInterfaces(allow);
+        immutableSetImplementMarkerInterfaces(implement);
 
-        setImplementMarkerInterfacesFlag(
-            (   (allow == null)
-             || (   (allow.trim().toLowerCase().equals("yes"))
-                 || (allow.trim().toLowerCase().equals("true")))));
+        setImplementMarkerInterfacesFlag(toBoolean(implement));
     }
 
     /**
@@ -1036,6 +1419,27 @@ public class QueryJTask
     protected boolean getImplementMarkerInterfacesFlag()
     {
         return m__bImplementMarkerInterfaces;
+    }
+
+    /**
+     * Retrieves the implement-marker-interfaces flag, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getImplementMarkerInterfacesFlag(
+        final Properties properties)
+    {
+        String t_strResult = getImplementMarkerInterfaces();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult = properties.getProperty(IMPLEMENT_MARKER_INTERFACES);
+            setImplementMarkerInterfaces(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
     }
 
     /**
@@ -1104,6 +1508,26 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the custom-sql model, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such model.
+     */
+    protected String getCustomSqlModel(final Properties properties)
+    {
+        String result = getCustomSqlModel();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(CUSTOM_SQL_MODEL);
+            setCustomSqlModel(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Specifies the sql.xml file.
      * @param file the new file.
      */
@@ -1131,8 +1555,33 @@ public class QueryJTask
     }
 
     /**
-     * Specifies the grammarbundle.
-     * @param grammarbundle the new grammarbundle.
+     * Retrieves the sql.xml file, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such information.
+     */
+    protected File getSqlXmlFile(final Properties properties)
+    {
+        File result = getSqlXmlFile();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            String t_strSqlXml = properties.getProperty(SQL_XML_FILE);
+
+            if  (t_strSqlXml != null)
+            {
+                result = new File(t_strSqlXml);
+                setSqlXmlFile(result);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the grammar bundle.
+     * @param grammarBundle the new grammar bundle.
      */
     protected final void immutableSetGrammarbundle(
         final String grammarBundle)
@@ -1141,8 +1590,8 @@ public class QueryJTask
     }
 
     /**
-     * Specifies the grammarbundle.
-     * @param grammarbundle the new grammarbundle.
+     * Specifies the grammar bundle.
+     * @param grammarBundle the new grammar bundle.
      */
     public void setGrammarbundle(final String grammarBundle)
     {
@@ -1150,12 +1599,32 @@ public class QueryJTask
     }
 
     /**
-     * Retrieves the grammarbundle.
+     * Retrieves the grammar bundle.
      * @return such information.
      */
     public String getGrammarbundle()
     {
         return m__strGrammarBundleName;
+    }
+
+    /**
+     * Retrieves the grammar bundle, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such information.
+     */
+    protected String getGrammarbundle(final Properties properties)
+    {
+        String result = getGrammarbundle();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(GRAMMAR_BUNDLE);
+            setGrammarbundle(result);
+        }
+
+        return result;
     }
 
     /**
@@ -1268,227 +1737,292 @@ public class QueryJTask
      * Builds the command.
      * @param command the command to be initialized.
      * @return the initialized command.
+     * @precondition command != null
      */
     protected QueryJCommand buildCommand(final QueryJCommand command)
+    {
+        return buildCommand(command, readSettings(getSettings()));
+    }
+
+    /**
+     * Builds the command.
+     * @param command the command to be initialized.
+     * @param settings the properties file.
+     * @return the initialized command.
+     * @precondition command != null
+     */
+    protected QueryJCommand buildCommand(
+        final QueryJCommand command, final Properties settings)
     {
         QueryJCommand result = command;
 
         if  (result != null)
         {
-            Map t_mAttributes = result.getAttributeMap();
-
-            String t_strDriver     = getDriver();
-            String t_strUrl        = getUrl();
-            String t_strUsername   = getUsername();
-            String t_strPassword   = getPassword();
-            String t_strCatalog    = getCatalog();
-            String t_strSchema     = getSchema();
-            String t_strRepository = getRepository();
-            String t_strPackage    = getPackage();
-            Path   t_Classpath     = getClasspath();
-            File   t_Outputdir     = getOutputdir();
-            File   t_Header = getHeaderfile();
-
-            boolean t_bOutputdirsubfolders = getOutputdirsubfoldersFlag();
-            boolean t_bExtractTables = getExtractTablesFlag();
-            boolean t_bExtractProcedures = getExtractProceduresFlag();
-            boolean t_bExtractFunctions = getExtractFunctionsFlag();
-            String t_strJNDIDataSources = getJndiDataSource();
-
-            boolean t_bGenerateMockDAOImplementation =
-                getGenerateMockDAOImplementationFlag();
-
-            boolean t_bGenerateXmlDAOImplementation =
-                getGenerateXMLDAOImplementationFlag();
-
-            boolean t_bAllowEmptyRepositoryDAO =
-                getAllowEmptyRepositoryDAOFlag();
-
-            boolean t_bImplementMarkerInterfaces =
-                getImplementMarkerInterfacesFlag();
-
-            String t_strCustomSqlModel = getCustomSqlModel();
-            File t_SqlXmlFile = getSqlXmlFile();
-
-            String t_strGrammarBundle = getGrammarbundle();
-
-            AntTablesElement t_Tables = getTables();
-
-            AntExternallyManagedFieldsElement t_ExternallyManagedFields =
-                getExternallyManagedFields();
-
-            if  (t_mAttributes != null)
-            {
-                if  (t_strDriver != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.JDBC_DRIVER,
-                        t_strDriver);
-                }
-
-                if  (t_strUrl != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.JDBC_URL,
-                        t_strUrl);
-                }
-
-                if  (t_strUsername != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.JDBC_USERNAME,
-                        t_strUsername);
-                }
-
-                if  (t_strPassword != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.JDBC_PASSWORD,
-                        t_strPassword);
-                }
-
-                if  (t_strCatalog != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.JDBC_CATALOG,
-                        t_strCatalog);
-                }
-
-                if  (t_strSchema != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.JDBC_SCHEMA,
-                        t_strSchema);
-                }
-
-                if  (t_strRepository != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.REPOSITORY,
-                        t_strRepository);
-                }
-
-                if  (t_strPackage != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.PACKAGE,
-                        t_strPackage);
-                }
-
-                if  (t_Classpath != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.CLASSPATH,
-                        t_Classpath);
-                }
-
-                if  (t_Outputdir != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.OUTPUT_DIR,
-                        t_Outputdir);
-                }
-
-                if  (t_Header != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.HEADER_FILE,
-                        t_Header);
-                }
-
-                t_mAttributes.put(
-                    ParameterValidationHandler.OUTPUT_DIR_SUBFOLDERS,
-                    (t_bOutputdirsubfolders
-                     ?  Boolean.TRUE
-                     :  Boolean.FALSE));
-
-                t_mAttributes.put(
-                    ParameterValidationHandler.EXTRACT_TABLES,
-                    (t_bExtractTables
-                     ?  Boolean.TRUE
-                     :  Boolean.FALSE));
-
-                t_mAttributes.put(
-                    ParameterValidationHandler.EXTRACT_PROCEDURES,
-                    (t_bExtractProcedures
-                     ?  Boolean.TRUE
-                     :  Boolean.FALSE));
-
-                t_mAttributes.put(
-                    ParameterValidationHandler.EXTRACT_FUNCTIONS,
-                    (t_bExtractFunctions
-                     ?  Boolean.TRUE
-                     :  Boolean.FALSE));
-
-                if  (t_strJNDIDataSources != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.JNDI_DATASOURCES,
-                        t_strJNDIDataSources);
-                }
-
-                t_mAttributes.put(
-                    ParameterValidationHandler.GENERATE_MOCK_DAO,
-                    (t_bGenerateMockDAOImplementation
-                     ?  Boolean.TRUE
-                     :  Boolean.FALSE));
-
-                t_mAttributes.put(
-                    ParameterValidationHandler.GENERATE_XML_DAO,
-                    (t_bGenerateXmlDAOImplementation
-                     ?  Boolean.TRUE
-                     :  Boolean.FALSE));
-
-                t_mAttributes.put(
-                    ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO,
-                    (t_bAllowEmptyRepositoryDAO
-                     ?  Boolean.TRUE
-                     :  Boolean.FALSE));
-
-                t_mAttributes.put(
-                    ParameterValidationHandler.IMPLEMENT_MARKER_INTERFACES,
-                    (t_bImplementMarkerInterfaces
-                     ?  Boolean.TRUE
-                     :  Boolean.FALSE));
-
-                if  (t_Tables != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.TABLES,
-                        t_Tables);
-                }
-
-                if  (t_ExternallyManagedFields != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS,
-                        t_ExternallyManagedFields);
-                }
-
-                if  (t_strCustomSqlModel != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.CUSTOM_SQL_MODEL,
-                        t_strCustomSqlModel);
-                }
-
-                if  (t_SqlXmlFile != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.SQL_XML_FILE,
-                        t_SqlXmlFile);
-                }
-
-                if  (t_strGrammarBundle != null)
-                {
-                    t_mAttributes.put(
-                        ParameterValidationHandler.GRAMMAR_BUNDLE_NAME,
-                        t_strGrammarBundle);
-                }
-            }
+            mapAttributes(
+                command.getAttributeMap(),
+                getDriver(settings),
+                getUrl(settings),
+                getUsername(settings),
+                getPassword(settings),
+                getCatalog(settings),
+                getSchema(settings),
+                getRepository(settings),
+                getPackage(settings),
+                getOutputdir(settings),
+                getHeaderfile(settings),
+                getOutputdirsubfoldersFlag(settings),
+                getExtractTablesFlag(settings),
+                getExtractProceduresFlag(settings),
+                getExtractFunctionsFlag(settings),
+                getJndiDataSource(settings),
+                getGenerateMockDAOImplementationFlag(settings),
+                getGenerateXMLDAOImplementationFlag(settings),
+                getAllowEmptyRepositoryDAOFlag(settings),
+                getImplementMarkerInterfacesFlag(settings),
+                getCustomSqlModel(settings),
+                getSqlXmlFile(settings),
+                getGrammarbundle(settings),
+                getTables(),
+                getExternallyManagedFields(),
+                getClasspath());
         }
 
         return result;
+    }
+                
+    /**
+     * Maps the attributes in the command map.
+     * @param attributes the command attributes.
+     * @param driver the JDBC driver.
+     * @param url the JDBC url.
+     * @param username the JDBC username.
+     * @param password the JDBC password.
+     * @param catalog the JDBC catalog.
+     * @param schema the JDBC schema.
+     * @param repository the repository.
+     * @param packageName the base package of the generated sources.
+     * @param outputDir the output folder.
+     * @param header the copyright header.
+     * @param outputDirSubfolders whether to use main/ and test/ as
+     * subfolders.
+     * @param extractTables whether to extract tables or not.
+     * @param extractProcedures whether to extract the procedures or not.
+     * @param extractFunctions whether to extract the functions or not.
+     * @param jndiDataSource the location in JNDI of the
+     * <code>DataSource</code>.
+     * @param generateMockDAOImplementation whether to generate Mock DAOs.
+     * @param generateXmlDAOImplementation whether to generate XML DAOs.
+     * @param allowEmptyRepositoryDAO whether to generate a repository
+     * DAO even tough it'll contain no custom queries..
+     * @param implementMarkerInterfaces whether to make some generated 
+     * sources implement <code>org.acmsl.commons.patterns</code> <i>Marker</i>
+     * interfaces.
+     * @param customSqlModel the format of the custom SQL file.
+     * @param sqlXmlFile the file containing the custom SQL.
+     * @param grammarBundle the grammar with irregular singular and plural
+     * forms of the table names.
+     * @param tables the custom tables.
+     * @param externallyManagedFields the externally-managed fields.
+     * @param classpath the classpath.
+     * @precondition attributes != null
+     */
+    protected void mapAttributes(
+        final Map attributes,
+        final String driver,
+        final String url,
+        final String username,
+        final String password,
+        final String catalog,
+        final String schema,
+        final String repository,
+        final String packageName,
+        final File outputdir,
+        final File header,
+        final boolean outputdirsubfolders,
+        final boolean extractTables,
+        final boolean extractProcedures,
+        final boolean extractFunctions,
+        final String jndiDataSource,
+        final boolean generateMockDAOImplementation,
+        final boolean generateXmlDAOImplementation,
+        final boolean allowEmptyRepositoryDAO,
+        final boolean implementMarkerInterfaces,
+        final String customSqlModel,
+        final File sqlXmlFile,
+        final String grammarBundle,
+        final AntTablesElement tables,
+        final AntExternallyManagedFieldsElement externallyManagedFields,
+        final Path classpath)
+    {
+        if  (attributes != null)
+        {
+            if  (driver != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.JDBC_DRIVER,
+                    driver);
+            }
+
+            if  (url != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.JDBC_URL,
+                    url);
+            }
+
+            if  (username != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.JDBC_USERNAME,
+                    username);
+            }
+
+            if  (password != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.JDBC_PASSWORD,
+                    password);
+            }
+
+            if  (catalog != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.JDBC_CATALOG,
+                    catalog);
+            }
+
+            if  (schema != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.JDBC_SCHEMA,
+                    schema);
+            }
+
+            if  (repository != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.REPOSITORY,
+                    repository);
+            }
+
+            if  (packageName != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.PACKAGE,
+                    packageName);
+            }
+
+            if  (classpath != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.CLASSPATH,
+                    classpath);
+            }
+
+            if  (outputdir != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.OUTPUT_DIR,
+                    outputdir);
+            }
+
+            if  (header != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.HEADER_FILE,
+                    header);
+            }
+
+            attributes.put(
+                ParameterValidationHandler.OUTPUT_DIR_SUBFOLDERS,
+                (outputdirsubfolders
+                 ?  Boolean.TRUE
+                 :  Boolean.FALSE));
+
+            attributes.put(
+                ParameterValidationHandler.EXTRACT_TABLES,
+                (extractTables
+                 ?  Boolean.TRUE
+                 :  Boolean.FALSE));
+
+            attributes.put(
+                ParameterValidationHandler.EXTRACT_PROCEDURES,
+                (extractProcedures
+                 ?  Boolean.TRUE
+                 :  Boolean.FALSE));
+
+            attributes.put(
+                ParameterValidationHandler.EXTRACT_FUNCTIONS,
+                (extractFunctions
+                 ?  Boolean.TRUE
+                 :  Boolean.FALSE));
+
+            if  (jndiDataSource != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.JNDI_DATASOURCES,
+                    jndiDataSource);
+            }
+
+            attributes.put(
+                ParameterValidationHandler.GENERATE_MOCK_DAO,
+                (generateMockDAOImplementation
+                 ?  Boolean.TRUE
+                 :  Boolean.FALSE));
+
+            attributes.put(
+                ParameterValidationHandler.GENERATE_XML_DAO,
+                (generateXmlDAOImplementation
+                 ?  Boolean.TRUE
+                 :  Boolean.FALSE));
+
+            attributes.put(
+                ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO,
+                (allowEmptyRepositoryDAO
+                 ?  Boolean.TRUE
+                 :  Boolean.FALSE));
+
+            attributes.put(
+                ParameterValidationHandler.IMPLEMENT_MARKER_INTERFACES,
+                (implementMarkerInterfaces
+                 ?  Boolean.TRUE
+                 :  Boolean.FALSE));
+
+            if  (tables != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.TABLES,
+                    tables);
+            }
+
+            if  (externallyManagedFields != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS,
+                    externallyManagedFields);
+            }
+
+            if  (customSqlModel != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.CUSTOM_SQL_MODEL,
+                    customSqlModel);
+            }
+
+            if  (sqlXmlFile != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.SQL_XML_FILE,
+                    sqlXmlFile);
+            }
+
+            if  (grammarBundle != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.GRAMMAR_BUNDLE_NAME,
+                    grammarBundle);
+            }
+        }
     }
 
     /**
@@ -1544,6 +2078,100 @@ public class QueryJTask
         else
         {
             throw new BuildException(name + " elements are not supported");
+        }
+
+        return result;
+    }
+
+    /**
+     * Converts given value to boolean.
+     * @param value the value.
+     * @return the converted value.
+     */
+    protected boolean toBoolean(final String value)
+    {
+        return toBoolean(value, true);
+    }
+
+    /**
+     * Converts given value to boolean.
+     * @param value the value.
+     * @param defaultValue the default value if input is null.
+     * @return the converted value.
+     */
+    protected boolean toBoolean(
+        final String value, final boolean defaultValue)
+    {
+        boolean result = defaultValue;
+
+        if  (value != null)
+        {
+            String t_strTrimmedValue = value.trim().toLowerCase();
+
+            result =
+                (   (t_strTrimmedValue.equals("yes"))
+                 || (t_strTrimmedValue.equals("true")));
+        }
+
+        return result;
+    }
+
+    /**
+     * Reads the settings from given file.
+     * @param file the file.
+     * @return the <code>Properties</code> instance, or <code>null</code>
+     * if the file doesn't exist.
+     */
+    protected Properties readSettings(final File file)
+    {
+        Properties result = new Properties();
+
+        if  (file != null)
+        {
+            InputStream t_isSettings = null;
+
+            try
+            {
+                t_isSettings = new FileInputStream(file);
+
+                result.load(t_isSettings);
+            }
+            catch  (final IOException ioException)
+            {
+                result = null;
+
+                Log t_Log = UniqueLogFactory.getLog(QueryJTask.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot read the configuration properties "
+                        + "file.",
+                        ioException);
+                }
+            }
+            finally
+            {
+                if  (t_isSettings != null)
+                {
+                    try
+                    {
+                        t_isSettings.close();
+                    }
+                    catch  (final IOException ioException)
+                    {
+                        Log t_Log = UniqueLogFactory.getLog(QueryJTask.class);
+
+                        if  (t_Log != null)
+                        {
+                            t_Log.error(
+                                  "Cannot close the configuration properties "
+                                + "file.",
+                                ioException);
+                        }
+                    }
+                }
+            }
         }
 
         return result;

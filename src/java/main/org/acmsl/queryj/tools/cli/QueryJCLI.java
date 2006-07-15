@@ -54,6 +54,11 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Properties;
+
 /**
  * Allows executing QueryJ from the command-line.
  * @since Thu Jul 13 18:21:23 2006
@@ -64,14 +69,6 @@ import org.apache.commons.cli.ParseException;
 public final class QueryJCLI
     implements  QueryJCLIOptions
 {
-    /**
-     * Creates a new <code>QueryJCLI</code> instance.
-     *
-     */
-    private QueryJCLI()
-    {
-    }
-
     /**
      * Executes <b>QueryJ</b> from the command line.
      * @param args the command-line arguments.
@@ -140,8 +137,10 @@ public final class QueryJCLI
             String t_strCustomSqlFileName =
                 t_CommandLine.getOptionValue(CUSTOM_SQL_OPTION);
 
-            if  (!helper.validateConfigurationOption(
-                     t_strConfigurationFileName))
+            Properties t_ConfigurationSettings =
+                helper.readConfigurationSettings(t_strConfigurationFileName);
+
+            if  (t_ConfigurationSettings == null)
             {
                 helper.printError(
                     "Invalid configuration properties", System.err);
@@ -150,20 +149,20 @@ public final class QueryJCLI
             else
             {
                 executeQueryJ(
-                    t_strConfigurationFileName, t_strCustomSqlFileName);
+                    t_ConfigurationSettings, t_strCustomSqlFileName);
             }
         }
     }
 
     /**
      * Executes QueryJ using given options.
-     * @param configurationFileName the name of the configuration file.
+     * @param configurationSettings the configuration settings.
      * @param customSqlFileName the name of the custom SQL file.
      * @precondition configurationFileName != null
      * @precondition customSqlFileName != null
      */
     protected static void executeQueryJ(
-        final String configurationFileName, final String customSqlFileName)
+        final Properties configurationSettings, final String customSqlFileName)
     {
         // TODO
     }
