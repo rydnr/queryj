@@ -68,7 +68,7 @@ public class AntFieldFkElement
      * Specifies the table name.
      * @param table the table name.
      */
-    protected void setTable(String table)
+    protected void setTable(final String table)
     {
         m__strTable = table;
     }
@@ -86,7 +86,7 @@ public class AntFieldFkElement
      * Specifies the fk field.
      * @param field the field.
      */
-    protected void setField(String field)
+    protected void setField(final String field)
     {
         m__strField = field;
     }
@@ -105,7 +105,7 @@ public class AntFieldFkElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setDynamicAttribute(String name, String value)
+    public void setDynamicAttribute(final String name, final String value)
     {
         if  ("table".equals(name))
         {
@@ -127,8 +127,10 @@ public class AntFieldFkElement
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
-    public Object createDynamicElement(String name)
+    public Object createDynamicElement(final String name)
     {
-        throw new BuildException("Nested elements inside <fk> are not supported");
+        throw
+            new BuildException(
+                "Nested elements inside <fk> are not supported");
     }
 }

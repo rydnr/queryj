@@ -340,16 +340,20 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                     t_Table.getName(),
                                     t_Field.getName(),
                                     t_MetadataTypeManager.getJavaType(
-                                        t_Field.getType()));
+                                        t_Field.getNativeType()));
 
                                 Collection t_cFields =
                                     (Collection)
-                                    t_mKeys.get(buildTableFieldsKey(t_Table.getName()));
+                                        t_mKeys.get(
+                                            buildTableFieldsKey(
+                                                t_Table.getName()));
 
                                 if  (t_cFields == null)
                                 {
                                     t_cFields = new ArrayList();
-                                    t_mKeys.put(buildTableFieldsKey(t_Table.getName()), t_cFields);
+                                    t_mKeys.put(
+                                        buildTableFieldsKey(
+                                            t_Table.getName()), t_cFields);
                                 }
 
                                 t_cFields.add(t_Field.getName());
@@ -361,12 +365,16 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                         t_Field.getName());
 
                                     Collection t_cPks =
-                                        (Collection) t_mKeys.get(buildPkKey(t_Table.getName()));
+                                        (Collection)
+                                            t_mKeys.get(
+                                                buildPkKey(t_Table.getName()));
 
                                     if  (t_cPks == null)
                                     {
                                         t_cPks = new ArrayList();
-                                        t_mKeys.put(buildPkKey(t_Table.getName()), t_cPks);
+                                        t_mKeys.put(
+                                            buildPkKey(
+                                                t_Table.getName()), t_cPks);
                                     }
 
                                     t_cPks.add(t_Field.getName());
@@ -800,7 +808,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                         t_Table.getName(),
                                         t_Field.getName(),
                                         metadataTypeManager.getJavaType(
-                                            t_Field.getType()));
+                                            t_Field.getNativeType()));
 
                                     t_TableFieldsKey =
                                         buildTableFieldsKey(t_Table.getName());

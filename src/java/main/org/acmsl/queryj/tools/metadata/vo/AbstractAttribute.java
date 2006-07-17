@@ -92,6 +92,31 @@ public abstract class AbstractAttribute
     private String m__strValue;
 
     /**
+     * Creates an empty <code>AbstractAttribute</code> instance.
+     */
+    public AbstractAttribute() {};
+
+    /**
+     * Creates an <code>AbstractAttribute</code> with the following
+     * information.
+     * @param name the name.
+     * @param nativeType the native type.
+     * @param tableName the table name.
+     * @param managedExternally whether the attribute is managed externally.
+     */
+    protected AbstractAttribute(
+        final String name,
+        final String nativeType,
+        final String tableName,
+        final boolean managedExternally)
+    {
+        immutableSetName(name);
+        immutableSetNativeType(nativeType);
+        immutableSetTableName(tableName);
+        immutableSetManagedExternally(managedExternally);
+    }
+
+    /**
      * Creates an <code>AbstractAttribute</code> with the following
      * information.
      * @param name the name.
@@ -113,12 +138,9 @@ public abstract class AbstractAttribute
         final boolean allowsNull,
         final String value)
     {
-        immutableSetName(name);
+        this(name, nativeType, tableName, managedExternally);
         immutableSetType(type);
-        immutableSetNativeType(nativeType);
         immutableSetFieldType(fieldType);
-        immutableSetTableName(tableName);
-        immutableSetManagedExternally(managedExternally);
         immutableSetAllowsNull(allowsNull);
         immutableSetValue(value);
     }

@@ -43,61 +43,31 @@ package org.acmsl.queryj.tools.ant;
  */
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
-import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.tools.customsql.handlers.CustomSqlValidationHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
-import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
-import org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.QueryJSettings;
-import org.acmsl.queryj.tools.templates.dao.DAOBundle;
-import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.functions.FunctionsBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomBaseValueObjectTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectImplTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectImplTemplateHandlerBundle;
+import org.acmsl.queryj.tools.QueryJChain;
+import org.acmsl.queryj.tools.logging.QueryJAntLog;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Chain;
 import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Properties;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
@@ -113,169 +83,19 @@ import org.apache.commons.logging.Log;
            >Jose San Leandro</a>
  */
 public class QueryJTask
-    extends     ChainTask
+    extends     Task
     implements  QueryJSettings,
                 DynamicConfigurator
 {
     /**
-     * The properties file (to include all other settings).
+     * The <code>QueryJChain</code> delegee.
      */
-    private File m__Settings;
-
-    /**
-     * The driver.
-     */
-    private String m__strDriver;
-
-    /**
-     * The url.
-     */
-    private String m__strUrl;
-
-    /**
-     * The username.
-     */
-    private String m__strUsername;
-
-    /**
-     * The password.
-     */
-    private String m__strPassword;
-
-    /**
-     * The catalog.
-     */
-    private String m__strCatalog;
-
-    /**
-     * The schema.
-     */
-    private String m__strSchema;
-
-    /**
-     * The repository.
-     */
-    private String m__strRepository;
-
-    /**
-     * The package.
-     */
-    private String m__strPackage;
+    private QueryJChain m__QueryJChain;
 
     /**
      * The classpath.
      */
     private Path m__Classpath;
-
-    /**
-     * The output folder.
-     */
-    private File m__Outputdir;
-
-    /**
-     * The optional header.
-     */
-    private File m__Header;
-
-    /**
-     * The "outputdirsubfolders" value.
-     */
-    private String m__strOutputdirsubfolders;
-
-    /**
-     * Whether to use subfolders or not.
-     */
-    private boolean m__bOutputdirsubfolders = false;
-
-    /**
-     * The "extract-tables" value.
-     */
-    private String m__strExtractTables;
-
-    /**
-     * The "extract-tables" flag.
-     */
-    private boolean m__bExtractTables = true;
-
-    /**
-     * The "extract-procedures" value.
-     */
-    private String m__strExtractProcedures;
-
-    /**
-     * The "extract-procedures" flag.
-     */
-    private boolean m__bExtractProcedures = true;
-
-    /**
-     * The "extract-functions" value.
-     */
-    private String m__strExtractFunctions;
-
-    /**
-     * The "extract-functions" flag.
-     */
-    private boolean m__bExtractFunctions = true;
-
-    /**
-     * The JNDI location for the data sources.
-     */
-    private String m__strJNDIDataSources;
-
-    /**
-     * The "generate-mock-dao-implementation" value.
-     */
-    private String m__strGenerateMockDAOImplementation;
-
-    /**
-     * The "generate-mock-dao-implementation" flag.
-     */
-    private boolean m__bGenerateMockDAOImplementation = true;
-
-    /**
-     * The "generate-xml-dao-implementation" value.
-     */
-    private String m__strGenerateXMLDAOImplementation;
-
-    /**
-     * The "generate-xml-dao-implementation" flag.
-     */
-    private boolean m__bGenerateXMLDAOImplementation = true;
-
-    /**
-     * The "custom-sql-model" type.
-     */
-    private String m__strCustomSqlModel = null;
-
-    /**
-     * The "sql-xml-file" path.
-     */
-    private File m__SqlXmlFile;
-
-    /**
-     * The "grammar-bundle" property.
-     */
-    private String m__strGrammarBundleName;
-
-    /**
-     * The <i>allowEmptyRepositoryDAO</i> flag.
-     */
-    private boolean m__bAllowEmptyRepositoryDAO = false;
-
-    /**
-     * The <i>allowEmptyRepositoryDAO</i> property.
-     */
-    private String m__strAllowEmptyRepositoryDAO;
-
-    /**
-     * The <i>implementMarkerInterfaces</i> flag.
-     */
-    private boolean m__bImplementMarkerInterfaces = false;
-
-    /**
-     * The <i>implementMarkerInterfaces</i> property.
-     */
-    private String m__strImplementMarkerInterfaces;
 
     /**
      * The nested tables.
@@ -290,15 +110,37 @@ public class QueryJTask
     /**
      * Creates a <code>QueryJTask</code> instance.
      */
-    public QueryJTask() {};
+    public QueryJTask()
+    {
+        // AntQueryJChain is an inner class defined below.
+        immutableSetQueryJChain(new AntQueryJChain());
+    }
 
     /**
-     * Specifies the properties file.
-     * @param file such file.
+     * Specifies the <code>QueryJChain</code> to delegate.
+     * @param delegee such instance.
      */
-    protected final void immutableSetSettings(final File file)
+    protected final void immutableSetQueryJChain(final QueryJChain delegee)
     {
-        m__Settings = file;
+        m__QueryJChain = delegee;
+    }
+
+    /**
+     * Specifies the <code>QueryJChain</code> to delegate.
+     * @param delegee such instance.
+     */
+    protected void setQueryJChain(final QueryJChain delegee)
+    {
+        immutableSetQueryJChain(delegee);
+    }
+
+    /**
+     * Retrieves the delegating <code>QueryJChain</code> instance.
+     * @return such instance.
+     */
+    protected QueryJChain getQueryJChain()
+    {
+        return m__QueryJChain;
     }
 
     /**
@@ -307,7 +149,18 @@ public class QueryJTask
      */
     public void setSettings(final File file)
     {
-        immutableSetSettings(file);
+        setSettings(file, getQueryJChain());
+    }
+
+    /**
+     * Specifies the properties file.
+     * @param file such file.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setSettings(final File file, final QueryJChain delegee)
+    {
+        delegee.setSettings(file);
     }
 
     /**
@@ -316,16 +169,18 @@ public class QueryJTask
      */
     public File getSettings()
     {
-        return m__Settings;
+        return getSettings(getQueryJChain());
     }
 
     /**
-     * Specifies the driver.
-     * @param driver the new driver.
+     * Retrieves the properties file.
+     * @param delegee the delegee.
+     * @return such file.
+     * @precondition delegee != null
      */
-    protected final void immutableSetDriver(final String driver)
+    protected File getSettings(final QueryJChain delegee)
     {
-        m__strDriver = driver;
+        return delegee.getSettings();
     }
 
     /**
@@ -334,7 +189,18 @@ public class QueryJTask
      */
     public void setDriver(final String driver)
     {
-        immutableSetDriver(driver);
+        setDriver(driver, getQueryJChain());
+    }
+
+    /**
+     * Specifies the driver.
+     * @param driver the new driver.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setDriver(final String driver, final QueryJChain delegee)
+    {
+        delegee.setDriver(driver);
     }
 
     /**
@@ -343,35 +209,18 @@ public class QueryJTask
      */
     public String getDriver()
     {
-        return m__strDriver;
+        return getDriver(getQueryJChain());
     }
 
     /**
-     * Retrieves the driver, using given properties if necessary.
-     * @param properties the properties.
-     * @return the JDBC driver.
+     * Retrieves the driver.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
      */
-    protected String getDriver(final Properties properties)
+    protected String getDriver(final QueryJChain delegee)
     {
-        String result = getDriver();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            result = properties.getProperty(JDBC_DRIVER);
-            setDriver(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the url.
-     * @param url the new url.
-     */
-    protected final void immutableSetUrl(final String url)
-    {
-        m__strUrl = url;
+        return delegee.getDriver();
     }
 
     /**
@@ -380,7 +229,18 @@ public class QueryJTask
      */
     public void setUrl(final String url)
     {
-        immutableSetUrl(url);
+        setUrl(url, getQueryJChain());
+    }
+
+    /**
+     * Specifies the url.
+     * @param url the new url.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setUrl(final String url, final QueryJChain delegee)
+    {
+        delegee.setUrl(url);
     }
 
     /**
@@ -389,35 +249,18 @@ public class QueryJTask
      */
     public String getUrl()
     {
-        return m__strUrl;
+        return getUrl(getQueryJChain());
     }
 
     /**
-     * Retrieves the url, using given properties if necessary.
-     * @param properties the properties.
-     * @return the JDBC url.
+     * Retrieves the url.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
      */
-    protected String getUrl(final Properties properties)
+    protected String getUrl(final QueryJChain delegee)
     {
-        String result = getUrl();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            result = properties.getProperty(JDBC_URL);
-            setUrl(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the username.
-     * @param username the new username.
-     */
-    protected final void immutableSetUsername(final String username)
-    {
-        m__strUsername = username;
+        return delegee.getUrl();
     }
 
     /**
@@ -426,7 +269,19 @@ public class QueryJTask
      */
     public void setUsername(final String username)
     {
-        immutableSetUsername(username);
+        setUsername(username, getQueryJChain());
+    }
+
+    /**
+     * Specifies the username.
+     * @param username the new username.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setUsername(
+        final String username, final QueryJChain delegee)
+    {
+        delegee.setUsername(username);
     }
 
     /**
@@ -435,35 +290,18 @@ public class QueryJTask
      */
     public String getUsername()
     {
-        return m__strUsername;
+        return getUsername(getQueryJChain());
     }
 
     /**
-     * Retrieves the username, using given properties if necessary.
-     * @param properties the properties.
-     * @return the JDBC username.
+     * Retrieves the username.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
      */
-    protected String getUsername(final Properties properties)
+    protected String getUsername(final QueryJChain delegee)
     {
-        String result = getUsername();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            result = properties.getProperty(JDBC_USERNAME);
-            setUsername(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the password.
-     * @param password the new password.
-     */
-    protected final void immutableSetPassword(final String password)
-    {
-        m__strPassword = password;
+        return delegee.getUsername();
     }
 
     /**
@@ -472,7 +310,19 @@ public class QueryJTask
      */
     public void setPassword(final String password)
     {
-        immutableSetPassword(password);
+        setPassword(password, getQueryJChain());
+    }
+
+    /**
+     * Specifies the password.
+     * @param password the new password.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setPassword(
+        final String password, final QueryJChain delegee)
+    {
+        delegee.setPassword(password);
     }
 
     /**
@@ -481,35 +331,18 @@ public class QueryJTask
      */
     public String getPassword()
     {
-        return m__strPassword;
+        return getPassword(getQueryJChain());
     }
 
     /**
-     * Retrieves the password, using given properties if necessary.
-     * @param properties the properties.
-     * @return the JDBC password.
+     * Retrieves the password.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
      */
-    protected String getPassword(final Properties properties)
+    protected String getPassword(final QueryJChain delegee)
     {
-        String result = getPassword();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            result = properties.getProperty(JDBC_PASSWORD);
-            setPassword(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the catalog.
-     * @param catalog the new catalog.
-     */
-    protected final void immutableSetCatalog(final String catalog)
-    {
-        m__strCatalog = catalog;
+        return delegee.getPassword();
     }
 
     /**
@@ -518,7 +351,19 @@ public class QueryJTask
      */
     public void setCatalog(final String catalog)
     {
-        immutableSetCatalog(catalog);
+        setCatalog(catalog, getQueryJChain());
+    }
+
+    /**
+     * Specifies the catalog.
+     * @param catalog the new catalog.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setCatalog(
+        final String catalog, final QueryJChain delegee)
+    {
+        delegee.setCatalog(catalog);
     }
 
     /**
@@ -527,35 +372,18 @@ public class QueryJTask
      */
     public String getCatalog()
     {
-        return m__strCatalog;
+        return getCatalog(getQueryJChain());
     }
 
     /**
-     * Retrieves the catalog, using given properties if necessary.
-     * @param properties the properties.
-     * @return the JDBC catalog.
+     * Retrieves the catalog.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
      */
-    protected String getCatalog(final Properties properties)
+    protected String getCatalog(final QueryJChain delegee)
     {
-        String result = getCatalog();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            result = properties.getProperty(JDBC_CATALOG);
-            setCatalog(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the schema.
-     * @param schema the new schema.
-     */
-    protected final void immutableSetSchema(final String schema)
-    {
-        m__strSchema = schema;
+        return delegee.getCatalog();
     }
 
     /**
@@ -564,7 +392,19 @@ public class QueryJTask
      */
     public void setSchema(final String schema)
     {
-        immutableSetSchema(schema);
+        setSchema(schema, getQueryJChain());
+    }
+
+    /**
+     * Specifies the schema.
+     * @param schema the new schema.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setSchema(
+        final String schema, final QueryJChain delegee)
+    {
+        delegee.setSchema(schema);
     }
 
     /**
@@ -573,35 +413,18 @@ public class QueryJTask
      */
     public String getSchema()
     {
-        return m__strSchema;
+        return getSchema(getQueryJChain());
     }
 
     /**
-     * Retrieves the schema, using given properties if necessary.
-     * @param properties the properties.
-     * @return the JDBC schema.
+     * Retrieves the schema.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
      */
-    protected String getSchema(final Properties properties)
+    protected String getSchema(final QueryJChain delegee)
     {
-        String result = getSchema();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            result = properties.getProperty(JDBC_SCHEMA);
-            setSchema(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the repository.
-     * @param repository the new repository.
-     */
-    protected final void immutableSetRepository(final String repository)
-    {
-        m__strRepository = repository;
+        return delegee.getSchema();
     }
 
     /**
@@ -610,7 +433,19 @@ public class QueryJTask
      */
     public void setRepository(final String repository)
     {
-        immutableSetRepository(repository);
+        setRepository(repository, getQueryJChain());
+    }
+
+    /**
+     * Specifies the repository.
+     * @param repository the new repository.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setRepository(
+        final String repository, final QueryJChain delegee)
+    {
+        delegee.setRepository(repository);
     }
 
     /**
@@ -619,35 +454,18 @@ public class QueryJTask
      */
     public String getRepository()
     {
-        return m__strRepository;
+        return getRepository(getQueryJChain());
     }
 
     /**
-     * Retrieves the repository, using given properties if necessary.
-     * @param properties the properties.
-     * @return the repository.
+     * Retrieves the repository.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
      */
-    protected String getRepository(final Properties properties)
+    protected String getRepository(final QueryJChain delegee)
     {
-        String result = getRepository();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            result = properties.getProperty(REPOSITORY);
-            setRepository(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the package.
-     * @param packageName the new package.
-     */
-    protected final void immutableSetPackage(final String packageName)
-    {
-        m__strPackage = packageName;
+        return delegee.getRepository();
     }
 
     /**
@@ -656,7 +474,19 @@ public class QueryJTask
      */
     public void setPackage(final String packageName)
     {
-        immutableSetPackage(packageName);
+        setPackage(packageName, getQueryJChain());
+    }
+
+    /**
+     * Specifies the package.
+     * @param packageName the new package.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setPackage(
+        final String packageName, final QueryJChain delegee)
+    {
+        delegee.setPackage(packageName);
     }
 
     /**
@@ -665,26 +495,588 @@ public class QueryJTask
      */
     public String getPackage()
     {
-        return m__strPackage;
+        return getPackage(getQueryJChain());
     }
 
     /**
-     * Retrieves the package, using given properties if necessary.
-     * @param properties the properties.
-     * @return the package.
+     * Retrieves the package.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
      */
-    protected String getPackage(final Properties properties)
+    protected String getPackage(final QueryJChain delegee)
     {
-        String result = getPackage();
+        return delegee.getPackage();
+    }
 
-        if  (   (result == null)
-             && (properties != null))
-        {
-            result = properties.getProperty(PACKAGE);
-            setPackage(result);
-        }
+    /**
+     * Specifies the output dir.
+     * @param outputdir the new output dir.
+     */
+    public void setOutputdir(final File outputdir)
+    {
+        setOutputdir(outputdir, getQueryJChain());
+    }
 
-        return result;
+    /**
+     * Specifies the output dir.
+     * @param outputdir the new output dir.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setOutputdir(
+        final File outputdir, final QueryJChain delegee)
+    {
+        delegee.setOutputdir(outputdir);
+    }
+
+    /**
+     * Retrieves the output dir.
+     * @return such information.
+     */
+    public File getOutputdir()
+    {
+        return getOutputdir(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the output dir.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
+     */
+    protected File getOutputdir(final QueryJChain delegee)
+    {
+        return delegee.getOutputdir();
+    }
+
+    /**
+     * Specifies the header file.
+     * @param headerfile the new header file.
+     */
+    public void setHeaderfile(final File headerfile)
+    {
+        setHeaderfile(headerfile, getQueryJChain());
+    }
+
+    /**
+     * Specifies the header file.
+     * @param headerfile the new header file.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setHeaderfile(
+        final File headerfile, final QueryJChain delegee)
+    {
+        delegee.setHeaderfile(headerfile);
+    }
+
+    /**
+     * Retrieves the header file.
+     * @return such information.
+     */
+    public File getHeaderfile()
+    {
+        return getHeaderfile(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the header file.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
+     */
+    protected File getHeaderfile(final QueryJChain delegee)
+    {
+        return delegee.getHeaderfile();
+    }
+
+    /**
+     * Specifies whether to use subfolders.
+     * @param outputDirSubFolders such setting.
+     */
+    public void setOutputdirsubfolders(final String outputDirSubFolders)
+    {
+        setOutputdirsubfolders(outputDirSubFolders, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to use subfolders.
+     * @param outputDirSubFolders such setting.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setOutputdirsubfolders(
+        final String outputDirSubFolders, final QueryJChain delegee)
+    {
+        delegee.setOutputdirsubfolders(outputDirSubFolders);
+    }
+
+    /**
+     * Retrieves whether to use subfolders.
+     * @return such setting.
+     */
+    public String getOutputdirsubfolders()
+    {
+        return getOutputdirsubfolders(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to use subfolders.
+     * @param delegee the delegee.
+     * @return such setting.
+     * @precondition delegee != null
+     */
+    protected String getOutputdirsubfolders(final QueryJChain delegee)
+    {
+        return delegee.getOutputdirsubfolders();
+    }
+
+    /**
+     * Specifies whether to extract the tables.
+     * @param extractTables the procedure extraction setting.
+     */
+    public void setExtractTables(final String extractTables)
+    {
+        setExtractTables(extractTables, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to extract the tables.
+     * @param extractTables the procedure extraction setting.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setExtractTables(
+        final String extractTables, final QueryJChain delegee)
+    {
+        delegee.setExtractTables(extractTables);
+    }
+
+    /**
+     * Retrieves whether to extract the tables.
+     * @return such setting.
+     */
+    public String getExtractTables()
+    {
+        return getExtractTables(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to extract the tables.
+     * @param delegee the delegee.
+     * @return such setting.
+     * @precondition delegee != null
+     */
+    protected String getExtractTables(final QueryJChain delegee)
+    {
+        return delegee.getExtractTables();
+    }
+
+    /**
+     * Retrieves the "extract-tables" flag.
+     * @return such flag.
+     */
+    protected boolean getExtractTablesFlag()
+    {
+        return getExtractTablesFlag(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the "extract-tables" flag.
+     * @return such flag.
+     */
+    protected boolean getExtractTablesFlag(final QueryJChain delegee)
+    {
+        return delegee.getExtractTablesFlag();
+    }
+
+    /**
+     * Specifies whether to extract the procedures.
+     * @param extractProcedures the procedure extraction setting.
+     */
+    public void setExtractProcedures(final String extractProcedures)
+    {
+        setExtractProcedures(extractProcedures, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to extract the procedures.
+     * @param extractProcedures the procedure extraction setting.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setExtractProcedures(
+        final String extractProcedures, final QueryJChain delegee)
+    {
+        delegee.setExtractProcedures(extractProcedures);
+    }
+
+    /**
+     * Retrieves whether to extract the procedures.
+     * @return such setting.
+     */
+    public String getExtractProcedures()
+    {
+        return getExtractProcedures(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to extract the procedures.
+     * @param delegee the delegee.
+     * @return such setting.
+     * @precondition delegee != null
+     */
+    protected String getExtractProcedures(final QueryJChain delegee)
+    {
+        return delegee.getExtractProcedures();
+    }
+
+    /**
+     * Specifies whether to extract the functions.
+     * @param extractFunctions the procedure extraction setting.
+     */
+    public void setExtractFunctions(final String extractFunctions)
+    {
+        setExtractFunctions(extractFunctions, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to extract the functions.
+     * @param extractFunctions the procedure extraction setting.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setExtractFunctions(
+        final String extractFunctions, final QueryJChain delegee)
+    {
+        delegee.setExtractFunctions(extractFunctions);
+    }
+
+    /**
+     * Retrieves whether to extract the functions.
+     * @return such setting.
+     */
+    public String getExtractFunctions()
+    {
+        return getExtractFunctions(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to extract the functions.
+     * @param delegee the delegee.
+     * @return such setting.
+     * @precondition delegee != null
+     */
+    protected String getExtractFunctions(final QueryJChain delegee)
+    {
+        return delegee.getExtractFunctions();
+    }
+
+    /**
+     * Specifices the JNDI location for the data sources.
+     * @param jndiLocation the JNDI location.
+     */
+    public void setJndiDataSource(final String jndiLocation)
+    {
+        setJndiDataSource(jndiLocation, getQueryJChain());
+    }
+
+    /**
+     * Specifices the JNDI location for the data sources.
+     * @param jndiLocation the JNDI location.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setJndiDataSource(
+        final String jndiLocation, final QueryJChain delegee)
+    {
+        delegee.setJndiDataSource(jndiLocation);
+    }
+
+    /**
+     * Retrieves the JNDI location for the data sources.
+     * @return such information.
+     */
+    public String getJndiDataSource()
+    {
+        return getJndiDataSource(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the JNDI location for the data sources.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
+     */
+    protected String getJndiDataSource(final QueryJChain delegee)
+    {
+        return delegee.getJndiDataSource();
+    }
+
+    /**
+     * Specifies whether to generate Mock DAO implementations.
+     * @param generate such setting.
+     */
+    public void setGenerateMockDAOImplementation(final String generate)
+    {
+        setGenerateMockDAOImplementation(generate, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to generate Mock DAO implementations.
+     * @param generate such setting.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setGenerateMockDAOImplementation(
+        final String generate, final QueryJChain delegee)
+    {
+        delegee.setGenerateMockDAOImplementation(generate);
+    }
+
+    /**
+     * Retrieves whether to generate Mock DAO implementations.
+     * @return such setting.
+     */
+    public String getGenerateMockDAOImplementation()
+    {
+        return getGenerateMockDAOImplementation(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to generate Mock DAO implementations.
+     * @return such setting.
+     */
+    protected String getGenerateMockDAOImplementation(
+        final QueryJChain delegee)
+    {
+        return delegee.getGenerateMockDAOImplementation();
+    }
+
+    /**
+     * Retrieves whether to generate XML DAO implementations.
+     * @return such setting.
+     */
+    public String getGenerateXMLDAOImplementation()
+    {
+        return getGenerateXMLDAOImplementation(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to generate XML DAO implementations.
+     * @param delegee the delegee.
+     * @return such setting.
+     * @precondition delegee != null
+     */
+    protected String getGenerateXMLDAOImplementation(
+        final QueryJChain delegee)
+    {
+        return delegee.getGenerateXMLDAOImplementation();
+    }
+
+    /**
+     * Specifies whether to allow empty repository DAO.
+     * @param allow such setting.
+     */
+    public void setAllowEmptyRepositoryDAO(final String allow)
+    {
+        setAllowEmptyRepositoryDAO(allow, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to allow empty repository DAO.
+     * @param allow such setting.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setAllowEmptyRepositoryDAO(
+        final String allow, final QueryJChain delegee)
+    {
+        delegee.setAllowEmptyRepositoryDAO(allow);
+    }
+
+    /**
+     * Retrieves whether to allow empty repository DAO.
+     * @return such setting.
+     */
+    public String getAllowEmptyRepositoryDAO()
+    {
+        return getAllowEmptyRepositoryDAO(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to allow empty repository DAO.
+     * @param delegee the delegee.
+     * @return such setting.
+     * @precondition delegee != null
+     */
+    protected String getAllowEmptyRepositoryDAO(final QueryJChain delegee)
+    {
+        return delegee.getAllowEmptyRepositoryDAO();
+    }
+
+    /**
+     * Specifies whether to implement marker interfaces.
+     * @param implement such setting.
+     */
+    public void setImplementMarkerInterfaces(final String implement)
+    {
+        setImplementMarkerInterfaces(implement, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to implement marker interfaces.
+     * @param implement such setting.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setImplementMarkerInterfaces(
+        final String implement, final QueryJChain delegee)
+    {
+        delegee.setImplementMarkerInterfaces(implement);
+    }
+
+    /**
+     * Retrieves whether to implement marker interfaces.
+     * @return such setting.
+     */
+    public String getImplementMarkerInterfaces()
+    {
+        return getImplementMarkerInterfaces(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to implement marker interfaces.
+     * @param delegee the delegee.
+     * @return such setting.
+     * @precondition delegee != null
+     */
+    protected String getImplementMarkerInterfaces(final QueryJChain delegee)
+    {
+        return delegee.getImplementMarkerInterfaces();
+    }
+
+    /**
+     * Specifies the custom-sql model.
+     * @param model the model.
+     */
+    public void setCustomSqlModel(final String model)
+    {
+        setCustomSqlModel(model, getQueryJChain());
+    }
+
+    /**
+     * Specifies the custom-sql model.
+     * @param model the model.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setCustomSqlModel(
+        final String model, final QueryJChain delegee)
+    {
+        delegee.setCustomSqlModel(model);
+    }
+
+    /**
+     * Retrieves the custom-sql model.
+     * @return such model.
+     */
+    public String getCustomSqlModel()
+    {
+        return getCustomSqlModel(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the custom-sql model.
+     * @param delegee the delegee.
+     * @return such model.
+     * @precondition delegee != null
+     */
+    protected String getCustomSqlModel(final QueryJChain delegee)
+    {
+        return delegee.getCustomSqlModel();
+    }
+
+    /**
+     * Specifies the sql.xml file.
+     * @param file the new file.
+     */
+    public void setSqlXmlFile(final File file)
+    {
+        setSqlXmlFile(file, getQueryJChain());
+    }
+
+    /**
+     * Specifies the sql.xml file.
+     * @param file the new file.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setSqlXmlFile(final File file, final QueryJChain delegee)
+    {
+        delegee.setSqlXmlFile(file);
+    }
+
+    /**
+     * Retrieves the sql.xml file.
+     * @return such information.
+     */
+    public File getSqlXmlFile()
+    {
+        return getSqlXmlFile(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the sql.xml file.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
+     */
+    protected File getSqlXmlFile(final QueryJChain delegee)
+    {
+        return delegee.getSqlXmlFile();
+    }
+
+    /**
+     * Specifies the grammar bundle.
+     * @param grammarBundle the new grammar bundle.
+     */
+    public void setGrammarbundle(final String grammarBundle)
+    {
+        setGrammarbundle(grammarBundle, getQueryJChain());
+    }
+
+    /**
+     * Specifies the grammar bundle.
+     * @param grammarBundle the new grammar bundle.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setGrammarbundle(
+        final String grammarBundle, final QueryJChain delegee)
+    {
+        delegee.setGrammarbundle(grammarBundle);
+    }
+
+    /**
+     * Retrieves the grammar bundle.
+     * @return such information.
+     */
+    public String getGrammarbundle()
+    {
+        return getGrammarbundle(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the grammar bundle.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
+     */
+    protected String getGrammarbundle(final QueryJChain delegee)
+    {
+        return delegee.getGrammarbundle();
     }
 
     /**
@@ -747,702 +1139,6 @@ public class QueryJTask
     }
 
     /**
-     * Specifies the outputdir.
-     * @param outputdir the new outputdir.
-     */
-    protected final void immutableSetOutputdir(final File outputdir)
-    {
-        m__Outputdir = outputdir;
-    }
-
-    /**
-     * Specifies the outputdir.
-     * @param outputdir the new outputdir.
-     */
-    public void setOutputdir(final File outputdir)
-    {
-        immutableSetOutputdir(outputdir);
-    }
-
-    /**
-     * Retrieves the outputdir.
-     * @return such information.
-     */
-    public File getOutputdir()
-    {
-        return m__Outputdir;
-    }
-
-    /**
-     * Retrieves the output folder, using given properties if necessary.
-     * @param properties the properties.
-     * @return the output folder.
-     */
-    protected File getOutputdir(final Properties properties)
-    {
-        File result = getOutputdir();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            String t_strOutputdir = properties.getProperty(OUTPUT_FOLDER);
-
-            if  (t_strOutputdir != null)
-            {
-                result = new File(t_strOutputdir);
-                setOutputdir(result);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    protected final void immutableSetHeaderfile(final File header)
-    {
-        m__Header = header;
-    }
-
-    /**
-     * Specifies the header.
-     * @param header the new header.
-     */
-    public void setHeaderfile(final File header)
-    {
-        immutableSetHeaderfile(header);
-    }
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    public File getHeaderfile()
-    {
-        return m__Header;
-    }
-
-    /**
-     * Retrieves the header file, using given properties if necessary.
-     * @param properties the properties.
-     * @return the header file.
-     */
-    protected File getHeaderfile(final Properties properties)
-    {
-        File result = getHeaderfile();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            String t_strHeader = properties.getProperty(HEADER_FILE);
-
-            if  (t_strHeader != null)
-            {
-                result = new File(t_strHeader);
-                setHeaderfile(result);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies whether to use subfolders.
-     * @param outputDirSubFolders such setting.
-     */
-    protected final void immutableSetOutputdirsubfolders(
-        final String outputDirSubFolders)
-    {
-        m__strOutputdirsubfolders = outputDirSubFolders;
-    }
-
-    /**
-     * Specifies whether to use subfolders.
-     * @param outputDirSubFolders such setting.
-     */
-    public void setOutputdirsubfolders(final String outputDirSubFolders)
-    {
-        immutableSetOutputdirsubfolders(outputDirSubFolders);
-
-        setOutputdirsubfoldersFlag(toBoolean(outputDirSubFolders));
-    }
-
-    /**
-     * Retrieves whether to use subfolders.
-     * @return such setting.
-     */
-    public String getOutputdirsubfolders()
-    {
-        return m__strOutputdirsubfolders;
-    }
-
-    /**
-     * Specifies the "outputdirsubfolders" flag.
-     * @param flag such flag.
-     */
-    protected void setOutputdirsubfoldersFlag(final boolean flag)
-    {
-        m__bOutputdirsubfolders = flag;
-    }
-
-    /**
-     * Retrieves the "outputdirsubfolders" flag.
-     * @return such flag.
-     */
-    protected boolean getOutputdirsubfoldersFlag()
-    {
-        return m__bOutputdirsubfolders;
-    }
-
-    /**
-     * Retrieves the output dir subfolders flag, using given properties if
-     * necessary.
-     * @param properties the properties.
-     * @return such flag.
-     */
-    protected boolean getOutputdirsubfoldersFlag(final Properties properties)
-    {
-        String t_strResult = getOutputdirsubfolders();
-
-        if  (   (t_strResult == null)
-             && (properties != null))
-        {
-            t_strResult = properties.getProperty(OUTPUT_DIR_SUBFOLDERS);
-            setOutputdirsubfolders(t_strResult);
-        }
-
-        return toBoolean(t_strResult);
-    }
-
-    /**
-     * Specifies whether to extract the tables.
-     * @param extractTables the procedure extraction setting.
-     */
-    protected final void immutableSetExtractTables(final String extractTables)
-    {
-        m__strExtractTables = extractTables;
-    }
-
-    /**
-     * Specifies whether to extract the tables.
-     * @param extractTables the procedure extraction setting.
-     */
-    public void setExtractTables(final String extractTables)
-    {
-        immutableSetExtractTables(extractTables);
-
-        setExtractTablesFlag(toBoolean(extractTables));
-    }
-
-    /**
-     * Retrieves whether to extract the tables.
-     * @return such setting.
-     */
-    public String getExtractTables()
-    {
-        return m__strExtractTables;
-    }
-
-    /**
-     * Specifies the "extract-tables" flag.
-     * @param flag such flag.
-     */
-    protected void setExtractTablesFlag(final boolean flag)
-    {
-        m__bExtractTables = flag;
-    }
-
-    /**
-     * Retrieves the "extract-tables" flag.
-     * @return such flag.
-     */
-    protected boolean getExtractTablesFlag()
-    {
-        return m__bExtractTables;
-    }
-
-    /**
-     * Retrieves the extract-tables flag, using given properties if necessary.
-     * @param properties the properties.
-     * @return such flag.
-     */
-    protected boolean getExtractTablesFlag(final Properties properties)
-    {
-        String t_strResult = getExtractTables();
-
-        if  (   (t_strResult == null)
-             && (properties != null))
-        {
-            t_strResult = properties.getProperty(EXTRACT_TABLES);
-            setExtractTables(t_strResult);
-        }
-
-        return toBoolean(t_strResult);
-    }
-
-    /**
-     * Specifies whether to extract the procedures.
-     * @param extractProcedures the procedure extraction setting.
-     */
-    protected final void immutableSetExtractProcedures(
-        final String extractProcedures)
-    {
-        m__strExtractProcedures = extractProcedures;
-    }
-
-    /**
-     * Specifies whether to extract the procedures.
-     * @param extractProcedures the procedure extraction setting.
-     */
-    public void setExtractProcedures(final String extractProcedures)
-    {
-        immutableSetExtractProcedures(extractProcedures);
-
-        setExtractProceduresFlag(toBoolean(extractProcedures));
-    }
-
-    /**
-     * Retrieves whether to extract the procedures.
-     * @return such setting.
-     */
-    public String getExtractProcedures()
-    {
-        return m__strExtractProcedures;
-    }
-
-    /**
-     * Specifies the "extract-procedures" flag.
-     * @param flag such flag.
-     */
-    protected void setExtractProceduresFlag(final boolean flag)
-    {
-        m__bExtractProcedures = flag;
-    }
-
-    /**
-     * Retrieves the "extract-procedures" flag.
-     * @return such flag.
-     */
-    protected boolean getExtractProceduresFlag()
-    {
-        return m__bExtractProcedures;
-    }
-
-    /**
-     * Retrieves the extract-procedures flag, using given properties
-     * if necessary.
-     * @param properties the properties.
-     * @return such flag.
-     */
-    protected boolean getExtractProceduresFlag(final Properties properties)
-    {
-        String t_strResult = getExtractProcedures();
-
-        if  (   (t_strResult == null)
-             && (properties != null))
-        {
-            t_strResult = properties.getProperty(EXTRACT_PROCEDURES);
-            setExtractProcedures(t_strResult);
-        }
-
-        return toBoolean(t_strResult);
-    }
-
-    /**
-     * Specifies whether to extract the functions.
-     * @param extractFunctions the function extraction setting.
-     */
-    protected final void immutableSetExtractFunctions(
-        final String extractFunctions)
-    {
-        m__strExtractFunctions = extractFunctions;
-    }
-
-    /**
-     * Specifies whether to extract the functions.
-     * @param extractFunctions the function extraction setting.
-     */
-    public void setExtractFunctions(final String extractFunctions)
-    {
-        immutableSetExtractFunctions(extractFunctions);
-
-        setExtractFunctionsFlag(toBoolean(extractFunctions));
-    }
-
-    /**
-     * Retrieves whether to extract the functions.
-     * @return such setting.
-     */
-    public String getExtractFunctions()
-    {
-        return m__strExtractFunctions;
-    }
-
-    /**
-     * Specifies the "extract-functions" flag.
-     * @param flag such flag.
-     */
-    protected void setExtractFunctionsFlag(final boolean flag)
-    {
-        m__bExtractFunctions = flag;
-    }
-
-    /**
-     * Retrieves the "extract-functions" flag.
-     * @return such flag.
-     */
-    protected boolean getExtractFunctionsFlag()
-    {
-        return m__bExtractFunctions;
-    }
-
-    /**
-     * Retrieves the extract-functions flag, using given properties if
-     * necessary.
-     * @param properties the properties.
-     * @return such flag.
-     */
-    protected boolean getExtractFunctionsFlag(final Properties properties)
-    {
-        String t_strResult = getExtractFunctions();
-
-        if  (   (t_strResult == null)
-             && (properties != null))
-        {
-            t_strResult = properties.getProperty(EXTRACT_FUNCTIONS);
-            setExtractFunctions(t_strResult);
-        }
-
-        return toBoolean(t_strResult);
-    }
-
-    /**
-     * Specifices the JNDI location for the data sources.
-     * @param jndiLocation the JNDI location.
-     */
-    protected final void immutableSetJndiDataSource(final String jndiLocation)
-    {
-        m__strJNDIDataSources = jndiLocation;
-    }
-
-    /**
-     * Specifices the JNDI location for the data sources.
-     * @param jndiLocation the JNDI location.
-     */
-    public void setJndiDataSource(final String jndiLocation)
-    {
-        immutableSetJndiDataSource(jndiLocation);
-    }
-
-    /**
-     * Retrieves the JNDI location for the data sources.
-     * @return such information.
-     */
-    public String getJndiDataSource()
-    {
-        return m__strJNDIDataSources;
-    }
-
-    /**
-     * Retrieves the JNDI path, using given properties if necessary.
-     * @param properties the properties.
-     * @return the JNDI location of the DataSource..
-     */
-    protected String getJndiDataSource(final Properties properties)
-    {
-        String result = getJndiDataSource();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            result = properties.getProperty(JNDI_DATASOURCE);
-            setJndiDataSource(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies whether to generate Mock DAO implementations.
-     * @param generate such setting.
-     */
-    protected final void immutableSetGenerateMockDAOImplementation(
-        final String generate)
-    {
-        m__strGenerateMockDAOImplementation = generate;
-    }
-
-    /**
-     * Specifies whether to generate Mock DAO implementations.
-     * @param generate such setting.
-     */
-    public void setGenerateMockDAOImplementation(final String generate)
-    {
-        immutableSetGenerateMockDAOImplementation(generate);
-
-        setGenerateMockDAOImplementationFlag(toBoolean(generate));
-    }
-
-    /**
-     * Retrieves whether to generate Mock DAO implementations.
-     * @return such setting.
-     */
-    public String getGenerateMockDAOImplementation()
-    {
-        return m__strGenerateMockDAOImplementation;
-    }
-
-    /**
-     * Specifies the "generate-mock-dao-implementation" flag.
-     * @param flag such flag.
-     */
-    protected void setGenerateMockDAOImplementationFlag(final boolean flag)
-    {
-        m__bGenerateMockDAOImplementation = flag;
-    }
-
-    /**
-     * Retrieves the "generate-mock-dao-implementation" flag.
-     * @return such flag.
-     */
-    protected boolean getGenerateMockDAOImplementationFlag()
-    {
-        return m__bGenerateMockDAOImplementation;
-    }
-
-    /**
-     * Retrieves the generate-mock-dao-implementation flag, using given
-     * properties if necessary.
-     * @param properties the properties.
-     * @return such flag.
-     */
-    protected boolean getGenerateMockDAOImplementationFlag(
-        final Properties properties)
-    {
-        String t_strResult = getGenerateMockDAOImplementation();
-
-        if  (   (t_strResult == null)
-             && (properties != null))
-        {
-            t_strResult =
-                properties.getProperty(GENERATE_MOCK_DAO_IMPLEMENTATION);
-            setGenerateMockDAOImplementation(t_strResult);
-        }
-
-        return toBoolean(t_strResult);
-    }
-
-    /**
-     * Specifies whether to generate XML DAO implementations.
-     * @param generate such setting.
-     */
-    protected final void immutableSetGenerateXMLDAOImplementation(
-        final String generate)
-    {
-        m__strGenerateXMLDAOImplementation = generate;
-    }
-
-    /**
-     * Specifies whether to generate XML DAO implementations.
-     * @param generate such setting.
-     */
-    public void setGenerateXMLDAOImplementation(final String generate)
-    {
-        immutableSetGenerateXMLDAOImplementation(generate);
-
-        setGenerateXMLDAOImplementationFlag(toBoolean(generate));
-    }
-
-    /**
-     * Retrieves whether to generate XML DAO implementations.
-     * @return such setting.
-     */
-    public String getGenerateXMLDAOImplementation()
-    {
-        return m__strGenerateXMLDAOImplementation;
-    }
-
-    /**
-     * Specifies the "generate-xml-dao-implementation" flag.
-     * @param flag such flag.
-     */
-    protected void setGenerateXMLDAOImplementationFlag(final boolean flag)
-    {
-        m__bGenerateXMLDAOImplementation = flag;
-    }
-
-    /**
-     * Retrieves the "generate-xml-dao-implementation" flag.
-     * @return such flag.
-     */
-    protected boolean getGenerateXMLDAOImplementationFlag()
-    {
-        return m__bGenerateXMLDAOImplementation;
-    }
-
-    /**
-     * Retrieves the generate-xml-dao-implementation flag, using given
-     * properties if necessary.
-     * @param properties the properties.
-     * @return such flag.
-     */
-    protected boolean getGenerateXMLDAOImplementationFlag(
-        final Properties properties)
-    {
-        String t_strResult = getGenerateXMLDAOImplementation();
-
-        if  (   (t_strResult == null)
-             && (properties != null))
-        {
-            t_strResult =
-                properties.getProperty(GENERATE_XML_DAO_IMPLEMENTATION);
-            setGenerateXMLDAOImplementation(t_strResult);
-        }
-
-        return toBoolean(t_strResult);
-    }
-
-    /**
-     * Specifies whether to allow empty repository DAO.
-     * @param allow such setting.
-     */
-    protected final void immutableSetAllowEmptyRepositoryDAO(
-        final String allow)
-    {
-        m__strAllowEmptyRepositoryDAO = allow;
-    }
-
-    /**
-     * Specifies whether to allow empty repository DAO.
-     * @param allow such setting.
-     */
-    public void setAllowEmptyRepositoryDAO(final String allow)
-    {
-        immutableSetAllowEmptyRepositoryDAO(allow);
-
-        setAllowEmptyRepositoryDAOFlag(toBoolean(allow));
-    }
-
-    /**
-     * Retrieves whether to allow empty repository DAO.
-     * @return such setting.
-     */
-    public String getAllowEmptyRepositoryDAO()
-    {
-        return m__strAllowEmptyRepositoryDAO;
-    }
-
-    /**
-     * Specifies the "allow-empty-repository-dao" flag.
-     * @param flag such flag.
-     */
-    protected void setAllowEmptyRepositoryDAOFlag(final boolean flag)
-    {
-        m__bAllowEmptyRepositoryDAO = flag;
-    }
-
-    /**
-     * Retrieves the "allow-empty-repository-dao" flag.
-     * @return such flag.
-     */
-    protected boolean getAllowEmptyRepositoryDAOFlag()
-    {
-        return m__bAllowEmptyRepositoryDAO;
-    }
-
-    /**
-     * Retrieves the allow-empty-repository-dao flag, using given
-     * properties if necessary.
-     * @param properties the properties.
-     * @return such flag.
-     */
-    protected boolean getAllowEmptyRepositoryDAOFlag(
-        final Properties properties)
-    {
-        String t_strResult = getAllowEmptyRepositoryDAO();
-
-        if  (   (t_strResult == null)
-             && (properties != null))
-        {
-            t_strResult = properties.getProperty(ALLOW_EMPTY_REPOSITORY_DAO);
-            setAllowEmptyRepositoryDAO(t_strResult);
-        }
-
-        return toBoolean(t_strResult);
-    }
-
-    /**
-     * Specifies whether to implement marker interfaces.
-     * @param allow such setting.
-     */
-    protected final void immutableSetImplementMarkerInterfaces(
-        final String allow)
-    {
-        m__strImplementMarkerInterfaces = allow;
-    }
-
-    /**
-     * Specifies whether to implement marker interfaces.
-     * @param implement such setting.
-     */
-    public void setImplementMarkerInterfaces(final String implement)
-    {
-        immutableSetImplementMarkerInterfaces(implement);
-
-        setImplementMarkerInterfacesFlag(toBoolean(implement));
-    }
-
-    /**
-     * Retrieves whether to implement marker interfaces.
-     * @return such setting.
-     */
-    public String getImplementMarkerInterfaces()
-    {
-        return m__strImplementMarkerInterfaces;
-    }
-
-    /**
-     * Specifies the "implement-marker-interfaces" flag.
-     * @param flag such flag.
-     */
-    protected void setImplementMarkerInterfacesFlag(final boolean flag)
-    {
-        m__bImplementMarkerInterfaces = flag;
-    }
-
-    /**
-     * Retrieves the "implement-marker-interfaces" flag.
-     * @return such flag.
-     */
-    protected boolean getImplementMarkerInterfacesFlag()
-    {
-        return m__bImplementMarkerInterfaces;
-    }
-
-    /**
-     * Retrieves the implement-marker-interfaces flag, using given
-     * properties if necessary.
-     * @param properties the properties.
-     * @return such flag.
-     */
-    protected boolean getImplementMarkerInterfacesFlag(
-        final Properties properties)
-    {
-        String t_strResult = getImplementMarkerInterfaces();
-
-        if  (   (t_strResult == null)
-             && (properties != null))
-        {
-            t_strResult = properties.getProperty(IMPLEMENT_MARKER_INTERFACES);
-            setImplementMarkerInterfaces(t_strResult);
-        }
-
-        return toBoolean(t_strResult);
-    }
-
-    /**
      * Specifies the "tables" nested element.
      * @param tables the tables xml element.
      */
@@ -1458,6 +1154,38 @@ public class QueryJTask
     public AntTablesElement getTables()
     {
         return m__Tables;
+    }
+
+    /**
+     * Requests the chained logic to be performed.
+     * @throws BuildException whenever the required
+     * parameters are not present or valid.
+     */
+    public void execute()
+        throws  BuildException
+    {
+        execute(getQueryJChain());
+    }
+
+    /**
+     * Requests the chained logic to be performed.
+     * @param delegee the delegee.
+     * @throws BuildException whenever the required
+     * parameters are not present or valid.
+     */
+    protected void execute(final QueryJChain delegee)
+        throws  BuildException
+    {
+        try
+        {
+            delegee.process();
+        }
+        catch  (final QueryJBuildException buildException)
+        {
+            throw
+                new BuildException(
+                    buildException.getMessage(), buildException);
+        }
     }
 
     /**
@@ -1481,546 +1209,158 @@ public class QueryJTask
     }
 
     /**
-     * Specifies the custom-sql model.
-     * @param model the model.
+     * Customizes <code>QueryJChain</code> to get parameters from Ant.
+     * @author <a href="mailto:chous@acm-sl.org"
+               >Jose San Leandro</a>
      */
-    protected final void immutableSetCustomSqlModel(final String model)
+    protected class AntQueryJChain
+        extends  QueryJChain
     {
-        m__strCustomSqlModel = model;
-    }
-
-    /**
-     * Specifies the custom-sql model.
-     * @param model the model.
-     */
-    public void setCustomSqlModel(final String model)
-    {
-        immutableSetCustomSqlModel(model);
-    }
-
-    /**
-     * Retrieves the custom-sql model.
-     * @return such model.
-     */
-    public String getCustomSqlModel()
-    {
-        return m__strCustomSqlModel;
-    }
-
-    /**
-     * Retrieves the custom-sql model, using given
-     * properties if necessary.
-     * @param properties the properties.
-     * @return such model.
-     */
-    protected String getCustomSqlModel(final Properties properties)
-    {
-        String result = getCustomSqlModel();
-
-        if  (   (result == null)
-             && (properties != null))
+        /**
+         * Creates an <code>AntQueryJChain</code> instance.
+         */
+        public AntQueryJChain() {};
+                
+        /**
+         * Builds the command.
+         * @return the initialized command.
+         */
+        protected QueryJCommand buildCommand()
         {
-            result = properties.getProperty(CUSTOM_SQL_MODEL);
-            setCustomSqlModel(result);
+            return
+                buildCommand(
+                    new QueryJCommand(new QueryJAntLog(getProject())));
         }
 
-        return result;
-    }
-
-    /**
-     * Specifies the sql.xml file.
-     * @param file the new file.
-     */
-    protected final void immutableSetSqlXmlFile(final File file)
-    {
-        m__SqlXmlFile = file;
-    }
-
-    /**
-     * Specifies the sql.xml file.
-     * @param file the new file.
-     */
-    public void setSqlXmlFile(final File file)
-    {
-        immutableSetSqlXmlFile(file);
-    }
-
-    /**
-     * Retrieves the sql.xml file.
-     * @return such information.
-     */
-    public File getSqlXmlFile()
-    {
-        return m__SqlXmlFile;
-    }
-
-    /**
-     * Retrieves the sql.xml file, using given
-     * properties if necessary.
-     * @param properties the properties.
-     * @return such information.
-     */
-    protected File getSqlXmlFile(final Properties properties)
-    {
-        File result = getSqlXmlFile();
-
-        if  (   (result == null)
-             && (properties != null))
+        /**
+         * Maps the attributes in the command map.
+         * @param attributes the command attributes.
+         * @param driver the JDBC driver.
+         * @param url the JDBC url.
+         * @param username the JDBC username.
+         * @param password the JDBC password.
+         * @param catalog the JDBC catalog.
+         * @param schema the JDBC schema.
+         * @param repository the repository.
+         * @param packageName the base package of the generated sources.
+         * @param outputDir the output folder.
+         * @param header the copyright header.
+         * @param outputDirSubfolders whether to use main/ and test/ as
+         * subfolders.
+         * @param extractTables whether to extract tables or not.
+         * @param extractProcedures whether to extract the procedures or not.
+         * @param extractFunctions whether to extract the functions or not.
+         * @param jndiDataSource the location in JNDI of the
+         * <code>DataSource</code>.
+         * @param generateMockDAOImplementation whether to generate Mock DAOs.
+         * @param generateXmlDAOImplementation whether to generate XML DAOs.
+         * @param allowEmptyRepositoryDAO whether to generate a repository
+         * DAO even tough it'll contain no custom queries..
+         * @param implementMarkerInterfaces whether to make some generated 
+         * sources implement <code>org.acmsl.commons.patterns</code> <i>Marker</i>
+         * interfaces.
+         * @param customSqlModel the format of the custom SQL file.
+         * @param sqlXmlFile the file containing the custom SQL.
+         * @param grammarBundle the grammar with irregular singular and plural
+         * forms of the table names.
+         * @param tables the custom tables.
+         * @param externallyManagedFields the externally-managed fields.
+         * @param classpath the classpath.
+         * @precondition attributes != null
+         */
+        protected void mapAttributes(
+            final Map attributes,
+            final String driver,
+            final String url,
+            final String username,
+            final String password,
+            final String catalog,
+            final String schema,
+            final String repository,
+            final String packageName,
+            final File outputdir,
+            final File header,
+            final boolean outputdirsubfolders,
+            final boolean extractTables,
+            final boolean extractProcedures,
+            final boolean extractFunctions,
+            final String jndiDataSource,
+            final boolean generateMockDAOImplementation,
+            final boolean generateXmlDAOImplementation,
+            final boolean allowEmptyRepositoryDAO,
+            final boolean implementMarkerInterfaces,
+            final String customSqlModel,
+            final File sqlXmlFile,
+            final String grammarBundle)
         {
-            String t_strSqlXml = properties.getProperty(SQL_XML_FILE);
+            super.mapAttributes(
+                attributes,
+                driver,
+                url,
+                username,
+                password,
+                catalog,
+                schema,
+                repository,
+                packageName,
+                outputdir,
+                header,
+                outputdirsubfolders,
+                extractTables,
+                extractProcedures,
+                extractFunctions,
+                jndiDataSource,
+                generateMockDAOImplementation,
+                generateXmlDAOImplementation,
+                allowEmptyRepositoryDAO,
+                implementMarkerInterfaces,
+                customSqlModel,
+                sqlXmlFile,
+                grammarBundle);
 
-            if  (t_strSqlXml != null)
-            {
-                result = new File(t_strSqlXml);
-                setSqlXmlFile(result);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the grammar bundle.
-     * @param grammarBundle the new grammar bundle.
-     */
-    protected final void immutableSetGrammarbundle(
-        final String grammarBundle)
-    {
-        m__strGrammarBundleName = grammarBundle;
-    }
-
-    /**
-     * Specifies the grammar bundle.
-     * @param grammarBundle the new grammar bundle.
-     */
-    public void setGrammarbundle(final String grammarBundle)
-    {
-        immutableSetGrammarbundle(grammarBundle);
-    }
-
-    /**
-     * Retrieves the grammar bundle.
-     * @return such information.
-     */
-    public String getGrammarbundle()
-    {
-        return m__strGrammarBundleName;
-    }
-
-    /**
-     * Retrieves the grammar bundle, using given
-     * properties if necessary.
-     * @param properties the properties.
-     * @return such information.
-     */
-    protected String getGrammarbundle(final Properties properties)
-    {
-        String result = getGrammarbundle();
-
-        if  (   (result == null)
-             && (properties != null))
-        {
-            result = properties.getProperty(GRAMMAR_BUNDLE);
-            setGrammarbundle(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Builds the chain.
-     * @param chain the chain to be configured.
-     * @return the updated chain.
-     */
-    protected Chain buildChain(final Chain chain)
-    {
-        return
-            buildChain(
-                chain,
-                getGenerateMockDAOImplementationFlag(),
-                getGenerateXMLDAOImplementationFlag());
-    }
-
-    /**
-     * Builds the chain.
-     * @param chain the chain to be configured.
-     * @param includeMock whether to include Mock implementations.
-     * @param includeXML whether to include XML implementations.
-     * @return the updated chain.
-     */
-    protected Chain buildChain(
-        final Chain chain,
-        final boolean generateMock,
-        final boolean generateXML)
-    {
-        Chain result = chain;
-
-        if  (result != null)
-        {
-            result.add(new ParameterValidationHandler());
-
-            result.add(new JdbcConnectionOpeningHandler());
-            result.add(new CustomSqlProviderRetrievalHandler());
-
-            result.add(new MySQL4xMetaDataRetrievalHandler());
-            result.add(new OracleMetaDataRetrievalHandler());
-            result.add(new JdbcMetaDataRetrievalHandler());
-            result.add(new CustomSqlValidationHandler());
-
-            result.add(new DatabaseMetaDataLoggingHandler());
-
-            result.add(new ExternallyManagedFieldsRetrievalHandler());
-
-            result.add(new BaseRepositoryDAOTemplateHandlerBundle());
-            result.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
-
-            result.add(new RepositoryDAOTemplateHandlerBundle());
-            result.add(new RepositoryDAOFactoryTemplateHandlerBundle());
-
-            result.add(new TableTemplateHandlerBundle());
-
-            result.add(new TableRepositoryTemplateHandlerBundle());
-
-            //result.add(new FunctionsBundle());
-
-            result.add(new ProcedureRepositoryTemplateHandlerBundle());
-
-            result.add(new KeywordRepositoryTemplateHandlerBundle());
-
-            result.add(new DAOBundle(generateMock, generateXML));
-
-            result.add(new ValueObjectTemplateHandlerBundle());
-
-            result.add(new ValueObjectFactoryTemplateHandlerBundle());
-
-            result.add(new BaseValueObjectTemplateHandlerBundle());
-
-            result.add(new ValueObjectImplTemplateHandlerBundle());
-
-            result.add(new CustomValueObjectTemplateHandlerBundle());
-
-            result.add(new CustomBaseValueObjectTemplateHandlerBundle());
-
-            result.add(new CustomValueObjectImplTemplateHandlerBundle());
-
-            result.add(new CustomValueObjectFactoryTemplateHandlerBundle());
-
-            result.add(new TestSuiteTemplateHandlerBundle());
-
-            result.add(new JdbcConnectionClosingHandler());
-        }
-
-        return result;
-    }
-
-    /**
-     * Performs any clean up whenever an error occurs.
-     * @param buildException the error that triggers this clean-up.
-     * @param command the command.
-     */
-    protected void cleanUpOnError(
-        final QueryJBuildException buildException, final QueryJCommand command)
-    {
-        log("Performing clean up");
-
-        try
-        {
-            new JdbcConnectionClosingHandler().handle(command);
-        }
-        catch  (final QueryJBuildException closingException)
-        {
-            log("Error closing the connection");
-        }
-    }
-
-    /**
-     * Builds the command.
-     * @param command the command to be initialized.
-     * @return the initialized command.
-     * @precondition command != null
-     */
-    protected QueryJCommand buildCommand(final QueryJCommand command)
-    {
-        return buildCommand(command, readSettings(getSettings()));
-    }
-
-    /**
-     * Builds the command.
-     * @param command the command to be initialized.
-     * @param settings the properties file.
-     * @return the initialized command.
-     * @precondition command != null
-     */
-    protected QueryJCommand buildCommand(
-        final QueryJCommand command, final Properties settings)
-    {
-        QueryJCommand result = command;
-
-        if  (result != null)
-        {
             mapAttributes(
-                command.getAttributeMap(),
-                getDriver(settings),
-                getUrl(settings),
-                getUsername(settings),
-                getPassword(settings),
-                getCatalog(settings),
-                getSchema(settings),
-                getRepository(settings),
-                getPackage(settings),
-                getOutputdir(settings),
-                getHeaderfile(settings),
-                getOutputdirsubfoldersFlag(settings),
-                getExtractTablesFlag(settings),
-                getExtractProceduresFlag(settings),
-                getExtractFunctionsFlag(settings),
-                getJndiDataSource(settings),
-                getGenerateMockDAOImplementationFlag(settings),
-                getGenerateXMLDAOImplementationFlag(settings),
-                getAllowEmptyRepositoryDAOFlag(settings),
-                getImplementMarkerInterfacesFlag(settings),
-                getCustomSqlModel(settings),
-                getSqlXmlFile(settings),
-                getGrammarbundle(settings),
+                attributes,
                 getTables(),
                 getExternallyManagedFields(),
                 getClasspath());
         }
 
-        return result;
-    }
-                
-    /**
-     * Maps the attributes in the command map.
-     * @param attributes the command attributes.
-     * @param driver the JDBC driver.
-     * @param url the JDBC url.
-     * @param username the JDBC username.
-     * @param password the JDBC password.
-     * @param catalog the JDBC catalog.
-     * @param schema the JDBC schema.
-     * @param repository the repository.
-     * @param packageName the base package of the generated sources.
-     * @param outputDir the output folder.
-     * @param header the copyright header.
-     * @param outputDirSubfolders whether to use main/ and test/ as
-     * subfolders.
-     * @param extractTables whether to extract tables or not.
-     * @param extractProcedures whether to extract the procedures or not.
-     * @param extractFunctions whether to extract the functions or not.
-     * @param jndiDataSource the location in JNDI of the
-     * <code>DataSource</code>.
-     * @param generateMockDAOImplementation whether to generate Mock DAOs.
-     * @param generateXmlDAOImplementation whether to generate XML DAOs.
-     * @param allowEmptyRepositoryDAO whether to generate a repository
-     * DAO even tough it'll contain no custom queries..
-     * @param implementMarkerInterfaces whether to make some generated 
-     * sources implement <code>org.acmsl.commons.patterns</code> <i>Marker</i>
-     * interfaces.
-     * @param customSqlModel the format of the custom SQL file.
-     * @param sqlXmlFile the file containing the custom SQL.
-     * @param grammarBundle the grammar with irregular singular and plural
-     * forms of the table names.
-     * @param tables the custom tables.
-     * @param externallyManagedFields the externally-managed fields.
-     * @param classpath the classpath.
-     * @precondition attributes != null
-     */
-    protected void mapAttributes(
-        final Map attributes,
-        final String driver,
-        final String url,
-        final String username,
-        final String password,
-        final String catalog,
-        final String schema,
-        final String repository,
-        final String packageName,
-        final File outputdir,
-        final File header,
-        final boolean outputdirsubfolders,
-        final boolean extractTables,
-        final boolean extractProcedures,
-        final boolean extractFunctions,
-        final String jndiDataSource,
-        final boolean generateMockDAOImplementation,
-        final boolean generateXmlDAOImplementation,
-        final boolean allowEmptyRepositoryDAO,
-        final boolean implementMarkerInterfaces,
-        final String customSqlModel,
-        final File sqlXmlFile,
-        final String grammarBundle,
-        final AntTablesElement tables,
-        final AntExternallyManagedFieldsElement externallyManagedFields,
-        final Path classpath)
-    {
-        if  (attributes != null)
+        /**
+         * Maps the attributes in the command map.
+         * @param attributes the command attributes.
+         * @param tables the custom tables.
+         * @param externallyManagedFields the externally-managed fields.
+         * @param classpath the classpath.
+         * @precondition attributes != null
+         */
+        protected void mapAttributes(
+            final Map attributes,
+            final AntTablesElement tables,
+            final AntExternallyManagedFieldsElement externallyManagedFields,
+            final Path classpath)
         {
-            if  (driver != null)
+            if  (attributes != null)
             {
-                attributes.put(
-                    ParameterValidationHandler.JDBC_DRIVER,
-                    driver);
-            }
+                if  (classpath != null)
+                {
+                    attributes.put(
+                        ParameterValidationHandler.CLASSPATH,
+                        classpath);
+                }
 
-            if  (url != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.JDBC_URL,
-                    url);
-            }
+                if  (tables != null)
+                {
+                    attributes.put(
+                        ParameterValidationHandler.TABLES,
+                        tables);
+                }
 
-            if  (username != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.JDBC_USERNAME,
-                    username);
-            }
-
-            if  (password != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.JDBC_PASSWORD,
-                    password);
-            }
-
-            if  (catalog != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.JDBC_CATALOG,
-                    catalog);
-            }
-
-            if  (schema != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.JDBC_SCHEMA,
-                    schema);
-            }
-
-            if  (repository != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.REPOSITORY,
-                    repository);
-            }
-
-            if  (packageName != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.PACKAGE,
-                    packageName);
-            }
-
-            if  (classpath != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.CLASSPATH,
-                    classpath);
-            }
-
-            if  (outputdir != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.OUTPUT_DIR,
-                    outputdir);
-            }
-
-            if  (header != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.HEADER_FILE,
-                    header);
-            }
-
-            attributes.put(
-                ParameterValidationHandler.OUTPUT_DIR_SUBFOLDERS,
-                (outputdirsubfolders
-                 ?  Boolean.TRUE
-                 :  Boolean.FALSE));
-
-            attributes.put(
-                ParameterValidationHandler.EXTRACT_TABLES,
-                (extractTables
-                 ?  Boolean.TRUE
-                 :  Boolean.FALSE));
-
-            attributes.put(
-                ParameterValidationHandler.EXTRACT_PROCEDURES,
-                (extractProcedures
-                 ?  Boolean.TRUE
-                 :  Boolean.FALSE));
-
-            attributes.put(
-                ParameterValidationHandler.EXTRACT_FUNCTIONS,
-                (extractFunctions
-                 ?  Boolean.TRUE
-                 :  Boolean.FALSE));
-
-            if  (jndiDataSource != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.JNDI_DATASOURCES,
-                    jndiDataSource);
-            }
-
-            attributes.put(
-                ParameterValidationHandler.GENERATE_MOCK_DAO,
-                (generateMockDAOImplementation
-                 ?  Boolean.TRUE
-                 :  Boolean.FALSE));
-
-            attributes.put(
-                ParameterValidationHandler.GENERATE_XML_DAO,
-                (generateXmlDAOImplementation
-                 ?  Boolean.TRUE
-                 :  Boolean.FALSE));
-
-            attributes.put(
-                ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO,
-                (allowEmptyRepositoryDAO
-                 ?  Boolean.TRUE
-                 :  Boolean.FALSE));
-
-            attributes.put(
-                ParameterValidationHandler.IMPLEMENT_MARKER_INTERFACES,
-                (implementMarkerInterfaces
-                 ?  Boolean.TRUE
-                 :  Boolean.FALSE));
-
-            if  (tables != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.TABLES,
-                    tables);
-            }
-
-            if  (externallyManagedFields != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS,
-                    externallyManagedFields);
-            }
-
-            if  (customSqlModel != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.CUSTOM_SQL_MODEL,
-                    customSqlModel);
-            }
-
-            if  (sqlXmlFile != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.SQL_XML_FILE,
-                    sqlXmlFile);
-            }
-
-            if  (grammarBundle != null)
-            {
-                attributes.put(
-                    ParameterValidationHandler.GRAMMAR_BUNDLE_NAME,
-                    grammarBundle);
+                if  (externallyManagedFields != null)
+                {
+                    attributes.put(
+                        ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS,
+                        externallyManagedFields);
+                }
             }
         }
     }
@@ -2078,100 +1418,6 @@ public class QueryJTask
         else
         {
             throw new BuildException(name + " elements are not supported");
-        }
-
-        return result;
-    }
-
-    /**
-     * Converts given value to boolean.
-     * @param value the value.
-     * @return the converted value.
-     */
-    protected boolean toBoolean(final String value)
-    {
-        return toBoolean(value, true);
-    }
-
-    /**
-     * Converts given value to boolean.
-     * @param value the value.
-     * @param defaultValue the default value if input is null.
-     * @return the converted value.
-     */
-    protected boolean toBoolean(
-        final String value, final boolean defaultValue)
-    {
-        boolean result = defaultValue;
-
-        if  (value != null)
-        {
-            String t_strTrimmedValue = value.trim().toLowerCase();
-
-            result =
-                (   (t_strTrimmedValue.equals("yes"))
-                 || (t_strTrimmedValue.equals("true")));
-        }
-
-        return result;
-    }
-
-    /**
-     * Reads the settings from given file.
-     * @param file the file.
-     * @return the <code>Properties</code> instance, or <code>null</code>
-     * if the file doesn't exist.
-     */
-    protected Properties readSettings(final File file)
-    {
-        Properties result = new Properties();
-
-        if  (file != null)
-        {
-            InputStream t_isSettings = null;
-
-            try
-            {
-                t_isSettings = new FileInputStream(file);
-
-                result.load(t_isSettings);
-            }
-            catch  (final IOException ioException)
-            {
-                result = null;
-
-                Log t_Log = UniqueLogFactory.getLog(QueryJTask.class);
-
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Cannot read the configuration properties "
-                        + "file.",
-                        ioException);
-                }
-            }
-            finally
-            {
-                if  (t_isSettings != null)
-                {
-                    try
-                    {
-                        t_isSettings.close();
-                    }
-                    catch  (final IOException ioException)
-                    {
-                        Log t_Log = UniqueLogFactory.getLog(QueryJTask.class);
-
-                        if  (t_Log != null)
-                        {
-                            t_Log.error(
-                                  "Cannot close the configuration properties "
-                                + "file.",
-                                ioException);
-                        }
-                    }
-                }
-            }
         }
 
         return result;

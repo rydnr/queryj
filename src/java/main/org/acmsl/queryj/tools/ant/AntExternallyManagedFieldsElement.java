@@ -74,7 +74,7 @@ public class AntExternallyManagedFieldsElement
      * Specifies the field collection.
      * @param fields the collection
      */
-    private void inmutableSetFields(Collection fields)
+    private void immutableSetFields(final Collection fields)
     {
         m__cFields = fields;
     }
@@ -83,9 +83,9 @@ public class AntExternallyManagedFieldsElement
      * Specifies the field collection.
      * @param fields the collection
      */
-    private void setFields(Collection fields)
+    private void setFields(final Collection fields)
     {
-        inmutableSetFields(fields);
+        immutableSetFields(fields);
     }
 
     /**
@@ -102,7 +102,7 @@ public class AntExternallyManagedFieldsElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setDynamicAttribute(String name, String value)
+    public void setDynamicAttribute(final String name, final String value)
     {
         throw new BuildException("Attributes are not supported");
     }

@@ -40,6 +40,11 @@
 package org.acmsl.queryj.tools.ant;
 
 /*
+ * Importing some project classes.
+ */
+import org.acmsl.queryj.tools.metadata.vo.AbstractField;
+
+/*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
@@ -58,83 +63,13 @@ import java.util.Collection;
            >Jose San Leandro</a>
  */
 public class AntFieldElement
+    extends  AbstractField
     implements  DynamicConfigurator
 {
-    /**
-     * The field name.
-     */
-    private String m__strName;
-
-    /**
-     * The field type.
-     */
-    private String m__strType;
-
     /**
      * The field pk nature.
      */
     private String m__strPk;
-
-    /**
-     * The field pk nature.
-     */
-    private boolean m__bPk = false;
-
-    /**
-     * The table name.
-     */
-    private String m__strTableName;
-
-    /**
-     * The keyword.
-     */
-    private String m__strKeyword;
-
-    /**
-     * The query to retrieve the keyword value.
-     */
-    private String m__strRetrievalQuery;
-
-    /**
-     * The field fk collection.
-     */
-    private Collection m__cFieldFks;
-
-    /**
-     * Specifies the field name.
-     * @param name the field name.
-     */
-    protected void setName(final String name)
-    {
-        m__strName = name;
-    }
-
-    /**
-     * Retrieves the field name.
-     * @return such name.
-     */
-    public String getName()
-    {
-        return m__strName;
-    }
-
-    /**
-     * Specifies the field type.
-     * @param type the field type.
-     */
-    protected void setType(final String type)
-    {
-        m__strType = type;
-    }
-
-    /**
-     * Retrieves the field type.
-     * @return such name.
-     */
-    public String getType()
-    {
-        return m__strType;
-    }
 
     /**
      * Specifies if the field is a primary key.
@@ -144,7 +79,7 @@ public class AntFieldElement
     {
         m__strPk = pk;
 
-        setIsPk(
+        setPk(
             (   (pk != null)
              && (   (pk.trim().toLowerCase().equals("yes")
                  || (pk.trim().toLowerCase().equals("true"))))));
@@ -160,114 +95,6 @@ public class AntFieldElement
     }
 
     /**
-     * Specifies if the field is a primary key.
-     * @param pk such information.
-     */
-    protected void setIsPk(final boolean pk)
-    {
-        m__bPk = pk;
-    }
-
-    /**
-     * Retrieves if the field is a primary key.
-     * @return such information.
-     */
-    public boolean isPk()
-    {
-        return m__bPk;
-    }
-
-    /**
-     * Specifies the table name.
-     * @param name the table name.
-     */
-    protected void setTableName(final String name)
-    {
-        m__strTableName = name;
-    }
-
-    /**
-     * Retrieves the table name.
-     * @return such name.
-     */
-    public String getTableName()
-    {
-        return m__strTableName;
-    }
-
-    /**
-     * Specifies the field's keyword.
-     * @param keyword the keyword.
-     */
-    protected void setKeyword(final String keyword)
-    {
-        m__strKeyword = keyword;
-    }
-
-    /**
-     * Retrieves the field's keyword.
-     * @return such keyword.
-     */
-    public String getKeyword()
-    {
-        return m__strKeyword;
-    }
-
-    /**
-     * Specifies the field fk collection.
-     * @param fieldFks the collection
-     */
-    private void inmutableSetFieldFks(final Collection fieldFks)
-    {
-        m__cFieldFks = fieldFks;
-    }
-
-    /**
-     * Specifies the field fk collection.
-     * @param fieldFks the collection
-     */
-    protected void setFieldFks(final Collection fieldFks)
-    {
-        inmutableSetFieldFks(fieldFks);
-    }
-
-    /**
-     * Retrieves the field fk collection.
-     * @return such collection.
-     */
-    public Collection getFieldFks()
-    {
-        return m__cFieldFks;
-    }
-
-    /**
-     * Specifies the query to retrieve the field value.
-     * @param query such query.
-     */
-    private void immutableSetRetrievalQuery(final String query)
-    {
-        m__strRetrievalQuery = query;
-    }
-
-    /**
-     * Specifies the query to retrieve the field value.
-     * @param query such query.
-     */
-    protected void setRetrievalQuery(final String query)
-    {
-        immutableSetRetrievalQuery(query);
-    }
-
-    /**
-     * Retrieves the query to retrieve the field value.
-     * @return such information.
-     */
-    public String getRetrievalQuery()
-    {
-        return m__strRetrievalQuery;
-    }
-
-    /**
      * Specifies a dynamic attribute.
      * @param name the attribute name.
      * @param value the attribute value.
@@ -280,7 +107,7 @@ public class AntFieldElement
         }
         else if  ("type".equals(name))
         {
-            setType(value);
+            setNativeType(value);
         }
         else if  ("pk".equals(name))
         {

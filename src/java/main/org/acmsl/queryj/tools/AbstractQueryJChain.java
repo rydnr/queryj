@@ -33,10 +33,10 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Manages a sequential chain of Ant actions.
+ * Description: Manages a sequential chain of actions within QueryJ.
  *
  */
-package org.acmsl.queryj.tools.ant;
+package org.acmsl.queryj.tools;
 
 /*
  * Importing some project classes.
@@ -68,31 +68,22 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
-import org.apache.tools.ant.types.Path;
-import org.apache.tools.ant.types.Reference;
-
 /**
- * Manages a sequential chain of Ant actions.
+ * Manages a sequential chain of actions within QueryJ.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class ChainTask
-    extends  Task
+public abstract class AbstractQueryJChain
 {
     /**
-     * The task chain.
+     * The chain.
      */
     private Chain m__Chain;
 
     /**
-     * Constructs a Chain task.
+     * Constructs an <code>AbstractQueryJChain</code> instance.
      */
-    public ChainTask()
+    public AbstractQueryJChain()
     {
         super(); // redundant
         immutableSetChain(new ArrayListChainAdapter());
@@ -127,25 +118,13 @@ public abstract class ChainTask
 
     /**
      * Requests the chained logic to be performed.
-     * @throws BuildException whenever the required
+     * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
-    public void execute()
-        throws  BuildException
+    public void process()
+        throws  QueryJBuildException
     {
-        try
-        {
-            process(
-                buildChain(getChain()),
-                buildCommand(
-                    new QueryJCommand(new QueryJAntLog(getProject()))));
-        }
-        catch  (final QueryJBuildException buildException)
-        {
-            throw
-                new BuildException(
-                    buildException.getMessage(), buildException);
-        }
+        process(buildChain(getChain()), buildCommand());
     }
 
     /**
@@ -154,6 +133,15 @@ public abstract class ChainTask
      * @return the updated chain.
      */
     protected abstract Chain buildChain(final Chain chain);
+
+    /**
+     * Builds the command.
+     * @return the initialized command.
+     */
+    protected QueryJCommand buildCommand()
+    {
+        return buildCommand(new QueryJCommand());
+    }
 
     /**
      * Builds the command.
