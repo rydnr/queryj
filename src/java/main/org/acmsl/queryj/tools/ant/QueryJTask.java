@@ -147,9 +147,9 @@ public class QueryJTask
      * Specifies the properties file.
      * @param file such file.
      */
-    public void setSettings(final File file)
+    public void setSettingsFile(final File file)
     {
-        setSettings(file, getQueryJChain());
+        setSettingsFile(file, getQueryJChain());
     }
 
     /**
@@ -158,18 +158,18 @@ public class QueryJTask
      * @param delegee the delegee.
      * @precondition delegee != null
      */
-    protected void setSettings(final File file, final QueryJChain delegee)
+    protected void setSettingsFile(final File file, final QueryJChain delegee)
     {
-        delegee.setSettings(file);
+        delegee.setSettingsFile(file);
     }
 
     /**
      * Retrieves the properties file.
      * @return such file.
      */
-    public File getSettings()
+    public File getSettingsFile()
     {
-        return getSettings(getQueryJChain());
+        return getSettingsFile(getQueryJChain());
     }
 
     /**
@@ -178,9 +178,9 @@ public class QueryJTask
      * @return such file.
      * @precondition delegee != null
      */
-    protected File getSettings(final QueryJChain delegee)
+    protected File getSettingsFile(final QueryJChain delegee)
     {
-        return delegee.getSettings();
+        return delegee.getSettingsFile();
     }
 
     /**

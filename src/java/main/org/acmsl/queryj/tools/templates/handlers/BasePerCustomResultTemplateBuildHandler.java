@@ -413,7 +413,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customSqlProvider the custom RESULT provider.
      * @param metadataManager the database metadata manager.
      * @return such foreign keys.
-     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
     protected Result[] retrieveCustomResultElements(
@@ -422,7 +421,9 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     {
         Collection t_cResult = new ArrayList();
 
-        Collection t_cCollection = customSqlProvider.getCollection();
+        Collection t_cCollection =
+            (customSqlProvider != null)
+            ? customSqlProvider.getCollection() : null;
 
         if  (t_cCollection != null)
         {

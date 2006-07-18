@@ -1002,7 +1002,6 @@ public abstract class BasePerTableTemplate
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom selects.
      * @precondition tableName != null
-     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
@@ -1019,14 +1018,26 @@ public abstract class BasePerTableTemplate
         final DAOTemplateUtils daoTemplateUtils,
         final TemplateUtils templateUtils)
     {
-        return
-            templateUtils.retrieveCustomSelects(
-                tableName,
-                customSqlProvider,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory,
-                daoTemplateUtils);
+        Collection result = null;
+
+        if  (customSqlProvider != null)
+        {
+            result =
+                templateUtils.retrieveCustomSelects(
+                    tableName,
+                    customSqlProvider,
+                    metadataManager,
+                    metadataTypeManager,
+                    decoratorFactory,
+                    daoTemplateUtils);
+        }
+
+        if  (result == null)
+        {
+            result = new ArrayList();
+        }
+
+        return result;
     }
 
     /**
@@ -1040,7 +1051,6 @@ public abstract class BasePerTableTemplate
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom sql.
      * @precondition tableName != null
-     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
@@ -1056,14 +1066,26 @@ public abstract class BasePerTableTemplate
         final DAOTemplateUtils daoTemplateUtils,
         final TemplateUtils templateUtils)
     {
-        return
-            templateUtils.retrieveCustomUpdatesOrInserts(
-                tableName,
-                customSqlProvider,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory,
-                daoTemplateUtils);
+        Collection result = null;
+
+        if  (customSqlProvider != null)
+        {
+            result =
+                templateUtils.retrieveCustomUpdatesOrInserts(
+                    tableName,
+                    customSqlProvider,
+                    metadataManager,
+                    metadataTypeManager,
+                    decoratorFactory,
+                    daoTemplateUtils);
+        }
+
+        if  (result == null)
+        {
+            result = new ArrayList();
+        }
+
+        return result;
     }
 
     /**
@@ -1077,7 +1099,6 @@ public abstract class BasePerTableTemplate
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom selects.
      * @precondition tableName != null
-     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
@@ -1093,14 +1114,26 @@ public abstract class BasePerTableTemplate
         final DAOTemplateUtils daoTemplateUtils,
         final TemplateUtils templateUtils)
     {
-        return
-            templateUtils.retrieveCustomSelectsForUpdate(
-                tableName,
-                customSqlProvider,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory,
-                daoTemplateUtils);
+        Collection result = null;
+
+        if  (customSqlProvider != null)
+        {
+            result =
+                templateUtils.retrieveCustomSelectsForUpdate(
+                    tableName,
+                    customSqlProvider,
+                    metadataManager,
+                    metadataTypeManager,
+                    decoratorFactory,
+                    daoTemplateUtils);
+        }
+
+        if  (result == null)
+        {
+            result = new ArrayList();
+        }
+
+        return result;
     }
 
     /**
@@ -1113,7 +1146,6 @@ public abstract class BasePerTableTemplate
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom results.
      * @precondition tableName != null
-     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
@@ -1127,13 +1159,25 @@ public abstract class BasePerTableTemplate
         final DAOTemplateUtils daoTemplateUtils,
         final TemplateUtils templateUtils)
     {
-        return
-            templateUtils.retrieveCustomResults(
-                tableName,
-                customSqlProvider,
-                metadataManager,
-                decoratorFactory,
-                daoTemplateUtils);
+        Collection result = null;
+
+        if  (customSqlProvider != null)
+        {
+            result =
+                templateUtils.retrieveCustomResults(
+                    tableName,
+                    customSqlProvider,
+                    metadataManager,
+                    decoratorFactory,
+                    daoTemplateUtils);
+        }
+
+        if  (result == null)
+        {
+            result = new ArrayList();
+        }
+
+        return result;
     }
 
     /**

@@ -456,14 +456,15 @@ public abstract class BasePerRepositoryTemplate
      * SQL or not.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @return <code>true</code> in such case.
-     * @precondition customSqlProvider != null
      */
     protected boolean definesRepositoryScopedSql(
         final CustomSqlProvider customSqlProvider)
     {
         boolean result = false;
 
-        Collection t_cContents = customSqlProvider.getCollection();
+        Collection t_cContents =
+            (customSqlProvider != null)
+            ?  customSqlProvider.getCollection() : null;
 
         if  (t_cContents != null)
         {

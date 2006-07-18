@@ -43,22 +43,22 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJCommand;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
+import org.acmsl.queryj.tools.logging.QueryJAntLog;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.utils.io.FileUtils;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.types.Path;
-import org.apache.tools.ant.types.Reference;
 
 /*
  * Importing Commons-Logging classes.
@@ -326,8 +326,38 @@ public class ParameterValidationHandler
     public ParameterValidationHandler() {};
 
     /**
+     * Handles given command.
+     * @param command the command to handle.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition command != null
+     */
+    public boolean handle(final QueryJCommand command)
+        throws  QueryJBuildException
+    {
+        return handle(command.getAttributeMap(), command.getLog());
+    }
+
+    /**
      * Handles given parameters.
      * @param parameters the parameters to handle.
+     * @param log the log.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     */
+    protected boolean handle(final Map parameters, final QueryJLog log)
+        throws  QueryJBuildException
+    {
+        validateParameters(parameters, (log instanceof QueryJAntLog));
+
+        return false;
+    }
+
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param log the log.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -335,21 +365,23 @@ public class ParameterValidationHandler
     protected boolean handle(final Map parameters)
         throws  QueryJBuildException
     {
-        validateParameters(parameters);
-        
+        validateParameters(parameters, false);
+
         return false;
     }
 
     /**
      * Validates the parameters.
      * @param parameters the parameter map.
+     * @param usingAnt whether QueryJ is executed within Ant.
      * @return <code>false</code> if the chain should be stopped because
      * of invalid parameters.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    public void validateParameters(final Map parameters)
-        throws  QueryJBuildException
+    public void validateParameters(
+        final Map parameters, final boolean usingAnt)
+      throws  QueryJBuildException
     {
         validateParameters(
             (String) parameters.get(JDBC_DRIVER),
@@ -360,7 +392,6 @@ public class ParameterValidationHandler
             (String) parameters.get(JDBC_SCHEMA),
             (String) parameters.get(REPOSITORY),
             (String) parameters.get(PACKAGE),
-            (Path) parameters.get(CLASSPATH),
             (File) parameters.get(OUTPUT_DIR),
             (File) parameters.get(HEADER_FILE),
             (Boolean) parameters.get(OUTPUT_DIR_SUBFOLDERS),
@@ -368,13 +399,21 @@ public class ParameterValidationHandler
             (Boolean) parameters.get(EXTRACT_FUNCTIONS),
             (String) parameters.get(JNDI_DATASOURCES),
             (Boolean) parameters.get(GENERATE_MOCK_DAO),
-            (AntTablesElement) parameters.get(TABLES),
-            (AntExternallyManagedFieldsElement)
-                parameters.get(EXTERNALLY_MANAGED_FIELDS),
             (String) parameters.get(CUSTOM_SQL_MODEL),
             (File) parameters.get(SQL_XML_FILE),
             (String) parameters.get(GRAMMAR_BUNDLE_NAME),
-            parameters);
+            parameters,
+            usingAnt);
+
+        if  (usingAnt)
+        {
+            validateAntParameters(
+                (AntTablesElement) parameters.get(TABLES),
+                (AntExternallyManagedFieldsElement)
+                    parameters.get(EXTERNALLY_MANAGED_FIELDS),
+                (Path) parameters.get(CLASSPATH),
+                parameters);
+        }
     }
 
     /**
@@ -387,7 +426,6 @@ public class ParameterValidationHandler
      * @param schema the schema.
      * @param repository the repository.
      * @param packageName the package name.
-     * @param classpath the classpath.
      * @param outputdir the output folder.
      * @param header the header.
      * @param outputdirsubfolders whether to use subfolders.
@@ -395,14 +433,12 @@ public class ParameterValidationHandler
      * @param extractFunctions the extract-functions setting.
      * @param jndiDataSources the JNDI location for data sources.
      * @param generateMockDAO the generate-mock-dao-implementation setting.
-     * @param tables the table information.
-     * @param externallyManagedFields the externally-managed fields
-     * information.
      * @param customSqlModel the model for custom-sql information.
      * @param sqlXmlFile the sql.xml file.
      * @param grammarBundleName the grammar bundle name.
      * @param parameters the parameter map, to store processed information
      * such as the header contents.
+     * @param usingAnt whether QueryJ is executed within Ant.
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
@@ -415,7 +451,6 @@ public class ParameterValidationHandler
         final String schema,
         final String repository,
         final String packageName,
-        final Path classpath,
         final File outputdir,
         final File header,
         final Boolean outputdirsubfolders,
@@ -423,12 +458,11 @@ public class ParameterValidationHandler
         final Boolean extractFunctions,
         final String jndiDataSources,
         final Boolean generateMockDAO,
-        final AntTablesElement tables,
-        final AntExternallyManagedFieldsElement externallyManagedFields,
         final String customSqlModel,
         final File sqlXmlFile,
         final String grammarBundleName,
-        final Map parameters)
+        final Map parameters,
+        final boolean usingAnt)
       throws  QueryJBuildException
     {
         Log t_Log =
@@ -476,11 +510,6 @@ public class ParameterValidationHandler
         if  (packageName == null) 
         {
             throw new QueryJBuildException(PACKAGE_MISSING);
-        }
-
-        if  (classpath == null) 
-        {
-            throw new QueryJBuildException(CLASSPATH_MISSING);
         }
 
         if  (outputdir == null) 
@@ -563,20 +592,6 @@ public class ParameterValidationHandler
             throw new QueryJBuildException(JNDI_DATASOURCES_INVALID);
         }
 
-        if  (   (tables != null)
-             && (   (tables.getTables() == null)
-                 || (tables.getTables().size() == 0)))
-        {
-            throw new QueryJBuildException(TABLES_MISSING);
-        }
-
-        if  (   (externallyManagedFields != null)
-             && (   (externallyManagedFields.getFields() == null)
-                 || (externallyManagedFields.getFields().size() == 0)))
-        {
-            throw new QueryJBuildException(EXTERNALLY_MANAGED_FIELDS_MISSING);
-        }
-
         /* Not mandatory
         if  (customSqlModel == null)
         {
@@ -602,6 +617,44 @@ public class ParameterValidationHandler
             {
                 throw new QueryJBuildException(GRAMMAR_BUNDLE_NOT_FOUND);
             }
+        }
+    }
+
+    /**
+     * Validates the parameters explicitly coming from Ant.
+     * @param tables the table information.
+     * @param externallyManagedFields the externally-managed fields
+     * information.
+     * @param classpath the classpath.
+     * @param parameters the parameter map, to store processed information
+     * such as the header contents.
+     * @throws QueryJBuildException whenever the required
+     * parameters are not present or valid.
+     */
+    protected void validateAntParameters(
+        final AntTablesElement tables,
+        final AntExternallyManagedFieldsElement externallyManagedFields,
+        final Path classpath,
+        final Map parameters)
+      throws  QueryJBuildException
+    {
+        if  (classpath == null) 
+        {
+            throw new QueryJBuildException(CLASSPATH_MISSING);
+        }
+
+        if  (   (tables != null)
+             && (   (tables.getTables() == null)
+                 || (tables.getTables().size() == 0)))
+        {
+            throw new QueryJBuildException(TABLES_MISSING);
+        }
+
+        if  (   (externallyManagedFields != null)
+             && (   (externallyManagedFields.getFields() == null)
+                 || (externallyManagedFields.getFields().size() == 0)))
+        {
+            throw new QueryJBuildException(EXTERNALLY_MANAGED_FIELDS_MISSING);
         }
     }
 

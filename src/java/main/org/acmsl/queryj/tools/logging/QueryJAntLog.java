@@ -38,8 +38,7 @@
  * API. It implements *Log* only to make the
  * developer confortable with the API, which just means
  * replacing *LogFactory.getLog(..)* with
- * using the *QueryjAntLog*, available via
- * *AntCommand*.
+ * using the *UniqueLogFactory.getLog(..)*.
  *
  * Version: $Revision$ ($Author$ at $Date$)
  *
@@ -63,8 +62,7 @@ import org.apache.tools.ant.Project;
  * API. It implements <code>Log</code> only to make the
  * developer confortable with the API, which just means
  * replacing <code>LogFactory.getLog(..)</code> with
- * using the <code>QueryJAntLog</code>, available via
- * <code>AntCommand</code>.
+ * using the <code>UniqueLogFactory.getLog(..)</code>.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  * @version $Revision$ ($Author$ at $Date$)

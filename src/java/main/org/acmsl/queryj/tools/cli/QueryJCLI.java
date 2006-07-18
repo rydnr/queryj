@@ -43,6 +43,11 @@ package org.acmsl.queryj.tools.cli;
  */
 import org.acmsl.queryj.tools.cli.QueryJCLIHelper;
 import org.acmsl.queryj.tools.cli.QueryJCLIOptions;
+import org.acmsl.queryj.tools.logging.QueryJCLILog;
+import org.acmsl.queryj.tools.logging.QueryJLog;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJChain;
+import org.acmsl.queryj.tools.QueryJCommand;
 
 /*
  * Importing some Apache Commons CLI classes.
@@ -91,6 +96,7 @@ public final class QueryJCLI
             args,
             helper.createConfigurationOption(),
             helper.createCustomSqlOption(),
+            helper.createVerbosityOptions(),
             helper);
     }
 
@@ -100,21 +106,32 @@ public final class QueryJCLI
      * @param configurationOption the option specifying the configuration
      * properties file.
      * @param customSqlOption the option specifying the custom SQL file.
+     * @param verbosityOptions the options specifying the verbosity.
      * @param helper the <code>QueryJCLIHelper</code> instance.
      * @precondition configurationOption != null
      * @precondition customSqlOption != null
+     * @precondition verbosityOptions != null
      * @precondition helper != null
      */
     protected static void executeQueryJ(
         final String[] args,
         final Option configurationOption,
         final Option customSqlOption,
+        final Option[] verbosityOptions,
         final QueryJCLIHelper helper)
     {
         Options t_Options = new Options();
 
         t_Options.addOption(configurationOption);
         t_Options.addOption(customSqlOption);
+
+        int t_iCount =
+            (verbosityOptions != null) ? verbosityOptions.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {            
+            t_Options.addOption(verbosityOptions[t_iIndex]);
+        }
 
         CommandLineParser t_Parser = new GnuParser();
         CommandLine t_CommandLine = null;
@@ -148,8 +165,20 @@ public final class QueryJCLI
             // Custom sql file is validated as part of QueryJ chain.
             else
             {
-                executeQueryJ(
-                    t_ConfigurationSettings, t_strCustomSqlFileName);
+                try
+                {
+                    executeQueryJ(
+                        t_ConfigurationSettings,
+                        retrieveLogThreshold(t_CommandLine),
+                        t_strCustomSqlFileName);
+                }
+                catch  (final QueryJBuildException buildException)
+                {
+                    helper.printError(
+                          "QueryJ failed. Reason: "
+                        + buildException.getMessage(),
+                        System.err);
+                }
             }
         }
     }
@@ -157,13 +186,120 @@ public final class QueryJCLI
     /**
      * Executes QueryJ using given options.
      * @param configurationSettings the configuration settings.
+     * @param logThreshold the log threshold.
      * @param customSqlFileName the name of the custom SQL file.
+     * @throws QueryJBuildException if QueryJ fails.
      * @precondition configurationFileName != null
      * @precondition customSqlFileName != null
      */
     protected static void executeQueryJ(
-        final Properties configurationSettings, final String customSqlFileName)
+        final Properties configurationSettings,
+        final int logThreshold,
+        final String customSqlFileName)
+      throws  QueryJBuildException
     {
-        // TODO
+        new CLIQueryJChain(configurationSettings, logThreshold).process();
+    }
+
+    /**
+     * Customizes <code>QueryJChain</code> to get parameters from Ant.
+     * @author <a href="mailto:chous@acm-sl.org"
+               >Jose San Leandro</a>
+     */
+    protected static class CLIQueryJChain
+        extends  QueryJChain
+    {
+        /**
+         * The log threshold.
+         */
+        private int m__iLogThreshold;
+
+        /**
+         * Creates an <code>CLIQueryJChain</code> instance.
+         * @param settings the settings.
+         * @param logThreshold the log threshold.
+         */
+        public CLIQueryJChain(
+            final Properties settings, final int logThreshold)
+        {
+            super(settings);
+            immutableSetLogThreshold(logThreshold);
+        }
+
+        /**
+         * Specifies the log threshold.
+         * @param threshold such threshold.
+         */
+        protected final void immutableSetLogThreshold(final int threshold)
+        {
+            m__iLogThreshold = threshold;
+        }
+
+        /**
+         * Specifies the log threshold.
+         * @param threshold such threshold.
+         */
+        protected void setLogThreshold(final int threshold)
+        {
+            immutableSetLogThreshold(threshold);
+        }
+
+        /**
+         * Retrieves the log threshold.
+         * @return such information.
+         */
+        public int getLogThreshold()
+        {
+            return m__iLogThreshold;
+        }
+
+        /**
+         * Builds the command.
+         * @return the initialized command.
+         */
+        protected QueryJCommand buildCommand()
+        {
+            return
+                buildCommand(
+                    new QueryJCommand(
+                        new QueryJCLILog(
+                            getLogThreshold(), System.err)));
+        }
+    }
+
+    /**
+     * Retrieves the log threshold.
+     * @param commandLine the command line.
+     * @returh such threshold.
+     * @precondition commandLine != null
+     */
+    protected static int retrieveLogThreshold(final CommandLine commandLine)
+    {
+        int result = QueryJLog.ERROR;
+
+        String t_strOption =
+            commandLine.getOptionValue(TRACE_VERBOSITY_OPTION);
+
+        if  (t_strOption != null)
+        {
+            result = QueryJLog.TRACE;
+        }
+        else
+        {
+            t_strOption =
+                commandLine.getOptionValue(DEBUG_VERBOSITY_OPTION);
+
+            if  (t_strOption != null)
+            {
+                result = QueryJLog.DEBUG;
+            }
+            else
+            {
+                t_strOption =
+                    commandLine.getOptionValue(INFO_VERBOSITY_OPTION);
+            }
+        }
+
+        return result;
     }
 }

@@ -62,6 +62,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Properties;
 
 /*
@@ -79,6 +81,11 @@ public class QueryJCLIHelper
                 Singleton,
                 Utils
 {
+    /**
+     * A cached empty <code>Option</code> array.
+     */
+    public static final Option[] EMPTY_OPTION_ARRAY = new Option[0];
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
@@ -124,12 +131,51 @@ public class QueryJCLIHelper
      */
     public Option createCustomSqlOption()
     {
-        return
+        Option result =
             OptionBuilder
                 .withArgName("file")
                 .hasArg()
                 .withDescription(CUSTOM_SQL_OPTION_DESCRIPTION)
                 .create(CUSTOM_SQL_OPTION);
+
+        result.setRequired(false);
+
+        return result;
+    }
+
+    /**
+     * Creates the command-line option for the verbosity levels.
+     * @return such <code>Option</code> instances.
+     */
+    public Option[] createVerbosityOptions()
+    {
+        Collection t_cResult = new ArrayList();
+
+        Option t_Option =
+            OptionBuilder
+                .withArgName("v")
+                .withDescription(INFO_VERBOSITY_OPTION_DESCRIPTION)
+                .create(INFO_VERBOSITY_OPTION);
+        t_Option.setRequired(false);
+        t_cResult.add(t_Option);
+
+        t_Option =
+            OptionBuilder
+                .withArgName("vv")
+                .withDescription(DEBUG_VERBOSITY_OPTION_DESCRIPTION)
+                .create(DEBUG_VERBOSITY_OPTION);
+        t_Option.setRequired(false);
+        t_cResult.add(t_Option);
+
+        t_Option =
+            OptionBuilder
+                .withArgName("vvv")
+                .withDescription(TRACE_VERBOSITY_OPTION_DESCRIPTION)
+                .create(TRACE_VERBOSITY_OPTION);
+        t_Option.setRequired(false);
+        t_cResult.add(t_Option);
+
+        return (Option[]) t_cResult.toArray(EMPTY_OPTION_ARRAY);
     }
 
     /**

@@ -177,7 +177,6 @@ public class RepositoryDAOTemplateBuildHandler
      * @param allowEmptyRepositoryDAO whether to generate the repository DAO
      * in any case.
      * @return <code>true</code> in such case.
-     * @precondition customSqlProvider != null
      */
     protected boolean definesRepositoryScopedSql(
         final CustomSqlProvider customSqlProvider,
@@ -187,7 +186,10 @@ public class RepositoryDAOTemplateBuildHandler
 
         if  (!result)
         {
-            Collection t_cElements = customSqlProvider.getCollection();
+            Collection t_cElements =
+                (customSqlProvider != null)
+                ?  customSqlProvider.getCollection()
+                :  null;
         
             Iterator t_Iterator =
                 (t_cElements != null) ? t_cElements.iterator() : null;

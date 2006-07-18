@@ -101,14 +101,19 @@ import org.apache.commons.logging.Log;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public abstract class QueryJChain
+public class QueryJChain
     extends     AbstractQueryJChain
     implements  QueryJSettings
 {
     /**
+     * The settings.
+     */
+    private Properties m__Settings;
+
+    /**
      * The properties file (to include all other settings).
      */
-    private File m__Settings;
+    private File m__SettingsFile;
 
     /**
      * The driver.
@@ -266,30 +271,150 @@ public abstract class QueryJChain
     public QueryJChain() {};
 
     /**
-     * Specifies the properties file.
-     * @param file such file.
+     * Creates a <code>QueryJChain</code> with given information.
+     * @param settings the configuration settings.
      */
-    protected final void immutableSetSettings(final File file)
+    public QueryJChain(final Properties settings)
     {
-        m__Settings = file;
+        immutableSetSettings(settings);
     }
 
     /**
-     * Specifies the properties file.
-     * @param file such file.
+     * Creates a <code>QueryJChain</code> with given information.
+     * @param settings the configuration settings.
+     * @param driver the JDBC driver.
+     * @param url the JDBC url.
+     * @param username the JDBC username.
+     * @param password the JDBC password.
+     * @param catalog the JDBC catalog.
+     * @param schema the JDBC schema.
+     * @param repository the repository.
+     * @param packageName the base package of the generated sources.
+     * @param outputDir the output folder.
+     * @param header the copyright header.
+     * @param outputDirSubfolders whether to use main/ and test/ as
+     * subfolders.
+     * @param extractTables whether to extract tables or not.
+     * @param extractProcedures whether to extract the procedures or not.
+     * @param extractFunctions whether to extract the functions or not.
+     * @param jndiDataSource the location in JNDI of the
+     * <code>DataSource</code>.
+     * @param generateMockDAOImplementation whether to generate Mock DAOs.
+     * @param generateXmlDAOImplementation whether to generate XML DAOs.
+     * @param allowEmptyRepositoryDAO whether to generate a repository
+     * DAO even tough it'll contain no custom queries..
+     * @param implementMarkerInterfaces whether to make some generated 
+     * sources implement <code>org.acmsl.commons.patterns</code> <i>Marker</i>
+     * interfaces.
+     * @param customSqlModel the format of the custom SQL file.
+     * @param sqlXmlFile the file containing the custom SQL.
+     * @param grammarBundle the grammar with irregular singular and plural
+     * forms of the table names.
      */
-    public void setSettings(final File file)
+    public QueryJChain(
+        final File settings,
+        final String driver,
+        final String url,
+        final String username,
+        final String password,
+        final String catalog,
+        final String schema,
+        final String repository,
+        final String packageName,
+        final File outputdir,
+        final File header,
+        final boolean outputdirsubfolders,
+        final boolean extractTables,
+        final boolean extractProcedures,
+        final boolean extractFunctions,
+        final String jndiDataSource,
+        final boolean generateMockDAOImplementation,
+        final boolean generateXmlDAOImplementation,
+        final boolean allowEmptyRepositoryDAO,
+        final boolean implementMarkerInterfaces,
+        final String customSqlModel,
+        final File sqlXmlFile,
+        final String grammarBundle)
     {
-        immutableSetSettings(file);
+        immutableSetSettingsFile(settings);
+        immutableSetDriver(driver);
+        immutableSetUrl(url);
+        immutableSetUsername(username);
+        immutableSetPassword(password);
+        immutableSetCatalog(catalog);
+        immutableSetSchema(schema);
+        immutableSetRepository(repository);
+        immutableSetPackage(packageName);
+        immutableSetOutputdir(outputdir);
+        immutableSetHeaderfile(header);
+        immutableSetOutputdirsubfoldersFlag(outputdirsubfolders);
+        immutableSetExtractTablesFlag(extractTables);
+        immutableSetExtractProceduresFlag(extractProcedures);
+        immutableSetExtractFunctionsFlag(extractFunctions);
+        immutableSetJndiDataSource(jndiDataSource);
+        immutableSetGenerateMockDAOImplementationFlag(
+            generateMockDAOImplementation);
+        immutableSetGenerateXMLDAOImplementationFlag(
+            generateXmlDAOImplementation);
+        immutableSetAllowEmptyRepositoryDAOFlag(allowEmptyRepositoryDAO);
+        immutableSetImplementMarkerInterfacesFlag(implementMarkerInterfaces);
+        immutableSetCustomSqlModel(customSqlModel);
+        immutableSetSqlXmlFile(sqlXmlFile);
+        immutableSetGrammarbundle(grammarBundle);
+    }
+
+    /**
+     * Specifies the properties.
+     * @param settings such settings.
+     */
+    protected final void immutableSetSettings(final Properties settings)
+    {
+        m__Settings = settings;
+    }
+
+    /**
+     * Specifies the properties.
+     * @param settings such settings.
+     */
+    public void setSettings(final Properties settings)
+    {
+        immutableSetSettings(settings);
     }
 
     /**
      * Retrieves the properties file.
      * @return such file.
      */
-    public File getSettings()
+    public Properties getSettings()
     {
         return m__Settings;
+    }
+
+    /**
+     * Specifies the properties file.
+     * @param file such file.
+     */
+    protected final void immutableSetSettingsFile(final File file)
+    {
+        m__SettingsFile = file;
+    }
+
+    /**
+     * Specifies the properties file.
+     * @param file such file.
+     */
+    public void setSettingsFile(final File file)
+    {
+        immutableSetSettingsFile(file);
+    }
+
+    /**
+     * Retrieves the properties file.
+     * @return such file.
+     */
+    public File getSettingsFile()
+    {
+        return m__SettingsFile;
     }
 
     /**
@@ -796,9 +921,19 @@ public abstract class QueryJChain
      * Specifies the "outputdirsubfolders" flag.
      * @param flag such flag.
      */
-    protected void setOutputdirsubfoldersFlag(final boolean flag)
+    protected final void immutableSetOutputdirsubfoldersFlag(
+        final boolean flag)
     {
         m__bOutputdirsubfolders = flag;
+    }
+
+    /**
+     * Specifies the "outputdirsubfolders" flag.
+     * @param flag such flag.
+     */
+    protected void setOutputdirsubfoldersFlag(final boolean flag)
+    {
+        immutableSetOutputdirsubfoldersFlag(flag);
     }
 
     /**
@@ -863,9 +998,18 @@ public abstract class QueryJChain
      * Specifies the "extract-tables" flag.
      * @param flag such flag.
      */
-    protected void setExtractTablesFlag(final boolean flag)
+    protected final void immutableSetExtractTablesFlag(final boolean flag)
     {
         m__bExtractTables = flag;
+    }
+
+    /**
+     * Specifies the "extract-tables" flag.
+     * @param flag such flag.
+     */
+    protected void setExtractTablesFlag(final boolean flag)
+    {
+        immutableSetExtractTablesFlag(flag);
     }
 
     /**
@@ -930,9 +1074,18 @@ public abstract class QueryJChain
      * Specifies the "extract-procedures" flag.
      * @param flag such flag.
      */
-    protected void setExtractProceduresFlag(final boolean flag)
+    protected final void immutableSetExtractProceduresFlag(final boolean flag)
     {
         m__bExtractProcedures = flag;
+    }
+
+    /**
+     * Specifies the "extract-procedures" flag.
+     * @param flag such flag.
+     */
+    protected void setExtractProceduresFlag(final boolean flag)
+    {
+        immutableSetExtractProceduresFlag(flag);
     }
 
     /**
@@ -998,9 +1151,18 @@ public abstract class QueryJChain
      * Specifies the "extract-functions" flag.
      * @param flag such flag.
      */
-    protected void setExtractFunctionsFlag(final boolean flag)
+    protected final void immutableSetExtractFunctionsFlag(final boolean flag)
     {
         m__bExtractFunctions = flag;
+    }
+
+    /**
+     * Specifies the "extract-functions" flag.
+     * @param flag such flag.
+     */
+    protected void setExtractFunctionsFlag(final boolean flag)
+    {
+        immutableSetExtractFunctionsFlag(flag);
     }
 
     /**
@@ -1112,9 +1274,19 @@ public abstract class QueryJChain
      * Specifies the "generate-mock-dao-implementation" flag.
      * @param flag such flag.
      */
-    protected void setGenerateMockDAOImplementationFlag(final boolean flag)
+    protected final void immutableSetGenerateMockDAOImplementationFlag(
+        final boolean flag)
     {
         m__bGenerateMockDAOImplementation = flag;
+    }
+
+    /**
+     * Specifies the "generate-mock-dao-implementation" flag.
+     * @param flag such flag.
+     */
+    protected void setGenerateMockDAOImplementationFlag(final boolean flag)
+    {
+        immutableSetGenerateMockDAOImplementationFlag(flag);
     }
 
     /**
@@ -1182,9 +1354,19 @@ public abstract class QueryJChain
      * Specifies the "generate-xml-dao-implementation" flag.
      * @param flag such flag.
      */
-    protected void setGenerateXMLDAOImplementationFlag(final boolean flag)
+    protected final void immutableSetGenerateXMLDAOImplementationFlag(
+        final boolean flag)
     {
         m__bGenerateXMLDAOImplementation = flag;
+    }
+
+    /**
+     * Specifies the "generate-xml-dao-implementation" flag.
+     * @param flag such flag.
+     */
+    protected void setGenerateXMLDAOImplementationFlag(final boolean flag)
+    {
+        immutableSetGenerateXMLDAOImplementationFlag(flag);
     }
 
     /**
@@ -1252,9 +1434,19 @@ public abstract class QueryJChain
      * Specifies the "allow-empty-repository-dao" flag.
      * @param flag such flag.
      */
-    protected void setAllowEmptyRepositoryDAOFlag(final boolean flag)
+    protected final void immutableSetAllowEmptyRepositoryDAOFlag(
+        final boolean flag)
     {
         m__bAllowEmptyRepositoryDAO = flag;
+    }
+
+    /**
+     * Specifies the "allow-empty-repository-dao" flag.
+     * @param flag such flag.
+     */
+    protected void setAllowEmptyRepositoryDAOFlag(final boolean flag)
+    {
+        immutableSetAllowEmptyRepositoryDAOFlag(flag);
     }
 
     /**
@@ -1321,9 +1513,19 @@ public abstract class QueryJChain
      * Specifies the "implement-marker-interfaces" flag.
      * @param flag such flag.
      */
-    protected void setImplementMarkerInterfacesFlag(final boolean flag)
+    protected final void immutableSetImplementMarkerInterfacesFlag(
+        final boolean flag)
     {
         m__bImplementMarkerInterfaces = flag;
+    }
+
+    /**
+     * Specifies the "implement-marker-interfaces" flag.
+     * @param flag such flag.
+     */
+    protected void setImplementMarkerInterfacesFlag(final boolean flag)
+    {
+        immutableSetImplementMarkerInterfacesFlag(flag);
     }
 
     /**
@@ -1625,7 +1827,27 @@ public abstract class QueryJChain
      */
     protected QueryJCommand buildCommand(final QueryJCommand command)
     {
-        return buildCommand(command, readSettings(getSettings()));
+        return buildCommand(command, getSettings());
+    }
+
+    /**
+     * Builds the command.
+     * @param command the command to be initialized.
+     * @param settings the already-loaded settings.
+     * @return the initialized command.
+     * @precondition command != null
+     */
+    protected QueryJCommand buildCommand(
+        final QueryJCommand command, final Properties settings)
+    {
+        Properties t_Settings = settings;
+
+        if  (t_Settings == null)
+        {
+            t_Settings = readSettings(getSettingsFile());
+        }
+
+        return buildCommandFromSettingsIfPossible(command, t_Settings);
     }
 
     /**
@@ -1635,7 +1857,7 @@ public abstract class QueryJChain
      * @return the initialized command.
      * @precondition command != null
      */
-    protected QueryJCommand buildCommand(
+    protected QueryJCommand buildCommandFromSettingsIfPossible(
         final QueryJCommand command, final Properties settings)
     {
         QueryJCommand result = command;

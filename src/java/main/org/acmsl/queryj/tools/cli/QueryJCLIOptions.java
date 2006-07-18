@@ -67,4 +67,37 @@ public interface QueryJCLIOptions
      */
     public static final String CUSTOM_SQL_OPTION_DESCRIPTION =
         "The XML file with all custom SQL queries.";
+
+    /**
+     * The <i>verbosity: trace</i> option.
+     */
+    public static final String TRACE_VERBOSITY_OPTION = "vvv";
+
+    /**
+     * The <i>verbosity: trace</i> option description.
+     */
+    public static final String TRACE_VERBOSITY_OPTION_DESCRIPTION =
+        "Verbosity level set to 'trace'";
+
+    /**
+     * The <i>verbosity: debug</i> option.
+     */
+    public static final String DEBUG_VERBOSITY_OPTION = "vv";
+
+    /**
+     * The <i>verbosity: debug</i> option description.
+     */
+    public static final String DEBUG_VERBOSITY_OPTION_DESCRIPTION =
+        "Verbosity level set to 'debug'";
+
+    /**
+     * The <i>verbosity: info</i> option.
+     */
+    public static final String INFO_VERBOSITY_OPTION = "v";
+
+    /**
+     * The <i>verbosity: info</i> option description.
+     */
+    public static final String INFO_VERBOSITY_OPTION_DESCRIPTION =
+        "Verbosity level set to 'info'";
 }

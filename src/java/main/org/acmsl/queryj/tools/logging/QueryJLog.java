@@ -74,6 +74,35 @@ import org.apache.commons.logging.Log;
 public interface QueryJLog
     extends  Log
 {
+    /**
+     * The <i>trace</i> level.
+     */
+    public static final int TRACE = 1;
+
+    /**
+     * The <i>debug</i> level.
+     */
+    public static final int DEBUG = 2;
+
+    /**
+     * The <i>info</i> level.
+     */
+    public static final int INFO = 3;
+
+    /**
+     * The <i>warn</i> level.
+     */
+    public static final int WARN = 4;
+
+    /**
+     * The <i>error</i> level.
+     */
+    public static final int ERROR = 5;
+
+    /**
+     * The <i>fatal</i> level.
+     */
+    public static final int FATAL = 6;
 }
 /*
  * Copyright 2001-2004 The Apache Software Foundation.

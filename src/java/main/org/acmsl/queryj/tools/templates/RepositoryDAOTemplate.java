@@ -62,6 +62,7 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -307,7 +308,6 @@ public class RepositoryDAOTemplate
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom selects.
-     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
@@ -323,13 +323,25 @@ public class RepositoryDAOTemplate
         final DAOTemplateUtils daoTemplateUtils,
         final TemplateUtils templateUtils)
     {
-        return
-            templateUtils.retrieveCustomSelects(
-                customSqlProvider,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory,
-                daoTemplateUtils);
+        Collection result = null;
+
+        if  (customSqlProvider != null)
+        {
+            result =
+                templateUtils.retrieveCustomSelects(
+                    customSqlProvider,
+                    metadataManager,
+                    metadataTypeManager,
+                    decoratorFactory,
+                    daoTemplateUtils);
+        }
+
+        if  (result == null)
+        {
+            result = new ArrayList();
+        }
+
+        return result;
     }
 
     /**
@@ -341,7 +353,6 @@ public class RepositoryDAOTemplate
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom sql.
-     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
@@ -356,13 +367,25 @@ public class RepositoryDAOTemplate
         final DAOTemplateUtils daoTemplateUtils,
         final TemplateUtils templateUtils)
     {
-        return
-            templateUtils.retrieveCustomUpdatesOrInserts(
-                customSqlProvider,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory,
-                daoTemplateUtils);
+        Collection result = null;
+
+        if  (customSqlProvider != null)
+        {
+            result =
+                templateUtils.retrieveCustomUpdatesOrInserts(
+                    customSqlProvider,
+                    metadataManager,
+                    metadataTypeManager,
+                    decoratorFactory,
+                    daoTemplateUtils);
+        }
+
+        if  (result == null)
+        {
+            result = new ArrayList();
+        }
+
+        return result;
     }
 
     /**
@@ -374,7 +397,6 @@ public class RepositoryDAOTemplate
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom selects.
-     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
@@ -389,13 +411,25 @@ public class RepositoryDAOTemplate
         final DAOTemplateUtils daoTemplateUtils,
         final TemplateUtils templateUtils)
     {
-        return
-            templateUtils.retrieveCustomSelectsForUpdate(
-                customSqlProvider,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory,
-                daoTemplateUtils);
+        Collection result = null;
+
+        if  (customSqlProvider != null)
+        {
+            result =
+                templateUtils.retrieveCustomSelectsForUpdate(
+                    customSqlProvider,
+                    metadataManager,
+                    metadataTypeManager,
+                    decoratorFactory,
+                    daoTemplateUtils);
+        }
+
+        if  (result == null)
+        {
+            result = new ArrayList();
+        }
+
+        return result;
     }
 
     /**
@@ -407,7 +441,6 @@ public class RepositoryDAOTemplate
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom results.
      * @precondition tableName != null
-     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
@@ -420,12 +453,24 @@ public class RepositoryDAOTemplate
         final DAOTemplateUtils daoTemplateUtils,
         final TemplateUtils templateUtils)
     {
-        return
-            templateUtils.retrieveCustomResults(
-                customSqlProvider,
-                metadataManager,
-                decoratorFactory,
-                daoTemplateUtils);
+        Collection result = null;
+
+        if  (customSqlProvider != null)
+        {
+            result =
+                templateUtils.retrieveCustomResults(
+                    customSqlProvider,
+                    metadataManager,
+                    decoratorFactory,
+                    daoTemplateUtils);
+        }
+
+        if  (result == null)
+        {
+            result = new ArrayList();
+        }
+
+        return result;
     }
 
     /**
