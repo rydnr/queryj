@@ -126,6 +126,21 @@ public class QueryJCLIHelper
     }
 
     /**
+     * Creates the command-line long option for the
+     * <i>configuration properties</i>.
+     * @return such <code>Option</code> instance.
+     */
+    public Option createConfigurationLongOption()
+    {
+        return
+            OptionBuilder
+                .withArgName("file")
+                .hasArg()
+                .withDescription(CONFIGURATION_PROPERTIES_OPTION_DESCRIPTION)
+                .create(CONFIGURATION_PROPERTIES_LONG_OPTION);
+    }
+
+    /**
      * Creates the command-line option for the <i>custom SQL</i>.
      * @return such <code>Option</code> instance.
      */
@@ -136,7 +151,26 @@ public class QueryJCLIHelper
                 .withArgName("file")
                 .hasArg()
                 .withDescription(CUSTOM_SQL_OPTION_DESCRIPTION)
+//                .withLongOption(CUSTOM_SQL_LONG_OPTION)
                 .create(CUSTOM_SQL_OPTION);
+
+        result.setRequired(false);
+
+        return result;
+    }
+
+    /**
+     * Creates the command-line long option for the <i>custom SQL</i>.
+     * @return such <code>Option</code> instance.
+     */
+    public Option createCustomSqlLongOption()
+    {
+        Option result =
+            OptionBuilder
+                .withArgName("file")
+                .hasArg()
+                .withDescription(CUSTOM_SQL_OPTION_DESCRIPTION)
+                .create(CUSTOM_SQL_LONG_OPTION);
 
         result.setRequired(false);
 
@@ -179,6 +213,106 @@ public class QueryJCLIHelper
     }
 
     /**
+     * Creates the command-line option for the <i>help</i>.
+     * @return such <code>Option</code> instance.
+     */
+    public Option createHelpOption()
+    {
+        Option result =
+            OptionBuilder
+                .withDescription(HELP_OPTION_DESCRIPTION)
+                .create(HELP_OPTION);
+
+        result.setRequired(false);
+
+        return result;
+    }
+
+    /**
+     * Creates the command-line long option for the <i>help</i>.
+     * @return such <code>Option</code> instance.
+     */
+    public Option createHelpLongOption()
+    {
+        Option result =
+            OptionBuilder
+                .withDescription(HELP_OPTION_DESCRIPTION)
+                .create(HELP_LONG_OPTION);
+
+        result.setRequired(false);
+
+        return result;
+    }
+
+    /**
+     * Creates the <code>Options</code> instance for given 
+     * <code>Option</code>s.
+     * @param configurationOption the option specifying the configuration
+     * properties file.
+     * @param customSqlOption the option specifying the custom SQL file.
+     * @param verbosityOptions the options specifying the verbosity.
+     * @param helpOption the option specifying the help.
+     * @return the <code>Options</code> instance.
+     * @precondition configurationOption != null
+     * @precondition customSqlOption != null
+     * @precondition verbosityOptions != null
+     * @precondition helpOption != null
+     */
+    public Options createOptions(
+        final Option configurationOption,
+        final Option customSqlOption,
+        final Option[] verbosityOptions,
+        final Option helpOption)
+    {
+        Options result = new Options();
+
+        addOptions(
+            result,
+            configurationOption,
+            customSqlOption,
+            verbosityOptions,
+            helpOption);
+
+        return result;
+    }
+
+    /**
+     * Creates the <code>Options</code> instance for given 
+     * <code>Option</code>s.
+     * @param options the <code>Options</code> instance to update.
+     * @param configurationOption the option specifying the configuration
+     * properties file.
+     * @param customSqlOption the option specifying the custom SQL file.
+     * @param verbosityOptions the options specifying the verbosity.
+     * @param helpOption the option specifying the help.
+     * @precondition options != null
+     * @precondition configurationOption != null
+     * @precondition customSqlOption != null
+     * @precondition verbosityOptions != null
+     * @precondition helpOption != null
+     */
+    protected void addOptions(
+        final Options options,
+        final Option configurationOption,
+        final Option customSqlOption,
+        final Option[] verbosityOptions,
+        final Option helpOption)
+    {
+        options.addOption(configurationOption);
+        options.addOption(customSqlOption);
+
+        int t_iCount =
+            (verbosityOptions != null) ? verbosityOptions.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {            
+            options.addOption(verbosityOptions[t_iIndex]);
+        }
+
+        options.addOption(helpOption);
+    }
+
+    /**
      * Prints an error message.
      * @param message the message.
      * @param printStream where to print the message to.
@@ -200,7 +334,58 @@ public class QueryJCLIHelper
     public void printUsage(
         final Options options, final PrintStream printStream)
     {
-        new HelpFormatter().printHelp("QueryJ", options);
+        new HelpFormatter().printHelp("QueryJ", options, true);
+    }
+
+    /**
+     * Prints the <i>Usage</i> message.
+     * @param configurationOption the option specifying the configuration
+     * properties file.
+     * @param configurationLongOption the long option specifying the
+     * configuration properties file.
+     * @param customSqlOption the option specifying the custom SQL file.
+     * @param customSqlLongOption the long option specifying the custom SQL
+     * file.
+     * @param verbosityOptions the options specifying the verbosity.
+     * @param helpOption the option specifying the help.
+     * @param helpLongOption the long option specifying the help.
+     * @param printStream where to print the message to.
+     * @precondition configurationOption != null
+     * @precondition configurationLongOption != null
+     * @precondition customSqlOption != null
+     * @precondition customSqlLongOption != null
+     * @precondition verbosityOptions != null
+     * @precondition helpOption != null
+     * @precondition helpLongOption != null
+     * @precondition printStream != null
+     */
+    public void printUsage(
+        final Option configurationOption,
+        final Option configurationLongOption,
+        final Option customSqlOption,
+        final Option customSqlLongOption,
+        final Option[] verbosityOptions,
+        final Option helpOption,
+        final Option helpLongOption,
+        final PrintStream printStream)
+    {
+        Options t_Options = new Options();
+
+        addOptions(
+            t_Options,
+            configurationOption, 
+            customSqlOption,
+            verbosityOptions,
+            helpOption);
+
+        addOptions(
+            t_Options,
+            configurationLongOption, 
+            customSqlLongOption,
+            verbosityOptions,
+            helpLongOption);
+
+        new HelpFormatter().printHelp("QueryJ", t_Options);
     }
 
     /**

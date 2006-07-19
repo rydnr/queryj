@@ -47,9 +47,29 @@ package org.acmsl.queryj.tools.cli;
 public interface QueryJCLIOptions
 {
     /**
+     * The <i>help</i> option.
+     */
+    public static final String HELP_OPTION = "h";
+
+    /**
+     * The <i>help</i> long option.
+     */
+    public static final String HELP_LONG_OPTION = "help";
+
+    /**
+     * The <i>help</i> option description.
+     */
+    public static final String HELP_OPTION_DESCRIPTION = "This help";
+
+    /**
      * The <i>configuration properties</i> option.
      */
-    public static final String CONFIGURATION_PROPERTIES_OPTION = "config";
+    public static final String CONFIGURATION_PROPERTIES_OPTION = "c";
+
+    /**
+     * The <i>configuration properties</i> long option.
+     */
+    public static final String CONFIGURATION_PROPERTIES_LONG_OPTION = "config";
 
     /**
      * The <i>configuration properties</i> option description.
@@ -60,7 +80,12 @@ public interface QueryJCLIOptions
     /**
      * The <i>custom SQL</i> option.
      */
-    public static final String CUSTOM_SQL_OPTION = "sql";
+    public static final String CUSTOM_SQL_OPTION = "s";
+
+    /**
+     * The <i>custom SQL</i> long option.
+     */
+    public static final String CUSTOM_SQL_LONG_OPTION = "sql";
 
     /**
      * The <i>custom SQL</i> option description.

@@ -58,6 +58,7 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 
 /*
  * Importing some JDK classes.
@@ -95,8 +96,12 @@ public final class QueryJCLI
         executeQueryJ(
             args,
             helper.createConfigurationOption(),
+            helper.createConfigurationLongOption(),
             helper.createCustomSqlOption(),
+            helper.createCustomSqlLongOption(),
             helper.createVerbosityOptions(),
+            helper.createHelpOption(),
+            helper.createHelpLongOption(),
             helper);
     }
 
@@ -105,79 +110,144 @@ public final class QueryJCLI
      * @param args the command-line arguments.
      * @param configurationOption the option specifying the configuration
      * properties file.
+     * @param configurationLongOption the long option specifying the
+     * configuration properties file.
      * @param customSqlOption the option specifying the custom SQL file.
+     * @param customSqlLongOption the long option specifying the custom SQL
+     * file.
      * @param verbosityOptions the options specifying the verbosity.
+     * @param helpOption the option specifying the help.
+     * @param helpLongOption the long option specifying the help.
      * @param helper the <code>QueryJCLIHelper</code> instance.
      * @precondition configurationOption != null
+     * @precondition configurationLongOption != null
      * @precondition customSqlOption != null
+     * @precondition customSqlLongOption != null
      * @precondition verbosityOptions != null
+     * @precondition helpOption != null
+     * @precondition helpLongOption != null
      * @precondition helper != null
      */
     protected static void executeQueryJ(
         final String[] args,
         final Option configurationOption,
+        final Option configurationLongOption,
         final Option customSqlOption,
+        final Option customSqlLongOption,
         final Option[] verbosityOptions,
+        final Option helpOption,
+        final Option helpLongOption,
         final QueryJCLIHelper helper)
     {
-        Options t_Options = new Options();
+        Options t_Options = null;
 
-        t_Options.addOption(configurationOption);
-        t_Options.addOption(customSqlOption);
-
-        int t_iCount =
-            (verbosityOptions != null) ? verbosityOptions.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
-        {            
-            t_Options.addOption(verbosityOptions[t_iIndex]);
-        }
-
-        CommandLineParser t_Parser = new GnuParser();
         CommandLine t_CommandLine = null;
 
         try
         {
-            t_CommandLine = t_Parser.parse(t_Options, args);
+            t_Options =
+                helper.createOptions(
+                    configurationLongOption, 
+                    customSqlLongOption,
+                    verbosityOptions,
+                    helpLongOption);
+
+            t_CommandLine = new GnuParser().parse(t_Options, args);
         }
         catch  (final ParseException parseException)
         {
-            helper.printError(parseException.getMessage(), System.err);
-            helper.printUsage(t_Options, System.err);
+            try
+            {
+                 t_Options =
+                     helper.createOptions(
+                         configurationOption, 
+                         customSqlOption,
+                         verbosityOptions,
+                         helpOption);
+
+                t_CommandLine = new PosixParser().parse(t_Options, args);
+            }
+            catch  (final ParseException anotherParseException)
+            {
+                helper.printError(
+                        parseException.getMessage() + "\n"
+                      + anotherParseException.getMessage(),
+                      System.err);
+
+                helper.printUsage(
+                    configurationOption,
+                    configurationLongOption,
+                    customSqlOption,
+                    customSqlLongOption,
+                    verbosityOptions,
+                    helpOption,
+                    helpLongOption,
+                    System.err);
+            }
         }
 
         if  (t_CommandLine != null)
         {
-            String t_strConfigurationFileName =
-                t_CommandLine.getOptionValue(CONFIGURATION_PROPERTIES_OPTION);
-
-            String t_strCustomSqlFileName =
-                t_CommandLine.getOptionValue(CUSTOM_SQL_OPTION);
-
-            Properties t_ConfigurationSettings =
-                helper.readConfigurationSettings(t_strConfigurationFileName);
-
-            if  (t_ConfigurationSettings == null)
+            if  (requestsHelp(t_CommandLine))
             {
-                helper.printError(
-                    "Invalid configuration properties", System.err);
+                helper.printUsage(
+                    configurationOption,
+                    configurationLongOption,
+                    customSqlOption,
+                    customSqlLongOption,
+                    verbosityOptions,
+                    helpOption,
+                    helpLongOption,
+                    System.err);
             }
-            // Custom sql file is validated as part of QueryJ chain.
             else
             {
-                try
+                String t_strConfigurationFileName =
+                    t_CommandLine.getOptionValue(
+                        CONFIGURATION_PROPERTIES_OPTION);
+
+                if  (t_strConfigurationFileName == null)
                 {
-                    executeQueryJ(
-                        t_ConfigurationSettings,
-                        retrieveLogThreshold(t_CommandLine),
-                        t_strCustomSqlFileName);
+                    t_strConfigurationFileName =
+                        t_CommandLine.getOptionValue(
+                            CONFIGURATION_PROPERTIES_LONG_OPTION);
                 }
-                catch  (final QueryJBuildException buildException)
+
+                String t_strCustomSqlFileName =
+                    t_CommandLine.getOptionValue(CUSTOM_SQL_OPTION);
+
+                if  (t_strCustomSqlFileName == null)
+                {
+                    t_strCustomSqlFileName =
+                        t_CommandLine.getOptionValue(CUSTOM_SQL_LONG_OPTION);
+                }
+
+                Properties t_ConfigurationSettings =
+                    helper.readConfigurationSettings(
+                        t_strConfigurationFileName);
+
+                if  (t_ConfigurationSettings == null)
                 {
                     helper.printError(
-                          "QueryJ failed. Reason: "
-                        + buildException.getMessage(),
-                        System.err);
+                        "Invalid configuration properties", System.err);
+                }
+                // Custom sql file is validated as part of QueryJ chain.
+                else
+                {
+                    try
+                    {
+                        executeQueryJ(
+                            t_ConfigurationSettings,
+                            retrieveLogThreshold(t_CommandLine),
+                            t_strCustomSqlFileName);
+                    }
+                    catch  (final QueryJBuildException buildException)
+                    {
+                        helper.printError(
+                            "QueryJ failed. Reason: "
+                            + buildException.getMessage(),
+                            System.err);
+                    }
                 }
             }
         }
@@ -298,6 +368,24 @@ public final class QueryJCLI
                 t_strOption =
                     commandLine.getOptionValue(INFO_VERBOSITY_OPTION);
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether the user has requested the help message.
+     * @param commandLine the command line.
+     * @return <code>true</code> in such case.
+     * @precondition commandLine != null
+     */
+    protected static boolean requestsHelp(final CommandLine commandLine)
+    {
+        boolean result = commandLine.hasOption(HELP_OPTION);
+
+        if  (!result)
+        {
+            result = commandLine.hasOption(HELP_LONG_OPTION);
         }
 
         return result;
