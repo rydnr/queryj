@@ -855,6 +855,27 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to generate XML DAO implementations.
+     * @param generate such setting.
+     */
+    public void setGenerateXMLDAOImplementation(final String generate)
+    {
+        setGenerateXMLDAOImplementation(generate, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to generate XML DAO implementations.
+     * @param generate such setting.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setGenerateXMLDAOImplementation(
+        final String generate, final QueryJChain delegee)
+    {
+        delegee.setGenerateXMLDAOImplementation(generate);
+    }
+
+    /**
      * Retrieves whether to generate XML DAO implementations.
      * @return such setting.
      */
