@@ -160,19 +160,19 @@
 -->
 <project name="${project.name}" default="description" basedir="../../..">
 
-    <!--
-     Displays the build script purpose, and the folder structure required.
-     @return the output of the described message.
-    -->
-    <target
-        name="description"
-        description="Displays the build script purpose, and the folder
-                              structure required.">
+  <!--
+   Displays the build script purpose, and the folder structure required.
+   @return the output of the described message.
+  -->
+  <target
+    name="description"
+    description="Displays the build script purpose, and the folder
+                        structure required.">
 
-        <!--
-         Displays the message.
-        -->
-        <echo>
+    <!--
+     Displays the message.
+    -->
+    <echo>
   Projects supported by this script have the following structure:
 
   project-base-folder/
@@ -278,9 +278,9 @@
     build.number
     package.number
     test.number
-      </echo>
+    </echo>
 
-    </target>
+  </target>
 
     <!--
      Defines the required variables in all tasks.
