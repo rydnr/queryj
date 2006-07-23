@@ -989,11 +989,11 @@ fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
   @param pkAttributes the pk attributes.
 !>
 <if(foreignKey.allowsNull)>
-//<foreignKey.targetVoName>DAO.discardRelationTo<foreignKey.sourceVoName>(
+<foreignKey.targetVoName>DAO.discardRelationTo<foreignKey.sourceVoName>(
 <else>
-//<foreignKey.targetVoName>DAO.deleteBy<foreignKey.sourceVoName>(
+<foreignKey.targetVoName>DAO.deleteBy<foreignKey.sourceVoName>(
 <endif>
-<!    <pkAttributes:{<it.nameLowercased>}; separator=",\n">); !>
+    <pkAttributes:{<it.nameLowercased>}; separator=",\n">);
 >>
 
 dao_javadoc(name,uncapitalizedName) ::= <<

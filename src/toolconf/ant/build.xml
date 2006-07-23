@@ -2,7 +2,7 @@
  @license
                  ACM-SL Ant-based build script
 
-    Copyright (C) 2001-2004  Jose San Leandro Armend&aacute;riz
+    Copyright (C) 2002-2006  Jose San Leandro Armend&aacute;riz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -1372,6 +1372,14 @@
           property="jalopy.jar.available"
           classpathref="java.development.class.path"/>
 
+        <!--
+         Checks if umlgraph.jar is available.
+        -->
+        <available
+          classname="gr.spinellis.umlgraph.doclet.UmlGraphDoc"
+          property="umlgraph.jar.available"
+          classpathref="java.development.class.path"/>
+
 <!--         END REQUIRED LIBRARIES/FILES/FOLDERS CHECK SECTION             -->
 
     </target>
@@ -2596,86 +2604,222 @@
      @return the javadoc documentation.
     -->
     <target
-        name="javadoc"
-        depends="init, clean.javadoc"
-        description="Creates the javadocs.">
+      name="javadoc"
+      depends="init, clean.javadoc"
+      description="Creates the javadocs.">
 
-        <!--
-         Creates the javadoc destination directory.
-        -->
-        <mkdir dir="${javadoc.dir}"/>
+      <!--
+       Creates the javadoc destination directory.
+      -->
+      <mkdir dir="${javadoc.dir}"/>
 
-        <!--
-         Generates the Javadoc documentation.
-        -->
-        <javadoc
-          version="yes"
-          author="yes"
-          destdir="${javadoc.dir}"
-          doctitle="${project.beautified.name} API"
-          windowtitle="${project.beautified.name} API"
-          access="public"
-          defaultexcludes="no"
-          overview="${javadoc.src.dir}/overview.html"
-          packagenames="*"
-          classpathref="java.compile.class.path"
-          encoding="ISO-8859-1"
-          stylesheetfile="${javadoc.src.dir}/javadoc.css"
-          use="yes">
+      <antcall target="_javadoc.umlgraph"/>
+      <antcall target="_javadoc.standard"/>
 
-          <sourcepath>
+    </target>
+   
+    <!--
+     Creates the javadoc API documentation.
+     @param javadoc.dir the javadoc output folder.
+     @param project.name the name of the project.
+     @param java.source.and.javadoc.path the Javadoc source files folder(s).
+     @param java.compile.class.path the classpath used to compile.
+     @if umlgraph.jar.available to print class diagrams as well.
+     @calls <i>mkdir</i> to create the <i>javadoc.dir</i> folder.
+     @calls <i>javadoc</i> to actually generate the documentation.
+     @return the javadoc documentation.
+    -->
+    <target
+      name="_javadoc.umlgraph"
+      description="Creates the javadocs."
+      if="umlgraph.jar.available">
 
-            <!-- ORDER MATTERS -->
-            <pathelement location="${javadoc.src.dir}"/>
+      <!--link resource="${java.development.lib.dir}/-->
 
-            <path refid="java.source.and.javadoc.path"/>
+      <!--
+       Generates the Javadoc documentation.
+      -->
+      <javadoc
+        version="yes"
+        author="yes"
+        destdir="${javadoc.dir}"
+        doctitle="${project.beautified.name} API"
+        windowtitle="${project.beautified.name} API"
+        access="public"
+        defaultexcludes="no"
+        overview="${javadoc.src.dir}/overview.html"
+        packagenames="*"
+        classpathref="java.compile.class.path"
+        encoding="ISO-8859-1"
+        stylesheetfile="${javadoc.src.dir}/javadoc.css"
+        use="yes">
 
-          </sourcepath>
+        <doclet
+          name="gr.spinellis.umlgraph.doclet.UmlGraphDoc">
+          <path>
+            <path refid="java.development.class.path"/>
+          </path>
 
-          <bottom><![CDATA[<i>Copyright &#169; 2004 ACM S.L.</i>]]></bottom>
+          <param name="-inferrel"/>
+          <param name="-inferdep"/>
+          <param name="-hide" value="java.*"/>
+          <param name="-collpackages" value="java.util.*"/>
+          <param name="-qualify"/>
+          <param name="-postfixpackage"/>
+          <param name="-nodefontsize" value="9"/>
+          <param name="-nodefontpackagesize" value="7"/>
+          <param name="-link" value="http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec"/>
+          <param name="-link" value="http://java.sun.com/j2se/1.5/docs/api"/>
+        </doclet>
 
-          <tag
-            name="precondition"
-            scope="all"
-            description="Preconditions: "/>
-          <tag
-            name="todo"
-            scope="all"
-            description="WARNING (not finished):"/>
-          <tag
-            name="testfamily"
-            scope="all"
-            description="Test family:"/>
-          <tag
-            name="testkind"
-            scope="all"
-            description="Test kind:"/>
-          <tag
-            name="testsetup"
-            scope="all"
-            description="Test set up:"/>
-          <tag
-            name="testpackage"
-            scope="all"
-            description="Test package:"/>
+        <sourcepath>
 
-          <group
-            title="${project.beautified.name} Packages"
-            packages="org.acmsl.queryj"/>
-          <group
-            title="${project.beautified.name} generation Packages"
-            packages="org.acmsl.queryj.tools*"/>
+          <!-- ORDER MATTERS -->
+          <pathelement location="${javadoc.src.dir}"/>
 
-          <link
-            href="${acmsl-commons.documentation.location}"/>
+          <path refid="java.source.and.javadoc.path"/>
 
-          <link
-            href="${jdk.documentation.location}"/>
+        </sourcepath>
 
-          <link
-            href="${junit.documentation.location}"/>
+        <bottom><![CDATA[<i>Copyright &#169; 2002-2006 ACM S.L.</i>]]></bottom>
 
-        </javadoc>
+        <tag
+          name="precondition"
+          scope="all"
+          description="Preconditions: "/>
+        <tag
+          name="todo"
+          scope="all"
+          description="WARNING (not finished):"/>
+        <tag
+          name="testfamily"
+          scope="all"
+          description="Test family:"/>
+        <tag
+          name="testkind"
+          scope="all"
+          description="Test kind:"/>
+        <tag
+          name="testsetup"
+          scope="all"
+          description="Test set up:"/>
+        <tag
+          name="testpackage"
+          scope="all"
+          description="Test package:"/>
+
+        <group
+          title="${project.beautified.name} Packages"
+          packages="org.acmsl.queryj"/>
+        <group
+          title="${project.beautified.name} generation Packages"
+          packages="org.acmsl.queryj.tools*"/>
+
+        <link
+          href="${acmsl-commons.documentation.location}"/>
+
+        <link
+          href="${jdk.documentation.location}"/>
+
+        <link
+          href="${junit.documentation.location}"/>
+
+      </javadoc>
+
+    </target>
+
+    <!--
+     Creates the javadoc API documentation.
+     @param javadoc.dir the javadoc output folder.
+     @param project.name the name of the project.
+     @param java.source.and.javadoc.path the Javadoc source files folder(s).
+     @param java.compile.class.path the classpath used to compile.
+     @unless umlgraph.jar.available, which would be used instead.
+     @calls <i>mkdir</i> to create the <i>javadoc.dir</i> folder.
+     @calls <i>javadoc</i> to actually generate the documentation.
+     @return the javadoc documentation.
+    -->
+    <target
+      name="_javadoc.standard"
+      description="Creates the javadocs."
+      unless="umlgraph.jar.available">
+
+      <!--
+       Creates the javadoc destination directory.
+      -->
+      <mkdir dir="${javadoc.dir}"/>
+
+      <!--
+       Generates the Javadoc documentation.
+      -->
+      <javadoc
+        version="yes"
+        author="yes"
+        destdir="${javadoc.dir}"
+        doctitle="${project.beautified.name} API"
+        windowtitle="${project.beautified.name} API"
+        access="public"
+        defaultexcludes="no"
+        overview="${javadoc.src.dir}/overview.html"
+        packagenames="*"
+        classpathref="java.compile.class.path"
+        encoding="ISO-8859-1"
+        stylesheetfile="${javadoc.src.dir}/javadoc.css"
+        use="yes">
+
+        <sourcepath>
+
+          <!-- ORDER MATTERS -->
+          <pathelement location="${javadoc.src.dir}"/>
+
+          <path refid="java.source.and.javadoc.path"/>
+
+        </sourcepath>
+
+        <bottom><![CDATA[<i>Copyright &#169; 2002-2006 ACM S.L.</i>]]></bottom>
+
+        <tag
+          name="precondition"
+          scope="all"
+          description="Preconditions: "/>
+        <tag
+          name="todo"
+          scope="all"
+          description="WARNING (not finished):"/>
+        <tag
+          name="testfamily"
+          scope="all"
+          description="Test family:"/>
+        <tag
+          name="testkind"
+          scope="all"
+          description="Test kind:"/>
+        <tag
+          name="testsetup"
+          scope="all"
+          description="Test set up:"/>
+        <tag
+          name="testpackage"
+          scope="all"
+          description="Test package:"/>
+
+        <group
+          title="${project.beautified.name} Packages"
+          packages="org.acmsl.queryj"/>
+        <group
+          title="${project.beautified.name} generation Packages"
+          packages="org.acmsl.queryj.tools*"/>
+
+        <link
+          href="${acmsl-commons.documentation.location}"/>
+
+        <link
+          href="${jdk.documentation.location}"/>
+
+        <link
+          href="${junit.documentation.location}"/>
+
+      </javadoc>
 
     </target>
 
