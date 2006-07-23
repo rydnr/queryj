@@ -29,7 +29,7 @@
 
  @header
   
-   Filename: $RCSfile: $
+   Filename: build.xml
 
    Author: Jose San Leandro Armendariz
 
@@ -155,7 +155,7 @@
     test.number
  @requires AspectJ libraries and Ant tasks.
  @requires JUnit libraries and Ant tasks.
- @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro Armendariz</a>
+ @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  @default description
 -->
 <project name="${project.name}" default="description" basedir="../../..">
