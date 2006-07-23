@@ -29,7 +29,7 @@
 
  @header
   
-   Filename: $RCSfile$
+   Filename: $RCSfile: $
 
    Author: Jose San Leandro Armendariz
 
@@ -37,6 +37,7 @@
                 project using Ant. Additional specific properties can be
                 specified in the <i>build.properties</i> file.
 
+  $Id$
 -->
 
 <!--
