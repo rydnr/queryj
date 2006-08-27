@@ -390,7 +390,11 @@ public class JdbcMetadataTypeManager
                 break;
 
             case Types.CLOB:
-                result = "Clob";
+                result = "String";
+                break;
+
+            case Types.BLOB:
+                result = "InputStream";
                 break;
 
             default:
@@ -1125,10 +1129,10 @@ public class JdbcMetadataTypeManager
     }
 
     /**
-     * Checks if given data type represents integers.
+     * Checks if given data type represents character large objects.
      * @param dataType the data type.
-     * @return <code>true</code> if such data type can be managed as an
-     * integer.
+     * @return <code>true</code> if such data type can be managed as a
+     * clob.
      */
     public boolean isClob(final int dataType)
     {
@@ -1136,14 +1140,58 @@ public class JdbcMetadataTypeManager
     }
 
     /**
-     * Checks if given data type represents integers.
+     * Checks if given data type represents character large objects.
      * @param dataType the data type.
-     * @return <code>true</code> if such data type can be managed as an
-     * integer.
+     * @return <code>true</code> if such data type can be managed as a
+     * Clob.
      */
     public boolean isClob(final String dataType)
     {
         return "Clob".equals(dataType);
+    }
+
+    /**
+     * Checks if given data type represents binary large objects.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * Blob.
+     */
+    public boolean isBlob(final int dataType)
+    {
+        return (dataType == Types.CLOB);
+    }
+
+    /**
+     * Checks if given data type represents binary large objects.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * Blob.
+     */
+    public boolean isBlob(final String dataType)
+    {
+        return "Blob".equals(dataType);
+    }
+
+    /**
+     * Checks if given data type represents large objects of any kind.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * Lob.
+     */
+    public boolean isLob(final int dataType)
+    {
+        return isClob(dataType) || isBlob(dataType);
+    }
+
+    /**
+     * Checks if given data type represents large objects of any kind.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * Lob.
+     */
+    public boolean isLob(final String dataType)
+    {
+        return isClob(dataType) || isBlob(dataType);
     }
 
     /**

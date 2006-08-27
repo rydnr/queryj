@@ -1454,7 +1454,7 @@ public class OracleMetadataManager
      * Checks whether the engine requires specific CLOB handling.
      * @return <code>true</code> in such case.
      */
-    public boolean requiresCustomClobHandling()
+    public boolean requiresCustomLobHandling()
     {
         return true;
     }

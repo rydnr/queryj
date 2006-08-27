@@ -1757,7 +1757,7 @@ public abstract class AbstractJdbcMetadataManager
      * @return <code>true</code> if such field is managed externally.
      */
     public boolean isManagedExternally(
-        final String tableName, String fieldName)
+        final String tableName, final String fieldName)
     {
         boolean result = false;
 
@@ -1797,7 +1797,7 @@ public abstract class AbstractJdbcMetadataManager
      * unknown.
      */
     public String getKeyword(
-        final String tableName, String fieldName)
+        final String tableName, final String fieldName)
     {
         String result = null;
 

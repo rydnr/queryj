@@ -684,11 +684,11 @@ public abstract class BasePerTableTemplate
         input.put("base_dao_package_name",  baseDAOPackageName);
 
         // Check for CLOB stuff.
-        if  (   (metadataManager.requiresCustomClobHandling())
-             && (containsClobs(
+        if  (   (metadataManager.requiresCustomLobHandling())
+             && (containsLobs(
                      tableName, metadataManager, metadataTypeManager)))
         {
-            input.put("clobHandling", metadataManager.getName());
+            input.put("lobHandling", metadataManager.getName());
         }
     }
 
@@ -1220,7 +1220,7 @@ public abstract class BasePerTableTemplate
     }
 
     /**
-     * Checks whether given table contains Clob attributes or not.
+     * Checks whether given table contains Lob attributes or not.
      * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
@@ -1229,7 +1229,7 @@ public abstract class BasePerTableTemplate
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
-    protected boolean containsClobs(
+    protected boolean containsLobs(
         final String tableName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager)
@@ -1243,7 +1243,7 @@ public abstract class BasePerTableTemplate
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            if  (metadataTypeManager.isClob(
+            if  (metadataTypeManager.isLob(
                      metadataManager.getColumnType(
                          tableName,
                          t_astrColumnNames[t_iIndex])))

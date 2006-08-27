@@ -396,8 +396,8 @@ public interface MetadataManager
     public MetadataTypeManager getMetadataTypeManager();
 
     /**
-     * Checks whether the engine requires specific CLOB handling.
+     * Checks whether the engine requires specific LOB handling.
      * @return <code>true</code> in such case.
      */
-    public boolean requiresCustomClobHandling();
+    public boolean requiresCustomLobHandling();
 }

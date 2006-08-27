@@ -132,6 +132,11 @@ import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.SqlParameter;
+<if(input.lobHandling)>
+import org.springframework.jdbc.core.support.AbstractLobCreatingPreparedStatementCreator;
+import org.springframework.jdbc.core.support.AbstractLobStreamingResultSetExtractor;
+<endif>
+
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.object.SqlQuery;
 import org.springframework.jdbc.support.JdbcUtils;
