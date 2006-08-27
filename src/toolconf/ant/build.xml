@@ -1252,7 +1252,7 @@
         depends="init.paths"
         description="Checks all defined conditions.">
 
-<!--          BEGIN OS CHECK SECTION                                        -->
+<!--          BEGIN GENERAL CHECK SECTION                                   -->
 
         <!--
          Checks if the operating system is Unix.
@@ -1271,7 +1271,14 @@
           </or>
         </condition>
 
-<!--          END OS CHECK SECTION                                          -->
+        <!--
+         Checks whether we're using Java5
+        -->
+        <condition property="java5">
+          <available classname="java.lang.StringBuilder"/>
+        </condition>
+
+<!--          END GENERAL CHECK SECTION                                     -->
 
 <!--          BEGIN REQUIRED LIBRARIES/FILES/FOLDERS CHECK SECTION          -->
 
@@ -1373,6 +1380,27 @@
           property="jalopy.jar.available"
           classpathref="java.development.class.path"/>
 
+        <antcall
+          target="init.conditions.for.java5"
+          inheritRefs="true"
+          inheritAll="true"/>
+
+<!--         END REQUIRED LIBRARIES/FILES/FOLDERS CHECK SECTION             -->
+
+    </target>
+
+     <!--
+      Checks conditions depending on Java5.
+      @depends init.paths to ensure all path references are defined.
+      @if java5 since the libraries require it.
+      @return some properties with the results of the checks.
+      -->
+      <target
+        name="init.conditions.for.java5"
+        depends="init.paths"
+        if="java5"
+        description="Checks conditions depending on Java5.">
+
         <!--
          Checks if umlgraph.jar is available.
         -->
@@ -1381,9 +1409,7 @@
           property="umlgraph.jar.available"
           classpathref="java.development.class.path"/>
 
-<!--         END REQUIRED LIBRARIES/FILES/FOLDERS CHECK SECTION             -->
-
-    </target>
+      </target>
 
 <!--         BEGIN REQUIRED LIBRARIES/FILES/FOLDERS CHECK SECTION           -->
 
@@ -2625,6 +2651,7 @@
      @param project.name the name of the project.
      @param java.source.and.javadoc.path the Javadoc source files folder(s).
      @param java.compile.class.path the classpath used to compile.
+     @if java5 since UMLGraph requires it.
      @if umlgraph.jar.available to print class diagrams as well.
      @calls <i>mkdir</i> to create the <i>javadoc.dir</i> folder.
      @calls <i>javadoc</i> to actually generate the documentation.
@@ -2633,7 +2660,7 @@
     <target
       name="_javadoc.umlgraph"
       description="Creates the javadocs."
-      if="umlgraph.jar.available">
+      if="java5,umlgraph.jar.available">
 
       <!--link resource="${java.development.lib.dir}/-->
 
