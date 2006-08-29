@@ -168,7 +168,8 @@ public class OracleUserTabColumnsTable
             {
                 TABLE_NAME,
                 COLUMN_NAME,
-                DATA_TYPE
+                DATA_TYPE,
+                NULLABLE
             };
     }
 }
