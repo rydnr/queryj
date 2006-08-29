@@ -54,31 +54,43 @@ public interface OracleTableRepository
     /**
      * The USER_TABLES table.
      */
-    public static final OracleUserTablesTable USER_TABLES = OracleUserTablesTable.getInstance();
+    public static final OracleUserTablesTable USER_TABLES =
+        OracleUserTablesTable.getInstance();
 
     /**
      * The USER_TAB_COLUMNS table.
      */
-    public static final OracleUserTabColumnsTable USER_TAB_COLUMNS = OracleUserTabColumnsTable.getInstance();
+    public static final OracleUserTabColumnsTable USER_TAB_COLUMNS =
+        OracleUserTabColumnsTable.getInstance();
 
     /**
      * The USER_COL_COMMENTS table.
      */
-    public static final OracleUserColCommentsTable USER_COL_COMMENTS = OracleUserColCommentsTable.getInstance();
+    public static final OracleUserColCommentsTable USER_COL_COMMENTS =
+        OracleUserColCommentsTable.getInstance();
 
     /**
      * The USER_CONS_COLUMNS table.
      */
-    public static final OracleUserConsColumnsTable USER_CONS_COLUMNS = OracleUserConsColumnsTable.getInstance();
+    public static final OracleUserConsColumnsTable USER_CONS_COLUMNS =
+        OracleUserConsColumnsTable.getInstance();
 
     /**
      * The USER_CONSTRAINTS table.
      */
-    public static final OracleUserConstraintsTable USER_CONSTRAINTS = OracleUserConstraintsTable.getInstance();
+    public static final OracleUserConstraintsTable USER_CONSTRAINTS =
+        OracleUserConstraintsTable.getInstance();
 
     /**
      * The USER_TAB_COMMENTS table.
      */
-    public static final OracleUserTabCommentsTable USER_TAB_COMMENTS = OracleUserTabCommentsTable.getInstance();
+    public static final OracleUserTabCommentsTable USER_TAB_COMMENTS =
+        OracleUserTabCommentsTable.getInstance();
+
+    /**
+     * The ALL_TAB_COLUMNS table.
+     */
+    public static final OracleAllTabColumnsTable ALL_TAB_COLUMNS =
+        OracleAllTabColumnsTable.getInstance();
 
 }

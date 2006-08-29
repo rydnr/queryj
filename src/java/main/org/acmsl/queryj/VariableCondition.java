@@ -66,7 +66,8 @@ public class VariableCondition
      * @precondition field != null
      * @precondition operator != null
      */
-    public VariableCondition(final Field field, final ConditionOperator operator)
+    public VariableCondition(
+        final Field field, final ConditionOperator operator)
     {
         super(field, operator, "?");
     }

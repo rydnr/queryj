@@ -83,6 +83,7 @@ import java.util.Map;
  */
 public class OracleMetadataManager
     extends  JdbcMetadataManager
+    implements  OracleTableRepository
 {
     /**
      * Creates an empty <code>OracleMetadataManager</code>.
@@ -230,28 +231,27 @@ public class OracleMetadataManager
                 {
                     SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                    t_Query.select(
-                        OracleTableRepository.USER_CONS_COLUMNS.COLUMN_NAME);
+                    t_Query.select(USER_CONS_COLUMNS.COLUMN_NAME);
 
-                    t_Query.from(OracleTableRepository.USER_CONS_COLUMNS);
-                    t_Query.from(OracleTableRepository.USER_CONSTRAINTS);
+                    t_Query.from(USER_CONS_COLUMNS);
+                    t_Query.from(USER_CONSTRAINTS);
 
                     Condition t_Condition =
-                        OracleTableRepository.USER_CONS_COLUMNS.CONSTRAINT_NAME.equals(
-                            OracleTableRepository.USER_CONSTRAINTS.CONSTRAINT_NAME);
+                        USER_CONS_COLUMNS.CONSTRAINT_NAME.equals(
+                            USER_CONSTRAINTS.CONSTRAINT_NAME);
 
                     // USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME
 
                     t_Condition =
                         t_Condition.and(
-                            OracleTableRepository.USER_CONS_COLUMNS.TABLE_NAME.equals());
+                            USER_CONS_COLUMNS.TABLE_NAME.equals());
 
                     //(USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
                     // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)
 
                     t_Condition =
                         t_Condition.and(
-                            OracleTableRepository.USER_CONSTRAINTS.CONSTRAINT_TYPE.equals("P"));
+                            USER_CONSTRAINTS.CONSTRAINT_TYPE.equals("P"));
 
                     //((USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
                     // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)) AND (USER_CONSTRAINTS.CONSTRAINT_TYPE = 'P')
@@ -261,7 +261,7 @@ public class OracleMetadataManager
                     t_PreparedStatement = t_Query.prepareStatement(connection);
 
                     t_Query.setString(
-                        OracleTableRepository.USER_CONS_COLUMNS.TABLE_NAME.equals(),
+                        USER_CONS_COLUMNS.TABLE_NAME.equals(),
                         tableNames[t_iTableIndex]);
 
                     //SELECT USER_CONS_COLUMNS.COLUMN_NAME
@@ -283,7 +283,7 @@ public class OracleMetadataManager
                         addPrimaryKey(
                             tableNames[t_iTableIndex],
                             t_rsResults.getString(
-                                OracleTableRepository.USER_CONS_COLUMNS.COLUMN_NAME.toSimplifiedString()));
+                                USER_CONS_COLUMNS.COLUMN_NAME.toSimplifiedString()));
                     }
                 }
                 catch  (final SQLException sqlException)
@@ -570,11 +570,11 @@ public class OracleMetadataManager
             {
                 SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                t_Query.select(OracleTableRepository.USER_TABLES.TABLE_NAME);
+                t_Query.select(USER_TABLES.TABLE_NAME);
 
-                t_Query.from(OracleTableRepository.USER_TABLES);
+                t_Query.from(USER_TABLES);
 
-                t_Query.where(OracleTableRepository.USER_TABLES.TABLE_NAME.notEquals("PLAN_TABLE"));
+                t_Query.where(USER_TABLES.TABLE_NAME.notEquals("PLAN_TABLE"));
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
@@ -670,7 +670,7 @@ public class OracleMetadataManager
         return
             extractStringFields(
                 resultSet,
-                OracleTableRepository.USER_TABLES.TABLE_NAME);
+                USER_TABLES.TABLE_NAME);
     }
 
     /**
@@ -737,18 +737,27 @@ public class OracleMetadataManager
             {
                 SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                t_Query.select(OracleTableRepository.USER_COL_COMMENTS.COLUMN_NAME);
+                t_Query.select(USER_COL_COMMENTS.COLUMN_NAME);
 
-                // t_Query.select(OracleTableRepository.USER_COL_COMMENTS.COMMENTS);
+                // t_Query.select(USER_COL_COMMENTS.COMMENTS);
 
-                t_Query.from(OracleTableRepository.USER_COL_COMMENTS);
+                t_Query.from(USER_COL_COMMENTS);
 
-                t_Query.where(OracleTableRepository.USER_COL_COMMENTS.TABLE_NAME.equals());
+                t_Query.from(ALL_TAB_COLUMNS);
+
+                t_Query.where(
+                         USER_COL_COMMENTS.TABLE_NAME.equals()
+                    .and(USER_COL_COMMENTS.TABLE_NAME.equals(
+                             ALL_TAB_COLUMNS.TABLE_NAME))
+                    .and(USER_COL_COMMENTS.COLUMN_NAME.equals(
+                             ALL_TAB_COLUMNS.COLUMN_NAME)));
+
+                t_Query.orderBy(ALL_TAB_COLUMNS.COLUMN_ID);
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
                 t_Query.setString(
-                    OracleTableRepository.USER_COL_COMMENTS.TABLE_NAME.equals(),
+                    USER_COL_COMMENTS.TABLE_NAME.equals(),
                     tableName);
 
                 /*
@@ -852,7 +861,7 @@ public class OracleMetadataManager
         return
             extractStringFields(
                 resultSet,
-                OracleTableRepository.USER_COL_COMMENTS.COLUMN_NAME);
+                USER_COL_COMMENTS.COLUMN_NAME);
     }
 
     /**
@@ -924,16 +933,23 @@ public class OracleMetadataManager
             {
                 SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                t_Query.select(OracleTableRepository.USER_TAB_COLUMNS.DATA_TYPE);
+                t_Query.select(USER_TAB_COLUMNS.DATA_TYPE);
 
-                t_Query.from(OracleTableRepository.USER_TAB_COLUMNS);
+                t_Query.from(USER_TAB_COLUMNS);
 
-                t_Query.where(OracleTableRepository.USER_TAB_COLUMNS.TABLE_NAME.equals());
+                t_Query.from(ALL_TAB_COLUMNS);
+
+                t_Query.where(
+                         USER_TAB_COLUMNS.TABLE_NAME.equals()
+                    .and(USER_TAB_COLUMNS.TABLE_NAME.equals(
+                             ALL_TAB_COLUMNS.TABLE_NAME))
+                    .and(USER_TAB_COLUMNS.COLUMN_NAME.equals(
+                             ALL_TAB_COLUMNS.COLUMN_NAME)));
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
                 t_Query.setString(
-                    OracleTableRepository.USER_TAB_COLUMNS.TABLE_NAME.equals(),
+                    USER_TAB_COLUMNS.TABLE_NAME.equals(),
                     tableName);
 
                 t_rsResults = t_Query.executeQuery();
@@ -946,7 +962,7 @@ public class OracleMetadataManager
                         sqlException);
             }
 
-            result = extractColumnTypes(t_rsResults, OracleTableRepository.USER_TAB_COLUMNS.DATA_TYPE);
+            result = extractColumnTypes(t_rsResults, USER_TAB_COLUMNS.DATA_TYPE);
         }
         catch  (final SQLException sqlException)
         {
@@ -1139,17 +1155,22 @@ public class OracleMetadataManager
             {
                 SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                t_Query.select(OracleTableRepository.USER_TAB_COLUMNS.NULLABLE);
+                t_Query.select(USER_TAB_COLUMNS.NULLABLE);
 
-                t_Query.from(OracleTableRepository.USER_TAB_COLUMNS);
+                t_Query.from(USER_TAB_COLUMNS);
+                t_Query.from(ALL_TAB_COLUMNS);
 
                 t_Query.where(
-                    OracleTableRepository.USER_TAB_COLUMNS.TABLE_NAME.equals());
+                         USER_TAB_COLUMNS.TABLE_NAME.equals()
+                    .and(USER_TAB_COLUMNS.TABLE_NAME.equals(
+                             ALL_TAB_COLUMNS.TABLE_NAME))
+                    .and(USER_TAB_COLUMNS.COLUMN_NAME.equals(
+                             ALL_TAB_COLUMNS.COLUMN_NAME)));
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
                 t_Query.setString(
-                    OracleTableRepository.USER_TAB_COLUMNS.TABLE_NAME.equals(),
+                    USER_TAB_COLUMNS.TABLE_NAME.equals(),
                     tableName);
 
                 t_rsResults = t_Query.executeQuery();
@@ -1165,7 +1186,7 @@ public class OracleMetadataManager
             result =
                 extractAllowNull(
                     t_rsResults,
-                    OracleTableRepository.USER_TAB_COLUMNS.NULLABLE);
+                    USER_TAB_COLUMNS.NULLABLE);
         }
         catch  (final SQLException sqlException)
         {
@@ -1334,17 +1355,17 @@ public class OracleMetadataManager
             {
                 SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                t_Query.select(OracleTableRepository.USER_TAB_COMMENTS.COMMENTS);
+                t_Query.select(USER_TAB_COMMENTS.COMMENTS);
 
-                t_Query.from(OracleTableRepository.USER_TAB_COMMENTS);
+                t_Query.from(USER_TAB_COMMENTS);
 
                 t_Query.where(
-                    OracleTableRepository.USER_TAB_COMMENTS.TABLE_NAME.equals());
+                    USER_TAB_COMMENTS.TABLE_NAME.equals());
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
                 t_Query.setString(
-                    OracleTableRepository.USER_TAB_COMMENTS.TABLE_NAME.equals(),
+                    USER_TAB_COMMENTS.TABLE_NAME.equals(),
                     tableName);
 
                 if  (t_Log != null)
@@ -1361,7 +1382,7 @@ public class OracleMetadataManager
                 {
                     t_strComment =
                         t_rsResults.getString(
-                            OracleTableRepository.USER_TAB_COMMENTS.COMMENTS.toSimplifiedString());
+                            USER_TAB_COMMENTS.COMMENTS.toSimplifiedString());
 
                     if  (t_strComment != null)
                     {
