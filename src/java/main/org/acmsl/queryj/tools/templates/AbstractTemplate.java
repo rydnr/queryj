@@ -571,14 +571,6 @@ public abstract class AbstractTemplate
          */
         public void run()
         {
-            Log t_Log =
-                UniqueLogFactory.getLog(AbstractTemplate.class);
-
-            if  (t_Log != null)
-            {
-                t_Log.fatal("Shutdown hook executed.");
-            }
-
             traceANTLRClassLoadingIssues();
         }
     }
