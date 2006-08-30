@@ -122,7 +122,7 @@ public class DAOTestTemplateBuildHandler
                 metadataManager,
                 retrieveTableTemplates(parameters),
                 metaData.getDatabaseProductName(),
-                metaData.getDatabaseProductVersion(),
+                retrieveDatabaseProductVersion(metaData),
                 retrieveDAOPackage(
                     metaData.getDatabaseProductName(),
                     parameters),

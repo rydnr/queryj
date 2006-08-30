@@ -132,7 +132,7 @@ public class FkStatementSetterTemplateBuildHandler
             handle(
                 parameters,
                 metaData.getDatabaseProductName(),
-                metaData.getDatabaseProductVersion(),
+                retrieveDatabaseProductVersion(metaData),
                 fixQuote(metaData.getIdentifierQuoteString()));
         }
         catch  (final SQLException sqlException)

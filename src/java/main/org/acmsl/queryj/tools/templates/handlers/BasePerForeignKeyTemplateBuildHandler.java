@@ -125,7 +125,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             buildTemplates(
                 parameters,
                 metaData.getDatabaseProductName(),
-                metaData.getDatabaseProductVersion(),
+                retrieveDatabaseProductVersion(metaData),
                 fixQuote(metaData.getIdentifierQuoteString()));
         }
         catch  (final SQLException sqlException)

@@ -342,4 +342,37 @@ public abstract class AbstractQueryJCommandHandler
 
         return result.booleanValue();
     }
+
+    /**
+     * Retrieves the database product version.
+     * @param metadata the database metadata.
+     * @return such information, or null if the vendor complains.
+     * @precondition metadata != null
+     */
+    protected String retrieveDatabaseProductVersion(
+        final DatabaseMetaData metadata)
+    {
+        String result = null;
+
+        try
+        {
+            result = metadata.getDatabaseProductVersion();
+        }
+        catch  (final Throwable throwable)
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(AbstractQueryJCommandHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.info(
+                      "Database vendor complained when queried about "
+                    + "its version via "
+                    + "java.sql.DatabaseMetaData.getDatabaseProductVersion()",
+                    throwable);
+            }
+        }
+
+        return result;
+    }
 }

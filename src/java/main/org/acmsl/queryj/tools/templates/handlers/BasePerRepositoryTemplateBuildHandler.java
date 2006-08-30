@@ -119,7 +119,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
             buildTemplate(
                 parameters,
                 metaData.getDatabaseProductName(),
-                metaData.getDatabaseProductVersion(),
+                retrieveDatabaseProductVersion(metaData),
                 fixQuote(metaData.getIdentifierQuoteString()));
         }
         catch  (final SQLException sqlException)
