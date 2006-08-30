@@ -136,7 +136,7 @@
     <dependency>
       <groupId>acmsl-commons</groupId>
       <artifactId>acmsl-commons</artifactId>
-      <version>0.5.7b11</version>
+      <version>0.5.7b13-SNAPSHOT</version>
       <url>http://www.acm-sl.org/commons</url>
       <properties>
         <required.to.compile>true</required.to.compile>
@@ -182,6 +182,20 @@
         <required.to.run>true</required.to.run>
         <required.to.test>true</required.to.test>
         <required.to.build>false</required.to.build>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>2.7.5</version>
+      <url>http://www.antlr.org</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>false</required.to.build>
+        <injected.by>stringtemplate</injected.by>
       </properties>
     </dependency>
 

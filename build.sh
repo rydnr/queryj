@@ -16,6 +16,7 @@ fi
 if  [[ "x$1" == "x-D" ]]; then
 shift
 [ -z "$1" ] && usage
+rm -rf ${basedir}/dependencies
 for last_command in "cd ${basedir}/src/toolconf/maven && mkdir -p ../emacs 2> /dev/null" "cd ${basedir}/src/toolconf/maven && maven $ACM_OPTS antdep" "cd ${basedir}/src/toolconf/ant && ant -f dependencies.xml"; do
   echo "$last_command" | sh
   if [[ ! $? == 0 ]]; then

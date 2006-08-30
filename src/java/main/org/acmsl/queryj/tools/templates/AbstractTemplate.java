@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.templates.Template;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.commons.utils.ClassLoaderUtils;
 
 /*
  * Importing Commons-Logging classes.
@@ -449,15 +450,18 @@ public abstract class AbstractTemplate
      * @precondition template != null
      * @precondition input != null
      */
-    protected String processInnerTemplate(final String template, final Map input)
+    protected String processInnerTemplate(
+        final String template, final Map input)
     {
         String result = null;
         
         if  (template != null)
         {
-            
+            traceClassLoaders();
+
             StringTemplate t_strInnerTemplate =
-                new StringTemplate(template, AngleBracketTemplateLexer.class);
+                new StringTemplate(
+                    template, AngleBracketTemplateLexer.class);
 
             t_strInnerTemplate.setAttribute("input", input);
         
@@ -466,7 +470,67 @@ public abstract class AbstractTemplate
         
         return result;
     }
-    
+
+    /**
+     * Prints a log message displaying ClassLoader issues related
+     * to ANTLR.jar and StringTemplate.jar.
+     */
+    protected void traceClassLoaders()
+    {
+        // CharScanner; panic: ClassNotFoundException:
+        // org.antlr.stringtemplate.language.ChunkToken
+        // can happen if ANTLR gets loaded by a ClassLoader
+        // with no reference to StringTemplate classes.
+        Log t_Log =
+            UniqueLogFactory.getLog(AbstractTemplate.class);
+
+        ClassLoaderUtils t_ClassLoaderUtils =
+            ClassLoaderUtils.getInstance();
+
+        if  (   (t_Log != null)
+             && (t_ClassLoaderUtils != null))
+        {
+            StringBuffer t_sbMessage = new StringBuffer();
+
+            String t_strAntlrLocation =
+                t_ClassLoaderUtils.findLocation(
+                    antlr.ANTLRParser.class);
+
+            String t_strStringTemplateLocation =
+                t_ClassLoaderUtils.findLocation(
+                    StringTemplate.class);
+
+            t_sbMessage.append(
+                  "antlr-X.Y.jar gets loaded by a class loader "
+                + "with no idea of where StringTemplate classes "
+                + "are, so that the reflection-based "
+                + "instantiation cannot be done. "
+                + "Check the classpath. ");
+
+            if  (   (t_strAntlrLocation != null)
+                 || (t_strStringTemplateLocation != null))
+            {
+                t_sbMessage.append("Hint: ");
+
+                if  (t_strAntlrLocation != null)
+                {
+                    t_sbMessage.append("ANTLR is loaded from ");
+                    t_sbMessage.append(t_strAntlrLocation);
+                }
+
+                if  (t_strStringTemplateLocation != null)
+                {
+                    t_sbMessage.append(
+                        " whereas StringTemplate is loaded from ");
+                    t_sbMessage.append(
+                        t_strStringTemplateLocation);
+                }
+            }
+
+            t_Log.debug(t_sbMessage.toString());
+        }
+    }
+
     /**
      * Generates the actual source code.
      * @param header the header.
