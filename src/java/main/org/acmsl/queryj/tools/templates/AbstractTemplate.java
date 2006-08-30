@@ -109,6 +109,27 @@ public abstract class AbstractTemplate
     private DecoratorFactory m__DecoratorFactory;
 
     /**
+     * A singleton container to avoid the double-checking lock idiom.
+     */
+    protected static final class FinalizingThreadSingletonContainer
+    {
+        /**
+         * The singleton instance.
+         */
+        protected static final FinalizingThread THREAD =
+            new FinalizingThread();
+
+        /**
+         * Retrieves the thread.
+         * @return such information.
+         */
+        public static FinalizingThread getInstance()
+        {
+            return THREAD;
+        }
+    }
+
+    /**
      * Builds a <code>AbstractTemplate</code> with given
      * decorator factory.
      * @param header the optional header.
@@ -313,7 +334,8 @@ public abstract class AbstractTemplate
      * @precondition path != null
      * @precondition theme != null
      */
-    protected final Object buildSTGroupKey(final String path, final String theme)
+    protected final Object buildSTGroupKey(
+        final String path, final String theme)
     {
         return ".:\\AbstractTemplate//STCACHE//" + path + "//" + theme;
     }
@@ -414,9 +436,17 @@ public abstract class AbstractTemplate
     public String generate()
       throws  InvalidTemplateException
     {
+        String result;
+
         logHeader(buildHeader());
 
-        return generateOutput(getHeader());
+        traceClassLoaders();
+
+        result = generateOutput(getHeader());
+
+        cleanUpClassLoaderTracing();
+
+        return result;
     }
 
     /**
@@ -457,8 +487,6 @@ public abstract class AbstractTemplate
         
         if  (template != null)
         {
-            traceClassLoaders();
-
             StringTemplate t_strInnerTemplate =
                 new StringTemplate(
                     template, AngleBracketTemplateLexer.class);
@@ -476,6 +504,90 @@ public abstract class AbstractTemplate
      * to ANTLR.jar and StringTemplate.jar.
      */
     protected void traceClassLoaders()
+    {
+        FinalizingThread t_FinalizingThread =
+            FinalizingThreadSingletonContainer.getInstance();
+
+        synchronized (t_FinalizingThread)
+        {
+            Runtime t_Runtime = Runtime.getRuntime();
+
+            if  (t_Runtime != null)
+            {
+                t_Runtime.addShutdownHook(t_FinalizingThread);
+            }
+        }
+    }
+
+    /**
+     * Cleans up the thread to trace class loaders on shutdown.
+     */
+    protected void cleanUpClassLoaderTracing()
+    {
+        FinalizingThread t_FinalizingThread =
+            FinalizingThreadSingletonContainer.getInstance();
+
+        synchronized (t_FinalizingThread)
+        {
+            Runtime t_Runtime = Runtime.getRuntime();
+
+            if  (t_Runtime != null)
+            {
+                t_Runtime.removeShutdownHook(t_FinalizingThread);
+            }
+        }
+    }
+
+    /**
+     * Thread to provide some information about ANTLR class loaders,
+     * since it's likely to have triggered the VM shutdown.
+     * @author <a href="mailto:jose.sanleandro@ventura24.es"
+     * >Jose San Leandro</a>
+     * @version $Revision$
+     */
+    protected static class FinalizingThread
+        extends  Thread
+    {
+        /**
+         * Whether the thread is new or not.
+         */
+        private boolean m__bNew = true;
+
+        /**
+         * Retrieves whether this thread has just been created or not.
+         * @return such information.
+         */
+        public boolean isNew()
+        {
+            boolean result = m__bNew;
+
+            m__bNew = false;
+
+            return result;
+        }
+
+        /**
+         * Runs the thread.
+         */
+        public void run()
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(AbstractTemplate.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.fatal("Shutdown hook executed.");
+            }
+
+            traceANTLRClassLoadingIssues();
+        }
+    }
+
+    /**
+     * Prints a log message displaying ClassLoader issues related
+     * to ANTLR.jar and StringTemplate.jar.
+     */
+    protected static void traceANTLRClassLoadingIssues()
     {
         // CharScanner; panic: ClassNotFoundException:
         // org.antlr.stringtemplate.language.ChunkToken
@@ -527,7 +639,7 @@ public abstract class AbstractTemplate
                 }
             }
 
-            t_Log.debug(t_sbMessage.toString());
+            t_Log.fatal(t_sbMessage.toString());
         }
     }
 
