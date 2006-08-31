@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://www.acm-sl.org/queryj"
+  xmlns="http://www.acm-sl.org/queryj"
+  elementFormDefault="qualified">
+
+  <xs:element name="sql-list">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sql" minOccurs="1" maxOccurs="unbounded"/>
+        <xs:element ref="parameter-list"/>
+        <xs:element ref="result-list"/>
+        <xs:element ref="property-list"/>
+        <xs:element ref="flag-list"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="sql">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="description" type="xs:string" use="/>
+        <xs:element name="value" type="xs:string"/>
+        <xs:element name="parameter-ref" type="id-ref"/>
+        <xs:element name="result-ref" type="id-ref"/>
+        <xs:element name="connection-flags-ref" type="id-ref"/>
+        <xs:element name="statement-flags-ref" type="id-ref"/>
+        <xs:element name="resultset-flags-ref" type="id-ref"/>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:ID" use="required"/>
+      <xs:attribute name="dao" type="xs:normalizedString" use="required"/>
+      <xs:attribute name="name" type="xs:normalizedString" use="required"/>
+      <xs:attribute name="type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="select"/>
+            <xs:enumeration value="insert"/>
+            <xs:enumeration value="update"/>
+            <xs:enumeration value="delete"/>
+            <xs:enumeration value="select-for-update"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="implementation" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="mysql"/>
+            <xs:enumeration value="oracle"/>
+            <xs:enumeration value="postgres"/>
+            <xs:enumeration value="odbc"/>
+            <xs:enumeration value="all-jdbc"/>
+            <xs:enumeration value="mock"/>
+            <xs:enumeration value="xml"/>
+            <xs:enumeration value="all"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute
+          name="validate" use="required" default="true" type="boolean"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="parameter-list">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="parameter" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="id-ref">
+    <xs:attribute name="id" type="xs:IDREF" use="required"/>
+  </xs:complexType>
+
+  <xs:element name="parameter">
+    <xs:complexType>
+      <xs:attribute name="id" type="xs:ID" use="required"/>
+      <xs:attribute name="index" type="xs:positiveInteger" use="required"/>
+      <xs:attribute name="type" type="xs:normalizedString" use="required"/>
+      <xs:attribute name="name" type="xs:normalizedString" use="required"/>
+      <xs:attribute name="validation-value" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="result-list">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="result" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="result">
+    <xs:complexType>
+      <xs:attribute name="id" type="xs:ID" use="required"/>
+      <xs:attribute name="class" type="xs:normalizedString" use="optional"/>
+      <xs:attribute name="matches">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="none"/>
+            <xs:enumeration value="single"/>
+            <xs:enumeration value="multiple"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="provider" type="xs:normalizedString" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="property-list">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="property">
+    <xs:complexType>
+      <xs:attribute name="id" type="xs:ID" use="required"/>
+      <xs:attribute
+        name="column_name" type="xs:normalizedString" use="required"/>
+      <xs:attribute name="index" type="xs:positiveInteger" use="optional"/>
+      <xs:attribute name="name" type="xs:normalizedString" use="optional"/>
+      <xs:attribute name="type" type="xs:normalizedString" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="flag-list">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element
+          ref="connection-flags" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element
+          ref="statement-flags" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element
+          ref="resultset-flags" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="connection-flags">
+    <xs:complexType>
+      <xs:attribute name="id" type="xs:ID" use="required"/>
+      <xs:attribute name="transactionIsolation" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="TRANSACTION_NONE"/>
+            <xs:enumeration value="TRANSACTION_READ_COMMITTED"/>
+            <xs:enumeration value="TRANSACTION_READ_UNCOMMITTED"/>
+            <xs:enumeration value="TRANSACTION_REPEATABLE_READ"/>
+            <xs:enumeration value="TRANSACTION_SERIALIZABLE"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="statement-flags">
+    <xs:complexType>
+      <xs:attribute name="id" type="xs:ID" use="required"/>
+      <xs:attribute name="autogeneratedkeys" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="NO_GENERATED_KEYS"/>
+            <xs:enumeration value="RETURN_GENERATED_KEYS"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="fetchsize" type="xs:positiveInteger" use="optional"/>
+      <xs:attribute name="maxrows" type="xs:positiveInteger" use="optional"/>
+      <xs:attribute
+          name="querytimeout" type="xs:positiveInteger" use="optional"/>
+      <xs:attribute name="fetchdirection" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="FETCH_FORWARD"/>
+            <xs:enumeration value="FETCH_REVERSE"/>
+            <xs:enumeration value="FETCH_UNKNOWN"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="escapeprocessing" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:normalizedString">
+            <xs:pattern
+                value="true|false"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="moreresults" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="CLOSE_CURRENT_RESULT"/>
+            <xs:enumeration value="|KEEP_CURRENT_RESULT"/>
+            <xs:enumeration value="CLOSE_ALL_RESULTS"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute
+          name="cursorname" type="xs:normalizedString" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="resultset-flags">
+    <xs:complexType>
+      <xs:attribute name="id" type="xs:ID" use="required"/>
+      <xs:attribute name="type" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="TYPE_FORWARD_ONLY"/>
+            <xs:enumeration value="TYPE_SCROLL_INSENSITIVE"/>
+            <xs:enumeration value="TYPE_SCROLL_SENSITIVE"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="concurrency" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="CONCUR_READ_ONLY"/>
+            <xs:enumeration value="CONCUR_UPDATABLE"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="holdability" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="HOLD_CURSORS_OVER_COMMIT"/>
+            <xs:enumeration value="CLOSE_CURSORS_AT_COMMIT"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="boolean">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="true"/>
+      <xs:enumeration value="false"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

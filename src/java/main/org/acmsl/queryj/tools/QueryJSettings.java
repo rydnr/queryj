@@ -165,4 +165,10 @@ public interface QueryJSettings
      * The grammar bundle.
      */
     public static final String GRAMMAR_BUNDLE = PREFIX + "grammarBundle";
+
+    /**
+     * Whether to disable custom sql validation completely.
+     */
+    public static final String DISABLE_CUSTOM_SQL_VALIDATION =
+        PREFIX + "disableCustomSqlValidation";
 }

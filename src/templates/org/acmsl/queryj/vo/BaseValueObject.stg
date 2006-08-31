@@ -75,7 +75,7 @@ source(input) ::= <<
 /*
  * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.commons.patterns.ValueObject;
+import org.acmsl.commons.patterns.dao.ValueObject;
 <endif>
 
 /*

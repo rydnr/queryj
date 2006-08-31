@@ -62,6 +62,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.Map;
 
@@ -172,7 +173,6 @@ public abstract class AbstractQueryJCommandHandler
                 parameters.get(
                     DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
     }
-
 
     /**
      * Retrieves the database metadata manager from the attribute map.
@@ -374,5 +374,22 @@ public abstract class AbstractQueryJCommandHandler
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the <code>Connection</code> instance.
+     * @param parameters the parameter map.
+     * @return such instance.
+     * @throws QueryJBuildException if the provider cannot be stored for
+     * any reason.
+     * @precondition parameters != null
+     */
+    protected Connection retrieveConnection(final Map parameters)
+      throws  QueryJBuildException
+    {
+        return
+            (Connection)
+                parameters.get(
+                    JdbcConnectionOpeningHandler.JDBC_CONNECTION);
     }
 }

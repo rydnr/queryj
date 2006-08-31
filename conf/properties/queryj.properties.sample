@@ -103,3 +103,6 @@ queryj.allowEmptyRepositoryDAO=false
 
 # Whether to implement org.acmsl.commons.patterns marker interfaces.
 queryj.implementMarkerInterfaces=true
+
+# Whether to disable custom SQL validation globally.
+queryj.disableCustomSqlValidation=false

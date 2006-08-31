@@ -141,14 +141,16 @@ public class CustomSqlValidationHandler
     protected boolean handle(final Map parameters)
       throws  QueryJBuildException
     {
-        validate(
-            retrieveCustomSqlProvider(parameters),
-            retrieveConnection(parameters),
-            retrieveMetadataManager(parameters));
+        if  (!retrieveDisableCustomSqlValidation(parameters))
+        {
+            validate(
+                retrieveCustomSqlProvider(parameters),
+                retrieveConnection(parameters),
+                retrieveMetadataManager(parameters));
+        }
 
         return false;
     }
-
 
     /**
      * Validates the SQL queries.
@@ -739,22 +741,6 @@ public class CustomSqlValidationHandler
         return
             (ParameterElement[])
                 t_cResult.toArray(EMPTY_PARAMETERELEMENT_ARRAY);
-    }
-
-    /**
-     * Retrieves the <code>Connection</code> instance.
-     * @param parameters the parameter map.
-     * @return such instance.
-     * @throws QueryJBuildException if the provider cannot be stored for any reason.
-     * @precondition parameters != null
-     */
-    protected Connection retrieveConnection(final Map parameters)
-      throws  QueryJBuildException
-    {
-        return
-            (Connection)
-                parameters.get(
-                    JdbcConnectionOpeningHandler.JDBC_CONNECTION);
     }
 
     /**
@@ -1435,6 +1421,29 @@ public class CustomSqlValidationHandler
              && (index != propertyIndex))
         {
             result = false;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether to disable custom sql validation at all or not.
+     * @param settings the settings.
+     * @return <code>true</code> in such case.
+     * @precondition settings != null
+     */
+    protected boolean retrieveDisableCustomSqlValidation(final Map settings)
+    {
+        boolean result = false;
+
+        Boolean flag =
+            (Boolean)
+                settings.get(
+                    ParameterValidationHandler.DISABLE_CUSTOM_SQL_VALIDATION);
+
+        if  (flag != null)
+        {
+            result = flag.booleanValue();
         }
 
         return result;

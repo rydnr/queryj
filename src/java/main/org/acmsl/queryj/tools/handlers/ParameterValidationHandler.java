@@ -294,6 +294,12 @@ public class ParameterValidationHandler
     public static final String CUSTOM_SQL_MODEL = "customSqlModel";
 
     /**
+     * Whether to disable custom sql validation.
+     */
+    public static final String DISABLE_CUSTOM_SQL_VALIDATION =
+        "disableCustomSqlValidation";
+
+    /**
      * The sql.xml file.
      */
     public static final String SQL_XML_FILE = "sqlXmlFile";

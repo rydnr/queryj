@@ -1020,6 +1020,47 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to disable custom sql validation.
+     * @param disable such setting.
+     */
+    public void setDisableCustomSqlValidation(final String disable)
+    {
+        setDisableCustomSqlValidation(disable, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to disable custom sql validation.
+     * @param disable such setting.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setDisableCustomSqlValidation(
+        final String disable, final QueryJChain delegee)
+    {
+        delegee.setDisableCustomSqlValidation(disable);
+    }
+
+    /**
+     * Retrieves whether to disable custom sql validation.
+     * @return such setting.
+     */
+    public String getDisableCustomSqlValidation()
+    {
+        return getDisableCustomSqlValidation(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to disable custom sql validation.
+     * @param delegee the delegee.
+     * @return such setting.
+     * @precondition delegee != null
+     */
+    protected String getDisableCustomSqlValidation(final QueryJChain delegee)
+    {
+        return delegee.getDisableCustomSqlValidation();
+    }
+
+    /**
      * Specifies the sql.xml file.
      * @param file the new file.
      */
@@ -1278,9 +1319,11 @@ public class QueryJTask
          * @param allowEmptyRepositoryDAO whether to generate a repository
          * DAO even tough it'll contain no custom queries..
          * @param implementMarkerInterfaces whether to make some generated 
-         * sources implement <code>org.acmsl.commons.patterns</code> <i>Marker</i>
-         * interfaces.
+         * sources implement <code>org.acmsl.commons.patterns</code>
+         * <i>Marker</i> interfaces.
          * @param customSqlModel the format of the custom SQL file.
+         * @param disableCustomSqlValidation whether to disable custom sql
+         * validation.
          * @param sqlXmlFile the file containing the custom SQL.
          * @param grammarBundle the grammar with irregular singular and plural
          * forms of the table names.
@@ -1311,6 +1354,7 @@ public class QueryJTask
             final boolean allowEmptyRepositoryDAO,
             final boolean implementMarkerInterfaces,
             final String customSqlModel,
+            final boolean disableCustomSqlValidation,
             final File sqlXmlFile,
             final String grammarBundle)
         {
@@ -1336,6 +1380,7 @@ public class QueryJTask
                 allowEmptyRepositoryDAO,
                 implementMarkerInterfaces,
                 customSqlModel,
+                disableCustomSqlValidation,
                 sqlXmlFile,
                 grammarBundle);
 

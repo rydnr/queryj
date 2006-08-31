@@ -266,6 +266,16 @@ public class QueryJChain
     private String m__strImplementMarkerInterfaces;
 
     /**
+     * The <i>disableCustomSqlValidation</i> flag.
+     */
+    private boolean m__bDisableCustomSqlValidation;
+
+    /**
+     * The <i>disableCustomSqlValidation</i> property.
+     */
+    private String m__strDisableCustomSqlValidation;
+
+    /**
      * Creates a <code>QueryJChain</code> instance.
      */
     public QueryJChain() {};
@@ -307,6 +317,7 @@ public class QueryJChain
      * sources implement <code>org.acmsl.commons.patterns</code> <i>Marker</i>
      * interfaces.
      * @param customSqlModel the format of the custom SQL file.
+     * @param disableCustomSqlValidation to disable validation of custom sql.
      * @param sqlXmlFile the file containing the custom SQL.
      * @param grammarBundle the grammar with irregular singular and plural
      * forms of the table names.
@@ -333,6 +344,7 @@ public class QueryJChain
         final boolean allowEmptyRepositoryDAO,
         final boolean implementMarkerInterfaces,
         final String customSqlModel,
+        final boolean disableCustomSqlValidation,
         final File sqlXmlFile,
         final String grammarBundle)
     {
@@ -359,6 +371,7 @@ public class QueryJChain
         immutableSetAllowEmptyRepositoryDAOFlag(allowEmptyRepositoryDAO);
         immutableSetImplementMarkerInterfacesFlag(implementMarkerInterfaces);
         immutableSetCustomSqlModel(customSqlModel);
+        immutableSetDisableCustomSqlValidationFlag(disableCustomSqlValidation);
         immutableSetSqlXmlFile(sqlXmlFile);
         immutableSetGrammarbundle(grammarBundle);
     }
@@ -1606,6 +1619,86 @@ public class QueryJChain
     }
 
     /**
+     * Specifies whether to disable custom sql validation.
+     * @param allow such setting.
+     */
+    protected final void immutableSetDisableCustomSqlValidation(
+        final String allow)
+    {
+        m__strDisableCustomSqlValidation = allow;
+    }
+
+    /**
+     * Specifies whether to disable custom sql validation.
+     * @param disable such setting.
+     */
+    public void setDisableCustomSqlValidation(final String disable)
+    {
+        immutableSetDisableCustomSqlValidation(disable);
+
+        setDisableCustomSqlValidationFlag(toBoolean(disable));
+    }
+
+    /**
+     * Retrieves whether to disable custom sql validation.
+     * @return such setting.
+     */
+    public String getDisableCustomSqlValidation()
+    {
+        return m__strDisableCustomSqlValidation;
+    }
+
+    /**
+     * Specifies the "disable-custom-sql-validation" flag.
+     * @param flag such flag.
+     */
+    protected final void immutableSetDisableCustomSqlValidationFlag(
+        final boolean flag)
+    {
+        m__bDisableCustomSqlValidation = flag;
+    }
+
+    /**
+     * Specifies the "disable-custom-sql-validation" flag.
+     * @param flag such flag.
+     */
+    protected void setDisableCustomSqlValidationFlag(final boolean flag)
+    {
+        immutableSetDisableCustomSqlValidationFlag(flag);
+    }
+
+    /**
+     * Retrieves the "disable-custom-sql-validation" flag.
+     * @return such flag.
+     */
+    protected boolean getDisableCustomSqlValidationFlag()
+    {
+        return m__bDisableCustomSqlValidation;
+    }
+
+    /**
+     * Retrieves the disable-custom-sql-validation flag, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getDisableCustomSqlValidationFlag(
+        final Properties properties)
+    {
+        String t_strResult = getDisableCustomSqlValidation();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult =
+                properties.getProperty(DISABLE_CUSTOM_SQL_VALIDATION);
+            setDisableCustomSqlValidation(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+    /**
      * Specifies the sql.xml file.
      * @param file the new file.
      */
@@ -1886,6 +1979,7 @@ public class QueryJChain
                 getAllowEmptyRepositoryDAOFlag(settings),
                 getImplementMarkerInterfacesFlag(settings),
                 getCustomSqlModel(settings),
+                getDisableCustomSqlValidationFlag(settings),
                 getSqlXmlFile(settings),
                 getGrammarbundle(settings));
         }
@@ -1921,6 +2015,8 @@ public class QueryJChain
      * sources implement <code>org.acmsl.commons.patterns</code> <i>Marker</i>
      * interfaces.
      * @param customSqlModel the format of the custom SQL file.
+     * @param disableCustomSqlValidation whether to disable custom sql
+     * validation.
      * @param sqlXmlFile the file containing the custom SQL.
      * @param grammarBundle the grammar with irregular singular and plural
      * forms of the table names.
@@ -1948,6 +2044,7 @@ public class QueryJChain
         final boolean allowEmptyRepositoryDAO,
         final boolean implementMarkerInterfaces,
         final String customSqlModel,
+        final boolean disableCustomSqlValidation,
         final File sqlXmlFile,
         final String grammarBundle)
     {
@@ -2084,6 +2181,12 @@ public class QueryJChain
                     ParameterValidationHandler.CUSTOM_SQL_MODEL,
                     customSqlModel);
             }
+
+            attributes.put(
+                ParameterValidationHandler.DISABLE_CUSTOM_SQL_VALIDATION,
+                (disableCustomSqlValidation
+                 ?  Boolean.TRUE
+                 :  Boolean.FALSE));
 
             if  (sqlXmlFile != null)
             {

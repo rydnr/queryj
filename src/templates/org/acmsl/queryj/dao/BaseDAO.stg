@@ -89,7 +89,7 @@ import org.springframework.dao.DataAccessException;
 /*
  * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.commons.patterns.DAO;
+import org.acmsl.commons.patterns.dao.DAO;
 <endif>
 
 /*
