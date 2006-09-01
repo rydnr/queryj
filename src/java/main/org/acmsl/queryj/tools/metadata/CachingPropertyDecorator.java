@@ -65,6 +65,11 @@ public class CachingPropertyDecorator
     private String m__strCachedObjectType;
 
     /**
+     * The cached name uppercased.
+     */
+    private String m__strCachedNameUppercased;
+
+    /**
      * The cached name lowercased.
      */
     private String m__strCachedNameLowercased;
@@ -197,6 +202,52 @@ public class CachingPropertyDecorator
         {
             result = super.getNameLowercased();
             setCachedNameLowercased(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached name uppercased.
+     * @param nameUppercased such value.
+     */
+    protected final void immutableSetCachedNameUppercased(
+        final String nameUppercased)
+    {
+        m__strCachedNameUppercased = nameUppercased;
+    }
+
+    /**
+     * Specifies the cached name uppercased.
+     * @param nameUppercased such value.
+     */
+    protected void setCachedNameUppercased(
+        final String nameUppercased)
+    {
+        immutableSetCachedNameUppercased(nameUppercased);
+    }
+
+    /**
+     * Retrieves the cached name uppercased.
+     * @return such value.
+     */
+    public String getCachedNameUppercased()
+    {
+        return m__strCachedNameUppercased;
+    }
+
+    /**
+     * Retrieves the name, in upper case.
+     * @return such information.
+     */
+    public String getNameUppercased()
+    {
+        String result = getCachedNameUppercased();
+
+        if  (result == null)
+        {
+            result = super.getNameUppercased();
+            setCachedNameUppercased(result);
         }
 
         return result;

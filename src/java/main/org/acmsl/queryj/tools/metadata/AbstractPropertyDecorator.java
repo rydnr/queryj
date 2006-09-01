@@ -279,6 +279,15 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
+     * Retrieves the name, in upper case.
+     * @return such information.
+     */
+    public String getNameUppercased()
+    {
+        return uppercase(getName());
+    }
+
+    /**
      * Retrieves the name, capitalized.
      * @return such information.
      */

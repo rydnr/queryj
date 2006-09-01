@@ -58,7 +58,9 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Provides some useful methods when working with custom result elements.
@@ -80,6 +82,13 @@ public class CustomResultUtils
      */
     public static final Result[] EMPTY_RESULT_ARRAY =
         new Result[0];
+
+    /**
+     * A map-based cache to improve performance when retrieving
+     * singular and plural forms for tables, and to cache other
+     * other data if needed.
+     */
+    private static final Map CACHE = new HashMap();
 
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -188,20 +197,20 @@ public class CustomResultUtils
             findSqlElementsByResultId(
                 resultElement.getId(), customSqlProvider);
 
-        if  (t_aSqlElements != null)
+        int t_iCount = (t_aSqlElements != null) ? t_aSqlElements.length : 0;
+
+        EnglishGrammarUtils t_EnglishGrammarUtils =
+            EnglishGrammarUtils.getInstance();
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
-            for  (int t_iIndex = 0;
-                      t_iIndex < t_aSqlElements.length;
-                      t_iIndex++)
+            if  (matches(
+                     tableName,
+                     t_aSqlElements[t_iIndex].getDao(),
+                     t_EnglishGrammarUtils))
             {
-                if  (matches(
-                         tableName,
-                         t_aSqlElements[t_iIndex].getDao(),
-                         EnglishGrammarUtils.getInstance()))
-                {
-                    result = true;
-                    break;
-                }
+                result = true;
+                break;
             }
         }
 
@@ -244,20 +253,41 @@ public class CustomResultUtils
 
         result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
 
-        if  (!result)
+        synchronized  (t_strTableInLowerCase)
         {
-            String t_strSingularName =
-                englishGrammarUtils.getSingular(t_strTableInLowerCase);
+            if  (!result)
+            {
+                String t_strSingularName =
+                    retrieveCachedSingularTableName(t_strTableInLowerCase);
 
-            result = daoId.equalsIgnoreCase(t_strSingularName);
-        }
+                if  (t_strSingularName == null)
+                {
+                    t_strSingularName =
+                        englishGrammarUtils.getSingular(t_strTableInLowerCase);
 
-        if  (!result)
-        {
-            String t_strPluralName =
-                englishGrammarUtils.getPlural(t_strTableInLowerCase);
+                    cacheSingularTableName(
+                        t_strTableInLowerCase, t_strSingularName);
+                }
 
-            result = daoId.equalsIgnoreCase(t_strPluralName);
+                result = daoId.equalsIgnoreCase(t_strSingularName);
+            }
+
+            if  (!result)
+            {
+                String t_strPluralName =
+                    retrieveCachedPluralTableName(t_strTableInLowerCase);
+
+                if  (t_strPluralName == null)
+                {
+                    t_strPluralName =
+                        englishGrammarUtils.getPlural(t_strTableInLowerCase);
+
+                    cachePluralTableName(
+                        t_strTableInLowerCase, t_strPluralName);
+                }
+
+                result = daoId.equalsIgnoreCase(t_strPluralName);
+            }
         }
 
         return result;
@@ -437,5 +467,142 @@ public class CustomResultUtils
         }
 
         return (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+    }
+
+    /**
+     * Caches the singular table name.
+     * @param tableName the table name.
+     * @param singularForm the singular form.
+     * @precondition tableName != null
+     */
+    protected void cacheSingularTableName(
+        final String tableName, final String singularForm)
+    {
+        cacheEntry(buildSingularKey(tableName), singularForm);
+    }
+
+    /**
+     * Caches the plural table name.
+     * @param tableName the table name.
+     * @param pluralForm the plural form.
+     * @precondition tableName != null
+     */
+    protected void cachePluralTableName(
+        final String tableName, final String pluralForm)
+    {
+        cacheEntry(buildPluralKey(tableName), pluralForm);
+    }
+
+    /**
+     * Caches given singular or plural form of a table name.
+     * @param key the key.
+     * @param value the value.
+     * @precondition key != null
+     */
+    protected void cacheEntry(
+        final String key, final String value)
+    {
+        if  (value == null)
+        {
+            removeEntryFromCache(CACHE, key);
+        }
+        else
+        {
+            cache(CACHE, key, value);
+        }
+    }
+
+    /**
+     * Retrieves the cached singular form for given table.
+     * @param tableName the table name.
+     * @return such value.
+     * @precondition tableName != null
+     */
+    protected String retrieveCachedSingularTableName(final String tableName)
+    {
+        return retrieveCachedEntry(buildSingularKey(tableName));
+    }
+
+    /**
+     * Retrieves the cached plural form for given table.
+     * @param tableName the table name.
+     * @return such value.
+     * @precondition tableName != null
+     */
+    protected String retrieveCachedPluralTableName(final String tableName)
+    {
+        return retrieveCachedEntry(buildPluralKey(tableName));
+    }
+
+    /**
+     * Retrieves the cached entry.
+     * @param key the key.
+     * @return the cached entry, or <code>null</code> if it's not cached.
+     * @precondition key != null
+     */
+    protected String retrieveCachedEntry(final String key)
+    {
+        return retrieveCachedEntry(CACHE, key);
+    }
+
+    /**
+     * Caches given entry.
+     * @param map the cache.
+     * @param key the key.
+     * @param value the value.
+     * @precondition map != null
+     * @precondition key != null
+     * @precondition value != null
+     */
+    protected void cache(final Map map, final String key, final String value)
+    {
+        map.put(key, value);
+    }
+
+    /**
+     * Retrieves the cached entry.
+     * @param cache the cache.
+     * @param key the key.
+     * @return the cached entry, or <code>null</code> if it's not cached.
+     * @precondition cache != null
+     * @precondition key != null
+     */
+    protected String retrieveCachedEntry(final Map cache, final String key)
+    {
+        return (String) cache.get(key);
+    }
+
+    /**
+     * Removes an entry from the cache.
+     * @param cache the cache.
+     * @param key the key.
+     * @precondition cache != null
+     * @precondition key != null
+     */
+    protected void removeEntryFromCache(final Map cache, final String key)
+    {
+        cache.remove(key);
+    }
+
+    /**
+     * Builds the singular key for given table.
+     * @param tableName the table name.
+     * @return such key.
+     * @precondition tableName != null
+     */
+    protected String buildSingularKey(final String tableName)
+    {
+        return "~singular--" + tableName;
+    }
+
+    /**
+     * Builds the plural key for given table.
+     * @param tableName the table name.
+     * @return such key.
+     * @precondition tableName != null
+     */
+    protected String buildPluralKey(final String tableName)
+    {
+        return "~plural--" + tableName;
     }
 }
