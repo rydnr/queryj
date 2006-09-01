@@ -65,6 +65,7 @@ import org.apache.commons.logging.Log;
  */
 import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateErrorListener;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -88,6 +89,60 @@ public abstract class AbstractTemplate
     implements  Template,
                 DefaultThemeConstants
 {
+    /**
+     * The default StringTemplate error listener.
+     */
+    protected static final StringTemplateErrorListener
+        DEFAULT_ST_ERROR_LISTENER =
+            new StringTemplateErrorListener()
+            {
+                /**
+                 * Receives a debug message.
+                 * @param message the debug message.
+                 */
+                public void debug(final String message)
+                {
+                    Log t_Log =
+                        UniqueLogFactory.getLog(AbstractTemplate.class);
+
+                    if  (t_Log != null)
+                    {
+                        t_Log.debug(message);
+                    }
+                }
+
+                /**
+                 * Receives a warning message.
+                 * @param message the warning message.
+                 */
+                public void warning(final String message)
+                {
+                    Log t_Log =
+                        UniqueLogFactory.getLog(AbstractTemplate.class);
+
+                    if  (t_Log != null)
+                    {
+                        t_Log.warn(message);
+                    }
+                }
+
+                /**
+                 * Receives the error.
+                 * @param message the error message.
+                 * @param cause the cause.
+                 */
+                public void error(final String message, final Throwable cause)
+                {
+                    Log t_Log =
+                        UniqueLogFactory.getLog(AbstractTemplate.class);
+
+                    if  (t_Log != null)
+                    {
+                        t_Log.fatal(message, cause);
+                    }
+                }
+            };
+
     /**
      * Caches the StringTemplateGroup for each template class.
      */
@@ -314,7 +369,12 @@ public abstract class AbstractTemplate
 
         if  (result == null)
         {
-            result = retrieveGroup(path, theme, STUtils.getInstance());
+            result =
+                retrieveGroup(
+                    path,
+                    theme,
+                    retrieveStErrorListener(),
+                    STUtils.getInstance());
 
             if  (result != null)
             {
@@ -323,6 +383,15 @@ public abstract class AbstractTemplate
         }
         
         return result;
+    }
+
+    /**
+     * Retrieves the StringTemplate error listener.
+     * @return such instance.
+     */
+    protected StringTemplateErrorListener retrieveStErrorListener()
+    {
+        return DEFAULT_ST_ERROR_LISTENER;
     }
 
     /**
@@ -344,6 +413,8 @@ public abstract class AbstractTemplate
      * Retrieves the string template group.
      * @param path the path.
      * @param theme the theme.
+     * @param errorListener the <code>StringTemplateErrorListener</code>
+     * instance.
      * @param stUtils the <code>STUtils</code> instance.
      * @return such instance.
      * @precondition path != null
@@ -351,9 +422,12 @@ public abstract class AbstractTemplate
      * @precondition stUtils != null
      */
     protected StringTemplateGroup retrieveGroup(
-        final String path, final String theme, final STUtils stUtils)
+        final String path,
+        final String theme,
+        final StringTemplateErrorListener errorListener,
+        final STUtils stUtils)
     {
-        return stUtils.retrieveGroup(path, theme);
+        return stUtils.retrieveGroup(path, theme, errorListener);
     }
 
     /**
@@ -365,6 +439,7 @@ public abstract class AbstractTemplate
     {
         stringTemplate.setPassThroughAttributes(true);
         stringTemplate.setLintMode(true);
+        stringTemplate.setErrorListener(retrieveStErrorListener());
     }
 
     /**

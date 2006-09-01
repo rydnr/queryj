@@ -90,7 +90,13 @@ public abstract class AbstractPropertyDecorator
 
         immutableSetProperty(property);
         immutableSetMetadataManager(metadataManager);
-        immutableSetMetadataTypeManager(metadataManager.getMetadataTypeManager());
+        immutableSetMetadataTypeManager(
+            metadataManager.getMetadataTypeManager());
+
+        if  (property.getName() == null)
+        {
+            immutableSetName(property.getColumnName());
+        }
     }
 
     /**

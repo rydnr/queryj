@@ -48,6 +48,7 @@ import org.acmsl.commons.patterns.Utils;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+import org.antlr.stringtemplate.StringTemplateErrorListener;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -101,19 +102,23 @@ public class STUtils
      * Retrieves the string template group.
      * @param path the path.
      * @param theme the theme.
+     * @param errorListener the <code>StringTemplateErrorListener</code>
+     * instance.
      * @return such instance.
      * @precondition path != null
      * @precondition theme != null
      */
     public StringTemplateGroup retrieveGroup(
-        final String path, final String theme)
+        final String path,
+        final String theme,
+        final StringTemplateErrorListener errorListener)
     {
         StringTemplateGroup result = (StringTemplateGroup) ST_GROUPS.get(path);
         
         if  (result == null)
         {
-            StringTemplateGroup t_Theme = retrieveGroup(theme);
-            result = retrieveUncachedGroup(path);
+            StringTemplateGroup t_Theme = retrieveGroup(theme, errorListener);
+            result = retrieveUncachedGroup(path, errorListener);
 
             if  (result != null)
             {
@@ -129,18 +134,20 @@ public class STUtils
      * Retrieves the string template group.
      * @param path the path.
      * @param theme the theme.
+     * @param errorListener the <code>StringTemplateErrorListener</code>
+     * instance.
      * @return such instance.
      * @precondition path != null
      * @precondition theme != null
      */
     protected StringTemplateGroup retrieveGroup(
-        final String path)
+        final String path, final StringTemplateErrorListener errorListener)
     {
         StringTemplateGroup result = (StringTemplateGroup) ST_GROUPS.get(path);
         
         if  (result == null)
         {
-            result = retrieveUncachedGroup(path);
+            result = retrieveUncachedGroup(path, errorListener);
             ST_GROUPS.put(path, result);
         }
         
@@ -151,12 +158,14 @@ public class STUtils
      * Retrieves the string template group.
      * @param path the path.
      * @param theme the theme.
+     * @param errorListener the <code>StringTemplateErrorListener</code>
+     * instance.
      * @return such instance.
      * @precondition path != null
      * @precondition theme != null
      */
     protected StringTemplateGroup retrieveUncachedGroup(
-        final String path)
+        final String path, final StringTemplateErrorListener errorListener)
     {
         StringTemplateGroup result = null;
 
@@ -165,7 +174,8 @@ public class STUtils
         result =
             new StringTemplateGroup(
                 new InputStreamReader(t_Input),
-                AngleBracketTemplateLexer.class);
+                AngleBracketTemplateLexer.class,
+                errorListener);
 
         return result;
     }
