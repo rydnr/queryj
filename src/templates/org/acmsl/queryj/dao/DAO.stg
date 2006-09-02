@@ -783,7 +783,8 @@ public class <input.engine_name><input.vo_name>DAO
 
     /**
      * Deletes \<code><input.vo_name>\</code> information."
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased);
+       separator="\n">
      * @param query the query used to perform the delete operation.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
      * instance.
@@ -799,27 +800,43 @@ public class <input.engine_name><input.vo_name>DAO
             new UpdateTransactionCallback(
                 new QueryPreparedStatementCreator(query),
                 new <input.vo_name>PkStatementSetter(
-                    <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
+                    <input.pk_attributes:{<it.nameLowercased>};
+                      separator=",\n">),
                 this));
     }
 
     /**
      * Deletes \<code><input.vo_name>\</code> information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased);
+       separator="\n">
      */
     public void delete(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
       throws DataAccessException
     {
 <if(input.fk_attributes)>
-        <input.fk_attributes:fk_dao_delete_call(
-          foreignKey=it, pkAttributes=input.pk_attributes);
-          separator="\n\n">
+        <input.tr_name_capitalized>DataAccessManager t_DataAccessManager =
+            <input.tr_name_capitalized>DataAccessManager.getInstance();
+
+        if  (t_DataAccessManager != null)
+        {
+            <input.fk_attributes:fk_dao_delete_call(
+              foreignKey=it, pkAttributes=input.pk_attributes);
+              separator="\n\n">
+        }
+
 <endif>
 
         deleteNoFk(
             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
     }
+
+<if(input.fk_attributes)>
+    <input.fk_attributes:fk_dao_delete_methods(
+      foreignKey=it, pkAttributes=input.pk_attributes);
+      separator="\n\n">
+<endif>
+
     <input.foreign_keys:fk_delete_method(
       foreignKey=it, input=input); separator="\n">
 
@@ -994,11 +1011,54 @@ fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
   @param pkAttributes the pk attributes.
 !>
 <if(foreignKey.allowsNull)>
-<foreignKey.targetVoName>DAO.discardRelationTo<foreignKey.sourceVoName>(
+discardRelationTo<foreignKey.targetVoName>(
+    t_DataAccessManager.get<foreignKey.sourceVoName>(),
 <else>
-<foreignKey.targetVoName>DAO.deleteBy<foreignKey.sourceVoName>(
+deleteBy<foreignKey.targetVoName>(
+    t_DataAccessManager.get<foreignKey.sourceVoName>(),
 <endif>
+
     <pkAttributes:{<it.nameLowercased>}; separator=",\n">);
+>>
+
+fk_dao_delete_methods(foreignKey, pkAttributes) ::= <<
+<!
+ Writes the code that actually requests the recursive deletion of the
+ referring tables.
+ @param foreignKey the foreign key.
+ @param pkAttributes the pk attributes.
+!>
+/**
+<if(foreignKey.allowsNull)>
+ * Discards the relation to \<code><foreignKey.targetVoName>\</code> in
+ * \<code><foreignKey.sourceVoName>\</code>.
+<else>
+ * Deletes the references to \<code><foreignKey.targetVoName>\</code> in
+ * \<code><foreignKey.sourceVoName>\</code>.
+<endif>
+
+ <pkAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ @param <foreignKey.sourceTableNameUncapitalized>DAO the
+ * \<code><foreignKey.sourceVoName>\</code> instance.
+ <precondition_notnull(foreignKey.sourceTableNameUncapitalized)>
+ */
+<if(foreignKey.allowsNull)>
+protected void discardRelationTo<foreignKey.targetVoName>(
+<else>
+protected void deleteBy<foreignKey.targetVoName>(
+<endif>
+
+    <pkAttributes:attribute_declaration(attr=it); separator=",\n">,
+    final <foreignKey.sourceVoName> <foreignKey.sourceTableNameUncapitalized>DAO)
+{
+<if(foreignKey.allowsNull)>
+    <foreignKey.sourceTableNameUncapitalized>DAO.discardRelationTo<foreignKey.targetVoName>(
+<else>
+    <foreignKey.sourceTableNameUncapitalized>DAO.deleteBy<foreignKey.targetVoName>(
+<endif>
+
+        <pkAttributes:{<it.nameLowercased>}; separator=",\n">);
+}
 >>
 
 dao_javadoc(name,uncapitalizedName) ::= <<

@@ -403,6 +403,24 @@ public class OracleMetadataManager
             {
                 try
                 {
+                    // select con.constraint_name,
+                    //        rcol.table_name,
+                    //        rcol.column_name,
+                    //        con.table_name,
+                    //        col.column_name
+                    // from user_constraints con,
+                    //      user_cons_columns col,
+                    //      user_constraints rcon,
+                    //      user_cons_columns rcol
+                    // where rcon.constraint_type = 'R'
+                    //   and rcon.r_constraint_name = con.constraint_name
+                    //   and col.table_name = con.table_name
+                    //   and col.constraint_name = con.constraint_name
+                    //   and rcol.table_name = rcon.table_name
+                    //   and rcol.constraint_name = rcon.constraint_name
+                    //   and rcol.position = col.position
+                    //   and upper(col.table_name) = ?
+
                     SelectQuery t_Query = queryFactory.createSelectQuery();
 
                     OracleUserConstraintsTable CON =
@@ -427,7 +445,8 @@ public class OracleMetadataManager
 
                     t_Query.where(
                              RCON.CONSTRAINT_TYPE.equals("R")
-                        .and(RCON.R_CONSTRAINT_NAME.equals(CON.CONSTRAINT_NAME))
+                        .and(RCON.R_CONSTRAINT_NAME.equals(
+                                 CON.CONSTRAINT_NAME))
                         .and(COL.TABLE_NAME.equals(CON.TABLE_NAME))
                         .and(COL.CONSTRAINT_NAME.equals(CON.CONSTRAINT_NAME))
                         .and(RCOL.TABLE_NAME.equals(RCON.TABLE_NAME))
@@ -445,20 +464,59 @@ public class OracleMetadataManager
 
                     if  (t_Results != null)
                     {
+                        Collection t_cOriginAttributes = new ArrayList();
+                        Collection t_cDestinationAttributes = new ArrayList();
+                        boolean t_bNewFk = true;
+                        String t_strLastTable = null;
+                        String t_strCurrentTable = null;
+
                         while  (t_Results.next())
                         {
+                            t_strCurrentTable = 
+                                t_Results.getString(RCOL.TABLE_NAME);
+
+                            if  (t_strLastTable == null)
+                            {
+                                t_strLastTable = t_strCurrentTable;
+                            }
+
+                            t_bNewFk =
+                                !(t_strLastTable.equals(t_strCurrentTable));
+
+                            if  (t_bNewFk)
+                            {
+                                addForeignKey(
+                                    t_strLastTable,
+                                    (String[])
+                                        t_cOriginAttributes.toArray(
+                                            EMPTY_STRING_ARRAY),
+                                    tableNames[t_iTableIndex],
+                                    (String[])
+                                        t_cDestinationAttributes.toArray(
+                                            EMPTY_STRING_ARRAY));
+
+                                t_cOriginAttributes = new ArrayList();
+                                t_cDestinationAttributes = new ArrayList();
+                                t_strLastTable = t_strCurrentTable;
+                            }
+
+                            t_cOriginAttributes.add(
+                                t_Results.getString(RCOL.COLUMN_NAME));
+                            t_cDestinationAttributes.add(
+                                t_Results.getString(COL.COLUMN_NAME));
+                        }
+
+                        if  (!t_bNewFk)
+                        {
                             addForeignKey(
-                                t_Results.getString(
-                                    RCOL.TABLE_NAME),
-                                new String[]
-                                {
-                                    t_Results.getString(RCOL.COLUMN_NAME)
-                                },
+                                t_strLastTable,
+                                (String[])
+                                    t_cOriginAttributes.toArray(
+                                        EMPTY_STRING_ARRAY),
                                 tableNames[t_iTableIndex],
-                                new String[]
-                                {
-                                    t_Results.getString(COL.COLUMN_NAME)
-                                });
+                                (String[])
+                                    t_cDestinationAttributes.toArray(
+                                        EMPTY_STRING_ARRAY));
                         }
                     }
                 }
