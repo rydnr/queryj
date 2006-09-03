@@ -946,6 +946,7 @@ public abstract class BasePerTableTemplate
         input.put("all_but_lob_attributes", allButLobAttributes);
         input.put("foreign_keys", foreignKeys);
         input.put("foreign_keys_by_table", referringKeys);
+        input.put("referring_tables", referringKeys.keySet());
         input.put("custom_selects", customSelects);
         input.put("custom_updates_or_inserts", customUpdatesOrInserts);
         input.put("custom_selects_for_update", customSelectsForUpdate);

@@ -431,7 +431,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             t_strSourceTable = t_astrTableNames[t_iTableIndex];
 
             t_astrReferredTables =
-                metadataManager.getReferingTables(t_strSourceTable);
+                metadataManager.getReferringTables(t_strSourceTable);
 
             t_iReferredTableLength =
                 (t_astrReferredTables != null)

@@ -456,7 +456,7 @@ public class MetadataUtils
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the foreign keys of other tables pointing
      * to this one:
-     * a map of "fk_"referringTableName -> foreign_keys (list of attribute
+     * a map of referringTableName -> foreign_keys (list of attribute
      * lists).
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -471,59 +471,59 @@ public class MetadataUtils
     {
         Map result = new HashMap();
 
-        String[] t_astrReferingTables =
-            metadataManager.getReferingTables(tableName);
+        String[] t_astrReferringTables =
+            metadataManager.getReferringTables(tableName);
 
-        String[][] t_aastrReferingColumns;
+        String[][] t_aastrReferringColumns;
 
         int t_iLength =
-            (t_astrReferingTables != null) ? t_astrReferingTables.length : 0;
+            (t_astrReferringTables != null) ? t_astrReferringTables.length : 0;
 
-        Collection t_cReferingFks = null;
+        Collection t_cReferringFks = null;
 
         Collection t_cCurrentForeignKey = null;
 
-        String t_strReferingTable = null;
+        String t_strReferringTable = null;
 
         for  (int t_iRefTableIndex = 0;
                   t_iRefTableIndex < t_iLength;
                   t_iRefTableIndex++)
         {
-            t_cReferingFks = new ArrayList();
+            t_cReferringFks = new ArrayList();
 
-            t_strReferingTable =
-                t_astrReferingTables[t_iRefTableIndex];
+            t_strReferringTable =
+                t_astrReferringTables[t_iRefTableIndex];
 
-            t_aastrReferingColumns =
+            t_aastrReferringColumns =
                 metadataManager.getForeignKeys(
-                    t_strReferingTable, tableName);
+                    t_strReferringTable, tableName);
 
             int t_iFkCount =
-                (t_aastrReferingColumns != null)
-                ?  t_aastrReferingColumns.length
+                (t_aastrReferringColumns != null)
+                ?  t_aastrReferringColumns.length
                 :  0;
 
             for  (int t_iFk = 0; t_iFk < t_iFkCount; t_iFk++)
             {
                 t_cCurrentForeignKey =
                     buildAttributes(
-                        t_aastrReferingColumns[t_iFk],
-                        t_strReferingTable,
+                        t_aastrReferringColumns[t_iFk],
+                        t_strReferringTable,
                         (metadataManager.allowsNull(
-                            t_strReferingTable,
-                            t_aastrReferingColumns[t_iFk])
+                            t_strReferringTable,
+                            t_aastrReferringColumns[t_iFk])
                          ?  Boolean.TRUE : Boolean.FALSE),
                         metadataManager,
                         metadataTypeManager,
                         decoratorFactory);
 
-                // Note: 't_cReferingFks' contains a list of lists.
-                t_cReferingFks.add(t_cCurrentForeignKey);
+                // Note: 't_cReferringFks' contains a list of lists.
+                t_cReferringFks.add(t_cCurrentForeignKey);
 
                 t_cCurrentForeignKey = null;
             }
 
-            result.put(t_strReferingTable, t_cReferingFks);
+            result.put(t_strReferringTable, t_cReferringFks);
         }
 
         return result;

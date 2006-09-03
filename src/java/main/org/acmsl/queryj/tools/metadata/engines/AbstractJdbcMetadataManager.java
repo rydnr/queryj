@@ -1242,20 +1242,20 @@ public abstract class AbstractJdbcMetadataManager
 
         if  (t_mForeignKeys != null) 
         {
-            Object t_ReferingTablesKey = buildReferingTablesKey();
+            Object t_ReferringTablesKey = buildReferringTablesKey();
 
-            Collection t_cReferingTables =
-                (Collection) t_mForeignKeys.get(t_ReferingTablesKey);
+            Collection t_cReferringTables =
+                (Collection) t_mForeignKeys.get(t_ReferringTablesKey);
 
-            if  (t_cReferingTables == null)
+            if  (t_cReferringTables == null)
             {
-                t_cReferingTables = new ArrayList();
-                t_mForeignKeys.put(t_ReferingTablesKey, t_cReferingTables);
+                t_cReferringTables = new ArrayList();
+                t_mForeignKeys.put(t_ReferringTablesKey, t_cReferringTables);
             }
 
-            if  (!t_cReferingTables.contains(tableName))
+            if  (!t_cReferringTables.contains(tableName))
             {
-                t_cReferingTables.add(tableName);
+                t_cReferringTables.add(tableName);
             }
 
             t_mForeignKeys.put(
@@ -1364,12 +1364,12 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Retrieves the tables refering to given table's.
+     * Retrieves the tables referring to given table's.
      * @param tableName the table name.
      * @return such tables.
      * @precondition tableName != null
      */
-    public String[] getReferingTables(final String tableName)
+    public String[] getReferringTables(final String tableName)
     {
         Collection t_cResult = new ArrayList();
 
@@ -1377,27 +1377,27 @@ public abstract class AbstractJdbcMetadataManager
 
         if  (t_mForeignKeys != null) 
         {
-            Collection t_cReferingTables =
+            Collection t_cReferringTables =
                 (Collection)
-                    t_mForeignKeys.get(buildReferingTablesKey());
+                    t_mForeignKeys.get(buildReferringTablesKey());
 
-            if  (t_cReferingTables != null)
+            if  (t_cReferringTables != null)
             {
-                Iterator t_itReferingTables = t_cReferingTables.iterator();
+                Iterator t_itReferringTables = t_cReferringTables.iterator();
 
-                if  (t_itReferingTables != null)
+                if  (t_itReferringTables != null)
                 {
                     String[] t_astrReferredTables = null;
 
-                    String t_strReferingTable = null;
+                    String t_strReferringTable = null;
 
-                    while  (t_itReferingTables.hasNext())
+                    while  (t_itReferringTables.hasNext())
                     {
-                        t_strReferingTable =
-                            (String) t_itReferingTables.next();
+                        t_strReferringTable =
+                            (String) t_itReferringTables.next();
 
                         t_astrReferredTables =
-                            getReferredTables(t_strReferingTable);
+                            getReferredTables(t_strReferringTable);
 
                         if  (t_astrReferredTables != null)
                         {
@@ -1414,7 +1414,7 @@ public abstract class AbstractJdbcMetadataManager
                                      && (tableName.equalsIgnoreCase(
                                              t_strCurrentTable)))
                                 {
-                                    t_cResult.add(t_strReferingTable);
+                                    t_cResult.add(t_strReferringTable);
                                 }
                             }
                         }
@@ -3524,7 +3524,7 @@ public abstract class AbstractJdbcMetadataManager
      * Builds a key to store the referring tables.
      * @return such key.
      */
-    protected String buildReferingTablesKey()
+    protected String buildReferringTablesKey()
     {
         return ".|_|referring_|_tables|_|.,";
     }

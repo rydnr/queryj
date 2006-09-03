@@ -230,11 +230,11 @@ public interface MetadataManager
         final String[] refColumnNames);
 
     /**
-     * Retrieves the tables refering to given table's.
+     * Retrieves the tables referring to given table's.
      * @param tableName the table name.
      * @return such tables.
      */
-    public String[] getReferingTables(final String tableName);
+    public String[] getReferringTables(final String tableName);
     
     /**
      * Retrieves the foreign keys of given table.

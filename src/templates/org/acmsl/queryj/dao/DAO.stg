@@ -834,33 +834,46 @@ public class <input.engine_name><input.vo_name>DAO
       throws DataAccessException
     {
 <if(input.fk_attributes)>
-        <input.tr_name_capitalized>DataAccessManager t_DataAccessManager =
-            <input.tr_name_capitalized>DataAccessManager.getInstance();
+        delete(
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <input.tr_name_capitalized>DataAccessManager.getInstance());
+    }
 
-        if  (t_DataAccessManager != null)
-        {
-            <input.fk_attributes:fk_dao_delete_call(
-              foreignKey=it, pkAttributes=input.pk_attributes);
-              separator="\n\n">
-        }
-
+    /**
+     * Deletes \<code><input.vo_name>\</code> information.
+     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased);
+       separator="\n">
+     * @param dataAccessManager the \<code><input.tr_name_capitalized>DataAccessManager\</code>
+     * instance.
+     <precondition_notnull("dataAccessManager")>
+     */
+    protected void delete(
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        final <input.tr_name_capitalized>DataAccessManager dataAccessManager)
+      throws DataAccessException
+    {
+        <input.fk_attributes:fk_dao_delete_call(
+          foreignKey=it, pkAttributes=input.pk_attributes);
+          separator="\n\n">
 <endif>
+
 
         deleteNoFk(
             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
     }
 
-<if(input.fk_attributes)>
-    <input.fk_attributes:fk_dao_delete_methods(
-      foreignKey=it, pkAttributes=input.pk_attributes);
+    <input.referring_tables:fk_dao_delete_methods(
+      referringTable=it,
+      fkMap=input.foreign_keys_by_table,
+      pkAttributes=input.pk_attributes,
+      voName=input.vo_name);
       separator="\n\n">
-<endif>
 
     <input.foreign_keys:fk_delete_method(
       foreignKey=it, input=input); separator="\n">
 
-    <input.foreign_keys_by_table:fk_discard_relation_method_by_map(
-      referringTable=it, map=input.foreign_keys_by_table, input=input);
+    <input.foreign_keys:fk_discard_relation_method(
+      foreignKey=it, input=input);
       separator="\n\n">
 
     <input.custom_selects:custom_select(
@@ -1040,15 +1053,41 @@ deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">(
 <endif>
 
     <pkAttributes:{<it.nameLowercased>}; separator=",\n">,
-    t_DataAccessManager.get<foreignKey.sourceVoName>DAO());
+    dataAccessManager.get<foreignKey.sourceVoName>DAO());
 >>
 
-fk_dao_delete_methods(foreignKey, pkAttributes) ::= <<
+fk_dao_delete_methods(referringTable, fkMap, pkAttributes, voName) ::= <<
+<!
+ Writes the code that actually requests the recursive deletion of the
+ referring tables.
+ @param referringTable the referring table.
+ @param fkMap the foreign key map.
+ @param pkAttributes the pk attributes.
+ @param voName the ValueObject name.
+!>
+<fkMap.(referringTable):fk_dao_delete_method_by_entity(foreignKeys=it, pkAttributes=pkAttributes, voName=voName);
+  separator="\n\n">
+>>
+
+fk_dao_delete_method_by_entity(foreignKeys, pkAttributes, voName) ::= <<
+<!
+ Writes the code that actually requests the recursive deletion of the
+ referring tables.
+ @param foreignKeys the foreign keys.
+ @param pkAttributes the pk attributes.
+ @param voName the ValueObject name.
+!>
+<foreignKeys:fk_dao_delete_method(
+  foreignKey=it, pkAttributes=pkAttributes, voName=voName); separator="\n\n">
+>>
+
+fk_dao_delete_method(foreignKey, pkAttributes, voName) ::= <<
 <!
  Writes the code that actually requests the recursive deletion of the
  referring tables.
  @param foreignKey the foreign key.
  @param pkAttributes the pk attributes.
+ @param voName the ValueObject name.
 !>
 /**
 <if(foreignKey.allowsNull)>
@@ -1064,16 +1103,19 @@ fk_dao_delete_methods(foreignKey, pkAttributes) ::= <<
  <precondition_notnull("dao")>
  */
 <if(foreignKey.allowsNull)>
-protected void discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">(
+protected void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+                                  separator="And">(
 <else>
-protected void deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">(
+protected void deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+                         separator="And">(
 <endif>
 
     <pkAttributes:attribute_declaration(attr=it); separator=",\n">,
     final <foreignKey.sourceVoName>DAO dao)
 {
 <if(foreignKey.allowsNull)>
-    dao.discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">(
+    dao.discardRelationTo<voName>By<pkAttributes:{attr|<attr.nameCapitalized>};
+                                     separator="And">(
 <else>
     dao.delete(
 <endif>
@@ -1247,17 +1289,6 @@ protected void deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>};
 
 >>
 
-fk_discard_relation_method_by_map(referringTable,map,input) ::= <<
-<!
- Writes the discardRelationToXXByYY method for a concrete foreign key.
- @param referringTable the referring table.
- @param map the table -> foreign_key map.
- @param input.table_name the table name.
-!>
-<map.referringTable:fk_discard_relation_method(foreignKey=it,input=input);
-  separator="\n\n">
->>
-
 fk_discard_relation_method(foreignKey,input) ::= <<
 <!
  Writes the discardRelationToXXByYY method for a concrete foreign key.
@@ -1271,10 +1302,10 @@ fk_discard_relation_method(foreignKey,input) ::= <<
  * foreign key.
  * @return the \<code>DeleteQuery\</code> instance.
  */
-protected Query buildDiscardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query()
+protected Query buildDiscardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query()
 {
     return
-        buildDiscardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query(
+        buildDiscardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query(
             QueryFactory.getInstance());
 }
 
@@ -1286,12 +1317,12 @@ protected Query buildDiscardRelationTo<foreignKey.sourceVoName>By<foreignKey.att
  * @return the \<code>DeleteQuery\</code> instance.
  <precondition_notnull("queryFactory")>
  */
-protected Query buildDiscardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query(
+protected Query buildDiscardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query(
     final QueryFactory queryFactory)
 {
     UpdateQuery result = queryFactory.createUpdateQuery();
 
-    buildDiscardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query(
+    buildDiscardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query(
         result);
 
     return result;
@@ -1304,7 +1335,7 @@ protected Query buildDiscardRelationTo<foreignKey.sourceVoName>By<foreignKey.att
  * @param query the query to initialize.
  <precondition_notnull("query")>
  */
-protected void buildDiscardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query(
+protected void buildDiscardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query(
     final UpdateQuery query)
 {
     query.update(<input.table_name_uppercased>);
@@ -1324,14 +1355,14 @@ protected void buildDiscardRelationTo<foreignKey.sourceVoName>By<foreignKey.attr
  <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased);
   separator="\n">
  */
-public void discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+public void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                                separator="And">(
     <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">)
 {
-    discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+    discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                        separator="And">(
         <foreignKey.attributes:{<it.nameLowercased>}; separator=",\n">,
-        buildDiscardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query(),
+        buildDiscardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">Query(),
         getDataSource());
 }
 
@@ -1346,13 +1377,13 @@ public void discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{
  <precondition_notnull("query")>
  <precondition_notnull("dataSource")>
  */
-protected void discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+protected void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                                   separator="And">(
     <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">,
     final Query query,
     final DataSource dataSource)
 {
-    discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+    discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                        separator="And">(
         <foreignKey.attributes:{<it.nameLowercased>}; separator=",\n">,
         query,
@@ -1371,7 +1402,7 @@ protected void discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attribute
  <precondition_notnull("query")>
  <precondition_notnull("transactionManager")>
  */
-protected void discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+protected void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                                   separator="And">(
     <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">,
     final Query query,
@@ -1380,7 +1411,7 @@ protected void discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attribute
     // Enabling transactions temporarily.
     synchronized (DataSourceTransactionManager.class)
     {
-        discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+        discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                            separator="And">(
             <foreignKey.attributes:{<it.nameLowercased>}; separator=",\n">,
             query,
@@ -1400,7 +1431,7 @@ protected void discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attribute
  <precondition_notnull("query")>
  <precondition_notnull("transactionTemplate")>
  */
-protected void discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+protected void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                                   separator="And">(
     <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">,
     final Query query,
@@ -1409,7 +1440,7 @@ protected void discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attribute
     transactionTemplate.execute(
         new UpdateTransactionCallback(
             new QueryPreparedStatementCreator(query),
-            new <input.vo_name>By<foreignKey.sourceVoName>StatementSetter(
+            new <input.vo_name>By<foreignKey.targetVoName>StatementSetter(
                 <foreignKey.attributes:{attr |<attr.nameLowercased>};
                   separator=",\n">),
             this));
