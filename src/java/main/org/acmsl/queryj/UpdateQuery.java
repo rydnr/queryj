@@ -250,30 +250,33 @@ public class UpdateQuery
 
         Iterator t_FieldIterator = fields.iterator();
 
-        while  (   (t_FieldIterator != null)
-                && (t_FieldIterator.hasNext()))
+        if  (t_FieldIterator != null)
         {
-            Field t_Field = (Field) t_FieldIterator.next();
-
-            String t_strValue = "";
-
-            Object t_Value = getValue(t_Field);
-
-            if  (t_Value == null)
+            while  (t_FieldIterator.hasNext())
             {
-                t_strValue = "?";
-            }
-            else 
-            {
-                t_strValue = "" + t_Value;
+                Field t_Field = (Field) t_FieldIterator.next();
 
-                if  (queryUtils.shouldBeEscaped(t_Value))
+                String t_strValue = "";
+
+                Object t_Value = getValue(t_Field);
+
+                if  (t_Value == null)
                 {
-                    t_strValue = "'" + t_strValue + "'";
+                    t_strValue = "?";
                 }
-            }
+                else 
+                {
+                    t_strValue = "" + t_Value;
 
-            t_alValues.add(t_Field.toSimplifiedString() + " = " + t_strValue);
+                    if  (queryUtils.shouldBeEscaped(t_Value))
+                    {
+                        t_strValue = "'" + t_strValue + "'";
+                    }
+                }
+
+                t_alValues.add(
+                    t_Field.toSimplifiedString() + " = " + t_strValue);
+            }
         }
 
         t_sbResult.append(

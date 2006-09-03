@@ -45,6 +45,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 
 /*
@@ -294,7 +295,7 @@ public class DAOTemplate
         final Collection allButExternallyManagedAttributes,
         final Collection lobAttributes,
         final Collection allButLobAttributes,
-        final Collection foreignKeys,
+        final ForeignKey[] foreignKeys,
         final String staticAttributeName,
         final String staticAttributeType,
         final Collection customSelects,

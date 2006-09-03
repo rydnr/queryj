@@ -61,6 +61,7 @@ import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
 import org.acmsl.queryj.tools.metadata.TableDecorator;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
@@ -334,7 +335,7 @@ public abstract class BasePerTableTemplate
 
         // A map of "fk_"referringTableName -> foreign_keys (list of lists)
         Map t_mReferringKeys =
-            metadataUtils.retrieveReferingKeys(
+            metadataUtils.retrieveReferringKeys(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
@@ -375,12 +376,18 @@ public abstract class BasePerTableTemplate
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cForeignKeys =
+        ForeignKey[] t_aForeignKeys =
             metadataUtils.retrieveForeignKeys(
                 tableName,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory);
+
+// //         Collection t_cForeignKeys =
+// //             metadataUtils.retrieveForeignKeys(
+// //                 tableName,
+// //                 metadataManager,
+// //                 metadataTypeManager,
+// //                 decoratorFactory);
 
         // items have to include the following methods:
         // getId()
@@ -466,7 +473,7 @@ public abstract class BasePerTableTemplate
             t_cAllButExternallyManagedAttributes,
             t_cLobAttributes,
             t_cAllButLobAttributes,
-            t_cForeignKeys,
+            t_aForeignKeys,
             t_cCustomSelects,
             t_cCustomUpdatesOrInserts,
             t_cCustomSelectsForUpdate,
@@ -506,7 +513,7 @@ public abstract class BasePerTableTemplate
      * @param nonPrimaryKeyAttributes the ones not part of the primary
      * key..
      * @param foreignKeyAttributes the foreign key attributes.
-     * @param referingKeys the foreign keys of other tables pointing
+     * @param referringKeys the foreign keys of other tables pointing
      * to this one. It's expected to be
      * a map of "fk_"referringTableName -> foreign_keys (list of attribute
      * lists).
@@ -584,13 +591,13 @@ public abstract class BasePerTableTemplate
         final Collection primaryKeyAttributes,
         final Collection nonPrimaryKeyAttributes,
         final Collection foreignKeyAttributes,
-        final Map referingKeys,
+        final Map referringKeys,
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
         final Collection lobAttributes,
         final Collection allButLobAttributes,
-        final Collection foreignKeys,
+        final ForeignKey[] foreignKeys,
         final Collection customSelects,
         final Collection customUpdatesOrInserts,
         final Collection customSelectsForUpdate,
@@ -645,7 +652,7 @@ public abstract class BasePerTableTemplate
             primaryKeyAttributes,
             nonPrimaryKeyAttributes,
             foreignKeyAttributes,
-            referingKeys,
+            referringKeys,
             attributes,
             externallyManagedAttributes,
             allButExternallyManagedAttributes,
@@ -830,7 +837,7 @@ public abstract class BasePerTableTemplate
      * @param pkAttributes the primary key attributes.
      * @param nonPkAttributes the ones not part of the primary key.
      * @param fkAttributes the foreign key attributes.
-     * @param referingKeys the foreign keys of other tables pointing
+     * @param referringKeys the foreign keys of other tables pointing
      * to this one. It's expected to be
      * a map of "fk_"referringTableName -> foreign_keys (list of attribute
      * lists).
@@ -886,13 +893,13 @@ public abstract class BasePerTableTemplate
         final Collection pkAttributes,
         final Collection nonPkAttributes,
         final Collection fkAttributes,
-        final Map referingKeys,
+        final Map referringKeys,
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
         final Collection lobAttributes,
         final Collection allButLobAttributes,
-        final Collection foreignKeys,
+        final ForeignKey[] foreignKeys,
         final String staticAttributeName,
         final String staticAttributeType,
         final Collection customSelects,
@@ -938,7 +945,7 @@ public abstract class BasePerTableTemplate
         input.put("lob_attributes", lobAttributes);
         input.put("all_but_lob_attributes", allButLobAttributes);
         input.put("foreign_keys", foreignKeys);
-        input.put("foreign_keys_by_table", referingKeys);
+        input.put("foreign_keys_by_table", referringKeys);
         input.put("custom_selects", customSelects);
         input.put("custom_updates_or_inserts", customUpdatesOrInserts);
         input.put("custom_selects_for_update", customSelectsForUpdate);

@@ -305,7 +305,8 @@ public abstract class WriteQuery
      * @precondition field != null
      * @precondition values != null
      */
-    protected void putValue(final LongField field, final long value, final Map values)
+    protected void putValue(
+        final LongField field, final long value, final Map values)
     {
         values.put(field, new Long(value));
     }
@@ -625,7 +626,8 @@ public abstract class WriteQuery
      * @param escape to force value escaping.
      * @precondition field != null
      */
-    protected void putValue(final Field field, final Object value, final boolean escape)
+    protected void putValue(
+        final Field field, final Object value, final boolean escape)
     {
         putValue(field, value, escape, getValues(), getEscapingFlags());
     }
@@ -1095,7 +1097,8 @@ public abstract class WriteQuery
      * @param value the value.
      * @precondition field != null
      */
-    protected void addValue(final BigDecimalField field, final BigDecimal value)
+    protected void addValue(
+        final BigDecimalField field, final BigDecimal value)
     {
         addField(field);
         putValue(field, value);
@@ -1202,14 +1205,15 @@ public abstract class WriteQuery
      * @precondition queryUtils != null
      */
     protected boolean shouldBeEscaped(
-        final Object value, final Map escapingFlags, final QueryUtils queryUtils)
+        final Object value,
+        final Map escapingFlags,
+        final QueryUtils queryUtils)
     {
         boolean result = true;
 
         Object t_Flag = escapingFlags.get(buildEscapingFlagKey(value));
 
-        if  (   (t_Flag != null)
-             && (t_Flag instanceof Boolean))
+        if  (t_Flag instanceof Boolean)
         {
             result = Boolean.TRUE.equals(t_Flag);
         }

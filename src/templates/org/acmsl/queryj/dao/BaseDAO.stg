@@ -294,12 +294,27 @@ fk_delete_method(foreignKey,input) ::= <<
   @param foreignKey the foreign key.
 !>
 /**
+<if(foreignKey.allowsNull)>
+ * Discards the relation to \<code><foreignKey.targetVoName>\</code> in
+ * \<code><foreignKey.sourceVoName>\</code>.
+<else>
  * Deletes <input.table_name> information from the persistence layer filtering
  * by given foreign keys.
- <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<endif>
+
+ <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased);
+   separator="\n">
  */
-public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-    <foreignKey:attribute_declaration(attr=it); separator=",\n">);
+<if(foreignKey.allowsNull)>
+public void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr |<attr.nameCapitalized>};
+                                                          separator="And">(
+<else>
+public void deleteBy<foreignKey.attributes:{attr |<attr.nameCapitalized>};
+                      separator="And">(
+<endif>
+
+
+    <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">);
 >>
 
 custom_select(cs, input) ::= <<

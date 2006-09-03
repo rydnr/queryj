@@ -207,6 +207,9 @@ public class MetadataUtils
     {
         Collection result = new ArrayList();
 
+        String[] t_astrReferredTables =
+            metadataManager.getReferredTables(tableName);
+
         String[][] t_aastrForeignKeys =
             metadataManager.getForeignKeys(tableName);
 
@@ -214,7 +217,6 @@ public class MetadataUtils
             (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
 
         Collection t_cAttributes = null;
-        Iterator t_itAttributeIterator = null;
         ForeignKey t_CurrentFk = null;
         Attribute t_FirstAttribute = null;
         boolean t_bAllowsNullAsAWhole = false;
@@ -235,26 +237,14 @@ public class MetadataUtils
                 t_bAllowsNullAsAWhole =
                     allowsNullAsAWhole(t_cAttributes);
 
-                t_itAttributeIterator = t_cAttributes.iterator();
+                t_CurrentFk =
+                    new CachingForeignKeyDecorator(
+                        t_astrReferredTables[t_iIndex],
+                        t_cAttributes,
+                        tableName,
+                        t_bAllowsNullAsAWhole);
 
-                if  (   (t_itAttributeIterator != null)
-                     && (t_itAttributeIterator.hasNext()))
-                {
-                    t_FirstAttribute =
-                        (Attribute) t_itAttributeIterator.next();
-
-                    if  (t_FirstAttribute != null)
-                    {
-                        t_CurrentFk =
-                            new CachingForeignKeyDecorator(
-                                t_FirstAttribute.getTableName(),
-                                t_cAttributes,
-                                tableName,
-                                t_bAllowsNullAsAWhole);
-
-                        result.add(t_CurrentFk);
-                    }
-                }
+                result.add(t_CurrentFk);
             }
         }
 
@@ -427,8 +417,7 @@ public class MetadataUtils
                 t_astrReferredTables[t_iRefTableIndex];
 
             String[][] t_aastrForeignKeys =
-                metadataManager.getForeignKeys(
-                    t_strReferredTable, tableName);
+                metadataManager.getForeignKeys(tableName, t_strReferredTable);
 
             int t_iFkLength =
                 (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
@@ -458,11 +447,12 @@ public class MetadataUtils
     }
 
     /**
-     * Retrieves the refering keys.
+     * Retrieves the referring keys.
      * @param tableName the table name.
      * @param metadataManager the <code>MetadataManager</code>
      * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the foreign keys of other tables pointing
      * to this one:
@@ -473,7 +463,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Map retrieveReferingKeys(
+    public Map retrieveReferringKeys(
         final String tableName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,

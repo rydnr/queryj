@@ -680,11 +680,19 @@ public abstract class AbstractTemplate
                     StringTemplate.class);
 
             t_sbMessage.append(
-                  "antlr-X.Y.jar gets loaded by a class loader "
+                  "A fatal error in StringTemplate-based generation "
+                + "has stopped QueryJ build process.\n"
+                + "If you see error messages from StringTemplate, "
+                + "review your templates. Otherwise, if the VM "
+                + "exited due to ClassNotFoundException or "
+                + "NoClassDefFoundException regarding ANTLR or StringTemplate "
+                + "classes (i.e. ChunkToken), then "
+                + "antlr-X.Y.jar has been loaded by a class loader "
                 + "with no idea of where StringTemplate classes "
-                + "are, so that the reflection-based "
-                + "instantiation cannot be done. "
-                + "Check the classpath. ");
+                + "are, and therefore ANTLR's reflection-based "
+                + "instantiation fails. Check your classpath or the way "
+                + "it's defined by Ant or any other tool you might be "
+                + "using. ");
 
             if  (   (t_strAntlrLocation != null)
                  || (t_strStringTemplateLocation != null))
