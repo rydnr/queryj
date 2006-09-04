@@ -103,6 +103,7 @@ source(input) ::= <<
   damSubpackageName=typeInitMap.dataAccessManagerSubpackageName,
   fkssSubpackageName=typeInitMap.foreignKeyStatementSetterSubpackageName,
   fkAttributes=input.fk_attributes,
+  referringVoNames=input.referring_vo_names,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName)>
 
 /*
@@ -206,41 +207,43 @@ third_line_description(tableName, engineName, engineVersion) ::= <<
 >>
 
 project_imports(
-  basePackageName,
-  subpackageName,
-  tableName,
-  tableNameLowercased,
-  jdbcOperationsSubpackageName,
-  customResults,
-  voSubpackageName,
-  voName,
-  voFactorySubpackageName,
-  rdbSubpackageName,
-  trSubpackageName,
-  trName,
-  damSubpackageName,
-  fkssSubpackageName,
-  fkAttributes,
-  baseDAOSubpackageName) ::= <<
+ basePackageName,
+ subpackageName,
+ tableName,
+ tableNameLowercased,
+ jdbcOperationsSubpackageName,
+ customResults,
+ voSubpackageName,
+ voName,
+ voFactorySubpackageName,
+ rdbSubpackageName,
+ trSubpackageName,
+ trName,
+ damSubpackageName,
+ fkssSubpackageName,
+ fkAttributes,
+ referringVoNames,
+ baseDAOSubpackageName) ::= <<
 <!
-  Generates the project imports
-  @param basePackageName the base package name.
-  @param subpackageName the subpackage name.
-  @param tableName the table name.
-  @param tableNameLowercased the table name, in lower-case.
-  @param jdbcOperationsSubpackageName the subpackage for the JDBC operations.
-  @param customResults the results of the custom queries.
-  @param voSubpackageName the subpackage for the value
-  @param voName the class name of the value-object.
-  @param voFactorySubpackageName the subpackage of the value object factories.
-  @param rdbSubpackageName the subpackage common of all RDBMs implementations.
-  @param trSubpackageName the subpackage of the table repository.
-  @param trName the name of the table repository.
-  @param damSubpackageName the subpackage of the DataAccessManager.
-  @param fkssSubpackageName the subpackage of the foreign key attribute
-  statement setter.
-  @param fkAttributes the foreign key attributes.
-  @param baseDAOSubpackageName the subpackage of the base DAO interface.
+ Generates the project imports
+ @param basePackageName the base package name.
+ @param subpackageName the subpackage name.
+ @param tableName the table name.
+ @param tableNameLowercased the table name, in lower-case.
+ @param jdbcOperationsSubpackageName the subpackage for the JDBC operations.
+ @param customResults the results of the custom queries.
+ @param voSubpackageName the subpackage for the value
+ @param voName the class name of the value-object.
+ @param voFactorySubpackageName the subpackage of the value object factories.
+ @param rdbSubpackageName the subpackage common of all RDBMs implementations.
+ @param trSubpackageName the subpackage of the table repository.
+ @param trName the name of the table repository.
+ @param damSubpackageName the subpackage of the DataAccessManager.
+ @param fkssSubpackageName the subpackage of the foreign key attribute
+ statement setter.
+ @param fkAttributes the foreign key attributes.
+ @param referringVoNames the VO names of the referring tables.
+ @param baseDAOSubpackageName the subpackage of the base DAO interface.
 !>
 /*
  * Importing project-specific classes.
@@ -274,6 +277,8 @@ import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
   referredVOName=it.sourceVoName); separator="\n">
+<referringVoNames:{vo|import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;};
+  separator="\n">
 >>
 
 foreignkey_statementsetter_import(
@@ -852,8 +857,10 @@ public class <input.engine_name><input.vo_name>DAO
         final <input.tr_name_capitalized>DataAccessManager dataAccessManager)
       throws DataAccessException
     {
-        <input.fk_attributes:fk_dao_delete_call(
-          foreignKey=it, pkAttributes=input.pk_attributes);
+        <input.referring_tables:fk_dao_delete_calls(
+          referringTable=it,
+          fkMap=input.foreign_keys_by_table,
+          pkAttributes=input.pk_attributes);
           separator="\n\n">
 <endif>
 
@@ -1039,12 +1046,24 @@ attribute_query_update(
 query.set(<tableNameUppercased>.<nameUppercased>);
 >>
 
+fk_dao_delete_calls(referringTable, fkMap, pkAttributes) ::= <<
+<!
+ Writes the code needed to use the DAOs associated to any
+ foreign key to perform a delete operation.
+ @param referringTable the referring table.
+ @param fkMap the referringTable->foreign_key map.
+ @param pkAttributes the pk attributes.
+!>
+<fkMap.(referringTable):fk_dao_delete_call(
+  foreignKey=it, pkAttributes=pkAttributes); separator="\n\n">
+>>
+
 fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
 <!
-  Writes the code needed to use the DAO associated to a
-  concrete foreign key to perform a delete operation.
-  @param foreignKey the foreign key.
-  @param pkAttributes the pk attributes.
+ Writes the code needed to use the DAO associated to a
+ concrete foreign key to perform a delete operation.
+ @param foreignKey the foreign key.
+ @param pkAttributes the pk attributes.
 !>
 <if(foreignKey.allowsNull)>
 discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">(
@@ -1065,20 +1084,8 @@ fk_dao_delete_methods(referringTable, fkMap, pkAttributes, voName) ::= <<
  @param pkAttributes the pk attributes.
  @param voName the ValueObject name.
 !>
-<fkMap.(referringTable):fk_dao_delete_method_by_entity(foreignKeys=it, pkAttributes=pkAttributes, voName=voName);
+<fkMap.(referringTable):fk_dao_delete_method(foreignKey=it, pkAttributes=pkAttributes, voName=voName);
   separator="\n\n">
->>
-
-fk_dao_delete_method_by_entity(foreignKeys, pkAttributes, voName) ::= <<
-<!
- Writes the code that actually requests the recursive deletion of the
- referring tables.
- @param foreignKeys the foreign keys.
- @param pkAttributes the pk attributes.
- @param voName the ValueObject name.
-!>
-<foreignKeys:fk_dao_delete_method(
-  foreignKey=it, pkAttributes=pkAttributes, voName=voName); separator="\n\n">
 >>
 
 fk_dao_delete_method(foreignKey, pkAttributes, voName) ::= <<
@@ -1099,7 +1106,7 @@ fk_dao_delete_method(foreignKey, pkAttributes, voName) ::= <<
 <endif>
 
  <pkAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @param dao the \<code><foreignKey.sourceVoName>\</code> instance.
+ * @param dao the \<code><foreignKey.sourceVoName>\DAO</code> instance.
  <precondition_notnull("dao")>
  */
 <if(foreignKey.allowsNull)>

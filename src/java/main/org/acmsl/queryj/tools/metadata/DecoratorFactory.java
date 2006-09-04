@@ -53,6 +53,11 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
  */
 import org.acmsl.commons.patterns.Factory;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Collection;
+
 /**
  * Abstract factory for template-specific decorators.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -114,4 +119,18 @@ public interface DecoratorFactory
      */
     public TableDecorator createTableDecorator(
         final String table, final MetadataManager metadataManager);
+
+    /**
+     * Creates a <code>ForeignKeyDecorator</code>.
+     * @param sourceTableName the name of the source table.
+     * @param attributes the foreign key attributes.
+     * @param targetTableName the name of the target table.
+     * @param allowsNull whether the fk can be null as a whole.
+     * @return the decorator instance.
+     */
+    public ForeignKeyDecorator createDecorator(
+        final String sourceTableName,
+        final Collection attributes,
+        final String targetTableName,
+        final boolean allowsNull);
 }

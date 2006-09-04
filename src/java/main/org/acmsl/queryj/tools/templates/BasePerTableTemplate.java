@@ -382,13 +382,6 @@ public abstract class BasePerTableTemplate
                 metadataManager,
                 decoratorFactory);
 
-// //         Collection t_cForeignKeys =
-// //             metadataUtils.retrieveForeignKeys(
-// //                 tableName,
-// //                 metadataManager,
-// //                 metadataTypeManager,
-// //                 decoratorFactory);
-
         // items have to include the following methods:
         // getId()
         // getIdAsConstant()
@@ -947,6 +940,7 @@ public abstract class BasePerTableTemplate
         input.put("foreign_keys", foreignKeys);
         input.put("foreign_keys_by_table", referringKeys);
         input.put("referring_tables", referringKeys.keySet());
+        input.put("referring_vo_names", toVoNames(referringKeys.keySet()));
         input.put("custom_selects", customSelects);
         input.put("custom_updates_or_inserts", customUpdatesOrInserts);
         input.put("custom_selects_for_update", customSelectsForUpdate);
@@ -1318,5 +1312,57 @@ public abstract class BasePerTableTemplate
         return
             metaLanguageUtils.retrieveStaticAttribute(
                 tableName, metadataManager);
+    }
+
+    /**
+     * Converts given values to their VO names.
+     * @param collection the values to convert.
+     * @return such converted values.
+     * @precondition collection != null
+     */
+    protected Collection toVoNames(final Collection collection)
+    {
+        return toVoNames(collection, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Converts given values to their VO names.
+     * @param collection the values to convert.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such converted values.
+     * @precondition collection != null
+     * @precondition decorationUtils != null
+     */
+    protected Collection toVoNames(
+        final Collection collection, final DecorationUtils decorationUtils)
+    {
+        Collection result = new ArrayList();
+
+        Iterator t_Iterator =
+            (collection != null) ? collection.iterator() : null;
+
+        if  (t_Iterator != null)
+        {
+            while  (t_Iterator.hasNext())
+            {
+                result.add(toVoName("" + t_Iterator.next(), decorationUtils));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Converts given value to its VO name.
+     * @param value the value to convert.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such converted value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String toVoName(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value.toLowerCase());
     }
 }

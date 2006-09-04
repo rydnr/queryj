@@ -63,6 +63,7 @@ import org.acmsl.commons.patterns.Utils;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -86,7 +87,8 @@ public class MetadataUtils
     /**
      * An empty <code>ForeignKey</code> array.
      */
-    public static final ForeignKey[] EMPTY_FOREIGNKEY_ARRAY = new ForeignKey[0];
+    public static final ForeignKey[] EMPTY_FOREIGNKEY_ARRAY = 
+        new ForeignKey[0];
 
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -456,8 +458,7 @@ public class MetadataUtils
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the foreign keys of other tables pointing
      * to this one:
-     * a map of referringTableName -> foreign_keys (list of attribute
-     * lists).
+     * a map of referringTableName -> ForeignKey[].
      * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
@@ -474,56 +475,25 @@ public class MetadataUtils
         String[] t_astrReferringTables =
             metadataManager.getReferringTables(tableName);
 
-        String[][] t_aastrReferringColumns;
-
         int t_iLength =
             (t_astrReferringTables != null) ? t_astrReferringTables.length : 0;
 
-        Collection t_cReferringFks = null;
-
-        Collection t_cCurrentForeignKey = null;
-
-        String t_strReferringTable = null;
+        String t_strReferringTable;
 
         for  (int t_iRefTableIndex = 0;
                   t_iRefTableIndex < t_iLength;
                   t_iRefTableIndex++)
         {
-            t_cReferringFks = new ArrayList();
+            t_strReferringTable = t_astrReferringTables[t_iRefTableIndex];
 
-            t_strReferringTable =
-                t_astrReferringTables[t_iRefTableIndex];
-
-            t_aastrReferringColumns =
-                metadataManager.getForeignKeys(
-                    t_strReferringTable, tableName);
-
-            int t_iFkCount =
-                (t_aastrReferringColumns != null)
-                ?  t_aastrReferringColumns.length
-                :  0;
-
-            for  (int t_iFk = 0; t_iFk < t_iFkCount; t_iFk++)
-            {
-                t_cCurrentForeignKey =
-                    buildAttributes(
-                        t_aastrReferringColumns[t_iFk],
-                        t_strReferringTable,
-                        (metadataManager.allowsNull(
-                            t_strReferringTable,
-                            t_aastrReferringColumns[t_iFk])
-                         ?  Boolean.TRUE : Boolean.FALSE),
-                        metadataManager,
-                        metadataTypeManager,
-                        decoratorFactory);
-
-                // Note: 't_cReferringFks' contains a list of lists.
-                t_cReferringFks.add(t_cCurrentForeignKey);
-
-                t_cCurrentForeignKey = null;
-            }
-
-            result.put(t_strReferringTable, t_cReferringFks);
+            result.put(
+                t_strReferringTable,
+                retrieveForeignKeys(
+                    t_strReferringTable,
+                    tableName,
+                    metadataManager,
+                    metadataTypeManager,
+                    decoratorFactory));
         }
 
         return result;
@@ -867,34 +837,69 @@ public class MetadataUtils
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            String[][] t_aastrForeignKeys =
-                metadataManager.getForeignKeys(
-                    tableName, t_astrReferredTables[t_iIndex]);
-
-            int t_iFkCount =
-                (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
-
-            for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
-            {
-                boolean t_bAllowsNullAsAWhole =
-                    allowsNullAsAWhole(
-                        t_aastrForeignKeys[t_iFkIndex],
+            result.addAll(
+                Arrays.asList(
+                    retrieveForeignKeys(
                         tableName,
-                        metadataManager);
-
-                result.add(
-                    new CachingForeignKeyDecorator(
-                        tableName,
-                        buildAttributes(
-                            t_aastrForeignKeys[t_iFkIndex],
-                            tableName,
-                            t_bAllowsNullAsAWhole,
-                            metadataManager,
-                            metadataTypeManager,
-                            decoratorFactory),
                         t_astrReferredTables[t_iIndex],
-                        t_bAllowsNullAsAWhole));
-            }
+                        metadataManager,
+                        metadataTypeManager,
+                        decoratorFactory)));
+        }
+
+        return (ForeignKey[]) result.toArray(EMPTY_FOREIGNKEY_ARRAY);
+    }
+
+    /**
+     * Builds the foreign keys pointing from one table to another.
+     * @param sourceTableName the name of the source table.
+     * @param targetTableName the name of the target table..
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition sourceTableName != null
+     * @precondition targetTableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected ForeignKey[] retrieveForeignKeys(
+        final String sourceTableName,
+        final String targetTableName,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        Collection result = new ArrayList();
+
+        String[][] t_aastrForeignKeys =
+            metadataManager.getForeignKeys(
+                sourceTableName, targetTableName);
+
+        int t_iFkCount =
+            (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
+
+        for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
+        {
+            boolean t_bAllowsNullAsAWhole =
+                allowsNullAsAWhole(
+                    t_aastrForeignKeys[t_iFkIndex],
+                    sourceTableName,
+                    metadataManager);
+
+            result.add(
+                decoratorFactory.createDecorator(
+                    sourceTableName,
+                    buildAttributes(
+                        t_aastrForeignKeys[t_iFkIndex],
+                        sourceTableName,
+                        t_bAllowsNullAsAWhole,
+                        metadataManager,
+                        metadataTypeManager,
+                        decoratorFactory),
+                    targetTableName,
+                    t_bAllowsNullAsAWhole));
         }
 
         return (ForeignKey[]) result.toArray(EMPTY_FOREIGNKEY_ARRAY);
