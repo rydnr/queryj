@@ -1322,19 +1322,28 @@ public abstract class BasePerTableTemplate
      */
     protected Collection toVoNames(final Collection collection)
     {
-        return toVoNames(collection, DecorationUtils.getInstance());
+        return
+            toVoNames(
+                collection,
+                DecorationUtils.getInstance(),
+                EnglishGrammarUtils.getInstance());
     }
 
     /**
      * Converts given values to their VO names.
      * @param collection the values to convert.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
      * @return such converted values.
      * @precondition collection != null
      * @precondition decorationUtils != null
+     * @precondition englishGrammarUtils != null
      */
     protected Collection toVoNames(
-        final Collection collection, final DecorationUtils decorationUtils)
+        final Collection collection,
+        final DecorationUtils decorationUtils,
+        final EnglishGrammarUtils englishGrammarUtils)
     {
         Collection result = new ArrayList();
 
@@ -1345,7 +1354,11 @@ public abstract class BasePerTableTemplate
         {
             while  (t_Iterator.hasNext())
             {
-                result.add(toVoName("" + t_Iterator.next(), decorationUtils));
+                result.add(
+                    toVoName(
+                        "" + t_Iterator.next(),
+                        decorationUtils,
+                        englishGrammarUtils));
             }
         }
 
@@ -1356,13 +1369,20 @@ public abstract class BasePerTableTemplate
      * Converts given value to its VO name.
      * @param value the value to convert.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
      * @return such converted value.
      * @precondition value != null
      * @precondition decorationUtils != null
+     * @precondition englishGrammarUtils != null
      */
     protected String toVoName(
-        final String value, final DecorationUtils decorationUtils)
+        final String value,
+        final DecorationUtils decorationUtils, 
+        final EnglishGrammarUtils englishGrammarUtils)
     {
-        return decorationUtils.capitalize(value.toLowerCase());
+        return
+            decorationUtils.capitalize(
+                englishGrammarUtils.getSingular(value.toLowerCase()));
     }
 }

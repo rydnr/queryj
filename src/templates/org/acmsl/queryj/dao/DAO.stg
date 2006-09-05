@@ -277,7 +277,7 @@ import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
   referredVOName=it.sourceVoName); separator="\n">
-<referringVoNames:{vo|import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;};
+<referringVoNames:{voName|import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;};
   separator="\n">
 >>
 
@@ -859,8 +859,7 @@ public class <input.engine_name><input.vo_name>DAO
     {
         <input.referring_tables:fk_dao_delete_calls(
           referringTable=it,
-          fkMap=input.foreign_keys_by_table,
-          pkAttributes=input.pk_attributes);
+          fkMap=input.foreign_keys_by_table);
           separator="\n\n">
 <endif>
 
@@ -872,7 +871,6 @@ public class <input.engine_name><input.vo_name>DAO
     <input.referring_tables:fk_dao_delete_methods(
       referringTable=it,
       fkMap=input.foreign_keys_by_table,
-      pkAttributes=input.pk_attributes,
       voName=input.vo_name);
       separator="\n\n">
 
@@ -1046,54 +1044,50 @@ attribute_query_update(
 query.set(<tableNameUppercased>.<nameUppercased>);
 >>
 
-fk_dao_delete_calls(referringTable, fkMap, pkAttributes) ::= <<
+fk_dao_delete_calls(referringTable, fkMap) ::= <<
 <!
  Writes the code needed to use the DAOs associated to any
  foreign key to perform a delete operation.
  @param referringTable the referring table.
  @param fkMap the referringTable->foreign_key map.
- @param pkAttributes the pk attributes.
 !>
-<fkMap.(referringTable):fk_dao_delete_call(
-  foreignKey=it, pkAttributes=pkAttributes); separator="\n\n">
+<fkMap.(referringTable):fk_dao_delete_call(foreignKey=it); separator="\n\n">
 >>
 
-fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
+fk_dao_delete_call(foreignKey) ::= <<
 <!
  Writes the code needed to use the DAO associated to a
  concrete foreign key to perform a delete operation.
  @param foreignKey the foreign key.
- @param pkAttributes the pk attributes.
 !>
 <if(foreignKey.allowsNull)>
-discardRelationTo<foreignKey.sourceVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">(
+discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+                                              separator="And">(
 <else>
 deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">(
 <endif>
 
-    <pkAttributes:{<it.nameLowercased>}; separator=",\n">,
+    <foreignKey.attributes:to_primitive(input=it); separator=",\n">,
     dataAccessManager.get<foreignKey.sourceVoName>DAO());
 >>
 
-fk_dao_delete_methods(referringTable, fkMap, pkAttributes, voName) ::= <<
+fk_dao_delete_methods(referringTable, fkMap, voName) ::= <<
 <!
  Writes the code that actually requests the recursive deletion of the
  referring tables.
  @param referringTable the referring table.
  @param fkMap the foreign key map.
- @param pkAttributes the pk attributes.
  @param voName the ValueObject name.
 !>
-<fkMap.(referringTable):fk_dao_delete_method(foreignKey=it, pkAttributes=pkAttributes, voName=voName);
+<fkMap.(referringTable):fk_dao_delete_method(foreignKey=it, voName=voName);
   separator="\n\n">
 >>
 
-fk_dao_delete_method(foreignKey, pkAttributes, voName) ::= <<
+fk_dao_delete_method(foreignKey, voName) ::= <<
 <!
  Writes the code that actually requests the recursive deletion of the
  referring tables.
  @param foreignKey the foreign key.
- @param pkAttributes the pk attributes.
  @param voName the ValueObject name.
 !>
 /**
@@ -1105,8 +1099,9 @@ fk_dao_delete_method(foreignKey, pkAttributes, voName) ::= <<
  * \<code><foreignKey.sourceVoName>\</code>.
 <endif>
 
- <pkAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @param dao the \<code><foreignKey.sourceVoName>\DAO</code> instance.
+ <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased);
+  separator="\n">
+ * @param dao the \<code><foreignKey.sourceVoName>DAO\</code> instance.
  <precondition_notnull("dao")>
  */
 <if(foreignKey.allowsNull)>
@@ -1117,17 +1112,19 @@ protected void deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                          separator="And">(
 <endif>
 
-    <pkAttributes:attribute_declaration(attr=it); separator=",\n">,
+    <foreignKey.attributes:primitive_attribute_declaration(attr=it);
+      separator=",\n">,
     final <foreignKey.sourceVoName>DAO dao)
 {
 <if(foreignKey.allowsNull)>
-    dao.discardRelationTo<voName>By<pkAttributes:{attr|<attr.nameCapitalized>};
+    dao.discardRelationTo<voName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                                      separator="And">(
 <else>
-    dao.delete(
+    dao.deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+                  separator="And">(
 <endif>
 
-        <pkAttributes:{<it.nameLowercased>}; separator=",\n">);
+        <foreignKey.attributes:{<it.nameLowercased>}; separator=",\n">);
 }
 >>
 
@@ -1364,7 +1361,8 @@ protected void buildDiscardRelationTo<foreignKey.targetVoName>By<foreignKey.attr
  */
 public void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                                separator="And">(
-    <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">)
+    <foreignKey.attributes:primitive_attribute_declaration(attr=it);
+      separator=",\n">)
 {
     discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                        separator="And">(
@@ -1386,7 +1384,8 @@ public void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{
  */
 protected void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                                   separator="And">(
-    <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">,
+    <foreignKey.attributes:primitive_attribute_declaration(attr=it);
+      separator=",\n">,
     final Query query,
     final DataSource dataSource)
 {
@@ -1411,7 +1410,8 @@ protected void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attribute
  */
 protected void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                                   separator="And">(
-    <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">,
+    <foreignKey.attributes:primitive_attribute_declaration(attr=it);
+      separator=",\n">,
     final Query query,
     final PlatformTransactionManager transactionManager)
 {
@@ -1440,7 +1440,8 @@ protected void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attribute
  */
 protected void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                                   separator="And">(
-    <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">,
+    <foreignKey.attributes:primitive_attribute_declaration(attr=it);
+      separator=",\n">,
     final Query query,
     final TransactionTemplate transactionTemplate)
 {
@@ -1913,4 +1914,17 @@ insert_attribute(attr) ::= <<
 <else>
 "?
 <endif>
+>>
+
+to_primitive(input) ::= <<
+<!
+ Writes the code to convert given attribute to primitive.
+ @param input the input.
+!>
+<if(input.allowsNull)>
+<indirect_template(name=input.objectType+"_to_primitive", input=input)>
+<else>
+<input.nameLowercased>
+<endif>
+
 >>

@@ -44,14 +44,14 @@ group BaseRepositoryDAO;
 
 source(input) ::= <<
 <!
-  Generates a base repository DAO implementation source file.
-  @param input.copyright_years the copyright's years.
-  @param input.package the package.
-  @param input.dao_class_name the DAO class name.
-  @param input.dao_factory_class_name the DAO factory class name.
-  @param input.dao_implementation_class_name the DAO implementation class name.
-  @params project_imports
-  @params class
+ Generates a base repository DAO implementation source file.
+ @param input.copyright_years the copyright's years.
+ @param input.package the package.
+ @param input.dao_class_name the DAO class name.
+ @param input.dao_factory_class_name the DAO factory class name.
+ @param input.dao_implementation_class_name the DAO implementation class name.
+ @params project_imports
+ @params class
 !>
 <if(input.header)>
 <input.header>
@@ -103,7 +103,6 @@ first_line_description(repository) ::= <<
 Defines the global queries defined for <repository>.
 >>
 
-
 project_imports(basePackageName, voSubpackageName, voName) ::= <<
 <!
  Generates the project imports.
@@ -141,9 +140,9 @@ public interface <input.tr_name_capitalized>DAO
 
 custom_select(cs, input) ::= <<
 <!
-  Writes the code for a custom select query.
-  @param cs the custom select.
-  @param input the input.
+ Writes the code for a custom select query.
+ @param cs the custom select.
+ @param input the input.
 !>
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>

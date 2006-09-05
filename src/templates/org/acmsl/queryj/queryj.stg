@@ -152,6 +152,15 @@ attribute_declaration(attr) ::= <<
 final <if(attr.clob)>String<else><attr.fieldType><endif> <attr.nameLowercased>
 >>
 
+primitive_attribute_declaration(attr) ::= <<
+<!
+ Writes the parameter declaration for a concrete attribute, using native
+ types.
+ @param attr the attribute.
+!>
+final <attr.nativeType> <attr.nameLowercased>
+>>
+
 attribute_isolated_declaration(attr) ::= <<
 <!
   Writes the parameter declaration for a concrete attribute, isolated.
@@ -1325,4 +1334,56 @@ oracle8_attribute_extraction(input) ::= <<
 <else>
 <default_lobhandling_attribute_extraction(attr=input)>
 <endif>
+>>
+
+Integer_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into an int primitive.
+ @param input the attribute.
+!><input.nameLowercased>.intValue()>>
+
+Long_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into a long primitive.
+ @param input the attribute.
+!><input.nameLowercased>.longValue()>>
+
+Float_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into a float primitive.
+ @param input the attribute.
+!><input.nameLowercased>.floatValue()>>
+
+Double_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into a double primitive.
+ @param input the attribute.
+!><input.nameLowercased>.doubleValue()>>
+
+String_to_primitive(input) ::= <<
+<!
+ Don't try to convert the String to anything.
+ @param input the attribute.
+!><Object_to_primitive(input=input)>
+>>
+
+BigDecimal_to_primitive(input) ::= <<
+<!
+ Don't try to convert the BigDecimal to anything.
+ @param input the attribute.
+!><Object_to_primitive(input=input)>
+>>
+
+Timestamp_to_primitive(input) ::= <<
+<!
+ Don't try to convert the Timestamp to anything.
+ @param input the attribute.
+!><Object_to_primitive(input=input)>
+>>
+
+Object_to_primitive(input) ::= <<
+<!
+ Don't try to convert the attribute to anything.
+ @param input the attribute.
+!><input.nameLowercased>
 >>

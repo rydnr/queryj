@@ -314,7 +314,8 @@ public void deleteBy<foreignKey.attributes:{attr |<attr.nameCapitalized>};
 <endif>
 
 
-    <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">);
+    <foreignKey.attributes:primitive_attribute_declaration(attr=it);
+      separator=",\n">);
 >>
 
 custom_select(cs, input) ::= <<
