@@ -939,8 +939,12 @@ public abstract class BasePerTableTemplate
         input.put("all_but_lob_attributes", allButLobAttributes);
         input.put("foreign_keys", foreignKeys);
         input.put("foreign_keys_by_table", referringKeys);
-        input.put("referring_tables", referringKeys.keySet());
-        input.put("referring_vo_names", toVoNames(referringKeys.keySet()));
+        Collection t_cReferringTables = referringKeys.keySet();
+        input.put("referring_tables", t_cReferringTables);
+        input.put("referring_vo_names", toVoNames(t_cReferringTables));
+        input.put(
+            "own_foreign_keys",
+            buildOwnForeignKeysMap(foreignKeys, tableName));
         input.put("custom_selects", customSelects);
         input.put("custom_updates_or_inserts", customUpdatesOrInserts);
         input.put("custom_selects_for_update", customSelectsForUpdate);
@@ -1384,5 +1388,40 @@ public abstract class BasePerTableTemplate
         return
             decorationUtils.capitalize(
                 englishGrammarUtils.getSingular(value.toLowerCase()));
+    }
+
+    /**
+     * Builds the map of the foreign keys starting and ending on given table.
+     * @param foreignKeys the foreign keys.
+     * @param tableName the table name.
+     * @return such map.
+     * @precondition foreignKeys != null
+     * @precondition tableName != null
+     */
+    protected Map buildOwnForeignKeysMap(
+        final ForeignKey[] foreignKeys,
+        final String tableName)
+    {
+        Map result = new HashMap();
+
+        int t_iCount = (foreignKeys != null) ? foreignKeys.length : 0;
+
+        ForeignKey t_ForeignKey;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_ForeignKey = foreignKeys[t_iIndex];
+
+            if  (   (t_ForeignKey != null)
+                 && (tableName.equalsIgnoreCase(
+                         t_ForeignKey.getSourceTableName())
+                 && (tableName.equalsIgnoreCase(
+                         t_ForeignKey.getTargetTableName()))))
+            {
+                result.put(t_ForeignKey, Boolean.TRUE);
+            }
+        }
+
+        return result;
     }
 }

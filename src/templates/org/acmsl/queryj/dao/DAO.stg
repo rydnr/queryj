@@ -859,10 +859,10 @@ public class <input.engine_name><input.vo_name>DAO
     {
         <input.referring_tables:fk_dao_delete_calls(
           referringTable=it,
-          fkMap=input.foreign_keys_by_table);
+          fkMap=input.foreign_keys_by_table,
+          ownFkMap=input.own_foreign_keys);
           separator="\n\n">
 <endif>
-
 
         deleteNoFk(
             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
@@ -871,6 +871,7 @@ public class <input.engine_name><input.vo_name>DAO
     <input.referring_tables:fk_dao_delete_methods(
       referringTable=it,
       fkMap=input.foreign_keys_by_table,
+      ownFkMap=input.own_foreign_keys,
       voName=input.vo_name);
       separator="\n\n">
 
@@ -1044,21 +1045,29 @@ attribute_query_update(
 query.set(<tableNameUppercased>.<nameUppercased>);
 >>
 
-fk_dao_delete_calls(referringTable, fkMap) ::= <<
+fk_dao_delete_calls(referringTable, fkMap, ownFkMap, pkAttributes) ::= <<
 <!
  Writes the code needed to use the DAOs associated to any
  foreign key to perform a delete operation.
  @param referringTable the referring table.
  @param fkMap the referringTable->foreign_key map.
+ @param ownFkMap the referringTable->flag, where flag indicated whether
+ @param pkAttributes the primary keys.
+ the fk defines a relationship between entities of the same kind.
 !>
-<fkMap.(referringTable):fk_dao_delete_call(foreignKey=it); separator="\n\n">
+<fkMap.(referringTable):fk_dao_delete_call(
+  foreignKey=it, own=ownFkMap.(it), pkAttributes=pkAttributes);
+  separator="\n\n">
 >>
 
-fk_dao_delete_call(foreignKey) ::= <<
+fk_dao_delete_call(foreignKey, own) ::= <<
 <!
  Writes the code needed to use the DAO associated to a
  concrete foreign key to perform a delete operation.
  @param foreignKey the foreign key.
+ @param own whether the foreign key defines a relationship between entities of
+ the same kind.
+ @param pkAttributes the primary keys.
 !>
 <if(foreignKey.allowsNull)>
 discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
@@ -1067,28 +1076,37 @@ discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr|<attr.n
 deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">(
 <endif>
 
+<if(own)>
+    <pkAttributes:to_primitive(input=it); separator=",\n">);
+<else>
     <foreignKey.attributes:to_primitive(input=it); separator=",\n">,
     dataAccessManager.get<foreignKey.sourceVoName>DAO());
+<endif>
+
 >>
 
-fk_dao_delete_methods(referringTable, fkMap, voName) ::= <<
+fk_dao_delete_methods(referringTable, fkMap, ownFks, voName) ::= <<
 <!
  Writes the code that actually requests the recursive deletion of the
  referring tables.
  @param referringTable the referring table.
  @param fkMap the foreign key map.
+ @param ownFks the own foreign keys map.
  @param voName the ValueObject name.
 !>
-<fkMap.(referringTable):fk_dao_delete_method(foreignKey=it, voName=voName);
+<fkMap.(referringTable):fk_dao_delete_method(
+  foreignKey=it, voName=voName, own=ownFks.(it));
   separator="\n\n">
 >>
 
-fk_dao_delete_method(foreignKey, voName) ::= <<
+fk_dao_delete_method(foreignKey, voName, own) ::= <<
 <!
  Writes the code that actually requests the recursive deletion of the
  referring tables.
  @param foreignKey the foreign key.
  @param voName the ValueObject name.
+ @param own whether the foreign key represents a relationship between
+ entities of the same kind.
 !>
 /**
 <if(foreignKey.allowsNull)>
@@ -1112,15 +1130,21 @@ protected void deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                          separator="And">(
 <endif>
 
+<if(own)>
+    <foreignKey.attributes:primitive_attribute_declaration(attr=it);
+      separator=",\n">)
+<else>
     <foreignKey.attributes:primitive_attribute_declaration(attr=it);
       separator=",\n">,
     final <foreignKey.sourceVoName>DAO dao)
+<endif>
+
 {
 <if(foreignKey.allowsNull)>
-    dao.discardRelationTo<voName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+    <if(own)><else>dao<endif>.discardRelationTo<voName>By<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                                      separator="And">(
 <else>
-    dao.deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>};
+    <if(own)><else>dao<endif>.deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>};
                   separator="And">(
 <endif>
 

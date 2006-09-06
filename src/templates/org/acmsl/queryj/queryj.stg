@@ -158,7 +158,14 @@ primitive_attribute_declaration(attr) ::= <<
  types.
  @param attr the attribute.
 !>
+<if(attr.isPrimitive)>
+// is primitive
 final <attr.nativeType> <attr.nameLowercased>
+<else>
+// is not primitive
+final <attr.fieldType> <attr.nameLowercased>
+<endif>
+
 >>
 
 attribute_isolated_declaration(attr) ::= <<

@@ -177,7 +177,8 @@ public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
     implements  PreparedStatementSetter,
                 <input.tr_name_capitalized>TableRepository
 {
-    <foreignKey.attributes:attribute_member_declaration(attr=it); separator="\n">
+    <foreignKey.attributes:attribute_member_declaration(attr=it);
+      separator="\n">
 
     /**
      * Creates a \<code><foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter\</code>
@@ -186,7 +187,7 @@ public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
         separator="\n">
      */
     public <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter(
-        <foreignKey.attributes:attribute_declaration(attr=it);
+        <foreignKey.attributes:primitive_attribute_declaration(attr=it);
           separator=",\n">)
     {
         <foreignKey.attributes:
@@ -253,7 +254,7 @@ attribute_accessor(attr) ::= <<
 <attribute_javadoc(name=attr.nameLowercased)>
  */
 protected final void immutableSet<attr.nameCapitalized>(
-    <attribute_declaration(attr=attr)>)
+    <primitive_attribute_declaration(attr=attr)>)
 {
     this.<attr.nameLowercased> = <attr.nameLowercased>;
 }
@@ -263,7 +264,7 @@ protected final void immutableSet<attr.nameCapitalized>(
 <attribute_javadoc(name=attr.nameLowercased)>
  */
 protected void set<attr.nameCapitalized>(
-    <attribute_declaration(attr=attr)>)
+    <primitive_attribute_declaration(attr=attr)>)
 {
     immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);
 }
@@ -273,7 +274,16 @@ protected void set<attr.nameCapitalized>(
 <attribute_javadoc(name=attr.nameLowercased)>
  * @return such value.
  */
-protected <if(attr.clob)>String<else><attr.javaType><endif> get<attr.nameCapitalized>()
+<if(attr.clob)>
+protected String get<attr.nameCapitalized>()
+<else>
+<if(attr.isPrimitive)>
+protected <attr.nativeType><attr.nameCapitalized>()
+<else>
+protected <attr.javaType><attr.nameCapitalized>()
+<endif>
+<endif>
+
 {
     return <attr.nameLowercased>;
 }
