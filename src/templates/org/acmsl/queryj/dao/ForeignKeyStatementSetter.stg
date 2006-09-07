@@ -223,7 +223,7 @@ public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
      */
     protected void setValues(
         final Query query,
-        <foreignKey.attributes:attribute_declaration(attr=it);
+        <foreignKey.attributes:primitive_attribute_declaration(attr=it);
           separator=",\n">)
       throws  SQLException
     {
@@ -241,7 +241,16 @@ attribute_member_declaration(attr) ::= <<
 /**
  * The \<i><attr.name>\</i> information.
  */
-private <if(attr.clob)>String<else><attr.javaType><endif> <attr.nameLowercased>;
+<if(attr.clob)>
+private String <attr.nameLowercased>;
+<else>
+<if(attr.primitive)>
+private <attr.nativeType> <attr.nameLowercased>;
+<else>
+private <attr.javaType> <attr.nameLowercased>;
+<endif>
+<endif>
+
 >>
 
 attribute_accessor(attr) ::= <<
@@ -277,10 +286,10 @@ protected void set<attr.nameCapitalized>(
 <if(attr.clob)>
 protected String get<attr.nameCapitalized>()
 <else>
-<if(attr.isPrimitive)>
-protected <attr.nativeType><attr.nameCapitalized>()
+<if(attr.primitive)>
+protected <attr.nativeType> get<attr.nameCapitalized>()
 <else>
-protected <attr.javaType><attr.nameCapitalized>()
+protected <attr.javaType> get<attr.nameCapitalized>()
 <endif>
 <endif>
 

@@ -1077,25 +1077,25 @@ deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">(
 <endif>
 
 <if(own)>
-    <pkAttributes:to_primitive(input=it); separator=",\n">);
+    <pkAttributes:to_primitive(attr=it); separator=",\n">);
 <else>
-    <foreignKey.attributes:to_primitive(input=it); separator=",\n">,
+    <foreignKey.attributes:to_primitive(attr=it); separator=",\n">,
     dataAccessManager.get<foreignKey.sourceVoName>DAO());
 <endif>
 
 >>
 
-fk_dao_delete_methods(referringTable, fkMap, ownFks, voName) ::= <<
+fk_dao_delete_methods(referringTable, fkMap, ownFkMap, voName) ::= <<
 <!
  Writes the code that actually requests the recursive deletion of the
  referring tables.
  @param referringTable the referring table.
  @param fkMap the foreign key map.
- @param ownFks the own foreign keys map.
+ @param ownFkMap the own foreign keys map.
  @param voName the ValueObject name.
 !>
 <fkMap.(referringTable):fk_dao_delete_method(
-  foreignKey=it, voName=voName, own=ownFks.(it));
+  foreignKey=it, voName=voName, own=ownFkMap.(it));
   separator="\n\n">
 >>
 
@@ -1940,15 +1940,15 @@ insert_attribute(attr) ::= <<
 <endif>
 >>
 
-to_primitive(input) ::= <<
+to_primitive(attr) ::= <<
 <!
  Writes the code to convert given attribute to primitive.
- @param input the input.
+ @param attr the attribute.
 !>
-<if(input.allowsNull)>
-<indirect_template(name=input.objectType+"_to_primitive", input=input)>
+<if(attr.primitive)>
+<attr.nameLowercased>
 <else>
-<input.nameLowercased>
+<indirect_template(name=attr.objectType+"_to_primitive", input=attr)>
 <endif>
 
 >>
