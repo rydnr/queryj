@@ -49,6 +49,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public interface ForeignKey
+    extends  java.lang.Comparable
 {
     /**
      * Retrieves the source table name.

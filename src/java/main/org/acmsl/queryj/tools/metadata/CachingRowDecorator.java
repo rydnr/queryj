@@ -144,4 +144,89 @@ public class CachingRowDecorator
         
         return result;
     }
+
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append(
+                    "cachedNameNormalizedUppercased",
+                    getCachedNameNormalizedUppercased())
+                .toString();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof CachingRowDecorator)
+        {
+            final CachingRowDecorator t_OtherInstance =
+                (CachingRowDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getCachedNameNormalizedUppercased(),
+                        t_OtherInstance.getCachedNameNormalizedUppercased())
+                    .append(
+                        getNameNormalizedUppercased(),
+                        t_OtherInstance.getNameNormalizedUppercased())
+                .isEquals();
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof CachingRowDecorator)
+        {
+            final CachingRowDecorator t_OtherInstance =
+                (CachingRowDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getCachedNameNormalizedUppercased(),
+                    t_OtherInstance.getCachedNameNormalizedUppercased())
+                .append(
+                    getNameNormalizedUppercased(),
+                    t_OtherInstance.getNameNormalizedUppercased())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
+    }
 }

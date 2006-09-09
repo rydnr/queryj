@@ -1055,8 +1055,8 @@ fk_dao_delete_calls(referringTable, fkMap, ownFkMap, pkAttributes) ::= <<
  @param pkAttributes the primary keys.
  the fk defines a relationship between entities of the same kind.
 !>
-<fkMap.(referringTable):fk_dao_delete_call(
-  foreignKey=it, own=ownFkMap.(it), pkAttributes=pkAttributes);
+<fkMap.(referringTable):{attr|<fk_dao_delete_call(
+  foreignKey=attr, own=ownFkMap.(attr), pkAttributes=pkAttributes)>};
   separator="\n\n">
 >>
 
@@ -1079,6 +1079,7 @@ deleteBy<foreignKey.attributes:{attr|<attr.nameCapitalized>}; separator="And">(
 <if(own)>
     <pkAttributes:to_primitive(attr=it); separator=",\n">);
 <else>
+// not own
     <foreignKey.attributes:to_primitive(attr=it); separator=",\n">,
     dataAccessManager.get<foreignKey.sourceVoName>DAO());
 <endif>

@@ -376,4 +376,134 @@ public abstract class AbstractAttribute
     {
         return getName();
     }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-2052006167, 878128337)
+                .appendSuper(super.hashCode())
+                .append(getName())
+                .append(getType())
+                .append(getNativeType())
+                .append(getFieldType())
+                .append(getTableName())
+                .append(getManagedExternally())
+                .append(getAllowsNull())
+                .append(getValue())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof Attribute)
+        {
+            final Attribute t_OtherInstance = (Attribute) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getName(),
+                        t_OtherInstance.getName())
+                    .append(
+                        getType(),
+                        t_OtherInstance.getType())
+                    .append(
+                        getNativeType(),
+                        t_OtherInstance.getNativeType())
+                    .append(
+                        getFieldType(),
+                        t_OtherInstance.getFieldType())
+                    .append(
+                        getTableName(),
+                        t_OtherInstance.getTableName())
+                    .append(
+                        getManagedExternally(),
+                        t_OtherInstance.getManagedExternally())
+                    .append(
+                        getAllowsNull(),
+                        t_OtherInstance.getAllowsNull())
+                    .append(
+                        getValue(),
+                        t_OtherInstance.getValue())
+                .isEquals();
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        ClassCastException exceptionToThrow = null;
+
+        if  (object instanceof Attribute)
+        {
+            final Attribute t_OtherInstance = (Attribute) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getName(),
+                    t_OtherInstance.getName())
+                .append(
+                    getType(),
+                    t_OtherInstance.getType())
+                .append(
+                    getNativeType(),
+                    t_OtherInstance.getNativeType())
+                .append(
+                    getFieldType(),
+                    t_OtherInstance.getFieldType())
+                .append(
+                    getTableName(),
+                    t_OtherInstance.getTableName())
+                .append(
+                    getManagedExternally(),
+                    t_OtherInstance.getManagedExternally())
+                .append(
+                    getAllowsNull(),
+                    t_OtherInstance.getAllowsNull())
+                .append(
+                    getValue(),
+                    t_OtherInstance.getValue())
+                .toComparison();
+        }
+        else
+        {
+            exceptionToThrow =
+                new ClassCastException(
+                      "Cannot compare "
+                    + object
+                    + " with "
+                    + toString());
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw  exceptionToThrow;
+        }
+
+        return result;
+    }
 }

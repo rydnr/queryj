@@ -59,7 +59,13 @@ import java.util.Collection;
  */
 public class RowDecorator
     extends AbstractRow
+    implements java.lang.Comparable
 {
+    /**
+     * The decorated row.
+     */
+    private Row m__Row;
+
     /**
      * The metadata type manager.
      */
@@ -81,6 +87,8 @@ public class RowDecorator
             row.getTableName(),
             row.getAttributes(),
             metadataManager.getMetadataTypeManager());
+
+        immutableSetRow(row);
     }
 
     /**
@@ -95,7 +103,7 @@ public class RowDecorator
      * @precondition attributes != null
      * @precondition metadataTypeManager != null
      */
-    public RowDecorator(
+    protected RowDecorator(
         final String name,
         final String tableName,
         final Collection attributes,
@@ -104,6 +112,33 @@ public class RowDecorator
         super(name, tableName, attributes);
 
         immutableSetMetadataTypeManager(metadataTypeManager);
+    }
+
+    /**
+     * Specifies the row to decorate.
+     * @param row the row.
+     */
+    protected final void immutableSetRow(final Row row)
+    {
+        m__Row = row;
+    }
+    
+    /**
+     * Specifies the row to decorate.
+     * @param row the row.
+     */
+    protected void setRow(final Row row)
+    {
+        immutableSetRow(row);
+    }
+
+    /**
+     * Retrieves the decorated row.
+     * @return such row.
+     */
+    public Row getRow()
+    {
+        return m__Row;
     }
 
     /**
@@ -156,5 +191,109 @@ public class RowDecorator
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.softNormalizeUppercase(value);
+    }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("metadataTypeManager", getMetadataTypeManager())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return hashCode(getRow());
+    }
+
+    /**
+     * Retrieves the hash code associated to given row.
+     * @param row the row.
+     * @return such information.
+     * @precondition row != null
+     */
+    protected int hashCode(final Row row)
+    {
+        return row.hashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof RowDecorator)
+        {
+            final RowDecorator t_OtherInstance =
+                (RowDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getMetadataTypeManager(),
+                        t_OtherInstance.getMetadataTypeManager())
+                    .append(
+                        getNameNormalizedUppercased(),
+                        t_OtherInstance.getNameNormalizedUppercased())
+                .isEquals();
+        }
+        else if  (object instanceof Row)
+        {
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .append(getRow(), object).isEquals();
+        }                        
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof RowDecorator)
+        {
+            final RowDecorator t_OtherInstance =
+                (RowDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getMetadataTypeManager(),
+                    t_OtherInstance.getMetadataTypeManager())
+                .append(
+                    getNameNormalizedUppercased(),
+                    t_OtherInstance.getNameNormalizedUppercased())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
     }
 }

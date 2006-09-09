@@ -66,6 +66,11 @@ public class ForeignKeyDecorator
     extends AbstractForeignKey
 {
     /**
+     * The decorated instance.
+     */
+    private ForeignKey m__ForeignKey;
+
+    /**
      * Creates a <code>ForeignKeyDecorator</code> with the
      * <code>ForeignKey</code> information to decorate.
      * @param foreignKey the foreign key.
@@ -78,6 +83,8 @@ public class ForeignKeyDecorator
             foreignKey.getAttributes(),
             foreignKey.getTargetTableName(),
             foreignKey.getAllowsNull());
+
+        immutableSetForeignKey(foreignKey);
     }
 
     /**
@@ -91,13 +98,40 @@ public class ForeignKeyDecorator
      * @precondition attributes != null
      * @precondition targetTableName != null
      */
-    public ForeignKeyDecorator(
+    protected ForeignKeyDecorator(
         final String sourceTableName,
         final Collection attributes,
         final String targetTableName,
         final boolean allowsNull)
     {
         super(sourceTableName, attributes, targetTableName, allowsNull);
+    }
+
+    /**
+     * Specifies the foreign key to decorate.
+     * @param foreignKey the foreign key.
+     */
+    protected final void immutableSetForeignKey(final ForeignKey foreignKey)
+    {
+        m__ForeignKey = foreignKey;
+    }
+
+    /**
+     * Specifies the foreign key to decorate.
+     * @param foreignKey the foreign key.
+     */
+    protected void setForeignKey(final ForeignKey foreignKey)
+    {
+        immutableSetForeignKey(foreignKey);
+    }
+
+    /**
+     * Retrieves the decorated foreign key.
+     * @return such foreign key.
+     */
+    public ForeignKey getForeignKey()
+    {
+        return m__ForeignKey;
     }
 
     /**
@@ -185,5 +219,109 @@ public class ForeignKeyDecorator
         final String value, final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
+    }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return "" + getForeignKey();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return hashCode(getForeignKey());
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @param foreignKey the foreign key.
+     * @return such information.
+     * @precondition foreignKey != null
+     */
+    protected int hashCode(final ForeignKey foreignKey)
+    {
+        return foreignKey.hashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof ForeignKeyDecorator)
+        {
+            final ForeignKeyDecorator t_OtherInstance =
+                (ForeignKeyDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getSourceTableNameUncapitalized(),
+                        t_OtherInstance.getSourceTableNameUncapitalized())
+                    .append(
+                        getSourceVoName(),
+                        t_OtherInstance.getSourceVoName())
+                    .append(
+                        getTargetVoName(),
+                        t_OtherInstance.getTargetVoName())
+                .isEquals();
+        }
+        else if (object instanceof ForeignKey)
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof ForeignKeyDecorator)
+        {
+            final ForeignKeyDecorator t_OtherInstance =
+                (ForeignKeyDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getSourceTableNameUncapitalized(),
+                    t_OtherInstance.getSourceTableNameUncapitalized())
+                .append(
+                    getSourceVoName(),
+                    t_OtherInstance.getSourceVoName())
+                .append(
+                    getTargetVoName(),
+                    t_OtherInstance.getTargetVoName())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
     }
 }

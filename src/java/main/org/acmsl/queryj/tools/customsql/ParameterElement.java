@@ -116,4 +116,18 @@ public class ParameterElement
     {
         return m__strValidationValue;
     }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append(getValidationValue())
+                .toString();
+    }
 }

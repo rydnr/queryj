@@ -117,4 +117,99 @@ public class PropertyElement
     {
         return m__bNullable;
     }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("nullable", isNullable())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-1682907407, 1052139971)
+                .appendSuper(super.hashCode())
+                .append(isNullable())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof Property)
+        {
+            final Property t_OtherInstance = (Property) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        isNullable(),
+                        t_OtherInstance.isNullable())
+                .isEquals();
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        ClassCastException exceptionToThrow = null;
+
+        if  (object instanceof Property)
+        {
+            final Property t_OtherInstance = (Property) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    isNullable(),
+                    t_OtherInstance.isNullable())
+                .toComparison();
+        }
+        else
+        {
+            exceptionToThrow =
+                new ClassCastException(
+                      "Cannot compare "
+                    + object
+                    + " with "
+                    + toString());
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw  exceptionToThrow;
+        }
+
+        return result;
+    }
 }

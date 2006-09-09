@@ -267,4 +267,50 @@ public abstract class AbstractResult
             + "[" + "matches=" + matches + "]"
             + "[" + "property-refs=" + propertyRefs + "]";
     }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        ClassCastException exceptionToThrow = null;
+
+        if  (object instanceof Result)
+        {
+                final Result t_OtherInstance = (Result) object;
+
+                result =
+                    new org.apache.commons.lang.builder.CompareToBuilder()
+                        .append(
+                            getMatches(),
+                            t_OtherInstance.getMatches())
+                        .append(
+                            getPropertyRefs(),
+                            t_OtherInstance.getPropertyRefs())
+                        .toComparison();
+        }
+        else
+        {
+            exceptionToThrow =
+                new ClassCastException(
+                      "Cannot compare "
+                    + object
+                    + " with "
+                    + toString());
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw  exceptionToThrow;
+        }
+
+        return result;
+    }
 }

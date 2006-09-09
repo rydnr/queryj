@@ -49,6 +49,7 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public interface Row
+    extends  java.lang.Comparable
 {
     /**
      * Retrieves the attribute name.

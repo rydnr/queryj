@@ -44,7 +44,8 @@ package org.acmsl.queryj.tools.customsql;
  *         >Jose San Leandro</a>
  */
 public interface Property
-    extends  IdentifiableElement
+    extends  IdentifiableElement,
+             java.lang.Comparable
 {
     /**
      * Retrieves the <i>column_name</i> attribute.

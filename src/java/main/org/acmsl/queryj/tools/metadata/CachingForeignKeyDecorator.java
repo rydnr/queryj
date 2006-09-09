@@ -238,4 +238,114 @@ public class CachingForeignKeyDecorator
         
         return result;
     }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append(
+                    "cachedSourceTableNameUncapitalized",
+                    getCachedSourceTableNameUncapitalized())
+                .append("cachedSourceVoName", getCachedSourceVoName())
+                .append("cachedTargetVoName", getCachedTargetVoName())
+                .toString();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof CachingForeignKeyDecorator)
+        {
+            final CachingForeignKeyDecorator t_OtherInstance =
+                (CachingForeignKeyDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getCachedSourceTableNameUncapitalized(),
+                        t_OtherInstance.getCachedSourceTableNameUncapitalized())
+                    .append(
+                        getSourceTableNameUncapitalized(),
+                        t_OtherInstance.getSourceTableNameUncapitalized())
+                    .append(
+                        getCachedSourceVoName(),
+                        t_OtherInstance.getCachedSourceVoName())
+                    .append(
+                        getSourceVoName(),
+                        t_OtherInstance.getSourceVoName())
+                    .append(
+                        getCachedTargetVoName(),
+                        t_OtherInstance.getCachedTargetVoName())
+                    .append(
+                        getTargetVoName(),
+                        t_OtherInstance.getTargetVoName())
+                .isEquals();
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof CachingForeignKeyDecorator)
+        {
+            final CachingForeignKeyDecorator t_OtherInstance =
+                (CachingForeignKeyDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getCachedSourceTableNameUncapitalized(),
+                    t_OtherInstance.getCachedSourceTableNameUncapitalized())
+                .append(
+                    getSourceTableNameUncapitalized(),
+                    t_OtherInstance.getSourceTableNameUncapitalized())
+                .append(
+                    getCachedSourceVoName(),
+                    t_OtherInstance.getCachedSourceVoName())
+                .append(
+                    getSourceVoName(),
+                    t_OtherInstance.getSourceVoName())
+                .append(
+                    getCachedTargetVoName(),
+                    t_OtherInstance.getCachedTargetVoName())
+                .append(
+                    getTargetVoName(),
+                    t_OtherInstance.getTargetVoName())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
+    }
 }

@@ -531,4 +531,166 @@ public abstract class AbstractSqlDecorator
 
         return result;
     }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("sql", getSql())
+                .append("customSqlProvider", getCustomSqlProvider())
+                .append("metadataManager", getMetadataManager())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return hashCode(getSql());
+    }
+
+    /**
+     * Retrieves the hash code associated to given instance.
+     * @param sql the sql.
+     * @return such information.
+     * @precondition sql != null
+     */
+    protected int hashCode(final Sql sql)
+    {
+        return sql.hashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof AbstractSqlDecorator)
+        {
+            final AbstractSqlDecorator t_OtherInstance =
+                (AbstractSqlDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getSql(),
+                        t_OtherInstance.getSql())
+                    .append(
+                        getCustomSqlProvider(),
+                        t_OtherInstance.getCustomSqlProvider())
+                    .append(
+                        getMetadataManager(),
+                        t_OtherInstance.getMetadataManager())
+                    .append(
+                        getMetadataTypeManager(),
+                        t_OtherInstance.getMetadataTypeManager())
+                    .append(
+                        getSplittedQuotedValue(),
+                        t_OtherInstance.getSplittedQuotedValue())
+                    .append(
+                        getIdAsConstant(),
+                        t_OtherInstance.getIdAsConstant())
+                    .append(
+                        getIdCapitalized(),
+                        t_OtherInstance.getIdCapitalized())
+                    .append(
+                        getNameUncapitalized(),
+                        t_OtherInstance.getNameUncapitalized())
+                    .append(
+                        getParameters(),
+                        t_OtherInstance.getParameters())
+                    .append(
+                        getResultClass(),
+                        t_OtherInstance.getResultClass())
+                    .append(
+                        getResultIdAsConstant(),
+                        t_OtherInstance.getResultIdAsConstant())
+                .isEquals();
+        }
+        else if  (object instanceof Sql)
+        {
+            result = object.equals(getSql());
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof AbstractSqlDecorator)
+        {
+            final AbstractSqlDecorator t_OtherInstance =
+                (AbstractSqlDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getSql(),
+                    t_OtherInstance.getSql())
+                .append(
+                    getCustomSqlProvider(),
+                    t_OtherInstance.getCustomSqlProvider())
+                .append(
+                    getMetadataManager(),
+                    t_OtherInstance.getMetadataManager())
+                .append(
+                    getMetadataTypeManager(),
+                    t_OtherInstance.getMetadataTypeManager())
+                .append(
+                    getSplittedQuotedValue(),
+                    t_OtherInstance.getSplittedQuotedValue())
+                .append(
+                    getIdAsConstant(),
+                    t_OtherInstance.getIdAsConstant())
+                .append(
+                    getIdCapitalized(),
+                    t_OtherInstance.getIdCapitalized())
+                .append(
+                    getNameUncapitalized(),
+                    t_OtherInstance.getNameUncapitalized())
+                .append(
+                    getParameters(),
+                    t_OtherInstance.getParameters())
+                .append(
+                    getResultClass(),
+                    t_OtherInstance.getResultClass())
+                .append(
+                    getResultIdAsConstant(),
+                    t_OtherInstance.getResultIdAsConstant())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
+    }
 }

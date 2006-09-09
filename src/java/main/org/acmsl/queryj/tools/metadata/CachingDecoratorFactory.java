@@ -167,7 +167,6 @@ public class CachingDecoratorFactory
         return new CachingTableDecorator(table, metadataManager);
     }
 
-
     /**
      * Creates a <code>ForeignKeyDecorator</code>.
      * @param sourceTableName the name of the source table.
@@ -188,5 +187,86 @@ public class CachingDecoratorFactory
                 attributes,
                 targetTableName,
                 allowsNull);
+    }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-2052006173, 772040777)
+                .appendSuper(super.hashCode())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof DecoratorFactory)
+        {
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(object))
+                .isEquals();
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        ClassCastException exceptionToThrow = null;
+
+        if  (object instanceof DecoratorFactory)
+        {
+            result = 0;
+        }
+        else
+        {
+            exceptionToThrow =
+                new ClassCastException(
+                      "Cannot compare "
+                    + object
+                    + " with "
+                    + toString());
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw  exceptionToThrow;
+        }
+
+        return result;
     }
 }

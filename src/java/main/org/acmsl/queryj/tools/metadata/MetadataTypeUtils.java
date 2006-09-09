@@ -140,4 +140,43 @@ public class MetadataTypeUtils
 
         return result;
     }
+
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-2052006153, 987877993)
+                .appendSuper(super.hashCode())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        return
+            new org.apache.commons.lang.builder.EqualsBuilder()
+                .appendSuper(super.equals(object))
+            .isEquals();
+    }
 }

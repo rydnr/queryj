@@ -605,4 +605,53 @@ public class CustomResultUtils
     {
         return "~plural--" + tableName;
     }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-1682907411, 790802603)
+                .appendSuper(super.hashCode())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof CustomResultUtils)
+        {
+            final CustomResultUtils t_OtherInstance =
+                (CustomResultUtils) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                .isEquals();
+        }
+
+        return result;
+    }
+
 }

@@ -229,4 +229,117 @@ public abstract class AbstractField
     {
         return m__cFieldFks;
     }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("type", getType())
+                .append("pk", isPk())
+                .append("keyword", getKeyword())
+                .append("retrievalQuery", getRetrievalQuery())
+                .append("fieldFks", getFieldFks())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-2052006159, 737950259)
+                .appendSuper(super.hashCode())
+                .append(getType())
+                .append(isPk())
+                .append(getKeyword())
+                .append(getRetrievalQuery())
+                .append(getFieldFks())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof AbstractField)
+        {
+            final Field t_OtherInstance = (Field) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        isPk(),
+                        t_OtherInstance.isPk())
+                    .append(
+                        getKeyword(),
+                        t_OtherInstance.getKeyword())
+                    .append(
+                        getRetrievalQuery(),
+                        t_OtherInstance.getRetrievalQuery())
+                    .append(
+                        getFieldFks(),
+                        t_OtherInstance.getFieldFks())
+                .isEquals();
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof Field)
+        {
+            final Field t_OtherInstance = (Field) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    isPk(),
+                    t_OtherInstance.isPk())
+                .append(
+                    getKeyword(),
+                    t_OtherInstance.getKeyword())
+                .append(
+                    getRetrievalQuery(),
+                    t_OtherInstance.getRetrievalQuery())
+                .append(
+                    getFieldFks(),
+                    t_OtherInstance.getFieldFks())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
+    }
 }

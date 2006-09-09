@@ -44,6 +44,7 @@ package org.acmsl.queryj.tools.metadata.vo;
  *         >Jose San Leandro</a>
  */
 public interface Attribute
+    extends  java.lang.Comparable
 {
     /**
      * Retrieves the attribute name.

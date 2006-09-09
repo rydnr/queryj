@@ -380,4 +380,152 @@ public class CachingResultDecorator
 
         return result;
     }
+
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("cachedIdNormalized", getCachedIdNormalized())
+                .append("cachedIdCapitalized", getCachedIdCapitalized())
+                .append("cachedMultiple", getCachedMultiple())
+                .append("cachedIdNormalizedUppercased", getCachedIdNormalizedUppercased())
+                .append("cachedProperties", getCachedProperties())
+                .append("cachedLobProperties", getCachedLobProperties())
+                .toString();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof CachingResultDecorator)
+        {
+            final CachingResultDecorator t_OtherInstance =
+                (CachingResultDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getCachedIdNormalized(),
+                        t_OtherInstance.getCachedIdNormalized())
+                    .append(
+                        getIdNormalized(),
+                        t_OtherInstance.getIdNormalized())
+                    .append(
+                        getCachedIdCapitalized(),
+                        t_OtherInstance.getCachedIdCapitalized())
+                    .append(
+                        getIdCapitalized(),
+                        t_OtherInstance.getIdCapitalized())
+                    .append(
+                        getCachedIdNormalizedUppercased(),
+                        t_OtherInstance.getCachedIdNormalizedUppercased())
+                    .append(
+                        getIdNormalizedUppercased(),
+                        t_OtherInstance.getIdNormalizedUppercased())
+                    .append(
+                        getCachedMultiple(),
+                        t_OtherInstance.getCachedMultiple())
+                    .append(
+                        isMultiple(),
+                        t_OtherInstance.isMultiple())
+                    .append(
+                        getCachedProperties(),
+                        t_OtherInstance.getCachedProperties())
+                    .append(
+                        getProperties(),
+                        t_OtherInstance.getProperties())
+                    .append(
+                        getCachedLobProperties(),
+                        t_OtherInstance.getCachedLobProperties())
+                    .append(
+                        getLobProperties(),
+                        t_OtherInstance.getLobProperties())
+                .isEquals();
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof CachingResultDecorator)
+        {
+            final CachingResultDecorator t_OtherInstance =
+                (CachingResultDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getCachedIdNormalized(),
+                    t_OtherInstance.getCachedIdNormalized())
+                .append(
+                    getIdNormalized(),
+                    t_OtherInstance.getIdNormalized())
+                .append(
+                    getCachedIdCapitalized(),
+                    t_OtherInstance.getCachedIdCapitalized())
+                .append(
+                    getIdCapitalized(),
+                    t_OtherInstance.getIdCapitalized())
+                .append(
+                    getCachedIdNormalizedUppercased(),
+                    t_OtherInstance.getCachedIdNormalizedUppercased())
+                .append(
+                    getIdNormalizedUppercased(),
+                    t_OtherInstance.getIdNormalizedUppercased())
+                .append(
+                    getCachedMultiple(),
+                    t_OtherInstance.getCachedMultiple())
+                .append(
+                    isMultiple(),
+                    t_OtherInstance.isMultiple())
+                .append(
+                    getCachedProperties(),
+                    t_OtherInstance.getCachedProperties())
+                .append(
+                    getProperties(),
+                    t_OtherInstance.getProperties())
+                .append(
+                    getCachedLobProperties(),
+                    t_OtherInstance.getCachedLobProperties())
+                .append(
+                    getLobProperties(),
+                    t_OtherInstance.getLobProperties())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
+    }
 }

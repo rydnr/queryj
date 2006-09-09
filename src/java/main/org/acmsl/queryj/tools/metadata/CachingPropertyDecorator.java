@@ -581,4 +581,204 @@ public class CachingPropertyDecorator
 
         return result.booleanValue();
     }
+
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("cachedJavaType", getCachedJavaType())
+                .append("cachedObjectType", getCachedObjectType())
+                .append("cachedNameUppercased", getCachedNameUppercased())
+                .append("cachedNameLowercased", getCachedNameLowercased())
+                .append("cachedNumberSmallerThanInt", getCachedNumberSmallerThanInt())
+                .append("cachedNameCapitalized", getCachedNameCapitalized())
+                .append("cachedColumnNameNormalizedCapitalized", getCachedColumnNameNormalizedCapitalized())
+                .append("cachedColumnNameCapitalized", getCachedColumnNameCapitalized())
+                .append("cachedColumnNameNormalizedUncapitalized", getCachedColumnNameNormalizedUncapitalized())
+                .append("cachedDate", getCachedDate())
+                .toString();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof CachingPropertyDecorator)
+        {
+            final CachingPropertyDecorator t_OtherInstance =
+                (CachingPropertyDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getCachedJavaType(),
+                        t_OtherInstance.getCachedJavaType())
+                    .append(
+                        getJavaType(),
+                        t_OtherInstance.getJavaType())
+                    .append(
+                        getCachedNameLowercased(),
+                        t_OtherInstance.getCachedNameLowercased())
+                    .append(
+                        getNameLowercased(),
+                        t_OtherInstance.getNameLowercased())
+                    .append(
+                        getCachedNameUppercased(),
+                        t_OtherInstance.getCachedNameUppercased())
+                    .append(
+                        getNameUppercased(),
+                        t_OtherInstance.getNameUppercased())
+                    .append(
+                        getCachedNameCapitalized(),
+                        t_OtherInstance.getCachedNameCapitalized())
+                    .append(
+                        getNameCapitalized(),
+                        t_OtherInstance.getNameCapitalized())
+                    .append(
+                        getCachedObjectType(),
+                        t_OtherInstance.getCachedObjectType())
+                    .append(
+                        getObjectType(),
+                        t_OtherInstance.getObjectType())
+                    .append(
+                        getCachedNumberSmallerThanInt(),
+                        t_OtherInstance.getCachedNumberSmallerThanInt())
+                    .append(
+                        getNumberSmallerThanInt(),
+                        t_OtherInstance.getNumberSmallerThanInt())
+                    .append(
+                        getCachedColumnNameNormalizedCapitalized(),
+                        t_OtherInstance.getCachedColumnNameNormalizedCapitalized())
+                    .append(
+                        getColumnNameNormalizedCapitalized(),
+                        t_OtherInstance.getColumnNameNormalizedCapitalized())
+                    .append(
+                        getCachedColumnNameCapitalized(),
+                        t_OtherInstance.getCachedColumnNameCapitalized())
+                    .append(
+                        getColumnNameCapitalized(),
+                        t_OtherInstance.getColumnNameCapitalized())
+                    .append(
+                        getCachedColumnNameNormalizedUncapitalized(),
+                        t_OtherInstance.getCachedColumnNameNormalizedUncapitalized())
+                    .append(
+                        getColumnNameNormalizedUncapitalized(),
+                        t_OtherInstance.getColumnNameNormalizedUncapitalized())
+                    .append(
+                        getCachedDate(),
+                        t_OtherInstance.getCachedDate())
+                    .append(
+                        isDate(),
+                        t_OtherInstance.isDate())
+                .isEquals();
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof CachingPropertyDecorator)
+        {
+            final CachingPropertyDecorator t_OtherInstance =
+                (CachingPropertyDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getCachedJavaType(),
+                    t_OtherInstance.getCachedJavaType())
+                .append(
+                    getJavaType(),
+                    t_OtherInstance.getJavaType())
+                .append(
+                    getCachedNameLowercased(),
+                    t_OtherInstance.getCachedNameLowercased())
+                .append(
+                    getNameLowercased(),
+                    t_OtherInstance.getNameLowercased())
+                .append(
+                    getCachedNameUppercased(),
+                    t_OtherInstance.getCachedNameUppercased())
+                .append(
+                    getNameUppercased(),
+                    t_OtherInstance.getNameUppercased())
+                .append(
+                    getCachedNameCapitalized(),
+                    t_OtherInstance.getCachedNameCapitalized())
+                .append(
+                    getNameCapitalized(),
+                    t_OtherInstance.getNameCapitalized())
+                .append(
+                    getCachedObjectType(),
+                    t_OtherInstance.getCachedObjectType())
+                .append(
+                    getObjectType(),
+                    t_OtherInstance.getObjectType())
+                .append(
+                    getCachedNumberSmallerThanInt(),
+                    t_OtherInstance.getCachedNumberSmallerThanInt())
+                .append(
+                    getNumberSmallerThanInt(),
+                    t_OtherInstance.getNumberSmallerThanInt())
+                .append(
+                    getCachedColumnNameNormalizedCapitalized(),
+                    t_OtherInstance.getCachedColumnNameNormalizedCapitalized())
+                .append(
+                    getColumnNameNormalizedCapitalized(),
+                    t_OtherInstance.getColumnNameNormalizedCapitalized())
+                .append(
+                    getCachedColumnNameCapitalized(),
+                    t_OtherInstance.getCachedColumnNameCapitalized())
+                .append(
+                    getColumnNameCapitalized(),
+                    t_OtherInstance.getColumnNameCapitalized())
+                .append(
+                    getCachedColumnNameNormalizedUncapitalized(),
+                    t_OtherInstance.getCachedColumnNameNormalizedUncapitalized())
+                .append(
+                    getColumnNameNormalizedUncapitalized(),
+                    t_OtherInstance.getColumnNameNormalizedUncapitalized())
+                .append(
+                    getCachedDate(),
+                    t_OtherInstance.getCachedDate())
+                .append(
+                    isDate(),
+                    t_OtherInstance.isDate())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
+    }
 }

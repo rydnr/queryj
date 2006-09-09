@@ -118,4 +118,85 @@ public abstract class AbstractIdElement
               getClass().getName()
             + "[" + "id=" + id + "]";
     }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-1682907411, 786895267)
+                .appendSuper(super.hashCode())
+                .append(getId())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof IdentifiableElement)
+        {
+            final IdentifiableElement t_OtherInstance =
+                (IdentifiableElement) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getId(),
+                        t_OtherInstance.getId())
+                .isEquals();
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        ClassCastException exceptionToThrow = null;
+
+        if  (object instanceof IdentifiableElement)
+        {
+                final IdentifiableElement t_OtherInstance =
+                    (IdentifiableElement) object;
+
+                result =
+                    new org.apache.commons.lang.builder.CompareToBuilder()
+                        .append(getId(), t_OtherInstance.getId())
+                        .toComparison();
+        }
+        else
+        {
+            exceptionToThrow =
+                new ClassCastException(
+                      "Cannot compare "
+                    + object
+                    + " with "
+                    + toString());
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw  exceptionToThrow;
+        }
+
+        return result;
+    }
 }

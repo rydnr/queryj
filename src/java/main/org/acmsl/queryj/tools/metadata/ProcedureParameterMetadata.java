@@ -210,4 +210,109 @@ public class ProcedureParameterMetadata
     {
         return m__iNullable;
     }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("dataType", getDataType())
+                .append("length", getLength())
+                .append("nullable", getNullable())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-2052006179, 772726967)
+                .appendSuper(super.hashCode())
+                .append(getDataType())
+                .append(getLength())
+                .append(getNullable())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof ProcedureParameterMetadata)
+        {
+            final ProcedureParameterMetadata t_OtherInstance =
+                (ProcedureParameterMetadata) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getDataType(),
+                        t_OtherInstance.getDataType())
+                    .append(
+                        getLength(),
+                        t_OtherInstance.getLength())
+                    .append(
+                        getNullable(),
+                        t_OtherInstance.getNullable())
+                .isEquals();
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof ProcedureParameterMetadata)
+        {
+            final ProcedureParameterMetadata t_OtherInstance =
+                (ProcedureParameterMetadata) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getDataType(),
+                    t_OtherInstance.getDataType())
+                .append(
+                    getLength(),
+                    t_OtherInstance.getLength())
+                .append(
+                    getNullable(),
+                    t_OtherInstance.getNullable())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
+    }
 }

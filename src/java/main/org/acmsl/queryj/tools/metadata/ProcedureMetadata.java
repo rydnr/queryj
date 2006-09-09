@@ -168,4 +168,117 @@ public class ProcedureMetadata
     {
         return m__strComment;
     }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("name", getName())
+                .append("type", getType())
+                .append("comment", getComment())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-2052006161, 638986823)
+                .appendSuper(super.hashCode())
+                .append(m__strName)
+                .append(m__iType)
+                .append(m__strComment)
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof ProcedureMetadata)
+        {
+            final ProcedureMetadata t_OtherInstance =
+                (ProcedureMetadata) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getName(),
+                        t_OtherInstance.getName())
+                    .append(
+                        getType(),
+                        t_OtherInstance.getType())
+                    .append(
+                        getComment(),
+                        t_OtherInstance.getComment())
+                .isEquals();
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        ClassCastException exceptionToThrow = null;
+
+        if  (object instanceof ProcedureMetadata)
+        {
+            final ProcedureMetadata t_OtherInstance =
+                (ProcedureMetadata) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getName(),
+                    t_OtherInstance.getName())
+                .append(
+                    getType(),
+                    t_OtherInstance.getType())
+                .append(
+                    getComment(),
+                    t_OtherInstance.getComment())
+                .toComparison();
+        }
+        else
+        {
+            exceptionToThrow =
+                new ClassCastException(
+                    "Cannot compare "
+                    + object
+                    + " with "
+                    + toString());
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw  exceptionToThrow;
+        }
+
+        return result;
+    }
 }

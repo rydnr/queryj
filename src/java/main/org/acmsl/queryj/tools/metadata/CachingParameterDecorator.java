@@ -368,4 +368,152 @@ public class CachingParameterDecorator
         
         return result.booleanValue();
     }
+
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("cachedSqlType", getCachedSqlType())
+                .append("cachedObjectType", getCachedObjectType())
+                .append("cachedIsObject", getCachedIsObject())
+                .append("cachedFieldType", getCachedFieldType())
+                .append("cachedNameLowercased", getCachedNameLowercased())
+                .append("cachedIsClob", getCachedIsClob())
+                .toString();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof CachingParameterDecorator)
+        {
+            final CachingParameterDecorator t_OtherInstance =
+                (CachingParameterDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getCachedSqlType(),
+                        t_OtherInstance.getCachedSqlType())
+                    .append(
+                        getSqlType(),
+                        t_OtherInstance.getSqlType())
+                    .append(
+                        getCachedObjectType(),
+                        t_OtherInstance.getCachedObjectType())
+                    .append(
+                        getObjectType(),
+                        t_OtherInstance.getObjectType())
+                    .append(
+                        getCachedIsObject(),
+                        t_OtherInstance.getCachedIsObject())
+                    .append(
+                        isObject(),
+                        t_OtherInstance.isObject())
+                    .append(
+                        getCachedFieldType(),
+                        t_OtherInstance.getCachedFieldType())
+                    .append(
+                        getFieldType(),
+                        t_OtherInstance.getFieldType())
+                    .append(
+                        getCachedNameLowercased(),
+                        t_OtherInstance.getCachedNameLowercased())
+                    .append(
+                        getNameLowercased(),
+                        t_OtherInstance.getNameLowercased())
+                    .append(
+                        getCachedIsClob(),
+                        t_OtherInstance.getCachedIsClob())
+                    .append(
+                        isClob(),
+                        t_OtherInstance.isClob())
+                .isEquals();
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof CachingParameterDecorator)
+        {
+            final CachingParameterDecorator t_OtherInstance =
+                (CachingParameterDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getCachedSqlType(),
+                    t_OtherInstance.getCachedSqlType())
+                .append(
+                    getSqlType(),
+                    t_OtherInstance.getSqlType())
+                .append(
+                    getCachedObjectType(),
+                    t_OtherInstance.getCachedObjectType())
+                .append(
+                    getObjectType(),
+                    t_OtherInstance.getObjectType())
+                .append(
+                    getCachedIsObject(),
+                    t_OtherInstance.getCachedIsObject())
+                .append(
+                    isObject(),
+                    t_OtherInstance.isObject())
+                .append(
+                    getCachedFieldType(),
+                    t_OtherInstance.getCachedFieldType())
+                .append(
+                    getFieldType(),
+                    t_OtherInstance.getFieldType())
+                .append(
+                    getCachedNameLowercased(),
+                    t_OtherInstance.getCachedNameLowercased())
+                .append(
+                    getNameLowercased(),
+                    t_OtherInstance.getNameLowercased())
+                .append(
+                    getCachedIsClob(),
+                    t_OtherInstance.getCachedIsClob())
+                .append(
+                    isClob(),
+                    t_OtherInstance.isClob())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
+    }
 }

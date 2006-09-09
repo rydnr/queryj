@@ -171,5 +171,116 @@ public abstract class AbstractRow
     {
         return m__cAttributes;
     }
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("name", getName())
+                .append("tableName", getTableName())
+                .append("attributes", getAttributes())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-2052006155, 1067893523)
+                .appendSuper(super.hashCode())
+                .append(getName())
+                .append(getTableName())
+                .append(getAttributes())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof Row)
+        {
+            final Row t_OtherInstance = (Row) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getName(),
+                        t_OtherInstance.getName())
+                    .append(
+                        getTableName(),
+                        t_OtherInstance.getTableName())
+                    .append(
+                        getAttributes(),
+                        t_OtherInstance.getAttributes())
+                .isEquals();
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        ClassCastException exceptionToThrow = null;
+
+        if  (object instanceof Row)
+        {
+            final Row t_OtherInstance = (Row) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getName(),
+                    t_OtherInstance.getName())
+                .append(
+                    getTableName(),
+                    t_OtherInstance.getTableName())
+                .append(
+                    getAttributes(),
+                    t_OtherInstance.getAttributes())
+                .toComparison();
+        }
+        else
+        {
+            exceptionToThrow =
+                new ClassCastException(
+                      "Cannot compare "
+                    + object
+                    + " with "
+                    + toString());
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw  exceptionToThrow;
+        }
+
+        return result;
+    }
 }
 

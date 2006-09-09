@@ -66,41 +66,8 @@ import java.util.Collection;
  */
 public class ConnectionFlagsElement
     extends  AbstractIdElement
+    implements  ConnectionFlags
 {
-    /**
-     * The <b>TRANSACTION_NONE</b> value for
-     * <i>transactionisolation</i> attribute.
-     */
-    public static final String TRANSACTION_NONE = "TRANSACTION_NONE";
-
-    /**
-     * The <b>TRANSACTION_READ_COMMITTED</b> value for
-     * <i>transactionisolation</i> attribute.
-     */
-    public static final String TRANSACTION_READ_COMMITTED =
-        "TRANSACTION_READ_COMMITTED";
-
-    /**
-     * The <b>TRANSACTION_READ_UNCOMMITTED</b> value for
-     * <i>transactionisolation</i> attribute.
-     */
-    public static final String TRANSACTION_READ_UNCOMMITTED =
-        "TRANSACTION_READ_UNCOMMITTED";
-
-    /**
-     * The <b>TRANSACTION_REPEATABLE_READ</b> value for
-     * <i>transactionisolation</i> attribute.
-     */
-    public static final String TRANSACTION_REPEATABLE_READ =
-        "TRANSACTION_REPEATABLE_READ";
-
-    /**
-     * The <b>TRANSACTION_SERIALIZABLE</b> value for
-     * <i>transactionisolation</i> attribute.
-     */
-    public static final String TRANSACTION_SERIALIZABLE =
-        "TRANSACTION_SERIALIZABLE";
-
     /**
      * The <i>transactionisolation</i> attribute.
      */
@@ -173,5 +140,87 @@ public class ConnectionFlagsElement
               getClass().getName()
             + "[" + "id=" + id + "]"
             + "[" + "transactionIsolation=" + transactionIsolation + "]";
+    }
+
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-1682907421, 626306293)
+                .appendSuper(super.hashCode())
+                .append(getTransactionIsolation())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof ConnectionFlags)
+        {
+            final ConnectionFlags t_OtherInstance = (ConnectionFlags) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getTransactionIsolation(),
+                        t_OtherInstance.getTransactionIsolation())
+                .isEquals();
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        ClassCastException exceptionToThrow = null;
+
+        if  (object instanceof ConnectionFlags)
+        {
+            final ConnectionFlags t_OtherInstance = (ConnectionFlags) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getTransactionIsolation(),
+                    t_OtherInstance.getTransactionIsolation())
+                .toComparison();
+        }
+        else
+        {
+            exceptionToThrow =
+                new ClassCastException(
+                      "Cannot compare "
+                    + object
+                    + " with "
+                    + toString());
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw  exceptionToThrow;
+        }
+
+        return result;
     }
 }

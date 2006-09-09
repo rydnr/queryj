@@ -59,6 +59,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  */
 public abstract class AbstractParameterElement
     extends  AbstractIdElement
+    implements  Parameter
 {
     /**
      * The <i>column_name</i> attribute.
@@ -87,6 +88,8 @@ public abstract class AbstractParameterElement
      * @param index the <i>index</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
+     * @precondition id != null
+     * @precondition type != null
      */
     protected AbstractParameterElement(
         final String id,
@@ -248,5 +251,108 @@ public abstract class AbstractParameterElement
             + "[" + "index=" + index + "]"
             + "[" + "name=" + name + "]"
             + "[" + "type=" + type + "]";
+    }
+
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-1682907425, 860212091)
+                .appendSuper(super.hashCode())
+                .append(getColumnName())
+                .append(getIndex())
+                .append(getName())
+                .append(getType())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof Parameter)
+        {
+            final Parameter t_OtherInstance = (Parameter) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getColumnName(),
+                        t_OtherInstance.getColumnName())
+                    .append(
+                        getIndex(),
+                        t_OtherInstance.getIndex())
+                    .append(
+                        getName(),
+                        t_OtherInstance.getName())
+                    .append(
+                        getType(),
+                        t_OtherInstance.getType())
+                .isEquals();
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        ClassCastException exceptionToThrow = null;
+
+        if  (object instanceof Parameter)
+        {
+                final Parameter t_OtherInstance = (Parameter) object;
+
+                result =
+                    new org.apache.commons.lang.builder.CompareToBuilder()
+                        .append(
+                            getColumnName(),
+                            t_OtherInstance.getColumnName())
+                        .append(
+                            getIndex(),
+                            t_OtherInstance.getIndex())
+                        .append(
+                            getName(),
+                            t_OtherInstance.getName())
+                        .append(
+                            getType(),
+                            t_OtherInstance.getType())
+                        .toComparison();
+        }
+        else
+        {
+            exceptionToThrow =
+                new ClassCastException(
+                      "Cannot compare "
+                    + object
+                    + " with "
+                    + toString());
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw  exceptionToThrow;
+        }
+
+        return result;
     }
 }

@@ -62,6 +62,11 @@ public class TableDecorator
     extends AbstractTable
 {
     /**
+     * The decorated table.
+     */
+    private Table m__Table;
+
+    /**
      * The metadata type manager.
      */
     private MetadataManager m__MetadataManager;
@@ -78,6 +83,8 @@ public class TableDecorator
         final Table table, final MetadataManager metadataManager)
     {
         this(table.getName(), metadataManager);
+
+        immutableSetTable(table);
     }
 
     /**
@@ -88,12 +95,39 @@ public class TableDecorator
      * @precondition name != null
      * @precondition metadataManager != null
      */
-    public TableDecorator(
+    protected TableDecorator(
         final String name, final MetadataManager metadataManager)
     {
         super(name);
 
         immutableSetMetadataManager(metadataManager);
+    }
+
+    /**
+     * Specifies the table to decorate.
+     * @param table the table.
+     */
+    protected final void immutableSetTable(final Table table)
+    {
+        m__Table = table;
+    }
+
+    /**
+     * Specifies the table to decorate.
+     * @param table the table.
+     */
+    protected void setTable(final Table table)
+    {
+        immutableSetTable(table);
+    }
+
+    /**
+     * Retrieves the decorated table.
+     * @return such table.
+     */
+    public Table getTable()
+    {
+        return m__Table;
     }
 
     /**
@@ -411,4 +445,167 @@ public class TableDecorator
         return lowerCase(getSingularNameUppercased());
     }
 
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("metadataManager", getMetadataManager())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return hashCode(getTable());
+    }
+
+    /**
+     * Retrieves the hash code associated to given table.
+     * @param table the table.
+     * @return such information.
+     * @precondition table != null
+     */
+    protected int hashCode(final Table table)
+    {
+        return hashCode(getTable());
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof TableDecorator)
+        {
+            final TableDecorator t_OtherInstance =
+                (TableDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getMetadataManager(),
+                        t_OtherInstance.getMetadataManager())
+                    .append(
+                        getNameUppercased(),
+                        t_OtherInstance.getNameUppercased())
+                    .append(
+                        getNameCapitalized(),
+                        t_OtherInstance.getNameCapitalized())
+                    .append(
+                        getNameLowercased(),
+                        t_OtherInstance.getNameLowercased())
+                    .append(
+                        getUncapitalizedName(),
+                        t_OtherInstance.getUncapitalizedName())
+                    .append(
+                        getVoName(),
+                        t_OtherInstance.getVoName())
+                    .append(
+                        getNameNormalizedLowercased(),
+                        t_OtherInstance.getNameNormalizedLowercased())
+                    .append(
+                        getSingularNameNormalizedLowercased(),
+                        t_OtherInstance.getSingularNameNormalizedLowercased())
+                    .append(
+                        getNameNormalized(),
+                        t_OtherInstance.getNameNormalized())
+                    .append(
+                        getSingularNameCapitalized(),
+                        t_OtherInstance.getSingularNameCapitalized())
+                    .append(
+                        getSingularNameUppercased(),
+                        t_OtherInstance.getSingularNameUppercased())
+                    .append(
+                        getSingularNameLowercased(),
+                        t_OtherInstance.getSingularNameLowercased())
+                .isEquals();
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        ClassCastException exceptionToThrow = null;
+
+        if  (object instanceof TableDecorator)
+        {
+            final TableDecorator t_OtherInstance =
+                (TableDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getMetadataManager(),
+                    t_OtherInstance.getMetadataManager())
+                .append(
+                    getNameUppercased(),
+                    t_OtherInstance.getNameUppercased())
+                .append(
+                    getNameCapitalized(),
+                    t_OtherInstance.getNameCapitalized())
+                .append(
+                    getNameLowercased(),
+                    t_OtherInstance.getNameLowercased())
+                .append(
+                    getUncapitalizedName(),
+                    t_OtherInstance.getUncapitalizedName())
+                .append(
+                    getVoName(),
+                    t_OtherInstance.getVoName())
+                .append(
+                    getNameNormalizedLowercased(),
+                    t_OtherInstance.getNameNormalizedLowercased())
+                .append(
+                    getSingularNameNormalizedLowercased(),
+                    t_OtherInstance.getSingularNameNormalizedLowercased())
+                .append(
+                    getNameNormalized(),
+                    t_OtherInstance.getNameNormalized())
+                .append(
+                    getSingularNameCapitalized(),
+                    t_OtherInstance.getSingularNameCapitalized())
+                .append(
+                    getSingularNameUppercased(),
+                    t_OtherInstance.getSingularNameUppercased())
+                .append(
+                    getSingularNameLowercased(),
+                    t_OtherInstance.getSingularNameLowercased())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
+    }
 }

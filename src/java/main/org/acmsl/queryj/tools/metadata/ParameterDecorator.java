@@ -53,6 +53,11 @@ public class ParameterDecorator
     extends  ParameterElement
 {
     /**
+     * The decorated parameter.
+     */
+    private ParameterElement m__Parameter;
+
+    /**
      * The metadata type manager.
      */
     private MetadataTypeManager m__MetadataTypeManager;
@@ -76,9 +81,38 @@ public class ParameterDecorator
             parameter.getType(),
             parameter.getValidationValue());
 
+        immutableSetParameter(parameter);
         immutableSetMetadataTypeManager(metadataTypeManager);
     }
 
+    /**
+     * Specifies the parameter to decorate.
+     * @param parameter the parameter.
+     */
+    protected final void immutableSetParameter(
+        final ParameterElement parameter)
+    {
+        m__Parameter = parameter;
+    }
+
+    /**
+     * Specifies the parameter to decorate.
+     * @param parameter the parameter.
+     */
+    protected void setParameter(final ParameterElement parameter)
+    {
+        immutableSetParameter(parameter);
+    }
+
+    /**
+     * Retrieves the decorated parameter.
+     * @return such instance.
+     */
+    public ParameterElement getParameter()
+    {
+        return m__Parameter;
+    }
+    
     /**
      * Specifies the metadata type manager.
      * @param metadataTypeManager such instance.
@@ -275,5 +309,144 @@ public class ParameterDecorator
     {
         return
             metadataTypeManager.isClob(metadataTypeManager.getJavaType(type));
+    }
+
+
+    /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("metadataTypeManager", getMetadataTypeManager())
+                .toString();
+    }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return hashCode(getParameter());
+    }
+
+    /**
+     * Retrieves the hash code associated to given instance.
+     * @param parameter the parameter.
+     * @return such information.
+     * @precondition parameter != null
+     */
+    protected int hashCode(final ParameterElement parameter)
+    {
+        return parameter.hashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof ParameterDecorator)
+        {
+            final ParameterDecorator t_OtherInstance =
+                (ParameterDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getMetadataTypeManager(),
+                        t_OtherInstance.getMetadataTypeManager())
+                    .append(
+                        getSqlType(),
+                        t_OtherInstance.getSqlType())
+                    .append(
+                        getObjectType(),
+                        t_OtherInstance.getObjectType())
+                    .append(
+                        isObject(),
+                        t_OtherInstance.isObject())
+                    .append(
+                        isString(),
+                        t_OtherInstance.isString())
+                    .append(
+                        getFieldType(),
+                        t_OtherInstance.getFieldType())
+                    .append(
+                        getNameLowercased(),
+                        t_OtherInstance.getNameLowercased())
+                    .append(
+                        isClob(),
+                        t_OtherInstance.isClob())
+                .isEquals();
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof ParameterDecorator)
+        {
+            final ParameterDecorator t_OtherInstance =
+                (ParameterDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getMetadataTypeManager(),
+                    t_OtherInstance.getMetadataTypeManager())
+                .append(
+                    getSqlType(),
+                    t_OtherInstance.getSqlType())
+                .append(
+                    getObjectType(),
+                    t_OtherInstance.getObjectType())
+                .append(
+                    isObject(),
+                    t_OtherInstance.isObject())
+                .append(
+                    isString(),
+                    t_OtherInstance.isString())
+                .append(
+                    getFieldType(),
+                    t_OtherInstance.getFieldType())
+                .append(
+                    getNameLowercased(),
+                    t_OtherInstance.getNameLowercased())
+                .append(
+                    isClob(),
+                    t_OtherInstance.isClob())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
     }
 }

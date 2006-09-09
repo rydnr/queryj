@@ -365,4 +365,36 @@ public class DecorationUtils
     {
         return stringUtils.escape(value, charToEscape);
     }
+
+    /**
+     * Retrieves the hash code associated to this instance.
+     * @return such information.
+     */
+    public int hashCode()
+    {
+        return
+            new org.apache.commons.lang.builder.HashCodeBuilder(-2052006157, 587765573)
+                .appendSuper(super.hashCode())
+                .toHashCode();
+    }
+
+    /**
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    public boolean equals(final Object object)
+    {
+        boolean result = false;
+
+        if  (object instanceof DecorationUtils)
+        {
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(object))
+                .isEquals();
+        }
+
+        return result;
+    }
 }

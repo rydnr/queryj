@@ -512,10 +512,31 @@ public abstract class AbstractResultDecorator
     }
 
     /**
+     * Provides a text representation of the information
+     * contained in this instance.
+     * @return such information.
+     */
+    public String toString()
+    {
+        return
+            new org.apache.commons.lang.builder.ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("decoratorFactory", getDecoratorFactory())
+                .append("idCapitalized", getIdCapitalized())
+                .append("idNormalized", getIdNormalized())
+                .append("idNormalizedUppercased", getIdNormalizedUppercased())
+                .append("lobProperties", getLobProperties())
+                .append("properties", getProperties())
+                .append("customSqlProvider", getCustomSqlProvider())
+                .append("metadataManager", getMetadataManager())
+                .toString();
+    }
+
+    /**
      * Retrieves the hashcode.
      * @return such value.
      */
-    public int hashCode()
+    public final int hashCode()
     {
         return hashCode(getResult());
     }
@@ -526,37 +547,113 @@ public abstract class AbstractResultDecorator
      * @return such value.
      * @precondition result != null
      */
-    protected int hashCode(final Result result)
+    protected final int hashCode(final Result result)
     {
         return result.hashCode();
     }
 
     /**
-     * Checks whether given instance is semantically equivalent to this one.
-     * @param instance the instance to compare with.
-     * @return the result of the check.
+     * Checks whether given object is semantically equal to this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
      */
-    public boolean equals(final Object instance)
-    {
-        return equals(instance, getResult());
-    }
-
-    /**
-     * Checks whether given instance is semantically equivalent to this one.
-     * @param instance the instance to compare with.
-     * @param wrappedResult the wrapped result.
-     * @return the result of the check.
-     * @precondition wrappedResult != null
-     */
-    protected boolean equals(
-        final Object instance, final Result wrappedResult)
+    public boolean equals(final Object object)
     {
         boolean result = false;
 
-        if  (   (instance != null)
-             && (instance instanceof Result))
+        if  (object instanceof AbstractResultDecorator)
         {
-            result = instance.equals(wrappedResult);
+            final AbstractResultDecorator t_OtherInstance =
+                (AbstractResultDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.EqualsBuilder()
+                    .appendSuper(super.equals(t_OtherInstance))
+                    .append(
+                        getDecoratorFactory(),
+                        t_OtherInstance.getDecoratorFactory())
+                    .append(
+                        getMetadataManager(),
+                        t_OtherInstance.getMetadataManager())
+                    .append(
+                        getCustomSqlProvider(),
+                        t_OtherInstance.getCustomSqlProvider())
+                    .append(
+                        isMultiple(),
+                        t_OtherInstance.isMultiple())
+                    .append(
+                        getIdNormalized(),
+                        t_OtherInstance.getIdNormalized())
+                    .append(
+                        getIdNormalizedUppercased(),
+                        t_OtherInstance.getIdNormalizedUppercased())
+                    .append(
+                        getProperties(),
+                        t_OtherInstance.getProperties())
+                    .append(
+                        getLobProperties(),
+                        t_OtherInstance.getLobProperties())
+                .isEquals();
+        }
+        else
+        {
+            result = super.equals(object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof AbstractResultDecorator)
+        {
+            final AbstractResultDecorator t_OtherInstance =
+                (AbstractResultDecorator) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getResult(),
+                    t_OtherInstance.getResult())
+                .append(
+                    getMetadataManager(),
+                    t_OtherInstance.getMetadataManager())
+                .append(
+                    getDecoratorFactory(),
+                    t_OtherInstance.getDecoratorFactory())
+                .append(
+                    getCustomSqlProvider(),
+                    t_OtherInstance.getCustomSqlProvider())
+                .append(
+                    getIdNormalized(),
+                    t_OtherInstance.getIdNormalized())
+                .append(
+                    getIdNormalizedUppercased(),
+                    t_OtherInstance.getIdNormalizedUppercased())
+                .append(
+                    isMultiple(),
+                    t_OtherInstance.isMultiple())
+                .append(
+                    getLobProperties(),
+                    t_OtherInstance.getLobProperties())
+                .append(
+                    getProperties(),
+                    t_OtherInstance.getProperties())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
         }
 
         return result;

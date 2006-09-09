@@ -27,65 +27,60 @@
                     28660 Madrid
                     Spain
 
- *****************************************************************************
+ ******************************************************************************
  *
  * Filename: $RCSfile: $
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Defines the ways an Attribute can be decorated.
+ * Description: Models <parameter> elements in custom-sql models.
  *
  */
-package org.acmsl.queryj.tools.metadata;
+package org.acmsl.queryj.tools.customsql;
 
 /*
- * Importing project classes.
+ * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Decorator;
+import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 
 /**
- * Defines the ways an <code>Attribute</code> can be decorated.
+ * Models elements in <i>custom-sql</i> models, which
+ * satisfy the following DTD extract (to describe the model even in
+ * non-xml implementations):
+ *   <!ELEMENT <i>element</i> EMPTY>
+ *  <!ATTLIST <i>element</i>
+ *    id ID #REQUIRED
+ *    column_name CDATA #IMPLIED
+ *    index CDATA #IMPLIED
+ *    name CDATA #IMPLIED
+ *    type CDATA #REQUIRED>
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface AttributeDecorator
-    extends  Attribute,
-             Decorator,
-             java.lang.Comparable
+public interface Parameter
+    extends  java.lang.Comparable
 {
     /**
-     * Retrieves the decorated <code>Attribute</code>.
-     * @return such instance.
+     * Retrieves the <i>column_name</i> attribute.
+     * @return such value.
      */
-    public Attribute getAttribute();
+    public String getColumnName();
 
     /**
-     * Retrieves whether the attribute is a clob or not.
-     * return such information.
+     * Retrieves the <i>index</i> attribute.
+     * @return such value.
      */
-    public boolean isClob();
+    public int getIndex();
 
     /**
-     * Retrieves whether the attribute is a string or not.
-     * return such information.
+     * Retrieves the <i>name</i> attribute.
+     * @return such value.
      */
-    public boolean isString();
+    public String getName();
 
     /**
-     * Retrieves whether the attribute is a date or not.
-     * return such information.
+     * Retrieves the <i>type</i> attribute.
+     * @return such value.
      */
-    public boolean isDate();
-
-    /**
-     * Retrieves whether the type means the attribute is a
-     * number smaller than an int.
-     * @return such condition.
-     */
-    public boolean isNumberSmallerThanInt();
+    public String getType();
 }

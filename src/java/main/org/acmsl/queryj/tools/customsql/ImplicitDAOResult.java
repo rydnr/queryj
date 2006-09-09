@@ -231,4 +231,39 @@ public class ImplicitDAOResult
             + "[" + "daoRef=" + daoRef + "]"
             + "[" + "property-refs=" + propertyRefs + "]";
     }
+
+    /**
+     * Compares given object with this instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     */
+    public int compareTo(final Object object)
+        throws  ClassCastException
+    {
+        int result = 1;
+
+        if  (object instanceof ImplicitDAOResult)
+        {
+            final ImplicitDAOResult t_OtherInstance =
+                (ImplicitDAOResult) object;
+
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    getDaoRef(),
+                    t_OtherInstance.getDaoRef())
+                .append(
+                    getClassValue(),
+                    t_OtherInstance.getClassValue())
+                .toComparison();
+        }
+        else
+        {
+            result = super.compareTo(object);
+        }
+
+        return result;
+    }
 }
