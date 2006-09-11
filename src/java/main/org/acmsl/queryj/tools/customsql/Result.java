@@ -55,7 +55,8 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public interface Result
-    extends  IdentifiableElement
+    extends  IdentifiableElement,
+             java.lang.Comparable
 {
     /**
      * The <b>none</b> value for <i>matches</i> attribute.

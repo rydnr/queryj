@@ -127,7 +127,6 @@ public abstract class AbstractIdElement
     {
         return
             new org.apache.commons.lang.builder.HashCodeBuilder(-1682907411, 786895267)
-                .appendSuper(super.hashCode())
                 .append(getId())
                 .toHashCode();
     }
@@ -148,7 +147,6 @@ public abstract class AbstractIdElement
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
-                    .appendSuper(super.equals(t_OtherInstance))
                     .append(
                         getId(),
                         t_OtherInstance.getId())

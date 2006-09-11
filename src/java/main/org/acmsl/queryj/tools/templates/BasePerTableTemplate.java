@@ -944,7 +944,9 @@ public abstract class BasePerTableTemplate
         input.put("referring_vo_names", toVoNames(t_cReferringTables));
         input.put(
             "own_foreign_keys",
-            buildOwnForeignKeysMap(foreignKeys, tableName));
+            buildOwnForeignKeyList(
+                tableName, t_cReferringTables, referringKeys));
+        //debugReferringKeys(t_cReferringTables, referringKeys, foreignKeys);
         input.put("custom_selects", customSelects);
         input.put("custom_updates_or_inserts", customUpdatesOrInserts);
         input.put("custom_selects_for_update", customSelectsForUpdate);
@@ -962,7 +964,8 @@ public abstract class BasePerTableTemplate
      * externally.
      * @param allowsNull if the attribute allows nulls.
      * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition input != null
      * @precondition staticAttributeName != null
@@ -1391,37 +1394,145 @@ public abstract class BasePerTableTemplate
     }
 
     /**
-     * Builds the map of the foreign keys starting and ending on given table.
-     * @param foreignKeys the foreign keys.
+     * Builds the list of the foreign keys starting and ending on given table.
      * @param tableName the table name.
+     * @param referringTables the referring tables.
+     * @param referringKeys the referring keys.
      * @return such map.
      * @precondition foreignKeys != null
      * @precondition tableName != null
      */
-    protected Map buildOwnForeignKeysMap(
-        final ForeignKey[] foreignKeys,
-        final String tableName)
+    protected List buildOwnForeignKeyList(
+        final String tableName,
+        final Collection referringTables,
+        final Map referringKeys)
     {
-        Map result = new HashMap();
+        List result = new ArrayList();
 
-        int t_iCount = (foreignKeys != null) ? foreignKeys.length : 0;
+        Iterator t_Iterator =
+            (referringTables != null) ? referringTables.iterator() : null;
 
-        ForeignKey t_ForeignKey;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        if  (t_Iterator != null)
         {
-            t_ForeignKey = foreignKeys[t_iIndex];
+            String t_strReferringTable;
+            ForeignKey[] t_aFks;
+            int t_iCount;
+            boolean t_bOwn;
 
-            if  (   (t_ForeignKey != null)
-                 && (tableName.equalsIgnoreCase(
-                         t_ForeignKey.getSourceTableName())
-                 && (tableName.equalsIgnoreCase(
-                         t_ForeignKey.getTargetTableName()))))
+            while  (t_Iterator.hasNext())
             {
-                result.put(t_ForeignKey, Boolean.TRUE);
+                t_strReferringTable = "" + t_Iterator.next();
+
+                t_aFks =
+                    (ForeignKey[]) referringKeys.get(t_strReferringTable);
+
+                t_bOwn = t_strReferringTable.equals(tableName);
+
+                t_iCount = (t_aFks != null) ? t_aFks.length : 0;
+
+                for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+                {
+                    result.add((t_bOwn) ? Boolean.TRUE : null);
+                }
             }
         }
 
         return result;
+    }
+
+    /**
+     * Debugs the referringTable->foreignKeys map.
+     * @param referringTables the referring tables.
+     * @param map the map.
+     * @param foreignKeys the foreign keys.
+     * @precondition referringTables != null
+     * @precondition map != null
+     */
+    protected void debugReferringKeys(
+        final Collection referringTables,
+        final Map map,
+        final ForeignKey[] foreignKeys)
+    {
+        org.apache.commons.logging.Log t_Log =
+            org.acmsl.commons.logging.UniqueLogFactory.getLog(
+                BasePerTableTemplate.class);
+
+        Iterator t_Iterator =
+            (referringTables != null)
+            ? referringTables.iterator() : null;
+
+        StringBuffer t_sbMessage;
+
+        if  (t_Iterator != null)
+        {
+            String t_strReferringTable;
+            ForeignKey[] t_aForeignKeys;
+            t_sbMessage = new StringBuffer();
+
+            while  (t_Iterator.hasNext())
+            {
+                t_strReferringTable = "" + t_Iterator.next();
+                t_aForeignKeys = (ForeignKey[]) map.get(t_strReferringTable);
+
+                t_sbMessage.append(t_strReferringTable);
+                t_sbMessage.append("->");
+
+                for  (int t_iIndex = 0; t_iIndex < t_aForeignKeys.length; t_iIndex++)
+                {
+                    t_sbMessage.append("[");
+                    t_sbMessage.append(
+                        concat(t_aForeignKeys[t_iIndex].getAttributes(), ","));
+
+                    t_sbMessage.append("]@");
+                    t_sbMessage.append(
+                        "" + t_aForeignKeys[t_iIndex].hashCode());
+                }
+            }
+            t_Log.info("Referring keys: " + t_sbMessage);
+        }
+
+        if  (foreignKeys != null)
+        {
+            t_sbMessage = new StringBuffer();
+
+            for  (int t_iIndex = 0; t_iIndex < foreignKeys.length; t_iIndex++)
+            {
+                t_sbMessage.append("[");
+                t_sbMessage.append(
+                    concat(foreignKeys[t_iIndex].getAttributes(), ","));
+
+                t_sbMessage.append("]@");
+                t_sbMessage.append(
+                    "" + foreignKeys[t_iIndex].hashCode());
+            }
+            t_Log.info("Foreign keys: " + t_sbMessage);
+        }
+    }
+
+    /**
+     * Concatenates given list.
+     * @param list the list.
+     * @param separator the separator.
+     * @precondition list != null
+     */
+    protected String concat(final Collection list, final String separator)
+    {
+        return concat(list, separator, StringUtils.getInstance());
+    }
+
+    /**
+     * Concatenates given list.
+     * @param list the list.
+     * @param separator the separator.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @precondition list != null
+     * @precondition stringUtils != null
+     */
+    protected String concat(
+        final Collection list,
+        final String separator,
+        final StringUtils stringUtils)
+    {
+        return stringUtils.concatenate(list, separator);
     }
 }

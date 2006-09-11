@@ -787,93 +787,19 @@ public abstract class AbstractAttributeDecorator
      */
     public boolean equals(final Object object)
     {
-        boolean result = false;
+        return equals(getAttribute(), object);
+    }
 
-        if  (object instanceof AbstractAttributeDecorator)
-        {
-            final AbstractAttributeDecorator t_OtherInstance =
-                (AbstractAttributeDecorator) object;
-
-            result =
-                new org.apache.commons.lang.builder.EqualsBuilder()
-                    .appendSuper(super.equals(t_OtherInstance))
-                    .append(
-                        getAttribute(),
-                        t_OtherInstance.getAttribute())
-                    .append(
-                        getMetadataManager(),
-                        t_OtherInstance.getMetadataManager())
-                    .append(
-                        getMetadataTypeManager(),
-                        t_OtherInstance.getMetadataTypeManager())
-                    .append(
-                        getNameUppercased(),
-                        t_OtherInstance.getNameUppercased())
-                    .append(
-                        getNameCapitalized(),
-                        t_OtherInstance.getNameCapitalized())
-                    .append(
-                        getNameUncapitalized(),
-                        t_OtherInstance.getNameUncapitalized())
-                    .append(
-                        getNameLowercased(),
-                        t_OtherInstance.getNameLowercased())
-                    .append(
-                        getUncapitalizedTableName(),
-                        t_OtherInstance.getUncapitalizedTableName())
-                    .append(
-                        getVoName(),
-                        t_OtherInstance.getVoName())
-                    .append(
-                        getJavaName(),
-                        t_OtherInstance.getJavaName())
-                    .append(
-                        getGetterMethod(),
-                        t_OtherInstance.getGetterMethod())
-                    .append(
-                        isPrimitive(),
-                        t_OtherInstance.isPrimitive())
-                    .append(
-                        getObjectType(),
-                        t_OtherInstance.getObjectType())
-                    .append(
-                        isClob(),
-                        t_OtherInstance.isClob())
-                    .append(
-                        isString(),
-                        t_OtherInstance.isString())
-                    .append(
-                        isDate(),
-                        t_OtherInstance.isDate())
-                    .append(
-                        getQuery(),
-                        t_OtherInstance.getQuery())
-                    .append(
-                        getQueryJFieldType(),
-                        t_OtherInstance.getQueryJFieldType())
-                    .append(
-                        getStatementSetterFieldType(),
-                        t_OtherInstance.getStatementSetterFieldType())
-                    .append(
-                        getTableNameUppercased(),
-                        t_OtherInstance.getTableNameUppercased())
-                    .append(
-                        getTableNameNormalizedLowercased(),
-                        t_OtherInstance.getTableNameNormalizedLowercased())
-                    .append(
-                        isNumberSmallerThanInt(),
-                        t_OtherInstance.isNumberSmallerThanInt())
-                    .append(
-                        getJavaType(),
-                        t_OtherInstance.getJavaType())
-                .isEquals();
-        }
-        else
-        {
-            result = super.equals(object);
-        }
-
-        return result;
+    /**
+     * Checks whether given object is semantically equal to given attribute.
+     * @param attribute the decorated attribute.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @precondition attribute != null
+     */
+    protected boolean equals(final Attribute attribute, final Object object)
+    {
+        return attribute.equals(object);
     }
 
     /**
@@ -886,93 +812,21 @@ public abstract class AbstractAttributeDecorator
     public int compareTo(final Object object)
         throws  ClassCastException
     {
-        int result = 1;
+        return compareTo(getAttribute(), object);
+    }
 
-        ClassCastException exceptionToThrow = null;
-
-        if  (object instanceof AbstractAttributeDecorator)
-        {
-            final AbstractAttributeDecorator t_OtherInstance =
-                (AbstractAttributeDecorator) object;
-
-            result =
-                new org.apache.commons.lang.builder.CompareToBuilder()
-                .append(
-                    getAttribute(),
-                    t_OtherInstance.getAttribute())
-                .append(
-                    getMetadataManager(),
-                    t_OtherInstance.getMetadataManager())
-                .append(
-                    getMetadataTypeManager(),
-                    t_OtherInstance.getMetadataTypeManager())
-                .append(
-                    getNameUppercased(),
-                    t_OtherInstance.getNameUppercased())
-                .append(
-                    getNameCapitalized(),
-                    t_OtherInstance.getNameCapitalized())
-                .append(
-                    getNameUncapitalized(),
-                    t_OtherInstance.getNameUncapitalized())
-                .append(
-                    getNameLowercased(),
-                    t_OtherInstance.getNameLowercased())
-                .append(
-                    getUncapitalizedTableName(),
-                    t_OtherInstance.getUncapitalizedTableName())
-                .append(
-                    getVoName(),
-                    t_OtherInstance.getVoName())
-                .append(
-                    getJavaName(),
-                    t_OtherInstance.getJavaName())
-                .append(
-                    getGetterMethod(),
-                    t_OtherInstance.getGetterMethod())
-                .append(
-                    isPrimitive(),
-                    t_OtherInstance.isPrimitive())
-                .append(
-                    getObjectType(),
-                    t_OtherInstance.getObjectType())
-                .append(
-                    isClob(),
-                    t_OtherInstance.isClob())
-                .append(
-                    isString(),
-                    t_OtherInstance.isString())
-                .append(
-                    isDate(),
-                    t_OtherInstance.isDate())
-                .append(
-                    getQuery(),
-                    t_OtherInstance.getQuery())
-                .append(
-                    getQueryJFieldType(),
-                    t_OtherInstance.getQueryJFieldType())
-                .append(
-                    getStatementSetterFieldType(),
-                    t_OtherInstance.getStatementSetterFieldType())
-                .append(
-                    getTableNameUppercased(),
-                    t_OtherInstance.getTableNameUppercased())
-                .append(
-                    getTableNameNormalizedLowercased(),
-                    t_OtherInstance.getTableNameNormalizedLowercased())
-                .append(
-                    isNumberSmallerThanInt(),
-                    t_OtherInstance.isNumberSmallerThanInt())
-                .append(
-                    getJavaType(),
-                    t_OtherInstance.getJavaType())
-                .toComparison();
-        }
-        else
-        {
-            result = super.compareTo(object);
-        }
-
-        return result;
+    /**
+     * Compares given object with this instance.
+     * @param attribute the decorated attribute.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     * @precondition attribute != null
+     */
+    protected int compareTo(final Attribute attribute, final Object object)
+        throws  ClassCastException
+    {
+        return attribute.compareTo(object);
     }
 }

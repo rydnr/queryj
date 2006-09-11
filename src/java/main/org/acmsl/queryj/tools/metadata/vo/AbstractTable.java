@@ -102,7 +102,6 @@ public abstract class AbstractTable
     {
         return
             new org.apache.commons.lang.builder.ToStringBuilder(this)
-                .appendSuper(super.toString())
                 .append("name", getName())
                 .toString();
     }
@@ -115,7 +114,6 @@ public abstract class AbstractTable
     {
         return
             new org.apache.commons.lang.builder.HashCodeBuilder(-2052006159, 836073109)
-                .appendSuper(super.hashCode())
                 .append(getName())
                 .toHashCode();
     }

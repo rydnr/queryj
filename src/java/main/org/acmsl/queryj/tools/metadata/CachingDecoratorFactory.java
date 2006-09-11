@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKeyValueObject;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -183,10 +184,11 @@ public class CachingDecoratorFactory
     {
         return
             new CachingForeignKeyDecorator(
-                sourceTableName,
-                attributes,
-                targetTableName,
-                allowsNull);
+                new ForeignKeyValueObject(
+                    sourceTableName,
+                    attributes,
+                    targetTableName,
+                    allowsNull));
     }
 
     /**

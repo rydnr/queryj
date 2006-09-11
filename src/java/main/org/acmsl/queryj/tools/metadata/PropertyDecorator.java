@@ -43,13 +43,19 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.customsql.Property;
 
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Decorator;
+
 /**
  * Decorates &lt;property&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public interface PropertyDecorator
-    extends  Property
+    extends  Property,
+             Decorator
 {
     /**
      * Retrieves the property.

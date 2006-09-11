@@ -518,18 +518,18 @@ public abstract class AbstractResultDecorator
      */
     public String toString()
     {
-        return
-            new org.apache.commons.lang.builder.ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("decoratorFactory", getDecoratorFactory())
-                .append("idCapitalized", getIdCapitalized())
-                .append("idNormalized", getIdNormalized())
-                .append("idNormalizedUppercased", getIdNormalizedUppercased())
-                .append("lobProperties", getLobProperties())
-                .append("properties", getProperties())
-                .append("customSqlProvider", getCustomSqlProvider())
-                .append("metadataManager", getMetadataManager())
-                .toString();
+        return toString(getResult());
+    }
+
+    /**
+     * Provides a text representation of the information
+     * contained in given instance.
+     * @param result the decorated result.
+     * @return such information.
+     */
+    protected String toString(final Result result)
+    {
+        return "" + result;
     }
 
     /**
@@ -542,8 +542,8 @@ public abstract class AbstractResultDecorator
     }
 
     /**
-     * Retrieves the hashcode.
-     * @param result the result element.
+     * Retrieves the hashcode of given instance.
+     * @param result the decoreated result.
      * @return such value.
      * @precondition result != null
      */
@@ -559,48 +559,17 @@ public abstract class AbstractResultDecorator
      */
     public boolean equals(final Object object)
     {
-        boolean result = false;
+        return equals(getResult(), object);
+    }
 
-        if  (object instanceof AbstractResultDecorator)
-        {
-            final AbstractResultDecorator t_OtherInstance =
-                (AbstractResultDecorator) object;
-
-            result =
-                new org.apache.commons.lang.builder.EqualsBuilder()
-                    .appendSuper(super.equals(t_OtherInstance))
-                    .append(
-                        getDecoratorFactory(),
-                        t_OtherInstance.getDecoratorFactory())
-                    .append(
-                        getMetadataManager(),
-                        t_OtherInstance.getMetadataManager())
-                    .append(
-                        getCustomSqlProvider(),
-                        t_OtherInstance.getCustomSqlProvider())
-                    .append(
-                        isMultiple(),
-                        t_OtherInstance.isMultiple())
-                    .append(
-                        getIdNormalized(),
-                        t_OtherInstance.getIdNormalized())
-                    .append(
-                        getIdNormalizedUppercased(),
-                        t_OtherInstance.getIdNormalizedUppercased())
-                    .append(
-                        getProperties(),
-                        t_OtherInstance.getProperties())
-                    .append(
-                        getLobProperties(),
-                        t_OtherInstance.getLobProperties())
-                .isEquals();
-        }
-        else
-        {
-            result = super.equals(object);
-        }
-
-        return result;
+    /**
+     * Checks whether given object is semantically equal to given instance.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     */
+    protected boolean equals(final Result result, final Object object)
+    {
+        return result.equals(object);
     }
 
     /**
@@ -613,49 +582,21 @@ public abstract class AbstractResultDecorator
     public int compareTo(final Object object)
         throws  ClassCastException
     {
-        int result = 1;
+        return compareTo(getResult(), object);
+    }
 
-        if  (object instanceof AbstractResultDecorator)
-        {
-            final AbstractResultDecorator t_OtherInstance =
-                (AbstractResultDecorator) object;
-
-            result =
-                new org.apache.commons.lang.builder.CompareToBuilder()
-                .append(
-                    getResult(),
-                    t_OtherInstance.getResult())
-                .append(
-                    getMetadataManager(),
-                    t_OtherInstance.getMetadataManager())
-                .append(
-                    getDecoratorFactory(),
-                    t_OtherInstance.getDecoratorFactory())
-                .append(
-                    getCustomSqlProvider(),
-                    t_OtherInstance.getCustomSqlProvider())
-                .append(
-                    getIdNormalized(),
-                    t_OtherInstance.getIdNormalized())
-                .append(
-                    getIdNormalizedUppercased(),
-                    t_OtherInstance.getIdNormalizedUppercased())
-                .append(
-                    isMultiple(),
-                    t_OtherInstance.isMultiple())
-                .append(
-                    getLobProperties(),
-                    t_OtherInstance.getLobProperties())
-                .append(
-                    getProperties(),
-                    t_OtherInstance.getProperties())
-                .toComparison();
-        }
-        else
-        {
-            result = super.compareTo(object);
-        }
-
-        return result;
+    /**
+     * Compares given object with given instance.
+     * @param result the decorated result.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     * @precondition result != null
+     */
+    protected int compareTo(final Result result, final Object object)
+        throws  ClassCastException
+    {
+        return result.compareTo(object);
     }
 }

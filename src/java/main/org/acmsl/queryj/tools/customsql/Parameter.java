@@ -58,7 +58,8 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  *         >Jose San Leandro</a>
  */
 public interface Parameter
-    extends  java.lang.Comparable
+    extends  IdentifiableElement,
+             java.lang.Comparable
 {
     /**
      * Retrieves the <i>column_name</i> attribute.

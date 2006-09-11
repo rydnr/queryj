@@ -181,7 +181,6 @@ public abstract class AbstractRow
     {
         return
             new org.apache.commons.lang.builder.ToStringBuilder(this)
-                .appendSuper(super.toString())
                 .append("name", getName())
                 .append("tableName", getTableName())
                 .append("attributes", getAttributes())
@@ -196,7 +195,6 @@ public abstract class AbstractRow
     {
         return
             new org.apache.commons.lang.builder.HashCodeBuilder(-2052006155, 1067893523)
-                .appendSuper(super.hashCode())
                 .append(getName())
                 .append(getTableName())
                 .append(getAttributes())
@@ -218,7 +216,6 @@ public abstract class AbstractRow
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
-                    .appendSuper(super.equals(t_OtherInstance))
                     .append(
                         getName(),
                         t_OtherInstance.getName())

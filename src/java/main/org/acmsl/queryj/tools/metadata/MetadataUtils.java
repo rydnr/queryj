@@ -241,10 +241,11 @@ public class MetadataUtils
 
                 t_CurrentFk =
                     new CachingForeignKeyDecorator(
-                        t_astrReferredTables[t_iIndex],
-                        t_cAttributes,
-                        tableName,
-                        t_bAllowsNullAsAWhole);
+                        new ForeignKeyValueObject(
+                            t_astrReferredTables[t_iIndex],
+                            t_cAttributes,
+                            tableName,
+                            t_bAllowsNullAsAWhole));
 
                 result.add(t_CurrentFk);
             }

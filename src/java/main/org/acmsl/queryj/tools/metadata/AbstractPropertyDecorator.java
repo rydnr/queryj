@@ -544,66 +544,19 @@ public abstract class AbstractPropertyDecorator
      */
     public boolean equals(final Object object)
     {
-        boolean result = false;
+        return equals(getProperty(), object);
+    }
 
-        if  (object instanceof AbstractPropertyDecorator)
-        {
-            final AbstractPropertyDecorator t_OtherInstance =
-                (AbstractPropertyDecorator) object;
-
-            result =
-                new org.apache.commons.lang.builder.EqualsBuilder()
-                    .appendSuper(super.equals(t_OtherInstance))
-                    .append(
-                        getProperty(),
-                        t_OtherInstance.getProperty())
-                    .append(
-                        getMetadataManager(),
-                        t_OtherInstance.getMetadataManager())
-                    .append(
-                        getMetadataTypeManager(),
-                        t_OtherInstance.getMetadataTypeManager())
-                    .append(
-                        getJavaType(),
-                        t_OtherInstance.getJavaType())
-                    .append(
-                        getObjectType(),
-                        t_OtherInstance.getObjectType())
-                    .append(
-                        getNameLowercased(),
-                        t_OtherInstance.getNameLowercased())
-                    .append(
-                        getNameUppercased(),
-                        t_OtherInstance.getNameUppercased())
-                    .append(
-                        getNameCapitalized(),
-                        t_OtherInstance.getNameCapitalized())
-                    .append(
-                        getAllowsNull(),
-                        t_OtherInstance.getAllowsNull())
-                    .append(
-                        isPrimitive(),
-                        t_OtherInstance.isPrimitive())
-                    .append(
-                        isNumberSmallerThanInt(),
-                        t_OtherInstance.isNumberSmallerThanInt())
-                    .append(
-                        getColumnNameCapitalized(),
-                        t_OtherInstance.getColumnNameCapitalized())
-                    .append(
-                        getColumnNameNormalizedCapitalized(),
-                        t_OtherInstance.getColumnNameNormalizedCapitalized())
-                    .append(
-                        getColumnNameNormalizedUncapitalized(),
-                        t_OtherInstance.getColumnNameNormalizedUncapitalized())
-                .isEquals();
-        }
-        else
-        {
-            result = super.equals(object);
-        }
-
-        return result;
+    /**
+     * Checks whether given object is semantically equal to given instance.
+     * @param property the decorated property.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @precondition property != null
+     */
+    protected boolean equals(final Property property, final Object object)
+    {
+        return property.equals(object);
     }
 
     /**
@@ -616,64 +569,21 @@ public abstract class AbstractPropertyDecorator
     public int compareTo(final Object object)
         throws  ClassCastException
     {
-        int result = 1;
+        return compareTo(getProperty(), object);
+    }
 
-        if  (object instanceof AbstractPropertyDecorator)
-        {
-            final AbstractPropertyDecorator t_OtherInstance =
-                (AbstractPropertyDecorator) object;
-
-            result =
-                new org.apache.commons.lang.builder.CompareToBuilder()
-                .append(
-                    getProperty(),
-                    t_OtherInstance.getProperty())
-                .append(
-                    getMetadataManager(),
-                    t_OtherInstance.getMetadataManager())
-                .append(
-                    getMetadataTypeManager(),
-                    t_OtherInstance.getMetadataTypeManager())
-                .append(
-                    getJavaType(),
-                    t_OtherInstance.getJavaType())
-                .append(
-                    getObjectType(),
-                    t_OtherInstance.getObjectType())
-                .append(
-                    getNameLowercased(),
-                    t_OtherInstance.getNameLowercased())
-                .append(
-                    getNameUppercased(),
-                    t_OtherInstance.getNameUppercased())
-                .append(
-                    getNameCapitalized(),
-                    t_OtherInstance.getNameCapitalized())
-                .append(
-                    getAllowsNull(),
-                    t_OtherInstance.getAllowsNull())
-                .append(
-                    isPrimitive(),
-                    t_OtherInstance.isPrimitive())
-                .append(
-                    isNumberSmallerThanInt(),
-                    t_OtherInstance.isNumberSmallerThanInt())
-                .append(
-                    getColumnNameCapitalized(),
-                    t_OtherInstance.getColumnNameCapitalized())
-                .append(
-                    getColumnNameNormalizedCapitalized(),
-                    t_OtherInstance.getColumnNameNormalizedCapitalized())
-                .append(
-                    getColumnNameNormalizedUncapitalized(),
-                    t_OtherInstance.getColumnNameNormalizedUncapitalized())
-                .toComparison();
-        }
-        else
-        {
-            result = super.compareTo(object);
-        }
-
-        return result;
+    /**
+     * Compares given object with given instance.
+     * @param property the decorated property.
+     * @param object the object to compare to.
+     * @return the result of such comparison.
+     * @throws ClassCastException if the type of the specified
+     * object prevents it from being compared to this Object.
+     * @precondition property != null
+     */
+    protected int compareTo(final Property property, final Object object)
+        throws  ClassCastException
+    {
+        return property.compareTo(object);
     }
 }

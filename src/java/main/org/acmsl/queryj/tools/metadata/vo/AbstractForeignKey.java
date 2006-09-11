@@ -215,7 +215,6 @@ public abstract class AbstractForeignKey
     {
         return
             new org.apache.commons.lang.builder.ToStringBuilder(this)
-                .appendSuper(super.toString())
                 .append("sourceTableName", getSourceTableName())
                 .append("attributes", getAttributes())
                 .append("targetTableName", getTargetTableName())
@@ -231,7 +230,6 @@ public abstract class AbstractForeignKey
     {
         return
             new org.apache.commons.lang.builder.HashCodeBuilder(-2052006169, 996718193)
-                .appendSuper(super.hashCode())
                 .append(getSourceTableName())
                 .append(getAttributes())
                 .append(getTargetTableName())
@@ -254,7 +252,6 @@ public abstract class AbstractForeignKey
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
-                    .appendSuper(super.equals(t_OtherInstance))
                     .append(
                         getSourceTableName(),
                         t_OtherInstance.getSourceTableName())

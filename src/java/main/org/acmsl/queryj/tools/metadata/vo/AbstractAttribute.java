@@ -385,7 +385,6 @@ public abstract class AbstractAttribute
     {
         return
             new org.apache.commons.lang.builder.HashCodeBuilder(-2052006167, 878128337)
-                .appendSuper(super.hashCode())
                 .append(getName())
                 .append(getType())
                 .append(getNativeType())
@@ -412,7 +411,6 @@ public abstract class AbstractAttribute
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
-                    .appendSuper(super.equals(t_OtherInstance))
                     .append(
                         getName(),
                         t_OtherInstance.getName())
