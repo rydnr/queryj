@@ -1010,6 +1010,7 @@ protected static class SelectForUpdateTransactionCallback
 }
 <endif>
 <endif>
+
 >>
 
 resultset_extractor_import(
@@ -1091,6 +1092,7 @@ if  (resultSet.wasNull())
 }
 
 <endif>
+
 >>
 
 String_nullable_attribute_extractor(input) ::= <<
@@ -1173,6 +1175,7 @@ new <attr.objectType>(
 <else>
     resultSet.get<attr.objectType>("<attr.nameUppercased>"));
 <endif>
+
 >>
 
 object_nullable_attribute_extractor(attr) ::= <<
@@ -1197,6 +1200,7 @@ resultSet.getInt("<attr.nameUppercased>");
 <else>
 resultSet.get<attr.objectType>("<attr.nameUppercased>");
 <endif>
+
 >>
 
 attribute_extraction(attr, input) ::= <<
@@ -1211,6 +1215,7 @@ attribute_extraction(attr, input) ::= <<
 <else>
 <default_attribute_extraction(attr)>
 <endif>
+
 >>
 
 default_attribute_extraction(attr) ::= <<
@@ -1227,6 +1232,7 @@ resultSet.getInt(<attr.tableNameUppercased>.<attr.nameUppercased>)
 resultSet.get<attr.objectType>("<attr.nameUppercased>")
 <endif>
 <endif>
+
 >>
 
 default_lobhandling_attribute_extraction(attr) ::= <<
@@ -1252,6 +1258,7 @@ resultSet.get<attr.objectType>("<attr.nameUppercased>")
 <endif>
 <endif>
 <endif>
+
 >>
 
 special_attribute_extraction(attr, input) ::= <<
@@ -1264,6 +1271,7 @@ special_attribute_extraction(attr, input) ::= <<
 <indirect_template(
   name=input.lobHandling+"_special_attribute_extraction", input=attr)>
 <endif>
+
 >>
 
 oracle8_nullable_attribute_extraction(input) ::= <<
@@ -1274,6 +1282,7 @@ oracle8_nullable_attribute_extraction(input) ::= <<
 <if(!input.clob)>
 <default_nullable_attribute_extraction(attr=input)>
 <endif>
+
 >>
 
 oracle8_special_attribute_extraction(input) ::= <<
@@ -1325,6 +1334,8 @@ if  (resultSet.wasNull())
     t_<input.nameCapitalized>As<input.objectType> = null;
 }
 <endif>
+<endif>
+
 >>
 
 oracle8_attribute_extraction(input) ::= <<
@@ -1339,6 +1350,7 @@ oracle8_attribute_extraction(input) ::= <<
 <else>
 <default_lobhandling_attribute_extraction(attr=input)>
 <endif>
+
 >>
 
 Integer_to_primitive(input) ::= <<

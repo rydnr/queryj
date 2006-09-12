@@ -127,8 +127,7 @@ class(input) ::= <<
  */
 public interface <input.tr_name_capitalized>DAO
 {
-    <input.custom_selects:custom_select(
-      cs=it, input=input); separator="\n">
+    <input.custom_selects:custom_select(cs=it, input=input); separator="\n">
 
     <input.custom_updates_or_inserts:custom_update_or_insert(
       cs=it, input=input); separator="\n">
