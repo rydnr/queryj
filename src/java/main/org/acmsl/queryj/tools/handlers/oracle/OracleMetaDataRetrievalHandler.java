@@ -41,14 +41,8 @@ package org.acmsl.queryj.tools.handlers.oracle;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.engines.oracle.Oracle8MetadataManager;
+import org.acmsl.queryj.tools.metadata.engines.oracle.OracleMetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.version.VersionUtils;
 
 /*
  * Importing some Ant classes.
@@ -58,13 +52,7 @@ import org.apache.tools.ant.BuildException;
 /*
  * Importing some JDK classes.
  */
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Retrieves the Oracle metadata.
@@ -90,28 +78,7 @@ public class OracleMetaDataRetrievalHandler
         final int majorVersion,
         final int minorVersion)
     {
-        boolean result = (productName.indexOf("Oracle") > -1);
-
-        if  (result)
-        {
-            result = checkVersion(productVersion, VersionUtils.getInstance());
-        }
-        
-        return result;
-    }
-
-    /**
-     * Checks the engine version.
-     * @param version the version.
-     * @param versionUtils the <code>VersionUtils</code> instance.
-     * @return <code>true</code> if the version matches or is compatible with.
-     * @precondition version != null
-     * @precondition versionUtils != null
-     */
-    protected boolean checkVersion(
-        final String version, final VersionUtils versionUtils)
-    {
-        return versionUtils.matches(version, "8.x");
+        return (productName.indexOf("Oracle") > -1);
     }
 
     /**
@@ -151,7 +118,7 @@ public class OracleMetaDataRetrievalHandler
         try 
         {
             result =
-                new Oracle8MetadataManager(
+                new OracleMetadataManager(
                     tableNames,
                     procedureNames,
                     disableTableExtraction,

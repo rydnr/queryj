@@ -1477,6 +1477,7 @@ public class OracleMetadataManager
      */
     public boolean requiresCustomLobHandling()
     {
+        // TODO: Test whether this is needed.
         return true;
     }
 }
