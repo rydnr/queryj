@@ -54,6 +54,7 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.handlers.oracle.Oracle8MetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.templates.dao.DAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOTemplateHandlerBundle;
@@ -1072,6 +1073,7 @@ public class QueryJTask
             result.add(new CustomSqlProviderRetrievalHandler());
 
             result.add(new MySQL4xMetaDataRetrievalHandler());
+            result.add(new Oracle8MetaDataRetrievalHandler());
             result.add(new OracleMetaDataRetrievalHandler());
             result.add(new JdbcMetaDataRetrievalHandler());
             result.add(new CustomSqlValidationHandler());
