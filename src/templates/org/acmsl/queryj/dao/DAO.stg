@@ -1561,6 +1561,14 @@ protected <input.vo_name> create(
 }
 >>
 
+oracleInsert(input) ::= <<
+<!
+  Generates the insert logic for Oracle.
+  @param input the input.
+!>
+<oracle8Insert(input=input)>
+>>
+
 oracle8Insert(input) ::= <<
 <!
   Generates the insert logic for Oracle8.

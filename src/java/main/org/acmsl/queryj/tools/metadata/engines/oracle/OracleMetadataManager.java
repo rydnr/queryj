@@ -737,27 +737,18 @@ public class OracleMetadataManager
             {
                 SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                t_Query.select(USER_COL_COMMENTS.COLUMN_NAME);
+                t_Query.select(USER_TAB_COLUMNS.COLUMN_NAME);
 
-                // t_Query.select(USER_COL_COMMENTS.COMMENTS);
+                t_Query.from(USER_TAB_COLUMNS);
 
-                t_Query.from(USER_COL_COMMENTS);
+                t_Query.where(USER_TAB_COLUMNS.TABLE_NAME.equals());
 
-                t_Query.from(ALL_TAB_COLUMNS);
-
-                t_Query.where(
-                         USER_COL_COMMENTS.TABLE_NAME.equals()
-                    .and(USER_COL_COMMENTS.TABLE_NAME.equals(
-                             ALL_TAB_COLUMNS.TABLE_NAME))
-                    .and(USER_COL_COMMENTS.COLUMN_NAME.equals(
-                             ALL_TAB_COLUMNS.COLUMN_NAME)));
-
-                t_Query.orderBy(ALL_TAB_COLUMNS.COLUMN_ID);
+                t_Query.orderBy(USER_TAB_COLUMNS.COLUMN_ID);
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
                 t_Query.setString(
-                    USER_COL_COMMENTS.TABLE_NAME.equals(),
+                    USER_TAB_COLUMNS.TABLE_NAME.equals(),
                     tableName);
 
                 /*
@@ -861,7 +852,7 @@ public class OracleMetadataManager
         return
             extractStringFields(
                 resultSet,
-                USER_COL_COMMENTS.COLUMN_NAME);
+                USER_TAB_COLUMNS.COLUMN_NAME);
     }
 
     /**
@@ -937,14 +928,8 @@ public class OracleMetadataManager
 
                 t_Query.from(USER_TAB_COLUMNS);
 
-                t_Query.from(ALL_TAB_COLUMNS);
-
                 t_Query.where(
-                         USER_TAB_COLUMNS.TABLE_NAME.equals()
-                    .and(USER_TAB_COLUMNS.TABLE_NAME.equals(
-                             ALL_TAB_COLUMNS.TABLE_NAME))
-                    .and(USER_TAB_COLUMNS.COLUMN_NAME.equals(
-                             ALL_TAB_COLUMNS.COLUMN_NAME)));
+                    USER_TAB_COLUMNS.TABLE_NAME.equals());
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
@@ -1158,14 +1143,9 @@ public class OracleMetadataManager
                 t_Query.select(USER_TAB_COLUMNS.NULLABLE);
 
                 t_Query.from(USER_TAB_COLUMNS);
-                t_Query.from(ALL_TAB_COLUMNS);
 
                 t_Query.where(
-                         USER_TAB_COLUMNS.TABLE_NAME.equals()
-                    .and(USER_TAB_COLUMNS.TABLE_NAME.equals(
-                             ALL_TAB_COLUMNS.TABLE_NAME))
-                    .and(USER_TAB_COLUMNS.COLUMN_NAME.equals(
-                             ALL_TAB_COLUMNS.COLUMN_NAME)));
+                    USER_TAB_COLUMNS.TABLE_NAME.equals());
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
@@ -1472,10 +1452,20 @@ public class OracleMetadataManager
     }
 
     /**
+     * Checks whether the engine requires specific BLOB handling.
+     * @return <code>true</code> in such case.
+     */
+    public boolean requiresCustomBlobHandling()
+    {
+        // TODO: Test whether this is needed.
+        return true;
+    }
+
+    /**
      * Checks whether the engine requires specific CLOB handling.
      * @return <code>true</code> in such case.
      */
-    public boolean requiresCustomLobHandling()
+    public boolean requiresCustomClobHandling()
     {
         // TODO: Test whether this is needed.
         return true;

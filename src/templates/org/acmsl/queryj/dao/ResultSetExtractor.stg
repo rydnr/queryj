@@ -228,6 +228,14 @@ protected <input.vo_name> extractData(
 }
 >>
 
+oracleExtractor(input) ::= <<
+<!
+ Generates the constructor needed by Oracle LOB management.
+ @param input the input.
+!>
+<oracle8Extractor(input=input)>
+>>
+
 oracle8Extractor(input) ::= <<
 <!
  Generates the constructor needed by Oracle8 LOB management.
@@ -242,7 +250,7 @@ oracle8Extractor(input) ::= <<
 private boolean m__bSelectForUpdateMode;
 
 /**
- * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
+ * Creates a Oracle-based \<code>ResultSetExtractor\</code>
  * to extract <input.vo_name> information, managing LOB stuff.
  * @param selectForUpdateMode whether the result set is the result of
  * the \<i>select for update\</code> (required to perform some operations
@@ -255,7 +263,7 @@ protected <input.vo_name>ResultSetExtractor(
 }
 
 /**
- * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
+ * Creates a Oracle-based \<code>ResultSetExtractor\</code>
  * to extract <input.vo_name> information, managing LOB stuff.
  <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
    separator=",\n">
@@ -273,7 +281,7 @@ public <input.vo_name>ResultSetExtractor(
 }
 
 /**
- * Creates a Oracle8-based \<code>ResultSetExtractor\</code>
+ * Creates a Oracle-based \<code>ResultSetExtractor\</code>
  * to extract <input.vo_name> information, managing LOB stuff.
  */
 public <input.vo_name>ResultSetExtractor()
@@ -661,6 +669,14 @@ special_attribute_extraction(attr, input) ::= <<
 <endif>
 >>
 
+oracle_nullable_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract nullable attributes for Oracle.
+ @param input the attribute.
+!>
+<oracle8_nullable_attribute_extraction(input=input)>
+>>
+
 oracle8_nullable_attribute_extraction(input) ::= <<
 <!
  Generates the code to extract nullable attributes for Oracle8.
@@ -669,6 +685,14 @@ oracle8_nullable_attribute_extraction(input) ::= <<
 <if(!input.clob)>
 <default_nullable_attribute_extraction(attr=input)>
 <endif>
+>>
+
+oracle_special_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract special attributes for Oracle.
+ @param input the attribute.
+!>
+<oracle8_special_attribute_extraction(input=input)>
 >>
 
 oracle8_special_attribute_extraction(input) ::= <<
@@ -690,6 +714,14 @@ if  (resultSet.wasNull())
     t_<input.nameCapitalized>As<input.objectType> = null;
 }
 <endif>
+>>
+
+oracle_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract the attributes for Oracle.
+ @param input the attribute.
+!>
+<oracle8_attribute_extraction(input=input)>
 >>
 
 oracle8_attribute_extraction(input) ::= <<

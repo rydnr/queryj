@@ -459,6 +459,14 @@ special_attribute_extraction(attr, input) ::= <<
 <endif>
 >>
 
+oracle_nullable_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract nullable attributes for Oracle.
+ @param input the attribute.
+!>
+<oracle8_nullable_attribute_extraction(input=input)>
+>>
+
 oracle8_nullable_attribute_extraction(input) ::= <<
 <!
  Generates the code to extract nullable attributes for Oracle8.
@@ -467,6 +475,14 @@ oracle8_nullable_attribute_extraction(input) ::= <<
 <if(!input.clob)>
 <default_nullable_attribute_extraction(attr=input)>
 <endif>
+>>
+
+oracle_special_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract special attributes for Oracle.
+ @param input the attribute.
+!>
+<oracle8_special_attribute_extraction(input=input)>
 >>
 
 oracle8_special_attribute_extraction(input) ::= <<
@@ -488,6 +504,14 @@ if  (resultSet.wasNull())
     t_<input.columnNameNormalizedCapitalized>As<input.objectType> = null;
 }
 <endif>
+>>
+
+oracle_attribute_extraction(input) ::= <<
+<!
+ Generates the code to extract the attributes for Oracle.
+ @param input the attribute.
+!>
+<oracle8_attribute_extraction(input=input)>
 >>
 
 oracle8_attribute_extraction(input) ::= <<

@@ -202,6 +202,15 @@ public class JdbcMetadataManager
     }
 
     /**
+     * Checks whether the engine requires specific BLOB handling.
+     * @return <code>true</code> in such case.
+     */
+    public boolean requiresCustomBlobHandling()
+    {
+        return false;
+    }
+
+    /**
      * Checks whether the engine requires specific CLOB handling.
      * @return <code>true</code> in such case.
      */
