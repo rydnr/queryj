@@ -1,0 +1,260 @@
+/*
+ * Styles for Orange Soft's S5-based presenation theme
+ *
+ * $Id: orangesoft.css,v 1.1 2006/08/24 18:38:07 luque Exp $
+ */
+
+
+/*
+ * Layout related styles
+ */
+
+div#header, div#footer, .slide {width: 100%; top: 0; left: 0;}
+div#header {top: 0; height: 3em; z-index: 1;}
+div#footer {top: auto; bottom: 0; height: 2em; z-index: 5;}
+.slide {top: 0; width: 92%; padding: 3.5em 4% 4%; z-index: 2;  list-style: none;}
+div#controls {left: 50%; bottom: 0; width: 50%; z-index: 100;}
+div#controls form {text-align: right; width: 100%; margin: 0;}
+#currentSlide {position: absolute; width: 10%; left: 45%; bottom: 1em; z-index: 10;}
+html>body #currentSlide {position: fixed;}
+
+
+/*
+ * Look & feel related styles
+ */
+
+body {
+  color: #000; 
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 2.25em; 
+}
+
+/* cleanup browser default styles for headers */
+h1, h2, h3, h4, h5 {
+  font-size: 100%;
+  font-weight: inherit;
+  margin: 0;
+  padding: 0; 
+}
+
+ul, pre {
+  margin: 0; 
+  line-height: 1em;
+}
+
+pre {
+  font-size: 70%;
+}
+
+/* header background */
+div#header {background: transparent url(header.png) repeat-x;}
+
+/* the left orange border */
+div#header, div#footer, .slide {border-left: 15px solid #ffa600;}
+
+div#footer {
+  background: #ccc; 
+  color: #333; 
+  font-size: 0.7em; 
+  padding: .5em 0;
+}
+
+div#header {line-height: 1px;}
+#footer h1 {font-style: italic;}
+#footer h1, #footer h2 {
+  display: block; 
+  padding: 0 1em;
+}
+
+div#controls {
+  position: absolute; 
+  left: 60%; 
+  bottom: 0; 
+  width: 40%;
+  text-align: right; 
+  font: bold 0.8em Verdana, Helvetica, sans-serif;
+}
+
+html>body div#controls {
+  position: fixed; 
+  padding: 0; 
+  top: auto;
+}
+
+#controls #navLinks a {
+  padding: 0; 
+  margin: 0 0.5em; 
+  border: none; 
+  color: #222; 
+  cursor: pointer;
+}
+
+#controls #navList #jumplist,
+#controls #styleList {
+  background: #ddd; 
+  color: #222;
+}
+
+#currentSlide {
+  text-align: center; 
+  font-size: 0.5em; 
+  color: #222;
+}
+
+:link, :visited {
+  text-decoration: none; 
+  color: #7375bd;
+}
+
+#currentSlide a:link, #currentSlide a:visited, 
+#footer a:link, #footer a:visited {
+  color: #222;
+}
+
+#controls :active {color: #88A !important;}
+#controls :focus {outline: 1px dotted #227;}
+
+blockquote, q {font-style: italic;}
+blockquote {padding: 0.5em 2em; margin: 0 1.5em 0.5em; text-align: center; font-size: 1em; color: #666;}
+blockquote p {margin: 0;}
+blockquote i {font-style: normal;}
+blockquote b {display: block; margin-top: 0.5em; font-weight: normal; font-size: smaller; font-style: normal;}
+blockquote b i {font-style: italic;}
+
+kbd {font-weight: bold; font-size: 1em;}
+sup {font-size: smaller; line-height: 1px;}
+
+
+/* Slide styles *********************************************************/
+
+.slide {
+  height: 100%;
+  /*background: transparent url(orange3dtrans.png) right 70% no-repeat;*/ 
+}
+
+.slide ul {
+  margin-left: 5%;
+  margin-right: 7%; 
+  list-style: disc;
+}
+
+.slide li {
+  margin-top: 0.75em; 
+  margin-right: 0;
+}
+
+.slide ul ul {
+  line-height: 1;
+}
+
+.slide ul ul li {
+  margin: .2em; 
+  font-size: 85%; 
+  list-style: square;
+}
+
+.slide img.leader {
+  display: block; 
+  margin: 0 auto;
+}
+
+.slide h1 {
+  margin: -1.2em 0 0 50px; 
+  padding: 0 0 .5em 0; 
+  white-space: nowrap;
+  font: 150%/1em Arial, sans-serif; 
+  color: #21188c;
+}
+
+.slide h3 {font-size: 130%;}
+
+.title {
+    padding-top: 10em;
+    text-align: center;
+}
+
+.title h1 {
+    font-weight: bold;
+}
+
+li.section {text-align: center;}
+li.section h1 {padding: 0; margin: 4em 0 1em 0;}
+
+
+#orangesoft-powered a {
+  position: absolute;
+  top: 0;
+  right: 1.5em;
+  display: block;
+  text-indent: -5000em;
+  width: 124px;
+  height: 25px;
+  text-decoration: none; 
+  background: url("orangesoft-powered.png") no-repeat;
+}
+
+
+div.long {font-size: 0.75em;}
+h1 abbr {font-variant: small-caps;}
+
+
+
+ul.urls {list-style: none; display: inline; margin: 0;}
+.urls li {display: inline; margin: 0;}
+.note {display: none;}
+
+.incremental, .incremental *, .incremental *:after {color: #dde; visibility: visible;}
+img.incremental {visibility: hidden;}
+.slide .current {color: #ffa600;}
+.slide [lang=en] {font-style: italic;}
+
+/* diagnostics
+
+li:after {content: " [" attr(class) "]"; color: #F88;}
+ */
+
+
+/* First slide styles ***************************************************/
+
+#slide0 {
+  background: transparent url(orange3d.png) 90% 70% no-repeat; 
+  padding-top: 3.5em; 
+  padding-left: 5em; 
+  font-size: 90%;
+}
+
+#slide0 h1 {
+  position: static; 
+  margin: 2em 0 0; 
+  padding: 0 2em 0 0; 
+  font: bold 2em Arial, sans-serif; 
+  white-space: normal;
+  color: #21188c; 
+  background: transparent;
+  border: none;
+}
+
+#slide0 h2 {
+  font: bold italic 1.3em Helvetica, sans-serif; 
+  margin: 0.25em 0;
+}
+
+#slide0 h3 {
+  font-size: 1.2em; 
+  font-weight: bold; 
+  margin-top: 3em;
+}
+
+#slide0 h4 {
+  font-size: 1em; 
+  font-weight: normal;
+}
+
+#slide0 h5 {
+  font-size: .7em; 
+  font-weight: normal;
+}
+
+#slide0 #orangesoft-powered {
+  display: none;
+}
