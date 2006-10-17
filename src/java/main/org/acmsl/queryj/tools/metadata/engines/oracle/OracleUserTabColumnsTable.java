@@ -102,6 +102,12 @@ public class OracleUserTabColumnsTable
         new StringField("NULLABLE", this);
 
     /**
+     * The user_tab_columns table column_id field.
+     */
+    public LongField COLUMN_ID =
+        new LongField("COLUMN_ID", this);
+
+    /**
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */

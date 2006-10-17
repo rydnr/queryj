@@ -176,6 +176,15 @@ public class Oracle8MetadataManager
     }
 
     /**
+     * Checks whether the engine requires specific BLOB handling.
+     * @return <code>true</code> in such case.
+     */
+    public boolean requiresCustomBlobHandling()
+    {
+        return true;
+    }
+
+    /**
      * Checks whether the engine requires specific CLOB handling.
      * @return <code>true</code> in such case.
      */
