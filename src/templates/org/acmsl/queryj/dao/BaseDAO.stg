@@ -323,9 +323,10 @@ custom_update_or_insert(cs, input) ::= <<
  * Custom sql \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the number of entities affected.
  * @throws DataAccessException if the operation fails.
  */
-public void <cs.nameUncapitalized>(
+public int <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException;
 >>

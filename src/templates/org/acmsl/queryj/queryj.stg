@@ -350,12 +350,15 @@ custom_update_or_insert(cs, input) ::= <<
  * Custom sql \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the number of entities updated.
  * @throws DataAccessException if the operation fails.
  */
-public void <cs.nameUncapitalized>(
+public int <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException
 {
+    int result = -10;
+
     PreparedStatementCreatorFactory
         preparedStatementCreatorFactory =
             new PreparedStatementCreatorFactory(
@@ -383,27 +386,37 @@ public void <cs.nameUncapitalized>(
     // Enabling transactions temporarily.
     synchronized (DataSourceTransactionManager.class)
     {
-       DataSourceTransactionManager transactionManager =
-           new DataSourceTransactionManager(getDataSource());
-       TransactionTemplate transactionTemplate =
-           new TransactionTemplate(transactionManager);
+        DataSourceTransactionManager transactionManager =
+            new DataSourceTransactionManager(getDataSource());
+        TransactionTemplate transactionTemplate =
+            new TransactionTemplate(transactionManager);
 
-       transactionTemplate.execute(
-           new UpdateTransactionCallback(
-               preparedStatementCreatorFactory
-                  .newPreparedStatementCreator(params),
-               preparedStatementCreatorFactory
-                  .newPreparedStatementSetter(params),
-               this));
+        Object t_Result =
+            transactionTemplate.execute(
+                new UpdateTransactionCallback(
+                    preparedStatementCreatorFactory
+                        .newPreparedStatementCreator(params),
+                    preparedStatementCreatorFactory
+                        .newPreparedStatementSetter(params),
+                    this));
 
-       /*
-       update(
-           t_PreparedStatementCreatorFactory
-              .newPreparedStatementCreator(params),
-           t_PreparedStatementCreatorFactory
-             .newPreparedStatementSetter(params));
-        */
+
+        if  (t_Result instanceof Integer)
+        {
+            result = ((Integer) t_Result).intValue();
+        }
+
+        /*
+        result =
+            update(
+                t_PreparedStatementCreatorFactory
+                   .newPreparedStatementCreator(params),
+                t_PreparedStatementCreatorFactory
+                   .newPreparedStatementSetter(params));
+         */
     }
+
+    return result;
 }
 >>
 
