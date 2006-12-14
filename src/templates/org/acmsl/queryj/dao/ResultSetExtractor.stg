@@ -523,14 +523,16 @@ Date_nullable_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
 !>
-<Timestamp_nullable_attribute_extractor(input=input)>
+resultSet.getTimestamp(
+    "<input.nameUppercased>");
 >>
 
 Date_nullable_clobhandling_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
 !>
-<Timestamp_nullable_clobhandling_attribute_extractor(input=input)>
+resultSet.getTimestamp(
+    "<input.nameUppercased>");
 >>
 
 Timestamp_nullable_attribute_extractor(input) ::= <<

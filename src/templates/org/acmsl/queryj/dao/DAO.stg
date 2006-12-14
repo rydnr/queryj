@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: $RCSfile$
+// Filename: DAO.stg
 //
 // Author: Jose San Leandro Armendariz
 //
@@ -110,6 +110,7 @@ source(input) ::= <<
  */
 import org.acmsl.queryj.DeleteQuery;
 import org.acmsl.queryj.dao.QueryjJdbcTemplate;
+import org.acmsl.queryj.dao.ThreadLocalBag;
 import org.acmsl.queryj.InsertQuery;
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.QueryFactory;
