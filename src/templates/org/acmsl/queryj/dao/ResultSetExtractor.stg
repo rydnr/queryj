@@ -523,32 +523,28 @@ Date_nullable_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
 !>
-resultSet.getTimestamp(
-    "<input.nameUppercased>");
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
 >>
 
 Date_nullable_clobhandling_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
 !>
-resultSet.getTimestamp(
-    "<input.nameUppercased>");
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
 >>
 
 Timestamp_nullable_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
-resultSet.getTimestamp(
-    "<input.nameUppercased>");
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
 >>
 
 Timestamp_nullable_clobhandling_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
-resultSet.getTimestamp(
-    "<input.nameUppercased>");
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
 >>
 
 BigDecimal_nullable_attribute_extractor(input) ::= <<
@@ -587,8 +583,13 @@ new <attr.objectType>(
 <if(attr.numberSmallerThanInt)>
     resultSet.getInt("<attr.nameUppercased>"));
 <else>
+<if(attr.date)>
+    resultSet.getTimestamp("<attr.nameUppercased>"));
+<else>
     resultSet.get<attr.objectType>("<attr.nameUppercased>"));
 <endif>
+<endif>
+
 >>
 
 object_nullable_attribute_extractor(attr) ::= <<
@@ -598,7 +599,11 @@ object_nullable_attribute_extractor(attr) ::= <<
 <if(attr.numberSmallerThanInt)>
     resultSet.getInt(
 <else>
+<if(attr.date)>
+resultSet.getTimestamp(
+<else>
 resultSet.get<attr.objectType>(
+<endif>
 <endif>
 
     "<attr.nameUppercased>");
@@ -611,8 +616,13 @@ object_nullable_clobhandling_attribute_extractor(attr) ::= <<
 <if(attr.numberSmallerThanInt)>
 resultSet.getInt("<attr.nameUppercased>");
 <else>
+<if(attr.date)>
+resultSet.getTimestamp("<attr.nameUppercased>");
+<else>
 resultSet.get<attr.objectType>("<attr.nameUppercased>");
 <endif>
+<endif>
+
 >>
 
 attribute_extraction(attr, input) ::= <<
@@ -640,9 +650,14 @@ t_<attr.nameCapitalized>As<attr.objectType>
 <if(attr.numberSmallerThanInt)>
 resultSet.getInt(<attr.tableNameUppercased>.<attr.nameUppercased>)
 <else>
+<if(attr.date)>
+resultSet.getTimestamp("<attr.nameUppercased>")
+<else>
 resultSet.get<attr.objectType>("<attr.nameUppercased>")
 <endif>
 <endif>
+<endif>
+
 >>
 
 default_clobhandling_attribute_extraction(attr) ::= <<
@@ -656,9 +671,14 @@ t_<attr.nameCapitalized>As<attr.objectType>
 <if(attr.numberSmallerThanInt)>
 resultSet.getInt("<attr.nameUppercased>")
 <else>
+<if(attr.date)>
+resultSet.getTimestamp("<attr.nameUppercased>")
+<else>
 resultSet.get<attr.objectType>("<attr.nameUppercased>")
 <endif>
 <endif>
+<endif>
+
 >>
 
 special_attribute_extraction(attr, input) ::= <<

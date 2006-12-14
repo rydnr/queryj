@@ -313,32 +313,28 @@ Date_nullable_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
 !>
-resultSet.getTimestamp(
-    "<input.nameUppercased>");
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
 >>
 
 Date_nullable_clobhandling_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
 !>
-resultSet.getTimestamp(
-    "<input.nameUppercased>");
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
 >>
 
 Timestamp_nullable_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
-resultSet.getTimestamp(
-    "<input.nameUppercased>");
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
 >>
 
 Timestamp_nullable_clobhandling_attribute_extractor(input) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
-resultSet.getTimestamp(
-    "<input.nameUppercased>");
+<object_nullable_clobhandling_attribute_extractor(attr=input)>
 >>
 
 BigDecimal_nullable_attribute_extractor(input) ::= <<
@@ -388,7 +384,11 @@ object_nullable_attribute_extractor(attr) ::= <<
 <if(attr.numberSmallerThanInt)>
     resultSet.getInt(
 <else>
+<if(attr.date)>
+resultSet.getTimestamp("<attr.nameUppercased>");
+<else>
 resultSet.get<attr.objectType>(
+<endif>
 <endif>
 
     "<attr.columnName>");
@@ -430,9 +430,14 @@ t_<attr.columnNameNormalizedCapitalized>As<attr.objectType>
 <if(attr.numberSmallerThanInt)>
 resultSet.getInt("<attr.columnName>")
 <else>
+<if(attr.date)>
+resultSet.getTimestamp("<attr.columnName>")
+<else>
 resultSet.get<attr.objectType>("<attr.columnName>")
 <endif>
 <endif>
+<endif>
+
 >>
 
 default_clobhandling_attribute_extraction(attr) ::= <<
@@ -446,9 +451,14 @@ t_<attr.columnNameNormalizedCapitalized>As<attr.objectType>
 <if(attr.numberSmallerThanInt)>
 resultSet.getInt("<attr.columnName>")
 <else>
+<if(attr.date)>
+resultSet.getTimestamp("<attr.columnName>")
+<else>
 resultSet.get<attr.objectType>("<attr.columnName>")
 <endif>
 <endif>
+<endif>
+
 >>
 
 special_attribute_extraction(attr, input) ::= <<
