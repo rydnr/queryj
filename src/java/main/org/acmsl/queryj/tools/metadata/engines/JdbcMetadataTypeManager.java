@@ -978,6 +978,17 @@ public class JdbcMetadataTypeManager
     }
 
     /**
+     * Checks if given data type represents dates.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * date.
+     */
+    public boolean isDate(final String dataType)
+    {
+        return "Date".equalsIgnoreCase(dataType);
+    }
+
+    /**
      * Checks if given data type represents timestamps.
      * @param dataType the data type.
      * @return <code>true</code> if such data type can be managed as a
@@ -1000,6 +1011,24 @@ public class JdbcMetadataTypeManager
                 default:
                     break;
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if given data type represents timestamps.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * timestamp.
+     */
+    public boolean isTimestamp(final String dataType)
+    {
+        boolean result = isDate(dataType);
+
+        if  (!result)
+        {
+            result = "Timestamp".equalsIgnoreCase(dataType);
         }
 
         return result;

@@ -847,8 +847,8 @@ protected static class QueryTransactionCallback
 
         if  (map != null)
         {
-            String user = map.get(ThreadLocalBag.PRINCIPAL);
-            String ip = map.get(ThreadLocalBag.REMOTE_IP);
+            String user = (String) map.get(ThreadLocalBag.PRINCIPAL);
+            String ip = (String) map.get(ThreadLocalBag.REMOTE_IP);
 
             if  (   (user != null)
                  || (ip != null))

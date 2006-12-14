@@ -81,6 +81,12 @@ public interface AttributeDecorator
     public boolean isDate();
 
     /**
+     * Retrieves whether the attribute is a timestamp or not.
+     * return such information.
+     */
+    public boolean isTimestamp();
+
+    /**
      * Retrieves whether the type means the attribute is a
      * number smaller than an int.
      * @return such condition.

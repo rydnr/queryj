@@ -508,6 +508,29 @@ public abstract class AbstractAttributeDecorator
     }
 
     /**
+     * Retrieves whether the attribute is a timestamp or not.
+     * return such information.
+     */
+    public boolean isTimestamp()
+    {
+        return isTimestamp(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is a timestamp or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * return such information.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isTimestamp(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isTimestamp(type);
+    }
+
+    /**
      * Retrieves the query to retrieve the externally-managed value.
      * @return such information.
      */

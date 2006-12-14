@@ -69,6 +69,18 @@ public interface PropertyDecorator
     public String getNameLowercased();
 
     /**
+     * Retrieves whether the property is a date or not.
+     * return such information.
+     */
+    public boolean isDate();
+
+    /**
+     * Retrieves whether the property is a timestamp or not.
+     * return such information.
+     */
+    public boolean isTimestamp();
+
+    /**
      * Retrieves whether the type means the attribute is a
      * number smaller than an int.
      * @return such condition.

@@ -287,6 +287,52 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
+     * Retrieves whether the attribute is a date or not.
+     * return such information.
+     */
+    public boolean isDate()
+    {
+        return isDate(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is a date or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * return such information.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isDate(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isDate(type);
+    }
+
+    /**
+     * Retrieves whether the attribute is a timestamp or not.
+     * return such information.
+     */
+    public boolean isTimestamp()
+    {
+        return isTimestamp(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is a timestamp or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * return such information.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isTimestamp(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isTimestamp(type);
+    }
+
+    /**
      * Lowers the case of given value.
      * @param value the value.
      * @return the value, after being processed.

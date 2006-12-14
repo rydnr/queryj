@@ -94,6 +94,16 @@ public class CachingPropertyDecorator
     private String m__strCachedColumnNameNormalizedUncapitalized;
 
     /**
+     * The cached <code>isDate</code> value.
+     */
+    private Boolean m__bCachedIsDate;
+
+    /**
+     * The cached <code>isTimestamp</code> value.
+     */
+    private Boolean m__bCachedIsTimestamp;
+
+    /**
      * Creates a <code>CachingPropertyDecorator</code> to decorate given
      * property.
      * @param property the property to decorate.
@@ -477,5 +487,94 @@ public class CachingPropertyDecorator
         }
 
         return result;
+    }
+    /**
+     * Specifies the cached <code>isDate</code> value.
+     * @param value the value to cache.
+     */
+    protected final void immutableSetCachedIsDate(
+        final Boolean value)
+    {
+        m__bCachedIsDate = value;
+    }
+
+    /**
+     * Specifies the cached <code>isDate</code> value.
+     * @param value the value to cache.
+     */
+    protected void setCachedIsDate(final Boolean value)
+    {
+        immutableSetCachedIsDate(value);
+    }
+
+    /**
+     * Retrieves the cached <code>isDate</code> value.
+     * @return such value.
+     */
+    public Boolean getCachedIsDate()
+    {
+        return m__bCachedIsDate;
+    }
+
+    /**
+     * Retrieves whether the attribute is a date or not.
+     * return such information.
+     */
+    public boolean isDate()
+    {
+        Boolean result = getCachedIsDate();
+
+        if  (result == null)
+        {
+            result = super.isDate() ? Boolean.TRUE : Boolean.FALSE;
+            setCachedIsDate(result);
+        }
+
+        return result.booleanValue();
+    }
+
+    /**
+     * Specifies the cached <code>isTimestamp</code> value.
+     * @param value the value to cache.
+     */
+    protected final void immutableSetCachedIsTimestamp(
+        final Boolean value)
+    {
+        m__bCachedIsTimestamp = value;
+    }
+
+    /**
+     * Specifies the cached <code>isTimestamp</code> value.
+     * @param value the value to cache.
+     */
+    protected void setCachedIsTimestamp(final Boolean value)
+    {
+        immutableSetCachedIsTimestamp(value);
+    }
+
+    /**
+     * Retrieves the cached <code>isTimestamp</code> value.
+     * @return such value.
+     */
+    public Boolean getCachedIsTimestamp()
+    {
+        return m__bCachedIsTimestamp;
+    }
+
+    /**
+     * Retrieves whether the attribute is a timestamp or not.
+     * return such information.
+     */
+    public boolean isTimestamp()
+    {
+        Boolean result = getCachedIsTimestamp();
+
+        if  (result == null)
+        {
+            result = super.isTimestamp() ? Boolean.TRUE : Boolean.FALSE;
+            setCachedIsTimestamp(result);
+        }
+
+        return result.booleanValue();
     }
 }
