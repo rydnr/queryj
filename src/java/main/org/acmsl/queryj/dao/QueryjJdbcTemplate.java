@@ -92,6 +92,7 @@ import javax.sql.DataSource;
 /*
  * Importing Jakarta Commons Logging classes
  */
+import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
@@ -634,6 +635,66 @@ public class QueryjJdbcTemplate
             TransactionSynchronizationManager.unbindResource(this.dataSource);
             DataSourceUtils.closeConnectionIfNecessary(
                 this.connectionHolder.getConnection(), this.dataSource);
+        }
+    }
+
+    /**
+     * Audits given sql.
+     * @param sql the original sql.
+     * @return the auditted sql.
+     */
+    protected static String auditSql(final String sql)
+    {
+        StringBuffer result = new StringBuffer();
+    
+        Map map = ThreadLocalBag.getThreadBag();
+    
+        if  (map != null)
+        {
+            String user = (String) map.get(ThreadLocalBag.PRINCIPAL);
+            String ip = (String) map.get(ThreadLocalBag.REMOTE_IP);
+    
+            if  (   (user != null)
+                 || (ip != null))
+            {
+                result.append("/* ");
+            }
+    
+            if  (user != null)
+            {
+                result.append(user);
+                result.append("|");
+            }
+    
+            if  (ip != null)
+            {
+                result.append(ip);
+            }
+    
+            if  (   (user != null)
+                 || (ip != null))
+            {
+                result.append(" */");
+            }
+        }
+    
+        result.append(sql);
+    
+        return result.toString();
+    }
+    
+    /**
+     * Performs an audit log.
+     */
+    protected static void auditLog()
+    {
+        Log log = LogFactory.getLog("queryj-auditlog");
+        Map map = ThreadLocalBag.getThreadBag();
+    
+        if  (   (map != null)
+             && (log.isInfoEnabled()))
+        {
+            log.info(map.toString());
         }
     }
 }

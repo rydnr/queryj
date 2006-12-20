@@ -716,7 +716,7 @@ public class <input.engine_name><input.vo_name>DAO
     }
 
     /**
-     * Deletes \<code><input.vo_name>\</code> information."
+     * Deletes \<code><input.vo_name>\</code> information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     protected void deleteNoFk(
@@ -729,7 +729,7 @@ public class <input.engine_name><input.vo_name>DAO
     }
 
     /**
-     * Deletes \<code><input.vo_name>\</code> information."
+     * Deletes \<code><input.vo_name>\</code> information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param dataSource the \<code>DataSource\<code> instance.
@@ -748,7 +748,7 @@ public class <input.engine_name><input.vo_name>DAO
     }
 
     /**
-     * Deletes \<code><input.vo_name>\</code> information."
+     * Deletes \<code><input.vo_name>\</code> information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
@@ -772,7 +772,7 @@ public class <input.engine_name><input.vo_name>DAO
     }
 
     /**
-     * Deletes \<code><input.vo_name>\</code> information."
+     * Deletes \<code><input.vo_name>\</code> information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
