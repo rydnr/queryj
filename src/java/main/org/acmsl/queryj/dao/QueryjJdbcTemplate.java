@@ -680,6 +680,8 @@ public class QueryjJdbcTemplate
     
         result.append(sql);
     
+        auditLog();
+
         return result.toString();
     }
     
@@ -692,7 +694,8 @@ public class QueryjJdbcTemplate
         Map map = ThreadLocalBag.getThreadBag();
     
         if  (   (map != null)
-             && (log.isInfoEnabled()))
+             && (log.isInfoEnabled())
+             && (map.size() > 0))
         {
             log.info(map.toString());
         }

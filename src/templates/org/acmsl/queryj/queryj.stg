@@ -820,8 +820,6 @@ protected static class QueryTransactionCallback
     {
         Object result = null;
 
-        auditLog();
-
         if  (sql == null)
         {
             result = dao.query(creator, setter, extractor);
