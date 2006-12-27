@@ -103,6 +103,16 @@ public class QueryjJdbcTemplate
     extends  JdbcTemplate
 {
     /**
+     * The audit log category.
+     */
+    public static final String AUDITLOG_CATEGORY = "queryj-auditlog";
+    
+    /**
+     * Whether to enable auditlog or not.
+     */
+    private static boolean enableAuditLog = false;
+
+    /**
      * Construct a new JdbcTemplate for bean usage.
      * Note: The DataSource has to be set before using the instance.
      * This constructor can be used to prepare a JdbcTemplate via a BeanFactory,
@@ -648,8 +658,11 @@ public class QueryjJdbcTemplate
         StringBuffer result = new StringBuffer();
     
         Map map = ThreadLocalBag.getThreadBag();
-    
-        if  (map != null)
+
+        boolean enableAuditLog = getEnableAuditLog();
+        
+        if  (   (enableAuditLog)
+             && (map != null))
         {
             String user = (String) map.get(ThreadLocalBag.PRINCIPAL);
             String ip = (String) map.get(ThreadLocalBag.REMOTE_IP);
@@ -679,8 +692,11 @@ public class QueryjJdbcTemplate
         }
     
         result.append(sql);
-    
-        auditLog();
+
+        if  (enableAuditLog)
+        {
+            auditLog();
+        }
 
         return result.toString();
     }
@@ -690,15 +706,51 @@ public class QueryjJdbcTemplate
      */
     protected static void auditLog()
     {
-        Log log = LogFactory.getLog("queryj-auditlog");
+        Log log = LogFactory.getLog(AUDITLOG_CATEGORY);
         Map map = ThreadLocalBag.getThreadBag();
     
         if  (   (map != null)
+             && (getEnableAuditLog())
              && (log.isInfoEnabled())
              && (map.size() > 0))
         {
             log.info(map.toString());
         }
     }
-}
 
+    /**
+     * Specifies whether to enable auditlog or not.
+     * @param flag such flag.
+     */
+    protected static final void immutableSetEnableAuditLog(final boolean flag)
+    {
+        enableAuditLog = flag;
+    }
+
+    /**
+     * Specifies whether to enable auditlog or not.
+     * @param flag such flag.
+     */
+    public static void setEnableAuditLog(final boolean flag)
+    {
+        immutableSetEnableAuditLog(flag);
+    }
+
+    /**
+     * Retrieves whether the auditlog is enabled.
+     * @return such information.
+     */
+    protected static final boolean immutableGetEnableAuditLog()
+    {
+        return enableAuditLog;
+    }
+
+    /**
+     * Retrieves whether the auditlog is enabled.
+     * @return such information.
+     */
+    public static boolean getEnableAuditLog()
+    {
+        return immutableGetEnableAuditLog();
+    }
+}
