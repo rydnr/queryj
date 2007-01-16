@@ -203,23 +203,37 @@ public abstract class Table
 
     /**
      * Outputs a text version of the table.
+     * @param table the table.
+     * @return such text.
+     * @precondition table != null
+     */
+    public static String toString(final Table table)
+    {
+        String result = "";
+
+        if  (table != null)
+        {
+            TableAlias t_TableAlias = table.getTableAlias();
+
+            if  (t_TableAlias != null) 
+            {
+                result = TableAlias.toString(t_TableAlias);
+            }
+            else 
+            {
+                result = table.getName();
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Outputs a text version of the table.
      * @return such text.
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
-
-        TableAlias t_TableAlias = getTableAlias();
-
-        if  (t_TableAlias != null) 
-        {
-            result.append(t_TableAlias);
-        }
-        else 
-        {
-            result.append(getName());
-        }
-
-        return result.toString();
+        return toString(this);
     }
 }

@@ -395,7 +395,25 @@ public abstract class Field
      */
     public String toString()
     {
-        return toString(getTable(), getName());
+        return toString(this);
+    }
+    
+    /**
+     * Outputs a text version of the field.
+     * @param field the field.
+     * @return the field.
+     * @precondition field != null
+     */
+    public static String toString(final Field field)
+    {
+        String result = "";
+
+        if  (field != null)
+        {
+            result = toString(field.getTable(), field.getName());
+        }
+        
+        return result;
     }
 
     /**
@@ -404,13 +422,13 @@ public abstract class Field
      * @param name the name.
      * @return the field.
      */
-    protected String toString(final Table table, final String name)
+    protected static String toString(final Table table, final String name)
     {
         StringBuffer result = new StringBuffer();
 
         if  (table != null) 
         {
-            result.append(table);
+            result.append(Table.toString(table));
             result.append(".");
         }
 

@@ -132,6 +132,22 @@ public class TableAlias
      */
     public String toString()
     {
-        return getName();
+        return toString(this);
+    }
+    
+    /**
+     * Outputs a text version of the tablealias.
+     * @return such text.
+     */
+    public static String toString(final TableAlias tableAlias)
+    {
+        String result = "";
+
+        if  (tableAlias != null)
+        {
+            result = tableAlias.getName();
+        }
+        
+        return result;
     }
 }
