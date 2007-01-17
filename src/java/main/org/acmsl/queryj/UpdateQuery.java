@@ -227,7 +227,7 @@ public class UpdateQuery
      * @param conditions the conditions.
      * @param queryUtils the <code>QueryUtils</code> instance.
      * @return the SQL query.
-     * @precondition tabhle != null
+     * @precondition table != null
      * @precondition fields != null
      * @precondition queryUtils != null
      */
@@ -241,7 +241,7 @@ public class UpdateQuery
 
         t_sbResult.append("UPDATE ");
 
-        t_sbResult.append(table);
+        t_sbResult.append(table.getName());
 
         t_sbResult.append(" SET ");
 

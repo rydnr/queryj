@@ -149,7 +149,7 @@ public class DeleteQuery
 
         t_sbResult.append("DELETE FROM ");
 
-        t_sbResult.append(table);
+        t_sbResult.append(table.getName());
 
         if  (   (conditions != null)
              && (conditions.size() > 0))

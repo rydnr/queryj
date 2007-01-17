@@ -394,7 +394,7 @@ public class InsertQuery
 
         t_sbResult.append("INSERT INTO ");
 
-        t_sbResult.append(table);
+        t_sbResult.append(table.getName());
 
         t_sbResult.append(" ( ");
 
