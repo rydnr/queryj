@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: OracleTableRepository.java
  *
  * Author: QueryJ
  *

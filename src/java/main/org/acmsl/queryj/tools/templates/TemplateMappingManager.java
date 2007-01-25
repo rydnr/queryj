@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: TemplateMappingManager.java
  *
  * Author: Jose San Leandro Armendariz
  *

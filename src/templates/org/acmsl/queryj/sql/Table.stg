@@ -2,7 +2,7 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2005  ACM-SL
+//  Copyright (C) 2002-2007  ACM-SL
 //                           chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: $RCSfile$
+// Filename: Table.stg
 //
 // Author: Jose San Leandro Armendariz
 //
@@ -89,7 +89,6 @@ import org.acmsl.queryj.Table;
  * Importing some JDK classes.
  */
 import java.math.BigDecimal;
-import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -132,9 +131,16 @@ public class <input.table_name_capitalized>Table
     <input.attributes:constants(attr=it); separator="\n\n">
 
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid double-checked locking.
      */
-    private static WeakReference singleton;
+    private static final class <input.table_name_capitalized>TableSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final <input.table_name_capitalized>Table SINGLETON =
+            new <input.table_name_capitalized>Table();
+    }
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -151,25 +157,6 @@ public class <input.table_name_capitalized>Table
     protected <input.table_name_capitalized>Table()
     {
         this(null);
-    }
-
-    /**
-     * Specifies a new weak reference.
-     * @param table the table instance to use.
-     */
-    protected static void setReference(
-        final <input.table_name_capitalized>Table table)
-    {
-        singleton = new WeakReference(table);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
     }
 
     /**
@@ -200,23 +187,7 @@ public class <input.table_name_capitalized>Table
      */
     public static <input.table_name_capitalized>Table getInstance()
     {
-        <input.table_name_capitalized>Table result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (<input.table_name_capitalized>Table) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new <input.table_name_capitalized>Table();
-
-            setReference(result);
-        }
-
-        return result;
+        return <input.table_name_capitalized>TableSingletonContainer.SINGLETON;
     }
 
     /**

@@ -28,7 +28,7 @@
 
  *****************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ResultSetExtractorTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *

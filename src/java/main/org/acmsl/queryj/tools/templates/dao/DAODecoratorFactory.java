@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: DAODecoratorFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *

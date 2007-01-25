@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ValueObjectImplTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

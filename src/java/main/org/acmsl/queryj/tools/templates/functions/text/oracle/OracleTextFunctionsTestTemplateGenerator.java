@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: OracleTextFunctionsTestTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: QueryPreparedStatementCreatorTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

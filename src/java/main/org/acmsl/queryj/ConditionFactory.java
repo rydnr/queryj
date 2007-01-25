@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ConditionFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *

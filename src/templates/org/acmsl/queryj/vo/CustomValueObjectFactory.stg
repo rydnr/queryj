@@ -2,7 +2,7 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2005  ACM-SL
+//  Copyright (C) 2002-2007  ACM-SL
 //                           chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: $RCSfile: $
+// Filename: CustomValueObjectFactory.stg
 //
 // Author: Jose San Leandro Armendariz
 //
@@ -74,8 +74,6 @@ source(input) ::= <<
 /*
  * Importing some JDK classes.
  */
-import java.lang.ref.WeakReference;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -110,34 +108,21 @@ class(input, result) ::= <<
 public class <input.vo_name>ValueObjectFactory
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid double-checked locking.
      */
-    private static WeakReference singleton;
+    private static final class <input.vo_name>ValueObjectFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final <input.vo_name>ValueObjectFactory SINGLETON =
+            new <input.vo_name>ValueObjectFactory();
+    }
 
     /**
      * Public constructor to allow reflective instantiation.
      */
     public <input.vo_name>ValueObjectFactory() {};
-
-    /**
-     * Specifies a new weak reference.
-     * @param factory the new \<code\><input.vo_name>ValueObjectFactory\</code\>
-     * instance.
-     */
-    private static void setReference(
-        final <input.vo_name>ValueObjectFactory factory)
-    {
-        singleton = new WeakReference(factory);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    private static WeakReference getReference()
-    {
-        return singleton;
-    }
 
     /**
      * Retrieves a \<code\><input.vo__name>ValueObjectFactory\</code\>
@@ -146,23 +131,7 @@ public class <input.vo_name>ValueObjectFactory
      */
     public static <input.vo_name>ValueObjectFactory getInstance()
     {
-        <input.vo_name>ValueObjectFactory result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (<input.vo_name>ValueObjectFactory) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new <input.vo_name>ValueObjectFactory();
-
-            setReference(result);
-        }
-
-        return result;
+        return <input.vo_name>ValueObjectFactorySingletonContainer.SINGLETON;
     }
 
     /**

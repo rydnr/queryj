@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: TransactionToken.java
  *
  * Author: Jose San Leandro Armendariz
  *

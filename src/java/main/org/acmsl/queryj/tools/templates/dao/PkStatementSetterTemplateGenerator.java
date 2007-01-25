@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: PkStatementSetterTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

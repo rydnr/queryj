@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: Tracer.java
  *
  * Author: Jose San Leandro Armendáriz
  *

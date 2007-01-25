@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: MetadataTypeManager.java
  *
  * Author: Jose San Leandro Armendariz
  *

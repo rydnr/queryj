@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: DatabaseMetaDataRetrievalHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -236,14 +236,14 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 t_cTableElements = t_TablesElement.getTables();
 
                 if  (   (t_cTableElements != null)
-                        && (t_cTableElements.size() > 0))
+                     && (t_cTableElements.size() > 0))
                 {
                     t_astrTableNames = new String[t_cTableElements.size()];
 
                     t_itTableElements = t_cTableElements.iterator();
 
                     while  (   (t_itTableElements != null)
-                               && (t_itTableElements.hasNext()))
+                            && (t_itTableElements.hasNext()))
                     {
                         AntTableElement t_Table =
                             (AntTableElement) t_itTableElements.next();
@@ -263,7 +263,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     t_iTableIndex = 0;
 
                     while  (   (t_itTableElements != null)
-                               && (t_itTableElements.hasNext()))
+                            && (t_itTableElements.hasNext()))
                     {
                         AntTableElement t_Table =
                             (AntTableElement) t_itTableElements.next();
@@ -273,7 +273,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                             t_cFieldElements = t_Table.getFields();
 
                             if  (   (t_cFieldElements != null)
-                                    && (t_cFieldElements.size() > 0))
+                                 && (t_cFieldElements.size() > 0))
                             {
                                 break;
                             }
@@ -330,7 +330,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     t_cFieldElements = t_Table.getFields();
 
                     if  (   (t_cFieldElements  != null)
-                            && (t_cFieldElements.size() > 0))
+                         && (t_cFieldElements.size() > 0))
                     {
                         String[] t_astrTableFieldNames =
                             new String[t_cFieldElements.size()];
@@ -340,7 +340,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                         int t_iFieldIndex = 0;
 
                         while  (   (t_itFieldElements != null)
-                                   && (t_itFieldElements.hasNext()))
+                                && (t_itFieldElements.hasNext()))
                         {
                             AntFieldElement t_Field =
                                 (AntFieldElement) t_itFieldElements.next();
@@ -425,7 +425,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             Iterator t_itTables = t_cTables.iterator();
 
             while  (   (t_itTables != null)
-                       && (t_itTables.hasNext()))
+                    && (t_itTables.hasNext()))
             {
                 String t_strTableName = (String) t_itTables.next();
 
@@ -433,16 +433,16 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 {
                     Collection t_cFields =
                         (Collection)
-                        t_mKeys.get(
-                            buildTableFieldsKey(
-                                t_strTableName));
+                            t_mKeys.get(
+                                buildTableFieldsKey(
+                                    t_strTableName));
 
                     if  (t_cFields != null)
                     {
                         Iterator t_itFields = t_cFields.iterator();
 
                         while  (   (t_itFields != null)
-                                   && (t_itFields.hasNext()))
+                                && (t_itFields.hasNext()))
                         {
                             String t_strFieldName =
                                 (String) t_itFields.next();
@@ -459,7 +459,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                 Iterator t_itFieldFks = t_cFieldFks.iterator();
 
                                 while  (   (t_itFieldFks != null)
-                                           && (t_itFieldFks.hasNext()))
+                                        && (t_itFieldFks.hasNext()))
                                 {
                                     AntFieldFkElement t_FieldFk =
                                         (AntFieldFkElement)

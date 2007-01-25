@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: STUtils.java
  *
  * Author: Jose San Leandro Armendariz
  *

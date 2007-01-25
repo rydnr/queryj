@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: KeywordRepositoryTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

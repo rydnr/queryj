@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: BaseRepositoryDAOFactoryTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

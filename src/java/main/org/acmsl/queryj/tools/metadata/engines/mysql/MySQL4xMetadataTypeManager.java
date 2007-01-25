@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: MySQL4xMetadataTypeManager.java
  *
  * Author: Jose San Leandro Armendariz
  *

@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: MockDAOTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

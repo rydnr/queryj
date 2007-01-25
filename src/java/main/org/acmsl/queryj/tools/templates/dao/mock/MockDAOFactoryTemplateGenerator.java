@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: MockDAOFactoryTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

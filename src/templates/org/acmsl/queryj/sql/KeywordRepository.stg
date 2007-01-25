@@ -2,7 +2,7 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2005  ACM-SL
+//  Copyright (C) 2002-2007  ACM-SL
 //                           chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: $RCSfile: $
+// Filename: KeywordRepository.stg
 //
 // Author: Jose San Leandro Armendariz
 //
@@ -89,7 +89,6 @@ import org.acmsl.queryj.StringField;
  * Importing some JDK classes.
  */
 import java.math.BigDecimal;
-import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -129,9 +128,16 @@ class(input) ::= <<
 public class <input.tr_name_capitalized>KeywordRepository
 {
     /**
-     * Singleton implemented as a weak reference.
+     * Singleton implemented to avoid double-checked locking.
      */
-    private static WeakReference singleton;
+    private static final class <input.tr_name_capitalized>KeywordRepository
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final class <input.tr_name_capitalized>KeywordRepository SINGLETON =
+            new <input.tr_name_capitalized>KeywordRepository();
+    }
 
     /**
      * Public constructor to allow reflective access.
@@ -139,45 +145,12 @@ public class <input.tr_name_capitalized>KeywordRepository
     public <input.tr_name_capitalized>KeywordRepository() {};
 
     /**
-     * Specifies a new weak reference.
-     * @param repository the new repository instance.
-     */
-    protected static void setReference(final <input.tr_name_capitalized>KeywordRepository repository)
-    {
-        singleton = new WeakReference(repository);
-    }
-
-    /**
-     * Retrieves the weak reference.
-     * @return such reference.
-     */
-    protected static WeakReference getReference()
-    {
-        return singleton;
-    }
-
-    /**
      * Retrieves a \<code\><input.tr_name_capitalized>KeywordRepository\</code\> instance.
      * @return such instance.
      */
     public static <input.tr_name_capitalized>KeywordRepository getInstance()
     {
-        <input.tr_name_capitalized>KeywordRepository result = null;
-
-        WeakReference reference = getReference();
-
-        if  (reference != null)
-        {
-            result = (<input.tr_name_capitalized>KeywordRepository) reference.get();
-        }
-
-        if  (result == null)
-        {
-            result = new <input.tr_name_capitalized>KeywordRepository();
-            setReference(result);
-        }
-
-        return result;
+        return <input.tr_name_capitalized>KeywordRepositorySingletonContainer.SINGLETON;
     }
 
     <input.keywords,input.keyword_types,input.keywords_uncapitalized:

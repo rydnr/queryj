@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: OracleTimeFunctionsTestTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

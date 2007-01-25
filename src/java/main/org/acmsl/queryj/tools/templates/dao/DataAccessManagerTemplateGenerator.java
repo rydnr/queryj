@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: DataAccessManagerTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

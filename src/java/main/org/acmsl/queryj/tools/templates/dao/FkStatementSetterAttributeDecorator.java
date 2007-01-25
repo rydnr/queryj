@@ -29,7 +29,7 @@
 
  *****************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: FkStatementSetterAttributeDecorator.java
  *
  * Author: Jose San Leandro Armendariz
  *

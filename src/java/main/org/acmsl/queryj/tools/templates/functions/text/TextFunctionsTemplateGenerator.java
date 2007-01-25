@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: TextFunctionsTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

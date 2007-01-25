@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: XmlDAOFactoryTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

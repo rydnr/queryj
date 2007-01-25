@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ConfigurationPropertiesTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: CustomResultUtils.java
  *
  * Author: Jose San Leandro Armendariz
  *

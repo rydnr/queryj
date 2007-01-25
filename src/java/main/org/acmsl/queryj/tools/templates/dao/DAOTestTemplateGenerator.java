@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: DAOTestTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

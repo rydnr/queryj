@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: OracleUserTabColumnsTable.java
  *
  * Author: QueryJ
  *

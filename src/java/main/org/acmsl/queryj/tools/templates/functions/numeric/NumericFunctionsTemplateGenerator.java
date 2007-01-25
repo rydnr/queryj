@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: NumericFunctionsTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

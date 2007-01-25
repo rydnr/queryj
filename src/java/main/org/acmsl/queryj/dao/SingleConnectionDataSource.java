@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: SingleConnectionDataSource.java
  *
  * Author: Jose San Leandro Armendariz
  *

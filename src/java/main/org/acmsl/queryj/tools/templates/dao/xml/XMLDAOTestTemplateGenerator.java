@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: XMLDAOTestTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

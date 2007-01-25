@@ -28,7 +28,7 @@ Spain
 
 ******************************************************************************
 *
-* Filename: $RCSfile$
+* Filename: ValueObjectFactoryTemplateTest.java
 *
 * Author: Jose San Leandro Armend?riz
 *

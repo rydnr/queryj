@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: DAOChooserTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

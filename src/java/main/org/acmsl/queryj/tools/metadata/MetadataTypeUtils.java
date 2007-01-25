@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: MetadataTypeUtils.java
  *
  * Author: Jose San Leandro Armendariz
  *

@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: MetaLanguageUtils.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -112,6 +112,34 @@ public class MetaLanguageUtils
             result =
                 tableComment.substring(
                     t_iKeyIndex + "@static".length()).trim();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the parent table in an ISA relationship, as
+     * declated by the table comment.
+     * @param tableComment the table's comment.
+     * @return the parent table, or <code>null</code> otherwise.
+     * @precondition tableComment != null
+     */
+    public String retrieveDeclaredParent(final String tableComment)
+    {
+        String result = null;
+        
+        int t_iKeyIndex = -1;
+
+        if  (tableComment != null)
+        {
+            t_iKeyIndex = tableComment.lastIndexOf("@isa");
+        }
+
+        if  (t_iKeyIndex >= 0)
+        {
+            result =
+                tableComment.substring(
+                    t_iKeyIndex + "@isa".length()).trim();
         }
 
         return result;

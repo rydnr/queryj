@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: DecorationUtils.java
  *
  * Author: Jose San Leandro Armend&aacute;riz
  *

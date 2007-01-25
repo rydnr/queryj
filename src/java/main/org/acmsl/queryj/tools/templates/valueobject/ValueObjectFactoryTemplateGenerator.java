@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ValueObjectFactoryTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

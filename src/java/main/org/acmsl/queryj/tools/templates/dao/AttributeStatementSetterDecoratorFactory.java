@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: AttributeStatementSetterDecoratorFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *

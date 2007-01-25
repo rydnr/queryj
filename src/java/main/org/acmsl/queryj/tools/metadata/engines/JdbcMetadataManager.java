@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2001-2005  Jose San Leandro Armendariz
+    Copyright (C) 2001-2007  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: JdbcMetadataManager.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -181,7 +181,6 @@ public class JdbcMetadataManager
             getCatalog(),
             getSchema());
     }
-
 
     /**
      * Retrieves the type manager.

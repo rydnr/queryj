@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: TestSuiteTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

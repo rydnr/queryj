@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2001-2005  Jose San Leandro Armendariz
+    Copyright (C) 2001-2007  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: AbstractJdbcMetadataManager.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.metadata.engines;
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
+import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 import org.acmsl.queryj.QueryJException;
 
 /*
@@ -88,9 +89,19 @@ public abstract class AbstractJdbcMetadataManager
     protected final int[] EMPTY_INT_ARRAY = new int[0];
 
     /**
+     * An empty integer array.
+     */
+    protected final Integer[] EMPTY_INTEGER_ARRAY = new Integer[0];
+
+    /**
      * An empty boolean array.
      */
-    protected final boolean[] EMPTY_BOOLEAN_ARRAY = new boolean[0];
+    protected final boolean[] EMPTY_BOOL_ARRAY = new boolean[0];
+
+    /**
+     * An empty boolean array.
+     */
+    protected final Boolean[] EMPTY_BOOLEAN_ARRAY = new Boolean[0];
 
     /**
      * An empty array of String arrays.
@@ -2321,34 +2332,39 @@ public abstract class AbstractJdbcMetadataManager
         {
             t_astrTableNames =
                 getTableNames(metaData, catalog, schema);
+
+            setTableNames(t_astrTableNames);
         }
 
         int t_iLength =
             (t_astrTableNames != null) ? t_astrTableNames.length : 0;
 
-        setTableNames(t_astrTableNames);
-
+        String t_strTableName;
+        String t_strParentTable;
+        
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
         {
+            t_strTableName = t_astrTableNames[t_iIndex];
+            t_strParentTable = getParentTable(t_strTableName);
+            
             String t_strTableComment =
                 getTableComment(
                     metaData,
                     catalog,
                     schema,
-                    t_astrTableNames[t_iIndex]);
+                    t_strTableName);
 
-            addTableComment(
-                t_astrTableNames[t_iIndex], t_strTableComment);
+            addTableComment(t_strTableName, t_strTableComment);
 
             String[] t_astrColumnNames =
                 getColumnNames(
                     metaData,
                     catalog,
                     schema,
-                    t_astrTableNames[t_iIndex]);
+                    t_strTableName,
+                    t_strParentTable);
 
-            addColumnNames(
-                t_astrTableNames[t_iIndex], t_astrColumnNames);
+            addColumnNames(t_strTableName, t_astrColumnNames);
 
             if  (t_astrColumnNames != null) 
             {
@@ -2357,7 +2373,8 @@ public abstract class AbstractJdbcMetadataManager
                         metaData,
                         catalog,
                         schema,
-                        t_astrTableNames[t_iIndex],
+                        t_strTableName,
+                        t_strParentTable,
                         t_astrColumnNames.length);
 
                 int t_iColumnLength =
@@ -2368,7 +2385,7 @@ public abstract class AbstractJdbcMetadataManager
                           t_iColumnIndex++)
                 {
                     addColumnType(
-                        t_astrTableNames[t_iIndex],
+                        t_strTableName,
                         t_astrColumnNames[t_iColumnIndex],
                         t_aiColumnTypes[t_iColumnIndex]);
                 }
@@ -2378,7 +2395,8 @@ public abstract class AbstractJdbcMetadataManager
                         metaData,
                         catalog,
                         schema,
-                        t_astrTableNames[t_iIndex],
+                        t_strTableName,
+                        t_strParentTable,
                         t_astrColumnNames.length);
 
                 int t_iAllowNullLength =
@@ -2541,12 +2559,25 @@ public abstract class AbstractJdbcMetadataManager
         final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String tableName)
+        final String tableName,
+        final String parentTable)
       throws  SQLException,
               QueryJException
     {
-        String[] result;
+        Collection result = new ArrayList();
 
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    getColumnNames(
+                        metaData,
+                        catalog,
+                        schema,
+                        parentTable,
+                        getParentTable(parentTable))));
+        }
+        
         try 
         {
             ResultSet t_rsColumns =
@@ -2556,7 +2587,9 @@ public abstract class AbstractJdbcMetadataManager
                     tableName,
                     null);
 
-            result = extractColumnNames(t_rsColumns);
+            result.addAll(
+                Arrays.asList(
+                    extractColumnNames(t_rsColumns)));
 
             t_rsColumns.close();
         }
@@ -2569,12 +2602,7 @@ public abstract class AbstractJdbcMetadataManager
             throw sqlException;
         }
 
-        if  (result == null)
-        {
-            result = EMPTY_STRING_ARRAY;
-        }
-
-        return result;
+        return (String[]) result.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -2628,6 +2656,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param parentTable the parent table, if any.
      * @param size the number of fields to extract.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
@@ -2638,11 +2667,27 @@ public abstract class AbstractJdbcMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
+        final String parentTable,
         final int size)
       throws  SQLException,
               QueryJException
     {
-        int[] result = EMPTY_INT_ARRAY;
+        Collection result = new ArrayList();
+        
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                        toIntegerArray(
+                            getColumnTypes(
+                                metaData,
+                                catalog,
+                                schema,
+                                parentTable,
+                                getParentTable(parentTable),
+                                -1))));
+        }
 
         try 
         {
@@ -2655,12 +2700,16 @@ public abstract class AbstractJdbcMetadataManager
                         tableName,
                         null);
 
-                result = extractColumnTypes(t_rsColumns, size);
+                result.addAll(
+                    Arrays.asList(
+                        (Object[])
+                        toIntegerArray(
+                            extractColumnTypes(t_rsColumns, size))));
 
                 t_rsColumns.close();
             }
         }
-        catch  (SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "Cannot retrieve the column types.",
@@ -2669,7 +2718,7 @@ public abstract class AbstractJdbcMetadataManager
             throw sqlException;
         }
 
-        return result;
+        return toIntArray((Integer[]) result.toArray(EMPTY_INTEGER_ARRAY));
     }
 
     /**
@@ -2739,6 +2788,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param parentTable the parent table, if any.
      * @param size the number of fields to extract.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
@@ -2750,12 +2800,28 @@ public abstract class AbstractJdbcMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
+        final String parentTable,
         final int size)
       throws  SQLException,
               QueryJException
     {
-        boolean[] result;
+        Collection result = new ArrayList();
 
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                       toBooleanArray(
+                           getAllowNulls(
+                               metaData,
+                               catalog,
+                               schema,
+                               parentTable,
+                               getParentTable(parentTable),
+                               -1))));
+        }
+                    
         try 
         {
             ResultSet t_rsColumns =
@@ -2765,7 +2831,10 @@ public abstract class AbstractJdbcMetadataManager
                     tableName,
                     null);
 
-            result = extractAllowNull(t_rsColumns, size);
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                        toBooleanArray(extractAllowNull(t_rsColumns, size))));
             
             t_rsColumns.close();
         }
@@ -2778,12 +2847,7 @@ public abstract class AbstractJdbcMetadataManager
             throw sqlException;
         }
 
-        if  (result == null)
-        {
-            result = EMPTY_BOOLEAN_ARRAY;
-        }
-
-        return result;
+        return toBoolArray((Boolean[]) result.toArray(EMPTY_BOOLEAN_ARRAY));
     }
 
     /**
@@ -2844,7 +2908,7 @@ public abstract class AbstractJdbcMetadataManager
         final ResultSet resultSet, final String fieldName, final int size)
       throws  SQLException
     {
-        boolean[] result =  EMPTY_BOOLEAN_ARRAY;
+        boolean[] result =  EMPTY_BOOL_ARRAY;
 
         int[] t_iFlags = extractIntFields(resultSet, fieldName, size);
 
@@ -3685,6 +3749,120 @@ public abstract class AbstractJdbcMetadataManager
             }
         }
 
+        return result;
+    }
+
+    /**
+     * Retrieves the parent table in the ISA relationship, if any.
+     * @param table the table.
+     * @return the parent's table name, or <code>null</code> otherwise.
+     */
+    public String getParentTable(final String table)
+    {
+        return getParentTable(table, MetaLanguageUtils.getInstance());
+    }
+    
+    /**
+     * Retrieves the parent table in the ISA relationship, if any.
+     * @param table the table.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return the parent's table name, or <code>null</code> otherwise.
+     * @precondition metaLanguageUtils != null
+     */
+    protected String getParentTable(
+        final String table, final MetaLanguageUtils metaLanguageUtils)
+    {
+        return metaLanguageUtils.retrieveDeclaredParent(table);
+    }
+
+    /**
+     * Converts given array to integer.
+     * @param array the array to convert.
+     * @return the converted array.
+     * @precondition array != null
+     */
+    protected int[] toIntArray(final Object[] array)
+    {
+        int[] result = (array == null) ? EMPTY_INT_ARRAY : new int[array.length];
+
+        int t_iCount = result.length;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            try
+            {
+                result[t_iIndex] = Integer.parseInt("" + array[t_iIndex]);
+            }
+            catch  (final NumberFormatException numberFormatException)
+            {
+                // skipping the whole stuff
+                result = EMPTY_INT_ARRAY;
+                break;
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Converts given array to integer.
+     * @param array the array to convert.
+     * @return the converted array.
+     * @precondition array != null
+     */
+    protected Integer[] toIntegerArray(final int[] array)
+    {
+        Integer[] result =
+            (array == null) ? EMPTY_INTEGER_ARRAY : new Integer[array.length];
+
+        int t_iCount = result.length;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            result[t_iIndex] = new Integer(array[t_iIndex]);
+        }
+        
+        return result;
+    }
+
+    /**
+     * Converts given array to boolean.
+     * @param array the array to convert.
+     * @return the converted array.
+     * @precondition array != null
+     */
+    protected boolean[] toBoolArray(final Object[] array)
+    {
+        boolean[] result =
+            (array == null) ? EMPTY_BOOL_ARRAY : new boolean[array.length];
+
+        int t_iCount = result.length;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            result[t_iIndex] = Boolean.valueOf("" + array[t_iIndex]).booleanValue();
+        }
+        
+        return result;
+    }
+
+    /**
+     * Converts given array to boolean.
+     * @param array the array to convert.
+     * @return the converted array.
+     * @precondition array != null
+     */
+    protected Boolean[] toBooleanArray(final boolean[] array)
+    {
+        Boolean[] result = (array == null) ? EMPTY_BOOLEAN_ARRAY : new Boolean[array.length];
+
+        int t_iCount = result.length;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            result[t_iIndex] = Boolean.valueOf(array[t_iIndex]);
+        }
+        
         return result;
     }
 }

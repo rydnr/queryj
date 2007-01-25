@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: JdbcDAOTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

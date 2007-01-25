@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: OracleUserColCommentsTable.java
  *
  * Author: QueryJ
  *

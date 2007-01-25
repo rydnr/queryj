@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: BaseDAOTemplateDefaults.java
  *
  * Author: Jose San Leandro Armendariz
  *

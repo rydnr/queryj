@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: CustomValueObjectTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

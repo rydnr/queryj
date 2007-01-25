@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: OracleMetadataManager.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -1229,7 +1229,7 @@ public class OracleMetadataManager
 
         if  (result == null)
         {
-            result = EMPTY_BOOLEAN_ARRAY;
+            result = EMPTY_BOOL_ARRAY;
         }
 
         return result;
@@ -1247,7 +1247,7 @@ public class OracleMetadataManager
         final ResultSet resultSet, final String fieldName)
       throws  SQLException
     {
-        boolean[] result = EMPTY_BOOLEAN_ARRAY;
+        boolean[] result = EMPTY_BOOL_ARRAY;
 
         String[] t_astrTypes = extractStringFields(resultSet, fieldName);
 

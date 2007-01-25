@@ -29,7 +29,7 @@
 
  *****************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ForeignKeyValueObject.java
  *
  * Author: Jose San Leandro Armendariz
  *

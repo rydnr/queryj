@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ResultSetExtractorDecoratorFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *

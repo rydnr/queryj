@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: SystemFunctionsTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

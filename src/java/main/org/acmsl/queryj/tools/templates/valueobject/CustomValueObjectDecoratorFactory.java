@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: CustomValueObjectDecoratorFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *

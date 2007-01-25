@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: DataAccessContextLocalTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

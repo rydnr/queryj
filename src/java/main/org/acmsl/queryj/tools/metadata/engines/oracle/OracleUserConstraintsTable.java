@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: OracleUserConstraintsTable.java
  *
  * Author: QueryJ
  *

@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: InsertQuery.java
  *
  * Author: Jose San Leandro Armendariz
  *

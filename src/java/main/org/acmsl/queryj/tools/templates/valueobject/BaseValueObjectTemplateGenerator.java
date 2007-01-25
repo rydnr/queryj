@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: BaseValueObjectTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

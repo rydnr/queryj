@@ -2,7 +2,7 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2005  ACM-SL
+//  Copyright (C) 2002-2007  ACM-SL
 //                           chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: $RCSfile$
+// Filename: AttributesStatementSetter.stg
 //
 // Author: Jose San Leandro Armendariz
 //

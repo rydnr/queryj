@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: TableRepositoryTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

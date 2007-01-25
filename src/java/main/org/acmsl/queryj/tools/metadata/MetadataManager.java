@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2001-2005  Jose San Leandro Armendariz
+    Copyright (C) 2001-2007  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: MetadataManager.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -401,4 +401,11 @@ public interface MetadataManager
      * @return <code>true</code> in such case.
      */
     public boolean requiresCustomClobHandling();
+
+    /**
+     * Retrieves the parent table in the ISA relationship, if any.
+     * @param table the table.
+     * @return the parent's table name, or <code>null</code> otherwise.
+     */
+    public String getParentTable(final String table);
 }

@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: RepositoryDAOTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

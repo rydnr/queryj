@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: OracleTextFunctions.java
  *
  * Author: QueryJ
  *

@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
+    Copyright (C) 2002-2007  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
 
  *****************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: BasePerCustomResultTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -47,7 +47,6 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
@@ -56,9 +55,7 @@ import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
-import org.acmsl.commons.utils.StringValidator;
 
 /*
  * Importing StringTemplate classes.
@@ -171,13 +168,9 @@ public abstract class BasePerCustomResultTemplate
                 getEngineVersion(),
                 getBasePackageName(),
                 getRepositoryName(),
-                metadataManager.getMetadataTypeManager(),
                 StringUtils.getInstance(),
                 DefaultThemeUtils.getInstance(),
-                PackageUtils.getInstance(),
-                StringValidator.getInstance(),
-                EnglishGrammarUtils.getInstance(),
-                MetaLanguageUtils.getInstance());
+                PackageUtils.getInstance());
     }
 
     /**
@@ -192,25 +185,17 @@ public abstract class BasePerCustomResultTemplate
      * @param engineVersion the engine version.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
-     * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the StringUtils instance.
      * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
      * @param packageUtils the PackageUtils instance.
-     * @param stringValidator the StringValidator instance.
-     * @param englishGrammarUtils the EnglishGrammarUtils instance.
-     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
      * @return such code.
      * @precondition customResult != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
-     * @precondition metadataTypeManager != null
      * @precondition stringUtils != null
      * @precondition defaultThemeUtils != null
      * @precondition packageUtils != null
-     * @precondition stringValidator != null
-     * @precondition englishGrammarUtils != null
-     * @precondition metaLanguageUtils != null
      */
     protected String generateOutput(
         final Result customResult,
@@ -223,13 +208,9 @@ public abstract class BasePerCustomResultTemplate
         final String engineVersion,
         final String basePackageName,
         final String repositoryName,
-        final MetadataTypeManager metadataTypeManager,
         final StringUtils stringUtils,
         final DefaultThemeUtils defaultThemeUtils,
-        final PackageUtils packageUtils,
-        final StringValidator stringValidator,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final MetaLanguageUtils metaLanguageUtils)
+        final PackageUtils packageUtils)
     {
         String result = "";
 

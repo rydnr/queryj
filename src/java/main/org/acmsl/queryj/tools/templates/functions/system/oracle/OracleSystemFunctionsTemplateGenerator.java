@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: OracleSystemFunctionsTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: MySQLTextFunctionsTestTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

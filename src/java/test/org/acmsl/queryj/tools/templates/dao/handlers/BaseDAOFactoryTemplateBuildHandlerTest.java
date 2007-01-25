@@ -28,7 +28,7 @@ Spain
 
 ******************************************************************************
 *
-* Filename: $RCSfile$
+* Filename: BaseDAOFactoryTemplateBuildHandlerTest.java
 *
 * Author: Jose San Leandro Armend?riz
 *
@@ -55,7 +55,7 @@ This file is part of  JUnitDoclet, a project to generate basic
 test cases  from source code and  helping to keep them in sync
 during refactoring.
 
-Copyright (C) 2002-2005  ObjectFab GmbH  (http://www.objectfab.de/)
+Copyright (C) 2002-2007  ObjectFab GmbH  (http://www.objectfab.de/)
 
 This library is  free software; you can redistribute it and/or
 modify  it under the  terms of  the  GNU Lesser General Public

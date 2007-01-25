@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: MySQLTimeFunctionsTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *

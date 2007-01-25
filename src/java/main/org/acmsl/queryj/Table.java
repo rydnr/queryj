@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: Table.java
  *
  * Author: Jose San Leandro Armendariz
  *

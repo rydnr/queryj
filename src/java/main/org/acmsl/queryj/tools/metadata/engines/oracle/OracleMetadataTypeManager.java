@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: OracleMetadataTypeManager.java
  *
  * Author: Jose San Leandro Armendariz
  *

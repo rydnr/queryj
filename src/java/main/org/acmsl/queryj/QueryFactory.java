@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: QueryFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *
