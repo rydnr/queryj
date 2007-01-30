@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.customsql;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.SqlElement;
@@ -49,8 +50,8 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 /*
  * Importing ACM-SL Commons classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
@@ -197,7 +198,7 @@ public class CustomResultUtils
                 if  (matches(
                          tableName,
                          t_aSqlElements[t_iIndex].getDao(),
-                         EnglishGrammarUtils.getInstance()))
+                         SingularPluralFormConverter.getInstance()))
                 {
                     result = true;
                     break;
@@ -219,24 +220,24 @@ public class CustomResultUtils
     public boolean matches(
         final String tableName, final String daoId)
     {
-        return matches(tableName, daoId, EnglishGrammarUtils.getInstance());
+        return matches(tableName, daoId, SingularPluralFormConverter.getInstance());
     }
 
     /**
      * Checks whether given table name matches the DAO id.
      * @param tableName the table name.
      * @param daoId the DAO id.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code>
      * instance.
      * @return <code>true</code> if they match.
      * @precondition tableName != null
      * @precondition daoId != null
-     * @precondition englishGrammarUtils != null
+     * @precondition singularPluralFormConverter != null
      */
     protected boolean matches(
         final String tableName,
         final String daoId,
-        final EnglishGrammarUtils englishGrammarUtils)
+        final EnglishGrammarUtils singularPluralFormConverter)
     {
         boolean result = false;
 
@@ -247,7 +248,7 @@ public class CustomResultUtils
         if  (!result)
         {
             String t_strSingularName =
-                englishGrammarUtils.getSingular(t_strTableInLowerCase);
+                singularPluralFormConverter.getSingular(t_strTableInLowerCase);
 
             result = daoId.equalsIgnoreCase(t_strSingularName);
         }
@@ -255,7 +256,7 @@ public class CustomResultUtils
         if  (!result)
         {
             String t_strPluralName =
-                englishGrammarUtils.getPlural(t_strTableInLowerCase);
+                singularPluralFormConverter.getPlural(t_strTableInLowerCase);
 
             result = daoId.equalsIgnoreCase(t_strPluralName);
         }

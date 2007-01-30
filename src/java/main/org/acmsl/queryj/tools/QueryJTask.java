@@ -56,11 +56,12 @@ import org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.Oracle8MetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.handlers.SetupContextHandler;
 import org.acmsl.queryj.tools.templates.dao.DAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOFactoryTemplateHandlerBundle;
@@ -239,7 +240,7 @@ public class QueryJTask
     /**
      * The "grammar-bundle" property.
      */
-    private String m__strGrammarBundleName;
+    private File m__GrammarBundle;
 
     /**
      * The nested tables.
@@ -557,7 +558,6 @@ public class QueryJTask
     {
         return m__Outputdir;
     }
-
 
     /**
      * Specifies the header.
@@ -1014,16 +1014,16 @@ public class QueryJTask
      * @param grammarbundle the new grammarbundle.
      */
     protected final void immutableSetGrammarbundle(
-        final String grammarBundle)
+        final File grammarBundle)
     {
-        m__strGrammarBundleName = grammarBundle;
+        m__GrammarBundle = grammarBundle;
     }
 
     /**
      * Specifies the grammarbundle.
      * @param grammarbundle the new grammarbundle.
      */
-    public void setGrammarbundle(final String grammarBundle)
+    public void setGrammarbundle(final File grammarBundle)
     {
         immutableSetGrammarbundle(grammarBundle);
     }
@@ -1032,9 +1032,9 @@ public class QueryJTask
      * Retrieves the grammarbundle.
      * @return such information.
      */
-    public String getGrammarbundle()
+    public File getGrammarbundle()
     {
-        return m__strGrammarBundleName;
+        return m__GrammarBundle;
     }
 
     /**
@@ -1068,6 +1068,7 @@ public class QueryJTask
         if  (result != null)
         {
             result.add(new ParameterValidationHandler());
+            result.add(new SetupContextHandler());
 
             result.add(new JdbcConnectionOpeningHandler());
             result.add(new CustomSqlProviderRetrievalHandler());
@@ -1173,7 +1174,7 @@ public class QueryJTask
             String t_strCustomSqlModel = getCustomSqlModel();
             File t_SqlXmlFile = getSqlXmlFile();
 
-            String t_strGrammarBundle = getGrammarbundle();
+            File t_GrammarBundle = getGrammarbundle();
 
             AntTablesElement t_Tables = getTables();
 
@@ -1324,11 +1325,11 @@ public class QueryJTask
                         t_SqlXmlFile);
                 }
 
-                if  (t_strGrammarBundle != null)
+                if  (t_GrammarBundle != null)
                 {
                     t_mAttributes.put(
                         ParameterValidationHandler.GRAMMAR_BUNDLE_NAME,
-                        t_strGrammarBundle);
+                        t_GrammarBundle);
                 }
             }
         }

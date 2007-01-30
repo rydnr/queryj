@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -53,7 +54,6 @@ import org.acmsl.queryj.tools.PackageUtils;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*

@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
@@ -54,8 +55,8 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -175,7 +176,7 @@ public class XmlDAOFactoryTemplateGenerator
             template,
             outputDir, 
             StringUtils.getInstance(),
-            EnglishGrammarUtils.getInstance(),
+            SingularPluralFormConverter.getInstance(),
             FileUtils.getInstance());
     }
 
@@ -184,21 +185,21 @@ public class XmlDAOFactoryTemplateGenerator
      * @param template template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code>
      * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition template instanceof BaseDAOFactoryTemplate
      * @precondition outputDir != null
      * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
+     * @precondition singularPluralFormConverter != null
      * @precondition fileUtils != null
      */
     protected void write(
         final BasePerTableTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
+        final EnglishGrammarUtils singularPluralFormConverter,
         final FileUtils fileUtils)
       throws  IOException
     {
@@ -209,7 +210,7 @@ public class XmlDAOFactoryTemplateGenerator
             + File.separator
             + "Xml"
             + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
+                singularPluralFormConverter.getSingular(
                     template.getTableName().toLowerCase()),
                 '_')
             + "DAOFactory.java",

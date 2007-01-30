@@ -2345,8 +2345,7 @@ public abstract class AbstractJdbcMetadataManager
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
         {
             t_strTableName = t_astrTableNames[t_iIndex];
-            t_strParentTable = getParentTable(t_strTableName);
-            
+
             String t_strTableComment =
                 getTableComment(
                     metaData,
@@ -2356,6 +2355,8 @@ public abstract class AbstractJdbcMetadataManager
 
             addTableComment(t_strTableName, t_strTableComment);
 
+            t_strParentTable = getParentTable(t_strTableName);
+            
             String[] t_astrColumnNames =
                 getColumnNames(
                     metaData,
@@ -2703,8 +2704,8 @@ public abstract class AbstractJdbcMetadataManager
                 result.addAll(
                     Arrays.asList(
                         (Object[])
-                        toIntegerArray(
-                            extractColumnTypes(t_rsColumns, size))));
+                            toIntegerArray(
+                                extractColumnTypes(t_rsColumns, size))));
 
                 t_rsColumns.close();
             }
@@ -3772,7 +3773,7 @@ public abstract class AbstractJdbcMetadataManager
     protected String getParentTable(
         final String table, final MetaLanguageUtils metaLanguageUtils)
     {
-        return metaLanguageUtils.retrieveDeclaredParent(table);
+        return metaLanguageUtils.retrieveDeclaredParent(getTableComment(table));
     }
 
     /**

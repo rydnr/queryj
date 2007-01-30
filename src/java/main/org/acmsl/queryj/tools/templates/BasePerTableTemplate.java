@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
@@ -188,7 +189,7 @@ public abstract class BasePerTableTemplate
                 DefaultThemeUtils.getInstance(),
                 PackageUtils.getInstance(),
                 StringValidator.getInstance(),
-                EnglishGrammarUtils.getInstance(),
+                SingularPluralFormConverter.getInstance(),
                 DAOTemplateUtils.getInstance(),
                 TemplateUtils.getInstance(),
                 MetaLanguageUtils.getInstance(),
@@ -213,7 +214,7 @@ public abstract class BasePerTableTemplate
      * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
      * @param packageUtils the PackageUtils instance.
      * @param stringValidator the StringValidator instance.
-     * @param englishGrammarUtils the EnglishGrammarUtils instance.
+     * @param singularPluralFormConverter the SingularPluralFormConverter instance.
      * @param daoTemplateUtils the DAOTemplateUtils instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
@@ -227,7 +228,7 @@ public abstract class BasePerTableTemplate
      * @precondition defaultThemeUtils != null
      * @precondition packageUtils != null
      * @precondition stringValidator != null
-     * @precondition englishGrammarUtils != null
+     * @precondition singularPluralFormConverter != null
      * @precondition daoTemplateUtils != null
      * @precondition metaLanguageUtils != null
      * @precondition metadataUtils != null
@@ -249,7 +250,7 @@ public abstract class BasePerTableTemplate
         final DefaultThemeUtils defaultThemeUtils,
         final PackageUtils packageUtils,
         final StringValidator stringValidator,
-        final EnglishGrammarUtils englishGrammarUtils,
+        final EnglishGrammarUtils singularPluralFormConverter,
         final DAOTemplateUtils daoTemplateUtils,
         final TemplateUtils templateUtils,
         final MetaLanguageUtils metaLanguageUtils,
@@ -259,7 +260,7 @@ public abstract class BasePerTableTemplate
 
         String t_strSingularName =
             stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
+                singularPluralFormConverter.getSingular(
                     tableName.toLowerCase()),
                 '_');
 
@@ -274,7 +275,7 @@ public abstract class BasePerTableTemplate
             stringUtils.capitalize(repositoryName, '_');
 
         String t_strValueObjectName =
-            englishGrammarUtils.getSingular(
+            singularPluralFormConverter.getSingular(
                 tableName.toLowerCase());
 
         String t_strCapitalizedValueObjectName =

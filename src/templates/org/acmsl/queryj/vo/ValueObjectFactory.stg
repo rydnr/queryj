@@ -101,7 +101,7 @@ class(input) ::= <<
  * <[
       first_line_description(tableName=input.table_name)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
@@ -116,7 +116,7 @@ public class <input.vo_name>ValueObjectFactory
          * The actual singleton.
          */
         public static final <input.vo_name>ValueObjectFactory SINGLETON =
-            <input.vo_name>ValueObjectFactory();
+            new <input.vo_name>ValueObjectFactory();
     }
 
     /**

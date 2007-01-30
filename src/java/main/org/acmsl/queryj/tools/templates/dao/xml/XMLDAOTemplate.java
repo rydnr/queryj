@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.dao.xml;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -213,7 +214,7 @@ public class XMLDAOTemplate
                 metadataManager.getMetadataTypeManager(),
                 StringUtils.getInstance(),
                 StringValidator.getInstance(),
-                EnglishGrammarUtils.getInstance(),
+                SingularPluralFormConverter.getInstance(),
                 PackageUtils.getInstance());
     }
 
@@ -276,7 +277,7 @@ public class XMLDAOTemplate
      * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param stringValidator the <code>StringValidator</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code>
      * instance.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such code.
@@ -284,7 +285,7 @@ public class XMLDAOTemplate
      * @precondition metadataTypeManager != null
      * @precondition stringUtils != null
      * @precondition stringValidator != null
-     * @precondition englishGrammarUtils != null
+     * @precondition singularPluralFormConverter != null
      * @precondition packageUtils != null
      */
     protected String generateOutput(
@@ -339,7 +340,7 @@ public class XMLDAOTemplate
         final MetadataTypeManager metadataTypeManager,
         final StringUtils stringUtils,
         final StringValidator stringValidator,
-        final EnglishGrammarUtils englishGrammarUtils,
+        final EnglishGrammarUtils singularPluralFormConverter,
         final PackageUtils packageUtils)
     {
         StringBuffer t_sbResult = new StringBuffer();
@@ -479,7 +480,7 @@ public class XMLDAOTemplate
                 t_strTableName);
 
         String t_strValueObjectName =
-            englishGrammarUtils.getSingular(
+            singularPluralFormConverter.getSingular(
                 tableTemplate.getTableName().toLowerCase());
 
         String t_strCapitalizedValueObjectName =
@@ -501,7 +502,7 @@ public class XMLDAOTemplate
 
                 String t_strReferredTableName =
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_astrReferredTables[t_iRefTableIndex].toLowerCase()),
                         '_');
 
@@ -569,7 +570,7 @@ public class XMLDAOTemplate
                             t_strDeleteMethodSuffix,
                             t_sbPkDeclaration,
                             stringUtils.capitalize(
-                                englishGrammarUtils.getSingular(
+                                singularPluralFormConverter.getSingular(
                                     t_strTableName.toLowerCase()),
                                 '_'),
                             t_sbPkFilterValues,
@@ -613,7 +614,7 @@ public class XMLDAOTemplate
                     packageUtils.retrieveValueObjectPackage(
                         basePackageName),
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_'),
                     packageUtils.retrieveValueObjectFactoryPackage(
@@ -641,7 +642,7 @@ public class XMLDAOTemplate
                 new Object[]
                 {
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_')
                 }));
@@ -652,7 +653,7 @@ public class XMLDAOTemplate
                 {
                     t_strTableName.toLowerCase(),
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_')
                 }));
@@ -663,7 +664,7 @@ public class XMLDAOTemplate
                 new Object[]
                 {
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_')
                 }));
@@ -900,7 +901,7 @@ public class XMLDAOTemplate
                     new Object[]
                     {
                         stringUtils.capitalize(
-                            englishGrammarUtils.getSingular(
+                            singularPluralFormConverter.getSingular(
                                 t_strTableName.toLowerCase()),
                             '_'),
                         stringUtils.unCapitalizeStart(
@@ -1004,7 +1005,7 @@ public class XMLDAOTemplate
 
         String t_strCapitalizedTableName =
             stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
+                singularPluralFormConverter.getSingular(
                     t_strTableName.toLowerCase()),
                 '_');
 
@@ -1030,7 +1031,7 @@ public class XMLDAOTemplate
                     t_strTableName,
                     t_sbPkJavadoc,
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_'),
                     t_sbPkDeclaration,
@@ -1043,7 +1044,7 @@ public class XMLDAOTemplate
                 {
                     t_strTableName.toUpperCase(),
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_'),
                     t_sbPkJavadoc,
@@ -1058,7 +1059,7 @@ public class XMLDAOTemplate
                 {
                     t_strTableName.toUpperCase(),
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_'),
                     t_sbPkJavadoc,
@@ -1073,7 +1074,7 @@ public class XMLDAOTemplate
                 new Object[]
                 {
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_'),
                     t_sbPkJavadoc.toString(),
@@ -1101,7 +1102,7 @@ public class XMLDAOTemplate
                     t_strDeleteMethodSuffix,
                     t_sbPkDeclaration,
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_'),
                     t_sbPkFilterValues,
@@ -1121,7 +1122,7 @@ public class XMLDAOTemplate
                     t_strDeleteMethodSuffix,
                     t_sbPkDeclaration,
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_'),
                     t_sbPkFilterValues,
@@ -1141,10 +1142,10 @@ public class XMLDAOTemplate
                 new Object[]
                 {
                     stringUtils.capitalize(
-                        englishGrammarUtils.getSingular(
+                        singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase()),
                         '_'),
-                    englishGrammarUtils.getSingular(
+                    singularPluralFormConverter.getSingular(
                         t_strTableName.toLowerCase()),
                     t_sbUndigesterPropertyRules
                 }));

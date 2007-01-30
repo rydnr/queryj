@@ -152,7 +152,7 @@ class(input, table) ::= <<
         className=input.dao_implementation_class_name,
         engineName=input.engine_name)
     ]:{ line |<line>}; separator="\n * ">
- * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */

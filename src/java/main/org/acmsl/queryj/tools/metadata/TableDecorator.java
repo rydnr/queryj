@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractTable;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -365,21 +366,21 @@ public class TableDecorator
      */
     protected String getSingular(final String word)
     {
-        return getSingular(word, EnglishGrammarUtils.getInstance());
+        return getSingular(word, SingularPluralFormConverter.getInstance());
     }
 
     /**
      * Retrieves the singular of given word.
      * @param word the word.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code> instance.
+     * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code> instance.
      * @return the singular.
      * @precondition word != null
-     * @precondition englishGrammarUtils != null
+     * @precondition singularPluralFormConverter != null
      */
     protected String getSingular(
-        final String word, final EnglishGrammarUtils englishGrammarUtils)
+        final String word, final EnglishGrammarUtils singularPluralFormConverter)
     {
-        return englishGrammarUtils.getSingular(word);
+        return singularPluralFormConverter.getSingular(word);
     }
 
     /**

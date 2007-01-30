@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
@@ -120,7 +121,7 @@ public class DAOFactoryTemplate
                 getBasePackageName(),
                 getJNDIDataSource(),
                 StringUtils.getInstance(),
-                EnglishGrammarUtils.getInstance(),
+                SingularPluralFormConverter.getInstance(),
                 DefaultThemeUtils.getInstance(),
                 PackageUtils.getInstance());
     }
@@ -135,14 +136,14 @@ public class DAOFactoryTemplate
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code>
      * instance.
      * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such source code.
      * @precondition tableTemplate != null
      * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
+     * @precondition singularPluralFormConverter != null
      * @precondition defaultThemeUtils != null
      * @precondition packageUtils != null
      */
@@ -154,7 +155,7 @@ public class DAOFactoryTemplate
         final String basePackageName,
         final String jndiDataSource,
         final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
+        final EnglishGrammarUtils singularPluralFormConverter,
         final DefaultThemeUtils defaultThemeUtils,
         final PackageUtils packageUtils)
     {
@@ -164,7 +165,7 @@ public class DAOFactoryTemplate
 
         String t_strSingularName =
             stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
+                singularPluralFormConverter.getSingular(
                     t_strTableName.toLowerCase()),
                 '_');
 

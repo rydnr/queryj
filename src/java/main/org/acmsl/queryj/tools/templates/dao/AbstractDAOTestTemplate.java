@@ -40,8 +40,9 @@
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
@@ -1421,25 +1422,25 @@ public abstract class AbstractDAOTestTemplate
     {
         return
             getTestName(
-                StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
+                StringUtils.getInstance(), SingularPluralFormConverter.getInstance());
     }
 
     /**
      * Retrieves the test name.
      * @param stringUtils the StringUtils instance.
-     * @param englishGrammarUtils the EnglishGrammarUtils instance.
+     * @param singularPluralFormConverter the SingularPluralFormConverter instance.
      * @return such name.
      * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
+     * @precondition singularPluralFormConverter != null
      */
     protected String getTestName(
         final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils)
+        final EnglishGrammarUtils singularPluralFormConverter)
     {
         return
               getEngineName()
             + stringUtils.capitalize(
-                  englishGrammarUtils.getSingular(
+                  singularPluralFormConverter.getSingular(
                       getTableTemplate().getTableName().toLowerCase()),
                   '_')
             + "DAOTest";

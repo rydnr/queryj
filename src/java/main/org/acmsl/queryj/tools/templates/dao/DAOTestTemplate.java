@@ -38,8 +38,9 @@
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -217,7 +218,7 @@ public class DAOTestTemplate
                 getClassEnd(),
                 metadataManager.getMetadataTypeManager(),
                 StringUtils.getInstance(),
-                EnglishGrammarUtils.getInstance());
+                SingularPluralFormConverter.getInstance());
     }
 
     /**
@@ -269,14 +270,14 @@ public class DAOTestTemplate
      * @param classEnd the class end.
      * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code>
      * instance.
      * @return such source code.
      * @precondition tableTemplate != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
+     * @precondition singularPluralFormConverter != null
      */
     protected String generateOutput(
         final TableTemplate tableTemplate,
@@ -320,13 +321,13 @@ public class DAOTestTemplate
         final String classEnd,
         final MetadataTypeManager metadataTypeManager,
         final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils)
+        final EnglishGrammarUtils singularPluralFormConverter)
     {
         StringBuffer t_sbResult = new StringBuffer();
 
         String t_strCapitalizedTableName =
             stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
+                singularPluralFormConverter.getSingular(
                     tableTemplate.getTableName().toLowerCase()),
                 '_');
         /*

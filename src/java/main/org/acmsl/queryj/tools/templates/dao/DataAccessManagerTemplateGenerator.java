@@ -40,8 +40,9 @@
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
@@ -58,7 +59,6 @@ import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 

@@ -71,6 +71,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -679,6 +680,7 @@ public class OracleMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param parentTable the parent table.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
@@ -688,7 +690,8 @@ public class OracleMetadataManager
         final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String tableName)
+        final String tableName,
+        final String parentTable)
       throws  SQLException,
               QueryJException
     {
@@ -698,6 +701,7 @@ public class OracleMetadataManager
                 catalog,
                 schema,
                 tableName,
+                parentTable,
                 QueryFactory.getInstance());
     }
 
@@ -707,6 +711,7 @@ public class OracleMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param parentTable the parent table.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
@@ -719,12 +724,26 @@ public class OracleMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
+        final String parentTable,
         final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
-        String[] result;
+        Collection result = new ArrayList();
 
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    getColumnNames(
+                        connection,
+                        catalog,
+                        schema,
+                        parentTable,
+                        getParentTable(parentTable),
+                        queryFactory)));
+        }
+        
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
@@ -770,7 +789,9 @@ public class OracleMetadataManager
                         sqlException);
             }
 
-            result = extractColumnNames(t_rsResults);
+            result.addAll(
+                Arrays.asList(
+                    extractColumnNames(t_rsResults)));
         }
         catch  (final SQLException sqlException)
         {
@@ -831,12 +852,7 @@ public class OracleMetadataManager
             }
         }
 
-        if  (result == null)
-        {
-            result = EMPTY_STRING_ARRAY;
-        }
-
-        return result;
+        return (String[]) result.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -861,6 +877,7 @@ public class OracleMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param parentTable the parent table, if any.
      * @param size the number of fields to extract.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
@@ -872,6 +889,7 @@ public class OracleMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
+        final String parentTable,
         final int size)
       throws  SQLException,
               QueryJException
@@ -882,6 +900,7 @@ public class OracleMetadataManager
                 catalog,
                 schema,
                 tableName,
+                parentTable,
                 size,
                 QueryFactory.getInstance());
     }
@@ -892,6 +911,7 @@ public class OracleMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param parentTable the parent table.
      * @param size the number of fields to extract.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @return the list of all column types.
@@ -905,12 +925,29 @@ public class OracleMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
+        final String parentTable,
         final int size,
         final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
-        int[] result;
+        Collection result = new ArrayList();
+        
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                        toIntegerArray(
+                            getColumnTypes(
+                                connection,
+                                catalog,
+                                schema,
+                                parentTable,
+                                getParentTable(parentTable),
+                                -1,
+                                queryFactory))));
+        }
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
@@ -947,7 +984,12 @@ public class OracleMetadataManager
                         sqlException);
             }
 
-            result = extractColumnTypes(t_rsResults, USER_TAB_COLUMNS.DATA_TYPE);
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                        toIntegerArray(
+                            extractColumnTypes(
+                                t_rsResults, USER_TAB_COLUMNS.DATA_TYPE))));
         }
         catch  (final SQLException sqlException)
         {
@@ -1008,12 +1050,7 @@ public class OracleMetadataManager
             }
         }
 
-        if  (result == null)
-        {
-            result = EMPTY_INT_ARRAY;
-        }
-
-        return result;
+        return toIntArray((Integer[]) result.toArray(EMPTY_INTEGER_ARRAY));
     }
 
     /**
@@ -1077,6 +1114,7 @@ public class OracleMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param parentTable the parent table, if any.
      * @param size the number of fields to extract.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
@@ -1088,6 +1126,7 @@ public class OracleMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
+        final String parentTable,
         final int size)
       throws  SQLException,
               QueryJException
@@ -1098,6 +1137,7 @@ public class OracleMetadataManager
                 catalog,
                 schema,
                 tableName,
+                parentTable,
                 size,
                 QueryFactory.getInstance());
     }
@@ -1108,6 +1148,7 @@ public class OracleMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param parentTable the parent table.
      * @param size the number of fields to extract.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @return the list of all column types.
@@ -1121,12 +1162,29 @@ public class OracleMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
+        final String parentTable,
         final int size,
         final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
-        boolean[] result;
+        Collection result = new ArrayList();
+
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                       toBooleanArray(
+                           getAllowNulls(
+                               connection,
+                               catalog,
+                               schema,
+                               parentTable,
+                               getParentTable(parentTable),
+                               -1,
+                               queryFactory))));
+        }
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
@@ -1163,10 +1221,13 @@ public class OracleMetadataManager
                         sqlException);
             }
 
-            result =
-                extractAllowNull(
-                    t_rsResults,
-                    USER_TAB_COLUMNS.NULLABLE);
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                        toBooleanArray(
+                            extractAllowNull(
+                                t_rsResults,
+                                USER_TAB_COLUMNS.NULLABLE))));
         }
         catch  (final SQLException sqlException)
         {
@@ -1227,12 +1288,7 @@ public class OracleMetadataManager
             }
         }
 
-        if  (result == null)
-        {
-            result = EMPTY_BOOL_ARRAY;
-        }
-
-        return result;
+        return toBoolArray((Boolean[]) result.toArray(EMPTY_BOOLEAN_ARRAY));
     }
 
     /**

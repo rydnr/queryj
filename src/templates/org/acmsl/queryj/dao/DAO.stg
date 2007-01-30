@@ -315,7 +315,7 @@ class(input,foreign_keys_by_table) ::= <<
         engineName=input.engine_name,
         engineVersion=input.engine_version)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
@@ -823,7 +823,7 @@ public class <input.engine_name><input.vo_name>DAO
 
     /**
      * Extracts \<i><input.vo_name>\</i> value objects from result sets.
-     * @author \<a href="http://maven.acm-sl.org/queryj">QueryJ\</a>
+     * @author \<a href="http://www.acm-sl.org/queryj">QueryJ\</a>
      */
     public static class <input.vo_name>PkResultSetExtractor
         implements  ResultSetExtractor

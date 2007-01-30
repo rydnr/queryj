@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates.dao.mock;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -146,8 +147,8 @@ public class MockDAOTestTemplate
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
+        EnglishGrammarUtils t_SingularPluralFormConverter =
+            SingularPluralFormConverter.getInstance();
 
         TableTemplate t_TableTemplate = getTableTemplate();
 
@@ -158,7 +159,7 @@ public class MockDAOTestTemplate
 
         String t_strCapitalizedTableName =
             t_StringUtils.capitalize(
-                t_EnglishGrammarUtils.getSingular(
+                t_SingularPluralFormConverter.getSingular(
                     t_TableTemplate.getTableName().toLowerCase()),
                 '_');
         /*

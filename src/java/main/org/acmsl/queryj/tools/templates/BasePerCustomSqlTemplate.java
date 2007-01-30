@@ -39,8 +39,9 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
@@ -178,7 +179,7 @@ public abstract class BasePerCustomSqlTemplate
                 DefaultThemeUtils.getInstance(),
                 PackageUtils.getInstance(),
                 StringValidator.getInstance(),
-                EnglishGrammarUtils.getInstance(),
+                SingularPluralFormConverter.getInstance(),
                 MetaLanguageUtils.getInstance());
     }
 
@@ -198,7 +199,7 @@ public abstract class BasePerCustomSqlTemplate
      * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
      * @param packageUtils the PackageUtils instance.
      * @param stringValidator the StringValidator instance.
-     * @param englishGrammarUtils the EnglishGrammarUtils instance.
+     * @param singularPluralFormConverter the SingularPluralFormConverter instance.
      * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
      * @return such code.
      * @precondition sql != null
@@ -209,7 +210,7 @@ public abstract class BasePerCustomSqlTemplate
      * @precondition defaultThemeUtils != null
      * @precondition packageUtils != null
      * @precondition stringValidator != null
-     * @precondition englishGrammarUtils != null
+     * @precondition singularPluralFormConverter != null
      * @precondition metaLanguageUtils != null
      */
     protected String generateOutput(
@@ -227,7 +228,7 @@ public abstract class BasePerCustomSqlTemplate
         final DefaultThemeUtils defaultThemeUtils,
         final PackageUtils packageUtils,
         final StringValidator stringValidator,
-        final EnglishGrammarUtils englishGrammarUtils,
+        final EnglishGrammarUtils singularPluralFormConverter,
         final MetaLanguageUtils metaLanguageUtils)
     {
         String result = "";

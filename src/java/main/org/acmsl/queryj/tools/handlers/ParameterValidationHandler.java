@@ -311,38 +311,6 @@ public class ParameterValidationHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(final Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            try 
-            {
-                result = handle((AntCommand) command);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(ParameterValidationHandler.class);
-                
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Error validating parameters.",
-                        buildException);
-                }
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      */
     public boolean handle(final AntCommand command)
@@ -392,7 +360,7 @@ public class ParameterValidationHandler
                     parameters.get(EXTERNALLY_MANAGED_FIELDS),
                 (String) parameters.get(CUSTOM_SQL_MODEL),
                 (File) parameters.get(SQL_XML_FILE),
-                (String) parameters.get(GRAMMAR_BUNDLE_NAME),
+                (File) parameters.get(GRAMMAR_BUNDLE_NAME),
                 parameters);
         }
     }
@@ -447,7 +415,7 @@ public class ParameterValidationHandler
         final AntExternallyManagedFieldsElement externallyManagedFields,
         final String customSqlModel,
         final File sqlXmlFile,
-        final String grammarBundleName,
+        final File grammarBundleName,
         final Map parameters)
       throws  BuildException
     {
@@ -612,17 +580,17 @@ public class ParameterValidationHandler
         }
 
         // Not mandatory
-        if  (grammarBundleName != null)
-        {
-            try
-            {
-                ResourceBundle.getBundle(grammarBundleName);
-            }
-            catch  (final MissingResourceException missingResourceException)
-            {
-                throw new BuildException(GRAMMAR_BUNDLE_NOT_FOUND);
-            }
-        }
+//         if  (grammarBundleName != null)
+//         {
+//             try
+//             {
+//                 ResourceBundle.getBundle(grammarBundleName.getName());
+//             }
+//             catch  (final MissingResourceException missingResourceException)
+//             {
+//                 throw new BuildException(GRAMMAR_BUNDLE_NOT_FOUND);
+//             }
+//         }
     }
 
     /**

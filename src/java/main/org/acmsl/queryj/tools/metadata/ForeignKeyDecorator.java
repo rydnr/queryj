@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractForeignKey;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -120,7 +121,7 @@ public class ForeignKeyDecorator
         return
             toVo(
                 getSourceTableName(),
-                EnglishGrammarUtils.getInstance(),
+                SingularPluralFormConverter.getInstance(),
                 DecorationUtils.getInstance());
     }
 
@@ -133,29 +134,29 @@ public class ForeignKeyDecorator
         return
             toVo(
                 getTargetTableName(),
-                EnglishGrammarUtils.getInstance(),
+                SingularPluralFormConverter.getInstance(),
                 DecorationUtils.getInstance());
     }
 
     /**
      * Converts given table name to its value-object version.
      * @param tableName the table name.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code>
      * instance.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the value-object name.
      * @precondition tableName != null
-     * @precondition englishGrammarUtils != null
+     * @precondition singularPluralFormConverter != null
      * @precondition decorationUtils != null
      */
     protected String toVo(
         final String tableName,
-        final EnglishGrammarUtils englishGrammarUtils,
+        final EnglishGrammarUtils singularPluralFormConverter,
         final DecorationUtils decorationUtils)
     {
         return
             capitalize(
-                englishGrammarUtils.getSingular(tableName.toLowerCase()),
+                singularPluralFormConverter.getSingular(tableName.toLowerCase()),
                 decorationUtils);
     }
 

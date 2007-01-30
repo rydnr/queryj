@@ -136,7 +136,7 @@ class(input) ::= <<
       first_line_description(tableName=input.table_name),
       second_line_description(tableName=input.table_name)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
+ * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
