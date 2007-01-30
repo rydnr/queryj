@@ -84,7 +84,7 @@ import java.util.Map;
  * Retrieves the database metadata instance.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
- * @version $Revision: 1659 $ ($Author: chous $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $)
+ * @version $Revision$ ($Author$ at $Date$)
  */
 public abstract class DatabaseMetaDataRetrievalHandler
     extends  AbstractAntCommandHandler

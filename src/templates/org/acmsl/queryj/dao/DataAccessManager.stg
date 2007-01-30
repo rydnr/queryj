@@ -35,9 +35,9 @@
 //
 // Description: Defines the rules to generate the DataAccessManager class.
 //
-// Version: $Revision: 563 $ ($Author: chous $ at $Date: 2006-04-26 23:06:32 +0200 (Wed, 26 Apr 2006) $)
+// Version: $Revision$ ($Author$ at $Date$)
 //
-// $Id: DataAccessManager.stg 563 2006-04-26 21:06:32Z chous $
+// $Id$
 //
 group DataAccessManager;
 

@@ -63,7 +63,7 @@ import java.sql.DatabaseMetaData;
  * Retrieves the Oracle metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
- * @version $Revision: 1318 $ ($Author: chous $ at $Date: 2006-04-23 19:05:20 +0200 (Sun, 23 Apr 2006) $)
+ * @version $Revision$ ($Author$ at $Date$)
  */
 public class Oracle8MetaDataRetrievalHandler
     extends  DatabaseMetaDataRetrievalHandler

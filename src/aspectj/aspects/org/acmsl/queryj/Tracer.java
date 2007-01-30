@@ -35,13 +35,13 @@
  *
  * Description: Traces method calls.
  *
- * Last modified by: $Author: chous $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $
+ * Last modified by: $Author$ at $Date$
  *
- * File version: $Revision: 1659 $
+ * File version: $Revision$
  *
  * Project version: $Name$
  *
- * $Id: Tracer.java 1659 2007-01-25 20:18:08Z chous $
+ * $Id$
  *
  */
 package aspects.org.acmsl.queryj;
@@ -70,7 +70,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href=
   "http://www.samspublishing.com/catalog/product.asp?product_id={681277AC-6106-4C7D-B71A-59D04871EE89}"
    >Ivan Kiselev (from Aspect-Oriented Programming with AspectJ)</a>
- * @version $Revision: 1659 $
+ * @version $Revision$
  */
 public aspect Tracer
 {

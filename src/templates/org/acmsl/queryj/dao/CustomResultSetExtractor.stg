@@ -35,9 +35,9 @@
 //
 // Description: Defines the rules to generate CustomResultSetExtractors.
 //
-// Version: $Revision: 574 $ ($Author: chous $ at $Date: 2006-04-27 17:32:39 +0200 (Thu, 27 Apr 2006) $)
+// Version: $Revision$ ($Author$ at $Date$)
 //
-// $Id: CustomResultSetExtractor.stg 574 2006-04-27 15:32:39Z chous $
+// $Id$
 //
 group CustomResultSetExtractor;
 

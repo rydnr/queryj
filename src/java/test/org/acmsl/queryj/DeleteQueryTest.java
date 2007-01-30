@@ -298,7 +298,7 @@ public class DeleteQueryTest
     /**
      * Test-only table.
      * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
-     * @version $Revision: 1659 $
+     * @version $Revision$
      */
     public static class UsersTable
         extends  Table

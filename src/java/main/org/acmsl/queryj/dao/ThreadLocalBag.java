@@ -47,7 +47,7 @@ import java.util.Map;
 /**
  * Provides per-thread data containers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @version $Revision: 39425 $
+ * @version $Revision$
  */
 public class ThreadLocalBag
 {

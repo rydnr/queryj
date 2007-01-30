@@ -34,11 +34,11 @@
  * Description: Provides some grammar rules for converting plural and singular
  *              forms (using english rules by default).
  *
- * Last modified by: $Author: chous $ at $Date: 2006-06-14 21:01:54 +0200 (Wed, 14 Jun 2006) $
+ * Last modified by: $Author$ at $Date$
  *
- * File version: $Revision: 550 $
+ * File version: $Revision$
  *
- * $Id: EnglishGrammarUtils.java 550 2006-06-14 19:01:54Z chous $
+ * $Id$
  *
  */
 package org.acmsl.queryj.tools;
@@ -65,7 +65,7 @@ import java.util.Map;
  *              forms (using english rules by default).
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro Armendáriz</a>
- * @version $Revision: 550 $
+ * @version $Revision$
  */
 public class SingularPluralFormConverter
     extends  EnglishGrammarUtils

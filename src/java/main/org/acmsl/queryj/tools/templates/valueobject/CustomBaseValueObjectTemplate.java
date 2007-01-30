@@ -35,7 +35,7 @@
  * Description: Is able to create CustomBaseValueObject implementation
  *              for each custom query requiring so.
  *
- * $Id: $
+ * $Id$
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 

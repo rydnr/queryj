@@ -72,7 +72,7 @@ import java.util.Map;
  * See <a href="bugzilla.acm-sl.org/show_bug.cgi?id=502">502</a>.
  * @author <a href="mailto:chous@acm-sl.org"
  * >Jose San Leandro</a>
- * @version: $Revision: 1662 $ at $Date: 2007-01-30 15:30:18 +0100 (Tue, 30 Jan 2007) $ by $Author: chous $
+ * @version: $Revision$ at $Date$ by $Author$
  */
 public abstract class AbstractXMLDAOTestTemplate
     extends  AbstractTestTemplate
