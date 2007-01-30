@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -176,7 +177,7 @@ public class CustomBaseValueObjectTemplateGenerator
         final BasePerCustomResultTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
-        final SingularPluralFormConverter singularPluralFormConverter,
+        final EnglishGrammarUtils singularPluralFormConverter,
         final FileUtils fileUtils)
       throws  IOException
     {

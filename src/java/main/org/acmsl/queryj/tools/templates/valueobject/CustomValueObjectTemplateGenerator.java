@@ -56,9 +56,9 @@ import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
