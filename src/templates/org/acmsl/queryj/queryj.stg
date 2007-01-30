@@ -35,9 +35,9 @@
 //
 // Description: Defines the common template rules in QueryJ theme.
 //
-// Version: $Revision$ ($Author$ at $Date$)
+// Version: $Revision: 1659 $ ($Author: chous $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $)
 //
-// $Id$
+// $Id: queryj.stg 1659 2007-01-25 20:18:08Z chous $
 group queryj;
 
 typeInitMap ::= [

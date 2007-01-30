@@ -53,7 +53,7 @@ import org.acmsl.commons.patterns.Singleton;
  * database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  * >Jose San Leandro</a>
- * @version $Revision$ at $Date$ by $Author$
+ * @version $Revision: 1659 $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $ by $Author: chous $
  */
 public interface XMLValueObjectFactoryTemplateDefaults
     extends  JavaTemplateDefaults,

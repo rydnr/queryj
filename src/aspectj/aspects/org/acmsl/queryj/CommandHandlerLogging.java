@@ -36,13 +36,13 @@
  * Description: Prints out when a handler starts and finishes in the process
  *              flow.
  *
- * Last modified by: $Author$ at $Date$
+ * Last modified by: $Author: chous $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $
  *
- * File version: $Revision$
+ * File version: $Revision: 1659 $
  *
  * Project version: $Name$
  *
- * $Id$
+ * $Id: CommandHandlerLogging.java 1659 2007-01-25 20:18:08Z chous $
  *
  */
 package aspects.org.acmsl.queryj;
@@ -63,7 +63,7 @@ import org.apache.commons.logging.LogFactory;
  * Prints out when a handler starts and finishes in the process
  * flow.
  * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
+ * @version $Revision: 1659 $
  */
 public aspect CommandHandlerLogging
 {

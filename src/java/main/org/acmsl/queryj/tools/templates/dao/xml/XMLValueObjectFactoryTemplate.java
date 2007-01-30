@@ -67,7 +67,7 @@ import java.util.Map;
  * database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  * >Jose San Leandro</a>
- * @version $Revision$ at $Date$ by $Author$
+ * @version $Revision: 1662 $ at $Date: 2007-01-30 15:30:18 +0100 (Tue, 30 Jan 2007) $ by $Author: chous $
  */
 public class XMLValueObjectFactoryTemplate
     extends  AbstractXMLValueObjectFactoryTemplate

@@ -297,7 +297,7 @@ public class ConditionFactory
     /**
      * Envelopes a condition surrounding it with appropiate prefix and suffix.
      * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
-     * @version $Revision$
+     * @version $Revision: 1659 $
      */
     protected static class _ConditionWrapper
         extends  Condition
@@ -526,7 +526,7 @@ public class ConditionFactory
     /**
      * Envelopes a condition surrounding it with appropiate prefix and suffix.
      * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
-     * @version $Revision$
+     * @version $Revision: 1659 $
      */
     protected static class _AtomicConditionWrapper
         extends  AtomicCondition
@@ -863,7 +863,7 @@ public class ConditionFactory
      * Envelopes a variable condition surrounding it with appropiate
      * prefix and suffix.
      * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
-     * @version $Revision$
+     * @version $Revision: 1659 $
      */
     protected static class _VariableConditionWrapper
         extends  VariableCondition

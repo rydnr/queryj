@@ -40,9 +40,9 @@
  * using the *QueryjAntLog*, available via
  * *AntCommand*.
  *
- * Version: $Revision$ ($Author$ at $Date$)
+ * Version: $Revision: 1659 $ ($Author: chous $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $)
  *
- * $Id$
+ * $Id: QueryJAntLog.java 1659 2007-01-25 20:18:08Z chous $
  *
  */
 package org.acmsl.queryj.tools.logging;
@@ -66,7 +66,7 @@ import org.apache.tools.ant.Project;
  * <code>AntCommand</code>.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
- * @version $Revision$ ($Author$ at $Date$)
+ * @version $Revision: 1659 $ ($Author: chous $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $)
  */
 public class QueryJAntLog
     implements  QueryJLog

@@ -36,9 +36,9 @@
  * Description: *LogFactory* implementation that uses a
  * cached Ant-based *Log* instance if pre-cached.
  *
- * Version: $Revision$ ($Author$ at $Date$)
+ * Version: $Revision: 1659 $ ($Author: chous $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $)
  *
- * $Id$
+ * $Id: QueryJLogFactory.java 1659 2007-01-25 20:18:08Z chous $
  *
  * Important Note: This class implements Apache Commons-Logging's Log
  * interface. License details are copied verbatim below.
@@ -58,7 +58,7 @@ import org.apache.commons.logging.LogFactory;
  * cached Ant-based <code>Log</code> instance if pre-cached.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
- * @version $Revision$ ($Author$ at $Date$)
+ * @version $Revision: 1659 $ ($Author: chous $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $)
  */
 public class QueryJLogFactory
     extends  LogFactory

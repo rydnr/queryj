@@ -42,9 +42,9 @@
  * using the *QueryJLog*, available via
  * *AntCommand*.
  *
- * Version: $Revision$ ($Author$ at $Date$)
+ * Version: $Revision: 1659 $ ($Author: chous $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $)
  *
- * $Id$
+ * $Id: QueryJLog.java 1659 2007-01-25 20:18:08Z chous $
  *
  * Important Note: This class implements Apacje Commons-Logging's Log
  * interface. License details are copied verbatim below.
@@ -68,7 +68,7 @@ import org.apache.commons.logging.Log;
  * <code>AntCommand</code>.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
- * @version $Revision$ ($Author$ at $Date$)
+ * @version $Revision: 1659 $ ($Author: chous $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $)
  */
 public interface QueryJLog
     extends  Log

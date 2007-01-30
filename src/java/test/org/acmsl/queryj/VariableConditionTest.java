@@ -185,7 +185,7 @@ public class VariableConditionTest
     /**
      * Test-only table.
      * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
-     * @version $Revision$
+     * @version $Revision: 1659 $
      */
     public static class UsersTable
         extends  Table

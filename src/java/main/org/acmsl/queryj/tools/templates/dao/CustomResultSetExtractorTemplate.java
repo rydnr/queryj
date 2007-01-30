@@ -35,7 +35,7 @@
  * Description: Is able to create CustomResultSetExtractor implementation
  *              for each custom query requiring so.
  *
- * $Id$
+ * $Id: CustomResultSetExtractorTemplate.java 1659 2007-01-25 20:18:08Z chous $
  */
 package org.acmsl.queryj.tools.templates.dao;
 

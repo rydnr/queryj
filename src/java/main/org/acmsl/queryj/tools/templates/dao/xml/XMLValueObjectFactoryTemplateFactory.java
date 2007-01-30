@@ -50,7 +50,7 @@ import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
  * Represents entities able to create XML value object templates.
  * @author <a href="mailto:chous@acm-sl.org"
  * >Jose San Leandro</a>
- * @version $Revision$ at $Date$ by $Author$
+ * @version $Revision: 1659 $ at $Date: 2007-01-25 21:18:08 +0100 (Thu, 25 Jan 2007) $ by $Author: chous $
  */
 public interface XMLValueObjectFactoryTemplateFactory
 {
