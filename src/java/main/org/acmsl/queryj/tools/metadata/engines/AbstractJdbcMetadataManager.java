@@ -162,6 +162,11 @@ public abstract class AbstractJdbcMetadataManager
     private Map m__mTableComments;
 
     /**
+     * The comments of each column.
+     */
+    private Map m__mColumnComments;
+
+    /**
      * The tables' primary keys information.
      */
     private Map m__mPrimaryKeys;
@@ -233,6 +238,7 @@ public abstract class AbstractJdbcMetadataManager
         immutableSetForeignKeys(t_UniqueMap);
         immutableSetExternallyManagedFields(t_UniqueMap);
         immutableSetTableComments(t_UniqueMap);
+        immutableSetColumnComments(t_UniqueMap);
     }
 
     /**
@@ -602,6 +608,33 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
+     * Specifies the column comments.
+     * @param comments such comments.
+     */
+    protected final void immutableSetColumnComments(final Map comments)
+    {
+        m__mColumnComments = comments;
+    }
+
+    /**
+     * Specifies the column comments.
+     * @param comments such comments.
+     */
+    protected void setColumnComments(final Map comments)
+    {
+        immutableSetColumnComments(comments);
+    }
+
+    /**
+     * Retrieves the column comments.
+     * @return such comments.
+     */
+    protected Map getColumnComments()
+    {
+        return m__mColumnComments;
+    }
+
+    /**
      * Adds the comments of given table.
      * @param tableName the table name.
      * @param tableComment the table comment.
@@ -656,6 +689,81 @@ public abstract class AbstractJdbcMetadataManager
     {
         return
             (String) tableComments.get(buildTableCommentKey(tableName));
+    }
+
+    /**
+     * Adds the comments of given column.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnComment the column comment.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnComment != null
+     */
+    public void addColumnComment(
+        final String tableName,
+        final String columnName,
+        final String columnComment)
+    {
+        addColumnComment(
+            tableName, columnName, columnComment, getColumnComments());
+    }
+
+    /**
+     * Adds the comments of given column.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnComment the column comment.
+     * @param map the map.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnComment != null
+     * @precondition map != null
+     */
+    protected void addColumnComment(
+        final String tableName,
+        final String columnName,
+        final String columnComment,
+        final Map map)
+    {
+        map.put(
+            buildColumnCommentKey(tableName, columnName), columnComment);
+    }
+
+    /**
+     * Retrieves the column comments.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return the column comment.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     */
+    public String getColumnComment(
+        final String tableName, final String columnName)
+    {
+        return
+            getColumnComment(tableName, columnName, getColumnComments());
+    }
+
+    /**
+     * Retrieves the column comments.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnComments the column comments.
+     * @return the column comment.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnComments != null
+     */
+    protected String getColumnComment(
+        final String tableName,
+        final String columnName,
+        final Map columnComments)
+    {
+        return
+            (String)
+                columnComments.get(
+                    buildColumnCommentKey(tableName, columnName));
     }
 
     /**
@@ -2308,6 +2416,21 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
+     * Builds a column comment key using given object.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return the map key.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     */
+    protected Object buildColumnCommentKey(
+        final Object tableName, final String columnName)
+    {
+        return
+            "[column-comment]!!" + buildKey(tableName) + buildKey(columnName);
+    }
+
+    /**
      * Retrieves the desired metadata.
      * @param tableNames optionally specified table names.
      * @param metaData the metadata.
@@ -2365,10 +2488,10 @@ public abstract class AbstractJdbcMetadataManager
                     t_strTableName,
                     t_strParentTable);
 
-            addColumnNames(t_strTableName, t_astrColumnNames);
-
             if  (t_astrColumnNames != null) 
             {
+                addColumnNames(t_strTableName, t_astrColumnNames);
+
                 int[] t_aiColumnTypes =
                     getColumnTypes(
                         metaData,
@@ -2391,6 +2514,29 @@ public abstract class AbstractJdbcMetadataManager
                         t_aiColumnTypes[t_iColumnIndex]);
                 }
 
+                String[] t_astrColumnComments =
+                    getColumnComments(
+                        metaData,
+                        catalog,
+                        schema,
+                        t_strTableName,
+                        t_astrColumnNames);
+
+                t_iColumnLength =
+                    (t_astrColumnComments != null)
+                    ?  t_astrColumnComments.length
+                    :  0;
+                
+                for  (int t_iColumnIndex = 0;
+                          t_iColumnIndex < t_iColumnLength;
+                          t_iColumnIndex++)
+                {
+                    addColumnComment(
+                        t_strTableName,
+                        t_astrColumnNames[t_iColumnIndex],
+                        t_astrColumnComments[t_iColumnIndex]);
+                }
+
                 boolean[] t_abAllowNull =
                     getAllowNulls(
                         metaData,
@@ -2400,11 +2546,11 @@ public abstract class AbstractJdbcMetadataManager
                         t_strParentTable,
                         t_astrColumnNames.length);
 
-                int t_iAllowNullLength =
+                t_iColumnLength =
                     (t_abAllowNull != null) ? t_abAllowNull.length : 0;
                 
                 for  (int t_iColumnIndex = 0;
-                          t_iColumnIndex < t_iAllowNullLength;
+                          t_iColumnIndex < t_iColumnLength;
                           t_iColumnIndex++)
                 {
                     addAllowNull(
@@ -2720,6 +2866,59 @@ public abstract class AbstractJdbcMetadataManager
         }
 
         return toIntArray((Integer[]) result.toArray(EMPTY_INTEGER_ARRAY));
+    }
+
+    /**
+     * Retrieves the column comments from given table name.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param tableName the table name.
+     * @param columnNames the column names, or null if not available.
+     * @return the list of all column comments.
+     * @throws SQLException if the database operation fails.
+     * @throws QueryJException if any other error occurs.
+     */
+    protected String[] getColumnComments(
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final String[] columnNames)
+      throws  SQLException,
+              QueryJException
+    {
+        Collection result = new ArrayList();
+        
+        try 
+        {
+            if  (metaData != null) 
+            {
+                int t_iCount =
+                    (columnNames != null) ? columnNames.length : 0;
+
+                for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+                {
+                    result.add(
+                        getColumnComment(
+                            metaData,
+                            catalog,
+                            schema,
+                            tableName,
+                            columnNames[t_iIndex]));
+                }
+            }
+        }
+        catch  (final SQLException sqlException)
+        {
+            logWarn(
+                "Cannot retrieve the column comment.",
+                sqlException);
+
+            throw sqlException;
+        }
+
+        return (String[]) result.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -3453,7 +3652,7 @@ public abstract class AbstractJdbcMetadataManager
                         sqlException);
             }
 
-            result = extractTableComment(t_rsTables);
+            result = extractComment(t_rsTables);
         }
         catch  (final SQLException sqlException)
         {
@@ -3475,13 +3674,76 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Extracts the table comment from given result set.
+     * Retrieves the column comments.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param tableName the table name.
+     * @return the list of all table names.
+     * @throws SQLException if the database operation fails.
+     * @precondition metaData != null
+     */
+    protected String getColumnComment(
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final String columnName)
+      throws  SQLException,
+              QueryJException
+    {
+        String result = "";
+
+        ResultSet t_rsColumns = null;
+
+        try 
+        {
+            try 
+            {
+                t_rsColumns =
+                    metaData.getColumns(
+                        catalog,
+                        schema,
+                        tableName,
+                        columnName);
+            }
+            catch  (final SQLException sqlException)
+            {
+                throw
+                    new QueryJException(
+                        "cannot.retrieve.database.table.names",
+                        sqlException);
+            }
+
+            result = extractComment(t_rsColumns);
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw sqlException;
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw queryjException;
+        }
+        finally 
+        {
+            if  (t_rsColumns != null)
+            {
+                t_rsColumns.close();
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Extracts the comment from given result set.
      * @param resultSet the result set with the table information.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    protected String extractTableComment(
+    protected String extractComment(
         final ResultSet resultSet)
       throws  SQLException
     {
@@ -3773,7 +4035,8 @@ public abstract class AbstractJdbcMetadataManager
     protected String getParentTable(
         final String table, final MetaLanguageUtils metaLanguageUtils)
     {
-        return metaLanguageUtils.retrieveDeclaredParent(getTableComment(table));
+        return
+            metaLanguageUtils.retrieveDeclaredParent(getTableComment(table));
     }
 
     /**
@@ -3784,7 +4047,8 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected int[] toIntArray(final Object[] array)
     {
-        int[] result = (array == null) ? EMPTY_INT_ARRAY : new int[array.length];
+        int[] result =
+            (array == null) ? EMPTY_INT_ARRAY : new int[array.length];
 
         int t_iCount = result.length;
         

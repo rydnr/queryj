@@ -1490,6 +1490,193 @@ public class OracleMetadataManager
     }
 
     /**
+     * Retrieves the column comments from given table name.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param tableName the table name.
+     * @param columnNames the column names, or null if not available.
+     * @return the list of all column comments.
+     * @throws SQLException if the database operation fails.
+     * @throws QueryJException if any other error occurs.
+     */
+    protected String[] getColumnComments(
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final String[] columnNames)
+      throws  SQLException,
+              QueryJException
+    {
+        return
+            getColumnComments(
+                metaData.getConnection(),
+                catalog,
+                schema,
+                tableName,
+                columnNames,
+                QueryFactory.getInstance());
+    }
+
+    /**
+     * Extracts the column comments.
+     * @param connection the database connection.
+     * @param catalog the database catalog.
+     * @param schema the database schema.
+     * @param tableName the table name.
+     * @param columnNames the column names.
+     * @param queryFactory the <code>QueryFactory</code> instance.
+     * @return the table comments.
+     * @throws SQLException if any kind of SQL exception occurs.
+     * @throws QueryJException if any other error occurs.
+     * @precondition connection != null
+     * @precondition tableName != null
+     * @precndition queryFactory != null
+     */
+    protected String[] getColumnComments(
+        final Connection connection,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final String[] columnNames,
+        final QueryFactory queryFactory)
+      throws  SQLException,
+              QueryJException
+    {
+        String[] result;
+
+        int t_iCount = (columnNames != null) ? columnNames.length : 0;
+
+        result = (t_iCount == 0) ? EMPTY_STRING_ARRAY : new String[t_iCount];
+
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        
+        ResultSet t_rsResults = null;
+
+        PreparedStatement t_PreparedStatement = null;
+
+        try
+        {
+            try
+            {
+                String t_strColumnName = null;
+                String t_strComment = null;
+
+                SelectQuery t_Query = queryFactory.createSelectQuery();
+
+                t_Query.select(USER_COL_COMMENTS.COMMENTS);
+
+                t_Query.from(USER_COL_COMMENTS);
+
+                t_Query.where(
+                        USER_COL_COMMENTS.TABLE_NAME.equals()
+                    .and(USER_COL_COMMENTS.COLUMN_NAME.equals()));
+
+                for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+                {
+                    t_strColumnName = columnNames[t_iIndex];
+
+                    t_PreparedStatement = t_Query.prepareStatement(connection);
+
+                    t_Query.setString(
+                        USER_TAB_COMMENTS.TABLE_NAME.equals(),
+                        tableName);
+
+                    t_Query.setString(
+                        USER_COL_COMMENTS.COLUMN_NAME.equals(),
+                        t_strColumnName);
+
+                    if  (t_Log != null)
+                    {
+                        t_Log.debug("query:" + t_Query);
+                    }
+                
+                    t_rsResults = t_Query.executeQuery();
+
+                    if  (   (t_rsResults != null)
+                         && (t_rsResults.next()))
+                    {
+                        t_strComment =
+                            t_rsResults.getString(
+                                USER_COL_COMMENTS.COMMENTS
+                                    .toSimplifiedString());
+
+                        if  (t_strComment != null)
+                        {
+                            if  (t_Log != null)
+                            {
+                                t_Log.trace(
+                                    "Comments for column "
+                                    + tableName
+                                    + "."
+                                    + t_strColumnName
+                                    + " = "
+                                    + t_strComment);
+                            }
+                        }
+                        else
+                        {
+                            t_strComment = "";
+                        }
+
+                        result[t_iIndex] = t_strComment;
+                    }
+                }
+            }
+            catch  (final SQLException sqlException)
+            {
+                throw
+                    new QueryJException(
+                        "cannot.retrieve.column.comments",
+                        sqlException);
+            }
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw queryjException;
+        }
+        finally 
+        {
+            try 
+            {
+                if  (t_rsResults != null)
+                {
+                    t_rsResults.close();
+                }
+            }
+            catch  (final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot close the result set.",
+                        sqlException);
+                }
+            }
+
+            try 
+            {
+                if  (t_PreparedStatement != null)
+                {
+                    t_PreparedStatement.close();
+                }
+            }
+            catch  (final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot close the statement.",
+                        sqlException);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the type manager.
      * @return such instance.
      */
