@@ -298,6 +298,10 @@ public abstract class BasePerTableTemplate
                 metadataManager.getColumnType(
                     tableName, t_strStaticAttributeName));
 
+        String t_strStaticAttributeComment =
+             metadataManager.getColumnComment(
+                tableName, t_strStaticAttributeName);
+
         // items have to include the following methods:
         // getName()
         // getNameUppercased()
@@ -470,6 +474,7 @@ public abstract class BasePerTableTemplate
             t_cCustomResults,
             t_strStaticAttributeName,
             t_strStaticAttributeType,
+            t_strStaticAttributeComment,
             t_strRepositoryName,
             metadataManager,
             metadataTypeManager,
@@ -591,6 +596,7 @@ public abstract class BasePerTableTemplate
         final Collection customResults,
         final String staticAttributeName,
         final String staticAttributeType,
+        final String staticAttributeComment,
         final String tableRepositoryName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -659,6 +665,7 @@ public abstract class BasePerTableTemplate
                 staticAttributeName,
                 staticAttributeType,
                 tableName,
+                staticAttributeComment,
                 metadataUtils.contain(
                     externallyManagedAttributes,
                     staticAttributeName,
@@ -935,9 +942,10 @@ public abstract class BasePerTableTemplate
      * Provides the parameters required by
      * <code>static_table</code> rule.
      * @param input the input.
-     * @param staticAttributeName the static attribute name.
-     * @param staticAttributeType the static attribute type.
+     * @param staticAttributeName the static attribute's name.
+     * @param staticAttributeType the static attribute's type.
      * @param tableName the table name.
+     * @param staticAttributeComment the static attribute's comment.
      * @param managedExternally whether the attribute is managed
      * externally.
      * @param allowsNull if the attribute allows nulls.
@@ -956,6 +964,7 @@ public abstract class BasePerTableTemplate
         final String staticAttributeName,
         final String staticAttributeType,
         final String tableName,
+        final String staticAttributeComment,
         final boolean managedExternally,
         final boolean allowsNull,
         final MetadataManager metadataManager,
@@ -971,6 +980,7 @@ public abstract class BasePerTableTemplate
                     staticAttributeType,
                     staticAttributeType,
                     tableName,
+                    staticAttributeComment,
                     managedExternally,
                     allowsNull,
                     null),

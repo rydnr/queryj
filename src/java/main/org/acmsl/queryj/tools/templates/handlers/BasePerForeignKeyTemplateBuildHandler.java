@@ -620,7 +620,11 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
         boolean t_bAllowsNull =
             metadataManager.allowsNull(tableName, attributeName);
-        
+
+        String t_strComment =
+            metadataManager.getColumnComment(
+                tableName, attributeName);
+
         String t_strFieldType =
             metadataTypeManager.getFieldType(t_iType, t_bAllowsNull);
 
@@ -635,6 +639,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                     t_strNativeType,
                     t_strFieldType,
                     tableName,
+                    t_strComment,
                     t_bManagedExternally,
                     t_bAllowsNull,
                     null), // value

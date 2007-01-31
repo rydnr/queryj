@@ -93,6 +93,7 @@ public abstract class AbstractAttributeDecorator
             attribute.getNativeType(),
             attribute.getFieldType(),
             attribute.getTableName(),
+            attribute.getComment(),
             attribute.getManagedExternally(),
             attribute.getAllowsNull(),
             attribute.getValue(),
@@ -109,6 +110,7 @@ public abstract class AbstractAttributeDecorator
      * @param nativeType the native type.
      * @param fieldType the field type.
      * @param tableName the table name.
+     * @param comment the attribute comment.
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional attribute value.
@@ -130,6 +132,7 @@ public abstract class AbstractAttributeDecorator
         final String nativeType,
         final String fieldType,
         final String tableName,
+        final String comment,
         final boolean managedExternally,
         final boolean allowsNull,
         final String value,
@@ -143,6 +146,7 @@ public abstract class AbstractAttributeDecorator
             nativeType,
             fieldType,
             tableName,
+            comment,
             managedExternally,
             allowsNull,
             value);

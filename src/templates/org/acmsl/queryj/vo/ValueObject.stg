@@ -124,7 +124,12 @@ attribute_getter(attribute) ::= <<
 !>
 /**
  * Retrieves the \<i\><attribute.name>\</i\> value.
+<if(attribute.comment)><
+ * @return <attribute.comment>.
+else>
  * @return such information.
+<endif>
+
  */
 <if(attribute.allowsNull)>
 public <attribute.objectType> get<attribute.nameCapitalized>();

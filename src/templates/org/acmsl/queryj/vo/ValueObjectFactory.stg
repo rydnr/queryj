@@ -197,7 +197,12 @@ attribute_javadoc(attribute) ::= <<
  Writes the Javadoc for given attribute.
  @param attribute the attribute.
 !>
+<if(attribute.comment)>
+* @param <attribute.nameUncapitalized> <attribute.comment>.
+<else>
 * @param <attribute.nameUncapitalized> the \<i\><attribute.name>\</i> value.
+<endif>
+
 >>
 
 attribute_method_declaration(attribute) ::= <<

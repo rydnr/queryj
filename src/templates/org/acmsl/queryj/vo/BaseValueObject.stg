@@ -133,7 +133,12 @@ attribute_declaration(attribute) ::= <<
  @param attribute the attribute.
 !>
 /**
- * The \<i\><attribute.name>\</i\> value.
+<if(attribute.comment)>
+ * <attribute.comment>.
+<else>
+ * The <attribute.name>.
+<endif>
+
  */
 <if(attribute.allowsNull)>
 private <attribute.objectType> m__<attribute.nameCapitalized>;
@@ -148,7 +153,12 @@ attribute_javadoc(attribute) ::= <<
  Writes the Javadoc for given attribute.
  @param attribute the attribute.
 !>
-* @param <attribute.nameUncapitalized> the \<i\><attribute.nameCapitalized>\</i> value.
+<if(attribute.comment)>
+* @param <attribute.nameUncapitalized> the <attribute.name> information.
+<else>
+* @param <attribute.nameUncapitalized> <attribute.comment>.
+<endif>
+
 >>
 
 attribute_method_declaration(attribute) ::= <<
@@ -190,7 +200,12 @@ attribute_setter(attribute) ::= <<
 !>
 /**
  * Specifies the \<i\><attribute.name>\</i\> value.
- * @param value such information.
+<if(attribute.comment)>
+ * @param value <attribute.comment>.
+<else>
+ * @param value the <attribute.name> information.
+<endif>
+
  */
 <if(attribute.allowsNull)>
 protected final void immutableSet<attribute.nameCapitalized>(final <attribute.objectType> value)
@@ -224,7 +239,12 @@ attribute_getter(attribute) ::= <<
 !>
 /**
  * Retrieves the \<i\><attribute.name>\</i\> value.
+<if(attribute.comment)>
+ * @return <attribute.comment>.
+<else>
  * @return such information.
+<endif>
+
  */
 <if(attribute.allowsNull)>
 public <attribute.objectType> get<attribute.nameCapitalized>()

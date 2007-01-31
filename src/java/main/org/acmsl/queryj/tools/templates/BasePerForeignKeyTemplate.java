@@ -629,16 +629,26 @@ public abstract class BasePerForeignKeyTemplate
 
         int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
+        String t_strColumnName;
+        int t_iType;
+        String t_strNativeType;
+        boolean t_bAllowsNull;
+        String t_strComment;
+        String t_strFieldType;
+        boolean t_bManagedExternally;
+
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            int t_iType =
-                metadataManager.getColumnType(
-                    tableName, columnNames[t_iIndex]);
+            t_strColumnName = columnNames[t_iIndex];
 
-            String t_strNativeType =
+            t_iType =
+                metadataManager.getColumnType(
+                    tableName, t_strColumnName);
+
+            t_strNativeType =
                 metadataTypeManager.getNativeType(t_iType);
 
-            boolean t_bAllowsNull = false;
+            t_bAllowsNull = false;
 
             if  (allowsNullAsAWhole != null)
             {
@@ -648,24 +658,29 @@ public abstract class BasePerForeignKeyTemplate
             {
                 t_bAllowsNull =
                     metadataManager.allowsNull(
-                        tableName, columnNames[t_iIndex]);
+                        tableName, t_strColumnName);
             }
 
-            String t_strFieldType =
+            t_strComment =
+                metadataManager.getColumnComment(
+                    tableName, t_strColumnName);
+
+            t_strFieldType =
                 metadataTypeManager.getFieldType(t_iType, t_bAllowsNull);
 
-            boolean t_bManagedExternally =
+            t_bManagedExternally =
                 metadataManager.isManagedExternally(
-                    tableName, columnNames[t_iIndex]);
+                    tableName, t_strColumnName);
 
             result.add(
                 decoratorFactory.createDecorator(
                     new AttributeValueObject(
-                        columnNames[t_iIndex],
+                        t_strColumnName,
                         t_iType,
                         t_strNativeType,
                         t_strFieldType,
                         tableName,
+                        t_strComment,
                         t_bManagedExternally,
                         t_bAllowsNull,
                         columnValues[t_iIndex]),

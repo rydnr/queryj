@@ -59,6 +59,7 @@ public final class AttributeValueObject
      * @param nativeType the native type.
      * @param fieldType the field type.
      * @param tableName the table name.
+     * @param comment the comment.
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
@@ -69,6 +70,7 @@ public final class AttributeValueObject
         final String nativeType,
         final String fieldType,
         final String tableName,
+        final String comment,
         final boolean managedExternally,
         final boolean allowsNull,
         final String value)
@@ -79,6 +81,7 @@ public final class AttributeValueObject
             nativeType,
             fieldType,
             tableName,
+            comment,
             managedExternally,
             allowsNull,
             value);

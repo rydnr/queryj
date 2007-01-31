@@ -1560,36 +1560,40 @@ public class OracleMetadataManager
         {
             try
             {
+                SelectQuery t_Query;
                 String t_strColumnName = null;
                 String t_strComment = null;
-
-                SelectQuery t_Query = queryFactory.createSelectQuery();
-
-                t_Query.select(USER_COL_COMMENTS.COMMENTS);
-
-                t_Query.from(USER_COL_COMMENTS);
-
-                t_Query.where(
-                        USER_COL_COMMENTS.TABLE_NAME.equals()
-                    .and(USER_COL_COMMENTS.COLUMN_NAME.equals()));
 
                 for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
                 {
                     t_strColumnName = columnNames[t_iIndex];
 
+                    t_Query = queryFactory.createSelectQuery();
+
+                    t_Query.select(USER_COL_COMMENTS.COMMENTS);
+
+                    t_Query.from(USER_COL_COMMENTS);
+
+                    t_Query.where(
+                             USER_COL_COMMENTS.TABLE_NAME.equals()
+                        .and(USER_COL_COMMENTS.COLUMN_NAME.equals()));
+
                     t_PreparedStatement = t_Query.prepareStatement(connection);
 
                     t_Query.setString(
-                        USER_TAB_COMMENTS.TABLE_NAME.equals(),
+                        USER_COL_COMMENTS.TABLE_NAME.equals(),
                         tableName);
 
                     t_Query.setString(
                         USER_COL_COMMENTS.COLUMN_NAME.equals(),
                         t_strColumnName);
 
-                    if  (t_Log != null)
+                    String t_strQuery = t_Query.toString();
+
+                    if  (   (t_Log != null)
+                         && (t_Log.isDebugEnabled()))
                     {
-                        t_Log.debug("query:" + t_Query);
+                        t_Log.debug("query:" + t_strQuery);
                     }
                 
                     t_rsResults = t_Query.executeQuery();

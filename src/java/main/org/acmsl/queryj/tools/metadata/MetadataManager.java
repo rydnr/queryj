@@ -187,6 +187,15 @@ public interface MetadataManager
         final boolean flag);
 
     /**
+     * Retrieves the column comment.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return the column comment.
+     */
+    public String getColumnComment(
+        final String tableName, final String columnName);
+    
+    /**
      * Adds a primary key.
      * @param tableName the table name.
      * @param columnName the column name.

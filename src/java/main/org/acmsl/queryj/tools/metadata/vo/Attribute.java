@@ -76,6 +76,12 @@ public interface Attribute
     public String getTableName();
 
     /**
+     * Retrieves the column comment.
+     * @return such information.
+     */
+    public String getComment();
+
+    /**
      * Retrieves whether it's managed externally.
      * @return such information.
      */

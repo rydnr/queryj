@@ -77,6 +77,11 @@ public abstract class AbstractAttribute
     private String m__strTableName;
 
     /**
+     * The comment.
+     */
+    private String m__strComment;
+
+    /**
      * Whether the attribute is managed externally or not.
      */
     private boolean m__bManagedExternally;
@@ -99,6 +104,7 @@ public abstract class AbstractAttribute
      * @param nativeType the native type.
      * @param fieldType the field type.
      * @param tableName the table name.
+     * @param comment the comment.
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
@@ -109,6 +115,7 @@ public abstract class AbstractAttribute
         final String nativeType,
         final String fieldType,
         final String tableName,
+        final String comment,
         final boolean managedExternally,
         final boolean allowsNull,
         final String value)
@@ -118,6 +125,7 @@ public abstract class AbstractAttribute
         immutableSetNativeType(nativeType);
         immutableSetFieldType(fieldType);
         immutableSetTableName(tableName);
+        immutableSetComment(comment);
         immutableSetManagedExternally(managedExternally);
         immutableSetAllowsNull(allowsNull);
         immutableSetValue(value);
@@ -256,6 +264,33 @@ public abstract class AbstractAttribute
     public String getTableName()
     {
         return m__strTableName;
+    }
+
+    /**
+     * Specifies the comment.
+     * @param comment such comment.
+     */
+    protected final void immutableSetComment(final String comment)
+    {
+        m__strComment = comment;
+    }
+
+    /**
+     * Specifies the comment.
+     * @param comment such comment.
+     */
+    protected void setComment(final String comment)
+    {
+        immutableSetComment(comment);
+    }
+
+    /**
+     * Retrieves the attribute comment.
+     * @return such comment.
+     */
+    public String getComment()
+    {
+        return m__strComment;
     }
 
     /**
