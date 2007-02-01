@@ -129,198 +129,203 @@ package org.acmsl.queryj.tools.antlr;
 
 @parser::members
 {
-    /**
-     * The table comment.
-     */
-    private String tableComment;
+/**
+ * An empty String String array.
+ */
+public static final String[][] EMPTY_STRING_STRING_ARRAY = new String[0][0];
 
-    /**
-     * The table static.
-     */
-    private String tableStatic;
+/**
+ * The table comment.
+ */
+private String tableComment;
 
-    /**
-     * The table ISA.
-     */
-    private String tableIsa;
+/**
+ * The table static.
+ */
+private String tableStatic;
 
-    /**
-     * The table ISA-type.
-     */
-    private String tableIsaType;
+/**
+ * The table ISA.
+ */
+private String tableIsa;
 
-    /**
-     * The column comment.
-     */
-    private String columnComment;
+/**
+ * The table ISA-type.
+ */
+private String tableIsaType;
 
-    /**
-     * The column boolean attribute.
-     */
-    private String columnBool;
+/**
+ * The column comment.
+ */
+private String columnComment;
 
-    /**
-     * Whether the column is readonly.
-     */
-    private boolean columnReadOnly = false;;
+/**
+ * The column boolean attribute.
+ */
+private String columnBool;
 
-    /**
-     * The column isa-ref mappings.
-     */
-    private String[][] columnIsaRefs;
+/**
+ * Whether the column is readonly.
+ */
+private boolean columnReadOnly = false;;
 
-    /**
-     * Specifies the table comment.
-     * @param comment such comment.
-     */
-    protected void setTableComment(final String comment)
-    {
-        tableComment = comment;
-    }
+/**
+ * The column isa-ref mappings.
+ */
+private String[][] columnIsaRefs;
 
-    /**
-     * Retrieves the table comment.
-     * @return such information.
-     */
-    public String getTableComment()
-    {
-        return tableComment;
-    }
+/**
+ * Specifies the table comment.
+ * @param comment such comment.
+ */
+protected void setTableComment(final String comment)
+{
+    tableComment = comment;
+}
 
-    /**
-     * Specifies the column name used to distinguish the 
-     * static content.
-     * @param name such name.
-     */
-    protected void setTableStatic(final String name)
-    {
-        tableStatic = name;
-    }
+/**
+ * Retrieves the table comment.
+ * @return such information.
+ */
+public String getTableComment()
+{
+    return tableComment;
+}
 
-    /**
-     * Retrieves the column name used to distinguish the 
-     * static content.
-     * @return such column name.
-     */
-    public String getTableStatic()
-    {
-        return tableStatic;
-    }
+/**
+ * Specifies the column name used to distinguish the 
+ * static content.
+ * @param name such name.
+ */
+protected void setTableStatic(final String name)
+{
+    tableStatic = name;
+}
 
-    /**
-     * Specifies the table name defined as parent table.
-     * @param name such name.
-     */
-    protected void setTableIsa(final String name)
-    {
-        tableIsa = name;
-    }
+/**
+ * Retrieves the column name used to distinguish the 
+ * static content.
+ * @return such column name.
+ */
+public String getTableStatic()
+{
+    return tableStatic;
+}
 
-    /**
-     * Retrieves the table name defined as parent table.
-     * @return such table name.
-     */
-    public String getTableIsa()
-    {
-        return tableIsa;
-    }
+/**
+ * Specifies the table name defined as parent table.
+ * @param name such name.
+ */
+protected void setTableIsa(final String name)
+{
+    tableIsa = name;
+}
 
-    /**
-     * Specifies the table name whose descendants get identified
-     * by the contents of this table.
-     * @param name such name.
-     */
-    protected void setTableIsaType(final String name)
-    {
-        tableIsaType = name;
-    }
+/**
+ * Retrieves the table name defined as parent table.
+ * @return such table name.
+ */
+public String getTableIsa()
+{
+    return tableIsa;
+}
 
-    /**
-     * Retrieves the table name whose descendants get identified
-     * by the contents of this table.
-     * @return such table name.
-     */
-    public String getTableIsaType()
-    {
-        return tableIsaType;
-    }
-    /**
-     * Specifies the column comment.
-     * @param comment such comment.
-     */
-    protected void setColumnComment(final String comment)
-    {
-        columnComment = comment;
-    }
+/**
+ * Specifies the table name whose descendants get identified
+ * by the contents of this table.
+ * @param name such name.
+ */
+protected void setTableIsaType(final String name)
+{
+    tableIsaType = name;
+}
 
-    /**
-     * Retrieves the column comment.
-     * @return such information.
-     */
-    public String getColumnComment()
-    {
-        return columnComment;
-    }
+/**
+ * Retrieves the table name whose descendants get identified
+ * by the contents of this table.
+ * @return such table name.
+ */
+public String getTableIsaType()
+{
+    return tableIsaType;
+}
+/**
+ * Specifies the column comment.
+ * @param comment such comment.
+ */
+protected void setColumnComment(final String comment)
+{
+    columnComment = comment;
+}
 
-    /**
-     * Specifies whether the column is defined as boolean,
-     * and how it denotes a <code>true</code> value.
-     * @param value the <code>true</code> value, or null if
-     * the column is not defined as boolean.
-     */
-    protected void setColumnBool(final String value)
-    {
-        columnBool = value;
-    }
+/**
+ * Retrieves the column comment.
+ * @return such information.
+ */
+public String getColumnComment()
+{
+    return columnComment;
+}
 
-    /**
-     * Retrieves whether the column is defined as boolean,
-     * and how it denotes a <code>true</code> value.
-     * @return  the <code>true</code> value, or null if
-     * the column is not defined as boolean.
-     */
-    public String getColumnBool()
-    {
-        return columnBool;
-    }
+/**
+ * Specifies whether the column is defined as boolean,
+ * and how it denotes a <code>true</code> value.
+ * @param value the <code>true</code> value, or null if
+ * the column is not defined as boolean.
+ */
+protected void setColumnBool(final String value)
+{
+    columnBool = value;
+}
 
-    /**
-     * Specifies whether the column is declared as read-only or not.
-     * @param flag such flag.
-     */
-    protected void setColumnReadOnly(final boolean flag)
-    {
-        columnReadOnly = flag;
-    }
+/**
+ * Retrieves whether the column is defined as boolean,
+ * and how it denotes a <code>true</code> value.
+ * @return  the <code>true</code> value, or null if
+ * the column is not defined as boolean.
+ */
+public String getColumnBool()
+{
+    return columnBool;
+}
 
-    /**
-     * Retrieves whether the column is declared as read-only or not.
-     * @return such information.
-     */
-    public boolean getColumnReadOnly()
-    {
-        return columnReadOnly;
-    }
+/**
+ * Specifies whether the column is declared as read-only or not.
+ * @param flag such flag.
+ */
+protected void setColumnReadOnly(final boolean flag)
+{
+    columnReadOnly = flag;
+}
 
-    /**
-     * Specifies the associations between column values and
-     * table names (ISA implementations).
-     * @param mappings the mappings.
-     */
-    protected void setColumnIsaRefs(final String[][] mappings)
-    {
-        columnIsaRefs = mappings;
-    }
+/**
+ * Retrieves whether the column is declared as read-only or not.
+ * @return such information.
+ */
+public boolean getColumnReadOnly()
+{
+    return columnReadOnly;
+}
 
-    /**
-     * Retrieves the associations between column values and
-     * table names (ISA implementations).
-     * @return such mappings.
-     */
-    public String[][] getColumnIsaRefs()
-    {
-        return columnIsaRefs;
-    }
+/**
+ * Specifies the associations between column values and
+ * table names (ISA implementations).
+ * @param mappings the mappings.
+ */
+protected void setColumnIsaRefs(final String[][] mappings)
+{
+    columnIsaRefs = mappings;
+}
+
+/**
+ * Retrieves the associations between column values and
+ * table names (ISA implementations).
+ * @return such mappings.
+ */
+public String[][] getColumnIsaRefs()
+{
+    return columnIsaRefs;
+}
 }
 
 /*------------------------------------------------------------------
@@ -396,13 +401,14 @@ fragment col_isarefs
  * LEXER RULES
  *------------------------------------------------------------------*/
 
-ID
+fragment ID
     : ( LETTER | '_' ) (NAMECHAR)*
     ;
 
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
         
-fragment TEXT  : (~'@')+ ;
+TEXT  : (~'@')+ ;
+
 fragment STATIC : '@static';
 fragment ISA : '@isa';
 fragment ISATYPE : '@isatype';

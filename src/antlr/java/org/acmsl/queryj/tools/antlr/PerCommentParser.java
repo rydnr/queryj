@@ -1,4 +1,4 @@
-// $ANTLR 3.0b6 PerComment.g 2007-02-01 16:20:52
+// $ANTLR 3.0b6 PerComment.g 2007-02-01 17:27:59
 
 /*
                         QueryJ
@@ -80,216 +80,221 @@ public class PerCommentParser extends Parser {
     public String getGrammarFileName() { return "PerComment.g"; }
 
 
-        /**
-         * The table comment.
-         */
-        private String tableComment;
+    /**
+     * An empty String String array.
+     */
+    public static final String[][] EMPTY_STRING_STRING_ARRAY = new String[0][0];
 
-        /**
-         * The table static.
-         */
-        private String tableStatic;
+    /**
+     * The table comment.
+     */
+    private String tableComment;
 
-        /**
-         * The table ISA.
-         */
-        private String tableIsa;
+    /**
+     * The table static.
+     */
+    private String tableStatic;
 
-        /**
-         * The table ISA-type.
-         */
-        private String tableIsaType;
+    /**
+     * The table ISA.
+     */
+    private String tableIsa;
 
-        /**
-         * The column comment.
-         */
-        private String columnComment;
+    /**
+     * The table ISA-type.
+     */
+    private String tableIsaType;
 
-        /**
-         * The column boolean attribute.
-         */
-        private String columnBool;
+    /**
+     * The column comment.
+     */
+    private String columnComment;
 
-        /**
-         * Whether the column is readonly.
-         */
-        private boolean columnReadOnly = false;;
+    /**
+     * The column boolean attribute.
+     */
+    private String columnBool;
 
-        /**
-         * The column isa-ref mappings.
-         */
-        private String[][] columnIsaRefs;
+    /**
+     * Whether the column is readonly.
+     */
+    private boolean columnReadOnly = false;;
 
-        /**
-         * Specifies the table comment.
-         * @param comment such comment.
-         */
-        protected void setTableComment(final String comment)
-        {
-            tableComment = comment;
-        }
+    /**
+     * The column isa-ref mappings.
+     */
+    private String[][] columnIsaRefs;
 
-        /**
-         * Retrieves the table comment.
-         * @return such information.
-         */
-        public String getTableComment()
-        {
-            return tableComment;
-        }
+    /**
+     * Specifies the table comment.
+     * @param comment such comment.
+     */
+    protected void setTableComment(final String comment)
+    {
+        tableComment = comment;
+    }
 
-        /**
-         * Specifies the column name used to distinguish the 
-         * static content.
-         * @param name such name.
-         */
-        protected void setTableStatic(final String name)
-        {
-            tableStatic = name;
-        }
+    /**
+     * Retrieves the table comment.
+     * @return such information.
+     */
+    public String getTableComment()
+    {
+        return tableComment;
+    }
 
-        /**
-         * Retrieves the column name used to distinguish the 
-         * static content.
-         * @return such column name.
-         */
-        public String getTableStatic()
-        {
-            return tableStatic;
-        }
+    /**
+     * Specifies the column name used to distinguish the 
+     * static content.
+     * @param name such name.
+     */
+    protected void setTableStatic(final String name)
+    {
+        tableStatic = name;
+    }
 
-        /**
-         * Specifies the table name defined as parent table.
-         * @param name such name.
-         */
-        protected void setTableIsa(final String name)
-        {
-            tableIsa = name;
-        }
+    /**
+     * Retrieves the column name used to distinguish the 
+     * static content.
+     * @return such column name.
+     */
+    public String getTableStatic()
+    {
+        return tableStatic;
+    }
 
-        /**
-         * Retrieves the table name defined as parent table.
-         * @return such table name.
-         */
-        public String getTableIsa()
-        {
-            return tableIsa;
-        }
+    /**
+     * Specifies the table name defined as parent table.
+     * @param name such name.
+     */
+    protected void setTableIsa(final String name)
+    {
+        tableIsa = name;
+    }
 
-        /**
-         * Specifies the table name whose descendants get identified
-         * by the contents of this table.
-         * @param name such name.
-         */
-        protected void setTableIsaType(final String name)
-        {
-            tableIsaType = name;
-        }
+    /**
+     * Retrieves the table name defined as parent table.
+     * @return such table name.
+     */
+    public String getTableIsa()
+    {
+        return tableIsa;
+    }
 
-        /**
-         * Retrieves the table name whose descendants get identified
-         * by the contents of this table.
-         * @return such table name.
-         */
-        public String getTableIsaType()
-        {
-            return tableIsaType;
-        }
-        /**
-         * Specifies the column comment.
-         * @param comment such comment.
-         */
-        protected void setColumnComment(final String comment)
-        {
-            columnComment = comment;
-        }
+    /**
+     * Specifies the table name whose descendants get identified
+     * by the contents of this table.
+     * @param name such name.
+     */
+    protected void setTableIsaType(final String name)
+    {
+        tableIsaType = name;
+    }
 
-        /**
-         * Retrieves the column comment.
-         * @return such information.
-         */
-        public String getColumnComment()
-        {
-            return columnComment;
-        }
+    /**
+     * Retrieves the table name whose descendants get identified
+     * by the contents of this table.
+     * @return such table name.
+     */
+    public String getTableIsaType()
+    {
+        return tableIsaType;
+    }
+    /**
+     * Specifies the column comment.
+     * @param comment such comment.
+     */
+    protected void setColumnComment(final String comment)
+    {
+        columnComment = comment;
+    }
 
-        /**
-         * Specifies whether the column is defined as boolean,
-         * and how it denotes a <code>true</code> value.
-         * @param value the <code>true</code> value, or null if
-         * the column is not defined as boolean.
-         */
-        protected void setColumnBool(final String value)
-        {
-            columnBool = value;
-        }
+    /**
+     * Retrieves the column comment.
+     * @return such information.
+     */
+    public String getColumnComment()
+    {
+        return columnComment;
+    }
 
-        /**
-         * Retrieves whether the column is defined as boolean,
-         * and how it denotes a <code>true</code> value.
-         * @return  the <code>true</code> value, or null if
-         * the column is not defined as boolean.
-         */
-        public String getColumnBool()
-        {
-            return columnBool;
-        }
+    /**
+     * Specifies whether the column is defined as boolean,
+     * and how it denotes a <code>true</code> value.
+     * @param value the <code>true</code> value, or null if
+     * the column is not defined as boolean.
+     */
+    protected void setColumnBool(final String value)
+    {
+        columnBool = value;
+    }
 
-        /**
-         * Specifies whether the column is declared as read-only or not.
-         * @param flag such flag.
-         */
-        protected void setColumnReadOnly(final boolean flag)
-        {
-            columnReadOnly = flag;
-        }
+    /**
+     * Retrieves whether the column is defined as boolean,
+     * and how it denotes a <code>true</code> value.
+     * @return  the <code>true</code> value, or null if
+     * the column is not defined as boolean.
+     */
+    public String getColumnBool()
+    {
+        return columnBool;
+    }
 
-        /**
-         * Retrieves whether the column is declared as read-only or not.
-         * @return such information.
-         */
-        public boolean getColumnReadOnly()
-        {
-            return columnReadOnly;
-        }
+    /**
+     * Specifies whether the column is declared as read-only or not.
+     * @param flag such flag.
+     */
+    protected void setColumnReadOnly(final boolean flag)
+    {
+        columnReadOnly = flag;
+    }
 
-        /**
-         * Specifies the associations between column values and
-         * table names (ISA implementations).
-         * @param mappings the mappings.
-         */
-        protected void setColumnIsaRefs(final String[][] mappings)
-        {
-            columnIsaRefs = mappings;
-        }
+    /**
+     * Retrieves whether the column is declared as read-only or not.
+     * @return such information.
+     */
+    public boolean getColumnReadOnly()
+    {
+        return columnReadOnly;
+    }
 
-        /**
-         * Retrieves the associations between column values and
-         * table names (ISA implementations).
-         * @return such mappings.
-         */
-        public String[][] getColumnIsaRefs()
-        {
-            return columnIsaRefs;
-        }
+    /**
+     * Specifies the associations between column values and
+     * table names (ISA implementations).
+     * @param mappings the mappings.
+     */
+    protected void setColumnIsaRefs(final String[][] mappings)
+    {
+        columnIsaRefs = mappings;
+    }
+
+    /**
+     * Retrieves the associations between column values and
+     * table names (ISA implementations).
+     * @return such mappings.
+     */
+    public String[][] getColumnIsaRefs()
+    {
+        return columnIsaRefs;
+    }
 
 
 
     // $ANTLR start tableComment
-    // PerComment.g:330:1: tableComment : t= text ( tab_annotation )* ;
+    // PerComment.g:335:1: tableComment : t= text ( tab_annotation )* ;
     public void tableComment() throws RecognitionException {
         String t = null;
 
 
         try {
-            // PerComment.g:330:16: (t= text ( tab_annotation )* )
-            // PerComment.g:330:16: t= text ( tab_annotation )*
+            // PerComment.g:335:16: (t= text ( tab_annotation )* )
+            // PerComment.g:335:16: t= text ( tab_annotation )*
             {
             pushFollow(FOLLOW_text_in_tableComment45);
             t=text();
             _fsp--;
 
-            // PerComment.g:330:23: ( tab_annotation )*
+            // PerComment.g:335:23: ( tab_annotation )*
             loop1:
             do {
                 int alt1=2;
@@ -301,7 +306,7 @@ public class PerCommentParser extends Parser {
 
                 switch (alt1) {
             	case 1 :
-            	    // PerComment.g:330:25: tab_annotation
+            	    // PerComment.g:335:25: tab_annotation
             	    {
             	    pushFollow(FOLLOW_tab_annotation_in_tableComment49);
             	    tab_annotation();
@@ -333,7 +338,7 @@ public class PerCommentParser extends Parser {
 
 
     // $ANTLR start text
-    // PerComment.g:332:10: fragment text returns [String result] : t= TEXT ;
+    // PerComment.g:337:10: fragment text returns [String result] : t= TEXT ;
     public String text() throws RecognitionException {
         String result = null;
 
@@ -341,8 +346,8 @@ public class PerCommentParser extends Parser {
 
          result = null; 
         try {
-            // PerComment.g:334:5: (t= TEXT )
-            // PerComment.g:334:5: t= TEXT
+            // PerComment.g:339:5: (t= TEXT )
+            // PerComment.g:339:5: t= TEXT
             {
             t=(Token)input.LT(1);
             match(input,TEXT,FOLLOW_TEXT_in_text85); 
@@ -363,7 +368,7 @@ public class PerCommentParser extends Parser {
 
 
     // $ANTLR start tab_annotation
-    // PerComment.g:337:10: fragment tab_annotation : (s= tab_static | i= tab_isa | t= tab_isatype ) ;
+    // PerComment.g:342:10: fragment tab_annotation : (s= tab_static | i= tab_isa | t= tab_isatype ) ;
     public void tab_annotation() throws RecognitionException {
         String s = null;
 
@@ -373,10 +378,10 @@ public class PerCommentParser extends Parser {
 
 
         try {
-            // PerComment.g:338:5: ( (s= tab_static | i= tab_isa | t= tab_isatype ) )
-            // PerComment.g:338:5: (s= tab_static | i= tab_isa | t= tab_isatype )
+            // PerComment.g:343:5: ( (s= tab_static | i= tab_isa | t= tab_isatype ) )
+            // PerComment.g:343:5: (s= tab_static | i= tab_isa | t= tab_isatype )
             {
-            // PerComment.g:338:5: (s= tab_static | i= tab_isa | t= tab_isatype )
+            // PerComment.g:343:5: (s= tab_static | i= tab_isa | t= tab_isatype )
             int alt2=3;
             switch ( input.LA(1) ) {
             case STATIC:
@@ -390,14 +395,14 @@ public class PerCommentParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("338:5: (s= tab_static | i= tab_isa | t= tab_isatype )", 2, 0, input);
+                    new NoViableAltException("343:5: (s= tab_static | i= tab_isa | t= tab_isatype )", 2, 0, input);
 
                 throw nvae;
             }
 
             switch (alt2) {
                 case 1 :
-                    // PerComment.g:339:9: s= tab_static
+                    // PerComment.g:344:9: s= tab_static
                     {
                     pushFollow(FOLLOW_tab_static_in_tab_annotation122);
                     s=tab_static();
@@ -408,7 +413,7 @@ public class PerCommentParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // PerComment.g:340:9: i= tab_isa
+                    // PerComment.g:345:9: i= tab_isa
                     {
                     pushFollow(FOLLOW_tab_isa_in_tab_annotation137);
                     i=tab_isa();
@@ -419,7 +424,7 @@ public class PerCommentParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // PerComment.g:341:9: t= tab_isatype
+                    // PerComment.g:346:9: t= tab_isatype
                     {
                     pushFollow(FOLLOW_tab_isatype_in_tab_annotation155);
                     t=tab_isatype();
@@ -448,7 +453,7 @@ public class PerCommentParser extends Parser {
 
 
     // $ANTLR start tab_static
-    // PerComment.g:345:10: fragment tab_static returns [String result] : STATIC i= identifier ;
+    // PerComment.g:350:10: fragment tab_static returns [String result] : STATIC i= identifier ;
     public String tab_static() throws RecognitionException {
         String result = null;
 
@@ -457,8 +462,8 @@ public class PerCommentParser extends Parser {
 
          result = null; 
         try {
-            // PerComment.g:347:5: ( STATIC i= identifier )
-            // PerComment.g:347:5: STATIC i= identifier
+            // PerComment.g:352:5: ( STATIC i= identifier )
+            // PerComment.g:352:5: STATIC i= identifier
             {
             match(input,STATIC,FOLLOW_STATIC_in_tab_static187); 
             pushFollow(FOLLOW_identifier_in_tab_static191);
@@ -482,7 +487,7 @@ public class PerCommentParser extends Parser {
 
 
     // $ANTLR start tab_isa
-    // PerComment.g:350:10: fragment tab_isa returns [String result] : ISA i= identifier ;
+    // PerComment.g:355:10: fragment tab_isa returns [String result] : ISA i= identifier ;
     public String tab_isa() throws RecognitionException {
         String result = null;
 
@@ -491,8 +496,8 @@ public class PerCommentParser extends Parser {
 
          result = null; 
         try {
-            // PerComment.g:352:5: ( ISA i= identifier )
-            // PerComment.g:352:5: ISA i= identifier
+            // PerComment.g:357:5: ( ISA i= identifier )
+            // PerComment.g:357:5: ISA i= identifier
             {
             match(input,ISA,FOLLOW_ISA_in_tab_isa217); 
             pushFollow(FOLLOW_identifier_in_tab_isa221);
@@ -516,7 +521,7 @@ public class PerCommentParser extends Parser {
 
 
     // $ANTLR start tab_isatype
-    // PerComment.g:355:10: fragment tab_isatype returns [String result] : ISATYPE i= identifier ;
+    // PerComment.g:360:10: fragment tab_isatype returns [String result] : ISATYPE i= identifier ;
     public String tab_isatype() throws RecognitionException {
         String result = null;
 
@@ -525,8 +530,8 @@ public class PerCommentParser extends Parser {
 
          result = null; 
         try {
-            // PerComment.g:357:5: ( ISATYPE i= identifier )
-            // PerComment.g:357:5: ISATYPE i= identifier
+            // PerComment.g:362:5: ( ISATYPE i= identifier )
+            // PerComment.g:362:5: ISATYPE i= identifier
             {
             match(input,ISATYPE,FOLLOW_ISATYPE_in_tab_isatype247); 
             pushFollow(FOLLOW_identifier_in_tab_isatype251);
@@ -550,20 +555,20 @@ public class PerCommentParser extends Parser {
 
 
     // $ANTLR start columnComment
-    // PerComment.g:360:1: columnComment : t= text ( col_annotation )* ;
+    // PerComment.g:365:1: columnComment : t= text ( col_annotation )* ;
     public void columnComment() throws RecognitionException {
         String t = null;
 
 
         try {
-            // PerComment.g:360:17: (t= text ( col_annotation )* )
-            // PerComment.g:360:17: t= text ( col_annotation )*
+            // PerComment.g:365:17: (t= text ( col_annotation )* )
+            // PerComment.g:365:17: t= text ( col_annotation )*
             {
             pushFollow(FOLLOW_text_in_columnComment266);
             t=text();
             _fsp--;
 
-            // PerComment.g:360:24: ( col_annotation )*
+            // PerComment.g:365:24: ( col_annotation )*
             loop3:
             do {
                 int alt3=2;
@@ -575,7 +580,7 @@ public class PerCommentParser extends Parser {
 
                 switch (alt3) {
             	case 1 :
-            	    // PerComment.g:360:26: col_annotation
+            	    // PerComment.g:365:26: col_annotation
             	    {
             	    pushFollow(FOLLOW_col_annotation_in_columnComment270);
             	    col_annotation();
@@ -607,16 +612,16 @@ public class PerCommentParser extends Parser {
 
 
     // $ANTLR start col_annotation
-    // PerComment.g:362:10: fragment col_annotation : ( col_readonly | b= col_bool | col_isarefs ) ;
+    // PerComment.g:367:10: fragment col_annotation : ( col_readonly | b= col_bool | col_isarefs ) ;
     public void col_annotation() throws RecognitionException {
         String b = null;
 
 
         try {
-            // PerComment.g:363:5: ( ( col_readonly | b= col_bool | col_isarefs ) )
-            // PerComment.g:363:5: ( col_readonly | b= col_bool | col_isarefs )
+            // PerComment.g:368:5: ( ( col_readonly | b= col_bool | col_isarefs ) )
+            // PerComment.g:368:5: ( col_readonly | b= col_bool | col_isarefs )
             {
-            // PerComment.g:363:5: ( col_readonly | b= col_bool | col_isarefs )
+            // PerComment.g:368:5: ( col_readonly | b= col_bool | col_isarefs )
             int alt4=3;
             switch ( input.LA(1) ) {
             case READONLY:
@@ -630,14 +635,14 @@ public class PerCommentParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("363:5: ( col_readonly | b= col_bool | col_isarefs )", 4, 0, input);
+                    new NoViableAltException("368:5: ( col_readonly | b= col_bool | col_isarefs )", 4, 0, input);
 
                 throw nvae;
             }
 
             switch (alt4) {
                 case 1 :
-                    // PerComment.g:364:10: col_readonly
+                    // PerComment.g:369:10: col_readonly
                     {
                     pushFollow(FOLLOW_col_readonly_in_col_annotation298);
                     col_readonly();
@@ -648,7 +653,7 @@ public class PerCommentParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // PerComment.g:365:8: b= col_bool
+                    // PerComment.g:370:8: b= col_bool
                     {
                     pushFollow(FOLLOW_col_bool_in_col_annotation311);
                     b=col_bool();
@@ -659,7 +664,7 @@ public class PerCommentParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // PerComment.g:366:8: col_isarefs
+                    // PerComment.g:371:8: col_isarefs
                     {
                     pushFollow(FOLLOW_col_isarefs_in_col_annotation326);
                     col_isarefs();
@@ -687,11 +692,11 @@ public class PerCommentParser extends Parser {
 
 
     // $ANTLR start col_readonly
-    // PerComment.g:369:10: fragment col_readonly : READONLY ;
+    // PerComment.g:374:10: fragment col_readonly : READONLY ;
     public void col_readonly() throws RecognitionException {
         try {
-            // PerComment.g:369:26: ( READONLY )
-            // PerComment.g:369:26: READONLY
+            // PerComment.g:374:26: ( READONLY )
+            // PerComment.g:374:26: READONLY
             {
             match(input,READONLY,FOLLOW_READONLY_in_col_readonly343); 
 
@@ -710,7 +715,7 @@ public class PerCommentParser extends Parser {
 
 
     // $ANTLR start col_bool
-    // PerComment.g:371:10: fragment col_bool returns [String result] : BOOL i= identifier ;
+    // PerComment.g:376:10: fragment col_bool returns [String result] : BOOL i= identifier ;
     public String col_bool() throws RecognitionException {
         String result = null;
 
@@ -719,8 +724,8 @@ public class PerCommentParser extends Parser {
 
          result = null; 
         try {
-            // PerComment.g:373:5: ( BOOL i= identifier )
-            // PerComment.g:373:5: BOOL i= identifier
+            // PerComment.g:378:5: ( BOOL i= identifier )
+            // PerComment.g:378:5: BOOL i= identifier
             {
             match(input,BOOL,FOLLOW_BOOL_in_col_bool364); 
             pushFollow(FOLLOW_identifier_in_col_bool368);
@@ -746,14 +751,14 @@ public class PerCommentParser extends Parser {
     };
 
     // $ANTLR start identifier
-    // PerComment.g:376:10: fragment identifier : ID ;
+    // PerComment.g:381:10: fragment identifier : ID ;
     public identifier_return identifier() throws RecognitionException {
         identifier_return retval = new identifier_return();
         retval.start = input.LT(1);
 
         try {
-            // PerComment.g:376:23: ( ID )
-            // PerComment.g:376:23: ID
+            // PerComment.g:381:23: ( ID )
+            // PerComment.g:381:23: ID
             {
             match(input,ID,FOLLOW_ID_in_identifier383); 
 
@@ -774,7 +779,7 @@ public class PerCommentParser extends Parser {
 
 
     // $ANTLR start col_isarefs
-    // PerComment.g:378:10: fragment col_isarefs : ISAREFS ( OPEN_PAREN a= identifier COMMA b= identifier CLOSE_PAREN )+ ;
+    // PerComment.g:383:10: fragment col_isarefs : ISAREFS ( OPEN_PAREN a= identifier COMMA b= identifier CLOSE_PAREN )+ ;
     public void col_isarefs() throws RecognitionException {
         identifier_return a = null;
 
@@ -785,11 +790,11 @@ public class PerCommentParser extends Parser {
             List contents = new ArrayList();
 
         try {
-            // PerComment.g:383:6: ( ISAREFS ( OPEN_PAREN a= identifier COMMA b= identifier CLOSE_PAREN )+ )
-            // PerComment.g:383:6: ISAREFS ( OPEN_PAREN a= identifier COMMA b= identifier CLOSE_PAREN )+
+            // PerComment.g:388:6: ( ISAREFS ( OPEN_PAREN a= identifier COMMA b= identifier CLOSE_PAREN )+ )
+            // PerComment.g:388:6: ISAREFS ( OPEN_PAREN a= identifier COMMA b= identifier CLOSE_PAREN )+
             {
             match(input,ISAREFS,FOLLOW_ISAREFS_in_col_isarefs401); 
-            // PerComment.g:384:6: ( OPEN_PAREN a= identifier COMMA b= identifier CLOSE_PAREN )+
+            // PerComment.g:389:6: ( OPEN_PAREN a= identifier COMMA b= identifier CLOSE_PAREN )+
             int cnt5=0;
             loop5:
             do {
@@ -802,7 +807,7 @@ public class PerCommentParser extends Parser {
 
                 switch (alt5) {
             	case 1 :
-            	    // PerComment.g:385:8: OPEN_PAREN a= identifier COMMA b= identifier CLOSE_PAREN
+            	    // PerComment.g:390:8: OPEN_PAREN a= identifier COMMA b= identifier CLOSE_PAREN
             	    {
             	    match(input,OPEN_PAREN,FOLLOW_OPEN_PAREN_in_col_isarefs417); 
             	    pushFollow(FOLLOW_identifier_in_col_isarefs421);

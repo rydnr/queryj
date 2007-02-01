@@ -39,10 +39,29 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
+ * Importing some project classes.
+ */
+import org.acmsl.queryj.tools.antlr.PerCommentLexer;
+import org.acmsl.queryj.tools.antlr.PerCommentParser;
+
+/*
  * Importing ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+
+/*
+ * Importing some ANTLR 3 classes.
+ */
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+
+/*
+ * Importing some Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Provides insight about the meta-language used in model descriptions.
@@ -99,19 +118,25 @@ public class MetaLanguageUtils
     public String retrieveStaticAttribute(final String tableComment)
     {
         String result = null;
-        
-        int t_iKeyIndex = -1;
 
-        if  (tableComment != null)
+        try
         {
-            t_iKeyIndex = tableComment.lastIndexOf("@static");
+            PerCommentParser t_Parser = setUpParser(tableComment);
+
+            t_Parser.tableComment();
+
+            result = t_Parser.getTableStatic();
         }
-
-        if  (t_iKeyIndex >= 0)
+        catch  (final RecognitionException recognitionException)
         {
-            result =
-                tableComment.substring(
-                    t_iKeyIndex + "@static".length()).trim();
+            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Invalid table comment: " + tableComment,
+                    recognitionException);
+            }
         }
 
         return result;
@@ -127,21 +152,197 @@ public class MetaLanguageUtils
     public String retrieveDeclaredParent(final String tableComment)
     {
         String result = null;
+
+        try
+        {
+            PerCommentParser t_Parser = setUpParser(tableComment);
+
+            t_Parser.tableComment();
+
+            result = t_Parser.getTableIsa();
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Invalid table comment: " + tableComment,
+                    recognitionException);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the table the comment owner discriminates among its
+     * children in an ISA relationship.
+     * @param tableComment the table's comment.
+     * @return the ISA parent table.
+     * @precondition tableComment != null
+     */
+    public String retrieveDiscriminatingParent(final String tableComment)
+    {
+        String result = null;
+
+        try
+        {
+            PerCommentParser t_Parser = setUpParser(tableComment);
+
+            t_Parser.tableComment();
+
+            result = t_Parser.getTableIsaType();
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Invalid table comment: " + tableComment,
+                    recognitionException);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the value to denote <code>true</code> values. If
+     * <code>null</code>, then the column is not considered boolean.
+     * @param columnComment the column comment.
+     * @return the value to use in the database to denote <code>true</code>
+     * values, or <code>null</code> if the column is not boolean.
+     * @precondition columnComment != null
+     */
+    public String retrieveColumnBool(final String columnComment)
+    {
+        String result = null;
+
+        try
+        {
+            PerCommentParser t_Parser = setUpParser(columnComment);
+
+            t_Parser.columnComment();
+
+            result = t_Parser.getColumnBool();
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Invalid column comment: " + columnComment,
+                    recognitionException);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether the column is meant to be read-only from the
+     * Java side (i.e. a last-modified or creation-date timestamp).
+     * @param columnComment the column comment.
+     * @return such condition.
+     * @precondition columnComment != null
+     */
+    public boolean retrieveColumnReadOnly(final String columnComment)
+    {
+        boolean result = false;
+
+        try
+        {
+            PerCommentParser t_Parser = setUpParser(columnComment);
+
+            t_Parser.columnComment();
+
+            result = t_Parser.getColumnReadOnly();
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Invalid column comment: " + columnComment,
+                    recognitionException);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves which values of the column correspond to which ISA descendant
+     * table (whose parent is declared in table comments as <code>@isatype</code>).
+     * @param columnComment the column comment.
+     * @return such associations.
+     * @precondition columnComment != null
+     */
+    public String[][] retrieveColumnDiscriminatedTables(final String columnComment)
+    {
+        String[][] result = PerCommentParser.EMPTY_STRING_STRING_ARRAY;
+
+        try
+        {
+            PerCommentParser t_Parser = setUpParser(columnComment);
+
+            t_Parser.columnComment();
+
+            result = t_Parser.getColumnIsaRefs();
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Invalid column comment: " + columnComment,
+                    recognitionException);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Sets up the comment parser.
+     * @param comment the comment to parse.
+     * @return the <code>PerCommentParser</code> instance.
+     * @throws RecognitionException if the comment cannot be parsed.
+     * @precondition comment != null
+
+     */
+    protected PerCommentParser setUpParser(final String comment)
+        throws  RecognitionException
+    {
+        PerCommentParser result = null;
+
+        Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+        if  (t_Log != null)
+        {
+            t_Log.info("Parsing '" + comment + "'");
+        }
+
+        PerCommentLexer t_Lexer =
+            new PerCommentLexer(
+                new ANTLRStringStream(comment));
+            
+        CommonTokenStream t_Tokens =
+            new CommonTokenStream(t_Lexer);
+
+        result = new PerCommentParser(t_Tokens);
+
         
-        int t_iKeyIndex = -1;
-
-        if  (tableComment != null)
-        {
-            t_iKeyIndex = tableComment.lastIndexOf("@isa");
-        }
-
-        if  (t_iKeyIndex >= 0)
-        {
-            result =
-                tableComment.substring(
-                    t_iKeyIndex + "@isa".length()).trim();
-        }
-
         return result;
     }
 }
