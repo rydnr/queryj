@@ -225,6 +225,46 @@
     </dependency>
 
     <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr-3</artifactId>
+      <version>3.0b5</version>
+      <url>http://www.antlr.org</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>true</required.to.build>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>stringtemplate</groupId>
+      <artifactId>stringtemplate-3</artifactId>
+      <version>3.0</version>
+      <url>http://www.stringtemplate.org</url>
+      <properties>
+        <required.to.compile>true</required.to.compile>
+        <required.to.run>true</required.to.run>
+        <required.to.test>true</required.to.test>
+        <required.to.build>true</required.to.build>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>2.7.5</version>
+      <url>http://www.antlr.org</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>false</required.to.run>
+        <required.to.test>false</required.to.test>
+        <required.to.build>true</required.to.build>
+        <injected.by>stringtemplate/stringtemplate-3.0</injected.by>
+      </properties>
+    </dependency>
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>

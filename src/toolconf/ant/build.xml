@@ -456,7 +456,7 @@
          ANTLR-specific libraries folder. Files under this folder are
          needed for compiling the sources and also at runtime.
       -->
-      <property name="antlr.lib.dir" value="${lib.dir}/antlr"/>
+      <property name="antlr.lib.dir" value="${lib.dir}/java"/>
 
       <!--
            ANTLR libraries needed ONLY for building the project, not
@@ -3346,13 +3346,13 @@ project.base.suite=
          Removes any sources generated from ANTLR grammars.
         -->
         <delete
-            dir="${antlr.java.src.dir}/org/acmsl/${project.name}/antlr"/>
+            dir="${antlr.java.src.dir}/org/acmsl/queryj/tools/antlr"/>
 
         <!--
          Creates such folder again.
         -->
         <mkdir
-            dir="${antlr.java.src.dir}/org/acmsl/${project.name}/antlr"/>
+            dir="${antlr.java.src.dir}/org/acmsl/queryj/tools/antlr"/>
 
     </target>
 
@@ -3375,15 +3375,29 @@ project.base.suite=
         <mkdir
         dir="${antlr.java.src.dir}/${antlr.base.package.folder}"/>
 
+        <echo>${antlr.src.dir}</echo>
+
         <!--
          Actual antlr execution on given grammar.
         -->
-        <antlr
+        <!--antlr
             target="${antlr.src.dir}/${antlr.grammar.name}Lexer.g"
             outputdirectory="${antlr.java.src.dir}/${antlr.base.package.folder}"/>
         <antlr
             target="${antlr.src.dir}/${antlr.grammar.name}Parser.g"
-            outputdirectory="${antlr.java.src.dir}/${antlr.base.package.folder}"/>
+            outputdirectory="${antlr.java.src.dir}/${antlr.base.package.folder}"/-->
+
+        <java
+          fork="true"
+          dir="${basedir}/src/antlr"
+          classname="org.antlr.Tool"
+          classpathref="java.development.class.path">
+          <arg value="-o"/>
+          <arg value="java/${antlr.base.package.folder}"/>
+          <arg value="${antlr.grammar.name}.g"/>
+          <!--arg value="${antlr.grammar.name}Lexer.g"/>
+          <arg value="${antlr.grammar.name}Parser.g"/-->
+        </java>
 
     </target>
 
