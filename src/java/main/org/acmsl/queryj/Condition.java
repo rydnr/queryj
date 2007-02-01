@@ -128,6 +128,15 @@ public abstract class Condition
     }
 
     /**
+     * Retrieves the variable conditions, non-recursively.
+     * @return such conditions.
+     */
+    protected final Collection immutableGetVariableConditions()
+    {
+        return m__cVariableConditions;
+    }
+    
+    /**
      * Retrieves the variable conditions.
      * @return such collection.
      */
@@ -139,7 +148,8 @@ public abstract class Condition
 
         if  (t_InnerCondition != null)
         {
-            Collection t_cInnerVariableConditions = t_InnerCondition.getVariableConditions();
+            Collection t_cInnerVariableConditions =
+                t_InnerCondition.getVariableConditions();
 
             if  (   (t_cInnerVariableConditions != null)
                  && (t_cInnerVariableConditions.size() > 0))
@@ -148,9 +158,11 @@ public abstract class Condition
             }
         }
 
-        if  (m__cVariableConditions != null)
+        Collection t_cVariableConditions = immutableGetVariableConditions();
+        
+        if  (t_cVariableConditions != null)
         {
-            result.addAll(m__cVariableConditions);
+            result.addAll(t_cVariableConditions);
         }
 
         return result;

@@ -76,14 +76,16 @@ public class VariableCondition
      */
     public Collection getVariableConditions()
     {
-        Collection result = super.getVariableConditions();
-
-        if  (result == null)
-        {
-            result = new ArrayList();
-        }
+        Collection result = new ArrayList();
 
         result.add(this);
+
+        Collection t_cNestedConditions = super.getVariableConditions();
+
+        if  (t_cNestedConditions != null)
+        {
+            result.addAll(t_cNestedConditions);
+        }
 
         return result;
     }

@@ -124,7 +124,7 @@ attribute_getter(attribute) ::= <<
 !>
 /**
  * Retrieves the \<i\><attribute.name>\</i\> value.
-<if(attribute.comment)><
+<if(attribute.comment)>
  * @return <attribute.comment>.
 else>
  * @return such information.
