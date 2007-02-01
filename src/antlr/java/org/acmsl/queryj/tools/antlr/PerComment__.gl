@@ -1,0 +1,88 @@
+lexer grammar PerComment;
+@header {
+/*
+                        QueryJ
+
+    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+                        chous@acm-sl.org
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Thanks to ACM S.L. for distributing this library under the GPL license.
+    Contact info: chous@acm-sl.org
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecabanas
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
+
+ ******************************************************************************
+ *
+ * Generated from PerComment.g by ANTLR.
+ *
+ * Author: Jose San Leandro Armendariz
+ *
+ * Description: ANTLR lexer for PerComment.g
+ *
+ */
+package org.acmsl.queryj.tools.antlr;
+}
+
+// $ANTLR src "PerComment.g" 399
+ID
+    : ( LETTER | '_' ) (NAMECHAR)*
+    ;
+
+// $ANTLR src "PerComment.g" 403
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
+        
+// $ANTLR src "PerComment.g" 405
+fragment TEXT  : (~'@')+ ;
+// $ANTLR src "PerComment.g" 406
+fragment STATIC : '@static';
+// $ANTLR src "PerComment.g" 407
+fragment ISA : '@isa';
+// $ANTLR src "PerComment.g" 408
+fragment ISATYPE : '@isatype';
+// $ANTLR src "PerComment.g" 409
+fragment ISAREFS : '@isarefs';
+// $ANTLR src "PerComment.g" 410
+fragment READONLY : '@readonly';
+// $ANTLR src "PerComment.g" 411
+fragment BOOL : '@bool';
+// $ANTLR src "PerComment.g" 412
+fragment OPEN_PAREN : '(';
+// $ANTLR src "PerComment.g" 413
+fragment CLOSE_PAREN : ')';
+// $ANTLR src "PerComment.g" 414
+fragment COMMA : ',';
+        
+
+// $ANTLR src "PerComment.g" 417
+fragment NAMECHAR
+    : LETTER | DIGIT | '.' | '-' | '_' | ':' | '$'
+    ;
+
+// $ANTLR src "PerComment.g" 421
+fragment DIGIT
+    :    '0'..'9'
+    ;
+
+// $ANTLR src "PerComment.g" 425
+fragment LETTER
+    : 'a'..'z'
+    | 'A'..'Z'
+    ;
+

@@ -1141,6 +1141,8 @@
         -->
         <pathelement location="${jdk.X.Y.src.dir}"/>
 
+        <pathelement location="${antlr.java.src.dir}"/>
+
       </path>
 
       <!--
@@ -2058,7 +2060,7 @@
     -->
     <target
       name="compile"
-      depends="init"
+      depends="init, antlr.execute"
       description="Compiles the source files.">
 
       <!--
@@ -2069,6 +2071,7 @@
         destdir="${classes.dir}"
         encoding="ISO-8859-1"
         target="1.4"
+        source="1.4"
         deprecation="false">
 
         <src refid="java.source.path"/>
