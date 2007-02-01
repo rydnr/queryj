@@ -134,7 +134,7 @@ attribute_declaration(attribute) ::= <<
 !>
 /**
 <if(attribute.comment)>
- * <attribute.comment>.
+ * <attribute.comment>
 <else>
  * The <attribute.name>.
 <endif>
@@ -154,9 +154,9 @@ attribute_javadoc(attribute) ::= <<
  @param attribute the attribute.
 !>
 <if(attribute.comment)>
-* @param <attribute.nameUncapitalized> the <attribute.name> information.
+* @param <attribute.nameUncapitalized> <attribute.comment>
 <else>
-* @param <attribute.nameUncapitalized> <attribute.comment>.
+* @param <attribute.nameUncapitalized> the <attribute.name> information.
 <endif>
 
 >>
@@ -201,7 +201,7 @@ attribute_setter(attribute) ::= <<
 /**
  * Specifies the \<i\><attribute.name>\</i\> value.
 <if(attribute.comment)>
- * @param value <attribute.comment>.
+ * @param value <attribute.comment>
 <else>
  * @param value the <attribute.name> information.
 <endif>
@@ -240,7 +240,7 @@ attribute_getter(attribute) ::= <<
 /**
  * Retrieves the \<i\><attribute.name>\</i\> value.
 <if(attribute.comment)>
- * @return <attribute.comment>.
+ * @return <attribute.comment>
 <else>
  * @return such information.
 <endif>

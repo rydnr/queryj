@@ -198,7 +198,7 @@ attribute_javadoc(attribute) ::= <<
  @param attribute the attribute.
 !>
 <if(attribute.comment)>
-* @param <attribute.nameUncapitalized> <attribute.comment>.
+* @param <attribute.nameUncapitalized> <attribute.comment>
 <else>
 * @param <attribute.nameUncapitalized> the \<i\><attribute.name>\</i> value.
 <endif>
