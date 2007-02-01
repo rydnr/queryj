@@ -405,7 +405,7 @@ fragment ID
     : ( LETTER | '_' ) (NAMECHAR)*
     ;
 
-WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
+fragment WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
         
 TEXT  : (~'@')+ ;
 
