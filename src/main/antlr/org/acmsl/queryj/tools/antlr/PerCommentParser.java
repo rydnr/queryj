@@ -1,4 +1,4 @@
-// $ANTLR 3.0b6 PerComment.g 2007-02-01 17:27:59
+// $ANTLR 3.0b6 PerComment.g 2007-02-02 10:11:00
 
 /*
                         QueryJ
@@ -52,7 +52,7 @@ import java.util.ArrayList;
 
 public class PerCommentParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "TEXT", "STATIC", "ISA", "ISATYPE", "READONLY", "BOOL", "ID", "ISAREFS", "OPEN_PAREN", "COMMA", "CLOSE_PAREN", "LETTER", "NAMECHAR", "WHITESPACE", "DIGIT"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "TEXT", "STATIC", "ISA", "ISATYPE", "READONLY", "BOOL", "ID", "ISAREFS", "OPEN_PAREN", "COMMA", "CLOSE_PAREN", "LETTER", "NAMECHAR", "DIGIT", "WHITESPACE"
     };
     public static final int COMMA=13;
     public static final int STATIC=5;
@@ -66,9 +66,9 @@ public class PerCommentParser extends Parser {
     public static final int OPEN_PAREN=12;
     public static final int NAMECHAR=16;
     public static final int ISA=6;
-    public static final int DIGIT=18;
+    public static final int DIGIT=17;
     public static final int ISAREFS=11;
-    public static final int WHITESPACE=17;
+    public static final int WHITESPACE=18;
     public static final int ID=10;
 
         public PerCommentParser(TokenStream input) {

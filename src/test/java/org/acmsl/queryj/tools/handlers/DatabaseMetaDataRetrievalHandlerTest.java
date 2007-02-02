@@ -36,7 +36,7 @@ Spain
 *              unittests.org.acmsl.queryj.tools.handlers.
 *
 */
-package unittests.org.acmsl.queryj.tools.handlers;
+package org.acmsl.queryj.tools.handlers;
 
 /*
 * Importing project classes.

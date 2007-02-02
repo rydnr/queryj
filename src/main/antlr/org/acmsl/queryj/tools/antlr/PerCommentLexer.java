@@ -1,4 +1,4 @@
-// $ANTLR 3.0b6 PerComment.g 2007-02-01 17:27:59
+// $ANTLR 3.0b6 PerComment.g 2007-02-02 10:11:00
 
 /*
                         QueryJ
@@ -54,14 +54,14 @@ public class PerCommentLexer extends Lexer {
     public static final int READONLY=8;
     public static final int ISA=6;
     public static final int ISAREFS=11;
-    public static final int WHITESPACE=17;
+    public static final int WHITESPACE=18;
     public static final int STATIC=5;
     public static final int EOF=-1;
     public static final int TEXT=4;
     public static final int OPEN_PAREN=12;
     public static final int Tokens=19;
     public static final int NAMECHAR=16;
-    public static final int DIGIT=18;
+    public static final int DIGIT=17;
     public static final int ID=10;
     public PerCommentLexer() {;} 
     public PerCommentLexer(CharStream input) {
@@ -143,34 +143,34 @@ public class PerCommentLexer extends Lexer {
     }
     // $ANTLR end ID
 
-    // $ANTLR start WHITESPACE
-    public void mWHITESPACE() throws RecognitionException {
+    // $ANTLR start TEXT
+    public void mTEXT() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            int _type = WHITESPACE;
+            int _type = TEXT;
             int _start = getCharIndex();
             int _line = getLine();
             int _charPosition = getCharPositionInLine();
             int _channel = Token.DEFAULT_CHANNEL;
-            // PerComment.g:408:14: ( ( ('\\t'|' '|'\\r'|'\\n'|'\\u000C'))+ )
-            // PerComment.g:408:14: ( ('\\t'|' '|'\\r'|'\\n'|'\\u000C'))+
+            // PerComment.g:408:9: ( (~ '@' )+ )
+            // PerComment.g:408:9: (~ '@' )+
             {
-            // PerComment.g:408:14: ( ('\\t'|' '|'\\r'|'\\n'|'\\u000C'))+
+            // PerComment.g:408:9: (~ '@' )+
             int cnt3=0;
             loop3:
             do {
                 int alt3=2;
                 int LA3_0 = input.LA(1);
-                if ( ((LA3_0>='\t' && LA3_0<='\n')||(LA3_0>='\f' && LA3_0<='\r')||LA3_0==' ') ) {
+                if ( ((LA3_0>='\u0000' && LA3_0<='?')||(LA3_0>='A' && LA3_0<='\uFFFE')) ) {
                     alt3=1;
                 }
 
 
                 switch (alt3) {
             	case 1 :
-            	    // PerComment.g:408:16: ('\\t'|' '|'\\r'|'\\n'|'\\u000C')
+            	    // PerComment.g:408:10: ~ '@'
             	    {
-            	    if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||(input.LA(1)>='\f' && input.LA(1)<='\r')||input.LA(1)==' ' ) {
+            	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='?')||(input.LA(1)>='A' && input.LA(1)<='\uFFFE') ) {
             	        input.consume();
 
             	    }
@@ -193,7 +193,6 @@ public class PerCommentLexer extends Lexer {
                 cnt3++;
             } while (true);
 
-             _channel = HIDDEN; 
 
             }
 
@@ -208,69 +207,14 @@ public class PerCommentLexer extends Lexer {
             ruleNestingLevel--;
         }
     }
-    // $ANTLR end WHITESPACE
-
-    // $ANTLR start TEXT
-    public void mTEXT() throws RecognitionException {
-        try {
-            ruleNestingLevel++;
-            // PerComment.g:410:18: ( (~ '@' )+ )
-            // PerComment.g:410:18: (~ '@' )+
-            {
-            // PerComment.g:410:18: (~ '@' )+
-            int cnt4=0;
-            loop4:
-            do {
-                int alt4=2;
-                int LA4_0 = input.LA(1);
-                if ( ((LA4_0>='\u0000' && LA4_0<='?')||(LA4_0>='A' && LA4_0<='\uFFFE')) ) {
-                    alt4=1;
-                }
-
-
-                switch (alt4) {
-            	case 1 :
-            	    // PerComment.g:410:19: ~ '@'
-            	    {
-            	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='?')||(input.LA(1)>='A' && input.LA(1)<='\uFFFE') ) {
-            	        input.consume();
-
-            	    }
-            	    else {
-            	        MismatchedSetException mse =
-            	            new MismatchedSetException(null,input);
-            	        recover(mse);    throw mse;
-            	    }
-
-
-            	    }
-            	    break;
-
-            	default :
-            	    if ( cnt4 >= 1 ) break loop4;
-                        EarlyExitException eee =
-                            new EarlyExitException(4, input);
-                        throw eee;
-                }
-                cnt4++;
-            } while (true);
-
-
-            }
-
-        }
-        finally {
-            ruleNestingLevel--;
-        }
-    }
     // $ANTLR end TEXT
 
     // $ANTLR start STATIC
     public void mSTATIC() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:412:19: ( '@static' )
-            // PerComment.g:412:19: '@static'
+            // PerComment.g:410:19: ( '@static' )
+            // PerComment.g:410:19: '@static'
             {
             match("@static"); 
 
@@ -288,8 +232,8 @@ public class PerCommentLexer extends Lexer {
     public void mISA() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:413:16: ( '@isa' )
-            // PerComment.g:413:16: '@isa'
+            // PerComment.g:411:16: ( '@isa' )
+            // PerComment.g:411:16: '@isa'
             {
             match("@isa"); 
 
@@ -307,8 +251,8 @@ public class PerCommentLexer extends Lexer {
     public void mISATYPE() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:414:20: ( '@isatype' )
-            // PerComment.g:414:20: '@isatype'
+            // PerComment.g:412:20: ( '@isatype' )
+            // PerComment.g:412:20: '@isatype'
             {
             match("@isatype"); 
 
@@ -326,8 +270,8 @@ public class PerCommentLexer extends Lexer {
     public void mISAREFS() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:415:20: ( '@isarefs' )
-            // PerComment.g:415:20: '@isarefs'
+            // PerComment.g:413:20: ( '@isarefs' )
+            // PerComment.g:413:20: '@isarefs'
             {
             match("@isarefs"); 
 
@@ -345,8 +289,8 @@ public class PerCommentLexer extends Lexer {
     public void mREADONLY() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:416:21: ( '@readonly' )
-            // PerComment.g:416:21: '@readonly'
+            // PerComment.g:414:21: ( '@readonly' )
+            // PerComment.g:414:21: '@readonly'
             {
             match("@readonly"); 
 
@@ -364,8 +308,8 @@ public class PerCommentLexer extends Lexer {
     public void mBOOL() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:417:17: ( '@bool' )
-            // PerComment.g:417:17: '@bool'
+            // PerComment.g:415:17: ( '@bool' )
+            // PerComment.g:415:17: '@bool'
             {
             match("@bool"); 
 
@@ -383,8 +327,8 @@ public class PerCommentLexer extends Lexer {
     public void mOPEN_PAREN() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:418:23: ( '(' )
-            // PerComment.g:418:23: '('
+            // PerComment.g:416:23: ( '(' )
+            // PerComment.g:416:23: '('
             {
             match('('); 
 
@@ -401,8 +345,8 @@ public class PerCommentLexer extends Lexer {
     public void mCLOSE_PAREN() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:419:24: ( ')' )
-            // PerComment.g:419:24: ')'
+            // PerComment.g:417:24: ( ')' )
+            // PerComment.g:417:24: ')'
             {
             match(')'); 
 
@@ -419,8 +363,8 @@ public class PerCommentLexer extends Lexer {
     public void mCOMMA() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:420:18: ( ',' )
-            // PerComment.g:420:18: ','
+            // PerComment.g:418:18: ( ',' )
+            // PerComment.g:418:18: ','
             {
             match(','); 
 
@@ -437,8 +381,8 @@ public class PerCommentLexer extends Lexer {
     public void mNAMECHAR() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:424:7: ( LETTER | DIGIT | '.' | '-' | '_' | ':' | '$' )
-            int alt5=7;
+            // PerComment.g:422:7: ( LETTER | DIGIT | '.' | '-' | '_' | ':' | '$' )
+            int alt4=7;
             switch ( input.LA(1) ) {
             case 'A':
             case 'B':
@@ -492,7 +436,7 @@ public class PerCommentLexer extends Lexer {
             case 'x':
             case 'y':
             case 'z':
-                alt5=1;
+                alt4=1;
                 break;
             case '0':
             case '1':
@@ -504,75 +448,75 @@ public class PerCommentLexer extends Lexer {
             case '7':
             case '8':
             case '9':
-                alt5=2;
+                alt4=2;
                 break;
             case '.':
-                alt5=3;
+                alt4=3;
                 break;
             case '-':
-                alt5=4;
+                alt4=4;
                 break;
             case '_':
-                alt5=5;
+                alt4=5;
                 break;
             case ':':
-                alt5=6;
+                alt4=6;
                 break;
             case '$':
-                alt5=7;
+                alt4=7;
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("423:10: fragment NAMECHAR : ( LETTER | DIGIT | '.' | '-' | '_' | ':' | '$' );", 5, 0, input);
+                    new NoViableAltException("421:10: fragment NAMECHAR : ( LETTER | DIGIT | '.' | '-' | '_' | ':' | '$' );", 4, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt5) {
+            switch (alt4) {
                 case 1 :
-                    // PerComment.g:424:7: LETTER
+                    // PerComment.g:422:7: LETTER
                     {
                     mLETTER(); 
 
                     }
                     break;
                 case 2 :
-                    // PerComment.g:424:16: DIGIT
+                    // PerComment.g:422:16: DIGIT
                     {
                     mDIGIT(); 
 
                     }
                     break;
                 case 3 :
-                    // PerComment.g:424:24: '.'
+                    // PerComment.g:422:24: '.'
                     {
                     match('.'); 
 
                     }
                     break;
                 case 4 :
-                    // PerComment.g:424:30: '-'
+                    // PerComment.g:422:30: '-'
                     {
                     match('-'); 
 
                     }
                     break;
                 case 5 :
-                    // PerComment.g:424:36: '_'
+                    // PerComment.g:422:36: '_'
                     {
                     match('_'); 
 
                     }
                     break;
                 case 6 :
-                    // PerComment.g:424:42: ':'
+                    // PerComment.g:422:42: ':'
                     {
                     match(':'); 
 
                     }
                     break;
                 case 7 :
-                    // PerComment.g:424:48: '$'
+                    // PerComment.g:422:48: '$'
                     {
                     match('$'); 
 
@@ -591,8 +535,8 @@ public class PerCommentLexer extends Lexer {
     public void mDIGIT() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:428:10: ( '0' .. '9' )
-            // PerComment.g:428:10: '0' .. '9'
+            // PerComment.g:426:10: ( '0' .. '9' )
+            // PerComment.g:426:10: '0' .. '9'
             {
             matchRange('0','9'); 
 
@@ -609,8 +553,8 @@ public class PerCommentLexer extends Lexer {
     public void mLETTER() throws RecognitionException {
         try {
             ruleNestingLevel++;
-            // PerComment.g:432:5: ( ('a'..'z'|'A'..'Z'))
-            // PerComment.g:432:7: ('a'..'z'|'A'..'Z')
+            // PerComment.g:430:5: ( ('a'..'z'|'A'..'Z'))
+            // PerComment.g:430:7: ('a'..'z'|'A'..'Z')
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -632,18 +576,137 @@ public class PerCommentLexer extends Lexer {
     }
     // $ANTLR end LETTER
 
+    // $ANTLR start WHITESPACE
+    public void mWHITESPACE() throws RecognitionException {
+        try {
+            ruleNestingLevel++;
+            int _type = WHITESPACE;
+            int _start = getCharIndex();
+            int _line = getLine();
+            int _charPosition = getCharPositionInLine();
+            int _channel = Token.DEFAULT_CHANNEL;
+            // PerComment.g:434:14: ( ( ('\\t'|' '|'\\r'|'\\n'|'\\u000C'))+ )
+            // PerComment.g:434:14: ( ('\\t'|' '|'\\r'|'\\n'|'\\u000C'))+
+            {
+            // PerComment.g:434:14: ( ('\\t'|' '|'\\r'|'\\n'|'\\u000C'))+
+            int cnt5=0;
+            loop5:
+            do {
+                int alt5=2;
+                int LA5_0 = input.LA(1);
+                if ( ((LA5_0>='\t' && LA5_0<='\n')||(LA5_0>='\f' && LA5_0<='\r')||LA5_0==' ') ) {
+                    alt5=1;
+                }
+
+
+                switch (alt5) {
+            	case 1 :
+            	    // PerComment.g:434:16: ('\\t'|' '|'\\r'|'\\n'|'\\u000C')
+            	    {
+            	    if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||(input.LA(1)>='\f' && input.LA(1)<='\r')||input.LA(1)==' ' ) {
+            	        input.consume();
+
+            	    }
+            	    else {
+            	        MismatchedSetException mse =
+            	            new MismatchedSetException(null,input);
+            	        recover(mse);    throw mse;
+            	    }
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    if ( cnt5 >= 1 ) break loop5;
+                        EarlyExitException eee =
+                            new EarlyExitException(5, input);
+                        throw eee;
+                }
+                cnt5++;
+            } while (true);
+
+             _channel = HIDDEN; 
+
+            }
+
+
+
+                    if ( token==null && ruleNestingLevel==1 ) {
+                        emit(_type,_line,_charPosition,_channel,_start,getCharIndex()-1);
+                    }
+
+                        }
+        finally {
+            ruleNestingLevel--;
+        }
+    }
+    // $ANTLR end WHITESPACE
+
     public void mTokens() throws RecognitionException {
-        // PerComment.g:1:10: ( WHITESPACE )
-        // PerComment.g:1:10: WHITESPACE
-        {
-        mWHITESPACE(); 
+        // PerComment.g:1:10: ( TEXT | WHITESPACE )
+        int alt6=2;
+        alt6 = dfa6.predict(input);
+        switch (alt6) {
+            case 1 :
+                // PerComment.g:1:10: TEXT
+                {
+                mTEXT(); 
+
+                }
+                break;
+            case 2 :
+                // PerComment.g:1:15: WHITESPACE
+                {
+                mWHITESPACE(); 
+
+                }
+                break;
 
         }
-
 
     }
 
 
+    protected DFA6 dfa6 = new DFA6(this);
+    public static final String DFA6_eotS =
+        "\1\uffff\1\2\1\uffff";
+    public static final String DFA6_eofS =
+        "\3\uffff";
+    public static final String DFA6_minS =
+        "\1\0\1\11\1\uffff";
+    public static final String DFA6_maxS =
+        "\1\ufffe\1\40\1\uffff";
+    public static final String DFA6_acceptS =
+        "\2\uffff\1\1";
+    public static final String DFA6_specialS =
+        "\3\uffff}>";
+    public static final String[] DFA6_transition = {
+        "\11\2\2\1\1\2\2\1\22\2\1\1\37\2\1\uffff\uffbe\2",
+        "\2\1\1\uffff\2\1\22\uffff\1\1",
+        ""
+    };
+
+    class DFA6 extends DFA {
+        public DFA6(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 6;
+            this.eot = DFA.unpackEncodedString(DFA6_eotS);
+            this.eof = DFA.unpackEncodedString(DFA6_eofS);
+            this.min = DFA.unpackEncodedStringToUnsignedChars(DFA6_minS);
+            this.max = DFA.unpackEncodedStringToUnsignedChars(DFA6_maxS);
+            this.accept = DFA.unpackEncodedString(DFA6_acceptS);
+            this.special = DFA.unpackEncodedString(DFA6_specialS);
+            int numStates = DFA6_transition.length;
+            this.transition = new short[numStates][];
+            for (int i=0; i<numStates; i++) {
+                transition[i] = DFA.unpackEncodedString(DFA6_transition[i]);
+            }
+        }
+        public String getDescription() {
+            return "1:1: Tokens : ( TEXT | WHITESPACE );";
+        }
+    }
  
 
 }

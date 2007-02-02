@@ -405,9 +405,10 @@ fragment ID
     : ( LETTER | '_' ) (NAMECHAR)*
     ;
 
-fragment WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
-        
 TEXT  : (~'@')+ ;
+
+
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
 
 fragment STATIC : '@static';
 fragment ISA : '@isa';
@@ -418,7 +419,6 @@ fragment BOOL : '@bool';
 fragment OPEN_PAREN : '(';
 fragment CLOSE_PAREN : ')';
 fragment COMMA : ',';
-        
 
 fragment NAMECHAR
     : LETTER | DIGIT | '.' | '-' | '_' | ':' | '$'
@@ -432,4 +432,3 @@ fragment LETTER
     : 'a'..'z'
     | 'A'..'Z'
     ;
-

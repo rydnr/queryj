@@ -46,44 +46,43 @@ fragment ID
     ;
 
 // $ANTLR src "PerComment.g" 408
-WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
-        
-// $ANTLR src "PerComment.g" 410
-fragment TEXT  : (~'@')+ ;
+TEXT  : (~'@')+ ;
 
-// $ANTLR src "PerComment.g" 412
+// $ANTLR src "PerComment.g" 410
 fragment STATIC : '@static';
-// $ANTLR src "PerComment.g" 413
+// $ANTLR src "PerComment.g" 411
 fragment ISA : '@isa';
-// $ANTLR src "PerComment.g" 414
+// $ANTLR src "PerComment.g" 412
 fragment ISATYPE : '@isatype';
-// $ANTLR src "PerComment.g" 415
+// $ANTLR src "PerComment.g" 413
 fragment ISAREFS : '@isarefs';
-// $ANTLR src "PerComment.g" 416
+// $ANTLR src "PerComment.g" 414
 fragment READONLY : '@readonly';
-// $ANTLR src "PerComment.g" 417
+// $ANTLR src "PerComment.g" 415
 fragment BOOL : '@bool';
-// $ANTLR src "PerComment.g" 418
+// $ANTLR src "PerComment.g" 416
 fragment OPEN_PAREN : '(';
-// $ANTLR src "PerComment.g" 419
+// $ANTLR src "PerComment.g" 417
 fragment CLOSE_PAREN : ')';
-// $ANTLR src "PerComment.g" 420
+// $ANTLR src "PerComment.g" 418
 fragment COMMA : ',';
         
 
-// $ANTLR src "PerComment.g" 423
+// $ANTLR src "PerComment.g" 421
 fragment NAMECHAR
     : LETTER | DIGIT | '.' | '-' | '_' | ':' | '$'
     ;
 
-// $ANTLR src "PerComment.g" 427
+// $ANTLR src "PerComment.g" 425
 fragment DIGIT
     :    '0'..'9'
     ;
 
-// $ANTLR src "PerComment.g" 431
+// $ANTLR src "PerComment.g" 429
 fragment LETTER
     : 'a'..'z'
     | 'A'..'Z'
     ;
 
+// $ANTLR src "PerComment.g" 434
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
