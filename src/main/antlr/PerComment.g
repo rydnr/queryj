@@ -355,7 +355,7 @@ fragment text returns [String result]
   : t=TEXT { result = $t.text; }
   ;
         
-fragment tab_annotation
+tab_annotation
   : (
         s=tab_static  { setTableStatic(s); }
       | i=tab_isa     { setTableIsa(i); }
@@ -363,19 +363,19 @@ fragment tab_annotation
     )
   ;
 
-fragment tab_static returns [String result]
+tab_static returns [String result]
 @init { result = null; }
-  : STATIC i=identifier { result = $i.text; }
+  : STATIC WS i=identifier { result = $i.text; }
   ;
 
 fragment tab_isa returns [String result]
 @init { result = null; }
-  : ISA i=identifier { result = $i.text; }
+  : ISA WS i=identifier WS* { result = $i.text; }
   ;
 
 fragment tab_isatype returns [String result]
 @init { result = null; }
-  : ISATYPE i=identifier { result = $i.text; }
+  : ISATYPE WS i=identifier WS* { result = $i.text; }
   ;
 
 columnComment : t=text ( col_annotation )* { setColumnComment(t); };
@@ -387,11 +387,11 @@ fragment col_annotation
      | col_isarefs
     );
 
-fragment col_readonly :  READONLY;
+fragment col_readonly :  READONLY WS*;
 
 fragment col_bool returns [String result]
 @init { result = null; }
-  : BOOL i=identifier { result = $i.text; }
+  : BOOL WS i=identifier WS* { result = $i.text; }
   ;
 
 fragment identifier : ID;
@@ -403,7 +403,7 @@ fragment col_isarefs
 }
   :  ISAREFS
      (
-       OPEN_PAREN a=identifier COMMA b=identifier CLOSE_PAREN
+       OPEN_PAREN WS* a=identifier WS* COMMA WS* b=identifier WS* CLOSE_PAREN WS*
        {
          contents.add(new String[] { trim($a.text), trim($b.text) });
        }
@@ -417,27 +417,27 @@ fragment col_isarefs
  * LEXER RULES
  *------------------------------------------------------------------*/
 
+WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ {_type=WS; $channel=HIDDEN;};
+
 AT
-    :  {input.LT(1).getText().equals("@static")}? => STATIC {type = STATIC;}
-    |  {input.LT(1).getText().equals("@isa")}? => ISA {type = ISA;}
-    |  {input.LT(1).getText().equals("@isatype")}? => ISATYPE {type = ISATYPE;}
-    |  {input.LT(1).getText().equals("@isarefs")}? => ISAREFS {type = ISAREFS;}
-    |  {input.LT(1).getText().equals("@readonly")}? => READONLY {type = READONLY;}
-    |  {input.LT(1).getText().equals("@bool")}? => BOOL {type = BOOL;}
+    :  (  ('@static')   => STATIC   {_type = STATIC;}
+        | ('@isa')      => ISA      {_type = ISA;}
+        | ('@isatype')  => ISATYPE  {_type = ISATYPE;}
+        | ('@isarefs')  => ISAREFS  {_type = ISAREFS;}
+        | ('@readonly') => READONLY {_type = READONLY;}
+        | ('@bool')     => BOOL     {_type = BOOL;})
     ;
 
 ID
     : ( LETTER | '_' ) (NAMECHAR)*
     ;
 
-WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
-
-STATIC : '@static';
-ISA : '@isa';
-ISATYPE : '@isatype';
-ISAREFS : '@isarefs';
-READONLY : '@readonly';
-BOOL : '@bool';
+fragment STATIC : '@static';
+fragment ISA : '@isa';
+fragment ISATYPE : '@isatype';
+fragment ISAREFS : '@isarefs';
+fragment READONLY : '@readonly';
+fragment BOOL : '@bool';
 OPEN_PAREN : '(';
 CLOSE_PAREN : ')';
 COMMA : ',';

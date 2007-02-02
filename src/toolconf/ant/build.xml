@@ -2096,9 +2096,9 @@
             <include name="**/*Test.java"/>
           </fileset>
 
-          <fileset dir="${basedir}/src/test/java">
+          <!--fileset dir="${basedir}/src/test/java">
             <include name="**/*Test.java"/>
-          </fileset>
+          </fileset-->
 
         </batchtest>
 
