@@ -159,7 +159,12 @@ public class PerCommentParserTest
 
                 t_Parser.tableComment();
 
-                assertEquals(TABLE_COMMENT, t_Parser.getTableComment());
+                System.out.println("Table Comment:~" + t_Parser.getTableComment() + "~");
+
+                assertEquals(
+                    "Test failed on table comment \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
+                    TABLE_COMMENT,
+                    t_Parser.getTableComment());
             }
         }
         catch  (final RecognitionException recognitionException)

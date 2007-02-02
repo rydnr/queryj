@@ -280,7 +280,7 @@
       <!--
          ANTLR test folder.
       -->
-      <property name="antlr.test.src.dir" value="${src.dir}/test/antlr"/>
+      <property name="antlr.test.src.dir" value="target/generated-sources"/>
 
       <!--
            ANTLR input data used in tests.

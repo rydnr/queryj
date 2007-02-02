@@ -180,7 +180,7 @@ private String[][] columnIsaRefs;
  */
 protected void setTableComment(final String comment)
 {
-    tableComment = comment;
+    tableComment = trim(comment);
 }
 
 /**
@@ -199,7 +199,7 @@ public String getTableComment()
  */
 protected void setTableStatic(final String name)
 {
-    tableStatic = name;
+    tableStatic = trim(name);
 }
 
 /**
@@ -218,7 +218,7 @@ public String getTableStatic()
  */
 protected void setTableIsa(final String name)
 {
-    tableIsa = name;
+    tableIsa = trim(name);
 }
 
 /**
@@ -237,7 +237,7 @@ public String getTableIsa()
  */
 protected void setTableIsaType(final String name)
 {
-    tableIsaType = name;
+    tableIsaType = trim(name);
 }
 
 /**
@@ -255,7 +255,7 @@ public String getTableIsaType()
  */
 protected void setColumnComment(final String comment)
 {
-    columnComment = comment;
+    columnComment = trim(comment);
 }
 
 /**
@@ -275,7 +275,7 @@ public String getColumnComment()
  */
 protected void setColumnBool(final String value)
 {
-    columnBool = value;
+    columnBool = trim(value);
 }
 
 /**
@@ -325,6 +325,22 @@ protected void setColumnIsaRefs(final String[][] mappings)
 public String[][] getColumnIsaRefs()
 {
     return columnIsaRefs;
+}
+
+/**
+ * Trims given value.
+ * @param value the value.
+ */
+protected String trim(final String value)
+{
+    String result = value;
+
+    if  (result != null)
+    {
+        result = result.trim();
+    }
+
+    return result;
 }
 }
 
@@ -389,7 +405,7 @@ fragment col_isarefs
      (
        OPEN_PAREN a=identifier COMMA b=identifier CLOSE_PAREN
        {
-         contents.add(new String[] { $a.text, $b.text });
+         contents.add(new String[] { trim($a.text), trim($b.text) });
        }
      )+
      {
@@ -401,24 +417,32 @@ fragment col_isarefs
  * LEXER RULES
  *------------------------------------------------------------------*/
 
-fragment ID
+AT
+    :  {input.LT(1).getText().equals("@static")}? => STATIC {type = STATIC;}
+    |  {input.LT(1).getText().equals("@isa")}? => ISA {type = ISA;}
+    |  {input.LT(1).getText().equals("@isatype")}? => ISATYPE {type = ISATYPE;}
+    |  {input.LT(1).getText().equals("@isarefs")}? => ISAREFS {type = ISAREFS;}
+    |  {input.LT(1).getText().equals("@readonly")}? => READONLY {type = READONLY;}
+    |  {input.LT(1).getText().equals("@bool")}? => BOOL {type = BOOL;}
+    ;
+
+ID
     : ( LETTER | '_' ) (NAMECHAR)*
     ;
 
-TEXT  : (~'@')+ ;
-
-
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
 
-fragment STATIC : '@static';
-fragment ISA : '@isa';
-fragment ISATYPE : '@isatype';
-fragment ISAREFS : '@isarefs';
-fragment READONLY : '@readonly';
-fragment BOOL : '@bool';
-fragment OPEN_PAREN : '(';
-fragment CLOSE_PAREN : ')';
-fragment COMMA : ',';
+STATIC : '@static';
+ISA : '@isa';
+ISATYPE : '@isatype';
+ISAREFS : '@isarefs';
+READONLY : '@readonly';
+BOOL : '@bool';
+OPEN_PAREN : '(';
+CLOSE_PAREN : ')';
+COMMA : ',';
+
+TEXT  : (~'@')+ ;
 
 fragment NAMECHAR
     : LETTER | DIGIT | '.' | '-' | '_' | ':' | '$'
