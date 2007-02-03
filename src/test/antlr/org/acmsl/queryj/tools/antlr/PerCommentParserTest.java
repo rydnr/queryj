@@ -185,22 +185,26 @@ public class PerCommentParserTest
      * Tests the <code>getTableComment()</code> method
      * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getTableComment(String)
      */
-    public void testTableCommentTest()
+    public void testTableComment()
     {
         int t_iIndex = 0;
         
         try
         {
-            int t_iCount = (TABLE_COMMENT_TESTS != null) ? TABLE_COMMENT_TESTS.length : 0;
+            int t_iCount =
+                (TABLE_COMMENT_TESTS != null) ? TABLE_COMMENT_TESTS.length : 0;
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                PerCommentParser t_Parser = setUpParser(TABLE_COMMENT_TESTS[t_iIndex]);
+                PerCommentParser t_Parser =
+                    setUpParser(TABLE_COMMENT_TESTS[t_iIndex]);
 
                 t_Parser.tableComment();
 
                 assertEquals(
-                    "Test failed on table comment \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
+                      "Test failed on table comment "
+                    + t_iIndex
+                    + " \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
                     TABLE_COMMENT,
                     t_Parser.getTableComment());
             }
@@ -209,7 +213,7 @@ public class PerCommentParserTest
         {
             fail(
                   recognitionException.getMessage()
-                + " on "
+                + " on test " + t_iIndex + " "
                 + TABLE_COMMENT_TESTS[t_iIndex]);
         }
     }
@@ -218,13 +222,16 @@ public class PerCommentParserTest
      * Tests the <code>getColumnComment()</code> method
      * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getColumnComment(String)
      */
-    public void testColumnCommentTest()
+    public void testColumnComment()
     {
         int t_iIndex = 0;
         
         try
         {
-            int t_iCount = (COLUMN_COMMENT_TESTS != null) ? COLUMN_COMMENT_TESTS.length : 0;
+            int t_iCount =
+                (COLUMN_COMMENT_TESTS != null)
+                ?  COLUMN_COMMENT_TESTS.length
+                :  0;
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
@@ -234,7 +241,9 @@ public class PerCommentParserTest
                 t_Parser.columnComment();
 
                 assertEquals(
-                    "Test failed on column comment \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                      "Test failed on column comment "
+                    + t_iIndex
+                    + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
                     COLUMN_COMMENT,
                     t_Parser.getColumnComment());
             }
@@ -243,7 +252,353 @@ public class PerCommentParserTest
         {
             fail(
                   recognitionException.getMessage()
-                + " on "
+                + " on test " + t_iIndex + " "
+                + COLUMN_COMMENT_TESTS[t_iIndex]);
+        }
+    }
+
+    /**
+     * Tests the <code>getTableStatic()</code> method
+     * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getTableStatic()
+     */
+    public void testTableStatic()
+    {
+        int t_iIndex = 0;
+        
+        try
+        {
+            int t_iCount =
+                (TABLE_COMMENT_TESTS != null) ? TABLE_COMMENT_TESTS.length : 0;
+            
+            for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                PerCommentParser t_Parser =
+                    setUpParser(TABLE_COMMENT_TESTS[t_iIndex]);
+
+                t_Parser.tableComment();
+
+                switch  (t_iIndex)
+                {
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 9:
+                    case 10:
+                    case 13:
+                    case 14:
+                        assertEquals(
+                              "@static test failed on table comment "
+                            + t_iIndex
+                            + " \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
+                            TABLE_STATIC,
+                            t_Parser.getTableStatic());
+                        break;
+
+                    default:
+                        assertNull(
+                              "@static test failed on table comment "
+                            + t_iIndex
+                            + " \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
+                            t_Parser.getTableStatic());
+                        break;
+                }
+            }
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            fail(
+                  recognitionException.getMessage()
+                + " on test " + t_iIndex + " "
+                + TABLE_COMMENT_TESTS[t_iIndex]);
+        }
+    }
+
+    /**
+     * Tests the <code>getTableIsa()</code> method
+     * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getTableIsa()
+     */
+    public void testTableIsa()
+    {
+        int t_iIndex = 0;
+        
+        try
+        {
+            int t_iCount =
+                (TABLE_COMMENT_TESTS != null) ? TABLE_COMMENT_TESTS.length : 0;
+            
+            for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                PerCommentParser t_Parser =
+                    setUpParser(TABLE_COMMENT_TESTS[t_iIndex]);
+
+                t_Parser.tableComment();
+
+                switch  (t_iIndex)
+                {
+                    case 2:
+                    case 3:
+                    case 6:
+                    case 7:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                        assertEquals(
+                              "@isa test failed on table comment "
+                            + t_iIndex
+                            + " \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
+                            TABLE_ISA,
+                            t_Parser.getTableIsa());
+                        break;
+
+                    default:
+                        assertNull(
+                              "@isa test failed on table comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                            t_Parser.getTableIsa());
+                        break;
+                }
+            }
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            fail(
+                  recognitionException.getMessage()
+                + " on test " + t_iIndex + " "
+                + TABLE_COMMENT_TESTS[t_iIndex]);
+        }
+    }
+
+    /**
+     * Tests the <code>getTableIsaType()</code> method
+     * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getTableIsaType()
+     */
+    public void testTableIsaType()
+    {
+        int t_iIndex = 0;
+        
+        try
+        {
+            int t_iCount =
+                (TABLE_COMMENT_TESTS != null) ? TABLE_COMMENT_TESTS.length : 0;
+            
+            for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                PerCommentParser t_Parser =
+                    setUpParser(TABLE_COMMENT_TESTS[t_iIndex]);
+
+                t_Parser.tableComment();
+
+                switch  (t_iIndex)
+                {
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                    case 14:
+                        assertEquals(
+                              "@isatype test failed on table comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                            TABLE_ISATYPE,
+                            t_Parser.getTableIsaType());
+                        break;
+
+                    default:
+                        assertNull(
+                              "@isatype test failed on table comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                            t_Parser.getTableIsaType());
+                        break;
+                }
+            }
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            fail(
+                  recognitionException.getMessage()
+                + " on test " + t_iIndex + " "
+                + TABLE_COMMENT_TESTS[t_iIndex]);
+        }
+    }
+
+    /**
+     * Tests the <code>getColumnReadOnly()</code> method
+     * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getColumnReadOnly()
+     */
+    public void testColumnReadOnly()
+    {
+        int t_iIndex = 0;
+        
+        try
+        {
+            int t_iCount =
+                (COLUMN_COMMENT_TESTS != null)
+                ?  COLUMN_COMMENT_TESTS.length
+                :  0;
+            
+            for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                PerCommentParser t_Parser =
+                    setUpParser(COLUMN_COMMENT_TESTS[t_iIndex]);
+
+                t_Parser.columnComment();
+
+                switch  (t_iIndex)
+                {
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                    case 14:
+                        assertTrue(
+                              "@readonly test failed on column comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                            t_Parser.getColumnReadOnly());
+                        break;
+
+                    default:
+                        assertFalse(
+                              "@readonly test failed on column comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                            t_Parser.getColumnReadOnly());
+                        break;
+                }
+            }
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            fail(
+                  recognitionException.getMessage()
+                + " on test " + t_iIndex + " "
+                + COLUMN_COMMENT_TESTS[t_iIndex]);
+        }
+    }
+
+    /**
+     * Tests the <code>getColumnBool()</code> method
+     * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getColumnBool()
+     */
+    public void testColumnBool()
+    {
+        int t_iIndex = 0;
+        
+        try
+        {
+            int t_iCount =
+                (COLUMN_COMMENT_TESTS != null)
+                ?  COLUMN_COMMENT_TESTS.length
+                :  0;
+            
+            for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                PerCommentParser t_Parser =
+                    setUpParser(COLUMN_COMMENT_TESTS[t_iIndex]);
+
+                t_Parser.columnComment();
+
+                switch  (t_iIndex)
+                {
+                    case 2:
+                    case 3:
+                    case 6:
+                    case 7:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                        assertEquals(
+                              "@bool test failed on column comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                            COLUMN_BOOL,
+                            t_Parser.getColumnBool());
+                        break;
+
+                    default:
+                        assertNull(
+                              "@bool test failed on column comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                              t_Parser.getColumnBool());
+                        break;
+                }
+            }
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            fail(
+                  recognitionException.getMessage()
+                + " on test " + t_iIndex + " "
+                + COLUMN_COMMENT_TESTS[t_iIndex]);
+        }
+    }
+
+    /**
+     * Tests the <code>getColumnIsaRefs()</code> method
+     * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getColumnIsaRefs()
+     */
+    public void testColumnIsaRefs()
+    {
+        int t_iIndex = 0;
+        
+        try
+        {
+            int t_iCount =
+                (COLUMN_COMMENT_TESTS != null)
+                ?  COLUMN_COMMENT_TESTS.length
+                :  0;
+            
+            for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                PerCommentParser t_Parser =
+                    setUpParser(COLUMN_COMMENT_TESTS[t_iIndex]);
+
+                t_Parser.columnComment();
+
+                switch  (t_iIndex)
+                {
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 9:
+                    case 10:
+                    case 13:
+                    case 14:
+                        assertNotNull(
+                              "@isarefs test failed on column comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                            t_Parser.getColumnIsaRefs());
+                        break;
+
+                    default:
+                        assertNull(
+                              "@isarefs test failed on column comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                              t_Parser.getColumnIsaRefs());
+                        break;
+                }
+            }
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            fail(
+                  recognitionException.getMessage()
+                + " on test " + t_iIndex + " "
                 + COLUMN_COMMENT_TESTS[t_iIndex]);
         }
     }
@@ -254,7 +609,6 @@ public class PerCommentParserTest
      * @return the <code>PerCommentParser</code> instance.
      * @throws RecognitionException if the comment cannot be parsed.
      * @precondition comment != null
-
      */
     protected PerCommentParser setUpParser(final String comment)
         throws  RecognitionException

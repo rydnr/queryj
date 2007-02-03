@@ -354,7 +354,7 @@ columnComment : WS? t=text ( col_annotation )* { setColumnComment(t); };
 
 fragment text returns [String result]
 @init { result = null; StringBuffer aux = new StringBuffer(); }
-  : (  t=TEXT { aux.append($t.text); }
+  : (  t=TEXT  { aux.append($t.text); }
      | q=QUOTE { aux.append($q.text); }
      | c=COMMA { aux.append($c.text); })+
     { result = aux.toString(); }
@@ -387,7 +387,7 @@ fragment col_annotation
   : (
          col_readonly { setColumnReadOnly(true); }
      | b=col_bool     { setColumnBool(b); }
-     | col_isarefs
+     |   col_isarefs
     );
 
 fragment col_readonly :  READONLY WS?;
@@ -406,15 +406,15 @@ fragment col_isarefs
 }
   :  ISAREFS
      WS
-//     (
-       OPEN_PAREN WS? a=TEXT WS? COMMA WS? b=identifier WS? CLOSE_PAREN WS?
+     (
+       OPEN_PAREN WS? a=TEXT WS? COMMA WS? b=identifier WS? CLOSE_PAREN WS? COMMA?
        {
          contents.add(new String[] { trim($a.text), trim($b.text) });
        }
-//     )+
-//     {
-//       setColumnIsaRefs((String[][]) contents.toArray(new String[0][0]));
-//S     }
+     )+
+     {
+       setColumnIsaRefs((String[][]) contents.toArray(new String[0][0]));
+     }
   ;
 
 /*------------------------------------------------------------------
