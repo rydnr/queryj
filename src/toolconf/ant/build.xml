@@ -273,14 +273,15 @@
       <property name="src.dir" value="${project.base.folder}/src"/>
 
       <!--
-         ANTLR source folder.
+         ANTLR source folders.
       -->
       <property name="antlr.src.dir" value="${src.dir}/main/antlr"/>
+      <property name="antlr.java.src.dir" value="target/generated-sources"/>
 
       <!--
          ANTLR test folder.
       -->
-      <property name="antlr.test.src.dir" value="target/generated-sources"/>
+      <property name="antlr.test.dir" value="${src.dir}/test/antlr"/>
 
       <!--
            ANTLR input data used in tests.
@@ -662,7 +663,7 @@
         <!--
          Source files.
         -->
-        <pathelement location="${antlr.src.dir}"/>
+        <pathelement location="${antlr.java.src.dir}"/>
 
       </path>
 
@@ -676,10 +677,9 @@
         -->
         <pathelement location="${java.test.dir}"/>
 
-        <!--
-         Source files.
-        -->
-        <pathelement location="${antlr.test.src.dir}"/>
+        <pathelement location="${antlr.java.src.dir}"/>
+
+        <pathelement location="${antlr.test.dir}"/>
 
       </path>
 

@@ -365,17 +365,17 @@ tab_annotation
 
 tab_static returns [String result]
 @init { result = null; }
-  : STATIC WS i=identifier { result = $i.text; }
+  : STATIC WS i=identifier WS? { result = $i.text; }
   ;
 
 fragment tab_isa returns [String result]
 @init { result = null; }
-  : ISA WS i=identifier WS* { result = $i.text; }
+  : ISA WS i=identifier WS? { result = $i.text; }
   ;
 
 fragment tab_isatype returns [String result]
 @init { result = null; }
-  : ISATYPE WS i=identifier WS* { result = $i.text; }
+  : ISATYPE WS i=identifier WS? { result = $i.text; }
   ;
 
 columnComment : t=text ( col_annotation )* { setColumnComment(t); };
@@ -387,11 +387,11 @@ fragment col_annotation
      | col_isarefs
     );
 
-fragment col_readonly :  READONLY WS*;
+fragment col_readonly :  READONLY WS?;
 
 fragment col_bool returns [String result]
 @init { result = null; }
-  : BOOL WS i=identifier WS* { result = $i.text; }
+  : BOOL WS i=identifier WS? { result = $i.text; }
   ;
 
 fragment identifier : ID;
@@ -403,7 +403,7 @@ fragment col_isarefs
 }
   :  ISAREFS
      (
-       OPEN_PAREN WS* a=identifier WS* COMMA WS* b=identifier WS* CLOSE_PAREN WS*
+       OPEN_PAREN WS? a=identifier WS? COMMA WS? b=identifier WS? CLOSE_PAREN WS?
        {
          contents.add(new String[] { trim($a.text), trim($b.text) });
        }
@@ -417,19 +417,17 @@ fragment col_isarefs
  * LEXER RULES
  *------------------------------------------------------------------*/
 
-WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ {_type=WS; $channel=HIDDEN;};
-
 AT
-    :  (  ('@static')   => STATIC   {_type = STATIC;}
-        | ('@isa')      => ISA      {_type = ISA;}
-        | ('@isatype')  => ISATYPE  {_type = ISATYPE;}
-        | ('@isarefs')  => ISAREFS  {_type = ISAREFS;}
-        | ('@readonly') => READONLY {_type = READONLY;}
-        | ('@bool')     => BOOL     {_type = BOOL;})
+    :  (  ('@static')   => STATIC   {$type = STATIC;}
+        | ('@isa')      => ISA      {$type = ISA;}
+        | ('@isatype')  => ISATYPE  {$type = ISATYPE;}
+        | ('@isarefs')  => ISAREFS  {$type = ISAREFS;}
+        | ('@readonly') => READONLY {$type = READONLY;}
+        | ('@bool')     => BOOL     {$type = BOOL;})
     ;
 
 ID
-    : ( LETTER | '_' ) (NAMECHAR)*
+    : ( LETTER | '_' ) (NAMECHAR)* WS? {$type = ID;}
     ;
 
 fragment STATIC : '@static';
@@ -442,7 +440,16 @@ OPEN_PAREN : '(';
 CLOSE_PAREN : ')';
 COMMA : ',';
 
-TEXT  : (~'@')+ ;
+WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ {$channel = HIDDEN;};
+
+TEXT
+   : (  ('\t') => WS {$type = WS;}
+      | (' ')  => WS {$type = WS;}
+      | ('\r') => WS {$type = WS;}
+      | ('\n') => WS {$type = WS;}
+      | ('\u000C') => WS {$type = WS;}
+      | (~'@')+)
+   ;
 
 fragment NAMECHAR
     : LETTER | DIGIT | '.' | '-' | '_' | ':' | '$'
