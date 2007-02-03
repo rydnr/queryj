@@ -86,19 +86,19 @@ public class PerCommentParserTest
         "Dummy table used in tests.";
     
     /**
-     * The table static attribute.
+     * The table 'static' annotation.
      */
     protected static final String TABLE_STATIC = "name";
     
     /**
-     * The table isa table.
+     * The table 'isa' annotation.
      */
     protected static final String TABLE_ISA = "parent_table";
     
     /**
-     * The table isaref reference.
+     * The table 'isatype' annotation.
      */
-    protected static final String TABLE_ISAREF = "isa_discriminator";
+    protected static final String TABLE_ISATYPE = "isa_parent";
     
     /**
      * The table comment tests.
@@ -107,22 +107,62 @@ public class PerCommentParserTest
         new String[]
         {
             TABLE_COMMENT,
-            TABLE_COMMENT +                                                     " @static " + TABLE_STATIC,
-            TABLE_COMMENT +                              " @isa " + TABLE_ISA,
-            TABLE_COMMENT +                              " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
-            TABLE_COMMENT + " @isaref " + TABLE_ISAREF,
-            TABLE_COMMENT + " @isaref " + TABLE_ISAREF                        + " @static " + TABLE_STATIC,
-            TABLE_COMMENT + " @isaref " + TABLE_ISAREF + " @isa " + TABLE_ISA,
-            TABLE_COMMENT + " @isaref " + TABLE_ISAREF + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
-            TABLE_COMMENT +                                                     " @isaref " + TABLE_ISAREF,
+            TABLE_COMMENT +                                                       " @static " + TABLE_STATIC,
+            TABLE_COMMENT +                                " @isa " + TABLE_ISA,
+            TABLE_COMMENT +                                " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
+            TABLE_COMMENT + " @isatype " + TABLE_ISATYPE,
+            TABLE_COMMENT + " @isatype " + TABLE_ISATYPE                        + " @static " + TABLE_STATIC,
+            TABLE_COMMENT + " @isatype " + TABLE_ISATYPE + " @isa " + TABLE_ISA,
+            TABLE_COMMENT + " @isatype " + TABLE_ISATYPE + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
+            TABLE_COMMENT +                                                     " @isatype " + TABLE_ISATYPE,
             TABLE_COMMENT +                        " @static " + TABLE_STATIC,
-            TABLE_COMMENT +                        " @static " + TABLE_STATIC + " @isaref " + TABLE_ISAREF,
+            TABLE_COMMENT +                        " @static " + TABLE_STATIC + " @isatype " + TABLE_ISATYPE,
             TABLE_COMMENT + " @isa " + TABLE_ISA,
-            TABLE_COMMENT + " @isa " + TABLE_ISA                              + " @isaref " + TABLE_ISAREF,
+            TABLE_COMMENT + " @isa " + TABLE_ISA                              + " @isatype " + TABLE_ISATYPE,
             TABLE_COMMENT + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
-            TABLE_COMMENT + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC + " @isaref " + TABLE_ISAREF
+            TABLE_COMMENT + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC + " @isatype " + TABLE_ISATYPE
         };
-    
+
+    /**
+     * The column comment.
+     */
+    protected static final String COLUMN_COMMENT =
+        "Dummy column used in tests.";
+
+    /**
+     * The column 'bool' annotation.
+     */
+    protected static final String COLUMN_BOOL = "'Y'";
+
+    /**
+     * The column 'isarefs' annotation.
+     */
+    protected static final String COLUMN_ISAREFS =
+        "(1, \"first_isa_child\") (2, \"second_isa_child\" )";
+
+    /**
+     * The column comment tests.
+     */
+    protected static final String[] COLUMN_COMMENT_TESTS =
+        new String[]
+        {
+            COLUMN_COMMENT,
+            COLUMN_COMMENT +                                                           " @readonly",
+            COLUMN_COMMENT +                                 " @bool " + COLUMN_BOOL,
+            COLUMN_COMMENT +                                 " @bool " + COLUMN_BOOL + " @readonly",
+            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS,
+            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @readonly",
+            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @bool " + COLUMN_BOOL,
+            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @bool " + COLUMN_BOOL + " @readonly",
+            COLUMN_COMMENT +                                                           " @readonly",
+            COLUMN_COMMENT +                           " @isarefs " + COLUMN_ISAREFS,
+            COLUMN_COMMENT +                           " @isarefs " + COLUMN_ISAREFS + " @readonly",
+            COLUMN_COMMENT + " @bool " + COLUMN_BOOL,
+            COLUMN_COMMENT + " @bool " + COLUMN_BOOL +                                 " @readonly",
+            COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS,
+            COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS + " @readonly"
+        };
+
     /**
      * Constructs a test case with the given name.
      * @param name the test case name.
@@ -142,7 +182,7 @@ public class PerCommentParserTest
     }
 
     /**
-     * Tests the getTableComment() method
+     * Tests the <code>getTableComment()</code> method
      * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getTableComment(String)
      */
     public void testTableCommentTest()
@@ -159,8 +199,6 @@ public class PerCommentParserTest
 
                 t_Parser.tableComment();
 
-                System.out.println("Table Comment:~" + t_Parser.getTableComment() + "~");
-
                 assertEquals(
                     "Test failed on table comment \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
                     TABLE_COMMENT,
@@ -173,6 +211,40 @@ public class PerCommentParserTest
                   recognitionException.getMessage()
                 + " on "
                 + TABLE_COMMENT_TESTS[t_iIndex]);
+        }
+    }
+
+    /**
+     * Tests the <code>getColumnComment()</code> method
+     * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getColumnComment(String)
+     */
+    public void testColumnCommentTest()
+    {
+        int t_iIndex = 0;
+        
+        try
+        {
+            int t_iCount = (COLUMN_COMMENT_TESTS != null) ? COLUMN_COMMENT_TESTS.length : 0;
+            
+            for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                PerCommentParser t_Parser =
+                    setUpParser(COLUMN_COMMENT_TESTS[t_iIndex]);
+
+                t_Parser.columnComment();
+
+                assertEquals(
+                    "Test failed on column comment \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                    COLUMN_COMMENT,
+                    t_Parser.getColumnComment());
+            }
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            fail(
+                  recognitionException.getMessage()
+                + " on "
+                + COLUMN_COMMENT_TESTS[t_iIndex]);
         }
     }
 

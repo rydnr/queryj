@@ -348,14 +348,19 @@ protected String trim(final String value)
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-tableComment : t=text ( tab_annotation )* { setTableComment(t); };
+tableComment : WS? t=text ( tab_annotation )* { setTableComment(t); };
         
+columnComment : WS? t=text ( col_annotation )* { setColumnComment(t); };
+
 fragment text returns [String result]
-@init { result = null; }
-  : t=TEXT { result = $t.text; }
+@init { result = null; StringBuffer aux = new StringBuffer(); }
+  : (  t=TEXT { aux.append($t.text); }
+     | q=QUOTE { aux.append($q.text); }
+     | c=COMMA { aux.append($c.text); })+
+    { result = aux.toString(); }
   ;
         
-tab_annotation
+fragment tab_annotation
   : (
         s=tab_static  { setTableStatic(s); }
       | i=tab_isa     { setTableIsa(i); }
@@ -363,7 +368,7 @@ tab_annotation
     )
   ;
 
-tab_static returns [String result]
+fragment tab_static returns [String result]
 @init { result = null; }
   : STATIC WS i=identifier WS? { result = $i.text; }
   ;
@@ -377,8 +382,6 @@ fragment tab_isatype returns [String result]
 @init { result = null; }
   : ISATYPE WS i=identifier WS? { result = $i.text; }
   ;
-
-columnComment : t=text ( col_annotation )* { setColumnComment(t); };
 
 fragment col_annotation
   : (
@@ -402,15 +405,16 @@ fragment col_isarefs
     List contents = new ArrayList();
 }
   :  ISAREFS
-     (
-       OPEN_PAREN WS? a=identifier WS? COMMA WS? b=identifier WS? CLOSE_PAREN WS?
+     WS
+//     (
+       OPEN_PAREN WS? a=TEXT WS? COMMA WS? b=identifier WS? CLOSE_PAREN WS?
        {
          contents.add(new String[] { trim($a.text), trim($b.text) });
        }
-     )+
-     {
-       setColumnIsaRefs((String[][]) contents.toArray(new String[0][0]));
-     }
+//     )+
+//     {
+//       setColumnIsaRefs((String[][]) contents.toArray(new String[0][0]));
+//S     }
   ;
 
 /*------------------------------------------------------------------
@@ -423,24 +427,29 @@ AT
         | ('@isatype')  => ISATYPE  {$type = ISATYPE;}
         | ('@isarefs')  => ISAREFS  {$type = ISAREFS;}
         | ('@readonly') => READONLY {$type = READONLY;}
-        | ('@bool')     => BOOL     {$type = BOOL;})
+        | ('@bool')     => BOOL     {$type = BOOL;}
+        | '@')
     ;
 
 ID
-    : ( LETTER | '_' ) (NAMECHAR)* WS? {$type = ID;}
+    : QUOTE? ( LETTER | '_' ) (NAMECHAR)* QUOTE? WS? {$type = ID;}
     ;
 
+// keywords
 fragment STATIC : '@static';
 fragment ISA : '@isa';
 fragment ISATYPE : '@isatype';
 fragment ISAREFS : '@isarefs';
 fragment READONLY : '@readonly';
 fragment BOOL : '@bool';
+
+// literals
+QUOTE : ('\'' | '"');
 OPEN_PAREN : '(';
 CLOSE_PAREN : ')';
 COMMA : ',';
 
-WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ {$channel = HIDDEN;};
+WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+;// {$channel = HIDDEN;};
 
 TEXT
    : (  ('\t') => WS {$type = WS;}
@@ -448,7 +457,12 @@ TEXT
       | ('\r') => WS {$type = WS;}
       | ('\n') => WS {$type = WS;}
       | ('\u000C') => WS {$type = WS;}
-      | (~'@')+)
+      | ('(') => OPEN_PAREN {$type = OPEN_PAREN;}
+      | (')') => CLOSE_PAREN {$type = CLOSE_PAREN;}
+      | (',') => COMMA {$type = COMMA;}
+      | ('\''|'"') => QUOTE {$type = QUOTE;}
+      | ('@') => AT
+      | (~('@'|','|'('|')'|'\''|'"')+))
    ;
 
 fragment NAMECHAR
