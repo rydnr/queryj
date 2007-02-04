@@ -164,35 +164,35 @@ public class PerCommentParserTest
     protected static final String[] COLUMN_COMMENT_TESTS =
         new String[]
         {
-            COLUMN_COMMENT,
-            COLUMN_COMMENT +                                                           " @readonly",
-            COLUMN_COMMENT +                                 " @bool " + COLUMN_BOOL,
-            COLUMN_COMMENT +                                 " @bool " + COLUMN_BOOL + " @readonly",
-            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS,
-            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @readonly",
-            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @bool " + COLUMN_BOOL,
-            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @bool " + COLUMN_BOOL + " @readonly",
-            COLUMN_COMMENT +                                                           " @readonly",
-            COLUMN_COMMENT +                           " @isarefs " + COLUMN_ISAREFS,
-            COLUMN_COMMENT +                           " @isarefs " + COLUMN_ISAREFS + " @readonly",
-            COLUMN_COMMENT + " @bool " + COLUMN_BOOL,
-            COLUMN_COMMENT + " @bool " + COLUMN_BOOL +                                 " @readonly",
-            COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS,
-            COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS + " @readonly",
-            COLUMN_COMMENT +                                                           " @readonly",
-            COLUMN_COMMENT +                                 " @oraseq " + COLUMN_ORASEQ,
-            COLUMN_COMMENT +                                 " @oraseq " + COLUMN_ORASEQ + " @readonly",
-            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS,
-            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @readonly",
-            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @oraseq " + COLUMN_ORASEQ,
-            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @oraseq " + COLUMN_ORASEQ + " @readonly",
-            COLUMN_COMMENT +                                                           " @readonly",
-            COLUMN_COMMENT +                               " @isarefs " + COLUMN_ISAREFS,
-            COLUMN_COMMENT +                               " @isarefs " + COLUMN_ISAREFS + " @readonly",
-            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ,
-            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ +                                 " @readonly",
-            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ + " @isarefs " + COLUMN_ISAREFS,
-            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ + " @isarefs " + COLUMN_ISAREFS + " @readonly"
+/*0*/       COLUMN_COMMENT,
+/*1*/       COLUMN_COMMENT +                                                           " @readonly",
+/*2*/       COLUMN_COMMENT +                                 " @bool " + COLUMN_BOOL,
+/*3*/            COLUMN_COMMENT +                                 " @bool " + COLUMN_BOOL + " @readonly",
+/*4*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS,
+/*5*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @readonly",
+/*6*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @bool " + COLUMN_BOOL,
+/*7*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @bool " + COLUMN_BOOL + " @readonly",
+/*8*/            COLUMN_COMMENT +                                                           " @readonly",
+/*9*/            COLUMN_COMMENT +                           " @isarefs " + COLUMN_ISAREFS,
+/*10*/            COLUMN_COMMENT +                           " @isarefs " + COLUMN_ISAREFS + " @readonly",
+/*11*/            COLUMN_COMMENT + " @bool " + COLUMN_BOOL,
+/*12*/            COLUMN_COMMENT + " @bool " + COLUMN_BOOL +                                 " @readonly",
+/*13*/            COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS,
+/*14*/            COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS + " @readonly",
+/*15*/            COLUMN_COMMENT +                                                           " @readonly",
+/*16*/            COLUMN_COMMENT +                                 " @oraseq " + COLUMN_ORASEQ,
+/*17*/            COLUMN_COMMENT +                                 " @oraseq " + COLUMN_ORASEQ + " @readonly",
+/*18*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS,
+/*19*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @readonly",
+/*20*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @oraseq " + COLUMN_ORASEQ,
+/*21*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @oraseq " + COLUMN_ORASEQ + " @readonly",
+/*22*/            COLUMN_COMMENT +                                                           " @readonly",
+/*23*/            COLUMN_COMMENT +                               " @isarefs " + COLUMN_ISAREFS,
+/*24*/            COLUMN_COMMENT +                               " @isarefs " + COLUMN_ISAREFS + " @readonly",
+/*25*/            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ,
+/*26*/            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ +                                 " @readonly",
+/*27*/            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ + " @isarefs " + COLUMN_ISAREFS,
+/*28*/            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ + " @isarefs " + COLUMN_ISAREFS + " @readonly"
         };
 
     /**
@@ -620,10 +620,12 @@ public class PerCommentParserTest
                     case 13:
                     case 14:
                     case 18:
+                    case 19:
+                    case 20:
+                    case 21:
                     case 23:
                     case 24:
-                    case 25:
-                    case 26:
+                    case 27:
                     case 28:
                     case 29:
                     case 32:
@@ -719,12 +721,12 @@ public class PerCommentParserTest
                 {
                     case 16:
                     case 17:
-                    case 22:
-                    case 23:
+                    case 20:
+                    case 21:
+                    case 25:
+                    case 26:
                     case 27:
                     case 28:
-                    case 29:
-                    case 30:
                         assertEquals(
                               "@oraseq test failed on column comment "
                             + t_iIndex
