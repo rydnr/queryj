@@ -110,7 +110,12 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public interface <input.vo_name>
+<if(input.parent)>
+    extends  <input.parent>
+<else>
 //    extends  ValueObject
+<endif>
+
 {
     <input.attributes:attribute_getter(attribute=it);
       separator="\n\n">

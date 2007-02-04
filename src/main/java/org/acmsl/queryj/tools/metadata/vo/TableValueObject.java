@@ -42,6 +42,12 @@ package org.acmsl.queryj.tools.metadata.vo;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.metadata.vo.AbstractTable;
+import org.acmsl.queryj.tools.metadata.vo.Table;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
 
 /**
  * Value-object implementation of <code>Table</code> interface.
@@ -55,10 +61,13 @@ public final class TableValueObject
      * Creates an <code>TableValueObject</code> with the following
      * information.
      * @param name the name.
+     * @param attributes the attributes.
+     * @param parentTable the parent table.
      */
-    public TableValueObject(final String name)
+    public TableValueObject(
+        final String name, final List attributes, final Table parentTable)
     {
-        super(name);
+        super(name, attributes, parentTable);
     }
 }
 

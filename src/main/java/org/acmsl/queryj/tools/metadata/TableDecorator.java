@@ -53,6 +53,11 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
+
 /**
  * Decorates <code>Table</code> instances to provide required alternate
  * representations of the information stored therein.
@@ -78,21 +83,30 @@ public class TableDecorator
     public TableDecorator(
         final Table table, final MetadataManager metadataManager)
     {
-        this(table.getName(), metadataManager);
+        this(
+            table.getName(),
+            table.getAttributes(),
+            table.getParentTable(),
+            metadataManager);
     }
 
     /**
      * Creates an <code>TableDecorator</code> with the following
      * information.
      * @param name the name.
+     * @param attributes the attributes.
+     * @param parentTable the parent table.
      * @param metadataManager the metadata manager.
      * @precondition name != null
      * @precondition metadataManager != null
      */
     public TableDecorator(
-        final String name, final MetadataManager metadataManager)
+        final String name,
+        final List attributes,
+        final Table parentTable,
+        final MetadataManager metadataManager)
     {
-        super(name);
+        super(name, attributes, parentTable);
 
         immutableSetMetadataManager(metadataManager);
     }
@@ -330,7 +344,6 @@ public class TableDecorator
         return normalizeLowercase(getName());
     }
 
-
     /**
      * Retrieves the table's name in lower-case, once normalized.
      * @return such information.
@@ -411,5 +424,4 @@ public class TableDecorator
     {
         return lowerCase(getSingularNameUppercased());
     }
-
 }

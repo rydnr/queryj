@@ -44,6 +44,11 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.metadata.TableDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
+
 /**
  * Adds a simple caching mechanism while decorating <code>Table</code>
  * instances.
@@ -71,14 +76,19 @@ public class CachingTableDecorator
      * Creates a <code>CachingTableDecorator</code> with the following
      * information.
      * @param name the name.
+     * @param attributes the table attributes.
+     * @param parentTable the parent table.
      * @param metadataManager the metadata manager.
      * @precondition name != null
      * @precondition metadataManager != null
      */
     public CachingTableDecorator(
-        final String name, final MetadataManager metadataManager)
+        final String name,
+        final List attributes,
+        final Table parentTable,
+        final MetadataManager metadataManager)
     {
-        super(name, metadataManager);
+        super(name, attributes, parentTable, metadataManager);
     }
 
     /**

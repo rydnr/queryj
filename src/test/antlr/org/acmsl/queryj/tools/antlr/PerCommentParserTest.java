@@ -154,6 +154,11 @@ public class PerCommentParserTest
         + "("  + ISAREFS_IDS[1] + ", \"" + ISAREFS_REFERENCES[1] + "\" )";
 
     /**
+     * The column 'oraseq' annotation.
+     */
+    protected static final String COLUMN_ORASEQ = "DUMMY_SEQ";
+
+    /**
      * The column comment tests.
      */
     protected static final String[] COLUMN_COMMENT_TESTS =
@@ -174,6 +179,20 @@ public class PerCommentParserTest
             COLUMN_COMMENT + " @bool " + COLUMN_BOOL +                                 " @readonly",
             COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS,
             COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS + " @readonly"
+            COLUMN_COMMENT +                                                           " @readonly",
+            COLUMN_COMMENT +                                 " @oraseq " + COLUMN_ORASEQ,
+            COLUMN_COMMENT +                                 " @oraseq " + COLUMN_ORASEQ + " @readonly",
+            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS,
+            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @readonly",
+            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @oraseq " + COLUMN_ORASEQ,
+            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @oraseq " + COLUMN_ORASEQ + " @readonly",
+            COLUMN_COMMENT +                                                           " @readonly",
+            COLUMN_COMMENT +                               " @isarefs " + COLUMN_ISAREFS,
+            COLUMN_COMMENT +                               " @isarefs " + COLUMN_ISAREFS + " @readonly",
+            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ,
+            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ +                                 " @readonly",
+            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ + " @isarefs " + COLUMN_ISAREFS,
+            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ + " @isarefs " + COLUMN_ISAREFS + " @readonly"
         };
 
     /**
@@ -644,6 +663,65 @@ public class PerCommentParserTest
                             + t_iIndex
                             + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
                             t_astrIsaRefs);
+                        break;
+                }
+            }
+        }
+        catch  (final RecognitionException recognitionException)
+        {
+            fail(
+                  recognitionException.getMessage()
+                + " on test " + t_iIndex + " "
+                + COLUMN_COMMENT_TESTS[t_iIndex]);
+        }
+    }
+
+    /**
+     * Tests the <code>getColumnOraSeq()</code> method
+     * @see org.acmsl.queryj.tools.antlr.PerCommentParser#getColumnOraSeq()
+     */
+    public void testColumnOraSeq()
+    {
+        int t_iIndex = 0;
+        
+        try
+        {
+            int t_iCount =
+                (COLUMN_COMMENT_TESTS != null)
+                ?  COLUMN_COMMENT_TESTS.length
+                :  0;
+            
+            for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                PerCommentParser t_Parser =
+                    setUpParser(COLUMN_COMMENT_TESTS[t_iIndex]);
+
+                t_Parser.columnComment();
+
+                switch  (t_iIndex)
+                {
+                    case 16:
+                    case 17:
+                    case 22:
+                    case 23:
+                    case 27:
+                    case 28:
+                    case 29:
+                    case 30:
+                        assertEquals(
+                              "@oraseq test failed on column comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                            COLUMN_ORASEQ,
+                            t_Parser.getColumnOraSeq());
+                        break;
+
+                    default:
+                        assertNull(
+                              "@oraseq test failed on column comment "
+                            + t_iIndex
+                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
+                              t_Parser.getColumnOraSeq());
                         break;
                 }
             }

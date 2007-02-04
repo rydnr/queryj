@@ -159,6 +159,11 @@ public class CachingDecoratorFactory
     public TableDecorator createTableDecorator(
         final String table, final MetadataManager metadataManager)
     {
-        return new CachingTableDecorator(table, metadataManager);
+        return
+            new CachingTableDecorator(
+                table,
+                null, // TODO: get attributes
+                null, // TODO: get parent
+                metadataManager);
     }
 }

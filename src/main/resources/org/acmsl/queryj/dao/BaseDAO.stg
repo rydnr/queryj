@@ -147,14 +147,21 @@ public interface <input.vo_name>DAO
       row=it, voName=input.vo_name); separator="\n\n">
 
     /**
-     * The whole constants.
+     * The static constants.
      */
-    public static final <input.vo_name>[] _ALL_QUERYJ_CONSTANTS_ =
+    public static final <input.vo_name>[] FIXED_CONSTANTS =
         new <input.vo_name>[]
         {
             <input.cached_rows:{<it.nameNormalizedUppercased>};
               separator=",\n">
         };
+
+    /**
+     * The static constants.
+     * @deprecated Use <input.vo_name>DAO.FIXED_CONSTANTS instead.
+     */
+    public static final <input.vo_name>[] _ALL_QUERYJ_CONSTANTS_ =
+        FIXED_CONSTANTS;
 
     <input.static_attribute:find_constant_methods(
       attribute=it,

@@ -43,6 +43,11 @@ package org.acmsl.queryj.tools.metadata.vo;
  */
 import org.acmsl.queryj.tools.metadata.vo.Table;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
+ 
 /**
  * Abstract logicless implementation of <code>Table</code> interface.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -55,15 +60,30 @@ public abstract class AbstractTable
      * The name.
      */
     private String m__strName;
-    
+
+    /**
+     * The attribute list.
+     */
+    private List m__lAttributes;
+
+    /**
+     * The parent table, if any.
+     */
+    private Table m__ParentTable;
+
     /**
      * Creates an <code>AbstractTable</code> with the following
      * information.
      * @param name the name.
+     * @param attributes the attributes.
+     * @param parentTable the parent table, if any.
      */
-    protected AbstractTable(final String name)
+    protected AbstractTable(
+        final String name, final List attributes, final Table parentTable)
     {
         immutableSetName(name);
+        immutableSetAttributes(attributes);
+        immutableSetParentTable(parentTable);
     }
     
     /**
@@ -91,5 +111,59 @@ public abstract class AbstractTable
     public String getName()
     {
         return m__strName;
+    }
+
+    /**
+     * Specifies the attributes.
+     * @param atts the attributes.
+     */
+    protected final void immutableSetAttributes(final List attrs)
+    {
+        m__lAttributes = attrs;
+    }
+
+    /**
+     * Specifies the attributes.
+     * @param atts the attributes.
+     */
+    protected void setAttributes(final List attrs)
+    {
+        immutableSetAttributes(attrs);
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @return such list.
+     */
+    public List getAttributes()
+    {
+        return m__lAttributes;
+    }
+
+    /**
+     * Specifies the parent table.
+     * @param parentTable the parent table.
+     */
+    protected final void immutableSetParentTable(final Table parentTable)
+    {
+        m__ParentTable = parentTable;
+    }
+
+    /**
+     * Specifies the parent table.
+     * @param parentTable the parent table.
+     */
+    protected void setParentTable(final Table parentTable)
+    {
+        immutableSetParentTable(parentTable);
+    }
+
+    /**
+     * Retrieves the parent table.
+     * @return such table.
+     */
+    public Table getParentTable()
+    {
+        return m__ParentTable;
     }
 }

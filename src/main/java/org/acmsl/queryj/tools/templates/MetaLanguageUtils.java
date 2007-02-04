@@ -286,7 +286,8 @@ public class MetaLanguageUtils
      * @return such associations.
      * @precondition columnComment != null
      */
-    public String[][] retrieveColumnDiscriminatedTables(final String columnComment)
+    public String[][] retrieveColumnDiscriminatedTables(
+        final String columnComment)
     {
         String[][] result = PerCommentParser.EMPTY_STRING_STRING_ARRAY;
 
@@ -295,7 +296,6 @@ public class MetaLanguageUtils
             PerCommentParser t_Parser = setUpParser(columnComment);
 
             t_Parser.columnComment();
-
             result = t_Parser.getColumnIsaRefs();
         }
         catch  (final RecognitionException recognitionException)
@@ -328,9 +328,10 @@ public class MetaLanguageUtils
 
         Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
-        if  (t_Log != null)
+        if  (   (t_Log != null)
+             && (t_Log.isDebugEnabled()))
         {
-            t_Log.info("Parsing '" + comment + "'");
+            t_Log.debug("Parsing '" + comment + "'");
         }
 
         PerCommentLexer t_Lexer =

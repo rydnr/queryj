@@ -175,6 +175,11 @@ private boolean columnReadOnly = false;;
 private String[][] columnIsaRefs;
 
 /**
+ * The column oraseq attribute.
+ */
+private String columnOraSeq;
+
+/**
  * Specifies the table comment.
  * @param comment such comment.
  */
@@ -328,6 +333,24 @@ public String[][] getColumnIsaRefs()
 }
 
 /**
+ * Specifies the 'oraseq' attribute.
+ * @param value such value.
+ */
+protected void setColumnOraSeq(final String value)
+{
+    columnOraSeq = trim(value);
+}
+
+/**
+ * Retrieves the 'oraseq' attribute.
+ * @return such information.
+ */
+public String getColumnOraSeq()
+{
+    return columnOraSeq;
+}
+
+/**
  * Trims given value.
  * @param value the value.
  */
@@ -388,6 +411,7 @@ fragment col_annotation
          col_readonly { setColumnReadOnly(true); }
      | b=col_bool     { setColumnBool(b); }
      |   col_isarefs
+     | s=col_oraseq   { setColumnOraSeq(s); }
     );
 
 fragment col_readonly :  READONLY WS?;
@@ -417,6 +441,11 @@ fragment col_isarefs
      }
   ;
 
+fragment col_oraseq returns [String result]
+@init { result = null; }
+  : ORASEQ WS i=identifier WS? { result = $i.text; }
+  ;
+
 /*------------------------------------------------------------------
  * LEXER RULES
  *------------------------------------------------------------------*/
@@ -428,6 +457,7 @@ AT
         | ('@isarefs')  => ISAREFS  {$type = ISAREFS;}
         | ('@readonly') => READONLY {$type = READONLY;}
         | ('@bool')     => BOOL     {$type = BOOL;}
+        | ('@oraseq')   => ORASEQ   {$type = ORASEQ;}
         | '@')
     ;
 
@@ -444,6 +474,7 @@ fragment ISATYPE : '@isatype';
 fragment ISAREFS : '@isarefs';
 fragment READONLY : '@readonly';
 fragment BOOL : '@bool';
+fragment ORASEQ : '@oraseq';
 
 // literals
 OPEN_PAREN : '(';

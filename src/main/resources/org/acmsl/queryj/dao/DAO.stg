@@ -935,13 +935,11 @@ public <voName> findConstantBy<attribute.nameCapitalized>(
     <voName> result = null;
 
     int t_iLength =
-        (_ALL_QUERYJ_CONSTANTS_ != null)
-        ?  _ALL_QUERYJ_CONSTANTS_.length
-        :  0;
+        (FIXED_CONSTANTS != null) ? FIXED_CONSTANTS.length : 0;
 
     for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
     {
-        <voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
+        <voName> t_CurrentItem = FIXED_CONSTANTS[t_iIndex];
 
         if  (   (t_CurrentItem != null)
              && (<attribute.nameLowercased>.equals(
@@ -967,15 +965,13 @@ public <voName> findConstantByPk(
     <voName> result = null;
 
     int t_iLength =
-        (_ALL_QUERYJ_CONSTANTS_ != null)
-        ?  _ALL_QUERYJ_CONSTANTS_.length
-        :  0;
+        (FIXED_CONSTANTS != null) ? FIXED_CONSTANTS.length : 0;
 
     boolean t_bFound = false;
 
     for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
     {
-        <voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
+        <voName> t_CurrentItem = FIXED_CONSTANTS[t_iIndex];
 
         if  (t_CurrentItem != null)
         {

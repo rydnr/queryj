@@ -38,6 +38,11 @@
  */
 package org.acmsl.queryj.tools.metadata.vo;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
+ 
 /**
  * Represents <i>table</i> entities in the metadata model.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -50,5 +55,17 @@ public interface Table
      * @return such name.
      */
     public String getName();
+
+    /**
+     * Retrieves the attributes.
+     * @return such list.
+     */
+    public List getAttributes();
+
+    /**
+     * Retrieves the parent table.
+     * @return such table.
+     */
+    public Table getParentTable();
 }
 

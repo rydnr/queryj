@@ -178,6 +178,8 @@ public class BaseDAOTemplate
      * <code>null</code> for non-static tables.
      * @param staticAttributeType the type of the static attribute, or
      * <code>null</code> for non-static tables.
+     * @param parentTable the parent table, or <code>null</code> if not
+     * part of an ISA relationship.
      * @param customSelects the custom selects.
      * @param customUpdatesOrInserts the custom updates and inserts.
      * @param customSelectsForUpdate the custom selects for update.
@@ -226,6 +228,7 @@ public class BaseDAOTemplate
         final Collection foreignKeys,
         final String staticAttributeName,
         final String staticAttributeType,
+        final String parentTable,
         final Collection customSelects,
         final Collection customUpdatesOrInserts,
         final Collection customSelectsForUpdate,
@@ -253,6 +256,7 @@ public class BaseDAOTemplate
             foreignKeys,
             staticAttributeName,
             staticAttributeType,
+            parentTable,
             customSelects,
             customUpdatesOrInserts,
             customSelectsForUpdate,

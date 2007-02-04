@@ -302,6 +302,9 @@ public abstract class BasePerTableTemplate
              metadataManager.getColumnComment(
                 tableName, t_strStaticAttributeName);
 
+        String t_strParentTableName =
+            metaLanguageUtils.retrieveDeclaredParent(t_strTableComment);
+
         // items have to include the following methods:
         // getName()
         // getNameUppercased()
@@ -475,6 +478,7 @@ public abstract class BasePerTableTemplate
             t_strStaticAttributeName,
             t_strStaticAttributeType,
             t_strStaticAttributeComment,
+            t_strParentTableName,
             t_strRepositoryName,
             metadataManager,
             metadataTypeManager,
@@ -527,6 +531,8 @@ public abstract class BasePerTableTemplate
      * <code>null</code> for non-static tables.
      * @param staticAttributeType the type of the static attribute, or
      * <code>null</code> for non-static tables.
+     * @param parentTable the parent table, or <code>null</code> if not
+     * part of an ISA relationship.
      * @param tableRepositoryName the table repository.
      * @param metadataManager the database metadata manager.
      * @param metadataTypeManager the metadata type manager.
@@ -597,6 +603,7 @@ public abstract class BasePerTableTemplate
         final String staticAttributeName,
         final String staticAttributeType,
         final String staticAttributeComment,
+        final String parentTable,
         final String tableRepositoryName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -652,6 +659,7 @@ public abstract class BasePerTableTemplate
             foreignKeys,
             staticAttributeName,
             staticAttributeType,
+            parentTable,
             customSelects,
             customUpdatesOrInserts,
             customSelectsForUpdate,
@@ -840,6 +848,8 @@ public abstract class BasePerTableTemplate
      * <code>null</code> for non-static tables.
      * @param staticAttributeType the type of the static attribute, or
      * <code>null</code> for non-static tables.
+     * @param parentTable the parent table, or <code>null</code> if not
+     * part of an ISA relationship.
      * @param customSelects the custom selects.
      * @param customUpdatesOrInserts the custom updates and inserts.
      * @param customSelectsForUpdate the custom selects for update.
@@ -888,6 +898,7 @@ public abstract class BasePerTableTemplate
         final Collection foreignKeys,
         final String staticAttributeName,
         final String staticAttributeType,
+        final String parentTable,
         final Collection customSelects,
         final Collection customUpdatesOrInserts,
         final Collection customSelectsForUpdate,
@@ -904,6 +915,11 @@ public abstract class BasePerTableTemplate
         if  (staticTable)
         {
             input.put("static_table", Boolean.TRUE);
+        }
+
+        if  (parentTable != null)
+        {
+            input.put("parent", parentTable);
         }
 
         input.put("tr_name", tableRepositoryName);
