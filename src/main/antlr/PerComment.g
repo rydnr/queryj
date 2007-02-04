@@ -397,7 +397,7 @@ fragment col_bool returns [String result]
   : BOOL WS i=identifier WS? { result = $i.text; }
   ;
 
-fragment identifier : ID;
+fragment identifier : QUOTE? ID QUOTE?;
 
 fragment col_isarefs
 @init
@@ -407,7 +407,7 @@ fragment col_isarefs
   :  ISAREFS
      WS
      (
-       OPEN_PAREN WS? a=TEXT WS? COMMA WS? b=identifier WS? CLOSE_PAREN WS? COMMA?
+       OPEN_PAREN WS? QUOTE? a=TEXT QUOTE? WS? COMMA WS? QUOTE? b=ID QUOTE? WS? CLOSE_PAREN WS? COMMA?
        {
          contents.add(new String[] { trim($a.text), trim($b.text) });
        }
@@ -431,8 +431,10 @@ AT
         | '@')
     ;
 
+QUOTE : ('\'' | '"');
+
 ID
-    : QUOTE? ( LETTER | '_' ) (NAMECHAR)* QUOTE? WS? {$type = ID;}
+    : ( LETTER | '_' ) (NAMECHAR)* WS? {$type = ID;}
     ;
 
 // keywords
@@ -444,7 +446,6 @@ fragment READONLY : '@readonly';
 fragment BOOL : '@bool';
 
 // literals
-QUOTE : ('\'' | '"');
 OPEN_PAREN : '(';
 CLOSE_PAREN : ')';
 COMMA : ',';

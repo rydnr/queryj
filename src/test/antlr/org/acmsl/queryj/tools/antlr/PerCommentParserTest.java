@@ -135,10 +135,23 @@ public class PerCommentParserTest
     protected static final String COLUMN_BOOL = "'Y'";
 
     /**
+     * The isaref ids.
+     */
+    protected static final String[] ISAREFS_IDS =
+        new String[] {"1", "2"};
+
+    /**
+     * The isaref references.
+     */
+    protected static final String[] ISAREFS_REFERENCES =
+        new String[] {"first_isa_child", "second_isa_child"};
+
+    /**
      * The column 'isarefs' annotation.
      */
     protected static final String COLUMN_ISAREFS =
-        "(1, \"first_isa_child\") (2, \"second_isa_child\" )";
+          "( " + ISAREFS_IDS[0] + ", \"" + ISAREFS_REFERENCES[0] + "\") " 
+        + "("  + ISAREFS_IDS[1] + ", \"" + ISAREFS_REFERENCES[1] + "\" )";
 
     /**
      * The column comment tests.
@@ -567,6 +580,8 @@ public class PerCommentParserTest
 
                 t_Parser.columnComment();
 
+                String[][] t_astrIsaRefs = t_Parser.getColumnIsaRefs();
+
                 switch  (t_iIndex)
                 {
                     case 4:
@@ -581,7 +596,46 @@ public class PerCommentParserTest
                               "@isarefs test failed on column comment "
                             + t_iIndex
                             + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                            t_Parser.getColumnIsaRefs());
+                            t_astrIsaRefs);
+
+                        for  (int t_iIsaRefIndex = 0;
+                                  t_iIsaRefIndex < ISAREFS_IDS.length; 
+                                  t_iIsaRefIndex++)
+                        {
+                            assertNotNull(
+                                  "@isarefs test failed on column comment "
+                                + t_iIndex
+                                + " \""
+                                + COLUMN_COMMENT_TESTS[t_iIndex]
+                                + "\"",
+                                t_astrIsaRefs[t_iIsaRefIndex]);
+
+                            assertTrue(
+                                  "@isarefs test failed on column comment "
+                                + t_iIndex
+                                + " \""
+                                + COLUMN_COMMENT_TESTS[t_iIndex]
+                                + "\"",
+                                t_astrIsaRefs[t_iIsaRefIndex].length == 2);
+
+                            assertEquals(
+                                  "@isarefs test failed on column comment "
+                                + t_iIndex
+                                + " \""
+                                + COLUMN_COMMENT_TESTS[t_iIndex]
+                                + "\"",
+                                ISAREFS_IDS[t_iIsaRefIndex],
+                                t_astrIsaRefs[t_iIsaRefIndex][0]);
+
+                            assertEquals(
+                                  "@isarefs test failed on column comment "
+                                + t_iIndex
+                                + " \""
+                                + COLUMN_COMMENT_TESTS[t_iIndex]
+                                + "\"",
+                                ISAREFS_REFERENCES[t_iIsaRefIndex],
+                                t_astrIsaRefs[t_iIsaRefIndex][1]);
+                        }
                         break;
 
                     default:
@@ -589,7 +643,7 @@ public class PerCommentParserTest
                               "@isarefs test failed on column comment "
                             + t_iIndex
                             + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                              t_Parser.getColumnIsaRefs());
+                            t_astrIsaRefs);
                         break;
                 }
             }
