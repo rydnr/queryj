@@ -178,7 +178,7 @@ public class PerCommentParserTest
             COLUMN_COMMENT + " @bool " + COLUMN_BOOL,
             COLUMN_COMMENT + " @bool " + COLUMN_BOOL +                                 " @readonly",
             COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS,
-            COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS + " @readonly"
+            COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS + " @readonly",
             COLUMN_COMMENT +                                                           " @readonly",
             COLUMN_COMMENT +                                 " @oraseq " + COLUMN_ORASEQ,
             COLUMN_COMMENT +                                 " @oraseq " + COLUMN_ORASEQ + " @readonly",
@@ -492,6 +492,14 @@ public class PerCommentParserTest
                     case 10:
                     case 12:
                     case 14:
+                    case 15:
+                    case 17:
+                    case 19:
+                    case 21:
+                    case 22:
+                    case 24:
+                    case 26:
+                    case 28:
                         assertTrue(
                               "@readonly test failed on column comment "
                             + t_iIndex
@@ -611,6 +619,15 @@ public class PerCommentParserTest
                     case 10:
                     case 13:
                     case 14:
+                    case 18:
+                    case 23:
+                    case 24:
+                    case 25:
+                    case 26:
+                    case 28:
+                    case 29:
+                    case 32:
+                    case 33:
                         assertNotNull(
                               "@isarefs test failed on column comment "
                             + t_iIndex
