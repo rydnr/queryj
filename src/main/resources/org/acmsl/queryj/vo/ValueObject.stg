@@ -111,7 +111,7 @@ class(input) ::= <<
  */
 public interface <input.vo_name>
 <if(input.parent)>
-    extends  <input.parent>
+    extends  <input.parent:{<it.voName>}>
 <else>
 //    extends  ValueObject
 <endif>

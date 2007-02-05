@@ -185,6 +185,7 @@ public class BaseDAOTemplate
      * @param customSelectsForUpdate the custom selects for update.
      * @param customResults the custom results.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition input != null
      * @precondition voName != null
      * @precondition engineName != null
@@ -206,6 +207,7 @@ public class BaseDAOTemplate
      * @precondition customSelectsForUpdate != null
      * @precondition customResults != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     protected void fillClassParameters(
         final Map input,
@@ -233,7 +235,8 @@ public class BaseDAOTemplate
         final Collection customUpdatesOrInserts,
         final Collection customSelectsForUpdate,
         final Collection customResults,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         super.fillClassParameters(
             input,
@@ -261,7 +264,8 @@ public class BaseDAOTemplate
             customUpdatesOrInserts,
             customSelectsForUpdate,
             customResults,
-            metadataManager);
+            metadataManager,
+            decoratorFactory);
 
         if  (staticTable) 
         {

@@ -48,11 +48,19 @@ import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Abstract factory for template-specific decorators.
@@ -159,11 +167,179 @@ public class CachingDecoratorFactory
     public TableDecorator createTableDecorator(
         final String table, final MetadataManager metadataManager)
     {
-        return
+        TableDecorator result = null;
+
+        List t_lAttributes =
+            decorateAttributes(
+                table,
+                metadataManager,
+                metadataManager.getMetadataTypeManager());
+
+        String t_strParentTable = metadataManager.getParentTable(table);
+
+        Table t_ParentTable = null;
+
+        if  (t_strParentTable != null)
+        {
+            t_ParentTable =
+                createLazyDecorator(t_strParentTable, metadataManager);
+        }
+
+        result =
             new CachingTableDecorator(
                 table,
-                null, // TODO: get attributes
-                null, // TODO: get parent
+                t_lAttributes,
+                t_ParentTable,
                 metadataManager);
+
+        return result;
+    }
+
+    /**
+     * Retrieves the decorated list of attributes of given table.
+     * @param table the table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * @return the attribute list
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    protected List decorateAttributes(
+        final String table,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        List result = new ArrayList();
+
+        String[] t_astrColumnNames =
+            metadataManager.getColumnNames(table);
+
+        String t_strColumnName;
+        int t_iColumnType;
+
+        int t_iCount =
+            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_strColumnName = t_astrColumnNames[t_iIndex];
+
+            t_iColumnType =
+                metadataManager.getColumnType(table, t_strColumnName);
+
+            result.add(
+                createDecorator(
+                    new AttributeValueObject(
+                        t_strColumnName,
+                        t_iColumnType,
+                        metadataTypeManager.getNativeType(t_iColumnType),
+                        metadataTypeManager.getFieldType(t_iColumnType),
+                        table,
+                        metadataManager.getColumnComment(
+                            table, t_strColumnName),
+                        metadataManager.isManagedExternally(
+                            table, t_strColumnName),
+                        metadataManager.allowsNull(
+                            table, t_strColumnName),
+                        null),
+                    metadataManager));
+        }
+
+        return result;
+    }
+
+    /**
+     * Creates a lazy decorator for given table.
+     * @param table the table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such decorator.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     */
+    protected TableDecorator createLazyDecorator(
+        final String table,
+        final MetadataManager metadataManager)
+    {
+        return new LazyLoadingTableDecorator(table, metadataManager);
+    }
+
+    /**
+     * A lazy-loaded <code>TableDecorator</code> implementation.
+     * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+     * @version $Revision$
+     */
+    protected class LazyLoadingTableDecorator
+        extends  CachingTableDecorator
+    {
+        /**
+         * Creates a <code>LazyLoadingTableDecorator</code> instance.
+         * @param table the table name.
+         * @param metadataManager the <code>MetadataManager</code> instance.
+         */
+        public LazyLoadingTableDecorator(
+            final String table, final MetadataManager metadataManager)
+        {
+            super(table, null, null, metadataManager);
+        }
+
+        /**
+         * Retrieves the attributes.
+         * @return such information.
+         */
+        public List getAttributes()
+        {
+            return getAttributes(getName(), getMetadataManager());
+        }
+
+        /**
+         * Retrieves the attributes.
+         * @param table the table name.
+         * @param metadataManager the <code>MetadataManager</code> instance.
+         * @return such information.
+         * @precondition table != null
+         * @precondition metadataManager != null
+         */
+        protected List getAttributes(
+            final String table, final MetadataManager metadataManager)
+        {
+            List result = super.getAttributes();
+
+            if  (   (result == null)
+                 || (result.size() == 0))
+            {
+                super.setAttributes(
+                    decorateAttributes(
+                        table,
+                        metadataManager,
+                        metadataManager.getMetadataTypeManager()));
+
+                result = super.getAttributes();
+            }
+
+            return result;
+        }
+
+        /**
+         * Retrieves the parent table.
+         * @return such information.
+         */
+        public Table getParentTable()
+        {
+            Table result = super.getParentTable();
+
+            if  (result == null)
+            {
+                super.setParentTable(
+                    createLazyDecorator(
+                        getName(), 
+                        getMetadataManager()));
+
+                result = super.getParentTable();
+            }
+
+            return result;
+        }
     }
 }

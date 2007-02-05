@@ -664,7 +664,8 @@ public abstract class BasePerTableTemplate
             customUpdatesOrInserts,
             customSelectsForUpdate,
             customResults,
-            metadataManager);
+            metadataManager,
+            decoratorFactory);
 
         if  (staticAttributeName != null)
         {
@@ -855,6 +856,7 @@ public abstract class BasePerTableTemplate
      * @param customSelectsForUpdate the custom selects for update.
      * @param customResults the custom results.
      * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition input != null
      * @precondition voName != null
      * @precondition engineName != null
@@ -876,6 +878,7 @@ public abstract class BasePerTableTemplate
      * @precondition customSelectsForUpdate != null
      * @precondition customResults != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     protected void fillClassParameters(
         final Map input,
@@ -903,7 +906,8 @@ public abstract class BasePerTableTemplate
         final Collection customUpdatesOrInserts,
         final Collection customSelectsForUpdate,
         final Collection customResults,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         input.put("vo_name", voName);
         input.put("engine_name", engineName);
@@ -919,7 +923,9 @@ public abstract class BasePerTableTemplate
 
         if  (parentTable != null)
         {
-            input.put("parent", parentTable);
+            input.put(
+                "parent",
+                decorate(parentTable, metadataManager, decoratorFactory));
         }
 
         input.put("tr_name", tableRepositoryName);
