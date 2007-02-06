@@ -105,6 +105,10 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public abstract class Abstract<input.vo_name>ValueObject
+<if(input.parent)>
+    extends  <input.parent:{<it.voName>}>
+<endif>
+
     implements  <input.vo_name>
 {
     <input.attributes:attribute_declaration(attribute=it);
@@ -118,6 +122,10 @@ public abstract class Abstract<input.vo_name>ValueObject
         <input.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {
+<if(input.parent)>
+        <super_call(parent=input.parent)>
+<endif>
+
         <input.attributes:immutable_setter_call(attribute=it);
           separator="\n">
     }
@@ -125,6 +133,15 @@ public abstract class Abstract<input.vo_name>ValueObject
     <input.attributes:attribute_accessors(attribute=it);
      separator="\n\n">
 }
+>>
+
+super_call(parent) ::= <<
+<!
+ Writes the call to super constructor with parent's attributes.
+!>
+super(
+    <parent.attributes:{<it.nameUncapitalized>}; separator=",\n">);
+
 >>
 
 attribute_declaration(attribute) ::= <<
