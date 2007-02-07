@@ -64,6 +64,8 @@ import org.apache.commons.logging.Log;
 /*
  * Importing some JDK classes.
  */
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Map;
@@ -85,40 +87,6 @@ public class JdbcConnectionOpeningHandler
      * Creates a JdbcConnectionOpeningHandler.
      */
     public JdbcConnectionOpeningHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(final Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            AntCommand t_AntCommand = (AntCommand) command;
-            
-            try 
-            {
-                result = handle(t_AntCommand);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(JdbcConnectionOpeningHandler.class);
-                
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Cannot open JDBC connection.",
-                        buildException);
-                }
-            }
-        }
-        
-        return result;
-    }
 
     /**
      * Handles given command.
@@ -168,7 +136,8 @@ public class JdbcConnectionOpeningHandler
                             ParameterValidationHandler.JDBC_USERNAME),
                     (String)
                         parameters.get(
-                            ParameterValidationHandler.JDBC_PASSWORD));
+                            ParameterValidationHandler.JDBC_PASSWORD),
+                    parameters);
         }
 
         return result;
@@ -180,15 +149,18 @@ public class JdbcConnectionOpeningHandler
      * @param url the url.
      * @param username the username.
      * @param password the password.
+     * @param attributes the attributes.
      * @return the JDBC connection.
      * @throws org.apache.tools.ant.BuildException whenever the required
      * parameters are not present or valid.
+     * @precondition attributes != null
      */
     protected Connection openConnection(
         final String driver,
         final String url,
         final String username,
-        final String password)
+        final String password,
+        final Map attributes)
       throws  BuildException
     {
         Connection result = null;
@@ -203,6 +175,11 @@ public class JdbcConnectionOpeningHandler
                 result =
                     DriverManager.getConnection(
                         url, username, password);
+
+                if  (result != null)
+                {
+                    fineTuneConnection(result, attributes);
+                }
             }
             catch  (final RuntimeException exception)
             {
@@ -231,5 +208,60 @@ public class JdbcConnectionOpeningHandler
       throws  BuildException
     {
         parameters.put(JDBC_CONNECTION, connection);
+    }
+
+    /**
+     * Sets up additional settings for this connection.
+     * @param connection the connection.
+     * @param attributes the attributes.
+     * @precondition connection != null
+     * @precondition attributes != null
+     */
+    protected void fineTuneConnection(
+        final Connection connection, final Map attributes)
+    {
+        fineTuneOracleConnection(connection, attributes);
+    }
+    
+    /**
+     * Sets up additional settings for this connection.
+     * @param connection the connection.
+     * @param attributes the attributes.
+     * @precondition connection != null
+     * @precondition attributes != null
+     */
+    protected void fineTuneOracleConnection(
+        final Connection connection, final Map attributes)
+    {
+        try
+        {
+            Method t_Method =
+                connection.getClass().getDeclaredMethod(
+                    "setStatementCacheSize", new Class[] { Integer.TYPE });
+
+            t_Method.invoke(connection, new Object[] { new Integer(100) });
+
+            t_Method = 
+                connection.getClass().getDeclaredMethod(
+                    "setImplicitCachingEnabled", new Class[] { Boolean.TYPE });
+
+            t_Method.invoke(connection, new Object[] { Boolean.TRUE });
+        }
+        catch  (final NoSuchMethodException noSuchMethod)
+        {
+            // Not Oracle. Better.
+        }
+        catch  (final SecurityException securityException)
+        {
+            // We cannot set up the statement cache.
+        }
+        catch  (final IllegalAccessException illegalAccessException)
+        {
+            // We cannot set up the statement cache.
+        }
+        catch  (final InvocationTargetException invocationTargetException)
+        {
+            // We cannot set up the statement cache.
+        }
     }
 }

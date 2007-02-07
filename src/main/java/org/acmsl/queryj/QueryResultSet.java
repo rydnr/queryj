@@ -599,15 +599,6 @@ public class QueryResultSet
     protected void close(final ResultSet resultSet)
         throws  SQLException
     {
-        Log t_Log = UniqueLogFactory.getLog(QueryResultSet.class);
-        
-        if  (t_Log != null)
-        {
-            t_Log.info(
-                  "Closing resultset (" + getResultSet()
-                + ") for (" + getQuery().retrievePreparedStatement() + ") " + getQuery());
-        }
-        
         resultSet.close();
     }
 

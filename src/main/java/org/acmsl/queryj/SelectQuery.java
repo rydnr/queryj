@@ -302,7 +302,7 @@ public class SelectQuery
     {
         return
             new QueryResultSet(
-                this, executeQuery(toString()));
+                this, executeQueryAndUnWrapResult(toString()));
     }
 
     /**
@@ -547,13 +547,6 @@ public class SelectQuery
                 queryUtils.concatenate(orderingFields, ", "));
         }
 
-        Log t_Log = UniqueLogFactory.getLog("jdbc");
-        
-        if  (t_Log != null)
-        {
-            t_Log.debug(t_sbResult.toString());
-        }
-        
         return t_sbResult.toString();
     }
 }

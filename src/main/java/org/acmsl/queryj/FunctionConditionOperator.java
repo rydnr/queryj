@@ -145,15 +145,17 @@ public class FunctionConditionOperator
             FunctionConditionOperator t_Candidate =
                 (FunctionConditionOperator) candidate;
 
-            result = (t_Candidate.getFunction() == function);
+            Function t_Function = t_Candidate.getFunction();
+            
+            result = (t_Function == function);
 
             if  (!result)
             {
-                result = (t_Candidate.getFunction() != null);
+                result = (t_Function != null);
 
                 if  (result) 
                 {
-                    result = (t_Candidate.getFunction().equals(symbol));
+                    result = (t_Function.equals(function));
                 }
                 else
                 {
@@ -187,8 +189,8 @@ public class FunctionConditionOperator
     protected int hashCode(final String symbol, final Function function)
     {
         return
-	    (  FunctionConditionOperator.class
-	     + function.buildExpression(symbol)).hashCode();
+            (  FunctionConditionOperator.class
+                     + function.buildExpression(symbol)).hashCode();
     }
 }
 

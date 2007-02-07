@@ -637,15 +637,6 @@ public abstract class Query
     protected void close(final PreparedStatement preparedStatement)
         throws  SQLException
     {
-        Log t_Log = UniqueLogFactory.getLog(Query.class);
-        
-        if  (t_Log != null)
-        {
-            t_Log.info(
-                  "Closing prepared statement for " + this
-                + " (" + retrievePreparedStatement() + ")");
-        }
-
         preparedStatement.close();
     }
 
@@ -716,7 +707,23 @@ public abstract class Query
     {
         return
             new QueryResultSet(
-                this, retrievePreparedStatement().executeQuery(sql));
+                this, executeQueryAndUnWrapResult(sql));
+    }
+
+    /**
+     * See java.sql.Statement#executeQuery(String).
+     * @see java.sql.Statement#executeQuery(String)
+     * @param sql (Taken from Sun's Javadoc) an SQL statement to be sent
+     * to the database, typically a static SQL SELECT statement.
+     * @return (Taken from Sun's Javadoc) a ResultSet object that
+     * contains the data produced by the given query; never null. 
+     * @throws SQLException if an error occurs.
+     * @precondition sql != null
+     */
+    protected ResultSet executeQueryAndUnWrapResult(final String sql)
+        throws  SQLException
+    {
+        return retrievePreparedStatement().executeQuery(sql);
     }
 
     /**

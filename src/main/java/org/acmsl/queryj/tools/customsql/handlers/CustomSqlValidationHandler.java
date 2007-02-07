@@ -527,8 +527,7 @@ public class CustomSqlValidationHandler
                         metadataTypeManager.getJavaType(
                             t_Parameter.getType()));
 
-                t_Type =
-                    retrieveType(t_strType, t_Parameter.getType(), log);
+                t_Type = retrieveType(t_strType, t_Parameter.getType(), log);
             }
 
             if  (t_Type != null)
@@ -549,144 +548,146 @@ public class CustomSqlValidationHandler
                 {
                     exceptionToThrow =
                         new BuildException(
-                            "Cannot bind parameter whose type is "
+                              "Cannot bind parameter whose type is "
                             + t_strType,
                             noSuchMethodException);
                 }
 
-                try
+                if  (exceptionToThrow == null)
                 {
-                    Method t_ParameterMethod = null;
-
-                    if  (   (   ("Date".equals(t_strType))
-                             || ("Timestamp".equals(t_strType)))
-                         && (t_Parameter.getValidationValue() != null))
-                    {
-                        t_ParameterValue = new Timestamp(new Date().getTime());
-                    }
-                    else
-                    {
-                        t_ParameterMethod =
-                            conversionUtils.getClass().getMethod(
-                                "to" + t_strType,
-                                CLASS_ARRAY_OF_ONE_STRING);
-
-                        if  (t_ParameterMethod != null)
-                        {
-                            t_ParameterValue =
-                                t_ParameterMethod.invoke(
-                                    conversionUtils,
-                                    new Object[]
-                                    {
-                                        t_Parameter.getValidationValue()
-                                    });
-
-                            exceptionToThrow = null;
-                        }
-                    }
-                }
-                catch  (final NoSuchMethodException noSuchMethod)
-                {
-                    // it's not a plain type.
-                }
-                catch  (final SecurityException securityMethod)
-                {
-                    // can do little
-                }
-                catch  (final IllegalAccessException illegalAccessException)
-                {
-                    // can do little
-                }
-                catch  (final InvocationTargetException invocationTargetException)
-                {
-                    // can do little
-                }
-
-                if  (t_ParameterValue == null)
-                {
-                    // let's try if it's a date.
                     try
                     {
-                        boolean t_bInvalidValidationValue = false;
+                        Method t_ParameterMethod = null;
 
-                        String t_strValidationValue = 
-                            t_Parameter.getValidationValue();
-
-                        if  (t_strValidationValue == null)
+                        if  (   (   ("Date".equals(t_strType))
+                                 || ("Timestamp".equals(t_strType)))
+                                && (t_Parameter.getValidationValue() != null))
                         {
-                            t_strValidationValue = DATE_FORMAT.format(new Date());
-                            t_bInvalidValidationValue = true;
+                            t_ParameterValue = new Timestamp(new Date().getTime());
                         }
-
-                        t_ParameterValue =
-                            DATE_FORMAT.parse(
-                                t_strValidationValue);
-
-                        if  (t_bInvalidValidationValue)
+                        else
                         {
-                            exceptionToThrow =
-                                new BuildException(
-                                    "No validation value specified for "
-                                    + "date parameter [" + t_Parameter.getId() + "]");
-                        }
-                    }
-                    catch  (final ParseException parseException)
-                    {
-                        // We have only once chance: constructor call.
-                        try
-                        {
-                            Constructor t_Constructor =
-                                t_Type.getConstructor(CLASS_ARRAY_OF_ONE_STRING);
+                            t_ParameterMethod =
+                                conversionUtils.getClass().getMethod(
+                                    "to" + t_strType,
+                                    CLASS_ARRAY_OF_ONE_STRING);
 
-                            if  (t_Constructor != null)
+                            if  (t_ParameterMethod != null)
                             {
                                 t_ParameterValue =
-                                    t_Constructor.newInstance(
+                                    t_ParameterMethod.invoke(
+                                        conversionUtils,
                                         new Object[]
                                         {
                                             t_Parameter.getValidationValue()
                                         });
+
+                                exceptionToThrow = null;
                             }
                         }
-                        catch  (final NoSuchMethodException noSuchMethod)
+                    }
+                    catch  (final NoSuchMethodException noSuchMethod)
+                    {
+                        // it's not a plain type.
+                    }
+                    catch  (final SecurityException securityMethod)
+                    {
+                        // can do little
+                    }
+                    catch  (final IllegalAccessException illegalAccessException)
+                    {
+                        // can do little
+                    }
+                    catch  (final InvocationTargetException invocationTargetException)
+                    {
+                        // can do little
+                    }
+
+                    if  (t_ParameterValue == null)
+                    {
+                        // let's try if it's a date.
+                        try
                         {
-                            exceptionToThrow =
-                                new BuildException(
-                                      "Cannot bind parameter whose type is "
-                                    + t_strType,
-                                    noSuchMethod);
+                            boolean t_bInvalidValidationValue = false;
+
+                            String t_strValidationValue = 
+                                t_Parameter.getValidationValue();
+
+                            if  (t_strValidationValue == null)
+                            {
+                                t_strValidationValue = DATE_FORMAT.format(new Date());
+                                t_bInvalidValidationValue = true;
+                            }
+
+                            t_ParameterValue =
+                                DATE_FORMAT.parse(t_strValidationValue);
+
+                            if  (t_bInvalidValidationValue)
+                            {
+                                exceptionToThrow =
+                                    new BuildException(
+                                          "No validation value specified for "
+                                        + "date parameter [" + t_Parameter.getId() + "]");
+                            }
                         }
-                        catch  (final SecurityException securityException)
+                        catch  (final ParseException parseException)
                         {
-                            exceptionToThrow =
-                                new BuildException(
-                                      "Cannot bind parameter whose type is "
-                                    + t_strType,
-                                    securityException);
-                        }
-                        catch  (final IllegalAccessException illegalAccessException)
-                        {
-                            exceptionToThrow =
-                                new BuildException(
-                                      "Cannot bind parameter whose type is "
-                                    + t_strType,
-                                    illegalAccessException);
-                        }
-                        catch  (final InstantiationException instantiationException)
-                        {
-                            exceptionToThrow =
-                                new BuildException(
-                                      "Cannot bind parameter whose type is "
-                                    + t_strType,
-                                    instantiationException);
-                        }
-                        catch  (final InvocationTargetException invocationTargetException)
-                        {
-                            exceptionToThrow =
-                                new BuildException(
-                                      "Cannot bind parameter whose type is "
-                                    + t_strType,
-                                    invocationTargetException);
+                            // We have only once chance: constructor call.
+                            try
+                            {
+                                Constructor t_Constructor =
+                                    t_Type.getConstructor(CLASS_ARRAY_OF_ONE_STRING);
+
+                                if  (t_Constructor != null)
+                                {
+                                    t_ParameterValue =
+                                        t_Constructor.newInstance(
+                                            new Object[]
+                                            {
+                                                t_Parameter.getValidationValue()
+                                            });
+                                }
+                            }
+                            catch  (final NoSuchMethodException noSuchMethod)
+                            {
+                                exceptionToThrow =
+                                    new BuildException(
+                                          "Cannot bind parameter whose type is "
+                                        + t_strType,
+                                        noSuchMethod);
+                            }
+                            catch  (final SecurityException securityException)
+                            {
+                                exceptionToThrow =
+                                    new BuildException(
+                                          "Cannot bind parameter whose type is "
+                                        + t_strType,
+                                        securityException);
+                            }
+                            catch  (final IllegalAccessException illegalAccessException)
+                            {
+                                exceptionToThrow =
+                                    new BuildException(
+                                          "Cannot bind parameter whose type is "
+                                        + t_strType,
+                                        illegalAccessException);
+                            }
+                            catch  (final InstantiationException instantiationException)
+                            {
+                                exceptionToThrow =
+                                    new BuildException(
+                                          "Cannot bind parameter whose type is "
+                                        + t_strType,
+                                        instantiationException);
+                            }
+                            catch  (final InvocationTargetException invocationTargetException)
+                            {
+                                exceptionToThrow =
+                                    new BuildException(
+                                          "Cannot bind parameter whose type is "
+                                        + t_strType,
+                                        invocationTargetException);
+                            }
                         }
                     }
                 }

@@ -187,7 +187,7 @@
 
     <dependency>
       <groupId>oracle-driver</groupId>
-      <artifactId>oracle-driver</artifactId>
+      <artifactId>ojdbc14dms_g</artifactId>
       <version>1.4</version>
       <url>http://www.oracle.com/</url>
       <properties>
